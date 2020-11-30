@@ -1,0 +1,17 @@
+@import 'typography';
+body {
+    font-family: 'Graphik'
+}
+.no-label-input{
+    .bx--label{
+        @apply hidden;
+    }
+
+    .bx--text-input, select{
+        @apply h-12 bg-serenity-gray border-0 focus:outline-none focus:bg-serenity-gray;
+    }
+
+    select{
+        @apply text-white focus:text-white;
+    }
+}
