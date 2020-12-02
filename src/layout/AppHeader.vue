@@ -29,7 +29,7 @@
             <p class="ml-3 text-white text-sm">Airport Residential</p>
             </div>
 
-            <cv-select class="no-label-input focus:bg-serenity-gray mx-6 text-sm" :label="false">
+            <cv-select class="no-label-input focus:bg-serenity-gray mx-6 text-sm" label="false">
                 <cv-select-option class="text-white" disabled selected hidden>Out Patient</cv-select-option>
             </cv-select>
 
@@ -47,12 +47,12 @@
 
 <script>
 export default {
-  name: "AppHeader",
+  name: 'AppHeader',
 
   data() {
     return {
-      search: "",
-    };
+      search: '',
+    }
   },
-};
+}
 </script>

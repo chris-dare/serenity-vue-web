@@ -3,7 +3,7 @@
     <AppNavItem to="/">
       <img class="w-5 h-5" src="@/assets/img/template 1.svg" alt="" />
     </AppNavItem>
-    <AppNavItem to="/reference">
+    <AppNavItem to="/patients">
       <img class="w-5 h-5" src="@/assets/img/cross-reference 1.svg" alt="" />
     </AppNavItem>
     <AppNavItem to="/medical">
@@ -34,12 +34,12 @@
 </template>
 
 <script>
-import AppNavItem from "@/layout/AppNavItem";
+import AppNavItem from '@/layout/AppNavItem'
 export default {
     name: 'AppSidebar',
 
     components: { AppNavItem },
-};
+}
 </script>
 
 <style lang="postcss">
