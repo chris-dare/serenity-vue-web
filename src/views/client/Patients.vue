@@ -1,0 +1,49 @@
+<template>
+  <div>
+        <div>
+          <div class="flex items-center justify-between">
+            <p class="text-xl font-bold">Patients ({{ patientsCount }})</p>
+            <cv-button class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4" kind="primary">
+              Add new patient <img class="ml-4 w-5 h-5" src="@/assets/img/add 1.svg" alt="">
+            </cv-button>
+          </div>
+
+          <PatientsTable />
+        </div>
+  </div>
+</template>
+
+<script>
+import { mapState, mapActions } from 'vuex'
+import PatientsTable from '@/components/patients/PatientsTable'
+export default {
+  name: 'Patients',
+
+  components: {  PatientsTable },
+
+  data() {
+      return {
+          search: '',
+      }
+  },
+
+  computed: {
+    ...mapState({
+      patients: (state) => state.patients.patients,
+      patientsCount: (state) => state.patients.patientsCount,
+    }),
+  },
+
+  mounted() {
+    this.getPatients()
+  },
+
+  methods: {
+    ...mapActions({
+      getPatients: 'patients/getPatients',
+    }),
+  },
+}
+</script>
+
+<style></style>

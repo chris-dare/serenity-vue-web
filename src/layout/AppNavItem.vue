@@ -14,13 +14,13 @@ export default {
     props: {
         to: {
             type: String,
-            default: '/'
+            default: '/',
         },
 
         hasNotifications: {
             type: Boolean,
-            default: false
-        }
+            default: false,
+        },
     },
 }
 </script>
