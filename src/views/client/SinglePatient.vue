@@ -1,5 +1,5 @@
 <template>
-  <div class="w-3/4 mx-auto">
+  <div class="w-4/5 mx-auto">
     <div class="bg-white py-8 px-4 my-2 flex items-center justify-between">
       <div class="flex">
         <div class="flex items-center">
@@ -57,18 +57,42 @@
         class="white-tabs"
       >
         <cv-tab id="queue" label="Summary">
-            <div class="mt-2 grid grid-cols-2 gap-2">
-                <PatientGeneralInfoCard :patient="patient" />
-                <PatientEmergencyContactCard :patient="patient"/>
-                <PatientSocialInfoCard :patient="patient"/>
-                <PatientSummaryCard title="Payment Method" :fields="summaryFields" />
-            </div>
+          <div class="mt-2 grid grid-cols-2 gap-2">
+            <PatientGeneralInfoCard :patient="patient" />
+            <PatientEmergencyContactCard :patient="patient" />
+            <PatientSocialInfoCard :patient="patient" />
+            <PatientSummaryCard
+              title="Payment Method"
+              :fields="summaryFields"
+            />
+          </div>
         </cv-tab>
-        <cv-tab id="activity" label="Chart"> </cv-tab>
+        <cv-tab id="chart" label="Chart">
+          <div class="mt-2">
+            <div class="flex justify-between items-center my-2">
+              <div class="flex items-center">
+                <p>Patient Vitals</p>
+                <p class="text-gray-500 text-sm ml-3">Updated: Today</p>
+              </div>
+              <div class="flex items-center">
+                <p class="text-gray-500 mr-3 text-sm">Monthly</p>
+                <cv-button
+                  size="field"
+                  kind="ghost"
+                  class="px-4 bg-white hover:bg-white text-sm text-gray-900"
+                >
+                  Filters
+                  <img src="@/assets/img/filter 1.svg" class="ml-2" alt="" />
+                </cv-button>
+              </div>
+            </div>
+            <PatientChartCards />
+          </div>
+        </cv-tab>
         <cv-tab id="patients" label="Encounters"> </cv-tab>
         <cv-tab label="History"> </cv-tab>
         <cv-tab label="Prescriptions">
-            <PatientPrescriptions class="mt-2" />
+          <PatientPrescriptions class="mt-2" />
         </cv-tab>
         <cv-tab label="Orders/Billing"> </cv-tab>
         <cv-tab label="Reports"> </cv-tab>
@@ -85,11 +109,19 @@ import PatientEmergencyContactCard from '@/components/patients/PatientEmergencyC
 import PatientSummaryCard from '@/components/patients/PatientSummaryCard'
 import PatientSocialInfoCard from '@/components/patients/PatientSocialInfoCard'
 import PatientPrescriptions from '@/components/patients/PatientPrescriptions'
+import PatientChartCards from '@/components/patients/charts/PatientChartCards'
 
 export default {
   name: 'SinglePatient',
 
-  components: { PatientPrescriptions, PatientGeneralInfoCard, PatientEmergencyContactCard, PatientSummaryCard, PatientSocialInfoCard },
+  components: {
+    PatientPrescriptions,
+    PatientGeneralInfoCard,
+    PatientEmergencyContactCard,
+    PatientSummaryCard,
+    PatientSocialInfoCard,
+    PatientChartCards,
+  },
 
   props: {
     id: {
@@ -109,13 +141,13 @@ export default {
       return (index) => this.initialSelected === index
     },
     summaryFields() {
-        return [
-            {label: 'Method', value: this.$faker().lorem.word()},
-            {label: 'Payment Network', value: this.$faker().lorem.word()},
-            {label: 'Phone Number', value: this.$faker().lorem.word()},
-            {label: 'Name on Account', value: this.$faker().lorem.word()},
-            {label: 'Secondary Method', value: this.$faker().lorem.word()},
-        ]
+      return [
+        { label: 'Method', value: this.$faker().lorem.word() },
+        { label: 'Payment Network', value: this.$faker().lorem.word() },
+        { label: 'Phone Number', value: this.$faker().lorem.word() },
+        { label: 'Name on Account', value: this.$faker().lorem.word() },
+        { label: 'Secondary Method', value: this.$faker().lorem.word() },
+      ]
     },
   },
 

@@ -5,11 +5,17 @@ import router from './router'
 import store from './store'
 import 'carbon-components/css/carbon-components.css'
 import CarbonComponentsVue from '@carbon/vue/src/index'
+import CarbonCharts from '@carbon/charts-vue'
+
+import '@/filters/index'
+import '@/globalComponents'
 import '@/assets/styles/tailwind.scss'
 import '@/assets/styles/app.scss'
+import '@carbon/charts/styles.css'
 
 Vue.use(CarbonComponentsVue)
 Vue.use(require('vue-faker'))
+Vue.use(CarbonCharts)
 
 Vue.config.productionTip = false
 
