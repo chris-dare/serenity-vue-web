@@ -7,11 +7,12 @@ module.exports = {
         colors: {
             serenity: {
                 primary: '#0B6B74',
-                'light-gray': '#F4F4F4',
                 gray: '#21272A',
                 warning: '#F1C21B',
-                'primary-highlight': '#0C7882',
                 step: 'rgb(234,235,236)',
+                'light-gray': '#F4F4F4',
+                'subtle-border': 'rgba(135, 141, 150, 0.2)',
+                'primary-highlight': '#0C7882',
             },
         },
         height: {
