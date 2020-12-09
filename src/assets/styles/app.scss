@@ -2,6 +2,9 @@
 body {
     font-family: 'Graphik'
 }
+p{
+    @apply text-sm
+}
 .no-label-input{
     .bx--label{
         @apply hidden;

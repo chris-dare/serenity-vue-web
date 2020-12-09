@@ -50,84 +50,51 @@
     </div>
 
     <div>
-      <cv-tabs
-        :open="true"
-        :container="false"
-        aria-label="navigation tab label"
-        class="white-tabs"
-      >
-        <cv-tab id="queue" label="Summary">
-          <div class="mt-2 grid grid-cols-2 gap-2">
-            <PatientGeneralInfoCard :patient="patient" />
-            <PatientEmergencyContactCard :patient="patient" />
-            <PatientSocialInfoCard :patient="patient" />
-            <PatientSummaryCard
-              title="Payment Method"
-              :fields="summaryFields"
-            />
-          </div>
-        </cv-tab>
-        <cv-tab id="chart" label="Chart">
-          <div class="mt-2">
-            <div class="flex justify-between items-center my-2">
-              <div class="flex items-center">
-                <p>Patient Vitals</p>
-                <p class="text-gray-500 text-sm ml-3">Updated: Today</p>
-              </div>
-              <div class="flex items-center">
-                <p class="text-gray-500 mr-3 text-sm">Monthly</p>
-                <cv-button
-                  size="field"
-                  kind="ghost"
-                  class="px-4 bg-white hover:bg-white text-sm text-gray-900"
-                >
-                  Filters
-                  <img src="@/assets/img/filter 1.svg" class="ml-2" alt="" />
-                </cv-button>
-              </div>
-            </div>
-            <PatientChartCards />
-          </div>
-        </cv-tab>
-        <cv-tab id="patients" label="Encounters"> </cv-tab>
-        <cv-tab label="History"> </cv-tab>
-        <cv-tab label="Prescriptions">
-          <PatientPrescriptions class="mt-2" />
-        </cv-tab>
-        <cv-tab label="Orders/Billing"> </cv-tab>
-        <cv-tab label="Reports"> </cv-tab>
-        <cv-tab label="Notes"> </cv-tab>
-      </cv-tabs>
+      <div class="mt-2 bg-white flex">
+        <router-link
+          tag="div"
+          :to="{ name: link.path }"
+          v-for="(link, index) in links"
+          :key="index"
+          class="relative cursor-pointer flex-1 items-center justify-center flex border-b-2 py-4 border-serenity-primary-highlight"
+          >{{ link.label }}
+          <div
+            class="w-4/5 mx-auto h-0.5 absolute bg-serenity-light-gray bottom-0"
+            :class="{ 'bg-serenity-primary-highlight': link.path === $route.name }"
+          ></div>
+        </router-link>
+      </div>
+      <router-view />
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import PatientGeneralInfoCard from '@/components/patients/PatientGeneralInfoCard'
-import PatientEmergencyContactCard from '@/components/patients/PatientEmergencyContactCard'
-import PatientSummaryCard from '@/components/patients/PatientSummaryCard'
-import PatientSocialInfoCard from '@/components/patients/PatientSocialInfoCard'
-import PatientPrescriptions from '@/components/patients/PatientPrescriptions'
-import PatientChartCards from '@/components/patients/charts/PatientChartCards'
 
 export default {
   name: 'SinglePatient',
-
-  components: {
-    PatientPrescriptions,
-    PatientGeneralInfoCard,
-    PatientEmergencyContactCard,
-    PatientSummaryCard,
-    PatientSocialInfoCard,
-    PatientChartCards,
-  },
 
   props: {
     id: {
       type: String,
       required: true,
     },
+  },
+
+  data() {
+    return {
+      links: [
+        { label: 'Summary', path: 'PatientSummary' },
+        { label: 'Chart', path: 'PatientCharts' },
+        { label: 'Encounters', path: 'PatientEncounters' },
+        { label: 'History', path: 'PatientHistory' },
+        { label: 'Prescriptions', path: 'PatientPrescriptions' },
+        { label: 'Orders/Billing', path: 'PatientOrders' },
+        { label: 'Reports', path: 'PatientReports' },
+        { label: 'Notes', path: 'PatientNotes' },
+      ],
+    }
   },
 
   computed: {
