@@ -4,7 +4,7 @@
       <div class="w-12"></div>
       <div class="w-8 flex items-center justify-center relative">
         <div class="z-1 w-px h-10 absolute bottom-0 bg-serenity-step"></div>
-        <div class="z-0 w-4 h-4 rounded-full bg-serenity-warning"></div>
+        <div class="z-0 w-4 h-4 rounded-full bg-warning"></div>
       </div>
       <div class="flex items-center justify-center">
         <p class="text-sm">{{ step.title }} ({{ step.patients.length }})</p>

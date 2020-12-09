@@ -18,6 +18,7 @@
           size="field"
           kind="ghost"
           class="px-4 bg-white hover:bg-white mr-2 text-gray-900"
+          @click="visible = !visible"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
           Medications ({{ 1 }})
@@ -26,8 +27,9 @@
           size="field"
           kind="ghost"
           class="px-4 bg-white hover:bg-white mr-2 text-gray-900"
+          @click="treatmentVisible = !treatmentVisible"
         >
-          <div class="w-2 h-2 rounded-full bg-serenity-warning mr-2"></div>
+          <div class="w-2 h-2 rounded-full bg-warning mr-2"></div>
           Treatment plans ({{ 1 }})
         </cv-button>
       </div>
@@ -88,22 +90,24 @@
       </cv-data-table>
     </div>
     <PrescriptionModal :visible.sync="visible" />
+    <TreatmentPlanModal :visible.sync="treatmentVisible" />
   </div>
 </template>
 
 <script>
 import PrescriptionModal from '@/components/patients/modals/PrescriptionModal'
+import TreatmentPlanModal from '@/components/patients/modals/TreatmentPlanModal'
 export default {
   name: 'PatientPrescriptions',
 
-  components: { PrescriptionModal },
+  components: { PrescriptionModal, TreatmentPlanModal },
 
   data() {
     return {
       search: '',
       rowSelects: null,
       columns: [
-        'Drug/Proccedure',
+        'Drug/Proceedure',
         'Type',
         'Duration',
         'Instructions',
@@ -111,6 +115,7 @@ export default {
       ],
       visible: false,
       prescription: {},
+      treatmentVisible: false,
     }
   },
 

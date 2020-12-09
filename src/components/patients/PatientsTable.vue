@@ -27,7 +27,7 @@
           kind="ghost"
           class="px-4 bg-white hover:bg-white mr-2 text-gray-900"
         >
-          <div class="w-2 h-2 rounded-full bg-serenity-warning mr-2"></div>
+          <div class="w-2 h-2 rounded-full bg-warning mr-2"></div>
           Urgent ({{ 1 }})
         </cv-button>
         <cv-button

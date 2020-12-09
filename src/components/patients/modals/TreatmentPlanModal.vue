@@ -1,12 +1,12 @@
 <template>
   <cv-modal close-aria-label="Close" :visible="modalVisible" size="xs">
     <template slot="title">
-      <p>Medication details</p>
+      <p>Treatment plan</p>
     </template>
     <template slot="content" class="p-0 mb-4">
       <div class="text-xs">
         <div class="mb-4">
-          <p class="text-gray-500 text-sm">Drug</p>
+          <p class="text-gray-500 text-sm">Proceedure</p>
           <p class="text-serenity-primary mt-1 text-sm">
             {{ $faker().lorem.word() }}
           </p>
@@ -72,7 +72,7 @@
 
 <script>
 export default {
-  name: 'PrescriptionModal',
+  name: 'TreatmentPlanModal',
 
   props: {
     visible: {

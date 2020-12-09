@@ -19,11 +19,12 @@
 import Edit32 from '@carbon/icons-vue/es/edit/32'
 import AddComment32 from '@carbon/icons-vue/es/add-comment/32'
 import PillsAdd32 from '@carbon/icons-vue/es/pills--add/32'
+import DocumentAdd32 from '@carbon/icons-vue/es/document--add/32'
 
 export default {
     name: 'EditableCard',
 
-    components: { Edit32, AddComment32, PillsAdd32 },
+    components: { Edit32, AddComment32, PillsAdd32, DocumentAdd32 },
 
     props: {
         title: {
@@ -49,6 +50,9 @@ export default {
 
             if (this.type === 'pills') {
                 return 'PillsAdd32'
+            }
+            if (this.type === 'add') {
+                return 'DocumentAdd32'
             }
 
             return 'Edit'

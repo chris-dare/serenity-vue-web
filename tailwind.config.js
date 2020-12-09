@@ -8,8 +8,6 @@ module.exports = {
             serenity: {
                 primary: '#0B6B74',
                 gray: '#21272A',
-                warning: '#F1C21B',
-                info: '#2368F8',
                 placeholder: '#4D5358',
                 step: 'rgb(234,235,236)',
                 'text': '#878D96',
@@ -18,6 +16,10 @@ module.exports = {
                 'primary-highlight': '#0C7882',
                 'secondary-text': '#878D96',
             },
+            success: '#24A148',
+            warning: '#F1C21B',
+            info: '#2368F8',
+            danger: '#F73842',
         },
         textColor: {
             'primary': '#21272A',

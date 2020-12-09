@@ -14,7 +14,7 @@
           :class="[
             chart.status_color === 'success'
               ? 'text-green-500'
-              : 'text-red-500',
+              : 'text-danger',
           ]"
         >
           {{ chart.status }}
