@@ -13,6 +13,7 @@
     "@carbon/charts": "^0.41.10",
     "@carbon/charts-vue": "^0.41.10",
     "@carbon/icons-vue": "^10.22.0",
+    "@carbon/motion": "^10.10.0",
     "@carbon/themes": "^10.23.0",
     "@carbon/vue": "^2.35.0",
     "autoprefixer": "9",

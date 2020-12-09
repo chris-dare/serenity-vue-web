@@ -20,10 +20,51 @@ const routes = [
             name: 'SinglePatient',
             component: () => import(/* webpackChunkName: "client" */ '../views/client/SinglePatient.vue'),
             props: true,
+            children: [
+                {
+                    path: '/patients/:id',
+                    name: 'PatientSummary',
+                    component: () => import(/* webpackChunkName: "client" */ '../views/client/PatientSummary.vue'),
+                },
+                {
+                    path: '/patients/:id/charts',
+                    name: 'PatientCharts',
+                    component: () => import(/* webpackChunkName: "client" */ '../views/client/PatientCharts.vue'),
+                },
+                {
+                    path: '/patients/:id/encounters',
+                    name: 'PatientEncounters',
+                    component: () => import(/* webpackChunkName: "client" */ '../views/client/PatientEncounters.vue'),
+                },
+                {
+                    path: '/patients/:id/history',
+                    name: 'PatientHistory',
+                    component: () => import(/* webpackChunkName: "client" */ '../views/client/PatientHistory.vue'),
+                },
+                {
+                    path: '/patients/:id/orders',
+                    name: 'PatientOrders',
+                    component: () => import(/* webpackChunkName: "client" */ '../views/client/PatientOrders.vue'),
+                },
+                {
+                    path: '/patients/:id/prescriptions',
+                    name: 'PatientPrescriptions',
+                    component: () => import(/* webpackChunkName: "client" */ '../views/client/PatientPrescriptions.vue'),
+                },
+                {
+                    path: '/patients/:id/reports',
+                    name: 'PatientReports',
+                    component: () => import(/* webpackChunkName: "client" */ '../views/client/PatientReports.vue'),
+                },
+                {
+                    path: '/patients/:id/notes',
+                    name: 'PatientNotes',
+                    component: () => import(/* webpackChunkName: "client" */ '../views/client/PatientNotes.vue'),
+                },
+            ],
         },
     ],
   },
-  
 ]
 
 const router = new VueRouter({
