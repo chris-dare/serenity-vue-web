@@ -8,7 +8,7 @@ import CarbonComponentsVue from '@carbon/vue/src/index'
 import CarbonCharts from '@carbon/charts-vue'
 import DatePlugin from '@/services/date'
 
-import '@/filters/index'
+import '@/filters'
 import '@/globalComponents'
 import '@/assets/styles/tailwind.scss'
 import '@/assets/styles/app.scss'

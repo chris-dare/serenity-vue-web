@@ -7,7 +7,7 @@
       <div
         v-if="!isOpen"
         @click="isOpen = !isOpen"
-        class="absolute flex items-center justify-center top-0 left-0 w-12 h-12 bg-serenity-warning transition-all duration-500 ease-in-out"
+        class="absolute flex items-center justify-center top-0 left-0 w-12 h-12 bg-warning transition-all duration-500 ease-in-out"
       >
         <img src="@/assets/img/user--activity 1.svg" class="w-5 h-5" alt="" />
       </div>

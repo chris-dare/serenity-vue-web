@@ -12,35 +12,35 @@
         <p class="text-primary">99 per min</p>
         <p class="text-secondary font-light">92</p>
         <div class="flex items-center">
-            <div class="w-3 h-3 rounded-full bg-serenity-warning mr-2"></div>
+            <div class="w-3 h-3 rounded-full bg-warning mr-2"></div>
             <p class="text-primary">High</p>
         </div>
         <p class="text-secondary font-light">Height:</p>
         <p class="text-primary">99 per min</p>
         <p class="text-secondary font-light">92</p>
         <div class="flex items-center">
-            <div class="w-3 h-3 rounded-full bg-serenity-warning mr-2"></div>
+            <div class="w-3 h-3 rounded-full bg-warning mr-2"></div>
             <p class="text-primary">High</p>
         </div>
         <p class="text-secondary font-light">Height:</p>
         <p class="text-primary">99 per min</p>
         <p class="text-secondary font-light">92</p>
         <div class="flex items-center">
-            <div class="w-3 h-3 rounded-full bg-serenity-warning mr-2"></div>
+            <div class="w-3 h-3 rounded-full bg-warning mr-2"></div>
             <p class="text-primary">High</p>
         </div>
         <p class="text-secondary font-light">Height:</p>
         <p class="text-primary">99 per min</p>
         <p class="text-secondary font-light">92</p>
         <div class="flex items-center">
-            <div class="w-3 h-3 rounded-full bg-serenity-warning mr-2"></div>
+            <div class="w-3 h-3 rounded-full bg-warning mr-2"></div>
             <p class="text-primary">High</p>
         </div>
         <p class="text-secondary font-light">Height:</p>
         <p class="text-primary">99 per min</p>
         <p class="text-secondary font-light">92</p>
         <div class="flex items-center">
-            <div class="w-3 h-3 rounded-full bg-serenity-warning mr-2"></div>
+            <div class="w-3 h-3 rounded-full bg-warning mr-2"></div>
             <p class="text-primary">High</p>
         </div>
     </div>

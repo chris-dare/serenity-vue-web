@@ -68,3 +68,7 @@ p{
         background-color: transparent !important;
     }
 }
+
+.bx--modal-container--xs{
+    @apply max-h-screen
+}
