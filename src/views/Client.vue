@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-screen overflow-hidden">
     <AppHeader />
     <div class="h-main flex">
       <AppSidebar class="h-100 relative bg-serenity-primary" />
