@@ -1,8 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Client from '../views/Client.vue'
+// import store from '@/store'
 
 Vue.use(VueRouter)
+
+// const requireAuth = (to, from, next) => {
+//     if (!store.state.auth.loggedIn) {
+//       next({
+//         name: 'AuthLogin',
+//       })
+//     } else {
+//       next()
+//     }
+// }
 
 const routes = [
   {
@@ -64,6 +75,16 @@ const routes = [
             ],
         },
     ],
+  },
+  {
+    path: '/login',
+    name: 'AuthLogin',
+    component: () => import(/* webpackChunkName: "auth" */ '../views/auth/Login.vue'),
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: () => import(/* webpackChunkName: "auth" */ '../views/auth/ForgotPassword.vue'),
   },
 ]
 

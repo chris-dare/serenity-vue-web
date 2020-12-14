@@ -6,7 +6,7 @@
       >
         <img src="@/assets/img/close.svg" alt="" />
       </div>
-      <div class="flex justify-between items-center w-100">
+      <div class="flex justify-between items-center w-full">
         <cv-header-name href="javascript:void(0)">
             <img src="@/assets/img/logo-full.svg" alt="" />
         </cv-header-name>

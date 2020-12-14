@@ -15,6 +15,7 @@ module.exports = {
                 'subtle-border': 'rgba(135, 141, 150, 0.2)',
                 'primary-highlight': '#0C7882',
                 'secondary-text': '#878D96',
+                'auth': '#121619',
             },
             success: '#24A148',
             warning: '#F1C21B',
@@ -35,6 +36,12 @@ module.exports = {
         fontFamily: {
             graphik: 'Graphik',
             body: ['Graphik'],
+        },
+        backgroundImage: () => ({
+            'logo': "url('/fonts/auth_bg.svg')",
+        }),
+        backgroundSize: {
+           'logo-size': '50% 90%',
         },
     },
   },
