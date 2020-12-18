@@ -1,0 +1,87 @@
+.no-label-input{
+    .bx--label{
+        @apply hidden;
+    }
+
+    .bx--text-input, select{
+        @apply h-12 bg-serenity-gray border-0 focus:outline-none focus:bg-serenity-gray;
+    }
+
+    select{
+        @apply text-white focus:text-white;
+    }
+}
+
+.bx--table-toolbar{
+    display: none;
+}
+
+.bx--tabs__nav{
+    @apply w-full;
+
+    li{
+        @apply flex-1;
+
+        a, a:focus{
+            @apply w-full
+        }
+    }
+}
+
+.white-tabs{
+    ul{
+        @apply bg-white;
+    }
+    a{
+        @apply outline-none
+    }
+
+    .bx--tabs__nav-item--selected{
+        .bx--tabs__nav-link, .bx--tabs__nav-link:active{
+            outline: none !important;
+            border-bottom-color: #0B6B74 !important;
+            color: #0B6B74 !important;
+            font-size: 0.75rem !important;
+        }
+    }
+
+    a.bx--tabs__nav-link:focus, a.bx--tabs__nav-link:active{
+        @apply outline-none;
+        border-bottom-color: #0B6B74 !important;
+    }
+
+    .bx--tabs__nav-item{
+        outline: none !important;
+        @apply text-gray-500 text-xs text-center
+    }
+}
+
+.transparent-table{
+    .bx--data-table-header, .bx--data-table thead, .bx--data-table tbody, .bx--data-table td, .cv-pagination{
+        background-color: transparent !important;
+    }
+}
+
+.bx--modal-container--xs{
+    @apply max-h-screen
+}
+
+.inherit-full-input{
+    label{
+        @apply text-primary text-sm
+    }
+    div,select, input, .bx--date-picker__input {
+        width: 100% !important;
+        @apply text-left
+    }
+}
+
+.se-no-title-modal{
+    .bx--modal-header{
+        @apply hidden
+    }
+
+    .bx--modal-container{
+        @apply h-auto max-h-screen
+    }
+}
