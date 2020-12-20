@@ -46,6 +46,7 @@
               v-model="form.date"
               class="my-8 w-full max-w-full inherit-full-input"
               placeholder="dd/mm/yyyy"
+              label="Date"
             >
             </cv-date-picker>
             <cv-select v-model="form.gender" label="Gender (required)" class="inherit-full-input my-8" placeholder="Male or female">

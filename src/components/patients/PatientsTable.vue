@@ -94,7 +94,7 @@
                 />
                 <div>
                   <p class="text-sm">{{ row.name }}</p>
-                  <p class="text-gray-400 text-xs">
+                  <p class="text-secondary text-xs">
                     {{ row.gender }}, {{ row.age }} years
                   </p>
                 </div>
@@ -103,7 +103,7 @@
             <cv-data-table-cell>
               <div>
                 <p class="text-sm">{{ row.weight }}kg</p>
-                <p class="text-gray-400 text-xs">{{ row.height }}cm</p>
+                <p class="text-secondary text-xs">{{ row.height }}cm</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>

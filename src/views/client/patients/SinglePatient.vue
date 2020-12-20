@@ -10,7 +10,7 @@
           />
           <div>
             <p>{{ patient.name }}</p>
-            <p class="text-gray-400 text-sm capitalize">
+            <p class="text-secondary text-sm capitalize">
               {{ patient.gender }}, {{ patient.age }} years
             </p>
             <div class="mt-2 flex items-center">
@@ -42,6 +42,7 @@
           kind="primary"
           size="field"
           class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
+          @click="$router.push({ name: 'SelectPatient' })"
         >
           Record a new encounter
           <img src="@/assets/img/add 1.svg" class="ml-2" alt="" />

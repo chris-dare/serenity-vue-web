@@ -85,3 +85,25 @@
         @apply h-auto max-h-screen
     }
 }
+
+.se-checkbox{
+    .bx--checkbox:checked + .bx--checkbox-label::before{
+        @apply bg-serenity-primary border-serenity-primary
+    }
+}
+
+.se-date-picker{
+    .bx--date-picker-container{
+        width: auto !important;
+        border-bottom: 1px solid #8d8d8d;
+        @apply flex-row items-center w-auto bg-white px-6
+    }
+
+    label{
+        @apply p-0 m-0
+    }
+
+    input{
+        @apply bg-white border-0 flex items-center
+    }
+}

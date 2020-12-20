@@ -1,0 +1,105 @@
+<template>
+  <div>
+    <p class="text-primary my-4 font-bold">
+      What time would the patient want to see the doctor?
+    </p>
+    <div class="grid grid-cols-2 gap-4">
+      <cv-date-picker
+        kind="single"
+        v-model="form.date"
+        class="w-full max-w-full inherit-full-input"
+        placeholder="dd/mm/yyyy"
+        label="Date"
+      ></cv-date-picker>
+      <cv-time-picker
+        label="Time"
+        :time="form.time"
+        ampm="AM"
+        :timezone="form.timezone"
+        :timezones="timezones"
+        :pattern="pattern"
+        class="inherit-full-input"
+        placeholder="hh:mm"
+        :form-item="true"
+      >
+      </cv-time-picker>
+      <cv-button :icon="icon" kind="primary" class="bg-serenity-primary">Give me the next time slot</cv-button>
+    </div>
+    <p class="text-primary mt-8 mb-4 font-bold">
+      Select a doctor for the apointment
+    </p>
+    <div class="grid gap-4">
+        <div v-for="i in 3" :key="i">
+            <div class="flex justify-between items-center hover:bg-serenity-subtle-border px-4 py-2">
+                <div class="flex items-center">
+                    <img class="w-10 h-10 rounded-full mr-3" :src="$faker().image.image()" alt="">
+                    <div>
+                        <p class="text-black font-semibold">Dr. {{ $faker().name.findName() }}</p>
+                        <p class="text-xs text-secondary">General practitioner</p>
+                    </div>
+                </div>
+                <div>
+                    <Checkmark class="hover:text-serenity-primary w-5 h-5" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex items-center justify-between mt-12 mb-6">
+      <div class="flex items-center">
+        <cv-button
+          class="border-serenity-primary mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
+          kind="tertiary"
+          >Cancel</cv-button
+        >
+        <cv-button
+          @click="$router.push({ name: 'ClinicsServices' })"
+          class="bg-black"
+          kind="primary"
+          >Go back</cv-button
+        >
+      </div>
+      <div class="flex items-center">
+        <cv-button
+          @click="$router.push({ name: 'AppointmentPayment' })"
+          :icon="right"
+          kind="primary"
+          class="bg-serenity-primary"
+          >Next: Payment</cv-button
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Time from '@carbon/icons-vue/es/time/32'
+import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
+import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+
+export default {
+  name: 'DateDoctor',
+
+  components: { Checkmark },
+
+  data() {
+    return {
+      form: {},
+      icon: Time,
+      right: ChevronRight,
+      selected: 1,
+      timezones: [
+        {
+          label: 'GMT',
+          value: 'GMT',
+        },
+        {
+          label: 'Timezone-2',
+          value: 'timezone2',
+        },
+      ],
+      pattern: '(1[012]|[1-9]):[0-5][0-9](\\s)?(?i)',
+    }
+  },
+}
+</script>

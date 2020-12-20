@@ -18,7 +18,6 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Client',
     component: Client,
     children: [
         {
@@ -55,6 +54,48 @@ const routes = [
                     path: '/register-patient/payment',
                     name: 'Payment',
                     component: () => import(/* webpackChunkName: "client" */ '../views/client/patients/register/Payment.vue'),
+                },
+            ],
+        },
+        {
+            path: '/',
+            name: 'Appointments',
+            component: () => import(/* webpackChunkName: "client" */ '../views/client/appointments/Appointments.vue'),
+        },
+        {
+            path: '/appointment',
+            name: 'Appointment',
+            component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/NewAppointment.vue'),
+            children: [
+                {
+                    path: '/appointment/select-patient',
+                    name: 'SelectPatient',
+                    component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/SelectPatient.vue'),
+                },
+                {
+                    path: '/appointment/clinics-services',
+                    name: 'ClinicsServices',
+                    component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/ClinicsServices.vue'),
+                },
+                {
+                    path: '/appointment/date-doctor',
+                    name: 'DateDoctor',
+                    component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/DateDoctor.vue'),
+                },
+                {
+                    path: '/appointment/payment',
+                    name: 'AppointmentPayment',
+                    component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/AppointmentPayment.vue'),
+                },
+                {
+                    path: '/appointment/notes',
+                    name: 'AppointmentNotes',
+                    component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/AppointmentNotes.vue'),
+                },
+                {
+                    path: '/appointment/summary',
+                    name: 'AppointmentSummary',
+                    component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/AppointmentSummary.vue'),
                 },
             ],
         },

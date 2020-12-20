@@ -9,5 +9,11 @@ body {
     overflow: hidden;
 }
 p{
-    @apply text-sm
+    font-size: 0.875rem !important;
+    line-height: 1.25rem !important;
+    @apply text-primary
+}
+
+*{
+    @apply ring-0 ring-transparent
 }
