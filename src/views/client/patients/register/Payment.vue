@@ -80,7 +80,7 @@
         >
       </div>
     </div>
-    <PatientSuccessModal :visible="visible" />
+    <PatientSuccessModal :visible.sync="visible" />
   </div>
 </template>
 

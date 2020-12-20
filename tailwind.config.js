@@ -43,6 +43,10 @@ module.exports = {
         backgroundSize: {
            'logo-size': '50% 90%',
         },
+        borderColor: theme => ({
+            ...theme('colors'),
+            subtle: 'rgba(135, 141, 150, 0.2)',
+        }),
     },
   },
   variants: {

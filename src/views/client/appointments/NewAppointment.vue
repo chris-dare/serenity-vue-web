@@ -1,6 +1,6 @@
 <template>
   <div class="w-3/4 mx-auto">
-    <p class="text-primary text-xl font-semibold">Register new patient</p>
+    <p class="text-primary text-xl font-semibold">New Appointment</p>
     <div class="grid grid-cols-4 my-6 gap-6">
       <div>
         <cv-radio-group :vertical="true">
@@ -35,11 +35,12 @@ export default {
         return {
             checked: '',
             navItems: [
-                { label: 'Biodata', description: 'Patient biological information', path: 'Biodata'},
-                { label: 'Contact Information', description: 'Phone and location of patient', path: 'ContactInfo'},
-                { label: 'Emergency Contact', description: 'Family and friends', path: 'EmergencyContact'},
-                { label: 'Social Information', description: 'Work, religion, other addresses', path: 'SocialInfo'},
-                { label: 'Payment', description: 'Method for payment', path: 'Payment'},
+                { label: 'Select patient', description: 'Existing or new patient', path: 'SelectPatient'},
+                { label: 'Clinics, Services', description: 'Choose service', path: 'ClinicsServices'},
+                { label: 'Date, Doctor', description: 'Choose your date and doctor', path: 'DateDoctor'},
+                { label: 'Payment', description: 'How patient makes payment', path: 'AppointmentPayment'},
+                { label: 'Notes', description: 'Any notes to take', path: 'AppointmentNotes'},
+                { label: 'Summary', description: 'Overview of appointment', path: 'AppointmentSummary'},
             ],
         }
     },

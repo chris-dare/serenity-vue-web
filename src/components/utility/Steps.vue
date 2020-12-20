@@ -22,7 +22,7 @@
         <img class="w-8 h-8 rounded-full mr-3" :src="patient.image" alt="" />
         <div>
           <p class="text-xs">{{ patient.name }}</p>
-          <p class="text-gray-400 text-xs">
+          <p class="text-secondary text-xs">
             {{ patient.gender }}, {{ patient.age }} years
           </p>
         </div>

@@ -7,9 +7,9 @@
       </div>
       <ListCard is-active="true" class="mt-2">
         <p class="text-sm text-serenity-primary">
-          Office Visit <span class="text-gray-400">(Today, Nov 13, 2020)</span>
+          Office Visit <span class="text-secondary">(Today, Nov 13, 2020)</span>
         </p>
-        <p class="text-sm text-gray-400 mt-1">
+        <p class="text-sm text-secondary mt-1">
           The patient has been complaining of difficulty in breathing.
         </p>
       </ListCard>
@@ -19,9 +19,9 @@
       </div>
       <ListCard border="bg-info" class="mt-2">
         <p class="text-sm text-serenity-primary">
-          Office Visit <span class="text-gray-400">(Today, Nov 13, 2020)</span>
+          Office Visit <span class="text-secondary">(Today, Nov 13, 2020)</span>
         </p>
-        <p class="text-sm text-gray-400 mt-1">
+        <p class="text-sm text-secondary mt-1">
           The patient has been complaining of difficulty in breathing.
         </p>
       </ListCard>

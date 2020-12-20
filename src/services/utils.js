@@ -5,16 +5,15 @@ const validateRequiredField = ($v, field) => {
       : ''
 }
 
-// validateRequiredField(field) {
-//     return this.$v.internalFaq[field].$error && this.$v.internalFaq[field].$dirty
-//       ? `${this.$t(field)} ${this.$t('is_required')}`
-//       : ''
-//   },
+const createRandom = (number = 10) => {
+    return Math.floor(Math.random() * number) + 1
+}
 
 export default {
   install(Vue) {
     Vue.prototype.$utils = {
         validateRequiredField,
+        createRandom,
     }
   },
 }

@@ -12,7 +12,7 @@
           <img class="w-8 h-8 rounded-full mr-3" :src="patient.image" alt="" />
           <div>
             <p class="text-xs">{{ patient.name }} <span class="text-gray-500">({{ patient.gender }} {{ patient.age }})</span></p>
-            <p class="text-gray-400 text-xs">
+            <p class="text-secondary text-xs">
               Encountered {{ difference(patient.recent) }} days ago
             </p>
           </div>
