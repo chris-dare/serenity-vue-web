@@ -20,7 +20,7 @@
 
           <div class="mt-8">
             <cv-text-input
-              class="my-4"
+              class="my-4 se-dark-input"
               label="Your email address"
               v-model="form.email"
             >
@@ -29,12 +29,22 @@
               label="Your password"
               v-model="form.password"
               type="password"
+              class="se-dark-input"
             >
             </cv-text-input>
-            <cv-button kind="primary" @click="actionClick" class="my-6 max-w-full w-full bg-serenity-primary">
+            <cv-button
+              kind="primary"
+              @click="login"
+              class="my-6 max-w-full w-full bg-serenity-primary"
+            >
               Sign In
             </cv-button>
-            <router-link tag="div" to="/forgot-password" class="underline cursor-pointer text-serenity-primary my-4">Forgot Password?</router-link>
+            <router-link
+              tag="div"
+              to="/forgot-password"
+              class="underline cursor-pointer text-serenity-primary my-4"
+              >Forgot Password?</router-link
+            >
           </div>
         </div>
       </div>
@@ -43,13 +53,22 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
       form: {},
     }
   },
+
+  methods: {
+    ...mapActions({
+      setLoggedIn: 'auth/setLoggedIn',
+    }),
+    login() {
+      this.setLoggedIn(true)
+      this.$router.push({ name: 'Dashboard' })
+    },
+  },
 }
 </script>
-
-<style></style>

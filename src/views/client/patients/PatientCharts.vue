@@ -10,7 +10,7 @@
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white text-sm text-gray-900"
+          class="px-4 bg-white hover:bg-white text-sm text-serenity-placeholder"
         >
           Filters
           <img src="@/assets/img/filter 1.svg" class="ml-2" alt="" />

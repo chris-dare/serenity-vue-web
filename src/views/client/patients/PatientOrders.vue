@@ -17,7 +17,7 @@
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-gray-900"
+          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
           @click="visible = !visible"
         >
           Paid ({{ 1 }})
@@ -25,14 +25,14 @@
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-gray-900"
+          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
         >
           Unpaid ({{ 1 }})
         </cv-button>
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-gray-900"
+          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
         >
           Cancelled ({{ 1 }})
         </cv-button>
@@ -69,16 +69,16 @@
               <p class="text-sm">{{ $date.formatDate($faker().date.recent(), 'MMM dd, yyyy') }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p class="text-sm">{{ $faker().finance.amount() | toCedis | formatMoney }}</p>
+              <p class="text-sm">{{ $faker().finance.amount() | formatMoney | toCedis }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p class="text-sm">{{ $faker().finance.amount() | toCedis | formatMoney }}</p>
+                <p class="text-sm">{{ $faker().finance.amount() | formatMoney | toCedis }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p class="text-sm">{{ $faker().finance.amount() | toCedis | formatMoney }}</p>
+                <p class="text-sm">{{ $faker().finance.amount() | formatMoney | toCedis }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>

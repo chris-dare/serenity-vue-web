@@ -17,7 +17,8 @@ export function toCedis(value) {
 }
 
 function formatMoney(num) {
-  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  return parseFloat(num).toFixed(2)
+//   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
 
 const filters = { toCedis, formatMoney, formatDate }

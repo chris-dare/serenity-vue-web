@@ -1,10 +1,11 @@
+$primary: #0B6B74;
 .no-label-input{
     .bx--label{
         @apply hidden;
     }
 
     .bx--text-input, select{
-        @apply h-12 bg-serenity-gray border-0 focus:outline-none focus:bg-serenity-gray;
+        @apply h-12 bg-serenity-gray border-0 focus:outline-none focus:bg-serenity-gray text-white;
     }
 
     select{
@@ -12,10 +13,23 @@
     }
 }
 
+.se-no-label{
+    .bx--label{
+        @apply hidden;
+    }
+}
+
+.se-dark-input {
+    .bx--text-input, select{
+        @apply bg-serenity-gray border-0 hover:bg-serenity-gray focus:bg-serenity-gray text-white;
+    }
+}
+
 .bx--table-toolbar{
     display: none;
 }
 
+.se-tabs{
 .bx--tabs__nav{
     @apply w-full;
 
@@ -26,6 +40,7 @@
             @apply w-full
         }
     }
+}
 }
 
 .white-tabs{
@@ -106,4 +121,30 @@
     input{
         @apply bg-white border-0 flex items-center
     }
+}
+
+.se-custom-input{
+    height: auto;
+    div{
+        @apply w-full
+    }
+    input, select, textarea{
+        @apply border-white w-full h-12;
+    }
+
+    input:focus, select:focus, textarea:focus{
+        border-bottom: 1px solid $primary;
+    }
+}
+
+.bx--btn--primary:focus{
+    outline: none !important;
+    border-color: transparent !important;
+    font-family: 'Graphik' !important;
+    box-shadow: 0 0 #0000 !important;
+}
+
+.bx--modal-content{
+    padding: 1.5rem !important;
+    margin: 0 !important;
 }

@@ -1,25 +1,31 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Client from '../views/Client.vue'
-// import store from '@/store'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
-// const requireAuth = (to, from, next) => {
-//     if (!store.state.auth.loggedIn) {
-//       next({
-//         name: 'AuthLogin',
-//       })
-//     } else {
-//       next()
-//     }
-// }
+const requireAuth = (to, from, next) => {
+    if (!store.state.auth.loggedIn) {
+      next({
+        name: 'AuthLogin',
+      })
+    } else {
+      next()
+    }
+}
 
 const routes = [
   {
     path: '/',
     component: Client,
+    beforeEnter: requireAuth,
     children: [
+        {
+            path: '/',
+            name: 'Dashboard',
+            component: () => import(/* webpackChunkName: "client" */ '../views/client/Dashboard.vue'),
+        },
         {
             path: '/patients',
             name: 'Patients',
@@ -58,7 +64,7 @@ const routes = [
             ],
         },
         {
-            path: '/',
+            path: '/appointments',
             name: 'Appointments',
             component: () => import(/* webpackChunkName: "client" */ '../views/client/appointments/Appointments.vue'),
         },

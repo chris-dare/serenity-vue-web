@@ -1,6 +1,6 @@
 <template>
   <div>
-    <cv-search placeholder="Search for appointment" v-model="search">
+    <cv-search v-if="!hideSearch" placeholder="Search for appointment" v-model="search">
     </cv-search>
 
     <div class="flex justify-end mt-4">
@@ -8,21 +8,16 @@
       </cv-date-picker>
     </div>
 
-    <div>
+    <div v-if="appointments.length">
       <cv-data-table
         :row-size="rowSize"
-        :sortable="sortable"
         :columns="columns"
         :pagination="{
-          numberOfItems: 10,
+          numberOfItems: 5,
+          pageSizes: [5, 10, 15, 20, 25]
         }"
-        @pagination="actionOnPagination"
         v-model="rowSelects"
-        @row-select-change="actionRowSelectChange"
-        @sort="onSort"
-        :overflow-menu="sampleOverflowMenu"
         :data="[]"
-        @overflow-menu-click="onOverflowMenuClick"
         ref="table"
       >
         <template slot="batch-actions">
@@ -32,7 +27,7 @@
         </template>
         <template slot="data">
           <cv-data-table-row
-            v-for="(row, rowIndex) in 10"
+            v-for="(row, rowIndex) in 5"
             :key="`${rowIndex}`"
             :value="`${rowIndex}`"
           >
@@ -89,15 +84,32 @@
         </template>
       </cv-data-table>
     </div>
+    <div v-else>
+        <div class="bg-white w-full h-auto flex flex-col justify-center items-center py-6 my-4">
+            <img src="@/assets/img/calendar--event 1.svg" class="w-12 h-12" alt="">
+            <p class="my-2">Uh oh! You have no appointments.</p>
+            <p class="text-secondary font-light mb-6">You currently have no active or incoming appointments.</p>
+            <router-link :to="{name:'SelectPatient'}" tag="cv-button" class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4" kind="primary">
+              Book an appointment <img class="ml-4 w-5 h-5" src="@/assets/img/add 1.svg" alt="">
+            </router-link>
+        </div>
+    </div>
     <AppointmentSummaryModal :visible.sync="visible" />
   </div>
 </template>
 
 <script>
 import AppointmentSummaryModal from '@/components/appointments/AppointmentSummaryModal'
+import { mapState } from 'vuex'
 export default {
   name: 'AppointmentsTable',
   components: {AppointmentSummaryModal},
+  props: {
+      hideSearch: {
+          type: Boolean,
+          default: false,
+      },
+  },
   data() {
     return {
       rowSelects: null,
@@ -125,6 +137,12 @@ export default {
       },
       visible: false,
     }
+  },
+
+  computed: {
+    ...mapState({
+        appointments: (state) => state.appointments.appointments,
+    }),
   },
 
   methods: {

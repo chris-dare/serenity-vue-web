@@ -2,6 +2,7 @@ import { SET_LOGGED_IN, SET_USER, SET_TOKEN } from './mutation-types'
 
 export default {
   [SET_LOGGED_IN](state, loggedIn) {
+    localStorage.setItem('loggedIn', loggedIn)
     state.loggedIn = loggedIn
   },
 

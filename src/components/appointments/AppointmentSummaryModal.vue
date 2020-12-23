@@ -7,7 +7,7 @@
   >
     <template slot="content">
       <div>
-          <p class="mb-2">Appointment details</p>
+        <p class="mb-2">Appointment details</p>
         <div class="border-b border-solid border-subtle py-3">
           <p class="text-secondary mb-4">Patient</p>
           <div class="flex items-center">
@@ -100,7 +100,7 @@ import Diagnostic from '@carbon/icons-vue/es/microscope/32'
 export default {
   name: 'AppointmentSummaryModal',
 
-  components: {Diagnostic},
+  components: { Diagnostic },
 
   props: {
     visible: {

@@ -1,8 +1,8 @@
 <template>
   <div
     @click="$emit('click')"
-    class="w-56 h-40 border border-subtle border-solid px-4 py-6 mr-4 cursor-pointer"
-    :class="{ 'bg-serenity-primary': isSelected }"
+    class="w-56 h-40  px-4 py-6 mr-4 cursor-pointer"
+    :class="[customClass, isSelected ? 'bg-serenity-primary': '']"
   >
     <component
       class="w-7 h-7"
@@ -27,6 +27,8 @@ import Newpatient from '@carbon/icons-vue/es/watson-health/download-study/32'
 import Inpatient from '@carbon/icons-vue/es/watson-health/study--next/32'
 import Outpatient from '@carbon/icons-vue/es/watson-health/study--previous/32'
 import Virtualcare from '@carbon/icons-vue/es/video--chat/32'
+import Schedule from '@carbon/icons-vue/es/event--schedule/32'
+import Book from '@carbon/icons-vue/es/watson-health/contour-finding/32'
 import Home from '@carbon/icons-vue/es/home/32'
 import Diagnostic from '@carbon/icons-vue/es/microscope/32'
 import Cash from '@carbon/icons-vue/es/money/32'
@@ -49,6 +51,8 @@ export default {
     Momo,
     Card,
     Insurance,
+    Schedule,
+    Book,
   },
 
   props: {
@@ -65,6 +69,11 @@ export default {
     isSelected: {
       type: Boolean,
       default: false,
+    },
+
+    customClass: {
+        type: String,
+        default: 'border border-subtle border-solid',
     },
   },
 
