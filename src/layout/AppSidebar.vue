@@ -9,7 +9,7 @@
     <AppNavItem to="/medical">
       <img class="w-5 h-5" src="@/assets/img/image--medical 1.svg" alt="" />
     </AppNavItem>
-    <AppNavItem to="/events">
+    <AppNavItem to="/appointments">
       <img class="w-5 h-5" src="@/assets/img/event--schedule 1.svg" alt="" />
     </AppNavItem>
     <AppNavItem to="/study">

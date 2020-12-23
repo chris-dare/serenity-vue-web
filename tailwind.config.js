@@ -21,6 +21,8 @@ module.exports = {
             warning: '#F1C21B',
             info: '#2368F8',
             danger: '#F73842',
+            'primary': '#21272A',
+            'secondary': '#878D96',
         },
         textColor: {
             'primary': '#21272A',

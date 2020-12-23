@@ -17,7 +17,7 @@
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-gray-900"
+          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
           Delayed ({{ 1 }})
@@ -25,7 +25,7 @@
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-gray-900"
+          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
         >
           <div class="w-2 h-2 rounded-full bg-warning mr-2"></div>
           Urgent ({{ 1 }})
@@ -33,7 +33,7 @@
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-gray-900"
+          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
         >
           Male({{ maleCount }})
           <img src="@/assets/img/gender--male 1.svg" class="ml-2" alt="" />
@@ -41,7 +41,7 @@
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-gray-900"
+          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
         >
           Female({{ femaleCount }})
           <img src="@/assets/img/gender--female 1.svg" class="ml-2" alt="" />
@@ -50,7 +50,7 @@
       <cv-button
         size="field"
         kind="ghost"
-        class="px-4 bg-white hover:bg-white mr-2 text-gray-900"
+        class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
       >
         Filters
         <img src="@/assets/img/filter 1.svg" class="ml-2" alt="" />

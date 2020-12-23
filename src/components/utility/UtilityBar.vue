@@ -1,5 +1,10 @@
 <template>
-  <cv-tabs :open="true" :container="false" aria-label="navigation tab label">
+  <cv-tabs
+    class="se-tabs"
+    :open="true"
+    :container="false"
+    aria-label="navigation tab label"
+  >
     <cv-tab id="queue" label="Queue">
       <Queue />
     </cv-tab>

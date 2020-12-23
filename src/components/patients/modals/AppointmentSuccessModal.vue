@@ -1,7 +1,7 @@
 <template>
   <cv-modal class="se-no-title-modal" close-aria-label="Close" :visible="modalVisible" size="xs">
       <template slot="content">
-          <div class="w-full flex flex-col items-center justify-center pt-6">
+          <div class="w-full flex flex-col items-center justify-center">
               <img src="@/assets/img/calendar--event 1.svg" class="" alt="">
               <p class="text-serenity-primary my-4 text-lg">Well done!</p>
               <p class="text-secondary">New appointment booked for Darlene Robertson</p>

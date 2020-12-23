@@ -1,12 +1,10 @@
 <template>
-  <cv-modal close-aria-label="Close" :visible="modalVisible" size="xs">
-    <template slot="title">
-      <div class="flex items-center justify-between">
-        <p>Order details</p>
-        <cv-tag label="Fully paid" class="bg-success text-white" kind="black"></cv-tag>
-      </div>
-    </template>
+  <cv-modal class="se-no-title-modal" close-aria-label="Close" :visible="modalVisible" size="xs">
     <template slot="content">
+      <div class="flex items-center justify-between mb-6 w-full">
+        <p>Order details</p>
+        <cv-tag label="Fully paid" class="bg-success text-white" kind="gray"></cv-tag>
+      </div>
       <div>
         <div class="mb-6">
           <p class="text-gray-500 text-sm mb-2">Prescribed by</p>
@@ -45,12 +43,14 @@
             {{ $faker().lorem.word() }}
           </p>
         </div>
+        <OrderReceipts :orders="orders" />
       </div>
       <div class="w-full mt-8">
-        <cv-button
-          class="flex items-center justify-center bg-black text-white w-full m-0 p-0"
+        <SeButton
+          variant="secondary"
+          full
         >
-          Close</cv-button
+          Close</SeButton
         >
       </div>
     </template>
@@ -58,8 +58,11 @@
 </template>
 
 <script>
+import OrderReceipts from '@/components/patients/OrderReceipts'
 export default {
   name: 'PrescriptionModal',
+
+  components: { OrderReceipts },
 
   props: {
     visible: {
@@ -69,6 +72,16 @@ export default {
   },
 
   computed: {
+    orders() {
+        let orders = []
+        for (let index = 0; index < 3; index++) {
+            orders.push({
+                label: this.$faker().lorem.words(),
+                amount: this.$faker().finance.amount(),
+            })
+        }
+        return orders
+    },
     modalVisible: {
       set(val) {
         this.$emit('visible:update', val)

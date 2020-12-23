@@ -17,7 +17,7 @@
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-gray-900"
+          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
           @click="visible = !visible"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
@@ -26,7 +26,7 @@
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-gray-900"
+          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
           @click="treatmentVisible = !treatmentVisible"
         >
           <div class="w-2 h-2 rounded-full bg-warning mr-2"></div>

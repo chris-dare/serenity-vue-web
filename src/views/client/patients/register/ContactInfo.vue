@@ -71,11 +71,11 @@
     <div class="flex items-center justify-between mt-12 mb-6">
       <div class="flex items-center">
         <cv-button
-          class="border-serenity-primary mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
+          class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
           kind="tertiary"
           >Cancel</cv-button
         >
-        <cv-button @click="$router.push({ name: 'Biodata' })" class="bg-black" kind="primary">Go back</cv-button>
+        <cv-button @click="$router.push({ name: 'Biodata' })" class="bg-black px-6" kind="primary">Go back</cv-button>
       </div>
       <div class="flex items-center">
         <p class="text-primary underline">Save and close</p>
