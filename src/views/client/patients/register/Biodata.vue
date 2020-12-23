@@ -65,7 +65,7 @@
         </div>
 
         <div class="flex items-center justify-between mt-12 mb-6">
-            <cv-button class="border-serenity-primary text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary" kind="tertiary">Cancel</cv-button>
+            <cv-button class="border-serenity-primary text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary px-6" kind="tertiary">Cancel</cv-button>
             <div class="flex items-center">
                 <p class="text-primary underline">Save and close</p>
                 <cv-button @click="$router.push({name: 'ContactInfo'})" :icon="icon" kind="primary" class="bg-serenity-primary ml-6">Next: Contact Info</cv-button>

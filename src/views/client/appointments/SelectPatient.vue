@@ -56,7 +56,7 @@
     </div>
     <div class="flex items-center justify-between mt-12 mb-6">
       <cv-button
-        class="border-serenity-primary text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
+        class="border-serenity-primary px-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
         kind="tertiary"
         >Cancel</cv-button
       >

@@ -7,7 +7,7 @@ import {
 } from './mutation-types'
 
 export default {
-  getPatients({ commit }) {
+  getAppointments({ commit }) {
     commit(SET_APPOINTMENTS, createAppointments())
     commit(SET_APPOINTMENTS_COUNT, 10)
   },
