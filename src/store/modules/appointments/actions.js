@@ -4,6 +4,7 @@ import {
   SET_APPOINTMENTS,
   DELETE_APPOINTMENT,
   SET_APPOINTMENTS_COUNT,
+  ADD_APPOINTMENT_DATA,
 } from './mutation-types'
 
 export default {
@@ -12,8 +13,12 @@ export default {
     commit(SET_APPOINTMENTS_COUNT, 10)
   },
 
-  createAppointment({ commit }, result) {
-    commit(SET_APPOINTMENT, result)
+  addToCurrentAppointment({ commit }, data) {
+      commit(ADD_APPOINTMENT_DATA, data)
+  },
+
+  createAppointment({ commit, state }) {
+    commit(SET_APPOINTMENT, {...state.currentAppointment, id: Math.random() })
   },
 
   updatePatient({ commit }, result) {

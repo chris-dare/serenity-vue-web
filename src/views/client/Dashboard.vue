@@ -18,7 +18,7 @@
     </p>
     <div class="flex my-4">
       <PatientCard
-        @click="selected = dashboard.value"
+        @click="change(dashboard)"
         :is-selected="selected === dashboard.value"
         :details="dashboard"
         :type="dashboard.type"
@@ -32,6 +32,7 @@
     </p>
     <AppointmentsTable hide-search />
     <GetStartedModal :visible.sync="visible" />
+    <StartVisitModal :visible.sync="visitVisible" />
   </div>
 </template>
 
@@ -39,23 +40,53 @@
 import PatientCard from '@/components/appointments/PatientCard'
 import AppointmentsTable from '@/components/appointments/AppointmentsTable'
 import GetStartedModal from '@/components/dashboard/GetStartedModal'
+import StartVisitModal from '@/components/appointments/StartVisitModal'
 import { mapState } from 'vuex'
 export default {
   name: 'Dashboard',
 
-  components: { PatientCard, AppointmentsTable, GetStartedModal },
+  components: { PatientCard, AppointmentsTable, GetStartedModal, StartVisitModal },
 
   data() {
     return {
       selected: 'search',
       visible: false,
-      dashboardTypes: [
+      visitVisible: false,
+    }
+  },
+
+  created() {
+    // if (this.appointmentsCount === 0) {
+    //   this.visible = true
+    // }
+  },
+
+  computed: {
+    ...mapState({
+      globalType: (state) => state.global.globalType,
+      appointmentsCount: (state) => state.appointments.appointmentsCount,
+    }),
+
+    dashboardTypes() {
+      const types = [
         {
           label: 'Find a patient',
           description: 'Quickly search for a patient by name',
           type: 'search',
           value: 'search',
         },
+      ]
+
+      if (this.globalType === 'Reception') {
+        types.push({
+          label: 'Start patient visit',
+          description: 'Start visit for walk-in or appointments',
+          type: 'destination',
+          value: 'visit',
+        })
+      }
+
+      types.push(
         {
           label: 'Book appointment',
           description: 'Help a patient schedule an appointment',
@@ -74,20 +105,28 @@ export default {
           type: 'book',
           value: 'book',
         },
-      ],
-    }
+      )
+
+      return types
+    },
   },
 
-  created() {
-    if (this.appointmentsCount === 0) {
-      this.visible = true
-    }
-  },
+  methods: {
+    change(dashboard) {
+      this.selected = dashboard.value
 
-  computed: {
-    ...mapState({
-      appointmentsCount: (state) => state.appointments.appointmentsCount,
-    }),
+      if (dashboard.value === 'visit') {
+        this.visitVisible = true
+      }
+
+      if (dashboard.value === 'register') {
+        this.$router.push({ name: 'Biodata'})
+      }
+
+      if (dashboard.value === 'schedule') {
+        this.$router.push({ name: 'SelectPatient'})
+      }
+    },
   },
 }
 </script>

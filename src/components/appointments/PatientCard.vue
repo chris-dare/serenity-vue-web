@@ -35,6 +35,7 @@ import Cash from '@carbon/icons-vue/es/money/32'
 import Momo from '@carbon/icons-vue/es/wallet/32'
 import Card from '@carbon/icons-vue/es/purchase/32'
 import Insurance from '@carbon/icons-vue/es/keep-dry/32'
+import Destination from '@carbon/icons-vue/es/purchase/32'
 
 export default {
   name: 'PatientCard',
@@ -53,6 +54,7 @@ export default {
     Insurance,
     Schedule,
     Book,
+    Destination,
   },
 
   props: {

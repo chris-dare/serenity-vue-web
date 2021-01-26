@@ -1,9 +1,13 @@
 <template>
   <div class="mt-2">
     <div class="flex justify-between items-center my-2">
-      <div class="flex items-center">
+      <div class="flex items-center space-x-3">
         <p>Patient Vitals</p>
-        <p class="text-gray-500 text-sm ml-3">Updated: Today</p>
+        <!-- <p class="text-gray-500 text-sm ml-3">Updated: Today</p> -->
+        <div @click="$router.push({name: 'Vitals'})" class="flex items-center space-x-1 cursor-pointer">
+          <AddFilled class="w-4 h-4 text-serenity-primary" />
+          <p>Add new</p>
+        </div>
       </div>
       <div class="flex items-center">
         <p class="text-gray-500 mr-3 text-sm">Monthly</p>
@@ -23,9 +27,10 @@
 
 <script>
 import PatientChartCards from '@/components/patients/charts/PatientChartCards'
+import AddFilled from '@carbon/icons-vue/es/add--filled/32.js'
 export default {
   name: 'PatientCharts',
 
-  components: { PatientChartCards },
+  components: { PatientChartCards, AddFilled },
 }
 </script>

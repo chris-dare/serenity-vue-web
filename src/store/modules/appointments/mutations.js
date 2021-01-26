@@ -3,6 +3,7 @@ import {
   SET_APPOINTMENT,
   DELETE_APPOINTMENT,
   SET_APPOINTMENTS_COUNT,
+  ADD_APPOINTMENT_DATA,
 } from './mutation-types'
 
 export default {
@@ -12,6 +13,11 @@ export default {
 
   [SET_APPOINTMENTS_COUNT](state, count) {
     state.appointmentsCount = count
+  },
+
+  [ADD_APPOINTMENT_DATA](state, data) {
+    let currentAppointment = state.currentAppointment
+    state.currentAppointment = {...currentAppointment, ...data}
   },
 
   [SET_APPOINTMENT](state, appointment) {

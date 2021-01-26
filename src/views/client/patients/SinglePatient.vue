@@ -85,23 +85,41 @@ export default {
 
   data() {
     return {
-      links: [
-        { label: 'Summary', path: 'PatientSummary' },
-        { label: 'Chart', path: 'PatientCharts' },
-        { label: 'Encounters', path: 'PatientEncounters' },
-        { label: 'History', path: 'PatientHistory' },
-        { label: 'Prescriptions', path: 'PatientPrescriptions' },
-        { label: 'Orders/Billing', path: 'PatientOrders' },
-        { label: 'Reports', path: 'PatientReports' },
-        { label: 'Notes', path: 'PatientNotes' },
-      ],
+    //   links: [
+    //     { label: 'Summary', path: 'PatientSummary' },
+    //     { label: 'Chart', path: 'PatientCharts' },
+    //     { label: 'Encounters', path: 'PatientEncounters' },
+    //     { label: 'History', path: 'PatientHistory' },
+    //     { label: 'Prescriptions', path: 'PatientPrescriptions' },
+    //     { label: 'Orders/Billing', path: 'PatientOrders' },
+    //     { label: 'Reports', path: 'PatientReports' },
+    //     { label: 'Notes', path: 'PatientNotes' },
+    //   ],
     }
   },
 
   computed: {
     ...mapState({
       patients: (state) => state.patients.patients,
+      globalType: (state) => state.global.globalType,
     }),
+    links() {
+        let links = [{ label: 'Summary', path: 'PatientSummary' }]
+
+        if (this.globalType === 'Reception') {
+            links.push({ label: 'Chart', path: 'PatientCharts' },{ label: 'Appointments', path: 'PatientAppointments' })
+        } else {
+            links.push(
+        { label: 'Encounters', path: 'PatientEncounters' },
+        { label: 'History', path: 'PatientHistory' },
+        { label: 'Prescriptions', path: 'PatientPrescriptions' },
+        { label: 'Orders/Billing', path: 'PatientOrders' },
+        { label: 'Reports', path: 'PatientReports' },
+        { label: 'Notes', path: 'PatientNotes' })
+        }
+            return links
+
+    },
     patient() {
       return this.patients[0]
     },

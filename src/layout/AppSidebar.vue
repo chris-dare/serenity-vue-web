@@ -6,22 +6,22 @@
     <AppNavItem to="/patients">
       <img class="w-5 h-5" src="@/assets/img/cross-reference 1.svg" alt="" />
     </AppNavItem>
-    <AppNavItem to="/medical">
+    <AppNavItem v-if="globalType != 'Reception'" to="/medical">
       <img class="w-5 h-5" src="@/assets/img/image--medical 1.svg" alt="" />
     </AppNavItem>
     <AppNavItem to="/appointments">
       <img class="w-5 h-5" src="@/assets/img/event--schedule 1.svg" alt="" />
     </AppNavItem>
-    <AppNavItem to="/study">
+    <AppNavItem v-if="globalType != 'Reception'" to="/study">
       <img class="w-5 h-5" src="@/assets/img/download-study 1.svg" alt="" />
     </AppNavItem>
-    <AppNavItem to="/notification">
+    <AppNavItem to="/notifications">
       <img class="w-5 h-5" src="@/assets/img/notification 2.svg" alt="" />
     </AppNavItem>
-    <AppNavItem to="/events">
+    <AppNavItem v-if="globalType != 'Reception'" to="/events">
       <img class="w-5 h-5" src="@/assets/img/events 1.svg" alt="" />
     </AppNavItem>
-    <AppNavItem to="/activity">
+    <AppNavItem v-if="globalType != 'Reception'" to="/activity">
       <img class="w-5 h-5" src="@/assets/img/activity 1.svg" alt="" />
     </AppNavItem>
     <AppNavItem to="/settings">
@@ -35,10 +35,17 @@
 
 <script>
 import AppNavItem from '@/layout/AppNavItem'
+import { mapState } from 'vuex'
 export default {
     name: 'AppSidebar',
 
     components: { AppNavItem },
+
+    computed: {
+        ...mapState({
+            globalType: state => state.global.globalType,
+        }),
+    },
 }
 </script>
 

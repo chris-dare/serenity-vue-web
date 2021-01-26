@@ -26,7 +26,7 @@
       </div>
       <div class="flex items-center">
         <cv-button
-          @click="$router.push({ name: 'AppointmentSummary' })"
+          @click="save"
           :icon="icon"
           kind="primary"
           class="bg-serenity-primary"
@@ -39,6 +39,7 @@
 
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import { mapActions } from 'vuex'
 export default {
   name: 'AppointmentNotes',
 
@@ -47,6 +48,18 @@ export default {
       form: {},
       icon: ChevronRight,
     }
+  },
+
+  methods: {
+    ...mapActions({
+      addToCurrentAppointment: 'appointments/addToCurrentAppointment',
+      getDoctors: 'doctors/getDoctors',
+    }),
+
+    save() {
+      this.addToCurrentAppointment(this.form)
+      this.$router.push({ name: 'AppointmentSummary' })
+    },
   },
 }
 </script>

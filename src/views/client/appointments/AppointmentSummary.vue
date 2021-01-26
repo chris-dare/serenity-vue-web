@@ -6,22 +6,22 @@
         <div class="flex items-center col-span-3">
           <img
             class="w-10 h-10 rounded-full mr-3"
-            :src="$faker().image.image()"
+            :src="currentAppointment.patient.image || $faker().image.image()"
             alt=""
           />
           <div>
-            <p class="text-black">{{ $faker().name.findName() }}</p>
+            <p class="text-black">{{ currentAppointment.patient.name || $faker().name.findName() }}</p>
             <p class="text-secondary">
-              {{ $faker().name.gender() }}, {{ $utils.createRandom(100) }} years
+              {{ currentAppointment.patient.gender || $faker().name.gender() }}, {{ currentAppointment.patient.age || $utils.createRandom(100) }} years
             </p>
           </div>
         </div>
         <div class="flex flex-col justify-center">
-          <p>{{ $utils.createRandom(200) }}kg</p>
-          <p class="text-secondary">{{ $utils.createRandom(100) }}cm</p>
+          <p>{{ currentAppointment.patient.weight || $utils.createRandom(200) }}kg</p>
+          <p class="text-secondary">{{ currentAppointment.patient.height || $utils.createRandom(100) }}cm</p>
         </div>
         <div class="col-span-2">
-          <p>{{ $faker().phone.phoneNumber() }}</p>
+          <p>{{ currentAppointment.patient.phone || $faker().phone.phoneNumber() }}</p>
         </div>
         <div>
           <div
@@ -72,7 +72,7 @@
           />
           <div>
             <p class="text-black font-semibold mb-1">
-              {{ $faker().name.findName() }}
+              {{  currentAppointment.doctor.name || $faker().name.findName() }}
             </p>
             <p class="text-secondary mb-2">
               General Practitioner
@@ -95,7 +95,7 @@
       <p class="text-secondary mb-2">Appointment notes:</p>
       <div class="grid grid-cols-7 gap-4">
         <div class="flex items-center col-span-6">
-          <p>This is a note...</p>
+          <p>{{ currentAppointment.notes || 'This is a note...' }}</p>
         </div>
         <div>
           <div
@@ -138,6 +138,7 @@
 import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
 import Diagnostic from '@carbon/icons-vue/es/microscope/32'
 import AppointmentSuccessModal from '@/components/patients/modals/AppointmentSuccessModal'
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'AppointmentSummary',
 
@@ -148,6 +149,22 @@ export default {
       icon: Checkmark,
       visible: false,
     }
+  },
+
+  computed: {
+      ...mapState({
+          currentAppointment: (state) => state.appointments.currentAppointment,
+      }),
+  },
+
+  methods: {
+      ...mapActions({
+          createAppointment: 'appointments/createAppointment',
+      }),
+
+      save() {
+          this.createAppointment()
+      },
   },
 }
 </script>
