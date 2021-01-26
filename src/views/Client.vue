@@ -8,7 +8,9 @@
           <UtilityBar />
         </template>
         <template>
+            <vue-page-transition>
             <router-view />
+            </vue-page-transition>
         </template>
       </LeftSidebarLayout>
     </div>

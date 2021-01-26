@@ -77,6 +77,10 @@ $primary: #0B6B74;
     }
 }
 
+.bx--data-table tbody{
+    background-color: white !important;
+}
+
 .bx--modal-container--xs{
     @apply max-h-screen
 }

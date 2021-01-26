@@ -10,6 +10,8 @@ import CarbonCharts from '@carbon/charts-vue'
 import DatePlugin from '@/services/date'
 import UtilsPlugin from '@/services/utils'
 import Vuelidate from 'vuelidate'
+import VuePageTransition from 'vue-page-transition'
+
 
 import '@/filters'
 import '@/globalComponents'
@@ -22,6 +24,8 @@ Vue.use(CarbonCharts)
 Vue.use(DatePlugin)
 Vue.use(UtilsPlugin)
 Vue.use(Vuelidate)
+Vue.use(VuePageTransition)
+
 
 
 Vue.config.productionTip = false

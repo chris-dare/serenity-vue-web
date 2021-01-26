@@ -1,5 +1,5 @@
 <template>
-  <div class="w-3/4 mx-auto">
+  <div class="w-4/5 mx-auto">
     <p class="text-primary text-xl font-semibold">New Appointment</p>
     <div class="grid grid-cols-4 my-6 gap-6">
       <div>

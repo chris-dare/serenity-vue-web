@@ -17,17 +17,26 @@
         v-model="search"
         class="mb-4"
       ></cv-search>
+      <cv-skeleton-text
+        v-if="loading"
+        :heading="false"
+        :paragraph="true"
+        :line-count="3"
+        width="100%"
+      ></cv-skeleton-text>
       <cv-data-table :columns="columns" :data="filteredPatients">
         <template slot="data">
           <cv-data-table-row
             v-for="(row, rowIndex) in filteredPatients"
             :key="`${rowIndex}`"
             :value="`${rowIndex}`"
+            class="cursor-pointer"
           >
             <cv-data-table-cell>
-              <div class="flex items-center py-2">
+              <div class="flex items-center py-2 space-x-3">
+                <cv-radio-button :value="row" name="group-1" v-model="form.patient" />
                 <img
-                  class="w-12 h-12 rounded-full mr-3"
+                  class="w-12 h-12 rounded-full"
                   :src="row.image"
                   alt=""
                 />
@@ -62,9 +71,10 @@
       >
       <div class="flex items-center">
         <cv-button
-          @click="$router.push({ name: 'ClinicsServices' })"
+          @click="save"
           :icon="icon"
           kind="primary"
+          :disabled="disabled"
           class="bg-serenity-primary ml-6"
           >Next: Clinic and service</cv-button
         >
@@ -75,7 +85,8 @@
 
 <script>
 import PatientCard from '@/components/appointments/PatientCard'
-import { mapState } from 'vuex'
+import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'SelectPatient',
 
@@ -83,8 +94,11 @@ export default {
 
   data() {
     return {
+      form: {},
       columns: ['Patient', 'Weight/Height', 'Mobile'],
+      radioVal: null,
       search: '',
+      icon: ChevronRight,
       patientTypes: [
         {
           label: 'Existing patient',
@@ -100,6 +114,7 @@ export default {
         },
       ],
       selected: 'existing',
+      loading: false,
     }
   },
   computed: {
@@ -109,7 +124,33 @@ export default {
     }),
 
     filteredPatients() {
-      return this.patients.slice(0, 4)
+      return this.patients.filter(
+        (data) =>
+          !this.search ||
+          data.name.toLowerCase().includes(this.search.toLowerCase()),
+      ).slice(0, 4)
+    },
+
+    disabled() {
+        return !this.form.patient
+    },
+  },
+
+  async mounted() {
+    this.loading = true
+    await this.getPatients()
+    this.loading = false
+  },
+
+  methods: {
+    ...mapActions({
+        addToCurrentAppointment: 'appointments/addToCurrentAppointment',
+        getPatients: 'patients/getPatients',
+    }),
+
+    save() {
+        this.addToCurrentAppointment(this.form)
+        this.$router.push({ name: 'ClinicsServices' })
     },
   },
 }

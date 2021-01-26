@@ -33,6 +33,7 @@
             class="no-label-input se-dark-input hover:bg-serenity-gray focus:bg-serenity-gray mx-6 text-sm"
             label="false"
             v-model="selected"
+            @change="actionChange"
           >
             <cv-select-option
               v-for="(item, index) in options"
@@ -55,6 +56,7 @@
 <script>
 import UserHeaderDropdown from '@/components/layout/UserHeaderDropdown'
 import NotificationDetailsDropdown from '@/components/layout/NotificationDetailsDropdown'
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'AppHeader',
 
@@ -63,7 +65,7 @@ export default {
   data() {
     return {
       search: '',
-      selected: 'Out Patient',
+    //   selected: 'Out Patient',
       options: [
         'Reception',
         'Out Patient',
@@ -75,6 +77,30 @@ export default {
         'Virtual Care',
       ],
     }
+  },
+
+  computed: {
+      ...mapState({
+          globalType: (state) => state.global.globalType,
+      }),
+      selected: {
+        get() {
+            return this.globalType
+        },
+        set(value) {
+            this.setGlobalType(value)
+        },
+      },
+  },
+
+  methods: {
+      ...mapActions({
+          setGlobalType: 'global/setGlobalType',
+      }),
+
+      actionChange(value) {
+          this.setGlobalType(value)
+      },
   },
 }
 </script>

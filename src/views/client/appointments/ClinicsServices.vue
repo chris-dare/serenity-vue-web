@@ -85,7 +85,7 @@
       </div>
       <div class="flex items-center">
         <cv-button
-          @click="$router.push({ name: 'DateDoctor' })"
+          @click="save"
           :icon="icon"
           kind="primary"
           class="bg-serenity-primary"
@@ -102,6 +102,7 @@ import Information from '@carbon/icons-vue/es/information/32'
 import PatientCard from '@/components/appointments/PatientCard'
 import VirtualCareRequirementsModal from '@/components/appointments/VirtualCareRequirementsModal'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'ClinicsServices',
 
@@ -110,10 +111,45 @@ export default {
   data() {
     return {
       selected: 'in-patient',
-      form: {},
+      form: {
+          service:'In Patient General Practice',
+          service_tier: 'Service Tier',
+      },
       visible: false,
       icon: ChevronRight,
-      appointmentTypes: [
+    }
+  },
+
+  computed: {
+    ...mapState({
+      globalType: (state) => state.global.globalType,
+    }),
+
+    appointmentTypes() {
+      if (this.globalType === 'Reception') {
+        return [
+          {
+            label: 'In patient',
+            description: 'for General and spceial pratices',
+            type: 'inpatient',
+            value: 'in-patient',
+          },
+          {
+            label: 'Out patient',
+            description: 'for General and spceial pratices',
+            type: 'outpatient',
+            value: 'out-patient',
+          },
+          {
+            label: 'Diagnostic',
+            description: 'COVID-19 and other laboratory tests',
+            type: 'diagnostic',
+            value: 'diagnostic',
+          },
+        ]
+      }
+
+      return [
         {
           label: 'In patient',
           description: 'for General and spceial pratices',
@@ -144,10 +180,19 @@ export default {
           type: 'diagnostic',
           value: 'diagnostic',
         },
-      ],
-    }
+      ]
+    },
+  },
+
+  methods: {
+    ...mapActions({
+      addToCurrentAppointment: 'appointments/addToCurrentAppointment',
+    }),
+
+    save() {
+      this.addToCurrentAppointment(this.form)
+      this.$router.push({ name: 'DateDoctor' })
+    },
   },
 }
 </script>
-
-<style></style>

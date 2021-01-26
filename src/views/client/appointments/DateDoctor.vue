@@ -23,26 +23,43 @@
         :form-item="true"
       >
       </cv-time-picker>
-      <cv-button :icon="icon" kind="primary" class="bg-serenity-primary">Give me the next time slot</cv-button>
+      <cv-button :icon="icon" kind="primary" class="bg-serenity-primary"
+        >Give me the next time slot</cv-button
+      >
     </div>
-    <p class="text-primary mt-8 mb-4 font-bold">
-      Select a doctor for the apointment
+    <p class="text-primary mt-8 mb-4 font-bold" @click="form.date = Date.now()">
+      Select a doctor for the appointment
     </p>
     <div class="grid gap-4">
-        <div v-for="i in 3" :key="i">
-            <div class="flex justify-between items-center hover:bg-serenity-subtle-border px-4 py-2">
-                <div class="flex items-center">
-                    <img class="w-10 h-10 rounded-full mr-3" :src="$faker().image.image()" alt="">
-                    <div>
-                        <p class="text-black font-semibold">Dr. {{ $faker().name.findName() }}</p>
-                        <p class="text-xs text-secondary">General practitioner</p>
-                    </div>
-                </div>
-                <div>
-                    <Checkmark class="hover:text-serenity-primary w-5 h-5" />
-                </div>
+      <cv-skeleton-text
+        v-if="loading"
+        :heading="false"
+        :paragraph="true"
+        :line-count="3"
+        width="100%"
+      ></cv-skeleton-text>
+      <div v-for="(doctor, i) in filteredDoctors" :key="i">
+        <div
+          class="flex justify-between items-center hover:bg-serenity-subtle-border px-4 py-2 cursor-pointer"
+          :class="{'bg-serenity-subtle-border': doctor.id === form.doctor.id}"
+          @click="form.doctor = doctor"
+        >
+          <div class="flex items-center">
+            <img
+              class="w-10 h-10 rounded-full mr-3"
+              :src="doctor.image"
+              alt=""
+            />
+            <div>
+              <p class="text-black font-semibold">Dr. {{ doctor.name }}</p>
+              <p class="text-xs text-secondary">{{ doctor.specialty }}</p>
             </div>
+          </div>
+          <div>
+            <Checkmark :class="{'text-serenity-primary': doctor.id === form.doctor.id}" class="hover:text-serenity-primary w-5 h-5" />
+          </div>
         </div>
+      </div>
     </div>
 
     <div class="flex items-center justify-between mt-12 mb-6">
@@ -61,8 +78,9 @@
       </div>
       <div class="flex items-center">
         <cv-button
-          @click="$router.push({ name: 'AppointmentPayment' })"
+          @click="save"
           :icon="right"
+          :disabled="disabled"
           kind="primary"
           class="bg-serenity-primary"
           >Next: Payment</cv-button
@@ -76,6 +94,7 @@
 import Time from '@carbon/icons-vue/es/time/32'
 import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'DateDoctor',
@@ -84,9 +103,12 @@ export default {
 
   data() {
     return {
-      form: {},
+      form: {
+          doctor: {},
+      },
       icon: Time,
       right: ChevronRight,
+      loading: false,
       selected: 1,
       timezones: [
         {
@@ -100,6 +122,45 @@ export default {
       ],
       pattern: '(1[012]|[1-9]):[0-5][0-9](\\s)?(?i)',
     }
+  },
+
+  computed: {
+    ...mapState({
+      globalType: (state) => state.global.globalType,
+      doctors: (state) => state.doctors.doctors,
+    }),
+
+    filteredDoctors() {
+      return this.doctors
+        .filter(
+          (data) =>
+            !this.search ||
+            data.name.toLowerCase().includes(this.search.toLowerCase()),
+        )
+        .slice(0, 4)
+    },
+
+    disabled() {
+        return !this.form.date || !this.form.doctor
+    },
+  },
+
+  async mounted() {
+    this.loading = true
+    await this.getDoctors()
+    this.loading = false
+  },
+
+  methods: {
+    ...mapActions({
+      addToCurrentAppointment: 'appointments/addToCurrentAppointment',
+      getDoctors: 'doctors/getDoctors',
+    }),
+
+    save() {
+      this.addToCurrentAppointment(this.form)
+      this.$router.push({ name: 'AppointmentPayment' })
+    },
   },
 }
 </script>

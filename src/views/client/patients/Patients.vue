@@ -1,6 +1,6 @@
 <template>
   <div>
-        <div>
+        <div class="w-4/5 mx-auto">
           <div class="flex items-center justify-between">
             <p class="text-xl font-bold">Patients ({{ patientsCount }})</p>
             <router-link :to="{name:'Biodata'}" tag="cv-button" class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4" kind="primary">

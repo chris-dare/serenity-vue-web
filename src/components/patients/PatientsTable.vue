@@ -18,6 +18,7 @@
           size="field"
           kind="ghost"
           class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+          v-if="globalType !== 'Reception'"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
           Delayed ({{ 1 }})
@@ -26,6 +27,16 @@
           size="field"
           kind="ghost"
           class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+          v-else
+        >
+          <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
+          In-patient ({{ 1 }})
+        </cv-button>
+        <cv-button
+          size="field"
+          kind="ghost"
+          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+          v-if="globalType !== 'Reception'"
         >
           <div class="w-2 h-2 rounded-full bg-warning mr-2"></div>
           Urgent ({{ 1 }})
@@ -160,6 +171,7 @@ export default {
     ...mapState({
       patients: (state) => state.patients.patients,
       patientsCount: (state) => state.patients.patientsCount,
+      globalType: (state) => state.global.globalType,
     }),
 
     maleCount() {

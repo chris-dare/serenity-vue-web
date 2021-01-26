@@ -5,15 +5,15 @@
     </p>
     <div class="grid grid-cols-3 gap-4">
       <PatientCard
-        @click="selected = payment.value"
-        :is-selected="selected === payment.value"
+        @click="form.payment_type = payment.value"
+        :is-selected="form.payment_type === payment.value"
         :details="payment"
         :type="payment.type"
         v-for="(payment, index) in paymentTypes"
         :key="index"
       />
     </div>
-    <div v-if="selected === 'momo'" class="grid grid-cols-2 gap-4 mt-8">
+    <div v-if="form.payment_type === 'momo'" class="grid grid-cols-2 gap-4 mt-8">
       <cv-select
         v-model="form.method_of_payment"
         label="Mobile Money Network"
@@ -31,7 +31,7 @@
       </cv-select>
       <cv-text-input class="inherit-full-input" label="Mobile Money Number" v-model="form.number"></cv-text-input>
     </div>
-    <div v-if="selected === 'card'" class="grid grid-cols-2 gap-4 mt-8">
+    <div v-if="form.payment_type === 'card'" class="grid grid-cols-2 gap-4 mt-8">
       <cv-text-input class="inherit-full-input" label="Card Number" placeholder="0000 - 0000 - 0000 - 0000" v-model="form.number"></cv-text-input>
       <cv-text-input class="inherit-full-input" label="Name on Card" placeholder="James Baduor" v-model="form.name"></cv-text-input>
       <cv-text-input class="inherit-full-input" label="Expiration (mm/yy)" placeholder="12/20" v-model="form.exp"></cv-text-input>
@@ -53,7 +53,7 @@
       </div>
       <div class="flex items-center">
         <cv-button
-          @click="$router.push({ name: 'AppointmentNotes' })"
+          @click="save"
           :icon="icon"
           kind="primary"
           class="bg-serenity-primary"
@@ -67,7 +67,7 @@
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import PatientCard from '@/components/appointments/PatientCard'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'AppointmentPayment',
 
@@ -76,7 +76,9 @@ export default {
   data() {
     return {
       selected: 'cash',
-      form: {},
+      form: {
+          payment_type: 'cash',
+      },
       visible: false,
       icon: ChevronRight,
       paymentTypes: [
@@ -111,6 +113,18 @@ export default {
     ...mapState({
       networks: (state) => state.global.networks,
     }),
+  },
+
+  methods: {
+    ...mapActions({
+      addToCurrentAppointment: 'appointments/addToCurrentAppointment',
+      getDoctors: 'doctors/getDoctors',
+    }),
+
+    save() {
+      this.addToCurrentAppointment(this.form)
+      this.$router.push({ name: 'AppointmentNotes' })
+    },
   },
 }
 </script>

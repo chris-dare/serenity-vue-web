@@ -78,11 +78,11 @@
           <cv-button
             kind="primary"
             @click="$router.push({ name: 'Patients' })"
-            class="my-3 flex items-center justify-center bg-serenity-primary px-12"
+            class="my-3 flex items-center justify-center bg-serenity-primary px-12 w-full"
             >Edit appointment</cv-button
           >
           <cv-button
-            class="border-danger mb-3 px-12 text-danger hover:text-white focus:bg-danger hover:bg-danger"
+            class="border-danger flex items-center justify-center mb-3 px-12 text-danger hover:text-white focus:bg-danger hover:bg-danger w-full"
             kind="tertiary"
             >Cancel</cv-button
           >
