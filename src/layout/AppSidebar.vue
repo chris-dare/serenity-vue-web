@@ -6,7 +6,7 @@
     <AppNavItem to="/patients">
       <img class="w-5 h-5" src="@/assets/img/cross-reference 1.svg" alt="" />
     </AppNavItem>
-    <AppNavItem v-if="globalType != 'Reception'" to="/medical">
+    <AppNavItem v-if="globalType != 'Reception'" to="/visits">
       <img class="w-5 h-5" src="@/assets/img/image--medical 1.svg" alt="" />
     </AppNavItem>
     <AppNavItem to="/appointments">

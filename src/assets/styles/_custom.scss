@@ -77,8 +77,16 @@ $primary: #0B6B74;
     }
 }
 
-.bx--data-table tbody{
-    background-color: white !important;
+.cv-data-table{
+    tbody, td{
+        background-color: white !important;
+    }
+
+    td{
+        border-top: 1px solid rgba($color: #121619, $alpha: 0.1) !important;
+        border-bottom: 1px solid rgba($color: #121619, $alpha: 0.1) !important;
+        --tw-border-opacity: 0.1 !important;
+    }
 }
 
 .bx--modal-container--xs{

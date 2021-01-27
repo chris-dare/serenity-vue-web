@@ -27,7 +27,13 @@
       </ListCard>
     </div>
     <div class="col-span-3">
-        <p class="text-serenity-placeholder my-3">Encounter Details</p>
+        <div class="flex justify-between items-center">
+            <p class="text-serenity-placeholder my-3">Encounter Details</p>
+            <div @click="$router.push({name: 'Vitals'})" class="flex items-center space-x-1 cursor-pointer">
+            <AddFilled class="w-4 h-4 text-serenity-primary" />
+            <p>Add new</p>
+            </div>
+        </div>
         <EncounterDetailCard />
     </div>
   </div>
