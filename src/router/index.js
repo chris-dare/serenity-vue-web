@@ -33,6 +33,11 @@ const routes = [
             component: () => import(/* webpackChunkName: "client" */ '../views/client/patients/Patients.vue'),
         },
         {
+            path: '/visits',
+            name: 'Visits',
+            component: () => import(/* webpackChunkName: "client" */ '../views/client/Visits.vue'),
+        },
+        {
             path: '/patient-vitals',
             name: 'Vitals',
             component: () => import(/* webpackChunkName: "client" */ '../views/client/patients/PatientVitals.vue'),
@@ -125,6 +130,11 @@ const routes = [
                     path: '/patients/:id/charts',
                     name: 'PatientCharts',
                     component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientCharts.vue'),
+                },
+                {
+                    path: '/patients/:id/timeline',
+                    name: 'PatientTimeline',
+                    component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientTimeline.vue'),
                 },
                 {
                     path: '/patients/:id/encounters',

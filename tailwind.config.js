@@ -27,6 +27,7 @@ module.exports = {
             danger: '#F73842',
             'primary': '#21272A',
             'secondary': '#878D96',
+            tetiary: '#f4f4f4',
         },
         textColor: {
             'primary': '#21272A',

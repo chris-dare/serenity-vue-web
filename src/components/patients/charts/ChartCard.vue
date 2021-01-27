@@ -20,6 +20,10 @@
           {{ chart.status }}
         </p>
       </div>
+      <div class="flex items-center space-x-2">
+        <p class="text-xs font-light text-gray-500">as at:</p>
+        <p class="text-xs font-bold">{{ $date.formatDate($faker().date.recent(), 'dd/MM/yyyy HH:mm a') }}</p>
+      </div>
     </div>
     <div>
       <ccv-area-chart class="chart" :data="data" :options="options"></ccv-area-chart>

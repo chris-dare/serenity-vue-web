@@ -122,7 +122,7 @@
       </div>
       <div class="flex items-center">
         <cv-button
-          @click="visible = !visible"
+          @click="billingVisible = !billingVisible"
           :icon="icon"
           kind="primary"
           class="bg-serenity-primary"
@@ -131,6 +131,7 @@
       </div>
     </div>
     <AppointmentSuccessModal :visible.sync="visible" />
+    <BillingModal :visible.sync="billingVisible" />
   </div>
 </template>
 
@@ -138,16 +139,18 @@
 import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
 import Diagnostic from '@carbon/icons-vue/es/microscope/32'
 import AppointmentSuccessModal from '@/components/patients/modals/AppointmentSuccessModal'
+import BillingModal from '@/components/appointments/BillingModal'
 import { mapActions, mapState } from 'vuex'
 export default {
   name: 'AppointmentSummary',
 
-  components: { Diagnostic, AppointmentSuccessModal },
+  components: { Diagnostic, AppointmentSuccessModal, BillingModal },
 
   data() {
     return {
       icon: Checkmark,
       visible: false,
+      billingVisible: false,
     }
   },
 

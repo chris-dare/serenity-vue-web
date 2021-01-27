@@ -94,16 +94,18 @@
             </router-link>
         </div>
     </div>
-    <AppointmentSummaryModal :visible.sync="visible" />
+    <AppointmentSummaryModal :visible.sync="visible" @print="billingVisible = !billingVisible" />
+    <BillingModal :visible.sync="billingVisible" />
   </div>
 </template>
 
 <script>
 import AppointmentSummaryModal from '@/components/appointments/AppointmentSummaryModal'
+import BillingModal from '@/components/appointments/BillingModal'
 import { mapState } from 'vuex'
 export default {
   name: 'AppointmentsTable',
-  components: {AppointmentSummaryModal},
+  components: {AppointmentSummaryModal, BillingModal},
   props: {
       hideSearch: {
           type: Boolean,
@@ -113,6 +115,7 @@ export default {
   data() {
     return {
       rowSelects: null,
+      billingVisible: false,
       date: null,
       columns: [
         'Patient',

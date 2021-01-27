@@ -1,13 +1,14 @@
 <template>
-  <div></div>
+  <div>
+      <PatientAppointmentTable />
+  </div>
 </template>
 
 <script>
+import PatientAppointmentTable from '@/components/patients/PatientAppointmentTable'
 export default {
+    name: 'PatientAppointments',
 
+    components: { PatientAppointmentTable },
 }
 </script>
-
-<style>
-
-</style>

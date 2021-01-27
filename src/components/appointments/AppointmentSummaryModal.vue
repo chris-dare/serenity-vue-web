@@ -7,7 +7,17 @@
   >
     <template slot="content">
       <div>
-        <p class="mb-2">Appointment details</p>
+        <div class="flex items-center justify-between">
+          <p class="mb-2">Appointment details</p>
+          <div
+            class="flex justify-center items-center rounded-full h-4 w-4 mr-3 bg-tetiary"
+          >
+            <Edit
+              :is="option.component"
+              class="w-3 h-3 text-serenity-primary"
+            />
+          </div>
+        </div>
         <div class="border-b border-solid border-subtle py-3">
           <p class="text-secondary mb-4">Patient</p>
           <div class="flex items-center">
@@ -77,14 +87,14 @@
         <div class="flex items-center justify-center flex-col">
           <cv-button
             kind="primary"
-            @click="$router.push({ name: 'Patients' })"
+            @click="$emit('print')"
             class="my-3 flex items-center justify-center bg-serenity-primary px-12 w-full"
-            >Edit appointment</cv-button
+            >Print Bill</cv-button
           >
           <cv-button
             class="border-danger flex items-center justify-center mb-3 px-12 text-danger hover:text-white focus:bg-danger hover:bg-danger w-full"
             kind="tertiary"
-            >Cancel</cv-button
+            >Cancel Appointment</cv-button
           >
           <router-link :to="{ name: 'Patients' }" class="underline text-primary"
             >Close</router-link
@@ -97,10 +107,11 @@
 
 <script>
 import Diagnostic from '@carbon/icons-vue/es/microscope/32'
+import Edit from '@carbon/icons-vue/es/edit/32'
 export default {
   name: 'AppointmentSummaryModal',
 
-  components: { Diagnostic },
+  components: { Diagnostic, Edit },
 
   props: {
     visible: {

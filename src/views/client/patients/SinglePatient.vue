@@ -14,8 +14,8 @@
               {{ patient.gender }}, {{ patient.age }} years
             </p>
             <div class="mt-2 flex items-center">
-              <div class="bg-green-700 w-3 h-3 rounded-full mr-2"></div>
-              <p>Delayed</p>
+              <!-- <div class="bg-green-700 w-3 h-3 rounded-full mr-2"></div> -->
+              <p>MR No: 0012456</p>
             </div>
           </div>
         </div>
@@ -26,25 +26,26 @@
         </div>
       </div>
       <div class="flex">
-        <cv-button
-          size="field"
-          kind="primary"
-          class="px-4 bg-black hover:bg-black mr-2"
-        >
-          Add new
-          <img
-            src="@/assets/img/chevron--sort--down 1.svg"
-            class="ml-2"
-            alt=""
-          />
-        </cv-button>
+        
+        <AddNewDropdown />
         <cv-button
           kind="primary"
           size="field"
           class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
           @click="$router.push({ name: 'SelectPatient' })"
+          v-if="!hasEncounter"
         >
           Record a new encounter
+          <img src="@/assets/img/add 1.svg" class="ml-2" alt="" />
+        </cv-button>
+        <cv-button
+          kind="primary"
+          size="field"
+          class="px-4 bg-warning hover:bg-warning mr-2 text-black"
+          @click="$router.push({ name: 'SelectPatient' })"
+          v-else
+        >
+          Open ongoing encounter
           <img src="@/assets/img/add 1.svg" class="ml-2" alt="" />
         </cv-button>
       </div>
@@ -72,9 +73,12 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import AddNewDropdown from '@/components/patients/AddNewDropdown'
 
 export default {
   name: 'SinglePatient',
+
+  components: {AddNewDropdown},
 
   props: {
     id: {
@@ -85,6 +89,7 @@ export default {
 
   data() {
     return {
+        hasEncounter: false,
     //   links: [
     //     { label: 'Summary', path: 'PatientSummary' },
     //     { label: 'Chart', path: 'PatientCharts' },
@@ -110,8 +115,10 @@ export default {
             links.push({ label: 'Chart', path: 'PatientCharts' },{ label: 'Appointments', path: 'PatientAppointments' })
         } else {
             links.push(
+        { label: 'Timeline', path: 'PatientTimeline' },
+        { label: 'Chart', path: 'PatientCharts' },
+        { label: 'Appointments', path: 'PatientAppointments' },
         { label: 'Encounters', path: 'PatientEncounters' },
-        { label: 'History', path: 'PatientHistory' },
         { label: 'Prescriptions', path: 'PatientPrescriptions' },
         { label: 'Orders/Billing', path: 'PatientOrders' },
         { label: 'Reports', path: 'PatientReports' },
