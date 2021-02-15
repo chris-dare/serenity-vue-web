@@ -12,10 +12,7 @@
           <div
             class="flex justify-center items-center rounded-full h-4 w-4 mr-3 bg-tetiary"
           >
-            <Edit
-              :is="option.component"
-              class="w-3 h-3 text-serenity-primary"
-            />
+            <Edit class="w-3 h-3 text-serenity-primary" />
           </div>
         </div>
         <div class="border-b border-solid border-subtle py-3">
@@ -87,7 +84,7 @@
         <div class="flex items-center justify-center flex-col">
           <cv-button
             kind="primary"
-            @click="$emit('print')"
+            @click="close"
             class="my-3 flex items-center justify-center bg-serenity-primary px-12 w-full"
             >Print Bill</cv-button
           >
@@ -128,6 +125,13 @@ export default {
       get() {
         return this.visible
       },
+    },
+  },
+
+  methods: {
+    close() {
+      this.$emit('print')
+      this.modalVisible = false
     },
   },
 }
