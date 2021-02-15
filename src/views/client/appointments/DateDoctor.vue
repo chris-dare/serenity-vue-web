@@ -23,9 +23,14 @@
         :form-item="true"
       >
       </cv-time-picker>
+    </div>
+    <div class="flex items-center space-x-4 my-4">
       <cv-button :icon="icon" kind="primary" class="bg-serenity-primary"
         >Give me the next time slot</cv-button
       >
+      <cv-button :icon="icon" kind="primary" class="bg-success">
+        Join a wait queue
+      </cv-button>
     </div>
     <p class="text-primary mt-8 mb-4 font-bold" @click="form.date = Date.now()">
       Select a doctor for the appointment
@@ -41,7 +46,7 @@
       <div v-for="(doctor, i) in filteredDoctors" :key="i">
         <div
           class="flex justify-between items-center hover:bg-serenity-subtle-border px-4 py-2 cursor-pointer"
-          :class="{'bg-serenity-subtle-border': doctor.id === form.doctor.id}"
+          :class="{ 'bg-serenity-subtle-border': doctor.id === form.doctor.id }"
           @click="form.doctor = doctor"
         >
           <div class="flex items-center">
@@ -56,7 +61,10 @@
             </div>
           </div>
           <div>
-            <Checkmark :class="{'text-serenity-primary': doctor.id === form.doctor.id}" class="hover:text-serenity-primary w-5 h-5" />
+            <Checkmark
+              :class="{ 'text-serenity-primary': doctor.id === form.doctor.id }"
+              class="hover:text-serenity-primary w-5 h-5"
+            />
           </div>
         </div>
       </div>
@@ -104,7 +112,7 @@ export default {
   data() {
     return {
       form: {
-          doctor: {},
+        doctor: {},
       },
       icon: Time,
       right: ChevronRight,
@@ -141,7 +149,7 @@ export default {
     },
 
     disabled() {
-        return !this.form.date || !this.form.doctor
+      return !this.form.date || !this.form.doctor
     },
   },
 

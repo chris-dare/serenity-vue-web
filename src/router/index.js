@@ -33,6 +33,11 @@ const routes = [
             component: () => import(/* webpackChunkName: "client" */ '../views/client/patients/Patients.vue'),
         },
         {
+            path: '/settings',
+            name: 'Settings',
+            component: () => import(/* webpackChunkName: "client" */ '../views/client/Settings.vue'),
+        },
+        {
             path: '/visits',
             name: 'Visits',
             component: () => import(/* webpackChunkName: "client" */ '../views/client/Visits.vue'),
@@ -184,6 +189,11 @@ const routes = [
     path: '/forgot-password',
     name: 'ForgotPassword',
     component: () => import(/* webpackChunkName: "auth" */ '../views/auth/ForgotPassword.vue'),
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: () => import(/* webpackChunkName: "auth" */ '../views/auth/ResetPassword.vue'),
   },
 ]
 

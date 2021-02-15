@@ -68,7 +68,7 @@
         <div class="flex items-center justify-between">
           <div
             @click="modalVisible = !modalVisible"
-            class="underline text-primary text-xs"
+            class="underline text-primary text-xs cursor-pointer"
           >
             Return to appointments
           </div>
@@ -117,7 +117,7 @@ export default {
     },
     modalVisible: {
       set(val) {
-        this.$emit('visible:update', val)
+        this.$emit('update:visible', val)
       },
       get() {
         return this.visible
