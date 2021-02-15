@@ -1,8 +1,8 @@
 import Vue from 'vue'
 
-import EditableCard from '@/components/ui/EditableCard'
+import EditableCard from '@/components/ui/cards/EditableCard'
 import ToggleList from '@/components/ui/ToggleList'
-import ListCard from '@/components/ui/ListCard'
+import ListCard from '@/components/ui/cards/ListCard'
 import FileUploadButton from '@/components/ui/FileUploadButton'
 import Webcam from '@/components/ui/Webcam'
 import Dropdown from '@/components/ui/Dropdown'

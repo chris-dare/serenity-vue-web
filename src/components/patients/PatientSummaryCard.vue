@@ -12,13 +12,8 @@
 </template>
 
 <script>
-import EditableCard from '@/components/ui/EditableCard'
 export default {
   name: 'PatientSummaryCard',
-
-  components: {
-    EditableCard,
-  },
 
   props: {
     patient: {
