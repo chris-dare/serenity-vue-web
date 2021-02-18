@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white">
     <div class="p-3 px-4">
-      <p class="text-sm mb-2">
+      <p class=" mb-2">
         {{ chart.title }} <span class="text-gray-500">(8)</span>
       </p>
       <div class="flex items-center justify-between">
@@ -10,7 +10,7 @@
           <p class="ml-4 text-xs font-light text-gray-500">{{ chart.per }}</p>
         </div>
         <p
-          class="text-sm"
+          class=""
           :class="[
             chart.status_color === 'success'
               ? 'text-green-500'
@@ -26,7 +26,11 @@
       </div>
     </div>
     <div>
-      <ccv-area-chart class="chart" :data="data" :options="options"></ccv-area-chart>
+      <ccv-area-chart
+        class="chart"
+        :data="data"
+        :options="options"
+      />
     </div>
   </div>
 </template>

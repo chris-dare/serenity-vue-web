@@ -1,11 +1,16 @@
 <template>
   <Dropdown :visible.sync="visible">
-    <div @click="visible = !visible" slot="label" class="w-12 flex items-center justify-center h-12" :class="[visible ? 'bg-serenity-primary' : '']">
+    <div
+      slot="label"
+      class="w-12 flex items-center justify-center h-12"
+      :class="[visible ? 'bg-serenity-primary' : '']"
+      @click="visible = !visible"
+    >
       <img
         src="@/assets/img/user 1.svg"
         class="w-5 h-5 cursor-pointer"
         alt=""
-      />
+      >
     </div>
     <div class="bg-primary w-60">
       <div class="flex items-center justify-between px-4 py-4">
@@ -17,12 +22,25 @@
           :src="$faker().image.image()"
           class="w-12 h-12 rounded-full"
           alt=""
-        />
+        >
       </div>
-      <p @click="$trigger('profile:edit')" class="text-serenity-primary px-4 py-2 cursor-pointer">Profile information</p>
-      <p @click="$trigger('profile:security')" class="text-serenity-primary px-4 py-2 cursor-pointer">Account security</p>
+      <p
+        class="text-serenity-primary px-4 py-2 cursor-pointer"
+        @click="$trigger('profile:edit')"
+      >
+        Profile information
+      </p>
+      <p
+        class="text-serenity-primary px-4 py-2 cursor-pointer"
+        @click="$trigger('profile:security')"
+      >
+        Account security
+      </p>
       <p class="text-serenity-primary px-4 py-2 cursor-pointer">Support</p>
-      <div @click="logout" class="flex items-center h-12 bg-serenity-placeholder px-4 text-white cursor-pointer">
+      <div
+        class="flex items-center h-12 bg-serenity-placeholder px-4 text-white cursor-pointer"
+        @click="logout"
+      >
         Logout
         <ArrowRight class="w-4 h-4 ml-3 text-white" />
       </div>

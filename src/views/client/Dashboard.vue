@@ -18,13 +18,13 @@
     </p>
     <div class="grid grid-cols-5 gap-2 lg:gap-6 my-4">
       <PatientCard
-        @click="change(dashboard)"
+        v-for="(dashboard, index) in dashboardTypes"
+        :key="index"
         :is-selected="selected === dashboard.value"
         :details="dashboard"
         :type="dashboard.type"
-        v-for="(dashboard, index) in dashboardTypes"
-        :key="index"
-        custom-class="w-full bg-white border-0"
+        custom-class="bg-white border-0"
+        @click="change(dashboard)"
       />
     </div>
     <p class="text-serenity-primary my-6 font-semibold">
@@ -53,12 +53,6 @@ export default {
       visible: false,
       visitVisible: false,
     }
-  },
-
-  created() {
-    // if (this.appointmentsCount === 0) {
-    //   this.visible = true
-    // }
   },
 
   computed: {
@@ -109,6 +103,12 @@ export default {
 
       return types
     },
+  },
+
+  created() {
+    // if (this.appointmentsCount === 0) {
+    //   this.visible = true
+    // }
   },
 
   methods: {

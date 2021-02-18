@@ -1,21 +1,24 @@
 <template>
   <div
-    @click="$emit('click')"
     class="w-56 h-40  px-4 py-6 mr-4 cursor-pointer"
     :class="[customClass, isSelected ? 'bg-serenity-primary': '']"
+    @click="$emit('click')"
   >
     <component
+      :is="currentIconComponent"
       class="w-7 h-7"
-      v-bind:is="currentIconComponent"
       :class="[isSelected ? 'text-white' : 'text-serenity-primary']"
-    ></component>
+    />
     <p
       class="mt-4 mb-3 font-semibold"
       :class="[isSelected ? 'text-white' : 'text-primary']"
     >
       {{ details.label }}
     </p>
-    <p class="text-xs" :class="[isSelected ? 'text-white' : 'text-secondary']">
+    <p
+      class="text-xs"
+      :class="[isSelected ? 'text-white' : 'text-secondary']"
+    >
       {{ details.description }}
     </p>
   </div>
@@ -78,8 +81,8 @@ export default {
     },
 
     customClass: {
-        type: String,
-        default: 'border border-subtle border-solid',
+      type: String,
+      default: 'border border-subtle border-solid',
     },
   },
 

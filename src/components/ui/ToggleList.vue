@@ -1,8 +1,8 @@
 <template>
   <div class="mb-4">
     <div
-      @click="isClosed = !isClosed"
       class="flex items-center justify-between"
+      @click="isClosed = !isClosed"
     >
       <div class="flex items-center">
         <CaretUp32
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div
-      class="overflow-hidden transform transition-all duration-200 ease-in-out pl-7 origin-top pt-1 text-sm"
+      class="overflow-hidden transform transition-all duration-200 ease-in-out pl-7 origin-top pt-1 "
       :class="[isClosed ? 'scale-y-0 h-0' : 'scale-y-100 h-auto']"
     >
       <slot />
@@ -26,14 +26,14 @@ import CaretUp32 from '@carbon/icons-vue/es/caret--up/32'
 export default {
   name: '',
 
+  components: { CaretUp32 },
+
   props: {
     title: {
       type: String,
       default: null,
     },
   },
-
-  components: { CaretUp32 },
 
   data() {
     return {

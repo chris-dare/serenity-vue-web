@@ -5,15 +5,15 @@
       <div>
         <cv-radio-group :vertical="true">
           <div
+            v-for="(item, index) in navItems"
+            :key="index"
             tag="div"
             :class="[
               checked == item.index
                 ? 'border-serenity-primary'
                 : 'border-serenity-subtle-border',
             ]"
-            class="border-l-2 text-sm h-20 flex items-center border-solid px-4 cursor-pointer"
-            v-for="(item, index) in navItems"
-            :key="index"
+            class="border-l-2  h-20 flex items-center border-solid px-4 cursor-pointer"
             @click="checked = item.index"
           >
             <div class="flex">
@@ -32,9 +32,9 @@
                   class="w-5 h-5 text-serenity-primary"
                 />
                 <div
-                  class="w-5 h-5 border border-solid rounded-full"
                   v-else
-                ></div>
+                  class="w-5 h-5 border border-solid rounded-full"
+                />
               </div>
               <div class="ml-4">
                 <p
@@ -56,13 +56,32 @@
         </cv-radio-group>
       </div>
       <div class="col-span-3 bg-white py-4 px-8">
-        <WeightHeight v-if="checked === 0" :form.sync="form" @next="nextStep" />
-        <Temperature v-else-if="checked === 1" :form.sync="form" @next="nextStep" />
-        <Pressure v-else-if="checked === 2" :form.sync="form" @next="nextStep" />
-        <Respiration v-else :form.sync="form" @confirm="visible = !visible" />
+        <WeightHeight
+          v-if="checked === 0"
+          :form.sync="form"
+          @next="nextStep"
+        />
+        <Temperature
+          v-else-if="checked === 1"
+          :form.sync="form"
+          @next="nextStep"
+        />
+        <Pressure
+          v-else-if="checked === 2"
+          :form.sync="form"
+          @next="nextStep"
+        />
+        <Respiration
+          v-else
+          :form.sync="form"
+          @confirm="visible = !visible"
+        />
       </div>
     </div>
-    <ConfirmVitalsModal :visible.sync="visible" :form="form" />
+    <ConfirmVitalsModal
+      :visible.sync="visible"
+      :form="form"
+    />
   </div>
 </template>
 
@@ -75,28 +94,28 @@ import ConfirmVitalsModal from '@/components/vitals/ConfirmVitalsModal'
 import CircleFilled from '@carbon/icons-vue/es/circle--filled/32'
 import CheckmarkOutline from '@carbon/icons-vue/es/checkmark--outline/32.js'
 export default {
-    name: 'PatientVitals',
+  name: 'PatientVitals',
 
-    components: { CircleFilled, WeightHeight, Temperature, Pressure, Respiration, ConfirmVitalsModal, CheckmarkOutline },
+  components: { CircleFilled, WeightHeight, Temperature, Pressure, Respiration, ConfirmVitalsModal, CheckmarkOutline },
 
-    data() {
-        return {
-            checked: 0,
-            visible: false,
-            navItems: [
-                { label: 'Weight and Height', description: 'Patient biological information', value: 'weight', index: 0},
-                { label: 'Temperature', description: 'Phone and location of patient', value: 'temperature', index: 1},
-                { label: 'Blood Pressure', description: 'Family and friends', value: 'pressure', index: 2},
-                { label: 'Respiration Rate and SPO2', description: 'Work, religion, other addresses', value: 'respiration', index: 3},
-            ],
-            form: {},
-        }
+  data() {
+    return {
+      checked: 0,
+      visible: false,
+      navItems: [
+        { label: 'Weight and Height', description: 'Patient biological information', value: 'weight', index: 0},
+        { label: 'Temperature', description: 'Phone and location of patient', value: 'temperature', index: 1},
+        { label: 'Blood Pressure', description: 'Family and friends', value: 'pressure', index: 2},
+        { label: 'Respiration Rate and SPO2', description: 'Work, religion, other addresses', value: 'respiration', index: 3},
+      ],
+      form: {},
+    }
+  },
+
+  methods: {
+    nextStep(step) {
+      this.checked = step
     },
-
-    methods: {
-        nextStep(step) {
-            this.checked = step
-        },
-    },
+  },
 }
 </script>

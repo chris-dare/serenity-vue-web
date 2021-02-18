@@ -7,17 +7,16 @@
 
       <div>
         <cv-search
-          placeholder="Search for patient"
           v-model="search"
-        >
-        </cv-search>
+          placeholder="Search for patient"
+        />
         <div class="my-4 flex items-center space-x-2">
           <cv-button
             size="field"
             kind="ghost"
             class="px-4 bg-white hover:bg-white text-serenity-placeholder"
           >
-            <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
+            <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
             Active ({{ 1 }})
           </cv-button>
           <cv-button
@@ -30,7 +29,10 @@
         </div>
 
         <div>
-          <cv-data-table :columns="columns" :data="patients">
+          <cv-data-table
+            :columns="columns"
+            :data="patients"
+          >
             <template slot="data">
               <cv-data-table-row
                 v-for="(row, rowIndex) in patients"
@@ -43,9 +45,9 @@
                       class="w-12 h-12 rounded-full mr-3"
                       :src="row.image"
                       alt=""
-                    />
+                    >
                     <div>
-                      <p class="text-sm">{{ row.name }}</p>
+                      <p class="">{{ row.name }}</p>
                       <p class="text-secondary text-xs capitalize">
                         {{ row.gender }}, {{ row.age }} years
                       </p>
@@ -54,17 +56,17 @@
                 </cv-data-table-cell>
                 <cv-data-table-cell>
                   <div>
-                    <p class="text-sm">{{ Math.random() }}</p>
+                    <p class="">{{ Math.random() }}</p>
                   </div>
                 </cv-data-table-cell>
                 <cv-data-table-cell>
                   <div>
-                    <p class="text-sm">Facility Visit</p>
+                    <p class="">Facility Visit</p>
                   </div>
                 </cv-data-table-cell>
                 <cv-data-table-cell>
                   <div>
-                    <p class="text-sm">Specialist Appointment</p>
+                    <p class="">Specialist Appointment</p>
                   </div>
                 </cv-data-table-cell>
                 <cv-data-table-cell>
@@ -77,7 +79,10 @@
                     <div
                       class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center"
                     >
-                      <img src="@/assets/img/view 1.svg" alt="" />
+                      <img
+                        src="@/assets/img/view 1.svg"
+                        alt=""
+                      >
                     </div>
                   </router-link>
                 </cv-data-table-cell>

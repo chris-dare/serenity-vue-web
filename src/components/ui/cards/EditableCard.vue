@@ -5,11 +5,14 @@
       <div
         class="bg-serenity-light-gray w-9 h-9 rounded-full ml-6 flex items-center justify-center"
       >
-        <component class="w-4 h-4 text-serenity-primary" v-bind:is="currentIconComponent"></component>
+        <component
+          :is="currentIconComponent"
+          class="w-4 h-4 text-serenity-primary"
+        />
       </div>
     </div>
     <div>
-        <slot />
+      <slot />
     </div>
   </div>
 </template>
@@ -22,41 +25,41 @@ import PillsAdd32 from '@carbon/icons-vue/es/pills--add/32'
 import DocumentAdd32 from '@carbon/icons-vue/es/document--add/32'
 
 export default {
-    name: 'EditableCard',
+  name: 'EditableCard',
 
-    components: { Edit32, AddComment32, PillsAdd32, DocumentAdd32 },
+  components: { Edit32, AddComment32, PillsAdd32, DocumentAdd32 },
 
-    props: {
-        title: {
-            type: String,
-            default: '',
-        },
-
-        type: {
-            type: String,
-            default: 'edit',
-        },
+  props: {
+    title: {
+      type: String,
+      default: '',
     },
 
-    computed: {
-        currentIconComponent() {
-            if (this.type === 'edit') {
-                return 'Edit32'
-            }
-
-            if (this.type === 'comment') {
-                return 'AddComment32'
-            }
-
-            if (this.type === 'pills') {
-                return 'PillsAdd32'
-            }
-            if (this.type === 'add') {
-                return 'DocumentAdd32'
-            }
-
-            return 'Edit'
-        },
+    type: {
+      type: String,
+      default: 'edit',
     },
+  },
+
+  computed: {
+    currentIconComponent() {
+      if (this.type === 'edit') {
+        return 'Edit32'
+      }
+
+      if (this.type === 'comment') {
+        return 'AddComment32'
+      }
+
+      if (this.type === 'pills') {
+        return 'PillsAdd32'
+      }
+      if (this.type === 'add') {
+        return 'DocumentAdd32'
+      }
+
+      return 'Edit'
+    },
+  },
 }
 </script>

@@ -95,7 +95,7 @@ $primary: #0B6B74;
 
 .inherit-full-input{
     label{
-        @apply text-primary text-sm
+        @apply text-primary 
     }
     div,select, input, .bx--date-picker__input {
         width: 100% !important;
@@ -159,4 +159,11 @@ $primary: #0B6B74;
 .bx--modal-content{
     padding: 1.5rem !important;
     margin: 0 !important;
+}
+
+button:focus{
+    outline: none !important;
+    border-color: transparent !important;
+    font-family: 'Graphik' !important;
+    box-shadow: 0 0 #0000 !important; 
 }

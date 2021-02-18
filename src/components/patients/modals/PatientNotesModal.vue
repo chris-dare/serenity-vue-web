@@ -16,7 +16,7 @@
             class="w-10 h-10 rounded-full mr-3"
             :src="$faker().image.image()"
             alt=""
-          />
+          >
           <div>
             <p>Dr. {{ $faker().name.findName() }}</p>
             <p class="text-secondary text-xs">
@@ -26,45 +26,51 @@
         </div>
 
         <div class="my-6">
-          <p class="text-secondary text-sm mb-2">Encounter</p>
+          <p class="text-secondary  mb-2">Encounter</p>
           <div class="flex items-center">
             <p>Nov. 10, 2020</p>
-            <p class="text-sm text-primary ml-2">
+            <p class=" text-primary ml-2">
               {{ $faker().lorem.word() }}
               <router-link
                 to="/"
                 class="text-serenity-primary font-bold underline ml-2"
-                >View encounter</router-link
               >
+                View encounter
+              </router-link>
             </p>
           </div>
         </div>
         <div class="my-6">
-          <p class="text-secondary text-sm mb-2">Area</p>
+          <p class="text-secondary  mb-2">Area</p>
           <p>In Patient</p>
         </div>
         <div class="my-6">
           <p
-            class="text-secondary text-sm pb-2 border border-solid border-subtle"
+            class="text-secondary  pb-2 border border-solid border-subtle"
           >
             Details
           </p>
           <p>
             Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
-            in laying out print, graphic or web designs. <br />
-            <br />
+            in laying out print, graphic or web designs. <br>
+            <br>
             The passage is attributed to an unknown typesetter in the 15th
             century who is thought to have scrambled parts of Cicero's De
             Finibus Bonorum et Malorum for use in a type specimen book.
-            <br />
-            <br />
+            <br>
+            <br>
             Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
             in laying out print, graphic or web designs.
           </p>
         </div>
       </div>
       <div class="w-full mt-8">
-        <SeButton variant="secondary" full> Close</SeButton>
+        <SeButton
+          variant="secondary"
+          full
+        >
+          Close
+        </SeButton>
       </div>
     </template>
   </cv-modal>

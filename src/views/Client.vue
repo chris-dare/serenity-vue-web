@@ -8,9 +8,9 @@
           <UtilityBar />
         </template>
         <template>
-            <vue-page-transition>
+          <vue-page-transition>
             <router-view />
-            </vue-page-transition>
+          </vue-page-transition>
         </template>
       </LeftSidebarLayout>
       <ChangePasswordModal ref="changePasswordModal" />

@@ -1,7 +1,19 @@
 <template>
-  <div :class="customClass" class="bg-serenity-light-gray flex items-center">
-    <input type="file" name="file" id="file" class="inputfile hidden" accept="image/*" />
-    <label class="w-full" for="file">
+  <div
+    :class="customClass"
+    class="bg-serenity-light-gray flex items-center"
+  >
+    <input
+      id="file"
+      type="file"
+      name="file"
+      class="inputfile hidden"
+      accept="image/*"
+    >
+    <label
+      class="w-full"
+      for="file"
+    >
       <slot name="button">
         <div class="flex items-center justify-between text-serenity-primary w-full">
           <div>{{ title }}</div>
@@ -26,8 +38,8 @@ export default {
     },
 
     customClass: {
-        type: String,
-        default: 'h-12 px-6 border-t border-solid border-serenity-subtle-border',
+      type: String,
+      default: 'h-12 px-6 border-t border-solid border-serenity-subtle-border',
     },
   },
 }
