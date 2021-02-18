@@ -16,7 +16,7 @@
     <p class="text-serenity-primary my-6 font-semibold">
       What would you like to do?
     </p>
-    <div class="flex my-4">
+    <div class="grid grid-cols-5 gap-2 lg:gap-6 my-4">
       <PatientCard
         v-for="(dashboard, index) in dashboardTypes"
         :key="index"
@@ -126,6 +126,7 @@ export default {
       if (dashboard.value === 'schedule') {
         this.$router.push({ name: 'SelectPatient'})
       }
+      
     },
   },
 }

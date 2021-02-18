@@ -18,6 +18,9 @@ import '@/globalComponents'
 import '@/assets/styles/tailwind.scss'
 import '@carbon/charts/styles.css'
 
+// all vue plugins
+import '@/plugins'
+
 Vue.use(CarbonComponentsVue)
 Vue.use(require('vue-faker'))
 Vue.use(CarbonCharts)

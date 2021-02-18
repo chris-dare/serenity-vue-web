@@ -24,9 +24,19 @@
           alt=""
         >
       </div>
-      <p class="text-serenity-primary px-4 py-2">Profile information</p>
-      <p class="text-serenity-primary px-4 py-2">Account security</p>
-      <p class="text-serenity-primary px-4 py-2">Support</p>
+      <p
+        class="text-serenity-primary px-4 py-2 cursor-pointer"
+        @click="$trigger('profile:edit')"
+      >
+        Profile information
+      </p>
+      <p
+        class="text-serenity-primary px-4 py-2 cursor-pointer"
+        @click="$trigger('profile:security')"
+      >
+        Account security
+      </p>
+      <p class="text-serenity-primary px-4 py-2 cursor-pointer">Support</p>
       <div
         class="flex items-center h-12 bg-serenity-placeholder px-4 text-white cursor-pointer"
         @click="logout"

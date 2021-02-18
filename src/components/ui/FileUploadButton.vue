@@ -14,10 +14,12 @@
       class="w-full"
       for="file"
     >
-      <div class="flex items-center justify-between text-serenity-primary w-full">
-        <div>{{ title }}</div>
-        <CloudUpload class="w-5 h-5" />
-      </div>
+      <slot name="button">
+        <div class="flex items-center justify-between text-serenity-primary w-full">
+          <div>{{ title }}</div>
+          <CloudUpload class="w-5 h-5" />
+        </div>
+      </slot>
     </label>
   </div>
 </template>
@@ -42,5 +44,3 @@ export default {
   },
 }
 </script>
-
-<style></style>
