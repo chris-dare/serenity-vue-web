@@ -2,10 +2,12 @@
   <div :class="customClass" class="bg-serenity-light-gray flex items-center">
     <input type="file" name="file" id="file" class="inputfile hidden" accept="image/*" />
     <label class="w-full" for="file">
-      <div class="flex items-center justify-between text-serenity-primary w-full">
-        <div>{{ title }}</div>
-        <CloudUpload class="w-5 h-5" />
-      </div>
+      <slot name="button">
+        <div class="flex items-center justify-between text-serenity-primary w-full">
+          <div>{{ title }}</div>
+          <CloudUpload class="w-5 h-5" />
+        </div>
+      </slot>
     </label>
   </div>
 </template>

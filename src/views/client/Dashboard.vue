@@ -16,7 +16,7 @@
     <p class="text-serenity-primary my-6 font-semibold">
       What would you like to do?
     </p>
-    <div class="flex my-4">
+    <div class="grid grid-cols-5 gap-2 lg:gap-6 my-4">
       <PatientCard
         @click="change(dashboard)"
         :is-selected="selected === dashboard.value"
@@ -24,7 +24,7 @@
         :type="dashboard.type"
         v-for="(dashboard, index) in dashboardTypes"
         :key="index"
-        custom-class="bg-white border-0"
+        custom-class="w-full bg-white border-0 mb-6"
       />
     </div>
     <p class="text-serenity-primary my-6 font-semibold">
@@ -105,6 +105,18 @@ export default {
           type: 'book',
           value: 'book',
         },
+        {
+          label: 'Edit Profile',
+          description: '',
+          type: 'user',
+          value: 'profile',
+        },
+        {
+          label: 'Security',
+          description: 'Protect your account',
+          type: 'security',
+          value: 'security',
+        },
       )
 
       return types
@@ -126,6 +138,15 @@ export default {
       if (dashboard.value === 'schedule') {
         this.$router.push({ name: 'SelectPatient'})
       }
+
+      if (dashboard.value === 'profile') {
+        this.$trigger('profile:edit')
+      }
+
+      if (dashboard.value === 'security') {
+        this.$trigger('profile:security')
+      }
+      
     },
   },
 }
