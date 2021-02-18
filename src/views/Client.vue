@@ -24,8 +24,8 @@ import AppHeader from '@/layout/AppHeader'
 import AppSidebar from '@/layout/AppSidebar'
 import UtilityBar from '@/components/utility/UtilityBar'
 import LeftSidebarLayout from '@/layout/LeftSidebarLayout'
-import ChangePasswordModal from '@/views/profile/ChangePasswordModal'
-import EditProfileModal from '@/views/profile/EditProfileModal'
+import ChangePasswordModal from '@/components/layout/ChangePasswordModal'
+import EditProfileModal from '@/components/layout/EditProfileModal'
 
 export default {
   name: 'Home',

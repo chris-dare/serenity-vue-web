@@ -31,7 +31,7 @@
             </div>
             <div class="grid grid-cols-2 gap-8 my-8">
               <cv-text-input
-                label="Firstname"
+                label="First Name"
                 v-model="form.first_name"
                 placeholder="Enter Firstname"
                 class="inherit-full-input"
@@ -39,7 +39,7 @@
               >
               </cv-text-input>
               <cv-text-input
-                label="Lastname"
+                label="Last Name"
                 v-model="form.last_name"
                 placeholder="Enter Latname"
                 class="inherit-full-input"
