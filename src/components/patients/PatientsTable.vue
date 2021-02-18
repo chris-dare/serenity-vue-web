@@ -1,10 +1,9 @@
 <template>
   <div>
     <cv-search
-      placeholder="Search for patient, enter name or MR number"
       v-model="search"
-    >
-    </cv-search>
+      placeholder="Search for patient, enter name or MR number"
+    />
     <div class="my-4 flex items-center justify-between">
       <div>
         <cv-button
@@ -28,7 +27,7 @@
           kind="ghost"
           class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
         >
-          <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
+          <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
           In-patient ({{ 1 }})
         </cv-button>
         <!-- <cv-button
@@ -46,7 +45,11 @@
           class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
         >
           Male({{ maleCount }})
-          <img src="@/assets/img/gender--male 1.svg" class="ml-2" alt="" />
+          <img
+            src="@/assets/img/gender--male 1.svg"
+            class="ml-2"
+            alt=""
+          >
         </cv-button>
         <cv-button
           size="field"
@@ -54,41 +57,33 @@
           class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
         >
           Female({{ femaleCount }})
-          <img src="@/assets/img/gender--female 1.svg" class="ml-2" alt="" />
+          <img
+            src="@/assets/img/gender--female 1.svg"
+            class="ml-2"
+            alt=""
+          >
         </cv-button>
       </div>
-      <cv-button
-        size="field"
-        kind="ghost"
-        class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
-      >
-        Filters
-        <img src="@/assets/img/filter 1.svg" class="ml-2" alt="" />
-      </cv-button>
+      <FilterDropdown v-model="selectedFilter" />
     </div>
 
     <div>
       <cv-data-table
+        ref="table"
+        v-model="rowSelects"
         :row-size="rowSize"
         :sortable="sortable"
         :columns="columns"
         :pagination="{
           numberOfItems: patientsCount,
         }"
-        @pagination="actionOnPagination"
-        v-model="rowSelects"
-        @row-select-change="actionRowSelectChange"
-        @sort="onSort"
         :overflow-menu="sampleOverflowMenu"
         :data="patients"
+        @pagination="actionOnPagination"
+        @row-select-change="actionRowSelectChange"
+        @sort="onSort"
         @overflow-menu-click="onOverflowMenuClick"
-        ref="table"
       >
-        <template slot="batch-actions">
-          <cv-button>
-            Delete
-          </cv-button>
-        </template>
         <template slot="data">
           <cv-data-table-row
             v-for="(row, rowIndex) in patients"
@@ -101,9 +96,9 @@
                   class="w-12 h-12 rounded-full mr-3"
                   :src="row.image"
                   alt=""
-                />
+                >
                 <div>
-                  <p class="text-sm">{{ row.name }}</p>
+                  <p class="">{{ row.name }}</p>
                   <p class="text-secondary text-xs">
                     {{ row.gender }}, {{ row.age }} years
                   </p>
@@ -112,25 +107,32 @@
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p class="text-sm">{{ row.weight }}kg</p>
+                <p class="">{{ row.weight }}kg</p>
                 <p class="text-secondary text-xs">{{ row.height }}cm</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p class="text-sm">{{ row.phone }}</p>
+                <p class="">{{ row.phone }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p class="text-sm">{{ row.recent }}</p>
+                <p class="">{{ row.recent }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <router-link tag="div" :to="`/patients/${row.id}`" class="flex items-center cursor-pointer" >
+              <router-link
+                tag="div"
+                :to="`/patients/${row.id}`"
+                class="flex items-center cursor-pointer"
+              >
                 View
                 <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
-                <img src="@/assets/img/view 1.svg" alt="">
+                  <img
+                    src="@/assets/img/view 1.svg"
+                    alt=""
+                  >
                 </div>
               </router-link>
             </cv-data-table-cell>
@@ -164,6 +166,7 @@ export default {
       zebra: false,
       search: '',
       sampleOverflowMenu: [],
+      selectedFilter: '',
     }
   },
   computed: {
@@ -182,10 +185,10 @@ export default {
   },
 
   methods: {
-      onOverflowMenuClick() {},
-      onSort() {},
-      actionRowSelectChange() {},
-      actionOnPagination() {},
+    onOverflowMenuClick() {},
+    onSort() {},
+    actionRowSelectChange() {},
+    actionOnPagination() {},
   },
 }
 </script>

@@ -1,10 +1,9 @@
 <template>
   <div>
     <cv-search
-      placeholder="Search for medication or date or condition"
       v-model="search"
-    >
-    </cv-search>
+      placeholder="Search for medication or date or condition"
+    />
     <div class="my-4 flex items-center justify-between">
       <div>
         <cv-button
@@ -33,7 +32,7 @@
     </div>
     <div class="bg-white p-3">
       <div class="flex items-center justify-between mb-4">
-        <p class="text-sm text-gray-500">Notes</p>
+        <p class=" text-gray-500">Notes</p>
         <div
           class="bg-serenity-light-gray w-8 h-8 rounded-full ml-6 flex items-center justify-center cursor-pointer"
         >
@@ -42,10 +41,10 @@
       </div>
 
       <cv-data-table
-        :columns="columns"
-        v-model="rowSelects"
-        :data="[]"
         ref="table"
+        v-model="rowSelects"
+        :columns="columns"
+        :data="[]"
         class="transparent-table"
         size="tall"
       >
@@ -56,7 +55,7 @@
             :value="`${rowIndex}`"
           >
             <cv-data-table-cell>
-              <p class="text-sm">{{ $date.formatDate($faker().date.recent(), 'MMM. dd, yyyy') }}</p>
+              <p class="">{{ $date.formatDate($faker().date.recent(), 'MMM. dd, yyyy') }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div class="flex items-center py-2">
@@ -64,7 +63,7 @@
                   class="w-10 h-10 rounded-full mr-3"
                   :src="$faker().image.image()"
                   alt=""
-                />
+                >
                 <div>
                   <p>Dr. {{ $faker().name.findName() }}</p>
                   <p class="text-secondary text-xs">
@@ -84,10 +83,16 @@
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <div @click="showOrder(row)" class="flex items-center cursor-pointer text-sm" >
+              <div
+                class="flex items-center cursor-pointer "
+                @click="showOrder(row)"
+              >
                 View
                 <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
-                <img src="@/assets/img/view 1.svg" alt="">
+                  <img
+                    src="@/assets/img/view 1.svg"
+                    alt=""
+                  >
                 </div>
               </div>
             </cv-data-table-cell>
@@ -124,10 +129,10 @@ export default {
   },
 
   methods: {
-      showOrder(data) {
-          this.order = data
-          this.visible = true
-      },
+    showOrder(data) {
+      this.order = data
+      this.visible = true
+    },
   },
 }
 </script>

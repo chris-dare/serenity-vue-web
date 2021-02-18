@@ -1,10 +1,9 @@
 <template>
   <div>
     <cv-search
-      placeholder="Search for medication or date or condition"
       v-model="search"
-    >
-    </cv-search>
+      placeholder="Search for medication or date or condition"
+    />
     <div class="my-4 flex items-center justify-between">
       <div>
         <cv-button
@@ -20,7 +19,7 @@
           class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
           @click="visible = !visible"
         >
-          <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
+          <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
           Medications ({{ 1 }})
         </cv-button>
         <cv-button
@@ -29,29 +28,32 @@
           class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
           @click="treatmentVisible = !treatmentVisible"
         >
-          <div class="w-2 h-2 rounded-full bg-warning mr-2"></div>
+          <div class="w-2 h-2 rounded-full bg-warning mr-2" />
           Treatment plans ({{ 1 }})
         </cv-button>
       </div>
     </div>
     <div class="bg-white p-3">
       <div class="flex items-center justify-between mb-4">
-        <p class="text-sm text-gray-500">Prescriptions</p>
+        <p class=" text-gray-500">Prescriptions</p>
         <div
           class="bg-serenity-light-gray w-9 h-9 rounded-full ml-6 flex items-center justify-center"
         >
-          <img src="@/assets/img/pills--add 1.svg" class="w-4 h-4" />
+          <img
+            src="@/assets/img/pills--add 1.svg"
+            class="w-4 h-4"
+          >
         </div>
       </div>
 
       <cv-data-table
+        ref="table"
+        v-model="rowSelects"
         :columns="columns"
         :pagination="{
           numberOfItems: 10,
         }"
-        v-model="rowSelects"
         :data="[]"
-        ref="table"
         class="transparent-table"
         size="tall"
       >
@@ -62,26 +64,32 @@
             :value="`${rowIndex}`"
           >
             <cv-data-table-cell>
-              <p class="text-serenity-primary text-sm">{{ $faker().lorem.word() }}</p>
+              <p class="text-serenity-primary ">{{ $faker().lorem.word() }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p class="text-sm">{{ $faker().lorem.word() }}</p>
+              <p class="">{{ $faker().lorem.word() }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p class="text-sm">{{ $faker().lorem.word() }}</p>
+                <p class="">{{ $faker().lorem.word() }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p class="text-sm">{{ $faker().lorem.word() }}</p>
+                <p class="">{{ $faker().lorem.word() }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <div @click="showPrescription(row)" class="flex items-center cursor-pointer text-sm" >
+              <div
+                class="flex items-center cursor-pointer "
+                @click="showPrescription(row)"
+              >
                 View
                 <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
-                <img src="@/assets/img/view 1.svg" alt="">
+                  <img
+                    src="@/assets/img/view 1.svg"
+                    alt=""
+                  >
                 </div>
               </div>
             </cv-data-table-cell>
@@ -120,10 +128,10 @@ export default {
   },
 
   methods: {
-      showPrescription(data) {
-          this.prescription = data
-          this.visible = true
-      },
+    showPrescription(data) {
+      this.prescription = data
+      this.visible = true
+    },
   },
 }
 </script>

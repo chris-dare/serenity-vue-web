@@ -1,30 +1,41 @@
 <template>
-  <Dropdown :visible.sync="visible" with-shadow>
+  <Dropdown
+    :visible.sync="visible"
+    with-shadow
+  >
     <cv-button
+      slot="label"
       size="field"
       kind="primary"
       class="px-4 bg-black hover:bg-black mr-2"
       @click="visible = !visible"
-      slot="label"
     >
       Add new
-      <img src="@/assets/img/chevron--sort--down 1.svg" class="ml-2" alt="" />
+      <img
+        src="@/assets/img/chevron--sort--down 1.svg"
+        class="ml-2"
+        alt=""
+      >
     </cv-button>
     <div class="w-52 bg-white">
       <router-link
-        class="flex items-center justify-between p-4 hover:bg-gray-200 cursor-pointer"
         v-for="(option, index) in options"
         :key="index"
-        @click="visible = !visible"
+        class="flex items-center justify-between p-4 hover:bg-gray-200 cursor-pointer"
         :to="{name: option.path}"
         tag="div"
+        @click="visible = !visible"
       >
-        <p>{{ option.label }}</p>
+        <p :class="{'text-orange text-lg': option.noIcon}">{{ option.label }}</p>
         <div
+          v-if="!option.noIcon"
           class="flex justify-center items-center rounded-full h-4 w-4 mr-3"
           :class="option.color"
         >
-          <component :is="option.component" class="w-3 h-3 text-black" />
+          <component
+            :is="option.component"
+            class="w-3 h-3 text-black"
+          />
         </div>
       </router-link>
     </div>
@@ -37,11 +48,12 @@ import Microscope from '@carbon/icons-vue/es/microscope/32.js'
 import Medication from '@carbon/icons-vue/es/medication/32.js'
 import DicomOverlay from '@carbon/icons-vue/es/watson-health/dicom--overlay/32'
 import StudySkip from '@carbon/icons-vue/es/watson-health/study--skip/32'
+import Cursor32 from '@carbon/icons-vue/es/watson-health/3D-cursor--alt/32'
 
 export default {
   name: 'AddNewDropdown',
 
-  components: { HealthCross, Microscope, Medication, DicomOverlay, StudySkip },
+  components: { HealthCross, Microscope, Medication, DicomOverlay, StudySkip, Cursor32 },
 
   data() {
     return {
@@ -53,7 +65,13 @@ export default {
     options() {
       return [
         {
-          label: 'Vitals Information',
+          label: 'Admit Patient',
+          component: 'Cursor32',
+          color: 'bg-tetiary',
+          path: 'Vitals',
+        },
+        {
+          label: 'Capture vitals',
           component: 'HealthCross',
           color: 'bg-tetiary',
           path: 'Vitals',
@@ -81,6 +99,11 @@ export default {
           component: 'StudySkip',
           color: 'bg-tetiary',
           path: 'Vitals',
+        },
+        {
+          label: 'Mark as deceased',
+          path: 'Vitals',
+          noIcon: true,
         },
       ]
     },

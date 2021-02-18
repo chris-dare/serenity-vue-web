@@ -1,9 +1,16 @@
 <template>
   <div class="px-6">
-    <div v-for="(item, index) in 4" :key="index" class="my-4">
+    <div
+      v-for="(item, index) in 4"
+      :key="index"
+      class="my-4"
+    >
       <div class="flex">
-        <img class="w-9 h-9 rounded-full mr-3" :src="$faker().image.image()" />
-        <div class="text-sm">
+        <img
+          class="w-9 h-9 rounded-full mr-3"
+          :src="$faker().image.image()"
+        >
+        <div class="">
           <span class="text-primary font-semibold">{{
             $faker().name.findName()
           }}</span>

@@ -7,10 +7,10 @@
             class="w-16 h-16 rounded-full mx-4"
             :src="patient.image"
             alt=""
-          />
+          >
           <div>
             <p>{{ patient.name }}</p>
-            <p class="text-secondary text-sm capitalize">
+            <p class="text-secondary  capitalize">
               {{ patient.gender }}, {{ patient.age }} years
             </p>
             <div class="mt-2 flex items-center">
@@ -22,31 +22,41 @@
         <div
           class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
         >
-          <img src="@/assets/img/edit 1.svg" class="w-4 h-4" />
+          <img
+            src="@/assets/img/edit 1.svg"
+            class="w-4 h-4"
+          >
         </div>
       </div>
       <div class="flex">
-        
         <AddNewDropdown />
         <cv-button
+          v-if="!hasEncounter"
           kind="primary"
           size="field"
           class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
           @click="$router.push({ name: 'SelectPatient' })"
-          v-if="!hasEncounter"
         >
           Record a new encounter
-          <img src="@/assets/img/add 1.svg" class="ml-2" alt="" />
+          <img
+            src="@/assets/img/add 1.svg"
+            class="ml-2"
+            alt=""
+          >
         </cv-button>
         <cv-button
+          v-else
           kind="primary"
           size="field"
           class="px-4 bg-warning hover:bg-warning mr-2 text-black"
           @click="$router.push({ name: 'SelectPatient' })"
-          v-else
         >
           Open ongoing encounter
-          <img src="@/assets/img/add 1.svg" class="ml-2" alt="" />
+          <img
+            src="@/assets/img/add 1.svg"
+            class="ml-2"
+            alt=""
+          >
         </cv-button>
       </div>
     </div>
@@ -54,16 +64,17 @@
     <div>
       <div class="mt-2 bg-white flex">
         <router-link
-          tag="div"
-          :to="{ name: link.path }"
           v-for="(link, index) in links"
           :key="index"
+          tag="div"
+          :to="{ name: link.path }"
           class="relative cursor-pointer flex-1 items-center justify-center flex border-b-2 py-4 border-serenity-primary-highlight"
-          >{{ link.label }}
+        >
+          {{ link.label }}
           <div
             class="w-4/5 mx-auto h-0.5 absolute bg-serenity-light-gray bottom-0"
             :class="{ 'bg-serenity-primary-highlight': link.path === $route.name }"
-          ></div>
+          />
         </router-link>
       </div>
       <router-view />
@@ -89,7 +100,7 @@ export default {
 
   data() {
     return {
-        hasEncounter: false,
+      hasEncounter: false,
     //   links: [
     //     { label: 'Summary', path: 'PatientSummary' },
     //     { label: 'Chart', path: 'PatientCharts' },
@@ -109,22 +120,22 @@ export default {
       globalType: (state) => state.global.globalType,
     }),
     links() {
-        let links = [{ label: 'Summary', path: 'PatientSummary' }]
+      let links = [{ label: 'Summary', path: 'PatientSummary' }]
 
-        if (this.globalType === 'Reception') {
-            links.push({ label: 'Chart', path: 'PatientCharts' },{ label: 'Appointments', path: 'PatientAppointments' })
-        } else {
-            links.push(
-        { label: 'Timeline', path: 'PatientTimeline' },
-        { label: 'Chart', path: 'PatientCharts' },
-        { label: 'Appointments', path: 'PatientAppointments' },
-        { label: 'Encounters', path: 'PatientEncounters' },
-        { label: 'Prescriptions', path: 'PatientPrescriptions' },
-        { label: 'Orders/Billing', path: 'PatientOrders' },
-        { label: 'Reports', path: 'PatientReports' },
-        { label: 'Notes', path: 'PatientNotes' })
-        }
-            return links
+      if (this.globalType === 'Reception') {
+        links.push({ label: 'Chart', path: 'PatientCharts' },{ label: 'Appointments', path: 'PatientAppointments' })
+      } else {
+        links.push(
+          { label: 'Timeline', path: 'PatientTimeline' },
+          { label: 'Chart', path: 'PatientCharts' },
+          { label: 'Appointments', path: 'PatientAppointments' },
+          { label: 'Encounters', path: 'PatientEncounters' },
+          { label: 'Prescriptions', path: 'PatientPrescriptions' },
+          { label: 'Orders/Billing', path: 'PatientOrders' },
+          { label: 'Reports', path: 'PatientReports' },
+          { label: 'Notes', path: 'PatientNotes' })
+      }
+      return links
 
     },
     patient() {

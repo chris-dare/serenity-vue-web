@@ -3,9 +3,10 @@ module.exports = {
   env: {
     node: true,
   },
-  'extends': [
+  extends: [
     'plugin:vue/essential',
     'eslint:recommended',
+    'plugin:vue/recommended',
   ],
   parserOptions: {
     parser: 'babel-eslint',
@@ -19,6 +20,7 @@ module.exports = {
     'space-before-function-paren': 0,
     quotes: [2, 'single', 'avoid-escape'],
     semi: [2, 'never'],
+    indent: ['error', 2],
     'comma-dangle': ['error', 'always-multiline'],
     camelcase: 'off',
     'promise/no-nesting': 'off',

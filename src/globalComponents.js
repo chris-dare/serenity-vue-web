@@ -8,6 +8,7 @@ import Webcam from '@/components/ui/Webcam'
 import Dropdown from '@/components/ui/Dropdown'
 import DateTimePicker from '@/components/ui/DateTimePicker'
 import Button from '@/components/ui/Button'
+import FilterDropdown from '@/components/ui/FilterDropdown'
 
 Vue.component('ToggleList', ToggleList)
 Vue.component('EditableCard', EditableCard)
@@ -17,3 +18,4 @@ Vue.component('Webcam', Webcam)
 Vue.component('Dropdown', Dropdown)
 Vue.component('DateTimePicker', DateTimePicker)
 Vue.component('SeButton', Button)
+Vue.component('FilterDropdown', FilterDropdown)

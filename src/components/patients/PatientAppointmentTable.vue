@@ -2,15 +2,10 @@
   <div>
     <div>
       <cv-data-table
+        ref="table"
         :columns="columns"
         :data="[]"
-        ref="table"
       >
-        <template slot="batch-actions">
-          <cv-button>
-            Delete
-          </cv-button>
-        </template>
         <template slot="data">
           <cv-data-table-row
             v-for="(row, rowIndex) in 5"
@@ -23,7 +18,7 @@
                   class="w-10 h-10 rounded-full mr-3"
                   :src="$faker().image.image()"
                   alt=""
-                />
+                >
                 <div>
                   <p>{{ $faker().name.findName() }}</p>
                   <p class="text-secondary text-xs">

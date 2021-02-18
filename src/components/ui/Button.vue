@@ -1,10 +1,10 @@
 <template>
   <cv-button
     :class="[buttonClass, full ? 'w-full' : '']"
-    class="px-4 flex items-center justify-center mr-2 text-sm"
-    @click="$emit('click')"
+    class="px-4 flex items-center justify-center mr-2 "
     kind="primary"
     :size="size"
+    @click="$emit('click')"
   >
     <slot>{{ label }}</slot>
   </cv-button>
@@ -26,8 +26,8 @@ export default {
     },
 
     size: {
-        type: String,
-        default: 'field',
+      type: String,
+      default: 'field',
     },
 
     variant: {
