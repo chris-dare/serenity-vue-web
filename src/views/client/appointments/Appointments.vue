@@ -10,7 +10,11 @@
           kind="primary"
         >
           Add new appointment
-          <img class="ml-4 w-5 h-5" src="@/assets/img/add 1.svg" alt="" />
+          <img
+            class="ml-4 w-5 h-5"
+            src="@/assets/img/add 1.svg"
+            alt=""
+          >
         </router-link>
       </div>
 
@@ -28,13 +32,13 @@ export default {
   components: { AppointmentsTable },
 
   mounted() {
-      this.getAppointments()
+    this.getAppointments()
   },
 
   methods: {
-      ...mapActions({
-        getAppointments: 'appointments/getAppointments',
-      }),
+    ...mapActions({
+      getAppointments: 'appointments/getAppointments',
+    }),
   },
 }
 </script>

@@ -8,7 +8,7 @@
             class="w-10 h-10 rounded-full mr-3"
             :src="currentAppointment.patient.image || $faker().image.image()"
             alt=""
-          />
+          >
           <div>
             <p class="text-black">{{ currentAppointment.patient.name || $faker().name.findName() }}</p>
             <p class="text-secondary">
@@ -27,7 +27,10 @@
           <div
             class="bg-serenity-light-gray w-8 h-8 rounded-full ml-6 flex items-center justify-center"
           >
-            <img src="@/assets/img/edit 1.svg" class="w-4 h-4" />
+            <img
+              src="@/assets/img/edit 1.svg"
+              class="w-4 h-4"
+            >
           </div>
         </div>
       </div>
@@ -56,7 +59,10 @@
           <div
             class="bg-serenity-light-gray w-8 h-8 rounded-full ml-6 flex items-center justify-center"
           >
-            <img src="@/assets/img/edit 1.svg" class="w-4 h-4" />
+            <img
+              src="@/assets/img/edit 1.svg"
+              class="w-4 h-4"
+            >
           </div>
         </div>
       </div>
@@ -69,10 +75,10 @@
             class="w-10 h-10 rounded-full mr-3"
             :src="$faker().image.image()"
             alt=""
-          />
+          >
           <div>
             <p class="text-black font-semibold mb-1">
-              {{  currentAppointment.doctor.name || $faker().name.findName() }}
+              {{ currentAppointment.doctor.name || $faker().name.findName() }}
             </p>
             <p class="text-secondary mb-2">
               General Practitioner
@@ -86,7 +92,10 @@
           <div
             class="bg-serenity-light-gray w-8 h-8 rounded-full ml-6 flex items-center justify-center"
           >
-            <img src="@/assets/img/edit 1.svg" class="w-4 h-4" />
+            <img
+              src="@/assets/img/edit 1.svg"
+              class="w-4 h-4"
+            >
           </div>
         </div>
       </div>
@@ -101,7 +110,10 @@
           <div
             class="bg-serenity-light-gray w-8 h-8 rounded-full ml-6 flex items-center justify-center"
           >
-            <img src="@/assets/img/edit 1.svg" class="w-4 h-4" />
+            <img
+              src="@/assets/img/edit 1.svg"
+              class="w-4 h-4"
+            >
           </div>
         </div>
       </div>
@@ -111,23 +123,26 @@
         <cv-button
           class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
           kind="tertiary"
-          >Cancel</cv-button
         >
+          Cancel
+        </cv-button>
         <cv-button
-          @click="$router.push({ name: 'AppointmentPayment' })"
           class="bg-black px-6"
           kind="primary"
-          >Go back</cv-button
+          @click="$router.push({ name: 'AppointmentPayment' })"
         >
+          Go back
+        </cv-button>
       </div>
       <div class="flex items-center">
         <cv-button
-          @click="billingVisible = !billingVisible"
           :icon="icon"
           kind="primary"
           class="bg-serenity-primary"
-          >Book appointment</cv-button
+          @click="billingVisible = !billingVisible"
         >
+          Book appointment
+        </cv-button>
       </div>
     </div>
     <AppointmentSuccessModal :visible.sync="visible" />
@@ -155,19 +170,19 @@ export default {
   },
 
   computed: {
-      ...mapState({
-          currentAppointment: (state) => state.appointments.currentAppointment,
-      }),
+    ...mapState({
+      currentAppointment: (state) => state.appointments.currentAppointment,
+    }),
   },
 
   methods: {
-      ...mapActions({
-          createAppointment: 'appointments/createAppointment',
-      }),
+    ...mapActions({
+      createAppointment: 'appointments/createAppointment',
+    }),
 
-      save() {
-          this.createAppointment()
-      },
+    save() {
+      this.createAppointment()
+    },
   },
 }
 </script>

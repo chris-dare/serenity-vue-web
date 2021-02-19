@@ -5,38 +5,46 @@
     </p>
     <div class="grid grid-cols-2 gap-6">
       <div class="flex items-end space-x-3">
-        <cv-text-input label="Weight" v-model="internalForm.weight">
-        </cv-text-input>
+        <cv-text-input
+          v-model="internalForm.weight"
+          label="Weight"
+        />
         <p class="mb-2">Kg</p>
       </div>
       <div class="flex items-end space-x-3">
-        <cv-text-input label="Height" v-model="internalForm.height">
-        </cv-text-input>
+        <cv-text-input
+          v-model="internalForm.height"
+          label="Height"
+        />
         <p class="mb-2">cm</p>
       </div>
       <div class="flex items-end space-x-3">
-        <cv-text-input label="BMI (Calculated)" v-model="internalForm.bmi">
-        </cv-text-input>
+        <cv-text-input
+          v-model="internalForm.bmi"
+          label="BMI (Calculated)"
+        />
         <p class="mb-2">Patient BMI</p>
       </div>
     </div>
 
     <div class="flex items-center justify-between mt-12 mb-6">
       <cv-button
-        @click="$router.push({ name: 'PatientCharts' })"
         class="border-serenity-primary px-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
         kind="tertiary"
-        >Cancel</cv-button
+        @click="$router.push({ name: 'PatientCharts' })"
       >
+        Cancel
+      </cv-button>
       <div class="flex items-center">
         <cv-button
-          @click="$emit('next', 1)"
           :icon="icon"
           kind="primary"
           :disabled="disabled"
           class="bg-serenity-primary ml-6"
-          >Next</cv-button
+          @click="$emit('next', 1)"
         >
+          Next
+        </cv-button>
       </div>
     </div>
   </div>

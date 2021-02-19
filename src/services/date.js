@@ -5,7 +5,7 @@ const formatDate = (date, formatString = 'yyyy-MM-dd HH:mm') => format(date, for
 export default {
   install(Vue) {
     Vue.prototype.$date = {
-        formatDate,
+      formatDate,
     }
   },
 }

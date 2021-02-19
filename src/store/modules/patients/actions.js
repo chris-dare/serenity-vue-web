@@ -4,7 +4,7 @@ import { createPatients } from '@/services/helpers'
 import {
 //   SET_PATIENT,
   SET_PATIENTS,
-//   DELETE_PATIENT,
+  //   DELETE_PATIENT,
   SET_PATIENTS_COUNT,
 } from './mutation-types'
 
@@ -23,27 +23,27 @@ export default {
     //   })
   },
 
-//   createPatient({ commit }, params) {
-//     return PatientsAPI.create(params)
-//       .then(({ data: result }) => {
-//         commit(SET_PATIENT, result.data)
-//         return result.data
-//       })
-//       .catch(result => {
-//         throw result
-//       })
-//   },
+  //   createPatient({ commit }, params) {
+  //     return PatientsAPI.create(params)
+  //       .then(({ data: result }) => {
+  //         commit(SET_PATIENT, result.data)
+  //         return result.data
+  //       })
+  //       .catch(result => {
+  //         throw result
+  //       })
+  //   },
 
-//   updatePatient({ commit }, params) {
-//     return PatientsAPI.update(params)
-//       .then(({ data: result }) => {
-//         commit(SET_PATIENT, result.data)
-//         return result.data
-//       })
-//       .catch(result => {
-//         throw result
-//       })
-//   },
+  //   updatePatient({ commit }, params) {
+  //     return PatientsAPI.update(params)
+  //       .then(({ data: result }) => {
+  //         commit(SET_PATIENT, result.data)
+  //         return result.data
+  //       })
+  //       .catch(result => {
+  //         throw result
+  //       })
+  //   },
 
 //   deletePatient({ commit }, id) {
 //     return PatientsAPI.delete(id)
