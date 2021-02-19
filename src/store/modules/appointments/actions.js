@@ -14,7 +14,7 @@ export default {
   },
 
   addToCurrentAppointment({ commit }, data) {
-      commit(ADD_APPOINTMENT_DATA, data)
+    commit(ADD_APPOINTMENT_DATA, data)
   },
 
   createAppointment({ commit, state }) {
