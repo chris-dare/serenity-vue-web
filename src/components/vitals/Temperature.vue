@@ -5,10 +5,8 @@
     </p>
     <div class="grid grid-cols-2 gap-6">
       <div class="flex items-end space-x-3">
-        <cv-text-input
-          v-model="internalForm.temperature"
-          label="Temperature"
-        />
+        <cv-text-input label="Temperature" v-model="internalForm.temperature">
+        </cv-text-input>
         <p class="mb-2">°C</p>
       </div>
     </div>
@@ -19,27 +17,24 @@
           class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
           kind="tertiary"
           @click="$router.push({ name: 'PatientCharts' })"
+          >Cancel</cv-button
         >
-          Cancel
-        </cv-button>
         <cv-button
+          @click="$emit('next', 0)"
           class="bg-black px-6"
           kind="primary"
-          @click="$emit('next', 0)"
+          >Go back</cv-button
         >
-          Go back
-        </cv-button>
       </div>
       <div class="flex items-center">
         <cv-button
+          @click="$emit('next', 2)"
           :icon="icon"
           kind="primary"
           :disabled="disabled"
           class="bg-serenity-primary ml-6"
-          @click="$emit('next', 2)"
+          >Next</cv-button
         >
-          Next
-        </cv-button>
       </div>
     </div>
   </div>

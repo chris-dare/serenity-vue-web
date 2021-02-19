@@ -12,19 +12,19 @@ export default {
     commit(SET_LOGGED_IN, status)
   },
 
-  //   login({ commit }, loginData) {
-  //     return AuthAPI.login(loginData)
-  //       .then(({ data: result }) => {
-  //         commit(SET_TOKEN, result.data.token)
-  //         commit(SET_USER, result.data.user)
-  //         commit(SET_LOGGED_IN, true)
+//   login({ commit }, loginData) {
+//     return AuthAPI.login(loginData)
+//       .then(({ data: result }) => {
+//         commit(SET_TOKEN, result.data.token)
+//         commit(SET_USER, result.data.user)
+//         commit(SET_LOGGED_IN, true)
 
-  //         return result.data
-  //       })
-  //       .catch(result => {
-  //         throw result.data
-  //       })
-  //   },
+//         return result.data
+//       })
+//       .catch(result => {
+//         throw result.data
+//       })
+//   },
 
 //   refresh({ commit }) {
 //     return AuthAPI.refresh()

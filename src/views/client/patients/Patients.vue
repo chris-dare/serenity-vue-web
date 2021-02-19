@@ -1,24 +1,15 @@
 <template>
   <div>
-    <div class="w-4/5 mx-auto">
-      <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Patients ({{ patientsCount }})</p>
-        <router-link
-          :to="{name:'Biodata'}"
-          tag="cv-button"
-          class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
-          kind="primary"
-        >
-          Add new patient <img
-            class="ml-4 w-5 h-5"
-            src="@/assets/img/add 1.svg"
-            alt=""
-          >
-        </router-link>
-      </div>
+        <div class="w-4/5 mx-auto">
+          <div class="flex items-center justify-between">
+            <p class="text-xl font-bold">Patients ({{ patientsCount }})</p>
+            <router-link :to="{name:'Biodata'}" tag="cv-button" class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4" kind="primary">
+              Add new patient <img class="ml-4 w-5 h-5" src="@/assets/img/add 1.svg" alt="">
+            </router-link>
+          </div>
 
-      <PatientsTable />
-    </div>
+          <PatientsTable />
+        </div>
   </div>
 </template>
 
@@ -31,9 +22,9 @@ export default {
   components: {  PatientsTable },
 
   data() {
-    return {
-      search: '',
-    }
+      return {
+          search: '',
+      }
   },
 
   computed: {

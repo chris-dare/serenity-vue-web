@@ -12,18 +12,18 @@
       </div>
     </div>
     <div class="my-2">
-      <div class="flex items-center justify-between">
-        <p class="text-secondary">Total</p>
-        <p class="font-semibold">{{ total | formatMoney | toCedis }}</p>
-      </div>
-      <div class="flex items-center justify-between my-4">
-        <p class="text-secondary">Amount Paid</p>
-        <p class="font-semibold">{{ total | formatMoney | toCedis }}</p>
-      </div>
-      <div class="flex items-center justify-between">
-        <p class="text-secondary">Balance</p>
-        <p class="text-warning font-semibold">{{ 0 | formatMoney | toCedis }}</p>
-      </div>
+        <div class="flex items-center justify-between">
+            <p class="text-secondary">Total</p>
+            <p class="font-semibold">{{ total | formatMoney | toCedis}}</p>
+        </div>
+        <div class="flex items-center justify-between my-4">
+            <p class="text-secondary">Amount Paid</p>
+            <p class="font-semibold">{{ total | formatMoney | toCedis}}</p>
+        </div>
+        <div class="flex items-center justify-between">
+            <p class="text-secondary">Balance</p>
+            <p class="text-warning font-semibold">{{ 0 | formatMoney | toCedis}}</p>
+        </div>
     </div>
   </div>
 </template>
@@ -41,7 +41,7 @@ export default {
 
   computed: {
     total() {
-      const orders = this.orders.map(order => order.amount)
+    const orders = this.orders.map(order => order.amount)
       return orders.reduce(function (a, b) {
         return a + b
       }, 0)

@@ -5,17 +5,13 @@
     </p>
     <div class="grid grid-cols-2 gap-6">
       <div class="flex items-end space-x-3">
-        <cv-text-input
-          v-model="internalForm.respiration_rate"
-          label="Respiratory rate"
-        />
+        <cv-text-input label="Respiratory rate" v-model="internalForm.respiration_rate">
+        </cv-text-input>
         <p class="mb-2">per min</p>
       </div>
       <div class="flex items-end space-x-3">
-        <cv-text-input
-          v-model="internalForm.saturation"
-          label="Arterial blood oxygen saturation"
-        />
+        <cv-text-input label="Arterial blood oxygen saturation" v-model="internalForm.saturation">
+        </cv-text-input>
         <p class="mb-2">%</p>
       </div>
     </div>
@@ -26,27 +22,24 @@
           class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
           kind="tertiary"
           @click="$router.push({ name: 'PatientCharts' })"
+          >Cancel</cv-button
         >
-          Cancel
-        </cv-button>
         <cv-button
+          @click="$emit('next', 3)"
           class="bg-black px-6"
           kind="primary"
-          @click="$emit('next', 3)"
+          >Go back</cv-button
         >
-          Go back
-        </cv-button>
       </div>
       <div class="flex items-center">
         <cv-button
+          @click="$emit('confirm')"
           :icon="icon"
           kind="primary"
           :disabled="disabled"
           class="bg-serenity-primary ml-6"
-          @click="$emit('confirm')"
+          >Confirm</cv-button
         >
-          Confirm
-        </cv-button>
       </div>
     </div>
   </div>

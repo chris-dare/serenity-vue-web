@@ -5,24 +5,18 @@
     </p>
     <div class="grid grid-cols-2 gap-6">
       <div class="flex items-end space-x-3">
-        <cv-text-input
-          v-model="internalForm.systolic"
-          label="BP Systolic"
-        />
+        <cv-text-input label="BP Systolic" v-model="internalForm.systolic">
+        </cv-text-input>
         <p class="mb-2">mmHg</p>
       </div>
       <div class="flex items-end space-x-3">
-        <cv-text-input
-          v-model="internalForm.diastolic"
-          label="BP Diastolic"
-        />
+        <cv-text-input label="BP Diastolic" v-model="internalForm.diastolic">
+        </cv-text-input>
         <p class="mb-2">mmHg</p>
       </div>
       <div class="flex items-end space-x-3">
-        <cv-text-input
-          v-model="internalForm.pulse"
-          label="Pulse"
-        />
+        <cv-text-input label="Pulse" v-model="internalForm.pulse">
+        </cv-text-input>
         <p class="mb-2">per min</p>
       </div>
     </div>
@@ -33,27 +27,24 @@
           class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
           kind="tertiary"
           @click="$router.push({ name: 'PatientCharts' })"
+          >Cancel</cv-button
         >
-          Cancel
-        </cv-button>
         <cv-button
+          @click="$emit('next', 1)"
           class="bg-black px-6"
           kind="primary"
-          @click="$emit('next', 1)"
+          >Go back</cv-button
         >
-          Go back
-        </cv-button>
       </div>
       <div class="flex items-center">
         <cv-button
+          @click="$emit('next', 3)"
           :icon="icon"
           kind="primary"
           :disabled="disabled"
           class="bg-serenity-primary ml-6"
-          @click="$emit('next', 3)"
+          >Next</cv-button
         >
-          Next
-        </cv-button>
       </div>
     </div>
   </div>

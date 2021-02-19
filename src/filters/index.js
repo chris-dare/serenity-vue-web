@@ -2,14 +2,14 @@ import Vue from 'vue'
 import { format } from 'date-fns'
 
 export function capitalize (value) {
-  if (!value) return ''
-  value = value.toString()
-  return value.charAt(0).toUpperCase() + value.slice(1)
+    if (!value) return ''
+    value = value.toString()
+    return value.charAt(0).toUpperCase() + value.slice(1)
 }
 
 export function formatDate(value) {
-  if (!value) return ''
-  return format(value)
+    if (!value) return ''
+    return format(value)
 }
 
 export function toCedis(value) {
