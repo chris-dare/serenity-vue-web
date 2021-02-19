@@ -5,7 +5,7 @@
         <div class="flex items-center">
           <img
             class="w-16 h-16 rounded-full mx-4"
-            :src="patient.image"
+            :src="$faker().image.image()"
             alt=""
           >
           <div>
@@ -28,7 +28,13 @@
           >
         </div>
       </div>
-      <div class="flex">
+      <div class="flex items-center space-x-4">
+        <p
+          class="underline cursor-pointer"
+          @click="$trigger('visit:end:open')"
+        >
+          End Visit
+        </p>
         <AddNewDropdown />
         <cv-button
           v-if="!hasEncounter"
@@ -58,6 +64,13 @@
             alt=""
           >
         </cv-button>
+        <SeButton
+          v-if="false"
+          variant="danger"
+          @click="$trigger('profile:deceased-info:open')"
+        >
+          Patient is deceaseed - read more
+        </SeButton>
       </div>
     </div>
 
@@ -79,17 +92,19 @@
       </div>
       <router-view />
     </div>
+    <SinglePatientModals />
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 import AddNewDropdown from '@/components/patients/AddNewDropdown'
+import SinglePatientModals from '@/components/patients/modals/SinglePatientModals'
 
 export default {
   name: 'SinglePatient',
 
-  components: {AddNewDropdown},
+  components: { AddNewDropdown, SinglePatientModals },
 
   props: {
     id: {
@@ -101,6 +116,8 @@ export default {
   data() {
     return {
       hasEncounter: false,
+      visible: false,
+      admitModal: false,
     //   links: [
     //     { label: 'Summary', path: 'PatientSummary' },
     //     { label: 'Chart', path: 'PatientCharts' },

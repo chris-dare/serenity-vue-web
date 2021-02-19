@@ -9,6 +9,7 @@ import Dropdown from '@/components/ui/Dropdown'
 import DateTimePicker from '@/components/ui/DateTimePicker'
 import Button from '@/components/ui/Button'
 import FilterDropdown from '@/components/ui/FilterDropdown'
+import SubSection from '@/components/ui/SubSection'
 
 Vue.component('ToggleList', ToggleList)
 Vue.component('EditableCard', EditableCard)
@@ -19,3 +20,4 @@ Vue.component('Dropdown', Dropdown)
 Vue.component('DateTimePicker', DateTimePicker)
 Vue.component('SeButton', Button)
 Vue.component('FilterDropdown', FilterDropdown)
+Vue.component('SubSection', SubSection)

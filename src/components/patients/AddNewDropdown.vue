@@ -18,13 +18,13 @@
       >
     </cv-button>
     <div class="w-52 bg-white">
-      <router-link
+      <div
         v-for="(option, index) in options"
         :key="index"
         class="flex items-center justify-between p-4 hover:bg-gray-200 cursor-pointer"
         :to="{name: option.path}"
         tag="div"
-        @click="visible = !visible"
+        @click="onClick(option)"
       >
         <p :class="{'text-orange text-lg': option.noIcon}">{{ option.label }}</p>
         <div
@@ -37,7 +37,7 @@
             class="w-3 h-3 text-black"
           />
         </div>
-      </router-link>
+      </div>
     </div>
   </Dropdown>
 </template>
@@ -58,6 +58,7 @@ export default {
   data() {
     return {
       visible: false,
+      admitModal: false,
     }
   },
 
@@ -68,7 +69,7 @@ export default {
           label: 'Admit Patient',
           component: 'Cursor32',
           color: 'bg-tetiary',
-          path: 'Vitals',
+          slug: 'admit',
         },
         {
           label: 'Capture vitals',
@@ -80,19 +81,19 @@ export default {
           label: 'Diagnostic test',
           component: 'Microscope',
           color: 'bg-tetiary',
-          path: 'Vitals',
+          slug: 'test',
         },
         {
           label: 'Medication',
           component: 'Medication',
           color: 'bg-tetiary',
-          path: 'Vitals',
+          slug: 'medication',
         },
         {
           label: 'Note',
           component: 'DicomOverlay',
           color: 'bg-tetiary',
-          path: 'Vitals',
+          slug: 'notes',
         },
         {
           label: 'Referral',
@@ -102,10 +103,22 @@ export default {
         },
         {
           label: 'Mark as deceased',
-          path: 'Vitals',
           noIcon: true,
+          slug: 'deceased',
         },
       ]
+    },
+  },
+
+  methods: {
+    onClick(option) {
+      if (option.path) {
+        this.$router.push({ name: option.path})
+        return
+      } else {
+        this.$trigger(`profile:${option.slug}:open`)
+      }
+      this.visible = false
     },
   },
 }

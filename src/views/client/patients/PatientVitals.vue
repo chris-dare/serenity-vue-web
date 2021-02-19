@@ -1,7 +1,14 @@
 <template>
   <div class="w-3/4 mx-auto">
     <p class="text-primary text-xl font-semibold">Capture vitals</p>
-    <div class="grid grid-cols-4 my-6 gap-6">
+    <ConfirmVitalsModal
+      v-if="confirmed"
+      :form="form"
+    />
+    <div
+      v-else
+      class="grid grid-cols-4 my-6 gap-6"
+    >
       <div>
         <cv-radio-group :vertical="true">
           <div
@@ -78,10 +85,6 @@
         />
       </div>
     </div>
-    <ConfirmVitalsModal
-      :visible.sync="visible"
-      :form="form"
-    />
   </div>
 </template>
 
@@ -101,7 +104,7 @@ export default {
   data() {
     return {
       checked: 0,
-      visible: false,
+      confirmed: true,
       navItems: [
         { label: 'Weight and Height', description: 'Patient biological information', value: 'weight', index: 0},
         { label: 'Temperature', description: 'Phone and location of patient', value: 'temperature', index: 1},
