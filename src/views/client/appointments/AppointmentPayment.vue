@@ -5,97 +5,60 @@
     </p>
     <div class="grid grid-cols-3 gap-4">
       <PatientCard
-        v-for="(payment, index) in paymentTypes"
-        :key="index"
+        @click="form.payment_type = payment.value"
         :is-selected="form.payment_type === payment.value"
         :details="payment"
         :type="payment.type"
-        @click="form.payment_type = payment.value"
+        v-for="(payment, index) in paymentTypes"
+        :key="index"
       />
     </div>
-    <div
-      v-if="form.payment_type === 'momo'"
-      class="grid grid-cols-2 gap-4 mt-8"
-    >
+    <div v-if="form.payment_type === 'momo'" class="grid grid-cols-2 gap-4 mt-8">
       <cv-select
         v-model="form.method_of_payment"
         label="Mobile Money Network"
         class="inherit-full-input"
       >
-        <cv-select-option
-          disabled
-          selected
-          hidden
+        <cv-select-option disabled selected hidden
+          >Mobile Money</cv-select-option
         >
-          Mobile Money
-        </cv-select-option>
         <cv-select-option
           v-for="(network, index) in networks"
           :key="index"
           :value="network"
+          >{{ network }}</cv-select-option
         >
-          {{ network }}
-        </cv-select-option>
       </cv-select>
-      <cv-text-input
-        v-model="form.number"
-        class="inherit-full-input"
-        label="Mobile Money Number"
-      />
+      <cv-text-input class="inherit-full-input" label="Mobile Money Number" v-model="form.number"></cv-text-input>
     </div>
-    <div
-      v-if="form.payment_type === 'card'"
-      class="grid grid-cols-2 gap-4 mt-8"
-    >
-      <cv-text-input
-        v-model="form.number"
-        class="inherit-full-input"
-        label="Card Number"
-        placeholder="0000 - 0000 - 0000 - 0000"
-      />
-      <cv-text-input
-        v-model="form.name"
-        class="inherit-full-input"
-        label="Name on Card"
-        placeholder="James Baduor"
-      />
-      <cv-text-input
-        v-model="form.exp"
-        class="inherit-full-input"
-        label="Expiration (mm/yy)"
-        placeholder="12/20"
-      />
-      <cv-text-input
-        v-model="form.cvc"
-        class="inherit-full-input"
-        label="CVC"
-      />
+    <div v-if="form.payment_type === 'card'" class="grid grid-cols-2 gap-4 mt-8">
+      <cv-text-input class="inherit-full-input" label="Card Number" placeholder="0000 - 0000 - 0000 - 0000" v-model="form.number"></cv-text-input>
+      <cv-text-input class="inherit-full-input" label="Name on Card" placeholder="James Baduor" v-model="form.name"></cv-text-input>
+      <cv-text-input class="inherit-full-input" label="Expiration (mm/yy)" placeholder="12/20" v-model="form.exp"></cv-text-input>
+      <cv-text-input class="inherit-full-input" label="CVC" v-model="form.cvc"></cv-text-input>
     </div>
     <div class="flex items-center justify-between my-6">
       <div class="flex items-center">
         <cv-button
           class="border-serenity-primary mr-6 px-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
           kind="tertiary"
+          >Cancel</cv-button
         >
-          Cancel
-        </cv-button>
         <cv-button
+          @click="$router.push({ name: 'DateDoctor' })"
           class="bg-black px-6"
           kind="primary"
-          @click="$router.push({ name: 'DateDoctor' })"
+          >Go back</cv-button
         >
-          Go back
-        </cv-button>
       </div>
       <div class="flex items-center">
         <cv-button
+          @click="save"
           :icon="icon"
           kind="primary"
           class="bg-serenity-primary"
-          @click="save"
+          >Next: Notes/Comments</cv-button
         >
-          Next: Notes/Comments
-        </cv-button>
       </div>
     </div>
   </div>
@@ -114,7 +77,7 @@ export default {
     return {
       selected: 'cash',
       form: {
-        payment_type: 'cash',
+          payment_type: 'cash',
       },
       visible: false,
       icon: ChevronRight,

@@ -6,100 +6,84 @@
         label="Marital status"
         class="inherit-full-input"
       >
-        <cv-select-option
-          disabled
-          selected
-          hidden
+        <cv-select-option disabled selected hidden
+          >Country</cv-select-option
         >
-          Country
-        </cv-select-option>
         <cv-select-option
           value="married"
+          >Married</cv-select-option
         >
-          Married
-        </cv-select-option>
         <cv-select-option
           value="single"
+          >Single</cv-select-option
         >
-          Single
-        </cv-select-option>
         <cv-select-option
           value="relationship"
+          >In a relationship</cv-select-option
         >
-          In a relationship
-        </cv-select-option>
       </cv-select>
       <cv-select
         v-model="form.religion"
         label="Religion"
         class="inherit-full-input"
       >
-        <cv-select-option
-          disabled
-          selected
-          hidden
+        <cv-select-option disabled selected hidden
+          >Region</cv-select-option
         >
-          Region
-        </cv-select-option>
         <cv-select-option
           v-for="(religion, index) in religions"
           :key="index"
           :value="religion"
+          >{{ religion }}</cv-select-option
         >
-          {{ religion }}
-        </cv-select-option>
       </cv-select>
       <cv-text-input
-        v-model="form.home_language"
         label="Home Language"
+        v-model="form.home_language"
         placeholder="Primary language you speak"
         class="inherit-full-input"
-      />
+      >
+      </cv-text-input>
       <cv-text-input
-        v-model="form.email"
         label="Occupation"
+        v-model="form.email"
         placeholder="Occupation"
         class="inherit-full-input"
-      />
+      >
+      </cv-text-input>
       <cv-text-input
-        v-model="form.company"
         label="Company/Employer"
+        v-model="form.company"
         placeholder="Where do you work?"
         class="inherit-full-input"
-      />
+      >
+      </cv-text-input>
       <cv-text-input
-        v-model="form.office_phone_number"
         label="Office Phone number"
+        v-model="form.office_phone_number"
         placeholder="Workplace phone or telephone"
         class="inherit-full-input"
-      />
+      >
+      </cv-text-input>
     </div>
     <div class="flex items-center justify-between mt-12 mb-6">
       <div class="flex items-center">
         <cv-button
           class="border-serenity-primary mr-6 px-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
           kind="tertiary"
+          >Cancel</cv-button
         >
-          Cancel
-        </cv-button>
-        <cv-button
-          class="bg-black px-6"
-          kind="primary"
-          @click="$router.push({ name: 'EmergencyContact' })"
-        >
-          Go back
-        </cv-button>
+        <cv-button @click="$router.push({ name: 'EmergencyContact' })" class="bg-black px-6" kind="primary">Go back</cv-button>
       </div>
       <div class="flex items-center">
         <p class="text-primary underline">Save and close</p>
         <cv-button
+          @click="$router.push({ name: 'Payment' })"
           :icon="icon"
           kind="primary"
           class="bg-serenity-primary ml-6"
-          @click="$router.push({ name: 'Payment' })"
+          >Next: Payment</cv-button
         >
-          Next: Payment
-        </cv-button>
       </div>
     </div>
   </div>

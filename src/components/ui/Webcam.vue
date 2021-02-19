@@ -1,7 +1,7 @@
 <template>
   <div
-    ref="webcam"
     class="bg-serenity-light-gray h-3/4 w-full flex items-center justify-center"
+    ref="webcam"
   >
     <div v-if="showVideo">
       <video
@@ -11,30 +11,23 @@
         height="100%"
         autoplay
         class="border border-solid"
-      />
+      ></video>
       <canvas
         v-show="isPhotoTaken"
         ref="canvas"
         :width="200"
         :height="200"
-      />
-      <div
-        v-if="showVideo"
-        class="camera-shoot"
-      >
-        <button
-          type="button"
-          class="button"
-          @click="takePhoto"
-        >
+      ></canvas>
+      <div v-if="showVideo" class="camera-shoot">
+        <button type="button" class="button" @click="takePhoto">
           takePhoto
         </button>
       </div>
     </div>
     <div
+      @click="showVideo = !showVideo"
       v-else
       class="flex flex-col items-center justify-center cursor-pointer"
-      @click="showVideo = !showVideo"
     >
       <Camera class="w-16 h-16 text-secondary" />
       <p class="text-secondary">Click to use webcam</p>
@@ -59,15 +52,6 @@ export default {
     }
   },
 
-  computed: {
-    dimensions() {
-      return {
-        height: this.$refs.webcam.clientHeight,
-        width: this.$refs.webcam.clientWidth,
-      }
-    },
-  },
-
   watch: {
     showVideo: {
       deep: true,
@@ -77,6 +61,15 @@ export default {
           this.initVideo()
         }
       },
+    },
+  },
+
+  computed: {
+    dimensions() {
+      return {
+        height: this.$refs.webcam.clientHeight,
+        width: this.$refs.webcam.clientWidth,
+      }
     },
   },
 

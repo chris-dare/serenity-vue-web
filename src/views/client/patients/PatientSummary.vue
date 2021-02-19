@@ -3,10 +3,7 @@
     <PatientGeneralInfoCard :patient="patient" />
     <PatientEmergencyContactCard :patient="patient" />
     <PatientSocialInfoCard :patient="patient" />
-    <PatientSummaryCard
-      title="Payment Method"
-      :fields="summaryFields"
-    />
+    <PatientSummaryCard title="Payment Method" :fields="summaryFields" />
   </div>
 </template>
 

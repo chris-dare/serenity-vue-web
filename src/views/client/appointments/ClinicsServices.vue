@@ -5,12 +5,12 @@
     </p>
     <div class="grid grid-cols-3 gap-4">
       <PatientCard
-        v-for="(appointment, index) in appointmentTypes"
-        :key="index"
+        @click="selected = appointment.value"
         :is-selected="selected === appointment.value"
         :details="appointment"
         :type="appointment.type"
-        @click="selected = appointment.value"
+        v-for="(appointment, index) in appointmentTypes"
+        :key="index"
       />
     </div>
     <div class="grid grid-cols-2 gap-4 mt-8 mb-6">
@@ -20,13 +20,9 @@
         class="inherit-full-input"
         placeholder="Male or female"
       >
-        <cv-select-option
-          disabled
-          selected
-          hidden
+        <cv-select-option disabled selected hidden
+          >In Patient General Practice</cv-select-option
         >
-          In Patient General Practice
-        </cv-select-option>
         <cv-select-option value="male">Male</cv-select-option>
         <cv-select-option value="female">FeMale</cv-select-option>
       </cv-select>
@@ -36,13 +32,9 @@
         class="inherit-full-input"
         placeholder="Male or female"
       >
-        <cv-select-option
-          disabled
-          selected
-          hidden
+        <cv-select-option disabled selected hidden
+          >Service tiers</cv-select-option
         >
-          Service tiers
-        </cv-select-option>
         <cv-select-option value="male">Male</cv-select-option>
         <cv-select-option value="female">FeMale</cv-select-option>
       </cv-select>
@@ -54,26 +46,27 @@
         virtual care
       </p>
       <p
-        class="underline text-info text-xs cursor-pointer"
         @click="visible = !visible"
+        class="underline text-info text-xs cursor-pointer"
       >
         Check requirements
       </p>
     </div>
     <div v-if="selected === 'home'">
       <cv-text-input
-        v-model="form.address"
         label="Home/Residential address"
+        v-model="form.address"
         placeholder="Enter venue for the home care/visit"
         class="inherit-full-input my-8"
-      />
+      ></cv-text-input>
     </div>
     <div v-if="selected === 'diagnostic'">
       <cv-checkbox
         label="Darlene Patterson (Patient) is taking the lab for travelling purposes"
         :checked="form.checked"
         class="se-checkbox"
-      />
+      >
+      </cv-checkbox>
     </div>
 
     <div class="flex items-center justify-between my-6">
@@ -81,26 +74,23 @@
         <cv-button
           class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
           kind="tertiary"
+          >Cancel</cv-button
         >
-          Cancel
-        </cv-button>
         <cv-button
+          @click="$router.push({ name: 'SelectPatient' })"
           class="bg-black px-6"
           kind="primary"
-          @click="$router.push({ name: 'SelectPatient' })"
+          >Go back</cv-button
         >
-          Go back
-        </cv-button>
       </div>
       <div class="flex items-center">
         <cv-button
+          @click="save"
           :icon="icon"
           kind="primary"
           class="bg-serenity-primary"
-          @click="save"
+          >Next: Date, Doctor</cv-button
         >
-          Next: Date, Doctor
-        </cv-button>
       </div>
     </div>
     <VirtualCareRequirementsModal :visible.sync="visible" />
@@ -122,8 +112,8 @@ export default {
     return {
       selected: 'in-patient',
       form: {
-        service:'In Patient General Practice',
-        service_tier: 'Service Tier',
+          service:'In Patient General Practice',
+          service_tier: 'Service Tier',
       },
       visible: false,
       icon: ChevronRight,
