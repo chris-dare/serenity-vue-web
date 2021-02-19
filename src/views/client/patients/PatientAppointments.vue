@@ -1,14 +1,14 @@
 <template>
-  <div>
-      <PatientAppointmentTable />
+  <div class="py-4">
+    <PatientAppointmentTable />
   </div>
 </template>
 
 <script>
 import PatientAppointmentTable from '@/components/patients/PatientAppointmentTable'
 export default {
-    name: 'PatientAppointments',
+  name: 'PatientAppointments',
 
-    components: { PatientAppointmentTable },
+  components: { PatientAppointmentTable },
 }
 </script>

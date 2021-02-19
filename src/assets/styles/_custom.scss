@@ -167,3 +167,14 @@ button:focus{
     font-family: 'Graphik' !important;
     box-shadow: 0 0 #0000 !important; 
 }
+
+.bx--select{
+    @apply w-full;
+    div, select{
+        @apply w-full
+    }
+}
+
+.bx--btn{
+    max-width: 30rem !important;
+}

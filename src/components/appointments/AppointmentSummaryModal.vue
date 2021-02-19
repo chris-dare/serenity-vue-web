@@ -22,7 +22,7 @@
               class="w-10 h-10 rounded-full mr-3"
               :src="$faker().image.image()"
               alt=""
-            />
+            >
             <div>
               <p class="text-black">{{ $faker().name.findName() }}</p>
               <p class="text-secondary">
@@ -60,7 +60,7 @@
               class="w-10 h-10 rounded-full mr-3"
               :src="$faker().image.image()"
               alt=""
-            />
+            >
             <div>
               <p class="text-black font-semibold mb-1">
                 {{ $faker().name.findName() }}
@@ -84,18 +84,23 @@
         <div class="flex items-center justify-center flex-col">
           <cv-button
             kind="primary"
-            @click="close"
             class="my-3 flex items-center justify-center bg-serenity-primary px-12 w-full"
-            >Print Bill</cv-button
+            @click="close"
           >
+            Print Bill
+          </cv-button>
           <cv-button
             class="border-danger flex items-center justify-center mb-3 px-12 text-danger hover:text-white focus:bg-danger hover:bg-danger w-full"
             kind="tertiary"
-            >Cancel Appointment</cv-button
           >
-          <router-link :to="{ name: 'Patients' }" class="underline text-primary"
-            >Close</router-link
+            Cancel Appointment
+          </cv-button>
+          <router-link
+            :to="{ name: 'Patients' }"
+            class="underline text-primary"
           >
+            Close
+          </router-link>
         </div>
       </div>
     </template>

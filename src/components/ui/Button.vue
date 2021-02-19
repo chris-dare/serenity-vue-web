@@ -1,7 +1,7 @@
 <template>
   <cv-button
     :class="[buttonClass, full ? 'w-full' : '']"
-    class="px-4 flex items-center justify-center mr-2 "
+    class="px-4 flex items-center justify-center"
     kind="primary"
     :size="size"
     @click="$emit('click')"
@@ -49,7 +49,11 @@ export default {
       }
 
       if (this.variant  === 'secondary') {
-        return 'flex items-center justify-center bg-black text-white'
+        return 'bg-black text-white'
+      }
+
+      if (this.variant  === 'danger') {
+        return 'bg-red-500 text-white'
       }
 
       if(this.variant === 'white') {
