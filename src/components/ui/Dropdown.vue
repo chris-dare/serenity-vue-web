@@ -3,7 +3,11 @@
     <div>
       <slot name="label" />
     </div>
-    <div ref="dropdown"  :class="[!visible ? 'scale-y-0 h-0' : 'scale-y-100 h-auto', withShadow ? 'shadow-lg' : '']" class="overflow-hidden transform origin-top transition-all duration-200 ease-in-out z-10 min-w-32 absolute right-0">
+    <div
+      ref="dropdown"
+      :class="[!visible ? 'scale-y-0 h-0' : 'scale-y-100 h-auto', withShadow ? 'shadow-lg' : '']"
+      class="overflow-hidden transform origin-top transition-all duration-200 ease-in-out z-10 min-w-32 absolute right-0"
+    >
       <slot />
     </div>
   </div>
@@ -20,18 +24,8 @@ export default {
     },
 
     withShadow: {
-        type: Boolean,
-        default: false,
-    },
-  },
-  
-  watch: {
-    '$route': {
-        deep: true,
-        immediate: true,
-        handler: function () {
-            this.modalVisible = false
-        },
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -42,6 +36,16 @@ export default {
       },
       get() {
         return this.visible
+      },
+    },
+  },
+  
+  watch: {
+    '$route': {
+      deep: true,
+      immediate: true,
+      handler: function () {
+        this.modalVisible = false
       },
     },
   },
