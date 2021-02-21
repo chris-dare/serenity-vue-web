@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2">
+  <div class="mt-4">
     <div class="flex justify-between items-center my-2">
       <div class="flex items-center space-x-3">
         <p>Patient Vitals</p>

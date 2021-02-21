@@ -1,9 +1,5 @@
 module.exports = {
-  purge: [
-    './src/**/*.html',
-    './src/**/*.vue',
-    './src/**/*.jsx',
-  ],
+  purge: ['./src/**/*.html', './src/**/*.vue', './src/**/*.jsx'],
   darkMode: false, // or 'media' or 'class'
   important: true,
   theme: {
@@ -17,7 +13,7 @@ module.exports = {
           'light-gray': '#F4F4F4',
           'subtle-border': 'rgba(135, 141, 150, 0.2)',
           'primary-highlight': '#0C7882',
-          'auth': '#121619',
+          auth: '#121619',
         },
         success: '#24A148',
         warning: '#F1C21B',
@@ -31,8 +27,8 @@ module.exports = {
         orange: '#F2994A',
       },
       textColor: {
-        'primary': '#21272A',
-        'danger': '#e3342f',
+        primary: '#21272A',
+        danger: '#e3342f',
       },
       height: {
         main: 'calc(100vh - 3rem)',
@@ -45,19 +41,24 @@ module.exports = {
         body: ['Graphik'],
       },
       backgroundImage: () => ({
-        'logo': "url('/fonts/auth_bg.svg')",
+        logo: "url('/fonts/auth_bg.svg')",
       }),
       backgroundSize: {
         'logo-size': '50% 90%',
       },
-      borderColor: theme => ({
+      borderColor: (theme) => ({
         ...theme('colors'),
         subtle: 'rgba(135, 141, 150, 0.2)',
       }),
+      minWidth: {
+        32: '8rem',
+      },
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      zIndex: ['hover', 'active'],
+    },
   },
   plugins: [],
 }

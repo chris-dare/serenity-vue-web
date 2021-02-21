@@ -9,22 +9,22 @@
     <template slot="content">
       <div class="space-y-8">
         <p class="text-lg font-semibold">Deceased patient information</p>
-        <SubSection
+        <InfoBlock
           label="Cause of death"
           description="Retroviral infection"
           description-color="text-serenity-primary"
         />
         <div class="grid grid-cols-2 gap-4">
-          <SubSection
+          <InfoBlock
             label="Date of death"
             description="Nov. 10, 2020"
           />
-          <SubSection
+          <InfoBlock
             label="Time of death"
             description="9:00 am"
           />
         </div>
-        <SubSection
+        <InfoBlock
           label="Reported by"
         >
           <div class="flex items-center py-2">
@@ -40,7 +40,7 @@
               </p>
             </div>
           </div>
-        </SubSection>
+        </InfoBlock>
         <SeButton
           variant="secondary"
           full

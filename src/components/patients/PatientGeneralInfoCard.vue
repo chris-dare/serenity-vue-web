@@ -23,19 +23,19 @@
       <div class="grid grid-cols-2 gap-6 text-xs my-5">
         <div>
           <p class="text-secondary text-xs mb-1">Date of Birth</p>
-          <p class="text-xs font-bold">{{ patient.dob }}</p>
+          <p class="font-bold">{{ patient.dob }}</p>
         </div>
         <div>
           <p class="text-secondary text-xs mb-1">Phone Number</p>
-          <p class="text-xs font-bold">{{ patient.phone }}</p>
+          <p class="font-bold">{{ patient.phone }}</p>
         </div>
         <div>
           <p class="text-secondary text-xs mb-1">Address</p>
-          <p class="text-xs font-bold">{{ patient.address }}</p>
+          <p class="font-bold">{{ patient.address }}</p>
         </div>
         <div>
           <p class="text-secondary text-xs mb-1">Email</p>
-          <p class="text-xs font-bold">{{ patient.email }}</p>
+          <p class="font-bold">{{ patient.email }}</p>
         </div>
       </div>
     </div>
