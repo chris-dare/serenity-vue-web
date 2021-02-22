@@ -113,6 +113,12 @@ $primary: #0B6B74;
     }
 }
 
+.se-modal-no-padding{
+    .bx--modal-content{
+        padding: 0 !important
+    }
+}
+
 .se-checkbox{
     .bx--checkbox:checked + .bx--checkbox-label::before{
         @apply bg-serenity-primary border-serenity-primary

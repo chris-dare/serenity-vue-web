@@ -12,7 +12,7 @@
         <p class=" text-serenity-primary">
           Office Visit <span class="text-secondary">(Today, Nov 13, 2020)</span>
         </p>
-        <p class=" text-secondary mt-1">
+        <p class="text-sm text-secondary mt-1">
           The patient has been complaining of difficulty in breathing.
         </p>
       </ListCard>
@@ -27,7 +27,7 @@
         <p class=" text-serenity-primary">
           Office Visit <span class="text-secondary">(Today, Nov 13, 2020)</span>
         </p>
-        <p class=" text-secondary mt-1">
+        <p class="text-sm text-secondary mt-1">
           The patient has been complaining of difficulty in breathing.
         </p>
       </ListCard>

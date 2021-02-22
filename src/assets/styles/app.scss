@@ -17,3 +17,14 @@ p{
     outline: none !important;
     font-family: 'Graphik' !important;
 }
+
+.series::-webkit-scrollbar {
+    width: 5px;
+    @apply bg-tetiary h-5;
+}
+
+.series::-webkit-scrollbar-thumb {
+    background: #0B6B74 url('https://res.cloudinary.com/seddiescloudimagecdn/image/upload/v1613933332/Group_229.png') no-repeat;
+    background-size: contain 1rem;
+    @apply bg-center
+}

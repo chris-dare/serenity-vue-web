@@ -7,7 +7,7 @@
           :key="index"
         >
           <p class="text-secondary text-xs mb-1">{{ field.label }}</p>
-          <p class="text-xs font-bold">{{ field.value || 'N/A' }}</p>
+          <p class="font-bold">{{ field.value || 'N/A' }}</p>
         </div>
       </div>
     </div>

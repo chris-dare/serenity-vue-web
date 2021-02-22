@@ -4,7 +4,7 @@
       v-model="search"
       placeholder="Search for medication or date or condition"
     />
-    <div class="my-4 flex items-center">
+    <div class="my-4 flex items-center space-x-2">
       <SeButton
         variant="primary"
         size="field"
