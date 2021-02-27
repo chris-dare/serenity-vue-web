@@ -1,8 +1,33 @@
 import Vue from 'vue'
 import 'carbon-components/css/carbon-components.css'
 import CarbonCharts from '@carbon/charts-vue'
-import { CvButton, CvDataTable, CvSearch, CvSelect, CvSelectOption, CvModal, CvDataTableRow, CvDataTableCell, CvTextArea, CvTextInput, CvTag, CvDatePicker, CvTimePicker, 
-  CvTab, CvTabs, CvHeader, CvHeaderName, CvCheckbox, CvRadioGroup, CvSkeletonText, CvRadioButton, CvForm, CvSideNav } from '@carbon/vue/src/index'
+import { 
+  CvButton,
+  CvDataTable,
+  CvSearch,
+  CvSelect,
+  CvSelectOption,
+  CvModal,
+  CvDataTableRow,
+  CvDataTableCell,
+  CvTextArea,
+  CvTextInput,
+  CvTag,
+  CvDatePicker,
+  CvTimePicker, 
+  CvTab,
+  CvTabs,
+  CvHeader,
+  CvHeaderName,
+  CvCheckbox,
+  CvRadioGroup,
+  CvSkeletonText,
+  CvRadioButton,
+  CvForm,
+  CvSideNav,
+  CvInlineNotification,
+  CvInlineLoading,
+} from '@carbon/vue/src/index'
 
 Vue.component(CvButton.name, CvButton)
 Vue.component(CvDataTable.name, CvDataTable)
@@ -27,5 +52,8 @@ Vue.component(CvHeader.name, CvHeader)
 Vue.component(CvRadioButton.name, CvRadioButton)
 Vue.component(CvForm.name, CvForm)
 Vue.component(CvSideNav.name, CvSideNav)
+Vue.component(CvSideNav.name, CvSideNav)
+Vue.component(CvInlineNotification.name, CvInlineNotification)
+Vue.component(CvInlineLoading.name, CvInlineLoading)
 
 Vue.use(CarbonCharts)

@@ -2,25 +2,15 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Client from '../views/Client.vue'
 import Dashboard from '../views/client/Dashboard.vue'
-import store from '@/store'
 
 Vue.use(VueRouter)
 
-const requireAuth = (to, from, next) => {
-  if (!store.state.auth.loggedIn) {
-    next({
-      name: 'AuthLogin',
-    })
-  } else {
-    next()
-  }
-}
 
 const routes = [
   {
     path: '/',
     component: Client,
-    beforeEnter: requireAuth,
+    meta: {requiresAuth: true},
     children: [
       {
         path: '/',

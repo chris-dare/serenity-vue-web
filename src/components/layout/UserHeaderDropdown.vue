@@ -12,10 +12,13 @@
         alt=""
       >
     </div>
-    <div class="bg-primary w-60">
+    <div
+      v-if="user"
+      class="bg-primary w-60"
+    >
       <div class="flex items-center justify-between px-4 py-4">
         <div>
-          <p class="font-semibold text-lg text-white">Dr. Grey Strep.</p>
+          <p class="font-semibold text-lg text-white">{{ userName }}</p>
           <p class="text-secondary">General Practitioner</p>
         </div>
         <img
@@ -49,7 +52,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import ArrowRight from '@carbon/icons-vue/es/arrow--right/32'
 export default {
   name: 'UserHeaderDropdown',
@@ -60,6 +63,12 @@ export default {
     return {
       visible: false,
     }
+  },
+  computed: {
+    ...mapState('auth', ['user', 'loggedIn']),
+     ...mapGetters({
+      userName: 'auth/fullName',
+    }),
   },
   methods: {
     ...mapActions({
