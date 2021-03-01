@@ -150,7 +150,7 @@ export default {
 
   computed: {
     ...mapState({
-      globalType: (state) => state.global.globalType,
+      workspaceType: (state) => state.global.workspaceType,
       doctors: (state) => state.doctors.doctors,
     }),
 

@@ -44,11 +44,7 @@
           @click="$router.push({ name: 'SelectPatient' })"
         >
           Record a new encounter
-          <img
-            src="@/assets/img/add 1.svg"
-            class="ml-2"
-            alt=""
-          >
+          <Add class="ml-2 w-5 h-5 text-white" />
         </cv-button>
         <cv-button
           v-else
@@ -58,11 +54,7 @@
           @click="$router.push({ name: 'SelectPatient' })"
         >
           Open ongoing encounter
-          <img
-            src="@/assets/img/add 1.svg"
-            class="ml-2"
-            alt=""
-          >
+          <Add class="ml-2 w-5 h-5 text-white" />
         </cv-button>
         <SeButton
           v-if="false"
@@ -134,12 +126,12 @@ export default {
   computed: {
     ...mapState({
       patients: (state) => state.patients.patients,
-      globalType: (state) => state.global.globalType,
+      workspaceType: (state) => state.global.workspaceType,
     }),
     links() {
       let links = [{ label: 'Summary', path: 'PatientSummary' }]
 
-      if (this.globalType === 'Reception') {
+      if (this.workspaceType === 'Reception') {
         links.push({ label: 'Chart', path: 'PatientCharts' },{ label: 'Appointments', path: 'PatientAppointments' })
       } else {
         links.push(

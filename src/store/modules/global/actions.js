@@ -16,7 +16,7 @@ export default {
       })
   },
 
-  setGlobalType({ commit }, type) {
+  setworkspaceType({ commit }, type) {
     commit(SET_GLOBAL_TYPE, type)
   },
 }

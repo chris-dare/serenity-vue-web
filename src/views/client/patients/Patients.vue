@@ -9,11 +9,7 @@
           class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
           kind="primary"
         >
-          Add new patient <img
-            class="ml-4 w-5 h-5"
-            src="@/assets/img/add 1.svg"
-            alt=""
-          >
+          Add new patient <Add class="ml-4 w-5 h-5 text-white" />
         </router-link>
       </div>
 

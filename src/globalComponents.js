@@ -10,6 +10,9 @@ import DateTimePicker from '@/components/ui/DateTimePicker'
 import Button from '@/components/ui/Button'
 import FilterDropdown from '@/components/ui/FilterDropdown'
 import InfoBlock from '@/components/ui/InfoBlock'
+// icons
+import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import Add from '@carbon/icons-vue/es/add/32'
 
 Vue.component('ToggleList', ToggleList)
 Vue.component('EditableCard', EditableCard)
@@ -21,3 +24,7 @@ Vue.component('DateTimePicker', DateTimePicker)
 Vue.component('SeButton', Button)
 Vue.component('FilterDropdown', FilterDropdown)
 Vue.component('InfoBlock', InfoBlock)
+
+// icons
+Vue.component('ChevronRight', ChevronRight)
+Vue.component('Add', Add)

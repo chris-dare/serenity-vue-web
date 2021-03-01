@@ -28,6 +28,16 @@ const routes = [
         component: Dashboard,
       },
       {
+        path: '/admin-dashboard',
+        name: 'AdminDashboard',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/AdminDashboard.vue'),
+      },
+      {
+        path: '/get-started',
+        name: 'GetStarted',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/GetStarted.vue'),
+      },
+      {
         path: '/patients',
         name: 'Patients',
         component: () => import(/* webpackChunkName: "client" */ '../views/client/patients/Patients.vue'),
@@ -41,6 +51,11 @@ const routes = [
         path: '/visits',
         name: 'Visits',
         component: () => import(/* webpackChunkName: "client" */ '../views/client/Visits.vue'),
+      },
+      {
+        path: '/team',
+        name: 'Team',
+        component: () => import(/* webpackChunkName: "client" */ '../views/client/Team.vue'),
       },
       {
         path: '/patient-vitals',

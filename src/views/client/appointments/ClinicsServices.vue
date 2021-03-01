@@ -132,11 +132,11 @@ export default {
 
   computed: {
     ...mapState({
-      globalType: (state) => state.global.globalType,
+      workspaceType: (state) => state.global.workspaceType,
     }),
 
     appointmentTypes() {
-      if (this.globalType === 'Reception') {
+      if (this.workspaceType === 'Reception') {
         return [
           {
             label: 'In patient',

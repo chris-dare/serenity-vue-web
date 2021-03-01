@@ -57,7 +57,7 @@ export default {
 
   computed: {
     ...mapState({
-      globalType: (state) => state.global.globalType,
+      workspaceType: (state) => state.global.workspaceType,
       appointmentsCount: (state) => state.appointments.appointmentsCount,
     }),
 
@@ -71,7 +71,7 @@ export default {
         },
       ]
 
-      if (this.globalType === 'Reception') {
+      if (this.workspaceType === 'Reception') {
         types.push({
           label: 'Start patient visit',
           description: 'Start visit for walk-in or appointments',
