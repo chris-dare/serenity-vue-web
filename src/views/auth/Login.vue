@@ -21,24 +21,40 @@
             Teresa
           </p>
 
+          <div class="text-white">
+            <cv-inline-notification 
+              v-if="showNotification"
+              kind="error"
+              :sub-title="errorMessage"
+              @close="showNotification = false"
+            />
+          </div>
           <div class="mt-8">
             <cv-text-input
               v-model="form.email"
+              :invalid-message="$utils.validateRequiredField($v, 'email')"
               class="my-4 se-dark-input"
               label="Your email address"
             />
             <cv-text-input
               v-model="form.password"
+              :invalid-message="$utils.validateRequiredField($v, 'password')"
               label="Your password"
               type="password"
               class="se-dark-input"
             />
             <cv-button
+              ref="loginButton"
               kind="primary"
-              class="my-6 max-w-full w-full bg-serenity-primary"
+              class="shake-anim my-6 max-w-full w-full bg-serenity-primary justify-start"
               @click="login"
             >
-              Sign In
+              <img
+                :class="{hidden: !saving}"
+                class="h-4 w-4 mr-4"
+                src="@/assets/img/eclipse.svg"
+              >
+              <template>Sign In</template>
             </cv-button>
             <router-link
               tag="div"
@@ -56,20 +72,54 @@
 
 <script>
 import { mapActions } from 'vuex'
+// import {emailValidation, passwordValidation} from '@/validations'
+import { required, email } from 'vuelidate/lib/validators'
+
 export default {
   data() {
     return {
-      form: {},
+      form: {
+        email: '',
+        password: '',
+      },
+      showNotification: false,
+      errorMessage: '',
+      saving: false,
     }
+  },
+
+  validations: {
+    form:  {
+      email: {required, email},
+      password: {required},
+    },
   },
 
   methods: {
     ...mapActions({
       setLoggedIn: 'auth/setLoggedIn',
     }),
-    login() {
-      this.setLoggedIn(true)
-      this.$router.push({ name: 'Dashboard' })
+    async login() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return
+      }
+      this.saving = true
+      try{
+        const result = await this.$store.dispatch('auth/login', this.form)
+        this.$router.push({ name: 'Dashboard' })
+        console.info('result', result)
+      }catch(error){
+        window.blah = this.$refs.loginButton.$el
+        this.$refs.loginButton.$el.classList.add('shake-anim-active')
+        setTimeout(()=> {
+          this.$refs.loginButton.$el.classList.remove('shake-anim-active')
+        }, 300)
+        console.info('error', error)
+        this.errorMessage = error.detail || 'Failed to login'
+        this.showNotification = true
+      }
+      this.saving = false
     },
   },
 }
