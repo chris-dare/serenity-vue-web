@@ -1,6 +1,6 @@
 <template>
   <div class="w-3/4 mx-auto">
-    <p class="text-primary text-xl font-semibold">Register new provider</p>
+    <p class="text-primary text-xl font-semibold">Register new practitioner</p>
     <div class="grid grid-cols-4 my-6 gap-6">
       <div>
         <cv-radio-group :vertical="true">
@@ -57,7 +57,7 @@ export default {
       navItems: [
         { label: 'Biodata', description: 'Basic information', path: 'TeamBiodata'},
         { label: 'Contact Information', description: 'Phone and location', path: 'TeamContactInformation'},
-        { label: 'ID & Roles', description: 'Team identification and roles', path: 'TeamIdentification'},
+        { label: 'Roles & Permissions', description: 'Team identification and roles', path: 'TeamIdentification'},
       ],
     }
   },

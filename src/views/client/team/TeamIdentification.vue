@@ -70,7 +70,7 @@
         <cv-button
           class="bg-black px-6"
           kind="primary"
-          @click="$router.push({ name: 'TeamBiodata' })"
+          @click="$router.push({ name: 'TeamContactInformation' })"
         >
           Go back
         </cv-button>

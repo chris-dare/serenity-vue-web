@@ -19,7 +19,7 @@
       v-model="form.postal"
       label="Postal Address"
       placeholder="Postal Address"
-      class="inherit-full-input"
+      class="inherit-full-input my-8"
     />
     <cv-text-input
       v-model="form.address"
