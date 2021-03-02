@@ -72,10 +72,12 @@ export default {
   methods: {
     ...mapActions({
       logout: 'auth/logout',
+      setLoggedIn: 'auth/setLoggedIn',
     }),
   
     async submit() {
-      await this.logout()
+      // await this.logout()
+      this.setLoggedIn(false)
       this.$router.push({ name: 'AuthLogin' })
     },
   },

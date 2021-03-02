@@ -83,7 +83,7 @@ export default {
     },
     'workspace:edit:open': function(data){
       this.visible = true
-      this.form = data.params[0]
+      this.form = { ...data.params[0], workspace_name: data.params[0].name, workspace_type: [data.params[0].type] }
     },
   },
 

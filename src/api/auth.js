@@ -22,6 +22,11 @@ export default {
   reset(params){
     return http.post(`${this.url}password-reset`, params)
   },
+
+  refresh(params){
+    return http.post(`${this.url}token/refresh`, params)
+  },
+
   confirmReset(params){
     return http.post(`${this.url}/password-reset/confirm`, params)
   },

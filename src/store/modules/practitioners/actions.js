@@ -4,17 +4,16 @@ import { SET_USERS, DELETE_USER, UPDATE_USER, ADD_USER_DATA } from './mutation-t
 
 export default {
   async getUsers({ commit, rootState }) {
-    console.log('aha')
-    // const provider = rootState.auth.user
-    const { data } = await UsersAPI.list(1).catch((error) => {
+    const provider = rootState.auth.provider
+    const { data } = await UsersAPI.list(provider.id).catch((error) => {
       console.log('error users', error)
       throw error
     })
-    commit(SET_USERS, data)
+    commit(SET_USERS, data ? data.data : [])
   },
 
   async createUser({ commit, rootState }, payload) {
-    const provider = rootState.auth.user
+    const provider = rootState.auth.provider
     const { data } = await UsersAPI
       .create(provider.id, payload)
       .catch(({ response: { data: error } }) => {
@@ -22,7 +21,7 @@ export default {
         throw error
       })
 
-    commit(UPDATE_USER, data)
+    commit(UPDATE_USER, data.data)
   },
 
   addToCurrentUser({ commit }, data) {
@@ -30,7 +29,7 @@ export default {
   },
 
   async updateUser({ commit, rootState }, payload) {
-    const provider = rootState.auth.user
+    const provider = rootState.auth.provider
     const { data } = await UsersAPI
       .update(provider.id,payload)
       .catch(({ response: { data: error } }) => {
@@ -38,10 +37,10 @@ export default {
         throw error
       })
 
-    commit(UPDATE_USER, data)
+    commit(UPDATE_USER, data.data)
   },
   async deleteUser({ commit, rootState }, id) {
-    const provider = rootState.auth.user
+    const provider = rootState.auth.provider
     const { data } = await UsersAPI
       .delete(provider.id, id)
       .catch(({ response: { data: error } }) => {
