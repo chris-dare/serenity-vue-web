@@ -1,5 +1,5 @@
 import AuthAPI from '@/api/auth'
-import { SET_LOGGED_IN, SET_USER, SET_TOKEN } from './mutation-types'
+import { SET_LOGGED_IN, SET_USER, SET_TOKEN, SET_REFRESH_TOKEN, SET_PRACTIONER_DATA } from './mutation-types'
 
 export default {
   reset({ commit }) {
@@ -15,9 +15,11 @@ export default {
   login({ commit }, loginData) {
     return AuthAPI.login(loginData)
       .then(({ data: result }) => {
-        commit(SET_TOKEN, result.token)
-        // commit(SET_REFRESH_TOKEN, result.data.token)
+        console.log('result', result)
+        commit(SET_TOKEN, result.access)
+        commit(SET_REFRESH_TOKEN, result.refresh)
         commit(SET_USER, result.user)
+        commit(SET_PRACTIONER_DATA, result.practitioner_roles[0])
         commit(SET_LOGGED_IN, true)
 
         return result
@@ -39,10 +41,11 @@ export default {
       })
   },
 
-  refresh({ commit }) {
-    return AuthAPI.refresh()
+  refresh({ commit, state }) {
+    const refresh = state.refreshToken
+    return AuthAPI.refresh({refresh})
       .then(({ data: result }) => {
-        commit(SET_TOKEN, result.data.token)
+        commit(SET_TOKEN, result.access)
         return result.data
       })
       .catch(result => {

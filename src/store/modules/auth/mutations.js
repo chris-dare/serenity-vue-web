@@ -1,4 +1,4 @@
-import { SET_LOGGED_IN, SET_USER, SET_TOKEN } from './mutation-types'
+import { SET_LOGGED_IN, SET_USER, SET_TOKEN, SET_REFRESH_TOKEN, SET_PRACTIONER_DATA} from './mutation-types'
 
 export default {
   [SET_LOGGED_IN](state, loggedIn) {
@@ -10,7 +10,15 @@ export default {
     state.token = token
   },
 
+  [SET_REFRESH_TOKEN](state, token) {
+    state.refreshToken = token
+  },
+
   [SET_USER](state, user) {
     state.user = user
+  },
+
+  [SET_PRACTIONER_DATA](state, data) {
+    state.provider = { ...data, id: data.organization_uuid}
   },
 }

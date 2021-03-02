@@ -1,3 +1,5 @@
 export const SET_LOGGED_IN = 'Set Logged In'
 export const SET_USER = 'Set User'
 export const SET_TOKEN = 'Set Token'
+export const SET_REFRESH_TOKEN = 'Set Refresh Token'
+export const SET_PRACTIONER_DATA = 'Set Practitioner'
