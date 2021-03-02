@@ -25,17 +25,16 @@ http.interceptors.request.use(
 // Refresh JWT if 401 is returned
 http.interceptors.response.use(undefined, (error) => {
   const errorResponse = error.response
+  console.log('error response', errorResponse)
   if (
-    errorResponse.status === 401 &&
-    errorResponse.data.error === 'Token expired' &&
-    errorResponse.config &&
-    !errorResponse.config.__isRetryRequest
+    errorResponse.status === 401 
   ) {
     return new Promise((resolve, reject) => {
       store
         .dispatch('auth/refresh')
-        .then(({ token }) => {
-          if (!token) {
+        .then((data) => {
+          console.log('data', data)
+          if (!data) {
             router.push({
               name: 'AuthLogin',
               params: {

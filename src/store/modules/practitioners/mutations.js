@@ -1,4 +1,4 @@
-import { SET_USERS, UPDATE_USER, DELETE_USER, ADD_USER_DATA } from './mutation-types'
+import { SET_USERS, UPDATE_USER, DELETE_USER, ADD_USER_DATA, SET_CURRENT_USER } from './mutation-types'
 
 export default {
   [SET_USERS](state, users) {
@@ -27,5 +27,9 @@ export default {
   [ADD_USER_DATA](state, data) {
     let currentUser = state.currentUser
     state.currentUser = {...currentUser, ...data}
+  },
+
+  [SET_CURRENT_USER](state, data) {
+    state.currentUser = data
   },
 }

@@ -18,7 +18,6 @@
     >
       <cv-select-option
         disabled
-        selected
         hidden
       >
         Nurse, Doctor etc
@@ -64,8 +63,8 @@
         v-for="(workspace, index) in workspaces"
         :key="index"
         v-model="form.workspaces"
-        :value="index"
-        :label="workspace"
+        :value="workspace.id"
+        :label="workspace.name"
       />
     </div>
 
@@ -103,6 +102,7 @@
 
 <script>
 import {mapActions, mapState} from 'vuex'
+import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 export default {
   name: 'TeamIdentification',
 
@@ -112,8 +112,9 @@ export default {
         workspaces: [],
       },
       titles: ['Clinical Staff', 'Non-Clinical Staff'],
-      workspaces: ['Reception', 'ER', 'Outpatient', 'Inpatient', 'Pharmacy', 'Diagnostics'],
+      // workspaces: ['Reception', 'ER', 'Outpatient', 'Inpatient', 'Pharmacy', 'Diagnostics'],
       loading: false,
+      icon: ChevronRight,
     }
   },
 
@@ -122,13 +123,22 @@ export default {
       currentUser: (state) => state.practitioners.currentUser,
       roles: (state) => state.roles.roles,
       specialties: (state) => state.specialties.specialties,
+      workspaces: (state) => state.workspaces.workspaces,
     }),
+  },
+
+  created() {
+    this.getRoles()
+    this.getWorkspaces()
   },
 
   methods: {
     ...mapActions({
       addToCurrentUser: 'practitioners/addToCurrentUser',
       createUser: 'practitioners/createUser',
+      getRoles: 'roles/getRoles',
+      getWorkspaces: 'workspaces/getWorkspaces',
+      reset: 'practitioners/reset',
     }),
 
     async save() {
@@ -146,6 +156,7 @@ export default {
         this.$toast.open({
           message: 'Member successfully added',
         })
+        this.reser()
       }
 
       this.loading = false

@@ -3,7 +3,7 @@
     class="se-no-title-modal"
     close-aria-label="Close"
     :visible="visible"
-    size="xs"
+    size="sm"
     @modal-hidden="visible = false"
   >
     <template slot="content">
@@ -19,40 +19,50 @@
           v-model="search"
           placeholder="Search for feature"
         />
-        <cv-data-table
-          ref="table"
-          :data="[]"
-          :columns="columns"
-        >
-          <template slot="data">
-            <cv-data-table-row
-              v-for="(row, rowIndex) in 0"
-              :key="`${rowIndex}`"
-              :value="`${rowIndex}`"
+
+        <div class="h-96 overflow-auto">
+          <div class="grid grid-cols-4 items-center h-8 bg-gray-100">
+            <p
+              v-for="(item, index) in columns"
+              :key="index"
+              class="text-center"
             >
-              <cv-data-table-cell>
-                <div class="flex items-center space-x-2 py-2">
-                  <p>{{ $faker().name.findName() }}</p>
-                </div>
-              </cv-data-table-cell>
-              <cv-data-table-cell>
-                <p>Default</p>
-              </cv-data-table-cell>
-            
-              <cv-data-table-cell>
-                <div class="flex items-center space-x-6">
-                  <p
-                    class="cursor-pointer"
-                    @click="$trigger('location:edit:open', {name:$faker().name.findName()})"
-                  >
-                    Duplicate
-                  </p>
-                  <!-- <p class="text-red-500">Delete</p> -->
-                </div>
-              </cv-data-table-cell>
-            </cv-data-table-row>
-          </template>
-        </cv-data-table>
+              {{ item }}
+            </p>
+          </div>
+          <div>
+            <div
+              v-for="(resource, index) in resourceInd"
+              :key="index"
+              class="grid grid-cols-4 items-center h-12"
+            >
+              <div class="flex items-center pl-6 capitalize">
+                {{ resource }}
+              </div>
+              <div class="flex items-center justify-center">
+                <cv-checkbox
+                  v-model="form.permissions"
+                  :value="getValue(resource, 'read')"
+                  class="flex-none"
+                />
+              </div>
+              <div class="flex items-center justify-center">
+                <cv-checkbox
+                  v-model="form.permissions"
+                  :value="getValue(resource, 'write')"
+                  class="flex-none"
+                />
+              </div>
+              <div class="flex items-center justify-center">
+                <cv-checkbox
+                  v-model="form.permissions"
+                  :value="getValue(resource, 'delete')"
+                  class="flex-none"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="flex items-center justify-between">
           <SeButton
             variant="secondary"
@@ -76,22 +86,34 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 export default {
   name: 'AddEditRole',
 
   data() {
     return {
-      form: {},
+      form: {
+        permissions: []
+      },
       visible: false,
       search: '',
       columns: [
         'Resources',
         'Read',
         'Write',
+        'Delete'
       ],
       loading: false,
     }
+  },
+
+  computed: {
+    ...mapState({
+      resources: (state) => state.resources.resources,
+    }),
+    ...mapGetters({
+      resourceInd: 'resources/resources'
+    })
   },
 
   events: {
@@ -109,6 +131,10 @@ export default {
       createRole: 'roles/createRole',
       updateRole: 'roles/updateRole',
     }),
+
+    getValue(resource,permission){
+      return `${resource}.${permission}`
+    },
 
     submit(){
       if (this.form.id) {

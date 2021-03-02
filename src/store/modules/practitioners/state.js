@@ -1,4 +1,6 @@
 export default () => ({
   users: [],
-  currentUser: {},
+  currentUser: {
+    country_code: '+233'
+  },
 })

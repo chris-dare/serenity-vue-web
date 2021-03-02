@@ -4,7 +4,7 @@ export default {
   url: 'providers/',
   
   list(providerId) {
-    return http.get(`${this.url}${providerId}/resources`)
+    return http.get(`${this.url}${providerId}/admin/resources`)
   },
 
   create(providerId, params) {

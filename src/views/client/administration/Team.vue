@@ -95,11 +95,14 @@ export default {
 
   created() {
     this.refresh()
+    this.getResources()
   },
 
   methods: {
     ...mapActions({
       getUsers: 'practitioners/getUsers',
+      getResources: 'resources/getResources',
+      
     }),
 
     async refresh() {
