@@ -43,7 +43,6 @@
               class="my-8 w-full max-w-full inherit-full-input"
               placeholder="dd/mm/yyyy"
               label="Date"
-              @change="actionChange"
             />
             <cv-select
               v-model="form.gender"

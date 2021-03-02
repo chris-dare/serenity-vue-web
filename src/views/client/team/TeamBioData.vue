@@ -20,24 +20,35 @@
             v-model="form.first_name"
             label="First name (required)"
             placeholder="Patient First Name"
-            :invalid-message="$utils.validateRequiredField($v, 'first_name')"
             class="inherit-full-input"
-          />
+          >
+            <template
+              v-if="$v.form.first_name.$error"
+              slot="invalid-message"
+            >
+              First name is required
+            </template>
+          </cv-text-input>
           <cv-text-input
             v-model="form.last_name"
             label="Last name (required)"
             placeholder="Patient last or family name"
-            :invalid-message="$utils.validateRequiredField($v, 'last_name')"
             class="inherit-full-input"
-          />
+          >
+            <template
+              v-if="$v.form.last_name.$error"
+              slot="invalid-message"
+            >
+              Last name is required
+            </template>
+          </cv-text-input>
           <div>
             <cv-date-picker
-              v-model="form.date"
+              v-model="form.date_of_birth"
               kind="single"
               class="my-8 w-full max-w-full inherit-full-input"
               placeholder="dd/mm/yyyy"
               label="Date"
-              @change="actionChange"
             />
             <cv-select
               v-model="form.gender"
@@ -45,15 +56,14 @@
               class="inherit-full-input my-8"
               placeholder="Male or female"
             >
-              <cv-select-option
+              <!-- <cv-select-option
                 disabled
-                selected
                 hidden
               >
                 Male or female
-              </cv-select-option>
+              </cv-select-option> -->
               <cv-select-option value="male">Male</cv-select-option>
-              <cv-select-option value="female">FeMale</cv-select-option>
+              <cv-select-option value="female">Female</cv-select-option>
             </cv-select>
           </div>
           <div>
@@ -95,6 +105,7 @@ export default {
     return {
       form: {
         title: 'Mr.',
+        gender: 'male',
       },
       titles: ['Mr.', 'Mrs', 'Miss', 'Hon.', 'Dr.', 'Prof.', 'Master'],
       icon: ChevronRight,
@@ -124,6 +135,10 @@ export default {
       addToCurrentUser: 'practitioners/addToCurrentUser',
     }),
     save() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return
+      }
       this.addToCurrentUser(this.form)
       this.$router.push({ name: 'TeamContactInformation' })
     },

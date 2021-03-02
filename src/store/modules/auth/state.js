@@ -3,6 +3,7 @@ export function initialState() {
     loggedIn: false,
     token: null,
     user: null,
+    refreshToken: null,
   }
 }
 

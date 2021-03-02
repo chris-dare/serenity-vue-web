@@ -42,11 +42,13 @@ export default {
   },
 
   refresh({ commit, state }) {
+    console.log('i got here')
     const refresh = state.refreshToken
     return AuthAPI.refresh({refresh})
       .then(({ data: result }) => {
+        console.log('result', result)
         commit(SET_TOKEN, result.access)
-        return result.data
+        return result.access
       })
       .catch(result => {
         throw result.data.error

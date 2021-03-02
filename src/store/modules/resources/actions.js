@@ -3,14 +3,14 @@ import ResourceAPI from '@/api/resources'
 import { SET_RESOURCES, DELETE_RESOURCE, UPDATE_RESOURCE } from './mutation-types'
 
 export default {
-  async getResource({ commit, rootState }) {
+  async getResources({ commit, rootState }) {
     const provider = rootState.auth.provider
     const { data } = await ResourceAPI.list(provider.id).catch((error) => {
       // this.$service.fail(error)
       console.log('error resources', error)
       throw error
     })
-    commit(SET_RESOURCES, data)
+    commit(SET_RESOURCES, data.data)
   },
 
   async createResource({ commit, rootState}, payload) {
@@ -22,7 +22,7 @@ export default {
         throw error
       })
 
-    commit(UPDATE_RESOURCE, data)
+    commit(UPDATE_RESOURCE, data.data)
   },
 
   async updateResource({ commit, rootState}, payload) {
@@ -34,18 +34,18 @@ export default {
         throw error
       })
 
-    commit(UPDATE_RESOURCE, data)
+    commit(UPDATE_RESOURCE, data.data)
   },
 
   async deleteResource({ commit, rootState}, id) {
     const provider = rootState.auth.provider
-    const { data } = await ResourceAPI
+    await ResourceAPI
       .delete(provider.id,id)
       .catch(({ response: { data: error } }) => {
         this.$service.fail(error)
         throw error
       })
 
-    commit(DELETE_RESOURCE, data)
+    commit(DELETE_RESOURCE, id)
   },
 }

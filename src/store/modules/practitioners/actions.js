@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import UsersAPI from '@/api/users'
-import { SET_USERS, DELETE_USER, UPDATE_USER, ADD_USER_DATA } from './mutation-types'
+import { SET_USERS, DELETE_USER, UPDATE_USER, ADD_USER_DATA, SET_CURRENT_USER } from './mutation-types'
 
 export default {
   async getUsers({ commit, rootState }) {
@@ -9,7 +9,7 @@ export default {
       console.log('error users', error)
       throw error
     })
-    commit(SET_USERS, data ? data.data : [])
+    commit(SET_USERS, data.data ? data.data : [])
   },
 
   async createUser({ commit, rootState }, payload) {
@@ -28,6 +28,12 @@ export default {
     commit(ADD_USER_DATA, data)
   },
 
+  reset({ commit }) {
+    commit(SET_CURRENT_USER, {
+      country_code: '+233'
+    })
+  },
+
   async updateUser({ commit, rootState }, payload) {
     const provider = rootState.auth.provider
     const { data } = await UsersAPI
@@ -39,6 +45,7 @@ export default {
 
     commit(UPDATE_USER, data.data)
   },
+
   async deleteUser({ commit, rootState }, id) {
     const provider = rootState.auth.provider
     const { data } = await UsersAPI

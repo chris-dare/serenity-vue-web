@@ -2,12 +2,18 @@
   <div>
     <div class="grid grid-cols-2 gap-8">
       <cv-text-input
-        v-model="form.phone_number"
+        v-model="form.mobile_number"
         label="Phone number (required)"
         placeholder="Patient First Name"
-        :invalid-message="$utils.validateRequiredField($v, 'phone_number')"
         class="inherit-full-input"
-      />
+      >
+        <template
+          v-if="$v.form.mobile_number.$error"
+          slot="invalid-message"
+        >
+          Phone number is required
+        </template>
+      </cv-text-input>
       <cv-text-input
         v-model="form.email"
         label="Email address(required)"
@@ -74,7 +80,7 @@ export default {
 
   validations: {
     form: {
-      phone_number: { required },
+      mobile_number: { required },
     },
   },
 
@@ -94,6 +100,10 @@ export default {
     }),
 
     save() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return
+      }
       this.addToCurrentUser(this.form)
       this.$router.push({ name: 'TeamIdentification' })
     },

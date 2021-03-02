@@ -35,6 +35,7 @@ export default {
 
     commit(UPDATE_WORKSPACE, data.data)
   },
+
   async deleteWorkspace({ commit, rootState}, id) {
     const provider = rootState.auth.provider
     const { data } = await WorkspacesAPI
