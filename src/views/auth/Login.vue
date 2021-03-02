@@ -107,7 +107,7 @@ export default {
       this.saving = true
       try{
         const result = await this.$store.dispatch('auth/login', this.form)
-        this.$router.push({ name: 'Dashboard' })
+        this.$router.push({ name: 'GetStarted' })
         console.info('result', result)
       }catch(error){
         window.blah = this.$refs.loginButton.$el

@@ -18,6 +18,36 @@ const routes = [
         component: Dashboard,
       },
       {
+        path: '/admin-dashboard',
+        name: 'AdminDashboard',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/AdminDashboard.vue'),
+      },
+      {
+        path: '/get-started',
+        name: 'GetStarted',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/GetStarted.vue'),
+      },
+      {
+        path: '/locations',
+        name: 'Locations',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Locations.vue'),
+      },
+      {
+        path: '/services',
+        name: 'Services',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Services.vue'),
+      },
+      {
+        path: '/schedules',
+        name: 'Schedules',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Schedules.vue'),
+      },
+      {
+        path: '/workspaces',
+        name: 'Workspaces',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Workspaces.vue'),
+      },
+      {
         path: '/patients',
         name: 'Patients',
         component: () => import(/* webpackChunkName: "client" */ '../views/client/patients/Patients.vue'),
@@ -33,9 +63,81 @@ const routes = [
         component: () => import(/* webpackChunkName: "client" */ '../views/client/Visits.vue'),
       },
       {
+        path: '/team',
+        name: 'Team',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Team.vue'),
+      },
+      {
+        path: '/team/:id',
+        name: 'TeamDetail',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/team/TeamDetail.vue'),
+      },
+      {
+        path: '/inventory',
+        name: 'Inventory',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Inventory.vue'),
+      },
+      {
+        path: '/billing',
+        name: 'Billing',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Billing.vue'),
+      },
+      {
+        path: '/roles',
+        name: 'Roles',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Roles.vue'),
+      },
+      {
+        path: '/clients',
+        name: 'CorporateClients',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/CorporateClients.vue'),
+      },
+      {
+        path: '/clients/:id',
+        name: 'ClientDetail',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/ClientDetail.vue'),
+      },
+      {
         path: '/patient-vitals',
         name: 'Vitals',
         component: () => import(/* webpackChunkName: "client" */ '../views/client/patients/PatientVitals.vue'),
+      },
+      {
+        path: '/register-client',
+        component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/corporate/RegisterClient.vue'),
+        children: [
+          {
+            path: '',
+            name: 'CompanyInformation',
+            component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/corporate/CompanyInformation.vue'),
+          },
+          {
+            path: '/register-client/admin-information',
+            name: 'CompanyAdminInformation',
+            component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/corporate/CompanyAdminInformation.vue'),
+          },
+        ],
+      },
+      {
+        path: '/register-team',
+        component: () => import(/* webpackChunkName: "registerpatient" */ '../views/client/team/RegisterTeam.vue'),
+        children: [
+          {
+            path: '',
+            name: 'TeamBiodata',
+            component: () => import(/* webpackChunkName: "registeruser" */ '../views/client/team/TeamBioData.vue'),
+          },
+          {
+            path: '/register-team/identification',
+            name: 'TeamIdentification',
+            component: () => import(/* webpackChunkName: "registeruser" */ '../views/client/team/TeamIdentification.vue'),
+          },
+          {
+            path: '/register-team/contact-information',
+            name: 'TeamContactInformation',
+            component: () => import(/* webpackChunkName: "registeruser" */ '../views/client/team/TeamContactInformation.vue'),
+          },
+        ],
       },
       {
         path: '/register-patient',

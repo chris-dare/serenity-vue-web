@@ -102,7 +102,7 @@ $primary: #0B6B74;
     }
     div,select, input, .bx--date-picker__input {
         width: 100% !important;
-        @apply text-left
+        @apply text-left max-w-full
     }
 }
 
@@ -150,7 +150,7 @@ $primary: #0B6B74;
         @apply w-full
     }
     input, select, textarea{
-        @apply border-white w-full h-12;
+        @apply border-white w-full h-12 max-w-full;
     }
 
     input:focus, select:focus, textarea:focus{

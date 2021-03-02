@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="w-full">
     <router-link
       tag="div"
       :to="to"
-      class="flex justify-center items-center h-12 hover:bg-serenity-primary-highlight relative"
+      class="flex items-center h-12 w-full hover:bg-serenity-primary-highlight relative cursor-pointer"
       exact-active-class="bg-serenity-primary-highlight"
     >
       <slot />
@@ -21,7 +21,7 @@ export default {
 
   props: {
     to: {
-      type: String,
+      type: [String, Object],
       default: '/',
     },
 

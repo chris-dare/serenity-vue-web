@@ -3,11 +3,16 @@
     <cv-header class="relative bg-black flex">
       <div
         class="w-12 h-12 bg-serenity-gray flex justify-center items-center cursor-pointer"
+        @click="change"
       >
-        <img
-          src="@/assets/img/close.svg"
-          alt=""
-        >
+        <Close32
+          v-if="open"
+          class="w-5 h-5 text-white"
+        />
+        <Menu32
+          v-else
+          class="w-5 h-5 text-white"
+        />
       </div>
       <div class="flex justify-between items-center w-full">
         <cv-header-name href="javascript:void(0)">
@@ -47,12 +52,12 @@
             @change="actionChange"
           >
             <cv-select-option
-              v-for="(item, index) in options"
+              v-for="(item, index) in workspaces"
               :key="index"
               class="text-white font-light"
-              :value="item"
+              :value="item.value"
             >
-              {{ item }}
+              {{ item.label }}
             </cv-select-option>
           </cv-select>
 
@@ -68,50 +73,49 @@
 <script>
 import UserHeaderDropdown from '@/components/layout/UserHeaderDropdown'
 import NotificationDetailsDropdown from '@/components/layout/NotificationDetailsDropdown'
+import Close32 from '@carbon/icons-vue/es/close/32'
+import Menu32 from '@carbon/icons-vue/es/menu/32'
 import { mapActions, mapState } from 'vuex'
 export default {
   name: 'AppHeader',
 
-  components: { UserHeaderDropdown, NotificationDetailsDropdown },
+  components: { UserHeaderDropdown, NotificationDetailsDropdown, Close32, Menu32 },
 
   data() {
     return {
       search: '',
       //   selected: 'Out Patient',
-      options: [
-        'Reception',
-        'Out Patient',
-        'In Patient',
-        'Pharmacy',
-        'Diagnostics',
-        'Billing',
-        'COVID-19',
-        'Virtual Care',
-      ],
+      open: '',
     }
   },
 
   computed: {
     ...mapState({
-      globalType: (state) => state.global.globalType,
+      workspaceType: (state) => state.global.workspaceType,
+      workspaces: (state) => state.global.workspaces,
     }),
     selected: {
       get() {
-        return this.globalType
+        return this.workspaceType
       },
       set(value) {
-        this.setGlobalType(value)
+        this.setworkspaceType(value)
       },
     },
   },
 
   methods: {
     ...mapActions({
-      setGlobalType: 'global/setGlobalType',
+      setworkspaceType: 'global/setworkspaceType',
     }),
 
     actionChange(value) {
-      this.setGlobalType(value)
+      this.setworkspaceType(value)
+    },
+
+    change() {
+      this.open = !this.open
+      this.$trigger('update:nav', this.open)
     },
   },
 }

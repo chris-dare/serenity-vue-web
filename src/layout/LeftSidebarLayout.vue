@@ -30,7 +30,7 @@
           </div>
           <div
             class="w-12 flex items-center justify-center h-12 bg-black"
-            @click="isOpen = false"
+            @click="isOpen = !isOpen"
           >
             <ArrowRight
               class="w-5 h-5 text-white transition-all duration-50 ease-in-out transform"

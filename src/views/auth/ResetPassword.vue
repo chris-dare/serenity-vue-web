@@ -36,6 +36,7 @@
             <cv-button
               kind="primary"
               class="my-3 max-w-full w-full bg-serenity-primary"
+              @click="reset"
             >
               Reset password
             </cv-button>
@@ -54,12 +55,38 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import { required, sameAs } from 'vuelidate/lib/validators'
 export default {
   name: 'ResetPassword',
   data() {
     return {
       form: {},
     }
+  },
+  methods: {
+    ...mapActions({
+      confirmResetPassword: 'auth/confirmResetPassword',
+    }),
+
+    async reset() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return
+      }
+
+      await this.resetPassword(this.form)
+    },
+  },
+  validations: {
+    form: {
+      password: {
+        required,
+      },
+      new_password: {
+        sameAsPassword: sameAs('password'),
+      },
+    },
   },
 }
 </script>

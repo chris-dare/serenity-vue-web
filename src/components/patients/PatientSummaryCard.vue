@@ -1,14 +1,13 @@
 <template>
   <EditableCard :title="title">
     <div>
-      <div class="grid grid-cols-2 gap-6 text-xs my-5 w-full">
-        <div
+      <div :class="[`grid grid-cols-${cols} gap-6 text-xs my-5 w-full`]">
+        <InfoBlock
           v-for="(field, index) in fields"
           :key="index"
-        >
-          <p class="text-secondary text-xs mb-1">{{ field.label }}</p>
-          <p class="font-bold">{{ field.value || 'N/A' }}</p>
-        </div>
+          :label="field.label"
+          :description="field.value || 'N/A'"
+        />
       </div>
     </div>
   </EditableCard>
@@ -19,10 +18,6 @@ export default {
   name: 'PatientSummaryCard',
 
   props: {
-    patient: {
-      type: Object,
-      default: () => {},
-    },
     title: {
       type: String,
       default: '',
@@ -31,8 +26,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    cols: {
+      type: Number,
+      default: 2,
+    },
   },
 }
 </script>
-
-<style></style>

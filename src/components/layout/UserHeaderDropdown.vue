@@ -13,8 +13,7 @@
       >
     </div>
     <div
-      v-if="user"
-      class="bg-primary w-60"
+      class="bg-primary w-96"
     >
       <div class="flex items-center justify-between px-4 py-4">
         <div>
@@ -42,7 +41,7 @@
       <p class="text-serenity-primary px-4 py-2 cursor-pointer">Support</p>
       <div
         class="flex items-center h-12 bg-serenity-placeholder px-4 text-white cursor-pointer"
-        @click="logout"
+        @click="submit"
       >
         Logout
         <ArrowRight class="w-4 h-4 ml-3 text-white" />
@@ -66,16 +65,17 @@ export default {
   },
   computed: {
     ...mapState('auth', ['user', 'loggedIn']),
-     ...mapGetters({
+    ...mapGetters({
       userName: 'auth/fullName',
     }),
   },
   methods: {
     ...mapActions({
-      setLoggedIn: 'auth/setLoggedIn',
+      logout: 'auth/logout',
     }),
-    logout() {
-      this.setLoggedIn(false)
+  
+    async submit() {
+      await this.logout()
       this.$router.push({ name: 'AuthLogin' })
     },
   },

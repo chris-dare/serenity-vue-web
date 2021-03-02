@@ -1,0 +1,106 @@
+<template>
+  <div>
+    <p class="text-primary mb-4 text-left">Team Member Type</p>
+    <div class="flex items-center space-x-6 w-full">
+      <cv-radio-button
+        v-for="(item, index) in titles"
+        :key="index"
+        v-model="form.member_type"
+        name="group-1"
+        :label="item"
+        :value="item"
+      />
+    </div>
+    <cv-select
+      v-model="form.roles"
+      label="Clinical Role"
+      class="inherit-full-input my-8"
+    >
+      <cv-select-option
+        disabled
+        selected
+        hidden
+      >
+        Nurse, Doctor etc
+      </cv-select-option>
+      <!-- <cv-select-option value="male">Male</cv-select-option>
+      <cv-select-option value="female">FeMale</cv-select-option> -->
+    </cv-select>
+    <cv-select
+      v-model="form.specialty"
+      label="Specialty"
+      class="inherit-full-input my-8"
+    >
+      <cv-select-option
+        disabled
+        selected
+        hidden
+      >
+        Select one or more specialties
+      </cv-select-option>
+      <!-- <cv-select-option value="male">Male</cv-select-option>
+      <cv-select-option value="female">FeMale</cv-select-option> -->
+    </cv-select>
+    <cv-text-input
+      v-model="form.code"
+      label="Medical Practice Code"
+      placeholder="Medical Practice Code"
+      class="inherit-full-input my-8"
+    />
+
+    <p class="text-primary mt-8 mb-4 text-left">Workspace access</p>
+    <div class="grid grid-cols-3">
+      <cv-checkbox
+        v-for="(workspace, index) in workspaces"
+        :key="index"
+        v-model="form.workspaces"
+        :value="index"
+        :label="workspace"
+      />
+    </div>
+
+    <div class="flex items-center justify-between mt-12 mb-6">
+      <div class="flex items-center">
+        <cv-button
+          class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
+          kind="tertiary"
+        >
+          Cancel
+        </cv-button>
+        <cv-button
+          class="bg-black px-6"
+          kind="primary"
+          @click="$router.push({ name: 'TeamBiodata' })"
+        >
+          Go back
+        </cv-button>
+      </div>
+      <div class="flex items-center">
+        <cv-button
+          :icon="icon"
+          kind="primary"
+          class="bg-serenity-primary ml-6"
+          @click="$router.push({ name: 'TeamIdentification' })"
+        >
+          Submit
+        </cv-button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'TeamIdentification',
+
+  data() {
+    return {
+      form: {
+        workspaces: [],
+      },
+      titles: ['Clinical Staff', 'Non-Clinical Staff'],
+      workspaces: ['Reception', 'ER', 'Outpatient', 'Inpatient', 'Pharmacy', 'Diagnostics'],
+    }
+  },
+}
+</script>

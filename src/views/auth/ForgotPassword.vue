@@ -24,12 +24,31 @@
             <cv-text-input
               v-model="form.email"
               class="my-4"
-              label="Phone/Email"
-            />
+              label="Email"
+            >
+              <template
+                v-if="$v.form.email.$error"
+                slot="invalid-message"
+              >
+                Email is required
+              </template>
+            </cv-text-input>
+            <cv-text-input
+              v-model="form.mobile_number"
+              class="my-4"
+              label="Phone number"
+            >
+              <template
+                v-if="$v.form.mobile_number.$error"
+                slot="invalid-message"
+              >
+                Phone number is required
+              </template>
+            </cv-text-input>
             <cv-button
               kind="primary"
               class="my-3 max-w-full w-full bg-serenity-primary"
-              @click="actionClick"
+              @click="reset"
             >
               Reset password
             </cv-button>
@@ -48,13 +67,34 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
 export default {
   data() {
     return {
       form: {},
     }
   },
+
+  methods: {
+    ...mapActions({
+      resetPassword: 'auth/resetPassword',
+    }),
+
+    async reset() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return
+      }
+
+      await this.resetPassword(this.form)
+    },
+  },
+  validations: {
+    form: {
+      email: { required },
+      mobile_number: { required },
+    },
+  },
 }
 </script>
-
-<style></style>

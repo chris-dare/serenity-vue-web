@@ -10,11 +10,7 @@
           kind="primary"
         >
           Add new appointment
-          <img
-            class="ml-4 w-5 h-5"
-            src="@/assets/img/add 1.svg"
-            alt=""
-          >
+          <Add class="ml-4 w-5 h-5 text-white" />
         </router-link>
       </div>
 
