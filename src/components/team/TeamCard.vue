@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-white w-full h-60 space-y-4 flex flex-col justify-center items-center">
+  <div
+    class="bg-white w-full h-60 space-y-4 flex flex-col justify-center items-center"
+  >
     <img
       :src="$faker().image.image()"
       alt=""
@@ -10,6 +12,11 @@
       <p class="text-sm text-primary">General Practitioner</p>
       <p class="text-sm text-secondary">nm@nmc.org</p>
     </div>
-    <p class="text-sm text-serenity-primary font-semibold">View Profile</p>
+    <p
+      class="text-sm text-serenity-primary font-semibold cursor-pointer"
+      @click="$router.push(`/team/${1}`)"
+    >
+      View Profile
+    </p>
   </div>
 </template>

@@ -42,10 +42,16 @@ export default {
       selected: 'search',
       dashboardTypes: [
         {
-          label: 'Edit Profile',
-          description: '',
-          type: 'user',
+          label: 'Provider Profile',
+          description: 'Information about this company',
+          type: 'home',
           value: 'profile',
+        },
+        {
+          label: 'Admin Profile',
+          description: 'A quick overview of you',
+          type: 'user',
+          value: 'add',
         },
         {
           label: 'Security',
@@ -61,7 +67,7 @@ export default {
     change(dashboard) {
       this.selected = dashboard.value
 
-      if (dashboard.value === 'profile') {
+      if (dashboard.value === 'profile' || dashboard.value === 'admin') {
         this.$trigger('profile:edit')
       }
 

@@ -9,6 +9,7 @@ import DatePlugin from '@/services/date'
 import UtilsPlugin from '@/services/utils'
 import Vuelidate from 'vuelidate'
 import VuePageTransition from 'vue-page-transition'
+import HasPermissionDirective from '@/plugins/has-permission'
 
 // all vue plugins
 import '@/plugins'
@@ -19,7 +20,7 @@ import '@/globalComponents'
 import '@/assets/styles/tailwind.scss'
 import '@carbon/charts/styles.css'
 
-
+Vue.directive('has-permission', HasPermissionDirective)
 
 Vue.use(require('vue-faker'))
 

@@ -2,7 +2,7 @@
   <cv-side-nav
     id="side-nav"
     class="bg-serenity-primary max-w-xl transition-all duration-50"
-    :class="[open ? 'w-48' : 'w-12']"
+    :class="[open ? 'w-56' : 'w-12']"
   >
     <div
       v-for="(item, index) in navItems"

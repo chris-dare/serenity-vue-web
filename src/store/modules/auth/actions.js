@@ -27,10 +27,43 @@ export default {
       })
   },
 
+  logout({ commit }) {
+    return AuthAPI.logout()
+      .then(({ data: result }) => {
+        commit(SET_TOKEN, null)
+        commit(SET_LOGGED_IN, false)
+        return result
+      })
+      .catch(result => {
+        throw result.data
+      })
+  },
+
   refresh({ commit }) {
     return AuthAPI.refresh()
       .then(({ data: result }) => {
         commit(SET_TOKEN, result.data.token)
+        return result.data
+      })
+      .catch(result => {
+        throw result.data.error
+      })
+  },
+
+  // eslint-disable-next-line no-unused-vars
+  resetPassword({ commit }, params) {
+    return AuthAPI.reset(params)
+      .then(({ data: result }) => {
+        return result.data
+      })
+      .catch(result => {
+        throw result.data.error
+      })
+  },
+  // eslint-disable-next-line no-unused-vars
+  confirmResetPassword({ commit }, params) {
+    return AuthAPI.confirmReset(params)
+      .then(({ data: result }) => {
         return result.data
       })
       .catch(result => {

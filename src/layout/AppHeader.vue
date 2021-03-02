@@ -85,6 +85,7 @@ export default {
     return {
       search: '',
       //   selected: 'Out Patient',
+      open: '',
     }
   },
 

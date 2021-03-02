@@ -39,11 +39,13 @@ import Calendar from '@carbon/icons-vue/es/calendar/32'
 import Add from '@carbon/icons-vue/es/add/32'
 import User from '@carbon/icons-vue/es/user/32'
 import Download from '@carbon/icons-vue/es/download/32'
+import Cross from '@carbon/icons-vue/es/health-cross/32'
+import Categories from '@carbon/icons-vue/es/categories/32'
 
 export default {
   name: 'DashboardCard',
 
-  components: { Stethoscope, Reference, Indentification, Calendar, Add, User, Download },
+  components: { Stethoscope, Reference, Indentification, Calendar, Add, User, Download, Cross, Categories },
 
   props: {
     details: {

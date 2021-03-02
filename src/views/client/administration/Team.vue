@@ -4,7 +4,7 @@
       <p class="text-xl font-bold">Team members (55)</p>
 
       <router-link
-        :to="{name:'Biodata'}"
+        :to="{name:'TeamBiodata'}"
         tag="cv-button"
         class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
         kind="primary"
@@ -65,6 +65,7 @@
 
 <script>
 import TeamCard from '@/components/team/TeamCard'
+import { mapActions } from 'vuex'
 export default {
   name: 'Team',
 
@@ -75,5 +76,18 @@ export default {
       search: '',
     }
   },
+
+  computed: {
+    ...mapActions({
+      getUsers: 'practitioners/getUsers',
+    }),
+  },
+
+  created() {
+    console.log('here')
+    this.getUsers()
+  },
+
+
 }
 </script>

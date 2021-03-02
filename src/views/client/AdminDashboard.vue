@@ -83,6 +83,16 @@ export default {
           type: 'Calendar',
           value: '0',
         },
+        {
+          label: 'Workspaces',
+          type: 'Cross',
+          value: '0',
+        },
+        {
+          label: 'Locations',
+          type: 'Categories',
+          value: '0',
+        },
       ]
 
       return types
@@ -93,6 +103,12 @@ export default {
           label: 'New Provider',
           type: 'Add',
           description: 'Add new provider',
+          value: '',
+        },
+        {
+          label: 'New workspace',
+          type: 'Cross',
+          description: 'Create a new department or workspace',
         },
         {
           label: 'Register patient',

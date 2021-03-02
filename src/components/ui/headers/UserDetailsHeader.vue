@@ -2,7 +2,7 @@
   <div>
     <div class="flex justify-between items-center">
       <p class="text-secondary font-semibold text-xl">
-        Hello, <span class="text-primary">Dr. Grey Strep</span>
+        Hello, <span class="text-primary">{{ fullName || 'Dr. Grey Strep' }}</span>
       </p>
       <div>
         <p class="text-xs">
@@ -17,7 +17,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
-
+  computed: {
+    ...mapGetters({
+      fullName: 'auth/fullName',
+    }),
+  },
 }
 </script>

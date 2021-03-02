@@ -3,7 +3,6 @@ import http from '@/http'
 export default {
   url: 'auth/',
   
-
   create(params) {
     return http.post(this.url, params)
   },
@@ -18,9 +17,16 @@ export default {
 
   login(params){
     return http.post(`${this.url}login`, params)
-  }
+  },
 
-  // refresh(params){
-  //   return http.post(`${this.url}login`, params)
-  // }
+  reset(params){
+    return http.post(`${this.url}password-reset`, params)
+  },
+  confirmReset(params){
+    return http.post(`${this.url}/password-reset/confirm`, params)
+  },
+
+  logout(){
+    return http.get(`${this.url}logout`)
+  },
 }
