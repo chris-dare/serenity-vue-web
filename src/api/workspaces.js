@@ -4,19 +4,18 @@ export default {
   url: 'providers/',
   
   list(providerId) {
-    console.log('here')
-    return http.get(`${this.url}${providerId}/practitioners`)
+    return http.get(`${this.url}${providerId}/workspaces`)
   },
 
   create(providerId, params) {
-    return http.post(`${this.url}${providerId}/practitioners`, params)
+    return http.post(`${this.url}${providerId}/workspaces`, params)
   },
 
   update(providerId, params) {
-    return http.put(`${this.url}${providerId}/practitioners/${params.id}`, params)
+    return http.put(`${this.url}${providerId}/workspaces/${params.id}`, params)
   },
 
   delete(providerId,id) {
-    return http.delete(`${this.url}${providerId}/practitioners/${id}`)
+    return http.delete(`${this.url}${providerId}/workspaces/${id}`)
   },
 }

@@ -4,19 +4,18 @@ import { SET_WORKSPACES, DELETE_WORKSPACE, UPDATE_WORKSPACE } from './mutation-t
 
 export default {
   async getWorkspaces({ commit, rootState }) {
-    console.log('aha')
-    // const provider = rootState.auth.user
-    const { data } = await WorkspacesAPI.list(1).catch((error) => {
-      // this.$service.fail(error)
+    const provider = rootState.auth.user
+    const { data } = await WorkspacesAPI.list(provider.id).catch((error) => {
       console.log('error workspaces', error)
       throw error
     })
     commit(SET_WORKSPACES, data)
   },
 
-  async createWorkspace({ commit }, payload) {
+  async createWorkspace({ commit, rootState }, payload) {
+    const provider = rootState.auth.user
     const { data } = await WorkspacesAPI
-      .create(payload)
+      .create(provider.id,payload)
       .catch(({ response: { data: error } }) => {
         this.$service.fail(error)
         throw error
@@ -25,9 +24,10 @@ export default {
     commit(UPDATE_WORKSPACE, data)
   },
 
-  async updateWorkspace({ commit }, { id, payload }) {
+  async updateWorkspace({ commit, rootState}, payload) {
+    const provider = rootState.auth.user
     const { data } = await WorkspacesAPI
-      .update(id, payload)
+      .update(provider.id,payload)
       .catch(({ response: { data: error } }) => {
         this.$service.fail(error)
         throw error
@@ -35,9 +35,10 @@ export default {
 
     commit(UPDATE_WORKSPACE, data)
   },
-  async deleteWorkspace({ commit }, id) {
+  async deleteWorkspace({ commit, rootState}, id) {
+    const provider = rootState.auth.user
     const { data } = await WorkspacesAPI
-      .delete(id)
+      .delete(provider.id,id)
       .catch(({ response: { data: error } }) => {
         this.$service.fail(error)
         throw error

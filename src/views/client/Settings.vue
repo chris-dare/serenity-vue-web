@@ -1,18 +1,6 @@
 <template>
   <div class="w-4/5 mx-auto">
-    <div class="flex justify-between items-center">
-      <p class="text-secondary font-semibold text-xl">
-        Hello, <span class="text-primary">Dr. Grey Strep</span>
-      </p>
-      <div>
-        <p class="text-xs">
-          {{ $date.formatDate(Date.now(), "EEEE, MMM dd, yyyy") }}
-        </p>
-        <p class="font-semibold">
-          {{ $date.formatDate(Date.now(), "HH:mm a") }}
-        </p>
-      </div>
-    </div>
+    <UserDetailsHeader />
     <p class="text-serenity-primary my-6 font-semibold">
       What would you like to do?
     </p>
@@ -32,10 +20,11 @@
 
 <script>
 import PatientCard from '@/components/appointments/PatientCard'
+import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
 export default {
   name: 'Settings',
 
-  components: { PatientCard },
+  components: { PatientCard,UserDetailsHeader },
 
   data() {
     return {
@@ -51,7 +40,7 @@ export default {
           label: 'Admin Profile',
           description: 'A quick overview of you',
           type: 'user',
-          value: 'add',
+          value: 'admin',
         },
         {
           label: 'Security',

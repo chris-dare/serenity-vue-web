@@ -49,7 +49,7 @@
           :icon="icon"
           kind="primary"
           class="bg-serenity-primary ml-6"
-          @click="$router.push({ name: 'TeamIdentification' })"
+          @click="save"
         >
           Next
         </cv-button>
@@ -80,20 +80,23 @@ export default {
 
   computed: {
     ...mapState({
-      countries: (state) => state.global.countries,
+      currentUser: (state) => state.practitioners.currentUser,
     }),
   },
 
-  mounted() {
-    this.getCountries()
+  created() {
+    this.form = this.currentUser
   },
-
-  
 
   methods: {
     ...mapActions({
-      getCountries: 'global/getCountries',
+      addToCurrentUser: 'practitioners/addToCurrentUser',
     }),
+
+    save() {
+      this.addToCurrentUser(this.form)
+      this.$router.push({ name: 'TeamIdentification' })
+    },
   },
 }
 </script>

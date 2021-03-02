@@ -71,12 +71,11 @@
             Cancel
           </cv-button>
           <div class="flex items-center">
-            <p class="text-primary underline">Save and close</p>
             <cv-button
               :icon="icon"
               kind="primary"
               class="bg-serenity-primary ml-6"
-              @click="$router.push({name: 'TeamContactInformation'})"
+              @click="save"
             >
               Next
             </cv-button>
@@ -90,6 +89,7 @@
 <script>
 import { required } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import { mapActions, mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -109,10 +109,24 @@ export default {
     },
   },
 
+  computed: {
+    ...mapState({
+      currentUser: (state) => state.practitioners.currentUser,
+    }),
+  },
+
+  created() {
+    this.form = this.currentUser
+  },
+
   methods: {
-    actionChange() {},
+    ...mapActions({
+      addToCurrentUser: 'practitioners/addToCurrentUser',
+    }),
+    save() {
+      this.addToCurrentUser(this.form)
+      this.$router.push({ name: 'TeamContactInformation' })
+    },
   },
 }
 </script>
-
-<style></style>

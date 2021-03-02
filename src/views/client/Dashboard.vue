@@ -1,18 +1,6 @@
 <template>
   <div class="w-4/5 mx-auto">
-    <div class="flex justify-between items-center">
-      <p class="text-secondary font-semibold text-xl">
-        Hello, <span class="text-primary">Dr. Grey Strep</span>
-      </p>
-      <div>
-        <p class="text-xs">
-          {{ $date.formatDate(Date.now(), "EEEE, MMM dd, yyyy") }}
-        </p>
-        <p class="font-semibold">
-          {{ $date.formatDate(Date.now(), "HH:mm a") }}
-        </p>
-      </div>
-    </div>
+    <UserDetailsHeader />
     <p class="text-serenity-primary my-6 font-semibold">
       What would you like to do?
     </p>
@@ -41,11 +29,12 @@ import PatientCard from '@/components/appointments/PatientCard'
 import AppointmentsTable from '@/components/appointments/AppointmentsTable'
 import GetStartedModal from '@/components/dashboard/GetStartedModal'
 import StartVisitModal from '@/components/appointments/StartVisitModal'
+import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
 import { mapState } from 'vuex'
 export default {
   name: 'Dashboard',
 
-  components: { PatientCard, AppointmentsTable, GetStartedModal, StartVisitModal },
+  components: { PatientCard, AppointmentsTable, GetStartedModal, StartVisitModal, UserDetailsHeader },
 
   data() {
     return {
