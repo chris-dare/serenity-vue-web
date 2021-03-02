@@ -1,32 +1,26 @@
-import {
-  SET_PATIENTS,
-  SET_PATIENT,
-  DELETE_PATIENT,
-  SET_PATIENTS_COUNT,
-} from './mutation-types'
+import { SET_ROLES, UPDATE_ROLE, DELETE_ROLE } from './mutation-types'
 
 export default {
-  [SET_PATIENTS](state, patients) {
-    state.patients = patients
+  [SET_ROLES](state, roles) {
+    state.roles = roles
   },
 
-  [SET_PATIENTS_COUNT](state, count) {
-    state.patientsCount = count
-  },
-
-  [SET_PATIENT](state, patient) {
-    const index = state.patients.findIndex(a => a.uuid === patient.uuid)
+  [UPDATE_ROLE](state, role) {
+    const index = state.roles.findIndex(a => a.id === role.id)
     if (index !== -1) {
-      state.patients = state.patients.map(a => {
-        if (a.uuid === patient.uuid) return patient
+      state.roles = state.roles.map(a => {
+        if (a.id === role.id) return role
         return a
       })
     } else {
-      state.patients.push(patient)
+      state.roles.push(role)
     }
   },
 
-  [DELETE_PATIENT](state, patientId) {
-    state.patients = state.patients.filter((es) => es.uuid !== patientId)
+  [DELETE_ROLE](state, roleId) {
+    const index = state.roles.findIndex(a => a.id === roleId)
+    if (index !== -1) {
+      state.roles.splice(index, 1)
+    }
   },
 }

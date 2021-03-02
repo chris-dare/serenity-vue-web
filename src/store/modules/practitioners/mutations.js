@@ -1,4 +1,4 @@
-import { SET_USERS, UPDATE_USER, DELETE_USER } from './mutation-types'
+import { SET_USERS, UPDATE_USER, DELETE_USER, ADD_USER_DATA } from './mutation-types'
 
 export default {
   [SET_USERS](state, users) {
@@ -22,5 +22,10 @@ export default {
     if (index !== -1) {
       state.users.splice(index, 1)
     }
+  },
+
+  [ADD_USER_DATA](state, data) {
+    let currentUser = state.currentUser
+    state.currentUser = {...currentUser, ...data}
   },
 }

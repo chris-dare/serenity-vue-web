@@ -23,8 +23,13 @@
       >
         Nurse, Doctor etc
       </cv-select-option>
-      <!-- <cv-select-option value="male">Male</cv-select-option>
-      <cv-select-option value="female">FeMale</cv-select-option> -->
+      <cv-select-option
+        v-for="(role, index) in roles"
+        :key="index"
+        :value="role.id"
+      >
+        {{ role.name }}
+      </cv-select-option>
     </cv-select>
     <cv-select
       v-model="form.specialty"
@@ -38,8 +43,13 @@
       >
         Select one or more specialties
       </cv-select-option>
-      <!-- <cv-select-option value="male">Male</cv-select-option>
-      <cv-select-option value="female">FeMale</cv-select-option> -->
+      <cv-select-option
+        v-for="(specialty, index) in specialties"
+        :key="index"
+        :value="specialty.id"
+      >
+        {{ specialty.name }}
+      </cv-select-option>
     </cv-select>
     <cv-text-input
       v-model="form.code"
@@ -76,11 +86,13 @@
         </cv-button>
       </div>
       <div class="flex items-center">
+        <cv-button-skeleton v-if="loading" />
         <cv-button
+          v-else
           :icon="icon"
           kind="primary"
           class="bg-serenity-primary ml-6"
-          @click="$router.push({ name: 'TeamIdentification' })"
+          @click="save"
         >
           Submit
         </cv-button>
@@ -90,6 +102,7 @@
 </template>
 
 <script>
+import {mapActions, mapState} from 'vuex'
 export default {
   name: 'TeamIdentification',
 
@@ -100,7 +113,43 @@ export default {
       },
       titles: ['Clinical Staff', 'Non-Clinical Staff'],
       workspaces: ['Reception', 'ER', 'Outpatient', 'Inpatient', 'Pharmacy', 'Diagnostics'],
+      loading: false,
     }
+  },
+
+  computed: {
+    ...mapState({
+      currentUser: (state) => state.practitioners.currentUser,
+      roles: (state) => state.roles.roles,
+      specialties: (state) => state.specialties.specialties,
+    }),
+  },
+
+  methods: {
+    ...mapActions({
+      addToCurrentUser: 'practitioners/addToCurrentUser',
+      createUser: 'practitioners/createUser',
+    }),
+
+    async save() {
+      this.loading = true
+      this.addToCurrentUser(this.form)
+      const data = await this.createUser(this.currentUser).catch(() => {
+        this.$toast.open({
+          message: 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+      })
+
+      if (data) {
+        this.$toast.open({
+          message: 'Member successfully added',
+        })
+      }
+
+      this.loading = false
+    },
   },
 }
 </script>

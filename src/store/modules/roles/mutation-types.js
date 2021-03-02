@@ -1,4 +1,3 @@
-export const DELETE_PATIENT = 'Delete patient'
-export const SET_PATIENT = 'Set patient'
-export const SET_PATIENTS = 'Set patients'
-export const SET_PATIENTS_COUNT = 'Set patients count'
+export const SET_ROLES = 'Set roles'
+export const DELETE_ROLE = 'Delete roles'
+export const UPDATE_ROLE = 'Update roles'

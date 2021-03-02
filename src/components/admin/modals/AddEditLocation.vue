@@ -14,14 +14,29 @@
           label="Location name"
           placeholder="eg Valley Heights"
         />
-        <SeButton full>{{ form.id ? 'Save changes' : 'Create new location' }}</SeButton>
-        <p class="text-center">Cancel</p>
+        <cv-button-skeleton
+          v-if="loading"
+        />
+        <SeButton
+          v-else
+          full
+          @click="submit"
+        >
+          {{ form.id ? 'Save changes' : 'Create new location' }}
+        </SeButton>
+        <p
+          class="text-center"
+          @click="visible = false"
+        >
+          Cancel
+        </p>
       </div>
     </template>
   </cv-modal>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'AddEditLocation',
 
@@ -29,6 +44,7 @@ export default {
     return {
       form: {},
       visible: false,
+      loading: false,
     }
   },
 
@@ -38,8 +54,60 @@ export default {
     },
     'location:edit:open': function(data){
       this.visible = true
-      console.log('data', data)
-      this.form = {name: data.params[0].name, id: 1}
+      this.form = data.params[0]
+    },
+  },
+
+  methods: {
+    ...mapActions({
+      createLocation: 'locations/createLocation',
+      updateLocation: 'locations/updateLocation',
+    }),
+
+    submit(){
+      if (this.form.id) {
+        this.update()
+      } else {
+        this.save()
+      }
+    },
+    async save() {
+      this.loading = true
+      const data = await this.createLocation(this.form).catch(() => {
+        this.$toast.open({
+          message: 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+      })
+
+      if (data) {
+        this.$toast.open({
+          message: 'Location successfully added',
+        })
+        this.visible = false
+      }
+
+      this.loading = false
+    },
+    async update() {
+      this.loading = true
+      const data = await this.updateLocation(this.form).catch(() => {
+        this.$toast.open({
+          message: 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+      })
+
+      if (data) {
+        this.$toast.open({
+          message: 'Location successfully updated',
+        })
+        this.visible = false
+      }
+
+      this.loading = false
     },
   },
 }

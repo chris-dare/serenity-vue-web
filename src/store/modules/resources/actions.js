@@ -1,51 +1,51 @@
 /* eslint-disable no-unused-vars */
-import RolesAPI from '@/api/roles'
-import { SET_ROLES, DELETE_ROLE, UPDATE_ROLE } from './mutation-types'
+import ResourceAPI from '@/api/resources'
+import { SET_RESOURCES, DELETE_RESOURCE, UPDATE_RESOURCE } from './mutation-types'
 
 export default {
-  async getRoles({ commit, rootState }) {
+  async getResource({ commit, rootState }) {
     const provider = rootState.auth.user
-    const { data } = await RolesAPI.list(provider.id).catch((error) => {
+    const { data } = await ResourceAPI.list(provider.id).catch((error) => {
       // this.$service.fail(error)
-      console.log('error roles', error)
+      console.log('error resources', error)
       throw error
     })
-    commit(SET_ROLES, data)
+    commit(SET_RESOURCES, data)
   },
 
-  async createRole({ commit, rootState}, payload) {
+  async createResource({ commit, rootState}, payload) {
     const provider = rootState.auth.user
-    const { data } = await RolesAPI
+    const { data } = await ResourceAPI
       .create(provider.id,payload)
       .catch(({ response: { data: error } }) => {
         this.$service.fail(error)
         throw error
       })
 
-    commit(UPDATE_ROLE, data)
+    commit(UPDATE_RESOURCE, data)
   },
 
-  async updateRole({ commit, rootState}, payload) {
+  async updateResource({ commit, rootState}, payload) {
     const provider = rootState.auth.user
-    const { data } = await RolesAPI
+    const { data } = await ResourceAPI
       .update(provider.id, payload)
       .catch(({ response: { data: error } }) => {
         this.$service.fail(error)
         throw error
       })
 
-    commit(UPDATE_ROLE, data)
+    commit(UPDATE_RESOURCE, data)
   },
 
-  async deleteRole({ commit, rootState}, id) {
+  async deleteResource({ commit, rootState}, id) {
     const provider = rootState.auth.user
-    const { data } = await RolesAPI
+    const { data } = await ResourceAPI
       .delete(provider.id,id)
       .catch(({ response: { data: error } }) => {
         this.$service.fail(error)
         throw error
       })
 
-    commit(DELETE_ROLE, data)
+    commit(DELETE_RESOURCE, data)
   },
 }

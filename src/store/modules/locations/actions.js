@@ -1,51 +1,51 @@
 /* eslint-disable no-unused-vars */
-import RolesAPI from '@/api/roles'
-import { SET_ROLES, DELETE_ROLE, UPDATE_ROLE } from './mutation-types'
+import LocationAPI from '@/api/locations'
+import { SET_LOCATIONS, DELETE_LOCATION, UPDATE_LOCATION } from './mutation-types'
 
 export default {
-  async getRoles({ commit, rootState }) {
+  async getLocation({ commit, rootState }) {
     const provider = rootState.auth.user
-    const { data } = await RolesAPI.list(provider.id).catch((error) => {
+    const { data } = await LocationAPI.list(provider.id).catch((error) => {
       // this.$service.fail(error)
-      console.log('error roles', error)
+      console.log('error locations', error)
       throw error
     })
-    commit(SET_ROLES, data)
+    commit(SET_LOCATIONS, data)
   },
 
-  async createRole({ commit, rootState}, payload) {
+  async createLocation({ commit, rootState}, payload) {
     const provider = rootState.auth.user
-    const { data } = await RolesAPI
+    const { data } = await LocationAPI
       .create(provider.id,payload)
       .catch(({ response: { data: error } }) => {
         this.$service.fail(error)
         throw error
       })
 
-    commit(UPDATE_ROLE, data)
+    commit(UPDATE_LOCATION, data)
   },
 
-  async updateRole({ commit, rootState}, payload) {
+  async updateLocation({ commit, rootState}, payload) {
     const provider = rootState.auth.user
-    const { data } = await RolesAPI
+    const { data } = await LocationAPI
       .update(provider.id, payload)
       .catch(({ response: { data: error } }) => {
         this.$service.fail(error)
         throw error
       })
 
-    commit(UPDATE_ROLE, data)
+    commit(UPDATE_LOCATION, data)
   },
 
-  async deleteRole({ commit, rootState}, id) {
+  async deleteLocation({ commit, rootState}, id) {
     const provider = rootState.auth.user
-    const { data } = await RolesAPI
+    const { data } = await LocationAPI
       .delete(provider.id,id)
       .catch(({ response: { data: error } }) => {
         this.$service.fail(error)
         throw error
       })
 
-    commit(DELETE_ROLE, data)
+    commit(DELETE_LOCATION, data)
   },
 }

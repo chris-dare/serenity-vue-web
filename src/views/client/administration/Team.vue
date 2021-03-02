@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto w-4/5 space-y-4">
     <div class="flex items-center justify-between">
-      <p class="text-xl font-bold">Team members (55)</p>
+      <p class="text-xl font-bold">Team members ({{ users.length }})</p>
 
       <router-link
         :to="{name:'TeamBiodata'}"
@@ -60,12 +60,18 @@
         :key="index"
       />
     </div>
+    <p
+      v-if="!users.length"
+      class="text-center w-full py-6"
+    >
+      No team members to show
+    </p>
   </div>
 </template>
 
 <script>
 import TeamCard from '@/components/team/TeamCard'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'Team',
 
@@ -74,20 +80,33 @@ export default {
   data() {
     return {
       search: '',
+      loading: false,
     }
   },
 
   computed: {
-    ...mapActions({
-      getUsers: 'practitioners/getUsers',
+    ...mapState({
+      users: (state) => state.practitioners.users,
     }),
+    filteredUsers() {
+      return this.users.filter(data => !this.search || data.name.toLowerCase().includes(this.search.toLowerCase()))
+    },
   },
 
   created() {
-    console.log('here')
-    this.getUsers()
+    this.refresh()
   },
 
+  methods: {
+    ...mapActions({
+      getUsers: 'practitioners/getUsers',
+    }),
 
+    async refresh() {
+      this.loading = true
+      await this.getUsers()
+      this.loading = false
+    },
+  },
 }
 </script>

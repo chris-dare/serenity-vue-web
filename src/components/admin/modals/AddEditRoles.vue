@@ -54,8 +54,21 @@
           </template>
         </cv-data-table>
         <div class="flex items-center justify-between">
-          <SeButton variant="secondary">Cancel</SeButton>
-          <SeButton @click="submit">{{ form.id ? 'Save changes' : 'Create new role' }}</SeButton>
+          <SeButton
+            variant="secondary"
+            @click="visible = false"
+          >
+            Cancel
+          </SeButton>
+          <cv-button-skeleton
+            v-if="loading"
+          />
+          <SeButton
+            v-else
+            @click="submit"
+          >
+            {{ form.id ? 'Save changes' : 'Create new role' }}
+          </SeButton>
         </div>
       </div>
     </template>
@@ -63,6 +76,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'AddEditRole',
 
@@ -76,6 +90,7 @@ export default {
         'Read',
         'Write',
       ],
+      loading: false,
     }
   },
 
@@ -85,14 +100,60 @@ export default {
     },
     'role:edit:open': function(data){
       this.visible = true
-      this.form = {name: data.params[0].name, id: 1}
+      this.form = data.params[0]
     },
   },
 
   methods: {
-    submit() {
-      this.visible = false
-      this.$trigger('success:open', 'Role added successfully!!')
+    ...mapActions({
+      createRole: 'roles/createRole',
+      updateRole: 'roles/updateRole',
+    }),
+
+    submit(){
+      if (this.form.id) {
+        this.update()
+      } else {
+        this.save()
+      }
+    },
+    async save() {
+      this.loading = true
+      const data = await this.createRole(this.form).catch(() => {
+        this.$toast.open({
+          message: 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+      })
+
+      if (data) {
+        this.$toast.open({
+          message: 'Role successfully added',
+        })
+        this.visible = false
+      }
+
+      this.loading = false
+    },
+    async update() {
+      this.loading = true
+      const data = await this.updateRole(this.form).catch(() => {
+        this.$toast.open({
+          message: 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+      })
+
+      if (data) {
+        this.$toast.open({
+          message: 'Role successfully updated',
+        })
+        this.visible = false
+      }
+
+      this.loading = false
     },
   },
 }

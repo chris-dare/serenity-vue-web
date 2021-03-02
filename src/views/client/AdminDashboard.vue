@@ -1,18 +1,6 @@
 <template>
   <div class="w-4/5 mx-auto">
-    <div class="flex justify-between items-center">
-      <p class="text-secondary font-semibold text-xl">
-        Hello, <span class="text-primary">Dr. Grey Strep</span>
-      </p>
-      <div>
-        <p class="text-xs">
-          {{ $date.formatDate(Date.now(), 'EEEE, MMM dd, yyyy') }}
-        </p>
-        <p class="font-semibold">
-          {{ $date.formatDate(Date.now(), 'HH:mm a') }}
-        </p>
-      </div>
-    </div>
+    <UserDetailsHeader />
     <p class="text-serenity-primary my-6 font-semibold">
       Overview
     </p>
@@ -46,11 +34,12 @@
 
 <script>
 import DashboardCard from '@/components/ui/cards/DashboardCard'
+import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
 
 export default {
   name: 'Dashboard',
 
-  components: { DashboardCard },
+  components: { DashboardCard, UserDetailsHeader },
 
   data() {
     return {
