@@ -8,9 +8,9 @@
       class="w-16 h-16 rounded-full"
     >
     <div class="space-y-1 flex items-center flex-col justify-center">
-      <p class="font-semibold">Dr. Eben Gahm</p>
+      <p class="font-semibold">{{user.title}} {{user.first_name}} {{user.last_name}}</p>
       <p class="text-sm text-primary">General Practitioner</p>
-      <p class="text-sm text-secondary">nm@nmc.org</p>
+      <p class="text-sm text-secondary">{{user.email}}</p>
     </div>
     <p
       class="text-sm text-serenity-primary font-semibold cursor-pointer"
@@ -27,7 +27,7 @@ export default {
   name: 'TeamCard',
 
   props: {
-    details: {
+    user: {
       type: Object,
       default: () => {},
     }
@@ -45,7 +45,7 @@ export default {
     }),
 
     go() {
-      this.setCurrentUser(this.details)
+      this.setCurrentUser(this.user)
       this.$router.push(`/team/${1}`)
     }
   }
