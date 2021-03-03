@@ -107,7 +107,7 @@ export default {
 
     async refresh() {
       this.loading = true
-      await this.getUsers()
+      // await this.getUsers()
       this.loading = false
     },
   },
