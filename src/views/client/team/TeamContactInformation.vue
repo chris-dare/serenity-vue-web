@@ -4,7 +4,7 @@
       <cv-text-input
         v-model="form.mobile_number"
         label="Phone number (required)"
-        placeholder="Patient First Name"
+        placeholder="eg 0349990390"
         class="inherit-full-input"
       >
         <template
@@ -50,7 +50,6 @@
         </cv-button>
       </div>
       <div class="flex items-center">
-        <p class="text-primary underline">Save and close</p>
         <cv-button
           :icon="icon"
           kind="primary"
