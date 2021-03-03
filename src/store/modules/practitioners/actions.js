@@ -20,8 +20,10 @@ export default {
         this.$service.fail(error)
         throw error
       })
+    console.info(data)
 
-    commit(UPDATE_USER, data.data)
+    commit(UPDATE_USER, data)
+    return data
   },
 
   addToCurrentUser({ commit }, data) {

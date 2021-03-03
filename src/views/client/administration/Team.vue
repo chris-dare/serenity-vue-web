@@ -56,7 +56,7 @@
 
     <div class="grid grid-cols-4 gap-4">
       <TeamCard
-        v-for="(item, index) in 10"
+        v-for="(item, index) in users"
         :key="index"
       />
     </div>

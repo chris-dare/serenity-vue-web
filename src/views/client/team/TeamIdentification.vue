@@ -144,19 +144,22 @@ export default {
     async save() {
       this.loading = true
       this.addToCurrentUser(this.form)
-      const data = await this.createUser(this.currentUser).catch(() => {
+      const data = await this.createUser(this.currentUser).catch((error) => {
+        console.info(error)
         this.$toast.open({
           message: 'Something went wrong!',
           type: 'error',
         })
         this.loading = false
       })
+      console.info(data)
 
       if (data) {
         this.$toast.open({
           message: 'Member successfully added',
         })
-        this.reser()
+        this.reset()
+        this.$router.push({name: 'Team'})
       }
 
       this.loading = false
