@@ -20,8 +20,10 @@ export default {
         this.$service.fail(error)
         throw error
       })
+    console.info(data)
 
-    commit(UPDATE_USER, data.data)
+    commit(UPDATE_USER, data)
+    return data
   },
 
   addToCurrentUser({ commit }, data) {
@@ -32,6 +34,10 @@ export default {
     commit(SET_CURRENT_USER, {
       country_code: '+233'
     })
+  },
+
+  setCurrentUser({ commit }, data) {
+    commit(SET_CURRENT_USER, data)
   },
 
   async updateUser({ commit, rootState }, payload) {

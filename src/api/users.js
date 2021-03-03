@@ -1,5 +1,14 @@
 import http from '@/http'
 
+function randomString(l) {
+  let text = '';
+  const char_list = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  for (let i = 0; i < l; i++) {
+    text += char_list.charAt(Math.floor(Math.random() * char_list.length));
+  }
+  return text;
+}
+
 export default {
   url: 'providers/',
   
@@ -9,7 +18,13 @@ export default {
   },
 
   create(providerId, params) {
-    return http.post(`${this.url}${providerId}/practitioners`, params)
+    let mmm =  Object.assign({}, params, {
+      id: randomString(15),
+    })
+    return Promise.resolve(
+      {data: mmm,}
+    )
+    // return http.post(`${this.url}${providerId}/practitioners`, params)
   },
 
   update(providerId, params) {
