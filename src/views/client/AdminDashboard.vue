@@ -52,11 +52,11 @@ export default {
   computed: {
     dashboardTypes() {
       const types = [
-        {
-          label: 'Providers',
-          type: 'stethoscope',
-          value: '152',
-        },
+        // {
+        //   label: 'Providers',
+        //   type: 'stethoscope',
+        //   value: '1',
+        // },
         {
           label: 'Patients',
           type: 'Reference',
