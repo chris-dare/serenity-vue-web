@@ -9,7 +9,7 @@
             alt=""
           >
           <div>
-            <p class="font-semibold">{{ $faker().name.findName() }}</p>
+            <p class="font-semibold">{{ currentUser.title }} {{ currentUser.first_name }} {{ currentUser.last_name }}</p>
             <p class="text-secondary">
               Gynaecologist
             </p>
