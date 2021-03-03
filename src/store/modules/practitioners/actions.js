@@ -36,6 +36,10 @@ export default {
     })
   },
 
+  setCurrentUser({ commit }, data) {
+    commit(SET_CURRENT_USER, data)
+  },
+
   async updateUser({ commit, rootState }, payload) {
     const provider = rootState.auth.provider
     const { data } = await UsersAPI

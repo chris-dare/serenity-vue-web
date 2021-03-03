@@ -40,24 +40,28 @@
 
 <script>
 import PatientSummaryCard from '@/components/patients/PatientSummaryCard'
+import { mapState } from 'vuex'
 export default {
   name: 'TeamDetail',
 
   components: {PatientSummaryCard},
 
   computed: {
+    ...mapState({
+      currentUser: (state) => state.practitioners.currentUser,
+    }),
     generalFields() {
       return [
-        {label: 'First Name', value: this.$faker().lorem.word() },
-        { label: 'Last Name', value: this.$faker().lorem.word() },
-        { label: 'Phone Number', value: this.$faker().lorem.word() },
-        { label: 'Admin Email', value: this.$faker().lorem.word() },
-        { label: 'Date of Birth', value: this.$faker().lorem.word() },
-        { label: 'Title', value: this.$faker().lorem.word() },
-        { label: 'Sex', value: this.$faker().lorem.word() },
-        { label: 'Home Address', value: this.$faker().lorem.word() },
-        { label: 'Postal Address', value: this.$faker().lorem.word() },
-        { label: 'Signature', value: this.$faker().lorem.word() },
+        {label: 'First Name', value: this.currentUser.first_name },
+        { label: 'Last Name', value: this.currentUser.last_name },
+        { label: 'Phone Number', value: this.currentUser.mobile_number },
+        { label: 'Admin Email', value: this.currentUser.email },
+        { label: 'Date of Birth', value: this.currentUser.date_of_birth },
+        { label: 'Title', value: this.currentUser.title },
+        { label: 'Sex', value: this.currentUser.gender },
+        { label: 'Home Address', value: this.currentUser.address },
+        { label: 'Postal Address', value: this.currentUser.address },
+        { label: 'Signature', value: this.currentUser.signature },
       ]
     },
     workspaceFields() {

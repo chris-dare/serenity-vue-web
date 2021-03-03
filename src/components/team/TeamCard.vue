@@ -14,9 +14,40 @@
     </div>
     <p
       class="text-sm text-serenity-primary font-semibold cursor-pointer"
-      @click="$router.push(`/team/${1}`)"
+      @click="go"
     >
       View Profile
     </p>
   </div>
 </template>
+
+<script>
+import { mapActions, mapState } from 'vuex'
+export default {
+  name: 'TeamCard',
+
+  props: {
+    details: {
+      type: Object,
+      default: () => {},
+    }
+  },
+
+  computed: {
+    ...mapState({
+      cursor: (state) => state.practitioners.cursor,
+    })
+  },
+
+  methods: {
+    ...mapActions({
+      setCurrentUser: 'practitioners/setCurrentUser'
+    }),
+
+    go() {
+      this.setCurrentUser(this.details)
+      this.$router.push(`/team/${1}`)
+    }
+  }
+}
+</script>

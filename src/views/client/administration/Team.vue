@@ -25,7 +25,7 @@
           size="field"
           class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
         >
-          All (5)
+          All ({{ users.length }})
         </cv-button>
         <cv-button
           size="field"
@@ -33,7 +33,7 @@
           class="px-4 bg-white hover:bg-white text-serenity-placeholder"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
-          Reception ({{ 1 }})
+          Reception ({{ 0 }})
         </cv-button>
         <cv-button
           size="field"
@@ -41,7 +41,7 @@
           class="px-4 bg-white hover:bg-white text-serenity-placeholder"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
-          In Patient ({{ 1 }})
+          In Patient ({{ 0 }})
         </cv-button>
         <cv-button
           size="field"
@@ -49,7 +49,7 @@
           class="px-4 bg-white hover:bg-white text-serenity-placeholder"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
-          Out Patient ({{ 1 }})
+          Out Patient ({{ 0 }})
         </cv-button>
       </div>
     </div>
@@ -58,6 +58,7 @@
       <TeamCard
         v-for="(item, index) in users"
         :key="index"
+        :details="item"
       />
     </div>
     <p
@@ -107,7 +108,7 @@ export default {
 
     async refresh() {
       this.loading = true
-      await this.getUsers()
+      // await this.getUsers()
       this.loading = false
     },
   },
