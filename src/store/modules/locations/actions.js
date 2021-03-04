@@ -3,13 +3,13 @@ import LocationAPI from '@/api/locations'
 import { SET_LOCATIONS, DELETE_LOCATION, UPDATE_LOCATION } from './mutation-types'
 
 export default {
-  async getLocation({ commit, rootState }) {
+  async getLocations({ commit, rootState }) {
     const provider = rootState.auth.provider
     const { data } = await LocationAPI.list(provider.id).catch((error) => {
       // this.$service.fail(error)
       throw error
     })
-    commit(SET_LOCATIONS, data)
+    commit(SET_LOCATIONS, data.data)
   },
 
   async createLocation({ commit, rootState}, payload) {
@@ -21,7 +21,7 @@ export default {
         throw error
       })
 
-    commit(UPDATE_LOCATION, data)
+    commit(UPDATE_LOCATION, data.data)
   },
 
   async updateLocation({ commit, rootState}, payload) {

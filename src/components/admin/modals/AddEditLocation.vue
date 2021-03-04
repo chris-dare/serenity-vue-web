@@ -10,16 +10,21 @@
       <div class="space-y-8">
         <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'New' }} location</p>
         <cv-text-input
-          v-model="form.name"
+          v-model="form.location_name"
           label="Location name"
           placeholder="eg Valley Heights"
         />
         <cv-text-input
-          v-model="form.address"
+          v-model="form.street_address"
           label="Address"
           placeholder="eg No Bana Street"
         />
         <cv-text-input
+          v-model="form.city"
+          label="City"
+          placeholder="eg No Bana Street"
+        />
+        <!-- <cv-text-input
           v-model="form.gps"
           label="GPS"
           placeholder="eg Longitude, Latitude"
@@ -30,7 +35,7 @@
             custom-class="h-12 bg-white"
             title="Or upload photo"
           />
-        </div>
+        </div> -->
         
         <cv-button-skeleton
           v-if="loading"
@@ -60,7 +65,12 @@ export default {
 
   data() {
     return {
-      form: {},
+      form: {
+        location_contact_number: '',
+        city: '',
+        postal_code: '',
+        country: 'GH',
+      },
       visible: false,
       loading: false,
     }
