@@ -35,7 +35,7 @@
             </div>
           </cv-data-table-cell>
             
-          <cv-data-table-cell>
+          <!-- <cv-data-table-cell>
             <div class="flex items-center space-x-6">
               <p
                 class="cursor-pointer"
@@ -50,7 +50,7 @@
                 Delete
               </p>
             </div>
-          </cv-data-table-cell>
+          </cv-data-table-cell> -->
         </cv-data-table-row>
       </template>
     </cv-data-table>
@@ -74,7 +74,8 @@ export default {
       search: '',
       columns: [
         'Name',
-        'Action',
+        'Address',
+        'City',
       ],
       loading: false,
     }

@@ -13,17 +13,50 @@
           v-model="form.location_name"
           label="Location name"
           placeholder="eg Valley Heights"
-        />
+        >
+          <template
+            v-if="$v.form.location_name.$error"
+            slot="invalid-message"
+          >
+            Location name is required
+          </template>
+        </cv-text-input>
         <cv-text-input
           v-model="form.street_address"
           label="Address"
           placeholder="eg No Bana Street"
-        />
+        >
+          <template
+            v-if="$v.form.street_address.$error"
+            slot="invalid-message"
+          >
+            Address is required
+          </template>
+        </cv-text-input>
         <cv-text-input
           v-model="form.city"
           label="City"
-          placeholder="eg No Bana Street"
-        />
+          placeholder="eg Accra"
+        >
+          <template
+            v-if="$v.form.city.$error"
+            slot="invalid-message"
+          >
+            City is required
+          </template>
+        </cv-text-input>
+        <cv-text-input
+          v-model="form.location_contact_number"
+          label="Location contact number"
+          placeholder="eg 022346786384"
+        >
+          <template
+            v-if="$v.form.location_contact_number.$error"
+            slot="invalid-message"
+          >
+            Location Phone number is required
+          </template>
+        </cv-text-input>
         <!-- <cv-text-input
           v-model="form.gps"
           label="GPS"
@@ -39,6 +72,7 @@
         
         <cv-button-skeleton
           v-if="loading"
+          class="w-full"
         />
         <SeButton
           v-else
@@ -60,6 +94,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
 export default {
   name: 'AddEditLocation',
 
@@ -83,6 +118,15 @@ export default {
     'location:edit:open': function(data){
       this.visible = true
       this.form = data.params[0]
+    },
+  },
+
+  validations: {
+    form: {
+      location_name: { required },
+      street_address: { required },
+      city: { required },
+      location_contact_number: { required },
     },
   },
 
