@@ -34,12 +34,12 @@
               </template>
             </cv-text-input>
             <cv-text-input
-              v-model="form.mobile_number"
+              v-model="form.phone_number"
               class="my-4"
               label="Phone number"
             >
               <template
-                v-if="$v.form.mobile_number.$error"
+                v-if="$v.form.phone_number.$error"
                 slot="invalid-message"
               >
                 Phone number is required
@@ -93,7 +93,7 @@ export default {
   validations: {
     form: {
       email: { required },
-      mobile_number: { required },
+      phone_number: { required },
     },
   },
 }

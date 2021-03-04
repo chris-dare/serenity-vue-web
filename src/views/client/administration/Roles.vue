@@ -92,15 +92,13 @@ export default {
     },
   },
 
-  created() {
-    this.refresh()
-    this.getResources()
-  },
+  // created() {
+  //   this.refresh()
+  // },
 
   methods: {
     ...mapActions({
       getRoles: 'roles/getRoles',
-      getResources: 'resources/getResources',
     }),
 
     async refresh() {

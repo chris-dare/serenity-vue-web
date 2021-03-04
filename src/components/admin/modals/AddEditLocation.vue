@@ -14,6 +14,24 @@
           label="Location name"
           placeholder="eg Valley Heights"
         />
+        <cv-text-input
+          v-model="form.address"
+          label="Address"
+          placeholder="eg No Bana Street"
+        />
+        <cv-text-input
+          v-model="form.gps"
+          label="GPS"
+          placeholder="eg Longitude, Latitude"
+        />
+        <div>
+          <p class="text-primary mb-2 text-left">Location photo</p>
+          <FileUploadButton
+            custom-class="h-12 bg-white"
+            title="Or upload photo"
+          />
+        </div>
+        
         <cv-button-skeleton
           v-if="loading"
         />
@@ -22,7 +40,7 @@
           full
           @click="submit"
         >
-          {{ form.id ? 'Save changes' : 'Create new location' }}
+          {{ form.id ? 'Update location' : 'Create location' }}
         </SeButton>
         <p
           class="text-center"

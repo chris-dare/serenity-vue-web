@@ -15,7 +15,6 @@ export default {
   login({ commit }, loginData) {
     return AuthAPI.login(loginData)
       .then(({ data: result }) => {
-        console.log('result', result)
         commit(SET_TOKEN, result.access)
         commit(SET_REFRESH_TOKEN, result.refresh)
         commit(SET_USER, result.user)
@@ -42,11 +41,9 @@ export default {
   },
 
   refresh({ commit, state }) {
-    console.log('i got here')
     const refresh = state.refreshToken
     return AuthAPI.refresh({refresh})
       .then(({ data: result }) => {
-        console.log('result', result)
         commit(SET_TOKEN, result.access)
         return result.access
       })

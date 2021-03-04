@@ -48,7 +48,6 @@ export default {
     },
     'service:edit:open': function(data){
       this.visible = true
-      console.log('data', data)
       this.form = {name: data.params[0].name, id: 1}
     },
   },

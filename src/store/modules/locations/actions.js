@@ -7,7 +7,6 @@ export default {
     const provider = rootState.auth.provider
     const { data } = await LocationAPI.list(provider.id).catch((error) => {
       // this.$service.fail(error)
-      console.log('error locations', error)
       throw error
     })
     commit(SET_LOCATIONS, data)

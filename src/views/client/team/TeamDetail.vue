@@ -54,7 +54,7 @@ export default {
       return [
         {label: 'First Name', value: this.currentUser.first_name },
         { label: 'Last Name', value: this.currentUser.last_name },
-        { label: 'Phone Number', value: this.currentUser.mobile_number },
+        { label: 'Phone Number', value: this.currentUser.phone_number },
         { label: 'Admin Email', value: this.currentUser.email },
         { label: 'Date of Birth', value: this.currentUser.date_of_birth },
         { label: 'Title', value: this.currentUser.title },
