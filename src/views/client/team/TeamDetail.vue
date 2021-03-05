@@ -56,6 +56,12 @@ export default {
       }
       return this.currentUser.practitioner_role.permissions.workspaces.join(', ')
     },
+    roleName() {
+      if(!this.currentUser || !this.currentUser.practitioner_role){
+        return ''
+      }
+      return this.currentUser.practitioner_role.name
+    },
     generalFields() {
       return [
         {label: 'First Name', value: this.currentUser.first_name },
@@ -71,11 +77,17 @@ export default {
       ]
     },
     workspaceFields() {
+      let specialty
+      if(this.currentUser){
+        if(this.currentUser.practitioner_specialty){
+          specialty = this.currentUser.practitioner_specialty[0]
+        }
+      }
       return [
         {label: 'Workspaces', value: this.workspaces },
-        { label: 'Clinical Role', value: this.$faker().lorem.word() },
-        { label: 'Specialty', value: this.$faker().lorem.word() },
-        { label: 'Medical Practice code', value: this.$faker().lorem.word() },
+        { label: 'Clinical Role', value: this.roleName },
+        { label: 'Specialty', value: specialty },
+        { label: 'Medical Practice code', value: null },
       ]
     },
   },
