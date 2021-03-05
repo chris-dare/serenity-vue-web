@@ -69,7 +69,7 @@ export default {
         return result.data
       })
       .catch(result => {
-        throw result.data.error
+        throw result.data
       })
   },
 }

@@ -75,14 +75,22 @@ export default {
         return
       }
       const token = this.$route.query.token
-      await this.confirmResetPassword({
-        password: this.form.password,
-        token: token,
-      })
-      this.$toast.open({
-        message: 'Password has been reset successfully',
-      })
-      this.$router.push({name: 'AuthLogin'})
+      try{
+        await this.confirmResetPassword({
+          password: this.form.password,
+          token: token,
+        })
+        this.$toast.open({
+          message: 'Password has been reset successfully',
+        })
+        this.$router.push({name: 'AuthLogin'})
+      }catch(error){
+        console.info(error)
+        this.$toast.open({
+          message: error.password[0],
+          type: 'error',
+        })
+      }
     },
   },
   validations: {
