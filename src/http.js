@@ -66,6 +66,11 @@ const authHttp = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
 })
 
+authHttp.interceptors.response.use(undefined, (error) => {
+  const errorResponse = error.response
+  return Promise.reject(errorResponse)
+})
+
 export default http
 
 export {authHttp}
