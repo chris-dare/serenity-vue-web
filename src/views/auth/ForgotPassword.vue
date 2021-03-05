@@ -47,9 +47,14 @@
             </cv-text-input>
             <cv-button
               kind="primary"
-              class="my-3 max-w-full w-full bg-serenity-primary"
+              class="my-3 max-w-full w-full bg-serenity-primary justify-start"
               @click="reset"
             >
+              <img
+                :class="{hidden: !saving}"
+                class="h-4 w-4 mr-4"
+                src="@/assets/img/eclipse.svg"
+              >
               Reset password
             </cv-button>
             <router-link
@@ -75,6 +80,7 @@ export default {
       form: {
         email: 'terry.j@gmail.com',
       },
+      saving: false,
     }
   },
 
@@ -88,12 +94,17 @@ export default {
       if (this.$v.$invalid) {
         return
       }
-
-      await this.resetPassword(this.form)
-      this.$toast.open({
-        message: 'Please check your email for a reset link',
-      })
-      this.$router.push({name: 'AuthLogin'})
+      this.saving = true
+      try{
+        await this.resetPassword(this.form)
+        this.$toast.open({
+          message: 'Please check your email for a reset link',
+        })
+        this.$router.push({name: 'AuthLogin'})
+      }catch(e){
+        console.info(e)
+      }
+      this.saving = false
     },
   },
   validations: {
