@@ -1,4 +1,5 @@
 import http from '@/http'
+import {authHttp} from '@/http'
 
 export default {
   url: 'auth/',
@@ -16,11 +17,11 @@ export default {
   },
 
   login(params){
-    return http.post(`${this.url}login`, params)
+    return authHttp.post(`${this.url}login`, params)
   },
 
   reset(params){
-    return http.post(`${this.url}password-reset/`, params)
+    return authHttp.post(`${this.url}password-reset/`, params)
   },
 
   refresh(params){
@@ -28,7 +29,7 @@ export default {
   },
 
   confirmReset(params){
-    return http.post(`${this.url}password-reset/confirm/`, params)
+    return authHttp.post(`${this.url}password-reset/confirm/`, params)
   },
 
   logout(){
