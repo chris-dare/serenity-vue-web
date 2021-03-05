@@ -18,19 +18,19 @@
           <div>
             <div class="grid grid-cols-2 gap-8 my-8">
               <cv-text-input
+                v-model="form.password"
                 label="Current Password"
-                value="**********"
-                :disabled="true"
+                :invalid-message="$utils.validateRequiredField($v, 'password')"
                 type="password"
                 class="inherit-full-input"
               />
               <div />
               <cv-text-input
-                v-model="form.password"
+                v-model="form.new_password"
                 label="New Password"
                 type="password"
                 placeholder="At least 8 characters"
-                :invalid-message="$utils.validateRequiredField($v, 'password')"
+                :invalid-message="$utils.validateRequiredField($v, 'new_password')"
                 class="inherit-full-input"
               />
               <cv-text-input
@@ -62,9 +62,14 @@
               <cv-button
                 :icon="icon"
                 kind="primary"
-                class="bg-serenity-primary hover:bg-serenity-primary-highlight  ml-6"
+                class="bg-serenity-primary hover:bg-serenity-primary-highlight  ml-6 justify-start"
                 @click="submit"
               >
+                <img
+                  :class="{hidden: !saving}"
+                  class="h-4 w-4 mr-4"
+                  src="@/assets/img/eclipse.svg"
+                >
                 Update Password
               </cv-button>
             </div>
@@ -76,7 +81,8 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
+import { mapActions } from 'vuex'
+import { required, sameAs } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 
 export default {
@@ -87,6 +93,7 @@ export default {
       form: {
         password: '',
         confirm_password: '',
+        new_password: '',
       },
       icon: ChevronRight,
       updateSuccessful: false,
@@ -95,21 +102,49 @@ export default {
   validations: {
     form: {
       password: { required },
-      confirm_password: { required },
+      new_password: { required },
+      confirm_password: {sameAsPassword: sameAs('new_password')},
     },
   },
   methods: {
+    ...mapActions({
+      changePassword: 'auth/changePassword',
+    }),
     open(){
       this.modalVisible = true
     },
     close() {
       this.modalVisible = false
     },
-    submit(){
+    async submit() {
+      if(this.saving)return
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return
+      }
+      const defaultErrorMessage = 'Failed to change password. Please try again later.'
       this.saving = true
-      setTimeout(()=>{
-        this.close()
-      },300)
+      try{
+        const response = await this.changePassword(this.form)
+        console.info(response)
+        if(response.operation_successful){
+          this.$toast.open({
+            message: response.message || 'Password reset Successfull',
+          })
+          this.close()
+        }else{
+          this.$toast.open({
+            message: response.message || defaultErrorMessage,
+            type: 'error',
+          })
+        }
+      }catch(e){
+        this.$toast.open({
+          message: defaultErrorMessage,
+          type: 'error',
+        })
+      }
+      this.saving = false
     },
   },
 }

@@ -188,6 +188,9 @@ button:focus{
     max-width: 30rem !important;
 }
 
+.v-toast{
+  z-index: 10000!important;
+}
 .v-toast.v-toast--top{
     top: 2rem !important;
 }

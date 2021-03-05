@@ -23,12 +23,14 @@
           <div class="mt-8">
             <cv-text-input
               v-model="form.password"
+              :invalid-message="$utils.validateRequiredField($v, 'password')"
               label="Enter new password"
               type="password"
               class="se-dark-input my-4"
             />
             <cv-text-input
-              v-model="form.new_password"
+              v-model="form.confirm_password"
+              :invalid-message="$utils.validateRequiredField($v, 'confirm_password')"
               label="Repeat new password"
               type="password"
               class="se-dark-input"
@@ -66,7 +68,10 @@ export default {
   name: 'ResetPassword',
   data() {
     return {
-      form: {},
+      form: {
+        password: '',
+        confirm_password: '',
+      },
       saving: false,
     }
   },
@@ -94,7 +99,7 @@ export default {
       }catch(error){
         console.info(error)
         this.$toast.open({
-          message: error.password[0],
+          message: error.password ? error.password[0] : error.status,
           type: 'error',
         })
       }
@@ -106,7 +111,7 @@ export default {
       password: {
         required,
       },
-      new_password: {
+      confirm_password: {
         sameAsPassword: sameAs('password'),
       },
     },

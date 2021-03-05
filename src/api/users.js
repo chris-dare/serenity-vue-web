@@ -23,6 +23,9 @@ export default {
     // return Promise.resolve(
     //   {data: mmm},
     // )
+    if(typeof(params.practitioner_specialty) == 'string'){
+      params.practitioner_specialty = [params.practitioner_specialty]
+    }
     return http.post(`${this.url}${providerId}/practitioners`, params)
   },
 
