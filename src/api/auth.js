@@ -28,7 +28,7 @@ export default {
   },
 
   confirmReset(params){
-    return http.post(`${this.url}/password-reset/confirm`, params)
+    return http.post(`${this.url}password-reset/confirm/`, params)
   },
 
   logout(){
