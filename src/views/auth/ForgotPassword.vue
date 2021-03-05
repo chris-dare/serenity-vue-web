@@ -72,7 +72,9 @@ import { required } from 'vuelidate/lib/validators'
 export default {
   data() {
     return {
-      form: {},
+      form: {
+        email: 'terry.j@gmail.com',
+      },
     }
   },
 
@@ -88,6 +90,10 @@ export default {
       }
 
       await this.resetPassword(this.form)
+      this.$toast.open({
+        message: 'Please check your email for a reset link',
+      })
+      this.$router.push({name: 'AuthLogin'})
     },
   },
   validations: {

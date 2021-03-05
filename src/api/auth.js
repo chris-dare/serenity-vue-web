@@ -20,7 +20,7 @@ export default {
   },
 
   reset(params){
-    return http.post(`${this.url}password-reset`, params)
+    return http.post(`${this.url}password-reset/`, params)
   },
 
   refresh(params){
