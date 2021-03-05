@@ -71,7 +71,6 @@ export default {
 
   events: {
     'update:nav': function (state) {
-      console.log('state', state)
       this.open = state.params[0]
     },
   },

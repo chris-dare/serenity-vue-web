@@ -6,8 +6,6 @@ export default {
   async getResources({ commit, rootState }) {
     const provider = rootState.auth.provider
     const { data } = await ResourceAPI.list(provider.id).catch((error) => {
-      // this.$service.fail(error)
-      console.log('error resources', error)
       throw error
     })
     commit(SET_RESOURCES, data.data)

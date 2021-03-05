@@ -2,6 +2,7 @@ import axios from 'axios'
 import store from '@/store'
 import router from '@/router'
 
+
 const http = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
 })
@@ -25,7 +26,6 @@ http.interceptors.request.use(
 // Refresh JWT if 401 is returned
 http.interceptors.response.use(undefined, (error) => {
   const errorResponse = error.response
-  console.log('error response', errorResponse)
   if (
     errorResponse.status === 401 
   ) {
@@ -33,7 +33,6 @@ http.interceptors.response.use(undefined, (error) => {
       store
         .dispatch('auth/refresh')
         .then((data) => {
-          console.log('data', data)
           if (!data) {
             router.push({
               name: 'AuthLogin',

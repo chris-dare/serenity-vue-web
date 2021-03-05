@@ -5,6 +5,11 @@ export default {
   initApp({dispatch}) {
     dispatch('appointments/getAppointments', null,{ root:true })
     dispatch('patients/getPatients', null,{ root:true })
+    dispatch('practitioners/getUsers', null,{ root:true })
+    dispatch('roles/getRoles', null,{ root:true })
+    dispatch('resources/getResources', null,{ root:true })
+    dispatch('workspaces/getWorkspaces', null,{ root:true })
+    dispatch('specialties/getSpecialties', null,{ root:true })
   },
   getCountries({ commit }) {
     axios.get('https://restcountries.eu/rest/v2/all')

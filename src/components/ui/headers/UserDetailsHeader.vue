@@ -2,7 +2,7 @@
   <div>
     <div class="flex justify-between items-center">
       <p class="text-secondary font-semibold text-xl">
-        Hello, <span class="text-primary">{{ fullName || 'Dr. Grey Strep' }}</span>
+        Welcome back, <span class="text-primary">{{ fullName || 'Dr. Grey Strep' }}</span>
       </p>
       <div>
         <p class="text-xs">

@@ -68,7 +68,7 @@
           </div>
           <div>
             <p class="text-primary mb-2 text-left">Capture or Upload Patient Photo</p>
-            <Webcam />
+            <Webcam @input="(photo) => form.image_url = photo" />
             <FileUploadButton title="Or upload patient photo" />
           </div>
         </div>

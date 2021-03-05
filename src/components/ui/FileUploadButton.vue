@@ -15,7 +15,10 @@
       for="file"
     >
       <slot name="button">
-        <div class="flex items-center justify-between text-serenity-primary w-full">
+        <div
+          :class="customClass"
+          class="flex items-center justify-between text-serenity-primary w-full px-6"
+        >
           <div>{{ title }}</div>
           <CloudUpload class="w-5 h-5" />
         </div>
@@ -39,7 +42,7 @@ export default {
 
     customClass: {
       type: String,
-      default: 'h-12 px-6 border-t border-solid border-serenity-subtle-border',
+      default: 'h-12 border-t border-solid border-serenity-subtle-border',
     },
   },
 }

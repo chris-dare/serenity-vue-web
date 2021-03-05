@@ -26,6 +26,7 @@ import UtilityBar from '@/components/utility/UtilityBar'
 import LeftSidebarLayout from '@/layout/LeftSidebarLayout'
 import ChangePasswordModal from '@/components/layout/ChangePasswordModal'
 import EditProfileModal from '@/components/layout/EditProfileModal'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Home',
@@ -44,6 +45,14 @@ export default {
     'profile:security': function(){
       this.$refs.changePasswordModal.open()
     },
+  },
+  created() {
+    this.initApp()
+  },
+  methods: {
+    ...mapActions({
+      initApp: 'global/initApp',
+    }),
   },
 }
 </script>

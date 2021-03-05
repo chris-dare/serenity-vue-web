@@ -2,13 +2,13 @@
   <div>
     <div class="grid grid-cols-2 gap-8">
       <cv-text-input
-        v-model="form.mobile_number"
+        v-model="form.phone_number"
         label="Phone number (required)"
         placeholder="eg 0349990390"
         class="inherit-full-input"
       >
         <template
-          v-if="$v.form.mobile_number.$error"
+          v-if="$v.form.phone_number.$error"
           slot="invalid-message"
         >
           Phone number is required
@@ -79,7 +79,7 @@ export default {
 
   validations: {
     form: {
-      mobile_number: { required },
+      phone_number: { required },
     },
   },
 

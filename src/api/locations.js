@@ -12,7 +12,7 @@ export default {
   },
 
   update(providerId, params) {
-    return http.put(`${this.url}${providerId}/locations/${params.id}`, params)
+    return http.patch(`${this.url}${providerId}/locations/${params.id}`, params)
   },
 
   delete(providerId,id) {

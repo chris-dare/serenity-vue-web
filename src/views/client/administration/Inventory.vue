@@ -3,14 +3,20 @@
     <div class="w-4/5 mx-auto space-y-4">
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Inventory ({{ 5 }})</p>
-        <cv-button
-          class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
-          kind="primary"
-          @click="$trigger('inventory:add:open')"
-        >
-          Add new item
-          <Add class="ml-4 w-5 h-5" />
-        </cv-button>
+        <div class="flex items-center space-x-2">
+          <SeButton
+            variant="secondary"
+          >
+            Upload CSV
+            <Upload class="ml-4 w-5 h-5" />
+          </SeButton>
+          <SeButton
+            @click="$trigger('inventory:add:open')"
+          >
+            Add new item
+            <Add class="ml-4 w-5 h-5" />
+          </SeButton>
+        </div>
       </div>
 
       <cv-search

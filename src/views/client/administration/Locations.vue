@@ -31,11 +31,11 @@
         >
           <cv-data-table-cell>
             <div class="flex items-center space-x-2 py-2">
-              <p>{{ row.name }}</p>
+              <p>{{ row.location_name }}</p>
             </div>
           </cv-data-table-cell>
             
-          <cv-data-table-cell>
+          <!-- <cv-data-table-cell>
             <div class="flex items-center space-x-6">
               <p
                 class="cursor-pointer"
@@ -43,9 +43,14 @@
               >
                 Edit
               </p>
-              <p class="text-red-500">Delete</p>
+              <p
+                class="text-red-500 cursor-pointer"
+                @click="remove(row.id)"
+              >
+                Delete
+              </p>
             </div>
-          </cv-data-table-cell>
+          </cv-data-table-cell> -->
         </cv-data-table-row>
       </template>
     </cv-data-table>
@@ -69,7 +74,8 @@ export default {
       search: '',
       columns: [
         'Name',
-        'Action',
+        'Address',
+        'City',
       ],
       loading: false,
     }
@@ -100,9 +106,9 @@ export default {
       this.loading = false
     },
 
-    async remove() {
+    async remove(id) {
       this.loading = true
-      await this.deleteLocation()
+      await this.deleteLocation(id)
       this.loading = false
     },
   },

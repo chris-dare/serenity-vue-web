@@ -3,15 +3,22 @@
     <div class="flex items-center justify-between">
       <p class="text-xl font-bold">Team members ({{ users.length }})</p>
 
-      <router-link
-        :to="{name:'TeamBiodata'}"
-        tag="cv-button"
-        class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
-        kind="primary"
-      >
-        Add new user 
-        <Add class="ml-4 w-5 h-5 text-white" />
-      </router-link>
+      
+
+      <div class="flex items-center space-x-2">
+        <SeButton
+          variant="secondary"
+        >
+          Upload CSV
+          <Upload class="ml-4 w-5 h-5" />
+        </SeButton>
+        <SeButton
+          @click="$router.push({name:'TeamBiodata'})"
+        >
+          Add new user 
+          <Add class="ml-4 w-5 h-5 text-white" />
+        </SeButton>
+      </div>
     </div>
 
     <div>
@@ -57,8 +64,8 @@
     <div class="grid grid-cols-4 gap-4">
       <TeamCard
         v-for="(item, index) in users"
-        :user="item"
         :key="index"
+        :user="item"
         :details="item"
       />
     </div>
@@ -95,16 +102,13 @@ export default {
     },
   },
 
-  created() {
-    this.refresh()
-    this.getResources()
-  },
+  // created() {
+  //   this.refresh()
+  // },
 
   methods: {
     ...mapActions({
       getUsers: 'practitioners/getUsers',
-      getResources: 'resources/getResources',
-      
     }),
 
     async refresh() {

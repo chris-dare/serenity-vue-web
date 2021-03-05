@@ -11,7 +11,7 @@ const storeConfiguration = Object.assign(
   {
     plugins: [
       createPersistedState({
-        paths: ['auth', 'scheduling', 'practitioners'],
+        paths: ['auth', 'scheduling'],
       }),
     ],
   },

@@ -5,14 +5,14 @@
       <cv-radio-button
         v-for="(item, index) in titles"
         :key="index"
-        v-model="form.member_type"
+        v-model="form.team_member_type"
         name="group-1"
-        :label="item"
-        :value="item"
+        :label="item.label"
+        :value="item.value"
       />
     </div>
     <cv-select
-      v-model="form.roles"
+      v-model="practitionerRole"
       label="Clinical Role"
       class="inherit-full-input my-8"
     >
@@ -31,13 +31,12 @@
       </cv-select-option>
     </cv-select>
     <cv-select
-      v-model="form.specialty"
+      v-model="form.practitioner_specialty"
       label="Specialty"
       class="inherit-full-input my-8"
     >
       <cv-select-option
         disabled
-        selected
         hidden
       >
         Select one or more specialties
@@ -45,9 +44,9 @@
       <cv-select-option
         v-for="(specialty, index) in specialties"
         :key="index"
-        :value="specialty.id"
+        :value="specialty.Code"
       >
-        {{ specialty.name }}
+        {{ specialty.Display }}
       </cv-select-option>
     </cv-select>
     <cv-text-input
@@ -57,7 +56,7 @@
       class="inherit-full-input my-8"
     />
 
-    <p class="text-primary mt-8 mb-4 text-left">Workspace access</p>
+    <!-- <p class="text-primary mt-8 mb-4 text-left">Workspace access</p>
     <div class="grid grid-cols-3">
       <cv-checkbox
         v-for="(workspace, index) in workspaces"
@@ -66,7 +65,7 @@
         :value="workspace.id"
         :label="workspace.name"
       />
-    </div>
+    </div> -->
 
     <div class="flex items-center justify-between mt-12 mb-6">
       <div class="flex items-center">
@@ -109,12 +108,13 @@ export default {
   data() {
     return {
       form: {
-        workspaces: [],
+        // workspaces: [],
       },
-      titles: ['Clinical Staff', 'Non-Clinical Staff'],
+      titles: [{label:'Clinical Staff', value: 'clinical_staff'}, {label:'Non-Clinical Staff', value: 'non_clinical_staff'}],
       // workspaces: ['Reception', 'ER', 'Outpatient', 'Inpatient', 'Pharmacy', 'Diagnostics'],
       loading: false,
       icon: ChevronRight,
+      practitionerRole: '',
     }
   },
 
@@ -127,22 +127,17 @@ export default {
     }),
   },
 
-  created() {
-    this.getRoles()
-    this.getWorkspaces()
-  },
-
   methods: {
     ...mapActions({
       addToCurrentUser: 'practitioners/addToCurrentUser',
       createUser: 'practitioners/createUser',
-      getRoles: 'roles/getRoles',
-      getWorkspaces: 'workspaces/getWorkspaces',
       reset: 'practitioners/reset',
     }),
 
     async save() {
       this.loading = true
+      this.form.practitioner_role = this.roles.find(r => r.id = this.practitionerRole)
+      console.log('form', this.form)
       this.addToCurrentUser(this.form)
       const data = await this.createUser(this.currentUser).catch((error) => {
         console.info(error)

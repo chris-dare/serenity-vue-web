@@ -6,7 +6,6 @@ export default {
   async getWorkspaces({ commit, rootState }) {
     const provider = rootState.auth.provider
     const { data } = await WorkspacesAPI.list(provider.id).catch((error) => {
-      console.log('error workspaces', error)
       throw error
     })
     commit(SET_WORKSPACES, data.data)

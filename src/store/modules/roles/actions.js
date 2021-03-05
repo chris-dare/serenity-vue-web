@@ -6,8 +6,6 @@ export default {
   async getRoles({ commit, rootState }) {
     const provider = rootState.auth.provider
     const { data } = await RolesAPI.list(provider.id).catch((error) => {
-      // this.$service.fail(error)
-      console.log('error roles', error)
       throw error
     })
     commit(SET_ROLES, data.data)

@@ -12,8 +12,14 @@
         autoplay
         class="border border-solid"
       />
-      <canvas
+      <img
         v-show="isPhotoTaken"
+        width="200"
+        height="auto"
+        :src="photo"
+      >
+      <canvas
+        v-show="false"
         ref="canvas"
         :width="200"
         :height="200"
@@ -27,7 +33,8 @@
           class="button"
           @click="takePhoto"
         >
-          takePhoto
+          <template v-if="photo && isPhotoTaken">Change Photo</template>
+          <template v-else>Take Photo</template>
         </button>
       </div>
     </div>
@@ -56,6 +63,9 @@ export default {
       canvas: {},
       isCameraOpen: false,
       isPhotoTaken: false,
+      photo: null,
+      width: null,
+      height: null,
     }
   },
 
@@ -91,11 +101,22 @@ export default {
         this.createCameraElement()
       }
     },
-    takePhoto() {
+    async takePhoto() {
       this.isPhotoTaken = !this.isPhotoTaken
-
+      const canvas = this.$refs.canvas
+      const video = this.$refs.video
       const context = this.$refs.canvas.getContext('2d')
-      context.drawImage(this.$refs.video, 0, 0, 450, 337.5)
+      canvas.setAttribute('width', video.videoWidth)
+      canvas.setAttribute('height', video.videoHeight)
+      context.drawImage(this.$refs.video, 0, 0, video.videoWidth, video.videoHeight)
+      let data = canvas.toDataURL('image/png')
+      this.photo = data
+      this.$emit('input', this.photo)
+      // await navigator.mediaDevices
+      //   .getUserMedia({ video: true })
+      //   .then((stream) => {
+      //     stream.getTracks()[0].stop()
+      //   })
     },
 
     async initVideo() {

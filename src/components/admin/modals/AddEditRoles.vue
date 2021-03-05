@@ -14,51 +14,65 @@
           label="Name of role"
           placeholder="eg Valley Heights"
         />
-        <p class="text-primary mb-4 text-left">Set permissions</p>
-        <cv-search
-          v-model="search"
-          placeholder="Search for feature"
-        />
-
-        <div class="h-96 overflow-auto">
-          <div class="grid grid-cols-4 items-center h-8 bg-gray-100">
-            <p
-              v-for="(item, index) in columns"
+        <div class="space-y-2">
+          <p class="text-primary text-left text-xs">Workspace access</p>
+          <div class="grid grid-cols-3">
+            <cv-checkbox
+              v-for="(workspace, index) in workspaces"
               :key="index"
-              class="text-center"
-            >
-              {{ item }}
-            </p>
+              v-model="form.workspaces"
+              :value="workspace.id"
+              :label="workspace.name"
+            />
           </div>
-          <div>
-            <div
-              v-for="(resource, index) in resourceInd"
-              :key="index"
-              class="grid grid-cols-4 items-center h-12"
-            >
-              <div class="flex items-center pl-6 capitalize">
-                {{ resource }}
-              </div>
-              <div class="flex items-center justify-center">
-                <cv-checkbox
-                  v-model="form.permissions"
-                  :value="getValue(resource, 'read')"
-                  class="flex-none"
-                />
-              </div>
-              <div class="flex items-center justify-center">
-                <cv-checkbox
-                  v-model="form.permissions"
-                  :value="getValue(resource, 'write')"
-                  class="flex-none"
-                />
-              </div>
-              <div class="flex items-center justify-center">
-                <cv-checkbox
-                  v-model="form.permissions"
-                  :value="getValue(resource, 'delete')"
-                  class="flex-none"
-                />
+        </div>
+        <div class="space-y-2">
+          <p class="text-primary text-left text-xs">Set permissions</p>
+          <cv-search
+            v-model="search"
+            placeholder="Search for feature"
+          />
+
+          <div class="h-96 overflow-auto">
+            <div class="grid grid-cols-4 items-center h-8 bg-gray-100">
+              <p
+                v-for="(item, index) in columns"
+                :key="index"
+                class="text-center"
+              >
+                {{ item }}
+              </p>
+            </div>
+            <div>
+              <div
+                v-for="(resource, index) in resourceInd"
+                :key="index"
+                class="grid grid-cols-4 items-center h-12"
+              >
+                <div class="flex items-center pl-6 capitalize">
+                  {{ resource }}
+                </div>
+                <div class="flex items-center justify-center">
+                  <cv-checkbox
+                    v-model="form.permissions"
+                    :value="getValue(resource, 'read')"
+                    class="flex-none"
+                  />
+                </div>
+                <div class="flex items-center justify-center">
+                  <cv-checkbox
+                    v-model="form.permissions"
+                    :value="getValue(resource, 'write')"
+                    class="flex-none"
+                  />
+                </div>
+                <div class="flex items-center justify-center">
+                  <cv-checkbox
+                    v-model="form.permissions"
+                    :value="getValue(resource, 'delete')"
+                    class="flex-none"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -93,7 +107,7 @@ export default {
   data() {
     return {
       form: {
-        permissions: []
+        permissions: [],
       },
       visible: false,
       search: '',
@@ -101,7 +115,7 @@ export default {
         'Resources',
         'Read',
         'Write',
-        'Delete'
+        'Delete',
       ],
       loading: false,
     }
@@ -110,10 +124,11 @@ export default {
   computed: {
     ...mapState({
       resources: (state) => state.resources.resources,
+      workspaces: (state) => state.workspaces.workspaces,
     }),
     ...mapGetters({
-      resourceInd: 'resources/resources'
-    })
+      resourceInd: 'resources/resources',
+    }),
   },
 
   events: {

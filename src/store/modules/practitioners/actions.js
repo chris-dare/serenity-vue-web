@@ -6,7 +6,6 @@ export default {
   async getUsers({ commit, rootState }) {
     const provider = rootState.auth.provider
     const { data } = await UsersAPI.list(provider.id).catch((error) => {
-      console.log('error users', error)
       throw error
     })
     commit(SET_USERS, data.data ? data.data : [])
@@ -32,7 +31,7 @@ export default {
 
   reset({ commit }) {
     commit(SET_CURRENT_USER, {
-      country_code: '+233'
+      country_code: '+233',
     })
   },
 
