@@ -35,9 +35,14 @@
             />
             <cv-button
               kind="primary"
-              class="my-3 max-w-full w-full bg-serenity-primary"
+              class="my-3 max-w-full w-full bg-serenity-primary justify-start"
               @click="reset"
             >
+              <img
+                :class="{hidden: !saving}"
+                class="h-4 w-4 mr-4"
+                src="@/assets/img/eclipse.svg"
+              >
               Reset password
             </cv-button>
             <router-link
@@ -62,6 +67,7 @@ export default {
   data() {
     return {
       form: {},
+      saving: false,
     }
   },
   methods: {
@@ -74,6 +80,7 @@ export default {
       if (this.$v.$invalid) {
         return
       }
+      this.saving = true
       const token = this.$route.query.token
       try{
         await this.confirmResetPassword({
@@ -91,6 +98,7 @@ export default {
           type: 'error',
         })
       }
+      this.saving = false
     },
   },
   validations: {
