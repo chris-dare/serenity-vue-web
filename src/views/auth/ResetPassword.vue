@@ -76,8 +76,8 @@ export default {
       }
       const token = this.$route.query.token
       await this.confirmResetPassword({
-        new_password: this.form.password,
-        rest_password_token: token,
+        password: this.form.password,
+        token: token,
       })
       this.$toast.open({
         message: 'Password has been reset successfully',
