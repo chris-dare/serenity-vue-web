@@ -32,6 +32,10 @@ export default {
     return authHttp.post(`${this.url}password-reset/confirm/`, params)
   },
 
+  changePassword(params){
+    return http.post(`${this.url}change-password`, params)
+  },
+
   logout(){
     return http.get(`${this.url}logout`)
   },

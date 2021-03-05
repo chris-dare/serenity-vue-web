@@ -72,4 +72,14 @@ export default {
         throw result.data
       })
   },
+  // eslint-disable-next-line no-unused-vars
+  changePassword({ commit }, params) {
+    return AuthAPI.changePassword(params)
+      .then((result) => {
+        return result.data
+      })
+      .catch(result => {
+        throw result.data
+      })
+  },
 }
