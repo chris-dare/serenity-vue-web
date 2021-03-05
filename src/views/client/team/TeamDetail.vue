@@ -50,6 +50,12 @@ export default {
     ...mapState({
       currentUser: (state) => state.practitioners.currentUser,
     }),
+    workspaces() {
+      if(!this.currentUser || !this.currentUser.practitioner_role){
+        return ''
+      }
+      return this.currentUser.practitioner_role.permissions.workspaces.join(', ')
+    },
     generalFields() {
       return [
         {label: 'First Name', value: this.currentUser.first_name },
@@ -66,7 +72,7 @@ export default {
     },
     workspaceFields() {
       return [
-        {label: 'Workspaces', value: this.$faker().lorem.word() },
+        {label: 'Workspaces', value: this.workspaces },
         { label: 'Clinical Role', value: this.$faker().lorem.word() },
         { label: 'Specialty', value: this.$faker().lorem.word() },
         { label: 'Medical Practice code', value: this.$faker().lorem.word() },
