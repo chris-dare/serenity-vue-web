@@ -74,8 +74,15 @@ export default {
       if (this.$v.$invalid) {
         return
       }
-
-      await this.resetPassword(this.form)
+      const token = this.$route.query.token
+      await this.confirmResetPassword({
+        new_password: this.form.password,
+        rest_password_token: token,
+      })
+      this.$toast.open({
+        message: 'Password has been reset successfully',
+      })
+      this.$router.push({name: 'AuthLogin'})
     },
   },
   validations: {
