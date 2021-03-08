@@ -1,4 +1,4 @@
-import { SET_RESOURCES, UPDATE_RESOURCE, DELETE_RESOURCE } from './mutation-types'
+import { SET_RESOURCES, UPDATE_RESOURCE, DELETE_RESOURCE, SET_SPECIALTIES } from './mutation-types'
 
 export default {
   [SET_RESOURCES](state, resources) {
@@ -22,5 +22,9 @@ export default {
     if (index !== -1) {
       state.resources.splice(index, 1)
     }
+  },
+
+  [SET_SPECIALTIES](state, specialties) {
+    state.specialties = specialties
   },
 }

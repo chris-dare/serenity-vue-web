@@ -20,7 +20,7 @@
             <cv-checkbox
               v-for="(workspace, index) in workspaces"
               :key="index"
-              v-model="form.workspaces"
+              v-model="form.permissions.workspaces"
               :value="workspace.id"
               :label="workspace.name"
             />
@@ -50,29 +50,33 @@
                 class="grid grid-cols-4 items-center h-12"
               >
                 <div class="flex items-center pl-6 capitalize">
-                  {{ resource }}
+                  {{ resource.value }}
                 </div>
-                <div class="flex items-center justify-center">
+                <div
+                  v-for="(group, rIndex) in resource.groups"
+                  :key="rIndex"
+                  class="flex items-center justify-center"
+                >
                   <cv-checkbox
-                    v-model="form.permissions"
-                    :value="getValue(resource, 'read')"
+                    v-model="form.permissions.resources"
+                    :value="getValue(resource.value, group)"
+                    class="flex-none"
+                  />
+                </div>
+                <!-- <div class="flex items-center justify-center">
+                  <cv-checkbox
+                    v-model="form.permissions.resources"
+                    :value="getValue(resource.value, 'write')"
                     class="flex-none"
                   />
                 </div>
                 <div class="flex items-center justify-center">
                   <cv-checkbox
-                    v-model="form.permissions"
-                    :value="getValue(resource, 'write')"
+                    v-model="form.permissions.resources"
+                    :value="getValue(resource.value, 'delete')"
                     class="flex-none"
                   />
-                </div>
-                <div class="flex items-center justify-center">
-                  <cv-checkbox
-                    v-model="form.permissions"
-                    :value="getValue(resource, 'delete')"
-                    class="flex-none"
-                  />
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -107,7 +111,10 @@ export default {
   data() {
     return {
       form: {
-        permissions: [],
+        permissions: {
+          workspaces: [],
+          resources: [],
+        },
       },
       visible: false,
       search: '',
@@ -137,7 +144,7 @@ export default {
     },
     'role:edit:open': function(data){
       this.visible = true
-      this.form = data.params[0]
+      this.form = this.formatIncomingResources(data.params[0])
     },
   },
 
@@ -158,6 +165,45 @@ export default {
         this.save()
       }
     },
+
+    formatIncomingResources(data) {
+      let role = { ...data }
+      let resources = data.permissions.resources
+      let newResources = []
+
+      resources.forEach(resource => {
+        if (resource.includes('*')) {
+          let split = resource.split('.')
+          let root = split.length === 2 ? split[0] : `${split[0]}.${split[1]}`
+          newResources.push(`${root}.read`,`${root}.write`,`${root}.delete`)
+        } else {
+          newResources.push(resource)
+        }
+      })
+
+      role.permissions.resources = newResources
+      return role
+    },
+
+    formatOutgoingResources(data) {
+      let role = { ...data }
+      let resources = data.permissions.resources
+      let newResources = []
+
+      resources.forEach(resource => {
+        if (resource.includes('*')) {
+          let split = resource.split('.')
+          let root = split.length === 2 ? split[0] : `${split[0]}.${split[1]}`
+          newResources.push(`${root}.read`,`${root}.write`,`${root}.delete`)
+        } else {
+          newResources.push(resource)
+        }
+      })
+
+      role.permissions.resources = newResources
+      return role
+    },
+
     async save() {
       this.loading = true
       const data = await this.createRole(this.form).catch(() => {
@@ -177,6 +223,7 @@ export default {
 
       this.loading = false
     },
+
     async update() {
       this.loading = true
       const data = await this.updateRole(this.form).catch(() => {

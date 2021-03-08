@@ -19,7 +19,14 @@
         label="Email address(required)"
         placeholder="Email address"
         class="inherit-full-input"
-      />
+      >
+        <template
+          v-if="$v.form.email.$error"
+          slot="invalid-message"
+        >
+          A valid email address is required
+        </template>
+      </cv-text-input>
     </div>
     <cv-text-input
       v-model="form.postal"
@@ -64,7 +71,7 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
+import { required, email } from 'vuelidate/lib/validators'
 import { mapActions, mapState } from 'vuex'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 export default {
@@ -80,6 +87,7 @@ export default {
   validations: {
     form: {
       phone_number: { required },
+      email: { required, email},
     },
   },
 

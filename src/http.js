@@ -34,6 +34,7 @@ http.interceptors.response.use(undefined, (error) => {
         .dispatch('auth/refresh')
         .then((data) => {
           if (!data) {
+            store.dispatch('auth/setLoggedIn', false)
             router.push({
               name: 'AuthLogin',
               params: {
@@ -48,6 +49,7 @@ http.interceptors.response.use(undefined, (error) => {
           return true
         })
         .catch((errored) => {
+          store.dispatch('auth/setLoggedIn', false)
           router.push({
             name: 'AuthLogin',
             params: {

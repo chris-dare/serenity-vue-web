@@ -40,11 +40,17 @@
             
           <cv-data-table-cell>
             <div class="flex items-center space-x-6">
-              <p
+              <!-- <p
                 class="cursor-pointer"
                 @click="$trigger('location:edit:open', {...row})"
               >
                 Duplicate
+              </p> -->
+              <p
+                class="cursor-pointer"
+                @click="$trigger('role:edit:open', {...row})"
+              >
+                Edit
               </p>
               <!-- <p class="text-red-500">Delete</p> -->
             </div>

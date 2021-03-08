@@ -34,6 +34,16 @@
               <p>{{ row.location_name }}</p>
             </div>
           </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div class="flex items-center space-x-2 py-2">
+              <p>{{ row.street_address }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div class="flex items-center space-x-2 py-2">
+              <p>{{ row.city }}</p>
+            </div>
+          </cv-data-table-cell>
             
           <!-- <cv-data-table-cell>
             <div class="flex items-center space-x-6">
@@ -86,7 +96,7 @@ export default {
       locations: (state) => state.locations.locations,
     }),
     filteredLocations() {
-      return this.locations.filter(data => !this.search || data.name.toLowerCase().includes(this.search.toLowerCase()))
+      return this.locations.filter(data => !this.search || data.location_name.toLowerCase().includes(this.search.toLowerCase()))
     },
   },
 

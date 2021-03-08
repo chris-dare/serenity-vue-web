@@ -13,7 +13,7 @@
           <Upload class="ml-4 w-5 h-5" />
         </SeButton>
         <SeButton
-          @click="$router.push({name:'TeamBiodata'})"
+          @click="go"
         >
           Add new user 
           <Add class="ml-4 w-5 h-5 text-white" />
@@ -63,7 +63,7 @@
 
     <div class="grid grid-cols-4 gap-4">
       <TeamCard
-        v-for="(item, index) in users"
+        v-for="(item, index) in filteredUsers"
         :key="index"
         :user="item"
         :details="item"
@@ -98,7 +98,7 @@ export default {
       users: (state) => state.practitioners.users,
     }),
     filteredUsers() {
-      return this.users.filter(data => !this.search || data.name.toLowerCase().includes(this.search.toLowerCase()))
+      return this.users.filter(data => !this.search || data.first_name.toLowerCase().includes(this.search.toLowerCase()) || data.last_name.toLowerCase().includes(this.search.toLowerCase()))
     },
   },
 
@@ -109,12 +109,18 @@ export default {
   methods: {
     ...mapActions({
       getUsers: 'practitioners/getUsers',
+      reset: 'practitioners/reset',
     }),
 
     async refresh() {
       this.loading = true
       // await this.getUsers()
       this.loading = false
+    },
+
+    go() {
+      this.reset()
+      this.$router.push({name:'TeamBiodata'})
     },
   },
 }

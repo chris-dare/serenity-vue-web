@@ -15,6 +15,9 @@ export default {
   list(providerId) {
     return http.get(`${this.url}${providerId}/practitioners`)
   },
+  get(providerId, id) {
+    return http.get(`${this.url}${providerId}/practitioners/${id}`)
+  },
 
   create(providerId, params) {
     // let mmm =  Object.assign({}, params, {
@@ -30,7 +33,7 @@ export default {
   },
 
   update(providerId, params) {
-    return http.put(`${this.url}${providerId}/practitioners/${params.id}`, params)
+    return http.patch(`${this.url}${providerId}/practitioners/${params.id}`, params)
   },
 
   delete(providerId,id) {
