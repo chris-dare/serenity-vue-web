@@ -1,7 +1,7 @@
 <template>
   <div
     class="w-full h-40 px-4 py-6 cursor-pointer"
-    :class="[customClass, isSelected ? 'bg-serenity-primary': '']"
+    :class="[customClass, isSelected ? 'bg-serenity-primary' : '']"
     @click="$emit('click')"
   >
     <component
@@ -11,7 +11,10 @@
     />
     <p
       class="mt-4"
-      :class="[isSelected ? 'text-white' : 'text-secondary', details.description ? 'text-primary' : 'text-secondary']"
+      :class="[
+        isSelected ? 'text-white font-semibold' : 'text-secondary',
+        details.description ? 'text-white' : 'text-secondary',
+      ]"
     >
       {{ details.label }}
     </p>
@@ -21,31 +24,37 @@
     >
       {{ details.value }}
     </p>
-    <p
-      class="text-xs"
-      :class="[isSelected ? 'text-white' : 'text-secondary']"
-    >
+    <p class="text-xs" :class="[isSelected ? 'text-white' : 'text-secondary']">
       {{ details.description }}
     </p>
   </div>
 </template>
 
 <script>
-
-import Stethoscope from '@carbon/icons-vue/es/stethoscope/32'
-import Reference from '@carbon/icons-vue/es/watson-health/cross-reference/32'
-import Indentification from '@carbon/icons-vue/es/identification/32'
-import Calendar from '@carbon/icons-vue/es/calendar/32'
-import Add from '@carbon/icons-vue/es/add/32'
-import User from '@carbon/icons-vue/es/user/32'
-import Download from '@carbon/icons-vue/es/download/32'
-import Cross from '@carbon/icons-vue/es/health-cross/32'
-import Categories from '@carbon/icons-vue/es/categories/32'
+import Stethoscope from "@carbon/icons-vue/es/stethoscope/32";
+import Reference from "@carbon/icons-vue/es/watson-health/cross-reference/32";
+import Indentification from "@carbon/icons-vue/es/identification/32";
+import Calendar from "@carbon/icons-vue/es/calendar/32";
+import Add from "@carbon/icons-vue/es/add/32";
+import User from "@carbon/icons-vue/es/user/32";
+import Download from "@carbon/icons-vue/es/download/32";
+import Cross from "@carbon/icons-vue/es/health-cross/32";
+import Categories from "@carbon/icons-vue/es/categories/32";
 
 export default {
-  name: 'DashboardCard',
+  name: "DashboardCard",
 
-  components: { Stethoscope, Reference, Indentification, Calendar, Add, User, Download, Cross, Categories },
+  components: {
+    Stethoscope,
+    Reference,
+    Indentification,
+    Calendar,
+    Add,
+    User,
+    Download,
+    Cross,
+    Categories,
+  },
 
   props: {
     details: {
@@ -59,8 +68,8 @@ export default {
     },
     customClass: {
       type: String,
-      default: 'border border-subtle border-solid',
+      default: "border border-subtle border-solid",
     },
   },
-}
+};
 </script>
