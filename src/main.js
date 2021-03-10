@@ -14,7 +14,6 @@ import HasPermissionDirective from '@/plugins/has-permission'
 // all vue plugins
 import '@/plugins'
 
-
 import '@/filters'
 import '@/globalComponents'
 import '@/assets/styles/tailwind.scss'
@@ -29,12 +28,10 @@ Vue.use(UtilsPlugin)
 Vue.use(Vuelidate)
 Vue.use(VuePageTransition)
 
-
-
 Vue.config.productionTip = false
 
 new Vue({
   router,
   store,
-  render: h => h(App),
+  render: (h) => h(App),
 }).$mount('#app')

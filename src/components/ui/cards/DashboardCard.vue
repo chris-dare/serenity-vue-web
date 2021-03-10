@@ -1,7 +1,7 @@
 <template>
   <div
     class="w-full h-40 px-4 py-6 cursor-pointer"
-    :class="[customClass, isSelected ? 'bg-serenity-primary': '']"
+    :class="[customClass, isSelected ? 'bg-serenity-primary' : '']"
     @click="$emit('click')"
   >
     <component
@@ -11,7 +11,10 @@
     />
     <p
       class="mt-4"
-      :class="[isSelected ? 'text-white' : 'text-secondary', details.description ? 'text-primary' : 'text-secondary']"
+      :class="[
+        isSelected ? 'text-white font-semibold' : 'text-secondary',
+        details.description ? 'text-white' : 'text-secondary',
+      ]"
     >
       {{ details.label }}
     </p>
@@ -31,7 +34,6 @@
 </template>
 
 <script>
-
 import Stethoscope from '@carbon/icons-vue/es/stethoscope/32'
 import Reference from '@carbon/icons-vue/es/watson-health/cross-reference/32'
 import Indentification from '@carbon/icons-vue/es/identification/32'
@@ -45,7 +47,17 @@ import Categories from '@carbon/icons-vue/es/categories/32'
 export default {
   name: 'DashboardCard',
 
-  components: { Stethoscope, Reference, Indentification, Calendar, Add, User, Download, Cross, Categories },
+  components: {
+    Stethoscope,
+    Reference,
+    Indentification,
+    Calendar,
+    Add,
+    User,
+    Download,
+    Cross,
+    Categories,
+  },
 
   props: {
     details: {
