@@ -33,7 +33,7 @@
                 Email is required
               </template>
             </cv-text-input>
-            <cv-text-input
+            <!-- <cv-text-input
               v-model="form.phone_number"
               class="my-4"
               label="Phone number"
@@ -44,7 +44,7 @@
               >
                 Phone number is required
               </template>
-            </cv-text-input>
+            </cv-text-input> -->
             <cv-button
               kind="primary"
               class="my-3 max-w-full w-full bg-serenity-primary justify-start"
@@ -110,7 +110,7 @@ export default {
   validations: {
     form: {
       email: { required },
-      phone_number: { required },
+      // phone_number: { required },
     },
   },
 }
