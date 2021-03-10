@@ -13,9 +13,16 @@
       </cv-button>
     </div>
 
-    <cv-search v-model="search" placeholder="Search for location" />
+    <cv-search
+      v-model="search"
+      placeholder="Search for location"
+    />
     <!-- {{ filteredLocations }} -->
-    <cv-data-table ref="table" :data="filteredLocations" :columns="columns">
+    <cv-data-table
+      ref="table"
+      :data="filteredLocations"
+      :columns="columns"
+    >
       <template slot="data">
         <cv-data-table-row
           v-for="(row, rowIndex) in filteredLocations"
@@ -42,7 +49,10 @@
               >
                 View
               </p>
-              <p class="text-red-500 cursor-pointer" @click="remove(row.id)">
+              <p
+                class="text-red-500 cursor-pointer"
+                @click="remove(row.id)"
+              >
                 Delete
               </p>
             </div>
@@ -50,7 +60,10 @@
         </cv-data-table-row>
       </template>
     </cv-data-table>
-    <p v-if="!locations.length" class="text-center w-full py-6">
+    <p
+      v-if="!locations.length"
+      class="text-center w-full py-6"
+    >
       No locations to show
     </p>
     <AddEditLocation />
@@ -58,16 +71,16 @@
 </template>
 
 <script>
-import AddEditLocation from "@/components/admin/modals/AddEditLocation";
-import { mapActions, mapState } from "vuex";
+import AddEditLocation from '@/components/admin/modals/AddEditLocation'
+import { mapActions, mapState } from 'vuex'
 export default {
   components: { AddEditLocation },
   data() {
     return {
-      search: "",
-      columns: ["Name", "Address", "Action"],
+      search: '',
+      columns: ['Name', 'Address', 'Action'],
       loading: false,
-    };
+    }
   },
 
   computed: {
@@ -82,32 +95,32 @@ export default {
             .toLowerCase()
             .includes(this.search.toLowerCase()) ||
           data.city.toLowerCase().includes(this.search.toLowerCase()) ||
-          data.street_address.toLowerCase().includes(this.search.toLowerCase())
-      );
+          data.street_address.toLowerCase().includes(this.search.toLowerCase()),
+      )
     },
   },
 
   created() {
-    this.refresh();
+    this.refresh()
   },
 
   methods: {
     ...mapActions({
-      getLocations: "locations/getLocations",
-      deleteLocation: "locations/deleteLocation",
+      getLocations: 'locations/getLocations',
+      deleteLocation: 'locations/deleteLocation',
     }),
 
     async refresh() {
-      this.loading = true;
-      await this.getLocations();
-      this.loading = false;
+      this.loading = true
+      await this.getLocations()
+      this.loading = false
     },
 
     async remove(id) {
-      this.loading = true;
-      await this.deleteLocation(id);
-      this.loading = false;
+      this.loading = true
+      await this.deleteLocation(id)
+      this.loading = false
     },
   },
-};
+}
 </script>

@@ -10,15 +10,25 @@
           class="absolute flex items-center justify-center top-0 left-0 w-12 h-12 bg-warning transition-all duration-500 ease-in-out"
           @click="isOpen = !isOpen"
         >
-          <img src="@/assets/img/user--activity 1.svg" class="w-5 h-5" alt="" />
+          <img
+            src="@/assets/img/user--activity 1.svg"
+            class="w-5 h-5"
+            alt=""
+          >
         </div>
         <div>
           <div>
-            <slot v-if="isOpen" name="sidebar" />
+            <slot
+              v-if="isOpen"
+              name="sidebar"
+            />
           </div>
         </div>
       </div>
-      <div class="h-full" @click="conditionalOpening"></div>
+      <div
+        class="h-full"
+        @click="conditionalOpening"
+      />
       <div class="absolute bottom-0 left-0 h-12 bg-black flex w-full">
         <div
           class="w-full pr-4 flex transition-all duration-500 ease-in-out justify-end items-center bg-serenity-light-gray"
@@ -47,26 +57,26 @@
 </template>
 
 <script>
-import ArrowRight from "@carbon/icons-vue/es/arrow--right/32";
+import ArrowRight from '@carbon/icons-vue/es/arrow--right/32'
 export default {
-  name: "LeftSidebarLayout",
+  name: 'LeftSidebarLayout',
 
   components: { ArrowRight },
 
   data() {
     return {
       isOpen: false,
-    };
+    }
   },
 
   methods: {
     conditionalOpening() {
       if (this.isOpen) {
-        return;
+        return
       }
 
-      this.isOpen = true;
+      this.isOpen = true
     },
   },
-};
+}
 </script>

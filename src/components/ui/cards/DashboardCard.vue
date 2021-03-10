@@ -24,25 +24,28 @@
     >
       {{ details.value }}
     </p>
-    <p class="text-xs" :class="[isSelected ? 'text-white' : 'text-secondary']">
+    <p
+      class="text-xs"
+      :class="[isSelected ? 'text-white' : 'text-secondary']"
+    >
       {{ details.description }}
     </p>
   </div>
 </template>
 
 <script>
-import Stethoscope from "@carbon/icons-vue/es/stethoscope/32";
-import Reference from "@carbon/icons-vue/es/watson-health/cross-reference/32";
-import Indentification from "@carbon/icons-vue/es/identification/32";
-import Calendar from "@carbon/icons-vue/es/calendar/32";
-import Add from "@carbon/icons-vue/es/add/32";
-import User from "@carbon/icons-vue/es/user/32";
-import Download from "@carbon/icons-vue/es/download/32";
-import Cross from "@carbon/icons-vue/es/health-cross/32";
-import Categories from "@carbon/icons-vue/es/categories/32";
+import Stethoscope from '@carbon/icons-vue/es/stethoscope/32'
+import Reference from '@carbon/icons-vue/es/watson-health/cross-reference/32'
+import Indentification from '@carbon/icons-vue/es/identification/32'
+import Calendar from '@carbon/icons-vue/es/calendar/32'
+import Add from '@carbon/icons-vue/es/add/32'
+import User from '@carbon/icons-vue/es/user/32'
+import Download from '@carbon/icons-vue/es/download/32'
+import Cross from '@carbon/icons-vue/es/health-cross/32'
+import Categories from '@carbon/icons-vue/es/categories/32'
 
 export default {
-  name: "DashboardCard",
+  name: 'DashboardCard',
 
   components: {
     Stethoscope,
@@ -68,8 +71,8 @@ export default {
     },
     customClass: {
       type: String,
-      default: "border border-subtle border-solid",
+      default: 'border border-subtle border-solid',
     },
   },
-};
+}
 </script>

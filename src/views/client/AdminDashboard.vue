@@ -29,20 +29,20 @@
 </template>
 
 <script>
-import DashboardCard from "@/components/ui/cards/DashboardCard";
-import UserDetailsHeader from "@/components/ui/headers/UserDetailsHeader";
+import DashboardCard from '@/components/ui/cards/DashboardCard'
+import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
 
 export default {
-  name: "Dashboard",
+  name: 'Dashboard',
 
   components: { DashboardCard, UserDetailsHeader },
 
   data() {
     return {
-      selected: "search",
+      selected: 'search',
       visible: false,
       visitVisible: false,
-    };
+    }
   },
 
   computed: {
@@ -54,79 +54,79 @@ export default {
         //   value: '1',
         // },
         {
-          label: "Patients",
-          type: "Reference",
-          value: "8,670",
+          label: 'Patients',
+          type: 'Reference',
+          value: '8,670',
         },
         {
-          label: "Corporate Clients",
-          type: "Indentification",
-          value: "8",
+          label: 'Corporate Clients',
+          type: 'Indentification',
+          value: '8',
         },
         {
-          label: "Appointment",
-          type: "Calendar",
-          value: "0",
+          label: 'Appointment',
+          type: 'Calendar',
+          value: '0',
         },
         {
-          label: "Workspaces",
-          type: "Cross",
-          value: "0",
+          label: 'Workspaces',
+          type: 'Cross',
+          value: '0',
         },
         {
-          label: "Locations",
-          type: "Categories",
-          value: "0",
+          label: 'Locations',
+          type: 'Categories',
+          value: '0',
         },
-      ];
+      ]
 
-      return types;
+      return types
     },
     overviewTypes() {
       const types = [
         {
-          label: "New Provider",
-          type: "Add",
-          description: "Add new provider",
-          value: "",
+          label: 'New Provider',
+          type: 'Add',
+          description: 'Add new provider',
+          value: '',
         },
         {
-          label: "New workspace",
-          type: "Cross",
-          description: "Create a new department or workspace",
+          label: 'New workspace',
+          type: 'Cross',
+          description: 'Create a new department or workspace',
         },
         {
-          label: "Register patient",
-          type: "User",
-          description: "Create a new patient profile",
+          label: 'Register patient',
+          type: 'User',
+          description: 'Create a new patient profile',
         },
         {
-          label: "New company",
-          type: "Download",
-          description: "Create a new corporate client",
+          label: 'New company',
+          type: 'Download',
+          description: 'Create a new corporate client',
         },
-      ];
+      ]
 
-      return types;
+      return types
     },
   },
 
   methods: {
     change(dashboard) {
-      this.selected = dashboard.type;
+      this.selected = dashboard.type
 
-      if (dashboard.type === "visit") {
-        this.visitVisible = true;
+      if (dashboard.type === 'visit') {
+        this.visitVisible = true
       }
 
-      if (dashboard.type === "register") {
-        this.$router.push({ name: "Biodata" });
+      if (dashboard.type === 'register') {
+        this.$router.push({ name: 'Biodata' })
       }
 
-      if (dashboard.type === "schedule") {
-        this.$router.push({ name: "SelectPatient" });
+      if (dashboard.type === 'schedule') {
+        this.$router.push({ name: 'SelectPatient' })
       }
     },
   },
-};
+}
 </script>
