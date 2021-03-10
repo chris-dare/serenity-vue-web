@@ -1,9 +1,7 @@
 <template>
   <div class="w-4/5 mx-auto">
     <UserDetailsHeader />
-    <p class="text-serenity-primary my-6 font-semibold">
-      Overview
-    </p>
+    <p class="text-serenity-primary my-6 font-semibold">Overview</p>
     <div class="grid grid-cols-4 gap-2 lg:gap-4 my-4">
       <DashboardCard
         v-for="(dashboard, index) in dashboardTypes"
@@ -15,14 +13,12 @@
         @click="change(dashboard)"
       />
     </div>
-    <p class="text-serenity-primary my-6 font-semibold">
-      Things to do
-    </p>
+    <p class="text-serenity-primary my-6 font-semibold">Things to do</p>
     <div class="grid grid-cols-4 gap-2 lg:gap-4 my-4">
       <DashboardCard
         v-for="(dashboard, index) in overviewTypes"
         :key="index"
-        :is-selected="selected === dashboard.value"
+        :is-selected="selected === dashboard.type"
         :details="dashboard"
         :type="dashboard.type"
         custom-class="bg-white border-0"
@@ -117,17 +113,17 @@ export default {
 
   methods: {
     change(dashboard) {
-      this.selected = dashboard.value
+      this.selected = dashboard.type
 
-      if (dashboard.value === 'visit') {
+      if (dashboard.type === 'visit') {
         this.visitVisible = true
       }
 
-      if (dashboard.value === 'register') {
+      if (dashboard.type === 'register') {
         this.$router.push({ name: 'Biodata' })
       }
 
-      if (dashboard.value === 'schedule') {
+      if (dashboard.type === 'schedule') {
         this.$router.push({ name: 'SelectPatient' })
       }
     },
