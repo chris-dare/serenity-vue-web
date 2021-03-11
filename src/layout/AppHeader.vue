@@ -5,12 +5,21 @@
         class="w-12 h-12 bg-serenity-gray flex justify-center items-center cursor-pointer"
         @click="change"
       >
-        <Close32 v-if="open" class="w-5 h-5 text-white" />
-        <Menu32 v-else class="w-5 h-5 text-white" />
+        <Close32
+          v-if="open"
+          class="w-5 h-5 text-white"
+        />
+        <Menu32
+          v-else
+          class="w-5 h-5 text-white"
+        />
       </div>
       <div class="flex justify-between items-center w-full">
         <cv-header-name href="javascript:void(0)">
-          <img src="@/assets/img/logo-full.svg" alt="" />
+          <img
+            src="@/assets/img/logo-full.svg"
+            alt=""
+          >
         </cv-header-name>
         <div class="flex items-center">
           <cv-text-input
@@ -21,16 +30,21 @@
           <div
             class="bg-serenity-gray h-12 flex items-center justify-center px-4"
           >
-            <img src="@/assets/img/search 1.svg" alt="" />
+            <img
+              src="@/assets/img/search 1.svg"
+              alt=""
+            >
           </div>
         </div>
         <div class="flex items-center mx-6">
           <div class="flex items-center">
-            <img src="@/assets/img/location 1.svg" alt="" />
-            <!-- <p class="ml-3 text-white ">Airport Residential</p> -->
+            <img
+              src="@/assets/img/location 1.svg"
+              alt=""
+            >
             <cv-select
               v-model="selectedLocation"
-              class="no-label-input se-dark-input hover:bg-serenity-gray focus:bg-serenity-gray mx-6"
+              class="no-label-input se-black-input hover:bg-serenity-gray focus:bg-serenity-gray mx-6"
               label="false"
               @change="selectLocation"
             >
@@ -71,13 +85,13 @@
 </template>
 
 <script>
-import UserHeaderDropdown from "@/components/layout/UserHeaderDropdown";
-import NotificationDetailsDropdown from "@/components/layout/NotificationDetailsDropdown";
-import Close32 from "@carbon/icons-vue/es/close/32";
-import Menu32 from "@carbon/icons-vue/es/menu/32";
-import { mapActions, mapState } from "vuex";
+import UserHeaderDropdown from '@/components/layout/UserHeaderDropdown'
+import NotificationDetailsDropdown from '@/components/layout/NotificationDetailsDropdown'
+import Close32 from '@carbon/icons-vue/es/close/32'
+import Menu32 from '@carbon/icons-vue/es/menu/32'
+import { mapActions, mapState } from 'vuex'
 export default {
-  name: "AppHeader",
+  name: 'AppHeader',
 
   components: {
     UserHeaderDropdown,
@@ -88,10 +102,9 @@ export default {
 
   data() {
     return {
-      search: "",
-      //   selected: 'Out Patient',
-      open: "",
-    };
+      search: '',
+      open: '',
+    }
   },
 
   computed: {
@@ -100,39 +113,37 @@ export default {
       workspaces: (state) => state.global.workspaces,
       locations: (state) => state.locations.locations,
     }),
+  
     selected: {
       get() {
-        return this.workspaceType;
+        return this.workspaceType
       },
       set(value) {
-        this.setworkspaceType(value);
+        this.setworkspaceType(value)
       },
     },
   },
+
   created() {
-    this.locations ? null : this.refresh();
+    this.getLocations(false)
   },
 
   methods: {
     ...mapActions({
-      setworkspaceType: "global/setworkspaceType",
-      getLocations: "locations/getLocations",
+      setworkspaceType: 'global/setworkspaceType',
+      getLocations: 'locations/getLocations',
     }),
 
     actionChange(value) {
-      this.setworkspaceType(value);
+      this.setworkspaceType(value)
     },
 
-    selectLocation(value) {},
-
-    async refresh() {
-      await this.getLocations();
-    },
+    selectLocation() {},
 
     change() {
-      this.open = !this.open;
-      this.$trigger("update:nav", this.open);
+      this.open = !this.open
+      this.$trigger('update:nav', this.open)
     },
   },
-};
+}
 </script>

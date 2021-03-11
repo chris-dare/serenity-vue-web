@@ -29,6 +29,12 @@ $primary: #0b6b74;
     @apply bg-serenity-gray border-0 hover:bg-serenity-gray focus:bg-serenity-gray text-white;
   }
 }
+.se-black-input {
+  .bx--text-input,
+  select {
+    @apply bg-black border-0 hover:bg-black focus:bg-black text-white capitalize;
+  }
+}
 
 .bx--table-toolbar {
   display: none;

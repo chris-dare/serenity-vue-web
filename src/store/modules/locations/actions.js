@@ -3,7 +3,10 @@ import LocationAPI from '@/api/locations'
 import { SET_LOCATIONS, DELETE_LOCATION, UPDATE_LOCATION } from './mutation-types'
 
 export default {
-  async getLocations({ commit, rootState }) {
+  async getLocations({ commit, rootState, state }, refresh = true) {
+    if (!refresh && state.locations.length) {
+      return
+    }
     const provider = rootState.auth.provider
     const { data } = await LocationAPI.list(provider.id).catch((error) => {
       // this.$service.fail(error)
