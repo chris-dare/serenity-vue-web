@@ -15,16 +15,22 @@
         @click="change(dashboard)"
       />
     </div>
+    <AdminProfile />
+    <ProviderProfile />
   </div>
 </template>
 
 <script>
 import PatientCard from '@/components/appointments/PatientCard'
 import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
+import AdminProfile from '@/components/admin/modals/AdminProfile'
+import ProviderProfile from '@/components/admin/modals/ProviderProfile'
+import { mapState } from 'vuex'
+
 export default {
   name: 'Settings',
 
-  components: { PatientCard,UserDetailsHeader },
+  components: { PatientCard,UserDetailsHeader, AdminProfile, ProviderProfile },
 
   data() {
     return {
@@ -52,12 +58,21 @@ export default {
     }
   },
 
+  computed: {
+    ...mapState({
+      workspaceType: state => state.global.workspaceType,
+    }),
+  },
+
   methods: {
     change(dashboard) {
       this.selected = dashboard.value
 
-      if (dashboard.value === 'profile' || dashboard.value === 'admin') {
-        this.$trigger('profile:edit')
+      if (dashboard.value === 'profile') {
+        this.$trigger(this.workspaceType === 'admin' ? 'provider:profile:open':'profile:edit')
+      }
+      if (dashboard.value === 'admin') {
+        this.$trigger('admin:profile:open')
       }
 
       if (dashboard.value === 'security') {

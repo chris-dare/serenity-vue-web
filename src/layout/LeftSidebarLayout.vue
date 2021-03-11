@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-col md:flex-row h-full overflow-hidden">
     <div
+      v-if="workspaceType !== 'admin'"
       class="border-r overflow-hidden relative transition-all duration-500 ease-in-out"
       :class="{ 'w-12': !isOpen, 'w-1/5': isOpen }"
     >
@@ -58,6 +59,7 @@
 
 <script>
 import ArrowRight from '@carbon/icons-vue/es/arrow--right/32'
+import { mapState } from 'vuex'
 export default {
   name: 'LeftSidebarLayout',
 
@@ -67,6 +69,12 @@ export default {
     return {
       isOpen: false,
     }
+  },
+
+  computed: {
+    ...mapState({
+      workspaceType: (state) => state.global.workspaceType,
+    })
   },
 
   methods: {

@@ -8,7 +8,13 @@
       <p class="text-serenity-primary font-semibold text-lg text-center">{{ details.label }}</p>
       <p class="text-center w-4/5 mx-auto text-sm">{{ details.description }}</p>
     </div>
-    <p class="text-serenity-primary underline">{{ isCompleted ? 'Completed': 'Update' }}</p>
+    <router-link
+      tag="p"
+      :to="{name: details.link}"
+      class="text-serenity-primary underline cursor-pointer"
+    >
+      {{ isCompleted ? 'Completed': 'Update' }}
+    </router-link>
   </div>
 </template>
 

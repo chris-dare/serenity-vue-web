@@ -25,17 +25,19 @@
         @click="change(dashboard)"
       />
     </div>
+    <AddEditWorkspace />
   </div>
 </template>
 
 <script>
 import DashboardCard from '@/components/ui/cards/DashboardCard'
 import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
+import AddEditWorkspace from '@/components/admin/modals/AddEditWorkspace'
 
 export default {
   name: 'Dashboard',
 
-  components: { DashboardCard, UserDetailsHeader },
+  components: { DashboardCard, UserDetailsHeader, AddEditWorkspace },
 
   data() {
     return {
@@ -88,22 +90,25 @@ export default {
           label: 'New Provider',
           type: 'Add',
           description: 'Add new provider',
-          value: '',
+          action: 'team',
         },
         {
           label: 'New workspace',
           type: 'Cross',
           description: 'Create a new department or workspace',
+          action: 'workspace'
         },
         {
           label: 'Register patient',
           type: 'User',
           description: 'Create a new patient profile',
+          action: 'patient'
         },
         {
           label: 'New company',
           type: 'Download',
           description: 'Create a new corporate client',
+          action: 'client'
         },
       ]
 
@@ -115,16 +120,17 @@ export default {
     change(dashboard) {
       this.selected = dashboard.type
 
-      if (dashboard.type === 'visit') {
-        this.visitVisible = true
+      if (dashboard.action === 'team') {
+        this.$router.push({ name: 'TeamBiodata' })
       }
-
-      if (dashboard.type === 'register') {
-        this.$router.push({ name: 'Biodata' })
+      if (dashboard.action === 'workspace') {
+        this.$trigger('workspace:add:open')
       }
-
-      if (dashboard.type === 'schedule') {
-        this.$router.push({ name: 'SelectPatient' })
+      if (dashboard.action === 'patient') {
+        this.$router.push({name:'Biodata'})
+      }
+      if (dashboard.action === 'client') {
+        this.$router.push({name:'CompanyInformation'})
       }
     },
   },
