@@ -9,7 +9,8 @@ export default {
     dispatch('roles/getRoles', null,{ root:true })
     dispatch('resources/getResources', null,{ root:true })
     dispatch('workspaces/getWorkspaces', null,{ root:true })
-    dispatch('specialties/getSpecialties', null,{ root:true })
+    dispatch('resources/getSpecialties', null,{ root:true })
+    dispatch('services/getServices', null,{ root:true })
   },
   getCountries({ commit }) {
     axios.get('https://restcountries.eu/rest/v2/all')

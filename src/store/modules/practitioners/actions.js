@@ -11,6 +11,14 @@ export default {
     commit(SET_USERS, data.data ? data.data : [])
   },
 
+  async getUser({ commit, rootState }, id) {
+    const provider = rootState.auth.provider
+    const { data } = await UsersAPI.get(provider.id, id).catch((error) => {
+      throw error
+    })
+    commit(SET_CURRENT_USER, data.data)
+  },
+
   async createUser({ commit, rootState }, payload) {
     const provider = rootState.auth.provider
     const { data } = await UsersAPI
@@ -19,9 +27,8 @@ export default {
         this.$service.fail(error)
         throw error
       })
-    console.info(data)
 
-    commit(UPDATE_USER, data)
+    commit(UPDATE_USER, data.data)
     return data
   },
 

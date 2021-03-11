@@ -16,6 +16,12 @@
       label="Clinical Role"
       class="inherit-full-input my-8"
     >
+      <template
+        v-if="$v.form.practitioner_role.$error"
+        slot="invalid-message"
+      >
+        A practitioner role is required
+      </template>
       <cv-select-option
         disabled
         hidden
@@ -35,6 +41,12 @@
       label="Specialty"
       class="inherit-full-input my-8"
     >
+      <template
+        v-if="$v.form.practitioner_specialty.$error"
+        slot="invalid-message"
+      >
+        A practitioner specialty is required
+      </template>
       <cv-select-option
         disabled
         hidden
@@ -102,16 +114,15 @@
 <script>
 import {mapActions, mapState} from 'vuex'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import { required } from 'vuelidate/lib/validators'
+
 export default {
   name: 'TeamIdentification',
 
   data() {
     return {
-      form: {
-        // workspaces: [],
-      },
+      form: {},
       titles: [{label:'Clinical Staff', value: 'clinical_staff'}, {label:'Non-Clinical Staff', value: 'non_clinical_staff'}],
-      // workspaces: ['Reception', 'ER', 'Outpatient', 'Inpatient', 'Pharmacy', 'Diagnostics'],
       loading: false,
       icon: ChevronRight,
       practitionerRole: '',
@@ -122,9 +133,17 @@ export default {
     ...mapState({
       currentUser: (state) => state.practitioners.currentUser,
       roles: (state) => state.roles.roles,
-      specialties: (state) => state.specialties.specialties,
+      specialties: (state) => state.resources.specialties,
       workspaces: (state) => state.workspaces.workspaces,
     }),
+  },
+
+  validations: {
+    form: {
+      team_member_type: { required },
+      practitioner_specialty: { required},
+      practitioner_role: { required},
+    },
   },
 
   methods: {
@@ -135,19 +154,28 @@ export default {
     }),
 
     async save() {
-      this.loading = true
       this.form.practitioner_role = this.roles.find(r => r.id = this.practitionerRole)
-      console.log('form', this.form)
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return
+      }
+      this.loading = true
+  
+      
+
+      if(typeof(this.form.practitioner_specialty) == 'string'){
+        this.form.practitioner_specialty = [this.form.practitioner_specialty]
+      }
+
       this.addToCurrentUser(this.form)
-      const data = await this.createUser(this.currentUser).catch((error) => {
-        console.info(error)
+
+      const data = await this.createUser(this.currentUser).catch(() => {
         this.$toast.open({
           message: 'Something went wrong!',
           type: 'error',
         })
         this.loading = false
       })
-      console.info(data)
 
       if (data) {
         this.$toast.open({

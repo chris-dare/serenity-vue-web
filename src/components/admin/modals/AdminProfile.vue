@@ -105,7 +105,7 @@
                 </div>
                 <FileUploadButton
                   custom-class="border-0 bg-gray-200"
-                  title="Or upload patient photo"
+                  title="Or upload signature photo"
                 />
               </div>
             </div>

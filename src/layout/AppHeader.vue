@@ -124,8 +124,9 @@ export default {
     },
   },
 
-  created() {
-    this.getLocations(false)
+  async created() {
+    await this.getLocations(false)
+    this.selectedLocation = this.locations[0]
   },
 
   methods: {

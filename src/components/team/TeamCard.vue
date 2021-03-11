@@ -3,10 +3,17 @@
     class="bg-white w-full h-60 space-y-4 flex flex-col justify-center items-center"
   >
     <img
-      :src="$faker().image.image()"
+      v-if="user.photo"
+      :src="user.photo"
       alt=""
       class="w-16 h-16 rounded-full"
     >
+    <Avatar
+      v-else
+      class="w-16 h-16"
+      :name="`${ user.first_name }  ${ user.last_name }}`"
+    />
+    
     <div class="space-y-1 flex items-center flex-col justify-center">
       <p class="font-semibold">{{ user.title }} {{ user.first_name }} {{ user.last_name }}</p>
       <p class="text-sm text-primary">General Practitioner</p>
@@ -42,10 +49,12 @@ export default {
   methods: {
     ...mapActions({
       setCurrentUser: 'practitioners/setCurrentUser',
+      getUser: 'practitioners/getUser',
     }),
 
-    go() {
-      this.setCurrentUser(this.user)
+    async go() {
+      // this.setCurrentUser(this.user)
+      await this.getUser(this.user.id)
       this.$router.push(`/team/${1}`)
     },
   },

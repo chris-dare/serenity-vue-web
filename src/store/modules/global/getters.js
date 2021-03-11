@@ -12,7 +12,7 @@ export default {
         // { label: 'Corporate Clients', to: 'CorporateClients', component: 'Baggage' },
         // { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
         // { label: 'Billing', to: 'Billing', component: 'Align', group_by: 'hospital operations'},
-        // { label: 'Services & pricing', to: 'Services', component: 'Wallet'},
+        { label: 'Services & pricing', to: 'Services', component: 'Wallet', group_by: 'hospital operations'},
         // { label: 'Inventory', to: 'Inventory', component: 'Folder'},
         // { label: 'Schedules', to: 'Schedules', component: 'Schedule'},
         { label: 'Team', to: 'Team', component: 'Events', group_by: 'administration'},

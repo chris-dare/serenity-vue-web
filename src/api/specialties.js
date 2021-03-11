@@ -12,7 +12,7 @@ export default {
   },
 
   update(providerId, params) {
-    return http.put(`${this.url}${providerId}/practitioner-specialties/${params.id}`, params)
+    return http.patch(`${this.url}${providerId}/practitioner-specialties/${params.id}`, params)
   },
 
   delete(providerId,id) {

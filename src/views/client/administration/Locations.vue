@@ -17,7 +17,6 @@
       v-model="search"
       placeholder="Search for location"
     />
-    <!-- {{ filteredLocations }} -->
     <cv-data-table
       ref="table"
       :data="filteredLocations"
@@ -34,14 +33,18 @@
               <p>{{ row.location_name }}</p>
             </div>
           </cv-data-table-cell>
-
           <cv-data-table-cell>
             <div class="flex items-center space-x-2 py-2">
               <p>{{ row.street_address }}</p>
             </div>
           </cv-data-table-cell>
-
           <cv-data-table-cell>
+            <div class="flex items-center space-x-2 py-2">
+              <p>{{ row.city }}</p>
+            </div>
+          </cv-data-table-cell>
+            
+          <!-- <cv-data-table-cell>
             <div class="flex items-center space-x-6">
               <p
                 class="cursor-pointer"
@@ -56,7 +59,7 @@
                 Delete
               </p>
             </div>
-          </cv-data-table-cell>
+          </cv-data-table-cell> -->
         </cv-data-table-row>
       </template>
     </cv-data-table>
@@ -78,7 +81,7 @@ export default {
   data() {
     return {
       search: '',
-      columns: ['Name', 'Address', 'Action'],
+      columns: ['Name', 'Address', 'City'],
       loading: false,
     }
   },
