@@ -42,12 +42,26 @@
               src="@/assets/img/location 1.svg"
               alt=""
             >
-            <p class="ml-3 text-white ">Airport Residential</p>
+            <cv-select
+              v-model="selectedLocation"
+              class="no-label-input se-black-input hover:bg-serenity-gray focus:bg-serenity-gray mx-6"
+              label="false"
+              @change="selectLocation"
+            >
+              <cv-select-option
+                v-for="(item, index) in locations"
+                :key="index"
+                class="text-white font-light"
+                :value="item.location_name"
+              >
+                {{ item.location_name }}
+              </cv-select-option>
+            </cv-select>
           </div>
 
           <cv-select
             v-model="selected"
-            class="no-label-input se-dark-input hover:bg-serenity-gray focus:bg-serenity-gray mx-6 "
+            class="no-label-input se-dark-input hover:bg-serenity-gray focus:bg-serenity-gray mx-6"
             label="false"
             @change="actionChange"
           >
@@ -79,12 +93,16 @@ import { mapActions, mapState } from 'vuex'
 export default {
   name: 'AppHeader',
 
-  components: { UserHeaderDropdown, NotificationDetailsDropdown, Close32, Menu32 },
+  components: {
+    UserHeaderDropdown,
+    NotificationDetailsDropdown,
+    Close32,
+    Menu32,
+  },
 
   data() {
     return {
       search: '',
-      //   selected: 'Out Patient',
       open: '',
     }
   },
@@ -93,7 +111,9 @@ export default {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
       workspaces: (state) => state.global.workspaces,
+      locations: (state) => state.locations.locations,
     }),
+  
     selected: {
       get() {
         return this.workspaceType
@@ -104,14 +124,21 @@ export default {
     },
   },
 
+  created() {
+    this.getLocations(false)
+  },
+
   methods: {
     ...mapActions({
       setworkspaceType: 'global/setworkspaceType',
+      getLocations: 'locations/getLocations',
     }),
 
     actionChange(value) {
       this.setworkspaceType(value)
     },
+
+    selectLocation() {},
 
     change() {
       this.open = !this.open
