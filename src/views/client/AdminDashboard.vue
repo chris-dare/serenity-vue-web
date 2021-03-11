@@ -1,9 +1,7 @@
 <template>
   <div class="w-4/5 mx-auto">
     <UserDetailsHeader />
-    <p class="text-serenity-primary my-6 font-semibold">
-      Overview
-    </p>
+    <p class="text-serenity-primary my-6 font-semibold">Overview</p>
     <div class="grid grid-cols-4 gap-2 lg:gap-4 my-4">
       <DashboardCard
         v-for="(dashboard, index) in dashboardTypes"
@@ -15,31 +13,31 @@
         @click="change(dashboard)"
       />
     </div>
-    <p class="text-serenity-primary my-6 font-semibold">
-      Things to do
-    </p>
+    <p class="text-serenity-primary my-6 font-semibold">Things to do</p>
     <div class="grid grid-cols-4 gap-2 lg:gap-4 my-4">
       <DashboardCard
         v-for="(dashboard, index) in overviewTypes"
         :key="index"
-        :is-selected="selected === dashboard.value"
+        :is-selected="selected === dashboard.type"
         :details="dashboard"
         :type="dashboard.type"
         custom-class="bg-white border-0"
         @click="change(dashboard)"
       />
     </div>
+    <AddEditWorkspace />
   </div>
 </template>
 
 <script>
 import DashboardCard from '@/components/ui/cards/DashboardCard'
 import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
+import AddEditWorkspace from '@/components/admin/modals/AddEditWorkspace'
 
 export default {
   name: 'Dashboard',
 
-  components: { DashboardCard, UserDetailsHeader },
+  components: { DashboardCard, UserDetailsHeader, AddEditWorkspace },
 
   data() {
     return {
@@ -92,22 +90,25 @@ export default {
           label: 'New Provider',
           type: 'Add',
           description: 'Add new provider',
-          value: '',
+          action: 'team',
         },
         {
           label: 'New workspace',
           type: 'Cross',
           description: 'Create a new department or workspace',
+          action: 'workspace'
         },
         {
           label: 'Register patient',
           type: 'User',
           description: 'Create a new patient profile',
+          action: 'patient'
         },
         {
           label: 'New company',
           type: 'Download',
           description: 'Create a new corporate client',
+          action: 'client'
         },
       ]
 
@@ -117,18 +118,19 @@ export default {
 
   methods: {
     change(dashboard) {
-      this.selected = dashboard.value
+      this.selected = dashboard.type
 
-      if (dashboard.value === 'visit') {
-        this.visitVisible = true
+      if (dashboard.action === 'team') {
+        this.$router.push({ name: 'TeamBiodata' })
       }
-
-      if (dashboard.value === 'register') {
-        this.$router.push({ name: 'Biodata' })
+      if (dashboard.action === 'workspace') {
+        this.$trigger('workspace:add:open')
       }
-
-      if (dashboard.value === 'schedule') {
-        this.$router.push({ name: 'SelectPatient' })
+      if (dashboard.action === 'patient') {
+        this.$router.push({name:'Biodata'})
+      }
+      if (dashboard.action === 'client') {
+        this.$router.push({name:'CompanyInformation'})
       }
     },
   },

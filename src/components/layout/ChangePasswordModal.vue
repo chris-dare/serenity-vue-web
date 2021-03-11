@@ -3,7 +3,7 @@
     class="se-no-title-modal"
     close-aria-label="Close"
     :visible="modalVisible"
-    @modal-hidden="modalVisible = false"
+    @modal-hidden="close"
   >
     <template slot="content">
       <div v-if="updateSuccessful" />
@@ -115,6 +115,7 @@ export default {
     },
     close() {
       this.modalVisible = false
+      this.form = {}
     },
     async submit() {
       if(this.saving)return
