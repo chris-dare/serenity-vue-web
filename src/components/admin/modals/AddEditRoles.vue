@@ -108,6 +108,7 @@ export default {
     return {
       form: {
         permissions: [],
+        workspaces: []
       },
       visible: false,
       search: '',
