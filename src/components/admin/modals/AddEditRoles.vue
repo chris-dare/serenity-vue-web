@@ -45,7 +45,7 @@
             </div>
             <div>
               <div
-                v-for="(resource, index) in resourceInd"
+                v-for="(resource, index) in filteredResourceInd"
                 :key="index"
                 class="grid grid-cols-4 items-center h-12"
               >
@@ -136,6 +136,11 @@ export default {
     ...mapGetters({
       resourceInd: 'resources/resources',
     }),
+    filteredResourceInd(){
+      return this.resourceInd.filter(el => {
+        return el.rootLabel.toLowerCase().includes(this.search.toLowerCase())
+      })
+    },
   },
 
   events: {
@@ -190,16 +195,25 @@ export default {
       let resources = data.permissions.resources
       let newResources = []
 
+      let splits = {}
       resources.forEach(resource => {
-        if (resource.includes('*')) {
-          let split = resource.split('.')
-          let root = split.length === 2 ? split[0] : `${split[0]}.${split[1]}`
-          newResources.push(`${root}.read`,`${root}.write`,`${root}.delete`)
-        } else {
-          newResources.push(resource)
+        let split = resource.split('.')
+        split = [ split.slice(0, split.length - 1).join('.'), split[split.length - 1] ]
+        splits[split[0]] = splits[split[0]] || []
+        if(!splits[split[0]].includes(split[1])){
+          splits[split[0]].push(split[1])
         }
       })
-
+      Object.keys(splits).forEach(key => {
+        let split = splits[key]
+        if(split.length === 3){
+          newResources.push(`${key}.*`)
+        }else{
+          split.forEach(el =>{
+            newResources.push(`${key}.${el}`)
+          })
+        }
+      })
       role.permissions.resources = newResources
       return role
     },
@@ -226,7 +240,8 @@ export default {
 
     async update() {
       this.loading = true
-      const data = await this.updateRole(this.form).catch(() => {
+      const params = this.formatOutgoingResources(this.form)
+      const data = await this.updateRole(params).catch(() => {
         this.$toast.open({
           message: 'Something went wrong!',
           type: 'error',
