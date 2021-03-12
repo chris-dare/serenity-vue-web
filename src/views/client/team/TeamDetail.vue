@@ -4,23 +4,28 @@
       <div class="flex">
         <div class="flex items-center">
           <img
-            class="w-16 h-16 rounded-full mx-4"
-            :src="$faker().image.image()"
+            v-if="currentUser.photo"
+            :src="currentUser.photo"
             alt=""
+            class="w-16 h-16 rounded-full mx-4"
           >
+          <Avatar
+            v-else
+            class="w-16 h-16 mx-4"
+            :name="`${currentUser.first_name}  ${currentUser.last_name}}`"
+          />
           <div>
-            <p class="font-semibold">{{ currentUser.title }} {{ currentUser.first_name }} {{ currentUser.last_name }}</p>
-            <p class="text-secondary">
-              Gynaecologist
+            <p class="font-semibold">
+              {{ currentUser.title }} {{ currentUser.first_name }}
+              {{ currentUser.last_name }}
             </p>
+            <p class="text-secondary">Gynaecologist</p>
           </div>
         </div>
       </div>
       <div class="flex items-center space-x-4 mr-4">
         <p class="text-green-500 font-semibold">Active</p>
-        <SeButton>
-          Actions
-        </SeButton>
+        <SeButton> Actions </SeButton>
       </div>
     </div>
 
@@ -44,27 +49,29 @@ import { mapState } from 'vuex'
 export default {
   name: 'TeamDetail',
 
-  components: {PatientSummaryCard},
+  components: { PatientSummaryCard },
 
   computed: {
     ...mapState({
       currentUser: (state) => state.practitioners.currentUser,
     }),
     workspaces() {
-      if(!this.currentUser || !this.currentUser.practitioner_role){
+      if (!this.currentUser || !this.currentUser.practitioner_role) {
         return ''
       }
-      return this.currentUser.practitioner_role.permissions.workspaces.join(', ')
+      return this.currentUser.practitioner_role.permissions.workspaces.join(
+        ', '
+      )
     },
     roleName() {
-      if(!this.currentUser || !this.currentUser.practitioner_role){
+      if (!this.currentUser || !this.currentUser.practitioner_role) {
         return ''
       }
       return this.currentUser.practitioner_role.name
     },
     generalFields() {
       return [
-        {label: 'First Name', value: this.currentUser.first_name },
+        { label: 'First Name', value: this.currentUser.first_name },
         { label: 'Last Name', value: this.currentUser.last_name },
         { label: 'Phone Number', value: this.currentUser.phone_number },
         { label: 'Admin Email', value: this.currentUser.email },
@@ -78,13 +85,13 @@ export default {
     },
     workspaceFields() {
       let specialty
-      if(this.currentUser){
-        if(this.currentUser.practitioner_specialty){
+      if (this.currentUser) {
+        if (this.currentUser.practitioner_specialty) {
           specialty = this.currentUser.practitioner_specialty[0]
         }
       }
       return [
-        {label: 'Workspaces', value: this.workspaces },
+        { label: 'Workspaces', value: this.workspaces },
         { label: 'Clinical Role', value: this.roleName },
         { label: 'Specialty', value: specialty },
         { label: 'Medical Practice code', value: null },
@@ -95,5 +102,4 @@ export default {
 </script>
 
 <style>
-
 </style>
