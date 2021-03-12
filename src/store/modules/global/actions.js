@@ -11,6 +11,7 @@ export default {
     dispatch('workspaces/getWorkspaces', null,{ root:true })
     dispatch('resources/getSpecialties', null,{ root:true })
     dispatch('services/getServices', null,{ root:true })
+    dispatch('getCountries')
   },
   getCountries({ commit }) {
     axios.get('https://restcountries.eu/rest/v2/all')

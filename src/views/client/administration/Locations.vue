@@ -40,11 +40,11 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div class="flex items-center space-x-2 py-2">
-              <p>{{ row.city }}</p>
+              <p>{{ row.location_contact_number }}</p>
             </div>
           </cv-data-table-cell>
             
-          <!-- <cv-data-table-cell>
+          <cv-data-table-cell>
             <div class="flex items-center space-x-6">
               <p
                 class="cursor-pointer"
@@ -59,7 +59,7 @@
                 Delete
               </p>
             </div>
-          </cv-data-table-cell> -->
+          </cv-data-table-cell>
         </cv-data-table-row>
       </template>
     </cv-data-table>
@@ -81,7 +81,7 @@ export default {
   data() {
     return {
       search: '',
-      columns: ['Name', 'Address', 'City'],
+      columns: ['Name', 'Address', 'Contact Number', 'Action'],
       loading: false,
     }
   },
