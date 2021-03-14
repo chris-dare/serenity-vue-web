@@ -56,24 +56,6 @@ export default {
       })
       throw error
     }
-
-    // const { data } = await AuthAPI.refresh({ refresh }).catch(result => {
-    //   console.log('result', result)
-    //   throw result
-    // })
-
-    
-
-    // return AuthAPI.refresh({ refresh })
-    //   .then(({ data: result }) => {
-    //     console.log('data', result)
-    //     commit(SET_TOKEN, result.access)
-    //     return result
-    //   })
-    //   .catch(result => {
-    //     console.log('result', result)
-    //     throw result
-    //   })
   },
 
   // eslint-disable-next-line no-unused-vars
