@@ -1,5 +1,6 @@
 import AuthAPI from '@/api/auth'
 import { SET_LOGGED_IN, SET_USER, SET_TOKEN, SET_REFRESH_TOKEN, SET_PRACTIONER_DATA } from './mutation-types'
+import router from '@/router'
 
 export default {
   reset({ commit }) {
@@ -40,16 +41,39 @@ export default {
       })
   },
 
-  refresh({ commit, state }) {
+  async refresh({ commit,dispatch, state }) {
+    console.log('i got here')
     const refresh = state.refreshToken
-    return AuthAPI.refresh({refresh})
-      .then(({ data: result }) => {
-        commit(SET_TOKEN, result.access)
-        return result.access
+
+    try {
+      const { data } = await AuthAPI.refresh({ refresh })
+      console.log('data', data)
+      commit(SET_TOKEN, data.access)
+    } catch (error) {
+      dispatch('setLoggedIn', false)
+      router.push({
+        name: 'AuthLogin',
       })
-      .catch(result => {
-        throw result.data.error
-      })
+      throw error
+    }
+
+    // const { data } = await AuthAPI.refresh({ refresh }).catch(result => {
+    //   console.log('result', result)
+    //   throw result
+    // })
+
+    
+
+    // return AuthAPI.refresh({ refresh })
+    //   .then(({ data: result }) => {
+    //     console.log('data', result)
+    //     commit(SET_TOKEN, result.access)
+    //     return result
+    //   })
+    //   .catch(result => {
+    //     console.log('result', result)
+    //     throw result
+    //   })
   },
 
   // eslint-disable-next-line no-unused-vars

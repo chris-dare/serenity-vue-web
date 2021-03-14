@@ -1,6 +1,5 @@
 import axios from 'axios'
 import store from '@/store'
-import router from '@/router'
 
 const http = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
@@ -25,38 +24,10 @@ http.interceptors.request.use(
 // Refresh JWT if 401 is returned
 http.interceptors.response.use(undefined, (error) => {
   const errorResponse = error.response
-  if (errorResponse.status === 401) {
-    return new Promise((resolve, reject) => {
-      store
-        .dispatch('auth/refresh')
-        .then((data) => {
-          if (!data) {
-            store.dispatch('auth/setLoggedIn', false)
-            router.push({
-              name: 'AuthLogin',
-              params: {
-                logout: true,
-              },
-            })
-          }
-
-          errorResponse.config.__isRetryRequest = true
-          errorResponse.config.headers.Authorization =
-            store.getters['auth/authorizationHeader']
-          resolve(axios(errorResponse.config))
-          return true
-        })
-        .catch((errored) => {
-          store.dispatch('auth/setLoggedIn', false)
-          router.push({
-            name: 'AuthLogin',
-            params: {
-              logout: true,
-            },
-          })
-          reject(errored)
-        })
-    })
+  console.log('error response', errorResponse)
+  if (errorResponse.status === 401 &&
+    errorResponse.data.code === 'token_not_valid') {
+    store.dispatch('auth/refresh')
   }
 
   return Promise.reject(errorResponse)
