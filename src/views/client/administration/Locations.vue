@@ -40,10 +40,10 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div class="flex items-center space-x-2 py-2">
-              <p>{{ row.city }}</p>
+              <p>{{ row.location_contact_number }}</p>
             </div>
           </cv-data-table-cell>
-            
+          <!-- APIS not ready for these -->
           <!-- <cv-data-table-cell>
             <div class="flex items-center space-x-6">
               <p

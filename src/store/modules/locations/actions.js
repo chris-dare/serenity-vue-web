@@ -25,6 +25,7 @@ export default {
       })
 
     commit(UPDATE_LOCATION, data.data)
+    return data
   },
 
   async updateLocation({ commit, rootState}, payload) {
@@ -37,6 +38,7 @@ export default {
       })
 
     commit(UPDATE_LOCATION, data)
+    return data
   },
 
   async deleteLocation({ commit, rootState}, id) {

@@ -21,18 +21,20 @@
             Location name is required
           </template>
         </cv-text-input>
-        <cv-text-input
-          v-model="form.street_address"
-          label="Address"
-          placeholder="eg No Bana Street"
+        <cv-select
+          v-model="form.country"
+          label="Country"
+          class="inherit-full-input"
+          placeholder="Select a country"
         >
-          <template
-            v-if="$v.form.street_address.$error"
-            slot="invalid-message"
+          <cv-select-option
+            v-for="(country, index) in countries"
+            :key="index"
+            :value="country.alpha2Code"
           >
-            Address is required
-          </template>
-        </cv-text-input>
+            {{ country.name }}
+          </cv-select-option>
+        </cv-select>
         <cv-text-input
           v-model="form.city"
           label="City"
@@ -46,6 +48,25 @@
           </template>
         </cv-text-input>
         <cv-text-input
+          v-model="form.street_address"
+          label="Location Address"
+          placeholder="eg No Bana Street"
+        >
+          <template
+            v-if="$v.form.street_address.$error"
+            slot="invalid-message"
+          >
+            Address is required
+          </template>
+        </cv-text-input>
+
+        <cv-text-input
+          v-model="form.postal_code"
+          label="Postal Code"
+          placeholder="eg 00233"
+        />
+        
+        <cv-text-input
           v-model="form.location_contact_number"
           label="Location contact number"
           placeholder="eg 022346786384"
@@ -57,18 +78,6 @@
             Location Phone number is required
           </template>
         </cv-text-input>
-        <!-- <cv-text-input
-          v-model="form.gps"
-          label="GPS"
-          placeholder="eg Longitude, Latitude"
-        />
-        <div>
-          <p class="text-primary mb-2 text-left">Location photo</p>
-          <FileUploadButton
-            custom-class="h-12 bg-white"
-            title="Or upload photo"
-          />
-        </div> -->
         
         <cv-button-skeleton
           v-if="loading"
@@ -93,7 +102,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState} from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 export default {
   name: 'AddEditLocation',
@@ -109,6 +118,12 @@ export default {
       visible: false,
       loading: false,
     }
+  },
+
+  computed: {
+    ...mapState({
+      countries: (state) => state.global.countries,
+    })
   },
 
   events: {

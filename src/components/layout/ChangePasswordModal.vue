@@ -14,67 +14,71 @@
             <p class="mt-4">Reset Password</p>
           </div>
         </div>
-        <cv-form @submit.prevent="submit">
-          <div>
-            <div class="grid grid-cols-2 gap-8 my-8">
-              <cv-text-input
-                v-model="form.password"
-                label="Current Password"
-                :invalid-message="$utils.validateRequiredField($v, 'password')"
-                type="password"
-                class="inherit-full-input"
-              />
-              <div />
-              <cv-text-input
-                v-model="form.new_password"
-                label="New Password"
-                type="password"
-                placeholder="At least 8 characters"
-                :invalid-message="$utils.validateRequiredField($v, 'new_password')"
-                class="inherit-full-input"
-              />
-              <cv-text-input
-                v-model="form.confirm_password"
-                label="Confirm Password"
-                type="password"
-                placeholder="At least 8 characters"
-                :invalid-message="$utils.validateRequiredField($v, 'confirm_password')"
-                class="inherit-full-input"
-              />
-            </div>
-            <div class="flex justify-end">
-              <router-link
-                tag="div"
-                to="/forgot-password"
-                class="underline cursor-pointer inline-block text-serenity-primary my-4"
+        <div>
+          <div class="grid grid-cols-2 gap-8 my-8">
+            <cv-text-input
+              v-model="form.password"
+              label="Current Password"
+              type="password"
+              class="inherit-full-input"
+            >
+              <template
+                v-if="$v.form.password.$error"
+                slot="invalid-message"
               >
-                Forgot Password?
-              </router-link>
-            </div>
-            <div class="flex items-center justify-between mt-4 mb-6">
-              <cv-button
-                class="border-gray-800 bg-gray-800 text-white focus:bg-gray-700 hover:bg-gray-700 px-6"
-                kind="tertiary"
-                @click="close"
-              >
-                Go Back
-              </cv-button>
-              <cv-button
-                :icon="icon"
-                kind="primary"
-                class="bg-serenity-primary hover:bg-serenity-primary-highlight  ml-6 justify-start"
-                @click="submit"
-              >
-                <img
-                  :class="{hidden: !saving}"
-                  class="h-4 w-4 mr-4"
-                  src="@/assets/img/eclipse.svg"
-                >
-                Update Password
-              </cv-button>
-            </div>
+                {{ $utils.validateRequiredField($v, 'password') }}
+              </template>
+            </cv-text-input>
+            <div />
+            <cv-text-input
+              v-model="form.new_password"
+              label="New Password"
+              type="password"
+              placeholder="At least 8 characters"
+              :invalid-message="$utils.validateRequiredField($v, 'new_password')"
+              class="inherit-full-input"
+            />
+            <cv-text-input
+              v-model="form.confirm_password"
+              label="Confirm Password"
+              type="password"
+              placeholder="At least 8 characters"
+              :invalid-message="$utils.validateRequiredField($v, 'confirm_password')"
+              class="inherit-full-input"
+            />
           </div>
-        </cv-form>
+          <div class="flex justify-end">
+            <router-link
+              tag="div"
+              to="/forgot-password"
+              class="underline cursor-pointer inline-block text-serenity-primary my-4"
+            >
+              Forgot Password?
+            </router-link>
+          </div>
+          <div class="flex items-center justify-between mt-4 mb-6">
+            <cv-button
+              class="border-gray-800 bg-gray-800 text-white focus:bg-gray-700 hover:bg-gray-700 px-6"
+              kind="tertiary"
+              @click="close"
+            >
+              Go Back
+            </cv-button>
+            <cv-button
+              :icon="icon"
+              kind="primary"
+              class="bg-serenity-primary hover:bg-serenity-primary-highlight  ml-6 justify-start"
+              @click="submit"
+            >
+              <img
+                :class="{hidden: !saving}"
+                class="h-4 w-4 mr-4"
+                src="@/assets/img/eclipse.svg"
+              >
+              Update Password
+            </cv-button>
+          </div>
+        </div>
       </div>
     </template>
   </cv-modal>
@@ -110,21 +114,32 @@ export default {
     ...mapActions({
       changePassword: 'auth/changePassword',
     }),
+  
     open(){
       this.modalVisible = true
     },
+  
     close() {
       this.modalVisible = false
-      this.form = {}
+      this.form = {
+        password: '',
+        confirm_password: '',
+        new_password: '',
+      }
+      this.$v.$reset()
     },
     async submit() {
-      if(this.saving)return
+      if(this.saving) return
+
       this.$v.$touch()
+
       if (this.$v.$invalid) {
         return
       }
+
       const defaultErrorMessage = 'Failed to change password. Please try again later.'
       this.saving = true
+
       try{
         const response = await this.changePassword(this.form)
         console.info(response)
