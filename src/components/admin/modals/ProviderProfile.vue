@@ -3,7 +3,7 @@
     class="se-no-title-modal"
     close-aria-label="Close"
     :visible="visible"
-    @modal-hidden="visible = false"
+    @modal-hidden="close"
   >
     <template slot="content">
       <div>
@@ -152,6 +152,10 @@ export default {
 
   methods: {
     submit() {},
+    close() {
+      this.visible = false
+      this.form = {}
+    },
   },
 }
 </script>

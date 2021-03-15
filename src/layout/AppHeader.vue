@@ -104,6 +104,7 @@ export default {
     return {
       search: '',
       open: '',
+      selectedLocation: '',
     }
   },
 
@@ -126,7 +127,7 @@ export default {
 
   async created() {
     await this.getLocations(false)
-    this.selectedLocation = this.locations[0]
+    this.selectedLocation = this.locations.length ? this.locations[0].location_name : ''
   },
 
   methods: {

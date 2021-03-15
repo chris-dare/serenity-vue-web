@@ -2,7 +2,7 @@
   <div>
     <div class="w-4/5 mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Workspaces/Departments ({{ workspaces.length }})</p>
+        <p class="text-xl font-bold">Workspaces/Departments ({{ dataCount }})</p>
         <cv-button
           class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
           kind="primary"
@@ -20,12 +20,12 @@
 
       <cv-data-table
         ref="table"
-        :data="filteredWorkspaces"
+        :data="filteredData"
         :columns="columns"
       >
         <template slot="data">
           <cv-data-table-row
-            v-for="(row, rowIndex) in filteredWorkspaces"
+            v-for="(row, rowIndex) in filteredData"
             :key="`${rowIndex}`"
             :value="`${rowIndex}`"
           >
@@ -35,7 +35,7 @@
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p>{{ row.type }}</p>
+              <p>{{ row.workspace_type }}</p>
             </cv-data-table-cell>
             
             <cv-data-table-cell>
@@ -47,8 +47,8 @@
                   Edit
                 </p>
                 <p
-                  class="text-red-500"
-                  @click="remove"
+                  class="text-red-500 cursor-pointer"
+                  @click="remove(row.id)"
                 >
                   Delete
                 </p>
@@ -58,7 +58,7 @@
         </template>
       </cv-data-table>
       <p
-        v-if="!workspaces.length"
+        v-if="!dataCount"
         class="text-center w-full py-6"
       >
         No workspaces to show
@@ -71,14 +71,17 @@
 <script>
 import AddEditWorkspace from '@/components/admin/modals/AddEditWorkspace'
 import { mapActions, mapState } from 'vuex'
+import DataMixin from '@/mixins/data'
+
 export default {
   name: 'Workspaces',
 
   components: {AddEditWorkspace},
 
+  mixins: [DataMixin],
+
   data() {
     return {
-      search: '',
       columns: [
         'Name',
         'Type',
@@ -88,18 +91,16 @@ export default {
     }
   },
 
+
   computed: {
     ...mapState({
-      workspaces: (state) => state.workspaces.workspaces,
+      data: (state) => state.workspaces.workspaces,
     }),
-    filteredWorkspaces() {
-      return this.workspaces.filter(data => !this.search || data.name.toLowerCase().includes(this.search.toLowerCase()))
-    },
   },
 
-  // created() {
-  //   this.refresh()
-  // },
+  created() {
+    this.refresh()
+  },
 
   methods: {
     ...mapActions({
@@ -113,9 +114,9 @@ export default {
       this.loading = false
     },
 
-    async remove() {
+    async remove(id) {
       this.loading = true
-      await this.deleteWorkspace()
+      await this.deleteWorkspace(id)
       this.loading = false
     },
   },

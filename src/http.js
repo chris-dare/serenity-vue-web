@@ -22,12 +22,18 @@ http.interceptors.request.use(
 )
 
 // Refresh JWT if 401 is returned
-http.interceptors.response.use(undefined, (error) => {
+http.interceptors.response.use(undefined, async (error) => {
   const errorResponse = error.response
   console.log('error response', errorResponse)
   if (errorResponse.status === 401 &&
     errorResponse.data.code === 'token_not_valid') {
-    store.dispatch('auth/refresh')
+    await store.dispatch('auth/refresh')
+
+    errorResponse.config.__isRetryRequest = true
+    errorResponse.config.headers.Authorization =
+            store.getters['auth/authorizationHeader']
+    return Promise.resolve(axios(errorResponse.config))
+
   }
 
   return Promise.reject(errorResponse)

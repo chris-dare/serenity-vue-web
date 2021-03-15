@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto w-4/5 space-y-4">
     <div class="flex items-center justify-between">
-      <p class="text-xl font-bold">Locations ({{ locations.length }})</p>
+      <p class="text-xl font-bold">Locations ({{ dataCount }})</p>
 
       <cv-button
         class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
@@ -19,12 +19,12 @@
     />
     <cv-data-table
       ref="table"
-      :data="filteredLocations"
+      :data="filteredData"
       :columns="columns"
     >
       <template slot="data">
         <cv-data-table-row
-          v-for="(row, rowIndex) in filteredLocations"
+          v-for="(row, rowIndex) in filteredData"
           :key="`${rowIndex}`"
           :value="`${rowIndex}`"
         >
@@ -64,7 +64,7 @@
       </template>
     </cv-data-table>
     <p
-      v-if="!locations.length"
+      v-if="!dataCount"
       class="text-center w-full py-6"
     >
       No locations to show
@@ -76,11 +76,17 @@
 <script>
 import AddEditLocation from '@/components/admin/modals/AddEditLocation'
 import { mapActions, mapState } from 'vuex'
+import DataMixin from '@/mixins/data'
+
 export default {
+  name: 'Locations',
+
   components: { AddEditLocation },
+
+  mixins: [DataMixin],
+
   data() {
     return {
-      search: '',
       columns: ['Name', 'Address', 'City'],
       loading: false,
     }
@@ -88,23 +94,12 @@ export default {
 
   computed: {
     ...mapState({
-      locations: (state) => state.locations.locations,
+      data: (state) => state.locations.locations,
     }),
-    filteredLocations() {
-      return this.locations.filter(
-        (data) =>
-          !this.search ||
-          data.location_name
-            .toLowerCase()
-            .includes(this.search.toLowerCase()) ||
-          data.city.toLowerCase().includes(this.search.toLowerCase()) ||
-          data.street_address.toLowerCase().includes(this.search.toLowerCase()),
-      )
-    },
   },
 
   created() {
-    this.refresh()
+    this.searchTerms = ['location_name', 'city', 'street_address']
   },
 
   methods: {
