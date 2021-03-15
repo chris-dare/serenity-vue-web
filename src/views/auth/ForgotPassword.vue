@@ -17,7 +17,7 @@
           >
           <p class="text-white my-4">Forgot Password</p>
           <p class="text-white w-60">
-            Please enter your mobile number or email below to get a reset link.
+            Please enter your email below to get a reset link.
           </p>
 
           <div class="mt-8">

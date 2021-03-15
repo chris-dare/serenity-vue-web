@@ -15,7 +15,7 @@ export default {
       const pathRequiresAuth = requiresAuth(to)
       const isAuthRoute = ['AuthLogin'].includes(to.name)
       if(loggedIn && isAuthRoute){
-        next({name: 'Dashboard'})
+        next({name: 'GetStarted'})
         return
       }
       if(!loggedIn && pathRequiresAuth){

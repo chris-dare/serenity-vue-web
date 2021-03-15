@@ -2,7 +2,7 @@
   <div>
     <div class="w-4/5 mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Services ({{ 5 }})</p>
+        <p class="text-xl font-bold">Services ({{ dataCount }})</p>
         <div class="flex items-center space-x-2">
           <SeButton
             variant="secondary"
@@ -28,17 +28,16 @@
         ref="table"
         :data="[]"
         :columns="columns"
-        :pagination="{ itemsPerPage:10, numberOfItems: 12, pageSizes: [10, 15, 20, 25] }"
       >
         <template slot="data">
           <cv-data-table-row
-            v-for="(row, rowIndex) in 10"
+            v-for="(row, rowIndex) in filteredData"
             :key="`${rowIndex}`"
             :value="`${rowIndex}`"
           >
             <cv-data-table-cell>
               <div class="flex items-center space-x-2 py-2">
-                <p>{{ $faker().lorem.word() }}</p>
+                <p>{{ row.healthcare_service_name }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
@@ -52,7 +51,7 @@
               <div class="flex items-center space-x-6">
                 <p
                   class="cursor-pointer"
-                  @click="$trigger('service:edit:open', {name:$faker().name.findName()})"
+                  @click="$trigger('service:edit:open', { ...row })"
                 >
                   Edit
                 </p>
@@ -69,10 +68,15 @@
 
 <script>
 import AddEditService from '@/components/admin/modals/AddEditService'
+import DataMixin from '@/mixins/data'
+import { mapState } from 'vuex'
+
 export default {
   name: 'Services',
 
   components: {AddEditService},
+
+  mixins: [DataMixin],
 
   data() {
     return {
@@ -85,5 +89,16 @@ export default {
       ],
     }
   },
+
+  computed: {
+    ...mapState({
+      data: (state) => state.services.services,
+    }),
+  },
+
+  created() {
+    this.searchTerms = ['healthcare_service_location_name', 'healthcare_service_name']
+  },
+
 }
 </script>

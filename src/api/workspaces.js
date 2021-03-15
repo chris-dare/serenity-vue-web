@@ -16,6 +16,6 @@ export default {
   },
 
   delete(providerId,id) {
-    return http.delete(`${this.url}${providerId}/workspaces/${id}`)
+    return http.delete(`${this.url}${providerId}/workspaces?workspace_id=${id}`)
   },
 }

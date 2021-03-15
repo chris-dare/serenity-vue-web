@@ -20,12 +20,12 @@
 
     <cv-data-table
       ref="table"
-      :data="filteredRoloes"
+      :data="filteredRoles"
       :columns="columns"
     >
       <template slot="data">
         <cv-data-table-row
-          v-for="(row, rowIndex) in filteredRoloes"
+          v-for="(row, rowIndex) in filteredRoles"
           :key="`${rowIndex}`"
           :value="`${rowIndex}`"
         >
@@ -93,7 +93,7 @@ export default {
     ...mapState({
       roles: (state) => state.roles.roles,
     }),
-    filteredRoloes() {
+    filteredRoles() {
       return this.roles.filter(data => !this.search || data.name.toLowerCase().includes(this.search.toLowerCase()))
     },
   },

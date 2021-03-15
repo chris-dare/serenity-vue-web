@@ -4,7 +4,7 @@
     close-aria-label="Close"
     :visible="visible"
     size="xs"
-    @modal-hidden="visible = false"
+    @modal-hidden="close"
   >
     <template slot="content">
       <div class="space-y-8">
@@ -15,29 +15,29 @@
           placeholder="eg Out patient"
         />
         <p>Workspace features access</p>
-        <cv-checkbox
+        <cv-radio-button
           v-model="form.workspace_type"
-          value="check-1"
+          value="PATIENTS"
           label="Patients"
         />
-        <cv-checkbox
+        <cv-radio-button
           v-model="form.workspace_type"
-          value="check-2"
+          value="BILL"
           label="Billing"
         />
-        <cv-checkbox
+        <cv-radio-button
           v-model="form.workspace_type"
-          value="check-3"
+          value="APPOINTMENTS"
           label="Appointments"
         />
-        <cv-checkbox
+        <cv-radio-button
           v-model="form.workspace_type"
-          value="check-4"
+          value="VISITS"
           label="Visits"
         />
-        <cv-checkbox
+        <cv-radio-button
           v-model="form.workspace_type"
-          value="check-5"
+          value="SCHEDULES"
           label="Schedules"
         />
         <cv-button-skeleton
@@ -47,13 +47,13 @@
         <SeButton
           v-else
           full
-          @click="save"
+          @click="submit"
         >
           {{ form.id ? 'Save changes' : 'Create new workspace' }}
         </SeButton>
         <p
           class="text-center"
-          @click="visible = false"
+          @click="close"
         >
           Cancel
         </p>
@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       form: {
-        workspace_type: [],
+        workspace_type: '',
       },
       visible: false,
       loading: false,
@@ -83,7 +83,7 @@ export default {
     },
     'workspace:edit:open': function(data){
       this.visible = true
-      this.form = { ...data.params[0], workspace_name: data.params[0].name, workspace_type: [data.params[0].type] }
+      this.form = { ...data.params[0], workspace_name: data.params[0].name, workspace_type: data.params[0].workspace_type }
     },
   },
 
@@ -113,7 +113,7 @@ export default {
         this.$toast.open({
           message: 'Workspace successfully added',
         })
-        this.visible = false
+        this.close
       }
 
       this.loading = false
@@ -132,11 +132,17 @@ export default {
         this.$toast.open({
           message: 'Workspace successfully updated',
         })
-        this.visible = false
+        this.close
       }
 
       this.loading = false
       
+    },
+    close() {
+      this.visible = false
+      this.form = {
+        workspace_type: [],
+      }
     },
   },
 }

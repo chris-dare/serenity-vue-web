@@ -28,7 +28,6 @@ export default {
     const { data } = await WorkspacesAPI
       .update(provider.id,payload)
       .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
         throw error
       })
 
@@ -37,13 +36,12 @@ export default {
 
   async deleteWorkspace({ commit, rootState}, id) {
     const provider = rootState.auth.provider
-    const { data } = await WorkspacesAPI
+    await WorkspacesAPI
       .delete(provider.id,id)
       .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
         throw error
       })
 
-    commit(DELETE_WORKSPACE, data)
+    commit(DELETE_WORKSPACE, id)
   },
 }
