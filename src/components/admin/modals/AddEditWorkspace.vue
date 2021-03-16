@@ -14,7 +14,7 @@
           label="Name"
           placeholder="eg Out patient"
         />
-        <div class="flex flex-row justify-center">
+        <div>
           <div class="flex flex-col items-start space-y-8">
             <p>Workspace features access</p>
             <cv-radio-button
@@ -42,25 +42,25 @@
               value="SCHEDULES"
               label="Schedules"
             />
-            <cv-button-skeleton
-              v-if="loading"
-              class="w-full"
-            />
-            <SeButton
-              v-else
-              full
-              @click="submit"
-            >
-              {{ form.id ? 'Save changes' : 'Create new workspace' }}
-            </SeButton>
           </div>
         </div>
-        <p
-          class="text-center"
-          @click="close"
-        >
-          Cancel
-        </p>
+        
+
+        <div class="flex items-center justify-between">
+          <SeButton
+            variant="secondary"
+            @click="close"
+          >
+            Cancel
+          </SeButton>
+          <SeButton
+            :loading="loading"
+            full
+            @click="submit"
+          >
+            {{ form.id ? 'Save changes' : 'Create new workspace' }}
+          </SeButton>
+        </div>
       </div>
     </template>
   </cv-modal>

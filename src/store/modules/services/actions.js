@@ -15,30 +15,32 @@ export default {
     const provider = rootState.auth.provider
     const { data } = await ServicesAPI
       .create(provider.id,payload)
-      .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
-        throw error
+      .catch((error) => {
+        console.log('error creating service', error)
+        throw error.data || error
       })
 
     commit(UPDATE_SERVICE, data.data)
+    return data
   },
 
   async updateService({ commit, rootState}, payload) {
     const provider = rootState.auth.provider
     const { data } = await ServicesAPI
       .update(provider.id,payload)
-      .catch(({ response: { data: error } }) => {
+      .catch((error) => {
         throw error
       })
 
     commit(UPDATE_SERVICE, data.data)
+    return data
   },
 
   async deleteService({ commit, rootState}, id) {
     const provider = rootState.auth.provider
     await ServicesAPI
       .delete(provider.id,id)
-      .catch(({ response: { data: error } }) => {
+      .catch((error) => {
         throw error
       })
 
