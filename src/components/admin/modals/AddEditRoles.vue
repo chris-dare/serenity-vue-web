@@ -16,6 +16,7 @@
         />
         <div class="space-y-2">
           <p class="text-primary text-left text-xs">Workspace access</p>
+         
           <div class="grid grid-cols-3">
             <cv-checkbox
               v-for="(workspace, index) in workspaces"
@@ -119,6 +120,7 @@ export default {
     ...mapState({
       resources: (state) => state.resources.resources,
       workspaces: (state) => state.workspaces.workspaces,
+
     }),
     ...mapGetters({
       resourceInd: 'resources/resources',
