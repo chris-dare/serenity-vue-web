@@ -18,29 +18,11 @@
           <div class="flex flex-col items-start space-y-8">
             <p>Workspace features access</p>
             <cv-radio-button
+              v-for="workspaceType in workspaceTypes"
+              :key="workspaceType.value"
               v-model="form.workspace_type"
-              value="PATIENTS"
-              label="Patients"
-            />
-            <cv-radio-button
-              v-model="form.workspace_type"
-              value="BILL"
-              label="Billing"
-            />
-            <cv-radio-button
-              v-model="form.workspace_type"
-              value="APPOINTMENTS"
-              label="Appointments"
-            />
-            <cv-radio-button
-              v-model="form.workspace_type"
-              value="VISITS"
-              label="Visits"
-            />
-            <cv-radio-button
-              v-model="form.workspace_type"
-              value="SCHEDULES"
-              label="Schedules"
+              :value="workspaceType.type"
+              :label="workspaceType.name"
             />
           </div>
         </div>
@@ -78,6 +60,19 @@ export default {
       },
       visible: false,
       loading: false,
+      workspaceTypes: [
+        {'name': 'Billing', 'type': 'BILL'},
+        {'name': 'Reception', 'type': 'RECEPT'},
+        {'name': 'Out Patient', 'type': 'OPD'},
+        {'name': 'In Patient', 'type': 'IPD'},
+        {'name': 'Pharmacy', 'type': 'PHARM'},
+        {'name': 'Virtual Care', 'type': 'VIRT'},
+        {'name': 'Diagnostic', 'type': 'DIAG'},
+        {'name': 'Home Care', 'type': 'HOME'},
+        {'name': 'Emergency', 'type': 'EMERG'},
+        {'name': 'Mother and Child', 'type': 'MOM'},
+        {'name': 'Admin', 'type': 'ADMIN'},
+      ],
     }
   },
 
@@ -108,7 +103,6 @@ export default {
       const data = await this.createWorkspace(this.form).catch((error) => {
         this.$toast.open({
           message: error.message || 'Something went wrong!',
-          duration: 0,
           type: 'error',
         })
         this.loading = false
