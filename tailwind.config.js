@@ -37,8 +37,8 @@ module.exports = {
         102: '32rem',
       },
       fontFamily: {
-        graphik: 'Graphik',
-        body: ['Graphik'],
+        graphik: 'Graphik, Open Sans',
+        body: ['Graphik', 'Open Sans'],
       },
       backgroundImage: () => ({
         logo: "url('/fonts/auth_bg.svg')",
