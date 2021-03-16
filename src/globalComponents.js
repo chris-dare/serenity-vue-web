@@ -12,6 +12,7 @@ import FilterDropdown from '@/components/ui/FilterDropdown'
 import InfoBlock from '@/components/ui/InfoBlock'
 import Avatar from '@/components/ui/Avatar'
 import SuccessModal from '@/components/ui/SuccessModal'
+import ConfirmActionModal from '@/components/ui/ConfirmActionModal'
 
 
 Vue.component('ToggleList', ToggleList)
@@ -26,3 +27,4 @@ Vue.component('FilterDropdown', FilterDropdown)
 Vue.component('InfoBlock', InfoBlock)
 Vue.component('Avatar', Avatar)
 Vue.component('SuccessModal', SuccessModal)
+Vue.component('ConfirmActionModal', ConfirmActionModal)

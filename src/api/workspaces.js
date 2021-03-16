@@ -12,10 +12,10 @@ export default {
   },
 
   update(providerId, params) {
-    return http.patch(`${this.url}${providerId}/workspaces/${params.id}`, params)
+    return http.patch(`${this.url}${providerId}/workspaces`, params)
   },
 
   delete(providerId,id) {
-    return http.delete(`${this.url}${providerId}/workspaces?workspace_id=${id}`)
+    return http.delete(`${this.url}${providerId}/workspaces`, {data: {id: id}})
   },
 }

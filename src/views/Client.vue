@@ -15,6 +15,7 @@
       </LeftSidebarLayout>
       <ChangePasswordModal ref="changePasswordModal" />
       <EditProfileModal ref="editProfileModal" />
+      <ConfirmActionModal />
     </div>
   </div>
 </template>
