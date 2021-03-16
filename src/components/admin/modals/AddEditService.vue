@@ -173,7 +173,12 @@
           />
         </div>
         <div class="flex items-center justify-between">
-          <p class="text-center">Cancel</p>
+          <SeButton
+            variant="secondary"
+            @click="close"
+          >
+            Cancel
+          </SeButton>
 
           
           <SeButton
@@ -273,12 +278,13 @@ export default {
         newForm.price_tiers = [{name: 'standard', cost: parseInt(this.price)}]
       } else {
         newForm.price_tiers = this.tiers.map(t => {
-          newForm.cost = parseInt(t.cost)
+          console.log('t', parseInt(t.cost))
+          t.cost = parseInt(t.cost)
           return t
         })
       }
 
-
+      console.log('newForm', newForm)
       return newForm
     },
 
@@ -308,7 +314,7 @@ export default {
       this.loading = true
       await this.createService(this.formatOutgoingData(this.form)).catch((error) => {
         this.$toast.open({
-          message: 'Fill all required fields',
+          message: error.message || 'Something went wrong!',
           type: 'error',
         })
         this.loading = false
@@ -318,15 +324,15 @@ export default {
       this.$toast.open({
         message: 'Service successfully added',
       })
-      this.close
+      this.close()
       this.loading = false
     },
 
     async update() {
       this.loading = true
-      const data = await this.updateService(this.formatOutgoingData(this.form)).catch(() => {
+      const data = await this.updateService(this.formatOutgoingData(this.form)).catch((error) => {
         this.$toast.open({
-          message: 'Something went wrong!',
+          message: error.message || 'Something went wrong!',
           type: 'error',
         })
         this.loading = false
@@ -336,12 +342,30 @@ export default {
         this.$toast.open({
           message: 'Service successfully updated',
         })
-        this.close
+        this.close()
       }
 
       this.loading = false
       
     },
+
+    close() {
+      this.visible = false
+      this.form = {
+        healthcare_service_not_available_times: {
+          during: {
+            start: '',
+            end: '',
+          },
+        },
+        healthcare_service_available_times: {
+          daysOfWeek: [],
+        },
+        healthcare_service_categories: [],
+        healthcare_service_locations: [],
+        healthcare_service_appointment_required: 'yes',
+      }
+    }
 
   },
 

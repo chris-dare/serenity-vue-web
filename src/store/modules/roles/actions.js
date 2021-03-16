@@ -16,7 +16,6 @@ export default {
     const { data } = await RolesAPI
       .create(provider.id,payload)
       .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
         throw error
       })
 
@@ -27,24 +26,23 @@ export default {
     const provider = rootState.auth.provider
     const { data } = await RolesAPI
       .update(provider.id, payload)
-      .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
-        throw error
+      .catch((error) => {
+        throw error.data || error
       })
 
     commit(UPDATE_ROLE, data.data)
+    return data
   },
 
   async duplicateRole({ commit, rootState}, payload) {
     const provider = rootState.auth.provider
     const { data } = await RolesAPI
-      .duplicate(provider.id, payload)
-      .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
-        throw error
+      .create(provider.id, payload)
+      .catch((error) => {
+        throw error.data || error
       })
-
     commit(UPDATE_ROLE, data.data)
+    return data
   },
 
   async deleteRole({ commit, rootState}, id) {
@@ -52,7 +50,6 @@ export default {
     await RolesAPI
       .delete(provider.id,id)
       .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
         throw error
       })
 

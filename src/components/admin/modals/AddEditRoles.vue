@@ -8,7 +8,7 @@
   >
     <template slot="content">
       <div class="space-y-8">
-        <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'Add' }} Role</p>
+        <p class="text-lg font-semibold">{{ type === 'update' ? 'Edit' : 'Duplicate' }} Role</p>
         <cv-text-input
           v-model="form.name"
           label="Name of role"
@@ -161,15 +161,15 @@ export default {
       if (this.type === 'update') {
         this.update()
       } else {
-        this.save()
+        this.duplicate()
       }
     },
 
     async save() {
       this.loading = true
-      const data = await this.createRole(this.form).catch(() => {
+      const data = await this.createRole(this.form).catch((error) => {
         this.$toast.open({
-          message: 'Something went wrong!',
+          message: error.message || 'Something went wrong!',
           type: 'error',
         })
         this.loading = false
@@ -190,7 +190,7 @@ export default {
       const params = this.$utils.formatOutgoingRoles(this.form)
       await this.updateRole(params).catch((error) => {
         this.$toast.open({
-          message: 'Something went wrong!',
+          message: error.message || 'Something went wrong!',
           type: 'error',
         })
         this.loading = false
@@ -210,7 +210,7 @@ export default {
       const params = this.$utils.formatOutgoingRoles(this.form)
       await this.duplicateRole(params).catch((error) => {
         this.$toast.open({
-          message: 'Something went wrong!',
+          message: error.message || 'Something went wrong!',
           type: 'error',
         })
         this.loading = false

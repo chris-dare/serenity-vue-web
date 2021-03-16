@@ -8,7 +8,7 @@
   >
     <template slot="content">
       <div class="w-full flex flex-col items-center justify-center pt-6 space-y-4">
-        <p class="text-serenity-primary my-4 text-lg">Are you sure you want to delete  {{ label }}</p>
+        <p class="text-serenity-primary my-4 text-lg">Are you sure you want to delete {{ label }}</p>
         <div class="flex items-center justify-between space-x-4">
           <SeButton
             variant="white"
