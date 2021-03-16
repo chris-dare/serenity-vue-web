@@ -1,16 +1,30 @@
 <template>
   <cv-modal
-    :kind="type == 'delete' ? 'danger' : ''"
-    size="xs"
+    class="se-no-title-modal"
+    close-aria-label="Close"
     :visible="visible"
-    :auto-hide-off="false"
+    size="xs"
     @modal-hidden="visible = false"
-    @primary-click="confirm"
-    @secondary-click="cancel"
   >
-    <template slot="title">Are you sure you want to delete {{ label }}</template>
-    <template slot="secondary-button">Cancel</template>
-    <template slot="primary-button">Confirm</template>
+    <template slot="content">
+      <div class="w-full flex flex-col items-center justify-center pt-6 space-y-4">
+        <p class="text-serenity-primary my-4 text-lg">Are you sure you want to delete  {{ label }}</p>
+        <div class="flex items-center justify-between space-x-4">
+          <SeButton
+            variant="white"
+            @click="cancel"
+          >
+            Close
+          </SeButton>
+          <SeButton
+            :variant="type == 'delete' ? 'danger' : ''"
+            @click="confirm"
+          >
+            <span class="capitalize">{{ type }}</span>
+          </SeButton>
+        </div>
+      </div>
+    </template>
   </cv-modal>
 </template>
 
@@ -61,7 +75,6 @@ export default {
     },
     cancel() {
       this.visible = false
-      this.$resetData()
     },
   },
 }
