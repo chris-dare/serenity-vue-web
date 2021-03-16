@@ -117,7 +117,20 @@ export default {
   
     async remove(rowId) {
       this.loading = true
-      await this.deleteRole(rowId)
+      await this.deleteRole(rowId).then(()=>{
+        this.$toast.open({
+        message: 'Role successfully deleted',
+      })
+      })
+      .catch((error) => {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+        throw error
+      })
+      
       this.loading = false
       this.$trigger('confirm:delete:close')
     },
