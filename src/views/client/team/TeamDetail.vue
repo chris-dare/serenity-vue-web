@@ -19,7 +19,7 @@
               {{ currentUser.title }} {{ currentUser.first_name }}
               {{ currentUser.last_name }}
             </p>
-            <p class="text-secondary">Gynaecologist</p>
+            <p class="text-secondary capitalize">{{ specialtyName }}</p>
           </div>
         </div>
       </div>
@@ -69,6 +69,12 @@ export default {
       }
       return this.currentUser.practitioner_role.name
     },
+    specialtyName() {
+      if (!this.currentUser || !this.currentUser.practitioner_specialty) {
+        return ''
+      }
+      return this.currentUser.practitioner_specialty[0]
+    },
     generalFields() {
       return [
         { label: 'First Name', value: this.currentUser.first_name },
@@ -84,16 +90,16 @@ export default {
       ]
     },
     workspaceFields() {
-      let specialty
-      if (this.currentUser) {
-        if (this.currentUser.practitioner_specialty) {
-          specialty = this.currentUser.practitioner_specialty[0]
-        }
-      }
+      // let specialty
+      // if (this.currentUser) {
+      //   if (this.currentUser.practitioner_specialty) {
+      //     specialty = this.currentUser.practitioner_specialty[0]
+      //   }
+      // }
       return [
         { label: 'Workspaces', value: this.workspaces },
         { label: 'Clinical Role', value: this.roleName },
-        { label: 'Specialty', value: specialty },
+        { label: 'Specialty', value: this.specialtyName },
         { label: 'Medical Practice code', value: null },
       ]
     },

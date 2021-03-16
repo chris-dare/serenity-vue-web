@@ -3,7 +3,12 @@
     <p class="text-secondary">{{ label }}</p>
     <div>
       <slot>
-        <p :class="descriptionColor">{{ description }}</p>
+        <p
+          :class="descriptionColor"
+          class="capitalize"
+        >
+          {{ description }}
+        </p>
       </slot>
     </div>
   </div>
