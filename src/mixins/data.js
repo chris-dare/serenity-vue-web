@@ -2,7 +2,7 @@
 export default {
   data() {
     return {
-      searchTerms: ['name'],
+      searchTerms: ['workspace_name', 'workspace_type'],
       search: '',
       page: 1,
       pageLength: 10,

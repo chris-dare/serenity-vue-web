@@ -14,6 +14,7 @@ import Avatar from '@/components/ui/Avatar'
 import SuccessModal from '@/components/ui/modals/SuccessModal'
 import ConfirmDeleteModal from '@/components/ui/modals/ConfirmDeleteModal'
 import Timepicker from '@/components/ui/Timepicker'
+import ConfirmActionModal from '@/components/ui/ConfirmActionModal'
 
 
 Vue.component('ToggleList', ToggleList)
@@ -30,3 +31,4 @@ Vue.component('Avatar', Avatar)
 Vue.component('SuccessModal', SuccessModal)
 Vue.component('ConfirmDeleteModal', ConfirmDeleteModal)
 Vue.component('Timepicker', Timepicker)
+Vue.component('ConfirmActionModal', ConfirmActionModal)

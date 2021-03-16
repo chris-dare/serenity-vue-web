@@ -13,6 +13,9 @@ import HasPermissionDirective from '@/plugins/has-permission'
 // all vue plugins
 import '@/plugins'
 
+// global mixins
+import '@/mixins'
+
 import '@/filters'
 import '@/globalComponents'
 import 'vue-multiselect/dist/vue-multiselect.min.css'

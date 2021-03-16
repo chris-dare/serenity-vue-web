@@ -49,7 +49,7 @@
                 <p
                   v-if="!row.is_core"
                   class="text-red-500 cursor-pointer"
-                  @click="remove(row.id)"
+                  @click="remove(row)"
                 >
                   Delete
                 </p>
@@ -116,10 +116,28 @@ export default {
       this.loading = false
     },
 
-    async remove(id) {
-      this.loading = true
-      await this.deleteWorkspace(id)
-      this.loading = false
+    remove(data) {
+      const id = data.id
+      this.$trigger('confirm-action-modal:open', {
+        label: data.workspace_name,
+        type: 'delete',
+        callback: async ()=>{
+          this.loading = true
+          try {
+            const data = await this.deleteWorkspace(id)
+            this.$toast.open({
+              message: data.message,
+            })
+          } catch (error) {
+            this.$toast.open({
+              message: error.message || 'Something went wrong!',
+              type: 'error',
+            })
+          }finally{
+            this.loading = false
+          }
+        }
+      })
     },
   },
 }

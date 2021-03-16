@@ -15,33 +15,33 @@ export default {
     const provider = rootState.auth.provider
     const { data } = await WorkspacesAPI
       .create(provider.id,payload)
-      .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
-        throw error
+      .catch((error) => {
+        // this.$service.fail(error)
+        throw error.data || error
       })
-
     commit(UPDATE_WORKSPACE, data.data)
+    return data
   },
 
   async updateWorkspace({ commit, rootState}, payload) {
     const provider = rootState.auth.provider
     const { data } = await WorkspacesAPI
       .update(provider.id,payload)
-      .catch(({ response: { data: error } }) => {
-        throw error
+      .catch((error) => {
+        throw error.data || error
       })
-
     commit(UPDATE_WORKSPACE, data.data)
+    return data
   },
 
   async deleteWorkspace({ commit, rootState}, id) {
     const provider = rootState.auth.provider
-    await WorkspacesAPI
-      .delete(provider.id,id)
-      .catch(({ response: { data: error } }) => {
-        throw error
-      })
-
-    commit(DELETE_WORKSPACE, id)
+    const {data} = await WorkspacesAPI
+        .delete(provider.id,id)
+        .catch((error) => {
+          throw error.data || error
+        })
+      commit(DELETE_WORKSPACE, id)
+      return data
   },
 }

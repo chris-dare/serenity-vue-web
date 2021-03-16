@@ -14,43 +14,47 @@
           label="Name"
           placeholder="eg Out patient"
         />
-        <p>Workspace features access</p>
-        <cv-radio-button
-          v-model="form.workspace_type"
-          value="PATIENTS"
-          label="Patients"
-        />
-        <cv-radio-button
-          v-model="form.workspace_type"
-          value="BILL"
-          label="Billing"
-        />
-        <cv-radio-button
-          v-model="form.workspace_type"
-          value="APPOINTMENTS"
-          label="Appointments"
-        />
-        <cv-radio-button
-          v-model="form.workspace_type"
-          value="VISITS"
-          label="Visits"
-        />
-        <cv-radio-button
-          v-model="form.workspace_type"
-          value="SCHEDULES"
-          label="Schedules"
-        />
-        <cv-button-skeleton
-          v-if="loading"
-          class="w-full"
-        />
-        <SeButton
-          v-else
-          full
-          @click="submit"
-        >
-          {{ form.id ? 'Save changes' : 'Create new workspace' }}
-        </SeButton>
+        <div class="flex flex-row justify-center">
+          <div class="flex flex-col items-start space-y-8">
+            <p>Workspace features access</p>
+            <cv-radio-button
+              v-model="form.workspace_type"
+              value="PATIENTS"
+              label="Patients"
+            />
+            <cv-radio-button
+              v-model="form.workspace_type"
+              value="BILL"
+              label="Billing"
+            />
+            <cv-radio-button
+              v-model="form.workspace_type"
+              value="APPOINTMENTS"
+              label="Appointments"
+            />
+            <cv-radio-button
+              v-model="form.workspace_type"
+              value="VISITS"
+              label="Visits"
+            />
+            <cv-radio-button
+              v-model="form.workspace_type"
+              value="SCHEDULES"
+              label="Schedules"
+            />
+            <cv-button-skeleton
+              v-if="loading"
+              class="w-full"
+            />
+            <SeButton
+              v-else
+              full
+              @click="submit"
+            >
+              {{ form.id ? 'Save changes' : 'Create new workspace' }}
+            </SeButton>
+          </div>
+        </div>
         <p
           class="text-center"
           @click="close"
@@ -101,9 +105,10 @@ export default {
     },
     async save() {
       this.loading = true
-      const data = await this.createWorkspace(this.form).catch(() => {
+      const data = await this.createWorkspace(this.form).catch((error) => {
         this.$toast.open({
-          message: 'Something went wrong!',
+          message: error.message || 'Something went wrong!',
+          duration: 0,
           type: 'error',
         })
         this.loading = false
@@ -111,18 +116,18 @@ export default {
 
       if (data) {
         this.$toast.open({
-          message: 'Workspace successfully added',
+          message: data.message,
         })
-        this.close
+        this.close()
       }
 
       this.loading = false
     },
     async update() {
       this.loading = true
-      const data = await this.updateWorkspace(this.form).catch(() => {
+      const data = await this.updateWorkspace(this.form).catch((error) => {
         this.$toast.open({
-          message: 'Something went wrong!',
+          message: error.message || 'Something went wrong!',
           type: 'error',
         })
         this.loading = false
@@ -130,9 +135,9 @@ export default {
 
       if (data) {
         this.$toast.open({
-          message: 'Workspace successfully updated',
+          message: data.message || 'Workspace successfully updated',
         })
-        this.close
+        this.close()
       }
 
       this.loading = false
