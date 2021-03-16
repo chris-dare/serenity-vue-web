@@ -1,4 +1,4 @@
-import { SET_RESOURCES, UPDATE_RESOURCE, DELETE_RESOURCE, SET_SPECIALTIES } from './mutation-types'
+import { SET_RESOURCES, UPDATE_RESOURCE, DELETE_RESOURCE, SET_SPECIALTIES, SET_CATEGORIES, SET_CODES } from './mutation-types'
 
 export default {
   [SET_RESOURCES](state, resources) {
@@ -26,5 +26,12 @@ export default {
 
   [SET_SPECIALTIES](state, specialties) {
     state.specialties = specialties
+  },
+
+  [SET_CATEGORIES](state, categories) {
+    state.categories = categories
+  },
+  [SET_CODES](state, codes) {
+    state.codes = codes
   },
 }

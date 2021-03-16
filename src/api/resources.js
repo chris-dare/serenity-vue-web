@@ -7,15 +7,11 @@ export default {
     return http.get(`${this.url}${providerId}/admin/resources`)
   },
 
-  create(providerId, params) {
-    return http.post(`${this.url}${providerId}/resources`, params)
+  categories() {
+    return http.get('FHIR/healthcare-service-categories')
   },
 
-  update(providerId, params) {
-    return http.patch(`${this.url}${providerId}/resources/${params.id}`, params)
-  },
-
-  delete(providerId,id) {
-    return http.delete(`${this.url}${providerId}/resources/${id}`)
+  codes() {
+    return http.get('FHIR/healthcare-service-provision-codes')
   },
 }

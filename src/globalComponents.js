@@ -11,7 +11,9 @@ import Button from '@/components/ui/Button'
 import FilterDropdown from '@/components/ui/FilterDropdown'
 import InfoBlock from '@/components/ui/InfoBlock'
 import Avatar from '@/components/ui/Avatar'
-import SuccessModal from '@/components/ui/SuccessModal'
+import SuccessModal from '@/components/ui/modals/SuccessModal'
+import ConfirmDeleteModal from '@/components/ui/modals/ConfirmDeleteModal'
+import Timepicker from '@/components/ui/Timepicker'
 
 
 Vue.component('ToggleList', ToggleList)
@@ -26,3 +28,5 @@ Vue.component('FilterDropdown', FilterDropdown)
 Vue.component('InfoBlock', InfoBlock)
 Vue.component('Avatar', Avatar)
 Vue.component('SuccessModal', SuccessModal)
+Vue.component('ConfirmDeleteModal', ConfirmDeleteModal)
+Vue.component('Timepicker', Timepicker)

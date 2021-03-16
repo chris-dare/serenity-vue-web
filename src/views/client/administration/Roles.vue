@@ -3,14 +3,14 @@
     <div class="flex items-center justify-between">
       <p class="text-xl font-bold">Roles ({{ roles.length }})</p>
 
-      <cv-button
+      <!-- <cv-button
         class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
         kind="primary"
         @click="$trigger('role:add:open')"
       >
         Add new role 
         <Add class="ml-4 w-5 h-5 text-white" />
-      </cv-button>
+      </cv-button> -->
     </div>
 
     <cv-search
@@ -40,19 +40,24 @@
             
           <cv-data-table-cell>
             <div class="flex items-center space-x-6">
-              <!-- <p
+              <p
                 class="cursor-pointer"
-                @click="$trigger('location:edit:open', {...row})"
+                @click="$trigger('role:duplicate:open', { ...row })"
               >
                 Duplicate
-              </p> -->
+              </p>
               <p
                 class="cursor-pointer"
                 @click="$trigger('role:edit:open', {...row})"
               >
                 Edit
               </p>
-              <!-- <p class="text-red-500">Delete</p> -->
+              <p
+                class="text-red-500 cursor-pointer"
+                @click="$trigger('confirm:delete:open', { data:row.id, label: 'Are you sure you want to delete this role?' })"
+              >
+                Delete
+              </p>
             </div>
           </cv-data-table-cell>
         </cv-data-table-row>
@@ -65,7 +70,7 @@
       No roles to show
     </p>
     <AddEditRole />
-    <SuccessModal />
+    <ConfirmDeleteModal @delete="remove" />
   </div>
 </template>
 
@@ -105,12 +110,20 @@ export default {
   methods: {
     ...mapActions({
       getRoles: 'roles/getRoles',
+      deleteRole: 'roles/deleteRole',
     }),
 
     async refresh() {
       this.loading = true
       await this.getRoles()
       this.loading = false
+    },
+  
+    async remove(rowId) {
+      this.loading = true
+      await this.deleteRole(rowId)
+      this.loading = false
+      this.$trigger('confirm:delete:close')
     },
   },
 }

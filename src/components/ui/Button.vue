@@ -1,13 +1,17 @@
 <template>
-  <cv-button
-    :class="[buttonClass, full ? 'w-full' : '']"
-    class="px-4 flex items-center justify-center"
-    kind="primary"
-    :size="size"
-    @click="$emit('click')"
-  >
-    <slot>{{ label }}</slot>
-  </cv-button>
+  <span>
+    <cv-button-skeleton v-if="loading" />
+    <cv-button
+      v-else
+      :class="[buttonClass, full ? 'w-full' : '']"
+      class="px-4 flex items-center justify-center"
+      kind="primary"
+      :size="size"
+      @click="$emit('click')"
+    >
+      <slot>{{ label }}</slot>
+    </cv-button>
+  </span>
 </template>
 
 <script>
@@ -21,6 +25,10 @@ export default {
     },
 
     full: {
+      type: Boolean,
+      default: false,
+    },
+    loading: {
       type: Boolean,
       default: false,
     },

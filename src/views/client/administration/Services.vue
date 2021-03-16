@@ -29,11 +29,15 @@
         :data="[]"
         :columns="columns"
       >
-        <template slot="data">
+        <template
+          slot="data"
+        >
           <cv-data-table-row
             v-for="(row, rowIndex) in filteredData"
             :key="`${rowIndex}`"
             :value="`${rowIndex}`"
+            aria-label-expand-row="Go large"
+            aria-label-collapse-row="Go small"
           >
             <cv-data-table-cell>
               <div class="flex items-center space-x-2 py-2">
@@ -41,40 +45,58 @@
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p class="lowercase">{{ Math.random() }}</p>
+              <p class="lowercase">{{ row.healthcare_service_appointment_required ? 'Yes' : 'No' }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p>{{ 100.00 }}</p>
+              <p>{{ getLocations(row.healthcare_service_locations) }}</p>
             </cv-data-table-cell>
-            
+            <!-- Actions not ready -->
             <cv-data-table-cell>
               <div class="flex items-center space-x-6">
                 <p
                   class="cursor-pointer"
-                  @click="$trigger('service:edit:open', { ...row })"
+                  @click="$trigger('service:view:open', { ...row })"
                 >
-                  Edit
+                  View
                 </p>
-                <p class="text-red-500">Delete</p>
+                <!-- <p class="text-red-500">Delete</p> -->
               </div>
             </cv-data-table-cell>
+            <template slot="expandedContent">
+              <div class="px-8">
+                <div class="grid grid-cols-4 gap-8 border-b border-solid border-subtle py-2 mb-4">
+                  <p class="text-secondary">Service Tier</p>
+                  <p class="text-secondary">Tier Price</p>
+                </div>
+                <div
+                  v-for="(tier, index) in row.price_tiers"
+                  :key="index"
+                  class="grid grid-cols-4 gap-8 py-2"
+                >
+                  <p class="capitalize">{{ tier.name }}</p>
+                  <p>{{ tier.cost | formatMoney | toCedis }}</p>
+                </div>
+              </div>
+            </template>
           </cv-data-table-row>
         </template>
       </cv-data-table>
     </div>
     <AddEditService />
+    <ViewService />
   </div>
 </template>
 
 <script>
 import AddEditService from '@/components/admin/modals/AddEditService'
+import ViewService from '@/components/admin/modals/ViewService'
 import DataMixin from '@/mixins/data'
 import { mapState } from 'vuex'
 
 export default {
   name: 'Services',
 
-  components: {AddEditService},
+  components: { AddEditService, ViewService },
 
   mixins: [DataMixin],
 
@@ -83,8 +105,8 @@ export default {
       search: '',
       columns: [
         'Service',
-        'Service Id',
-        'Price',
+        'Appointment?',
+        'Locations',
         'Action',
       ],
     }
@@ -97,7 +119,16 @@ export default {
   },
 
   created() {
-    this.searchTerms = ['healthcare_service_location_name', 'healthcare_service_name']
+    this.searchTerms = ['healthcare_service_name']
+  },
+
+  methods: {
+    getLocations(services) {
+      if(!services.length) {
+        return ''
+      }
+      return services.map(service => service.location_name || service.display).join(',')
+    },
   },
 
 }

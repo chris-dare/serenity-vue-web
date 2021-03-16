@@ -7,7 +7,7 @@
     @modal-hidden="close"
   >
     <template slot="content">
-      <div class="space-y-8">
+      <div class="space-y-8 left-button">
         <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'New' }} workspace</p>
         <cv-text-input
           v-model="form.workspace_name"
@@ -83,7 +83,7 @@ export default {
     },
     'workspace:edit:open': function(data){
       this.visible = true
-      this.form = { ...data.params[0], workspace_name: data.params[0].name, workspace_type: data.params[0].workspace_type }
+      this.form = { ...data.params[0] }
     },
   },
 

@@ -35,15 +35,27 @@ export default {
     commit(UPDATE_ROLE, data.data)
   },
 
-  async deleteRole({ commit, rootState}, id) {
+  async duplicateRole({ commit, rootState}, payload) {
     const provider = rootState.auth.provider
     const { data } = await RolesAPI
+      .duplicate(provider.id, payload)
+      .catch(({ response: { data: error } }) => {
+        this.$service.fail(error)
+        throw error
+      })
+
+    commit(UPDATE_ROLE, data.data)
+  },
+
+  async deleteRole({ commit, rootState}, id) {
+    const provider = rootState.auth.provider
+    await RolesAPI
       .delete(provider.id,id)
       .catch(({ response: { data: error } }) => {
         this.$service.fail(error)
         throw error
       })
 
-    commit(DELETE_ROLE, data)
+    commit(DELETE_ROLE, id)
   },
 }
