@@ -42,12 +42,10 @@ export default {
   },
 
   async refresh({ commit,dispatch, state }) {
-    console.log('i got here')
     const refresh = state.refreshToken
 
     try {
       const { data } = await AuthAPI.refresh({ refresh })
-      console.log('data', data)
       commit(SET_TOKEN, data.access)
     } catch (error) {
       dispatch('setLoggedIn', false)

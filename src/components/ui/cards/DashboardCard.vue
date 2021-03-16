@@ -43,6 +43,7 @@ import User from '@carbon/icons-vue/es/user/32'
 import Download from '@carbon/icons-vue/es/download/32'
 import Cross from '@carbon/icons-vue/es/health-cross/32'
 import Categories from '@carbon/icons-vue/es/categories/32'
+import Folder from '@carbon/icons-vue/es/folder--add/32'
 
 export default {
   name: 'DashboardCard',
@@ -57,6 +58,7 @@ export default {
     Download,
     Cross,
     Categories,
+    Folder
   },
 
   props: {

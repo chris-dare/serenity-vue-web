@@ -15,7 +15,11 @@ p {
 
 *:focus {
   outline: none !important;
-  // font-family: 'Graphik' !important;
+}
+
+button:focus{
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .series::-webkit-scrollbar {

@@ -75,7 +75,7 @@
         :key="index"
         v-model="form.workspaces"
         :value="workspace.id"
-        :label="workspace.name"
+        :label="workspace.workspace_name"
       />
     </div> -->
 

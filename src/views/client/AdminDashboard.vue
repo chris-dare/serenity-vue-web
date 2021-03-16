@@ -26,6 +26,7 @@
       />
     </div>
     <AddEditWorkspace />
+    <AddEditInventory />
   </div>
 </template>
 
@@ -33,11 +34,12 @@
 import DashboardCard from '@/components/ui/cards/DashboardCard'
 import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
 import AddEditWorkspace from '@/components/admin/modals/AddEditWorkspace'
+import AddEditInventory from '@/components/admin/modals/AddEditInventory'
 
 export default {
   name: 'Dashboard',
 
-  components: { DashboardCard, UserDetailsHeader, AddEditWorkspace },
+  components: { DashboardCard, UserDetailsHeader, AddEditWorkspace, AddEditInventory },
 
   data() {
     return {
@@ -99,16 +101,16 @@ export default {
           action: 'workspace'
         },
         {
+          label: 'Inventory Item',
+          type: 'Folder',
+          description: 'Add new item to your inventory',
+          action: 'inventory'
+        },
+        {
           label: 'Register patient',
           type: 'User',
           description: 'Create a new patient profile',
           action: 'patient'
-        },
-        {
-          label: 'New company',
-          type: 'Download',
-          description: 'Create a new corporate client',
-          action: 'client'
         },
       ]
 
@@ -129,8 +131,8 @@ export default {
       if (dashboard.action === 'patient') {
         this.$router.push({name:'Biodata'})
       }
-      if (dashboard.action === 'client') {
-        this.$router.push({name:'CompanyInformation'})
+      if (dashboard.action === 'inventory') {
+        this.$trigger('inventory:add:open')
       }
     },
   },

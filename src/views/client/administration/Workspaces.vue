@@ -31,7 +31,7 @@
           >
             <cv-data-table-cell>
               <div class="flex items-center space-x-2 py-2">
-                <p>{{ row.name }}</p>
+                <p>{{ row.workspace_name }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
@@ -47,6 +47,7 @@
                   Edit
                 </p>
                 <p
+                  v-if="!row.is_core"
                   class="text-red-500 cursor-pointer"
                   @click="remove(row.id)"
                 >
@@ -100,6 +101,7 @@ export default {
 
   created() {
     this.refresh()
+    this.searchTerms = ['workspace_name']
   },
 
   methods: {

@@ -11,6 +11,10 @@ export default {
     return http.post(`${this.url}${providerId}/roles`, params)
   },
 
+  duplicate(providerId, params) {
+    return http.post(`${this.url}${providerId}/roles/${params.id}`, params)
+  },
+
   update(providerId, params) {
     return http.patch(`${this.url}${providerId}/roles/${params.id}`, params)
   },

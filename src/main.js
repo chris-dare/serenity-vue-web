@@ -3,7 +3,6 @@ import App from './App.vue'
 // import './registerServiceWorker'
 import router from './router'
 import store from './store'
-import '@/assets/styles/app.scss'
 
 import DatePlugin from '@/services/date'
 import UtilsPlugin from '@/services/utils'
@@ -16,8 +15,11 @@ import '@/plugins'
 
 import '@/filters'
 import '@/globalComponents'
+import 'vue-multiselect/dist/vue-multiselect.min.css'
 import '@/assets/styles/tailwind.scss'
 import '@carbon/charts/styles.css'
+import '@/assets/styles/app.scss'
+
 
 Vue.directive('has-permission', HasPermissionDirective)
 

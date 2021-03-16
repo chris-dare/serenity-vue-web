@@ -119,9 +119,15 @@ $primary: #0b6b74;
   div,
   select,
   input,
-  .bx--date-picker__input {
+  .bx--date-picker__input, .bx--time-picker {
     width: 100% !important;
     @apply text-left max-w-full;
+  }
+}
+
+.left-button{
+  .bx--radio-button__label{
+    justify-content: flex-start !important;
   }
 }
 
@@ -217,4 +223,28 @@ button:focus {
 }
 .v-toast.v-toast--top {
   top: 2rem !important;
+}
+
+
+.multiselect{
+  .multiselect__tags{
+    border-bottom: 1px solid #8d8d8d;
+    @apply rounded-none
+  }
+  .multiselect__tag, .multiselect__option--highlight, .multiselect__option--highlight:after{
+    @apply bg-serenity-primary
+  }
+  .multiselect__tag-icon:after{
+    @apply text-white
+  }
+}
+
+.vue__time-picker{
+  @apply h-10 w-full;
+  input{
+    border: unset !important;
+    border-bottom: 1px solid #8d8d8d !important;
+    height: 2.5rem !important;
+    width: 100% !important;
+  }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-1">
-    <p class="text-gray-500">{{ label }}</p>
+    <p class="text-secondary">{{ label }}</p>
     <div>
       <slot>
         <p :class="descriptionColor">{{ description }}</p>

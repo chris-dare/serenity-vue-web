@@ -21,8 +21,8 @@
               v-for="(workspace, index) in workspaces"
               :key="index"
               v-model="form.permissions.workspaces"
-              :value="workspace.id"
-              :label="workspace.name"
+              :value="workspace.workspace_type"
+              :label="workspace.workspace_name"
             />
           </div>
         </div>
@@ -63,20 +63,6 @@
                     class="flex-none"
                   />
                 </div>
-                <!-- <div class="flex items-center justify-center">
-                  <cv-checkbox
-                    v-model="form.permissions.resources"
-                    :value="getValue(resource.value, 'write')"
-                    class="flex-none"
-                  />
-                </div>
-                <div class="flex items-center justify-center">
-                  <cv-checkbox
-                    v-model="form.permissions.resources"
-                    :value="getValue(resource.value, 'delete')"
-                    class="flex-none"
-                  />
-                </div> -->
               </div>
             </div>
           </div>
@@ -95,7 +81,7 @@
             v-else
             @click="submit"
           >
-            {{ form.id ? 'Save changes' : 'Create new role' }}
+            {{ type === 'update' ? 'Save changes' : 'Duplicate role' }}
           </SeButton>
         </div>
       </div>
@@ -125,6 +111,7 @@ export default {
         'Delete',
       ],
       loading: false,
+      type: 'update',
     }
   },
 
@@ -149,7 +136,13 @@ export default {
     },
     'role:edit:open': function(data){
       this.visible = true
-      this.form = this.formatIncomingResources(data.params[0])
+      this.form = this.$utils.formatIncomingRoles(data.params[0])
+      this.type = 'update'
+    },
+    'role:duplicate:open': function(data){
+      this.visible = true
+      this.form = this.$utils.formatIncomingRoles(data.params[0])
+      this.type = 'duplicate'
     },
   },
 
@@ -157,6 +150,7 @@ export default {
     ...mapActions({
       createRole: 'roles/createRole',
       updateRole: 'roles/updateRole',
+      duplicateRole: 'roles/duplicateRole',
     }),
 
     getValue(resource,permission){
@@ -164,58 +158,11 @@ export default {
     },
 
     submit(){
-      if (this.form.id) {
+      if (this.type === 'update') {
         this.update()
       } else {
         this.save()
       }
-    },
-
-    formatIncomingResources(data) {
-      let role = { ...data }
-      let resources = data.permissions.resources
-      let newResources = []
-
-      resources.forEach(resource => {
-        if (resource.includes('*')) {
-          let split = resource.split('.')
-          let root = split.length === 2 ? split[0] : `${split[0]}.${split[1]}`
-          newResources.push(`${root}.read`,`${root}.write`,`${root}.delete`)
-        } else {
-          newResources.push(resource)
-        }
-      })
-
-      role.permissions.resources = newResources
-      return role
-    },
-
-    formatOutgoingResources(data) {
-      let role = { ...data }
-      let resources = data.permissions.resources
-      let newResources = []
-
-      let splits = {}
-      resources.forEach(resource => {
-        let split = resource.split('.')
-        split = [ split.slice(0, split.length - 1).join('.'), split[split.length - 1] ]
-        splits[split[0]] = splits[split[0]] || []
-        if(!splits[split[0]].includes(split[1])){
-          splits[split[0]].push(split[1])
-        }
-      })
-      Object.keys(splits).forEach(key => {
-        let split = splits[key]
-        if(split.length === 3){
-          newResources.push(`${key}.*`)
-        }else{
-          split.forEach(el =>{
-            newResources.push(`${key}.${el}`)
-          })
-        }
-      })
-      role.permissions.resources = newResources
-      return role
     },
 
     async save() {
@@ -240,21 +187,41 @@ export default {
 
     async update() {
       this.loading = true
-      const params = this.formatOutgoingResources(this.form)
-      const data = await this.updateRole(params).catch(() => {
+      const params = this.$utils.formatOutgoingRoles(this.form)
+      await this.updateRole(params).catch((error) => {
         this.$toast.open({
           message: 'Something went wrong!',
           type: 'error',
         })
         this.loading = false
+        throw error
       })
 
-      if (data) {
+      this.$toast.open({
+        message: 'Role successfully updated',
+      })
+      this.visible = false
+
+      this.loading = false
+    },
+
+    async duplicate() {
+      this.loading = true
+      const params = this.$utils.formatOutgoingRoles(this.form)
+      await this.duplicateRole(params).catch((error) => {
         this.$toast.open({
-          message: 'Role successfully updated',
+          message: 'Something went wrong!',
+          type: 'error',
         })
-        this.visible = false
-      }
+        this.loading = false
+        throw error
+      })
+
+      
+      this.$toast.open({
+        message: 'Role successfully duplicated',
+      })
+      this.visible = false
 
       this.loading = false
     },

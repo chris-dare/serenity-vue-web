@@ -60,7 +60,7 @@ export default {
         return ''
       }
       return this.currentUser.practitioner_role.permissions.workspaces.join(
-        ', '
+        ', ',
       )
     },
     roleName() {

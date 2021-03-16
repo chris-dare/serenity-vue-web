@@ -10,6 +10,8 @@ export default {
     dispatch('resources/getResources', null,{ root:true })
     dispatch('workspaces/getWorkspaces', null,{ root:true })
     dispatch('resources/getSpecialties', null,{ root:true })
+    dispatch('resources/getCategories', null,{ root:true })
+    dispatch('resources/getCodes', null,{ root:true })
     dispatch('services/getServices', null,{ root:true })
     dispatch('getCountries')
   },
