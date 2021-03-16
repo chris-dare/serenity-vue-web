@@ -29,8 +29,8 @@
             class="inherit-full-input"
             placeholder="Yes or No"
           >
-            <cv-select-option :value="true">Yes</cv-select-option>
-            <cv-select-option :value="false">No</cv-select-option>
+            <cv-select-option>Yes</cv-select-option>
+            <cv-select-option>No</cv-select-option>
           </cv-select>
           <cv-select
             v-model="type"
@@ -217,7 +217,7 @@ export default {
         },
         healthcare_service_categories: [],
         healthcare_service_locations: [],
-        healthcare_service_appointment_required: 'yes',
+        healthcare_service_appointment_required: 'Yes',
       },
       type: 'single',
       price: '0',
@@ -261,7 +261,7 @@ export default {
     formatOutgoingData(form) {
       const newForm = {
         ...form,
-        healthcare_service_appointment_required: form.healthcare_service_appointment_required === 'yes',
+        healthcare_service_appointment_required: form.healthcare_service_appointment_required === 'Yes',
       }
 
       let code = this.codes.find(c => c.code === this.code)

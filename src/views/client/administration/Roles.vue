@@ -34,9 +34,6 @@
               <p>{{ row.name }}</p>
             </div>
           </cv-data-table-cell>
-          <cv-data-table-cell>
-            <p>{{ row.type }}</p>
-          </cv-data-table-cell>
             
           <cv-data-table-cell>
             <div class="flex items-center space-x-6">
@@ -87,7 +84,6 @@ export default {
       search: '',
       columns: [
         'Name',
-        'Type',
         'Action',
       ],
       loading: false,
