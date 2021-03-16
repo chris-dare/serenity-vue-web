@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="text-primary mb-4 text-left">Team Member Type</p>
-    <div class="flex items-center space-x-6 w-full">
+    <!-- <div class="flex items-center space-x-6 w-full">
       <cv-radio-button
         v-for="(item, index) in titles"
         :key="index"
@@ -10,7 +10,7 @@
         :label="item.label"
         :value="item.value"
       />
-    </div>
+    </div> -->
     <cv-select
       v-model="practitionerRole"
       label="Clinical Role"
@@ -41,12 +41,12 @@
       label="Specialty"
       class="inherit-full-input my-8"
     >
-      <template
+      <!-- <template
         v-if="$v.form.practitioner_specialty.$error"
         slot="invalid-message"
       >
         A practitioner specialty is required
-      </template>
+      </template> -->
       <cv-select-option
         disabled
         hidden
@@ -61,12 +61,12 @@
         {{ specialty.Display }}
       </cv-select-option>
     </cv-select>
-    <cv-text-input
+    <!-- <cv-text-input
       v-model="form.code"
       label="Medical Practice Code"
       placeholder="Medical Practice Code"
       class="inherit-full-input my-8"
-    />
+    /> -->
 
     <!-- <p class="text-primary mt-8 mb-4 text-left">Workspace access</p>
     <div class="grid grid-cols-3">
@@ -121,7 +121,10 @@ export default {
 
   data() {
     return {
-      form: {},
+      form: {
+        practitioner_specialty: '',
+        team_member_type: ''
+      },
       titles: [{label:'Clinical Staff', value: 'clinical_staff'}, {label:'Non-Clinical Staff', value: 'non_clinical_staff'}],
       loading: false,
       icon: ChevronRight,
@@ -140,8 +143,6 @@ export default {
 
   validations: {
     form: {
-      team_member_type: { required },
-      practitioner_specialty: { required},
       practitioner_role: { required},
     },
   },

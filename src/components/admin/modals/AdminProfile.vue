@@ -57,15 +57,8 @@
                 class="inherit-full-input"
                 placeholder="Male or female"
               >
-                <cv-select-option
-                  disabled
-                  selected
-                  hidden
-                >
-                  Male or female
-                </cv-select-option>
                 <cv-select-option value="male">Male</cv-select-option>
-                <cv-select-option value="female">FeMale</cv-select-option>
+                <cv-select-option value="female">Female</cv-select-option>
               </cv-select>
               <cv-date-picker
                 v-model="form.date_of_birth"
