@@ -15,16 +15,19 @@
         />
       </div>
       <div class="flex justify-between items-center w-full">
-        <cv-header-name href="javascript:void(0)">
+        <cv-header-name
+          class="hidden lg:block"
+          href="javascript:void(0)"
+        >
           <img
             src="@/assets/img/logo-full.svg"
             alt=""
           >
         </cv-header-name>
-        <div class="flex items-center">
+        <div class="flex items-center flex-1">
           <cv-text-input
             v-model="search"
-            class="no-label-input h-12 w-102 text-white"
+            class="no-label-input h-12 flex-1  lg:max-w-102 text-white"
             placeholder="Search for patient name or Phone number"
           />
           <div
@@ -44,7 +47,7 @@
             >
             <cv-select
               v-model="selectedLocation"
-              class="no-label-input se-black-input hover:bg-serenity-gray focus:bg-serenity-gray mx-6"
+              class="no-label-input se-black-input hover:bg-serenity-gray focus:bg-serenity-gray mx-2 lg:mx-6"
               label="false"
               @change="selectLocation"
             >
@@ -61,7 +64,7 @@
 
           <cv-select
             v-model="selected"
-            class="no-label-input se-dark-input hover:bg-serenity-gray focus:bg-serenity-gray mx-6"
+            class="no-label-input se-dark-input hover:bg-serenity-gray focus:bg-serenity-gray mx-2 lg:mx-6"
             label="false"
             @change="actionChange"
           >
