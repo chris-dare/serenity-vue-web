@@ -48,7 +48,7 @@
               kind="single"
               class="my-8 w-full max-w-full inherit-full-input"
               placeholder="dd/mm/yyyy"
-              label="Date"
+              date-label="Date of Birth"
             />
             <cv-select
               v-model="form.gender"
