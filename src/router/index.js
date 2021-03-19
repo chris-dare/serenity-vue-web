@@ -140,6 +140,27 @@ const routes = [
         ],
       },
       {
+        path: '/register-service',
+        component: () => import(/* webpackChunkName: "registerservice" */ '../views/client/services/RegisterService.vue'),
+        children: [
+          {
+            path: '',
+            name: 'ServiceInformation',
+            component: () => import(/* webpackChunkName: "registerservice" */ '../views/client/services/ServiceInformation.vue'),
+          },
+          {
+            path: '/register-service/pricing',
+            name: 'ServicePricing',
+            component: () => import(/* webpackChunkName: "registerservice" */ '../views/client/services/ServicePricing.vue'),
+          },
+          {
+            path: '/register-service/availability',
+            name: 'ServiceAvailability',
+            component: () => import(/* webpackChunkName: "registerservice" */ '../views/client/services/ServiceAvailability.vue'),
+          },
+        ],
+      },
+      {
         path: '/register-patient',
         component: () => import(/* webpackChunkName: "registerpatient" */ '../views/client/patients/Register.vue'),
         children: [

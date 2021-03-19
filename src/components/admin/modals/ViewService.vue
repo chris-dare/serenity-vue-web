@@ -32,33 +32,49 @@
         </div>
 
         <!-- locations -->
-        <InfoBlock
-          label="Service locations"
-          :description="normalizedData.locations"
-        />
-        <InfoBlock
-          label="Is appointment required for this service?"
-          :description="form.healthcare_service_appointment_required ? 'Yes':'No'"
-        />
+        <div class="grid grid-cols-2 gap-8">
+          <InfoBlock
+            label="Service locations"
+            :description="form.locations"
+          />
+          <InfoBlock
+            label="Slot duration"
+            :description="`${form.duration} mins`"
+          />
+          
+          <InfoBlock
+            label="Is appointment required for this service?"
+            :description="form.healthcare_service_appointment_required ? 'Yes':'No'"
+          />
+          <InfoBlock
+            label="Service categories"
+            :description="form.categories"
+          />
+          <InfoBlock
+            label="Service specialties"
+            :description="form.specialties"
+          />
+        </div>
+        
 
         <div class="border-b border-solid border-subtle w-full h-0" />
 
         <div class="grid grid-cols-2 gap-8">
           <InfoBlock
             label="Service available days"
-            :description="normalizedData.available_days"
+            :description="form.available_days"
           />
           <InfoBlock
             label="Time range"
-            :description="normalizedData.available_times"
+            :description="form.available_times"
           />
           <InfoBlock
             label="Description of unavailability"
-            :description="normalizedData.description"
+            :description="form.description"
           />
           <InfoBlock
             label="Service unavailable dates"
-            :description="normalizedData.unavailable_times"
+            :description="form.unavailable_times"
           />
         </div>
 
@@ -88,27 +104,6 @@ export default {
       visible: false,
       loading: false,
     }
-  },
-
-  computed: {
-    normalizedData() {
-      let newService = {
-        ...this.form,
-        locations: this.form.healthcare_service_locations && this.form.healthcare_service_locations.length ? this.form.healthcare_service_locations.map(service => service.display || service.location_name).join(', ') : '-',
-        required: this.form.healthcare_service_appointment_required ? 'Yes':'No',
-        available_times: this.form.healthcare_service_available_times && this.form.healthcare_service_available_times.length ? `${this.form.healthcare_service_available_times[0].availableStartTime} - ${this.form.healthcare_service_available_times[0].availableEndTime} ` : '-',
-        available_days: this.form.healthcare_service_available_times && this.form.healthcare_service_available_times.length ? this.form.healthcare_service_available_times[0].daysOfWeek.join(',') : '-',
-        description: this.form.healthcare_service_not_available_times && this.form.healthcare_service_not_available_times.length ? this.form.healthcare_service_not_available_times[0].description :'-',
-        unavailable_times: '',
-      }
-
-      if (this.form.healthcare_service_not_available_times && this.form.healthcare_service_not_available_times.length && this.form.healthcare_service_not_available_times[0].during) {
-        newService.unavailable_times = `${this.form.healthcare_service_not_available_times[0].during.start} - ${this.form.healthcare_service_not_available_times[0].during.end}`
-      }
-        
-
-      return newService
-    },
   },
 
   events: {

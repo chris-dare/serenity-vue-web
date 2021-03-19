@@ -129,6 +129,14 @@ $primary: #0b6b74;
     width: 100% !important;
     @apply text-left max-w-full;
   }
+
+  .bx--number__controls{
+    @apply items-end
+  }
+}
+
+.bx--number{
+  @apply w-full
 }
 
 .left-button{
@@ -233,9 +241,11 @@ button:focus {
 
 
 .multiselect{
+  
   .multiselect__tags{
+    background-color: #f4f4f4;
+    @apply rounded-none border-0;
     border-bottom: 1px solid #8d8d8d;
-    @apply rounded-none
   }
   .multiselect__tag, .multiselect__option--highlight, .multiselect__option--highlight:after{
     @apply bg-serenity-primary
