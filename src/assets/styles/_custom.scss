@@ -139,7 +139,11 @@ $primary: #0b6b74;
 
 .se-no-title-modal {
   .bx--modal-header {
-    @apply hidden;
+    .bx--modal-header__label, .bx--modal-header__heading{
+      @apply hidden;
+      padding: 0!important;
+      margin: 0!important;
+    }
   }
 
   .bx--modal-container {

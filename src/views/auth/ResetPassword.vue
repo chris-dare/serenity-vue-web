@@ -30,6 +30,7 @@
             />
             <cv-text-input
               v-model="form.confirm_password"
+              v-nested-keyup:input.enter="reset"
               :invalid-message="$utils.validateRequiredField($v, 'confirm_password')"
               label="Repeat new password"
               type="password"

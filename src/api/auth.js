@@ -36,6 +36,10 @@ export default {
     return http.post(`${this.url}change-password`, params)
   },
 
+  updateProfile(params){
+    return http.post(`${this.url}user`, params)
+  },
+
   logout(){
     return http.get(`${this.url}logout`)
   },

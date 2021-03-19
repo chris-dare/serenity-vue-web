@@ -38,6 +38,7 @@
             />
             <cv-text-input
               v-model="form.password"
+              v-nested-keyup:input.enter="login"
               :invalid-message="$utils.validateRequiredField($v, 'password')"
               label="Your password"
               type="password"

@@ -23,12 +23,12 @@
         <img
           src="@/assets/img/logo.svg"
           alt=""
-          class="lg:hidden w-5 h-5 mx-6"
+          class="lg:hidden w-5 h-5 mx-4"
         >
-        <div class="lg:flex items-center hidden">
+        <div class="flex items-center flex-1 max-w-102 mr-2">
           <cv-text-input
             v-model="search"
-            class="no-label-input h-12 lg:w-102 text-white"
+            class="no-label-input h-12 flex-1 text-white"
             placeholder="Search for patient name or Phone number"
           />
           <div
@@ -40,7 +40,7 @@
             >
           </div>
         </div>
-        <div class="flex items-center mx-6">
+        <div class="flex items-center">
           <div class="hidden md:flex items-center">
             <img
               src="@/assets/img/location 1.svg"
@@ -48,7 +48,7 @@
             >
             <cv-select
               v-model="selectedLocation"
-              class="no-label-input se-black-input hover:bg-serenity-gray focus:bg-serenity-gray mx-6"
+              class="no-label-input se-black-input hover:bg-serenity-gray focus:bg-serenity-gray mx-2 lg:mx-6"
               label="false"
               @change="selectLocation"
             >
@@ -65,7 +65,7 @@
 
           <cv-select
             v-model="selected"
-            class="no-label-input se-dark-input hover:bg-serenity-gray focus:bg-serenity-gray mx-6 md:block hidden"
+            class="no-label-input se-dark-input hover:bg-serenity-gray focus:bg-serenity-gray mx-2 lg:mx-6 md:block hidden"
             label="false"
             @change="actionChange"
           >

@@ -127,7 +127,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Camera from '@carbon/icons-vue/es/camera/32'
 
@@ -151,21 +151,40 @@ export default {
     }),
   },
 
-  created() {
-    this.form = this.user
-  },
-
   events: {
     'admin:profile:add:open': function(){
       this.visible = true
     },
     'admin:profile:open': function(){
+      this.form = Object.assign({}, this.user)
       this.visible = true
     },
   },
 
   methods: {
-    submit() {},
+    ...mapActions({
+      update: 'auth/updateProfile',
+    }),
+    async submit() {
+      this.loading = true
+      const data = await this.update(this.form).catch((error) => {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+      })
+
+      if (data) {
+        console.info(data)
+        this.$toast.open({
+          message: data.message || 'Profile updated successfully',
+        })
+        this.close()
+      }
+
+      this.loading = false
+    },
   },
 }
 </script>

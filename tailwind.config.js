@@ -36,6 +36,9 @@ module.exports = {
       width: {
         102: '32rem',
       },
+      maxWidth: {
+        102: '32rem',
+      },
       fontFamily: {
         graphik: 'Graphik, Open Sans',
         body: ['Graphik', 'Open Sans'],
