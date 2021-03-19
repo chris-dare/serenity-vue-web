@@ -1,4 +1,4 @@
-import { SET_SERVICES, UPDATE_SERVICE, DELETE_SERVICE } from './mutation-types'
+import { SET_SERVICES, UPDATE_SERVICE, DELETE_SERVICE, ADD_SERVICE_DATA } from './mutation-types'
 
 export default {
   [SET_SERVICES](state, services) {
@@ -22,5 +22,10 @@ export default {
     if (index !== -1) {
       state.services.splice(index, 1)
     }
+  },
+
+  [ADD_SERVICE_DATA](state, data) {
+    let currentService = state.currentService
+    state.currentService = {...currentService, ...data}
   },
 }

@@ -28,6 +28,8 @@ import {
   CvInlineNotification,
   CvInlineLoading,
   CvButtonSkeleton,
+  CvMultiSelect,
+  CvNumberInput,
 } from '@carbon/vue/src/index'
 
 Vue.component(CvButton.name, CvButton)
@@ -57,5 +59,7 @@ Vue.component(CvSideNav.name, CvSideNav)
 Vue.component(CvInlineNotification.name, CvInlineNotification)
 Vue.component(CvInlineLoading.name, CvInlineLoading)
 Vue.component(CvButtonSkeleton.name, CvButtonSkeleton)
+Vue.component(CvMultiSelect.name, CvMultiSelect)
+Vue.component(CvNumberInput.name, CvNumberInput)
 
 Vue.use(CarbonCharts)

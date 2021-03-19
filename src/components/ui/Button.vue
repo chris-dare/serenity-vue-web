@@ -7,7 +7,7 @@
       class="px-4 flex items-center justify-center"
       kind="primary"
       :size="size"
-      @click="$emit('click')"
+      @click="go"
     >
       <slot>{{ label }}</slot>
     </cv-button>
@@ -37,6 +37,10 @@ export default {
       type: String,
       default: 'field',
     },
+    to: {
+      type: [String,Object],
+      default: null,
+    },
 
     variant: {
       type: String,
@@ -44,7 +48,7 @@ export default {
       validator: function (value) {
         // The value must match one of these strings
         return (
-          ['primary', 'secondary', 'tertiary', 'danger', 'outline', 'ghost', 'white'].indexOf(value) !== -1
+          ['primary', 'secondary', 'tertiary', 'danger', 'outline', 'ghost', 'white', 'default'].indexOf(value) !== -1
         )
       },
     },
@@ -69,6 +73,17 @@ export default {
       }
 
       return 'bg-serenity-primary hover:bg-serenity-primary-highlight'
+    },
+  },
+
+  methods: {
+    go() {
+      if (this.to) {
+        this.$router.push(this.to)
+        return
+      }
+
+      this.$emit('click')
     },
   },
 }

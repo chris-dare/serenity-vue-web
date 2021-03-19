@@ -17,7 +17,7 @@
             Close
           </SeButton>
           <SeButton
-            :variant="type == 'delete' ? 'danger' : ''"
+            :variant="type == 'delete' ? 'danger' : 'default'"
             @click="confirm"
           >
             <span class="capitalize">{{ type }}</span>

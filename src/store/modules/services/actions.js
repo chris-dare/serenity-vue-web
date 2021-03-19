@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import ServicesAPI from '@/api/services'
-import { SET_SERVICES, UPDATE_SERVICE, DELETE_SERVICE } from './mutation-types'
+import { SET_SERVICES, UPDATE_SERVICE, DELETE_SERVICE, ADD_SERVICE_DATA } from './mutation-types'
 
 export default {
   async getServices({ commit, rootState }) {
@@ -45,5 +45,9 @@ export default {
       })
 
     commit(DELETE_SERVICE, id)
+  },
+
+  addToCurrentService({ commit }, data) {
+    commit(ADD_SERVICE_DATA, data)
   },
 }

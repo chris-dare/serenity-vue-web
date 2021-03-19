@@ -11,7 +11,7 @@
             <Upload class="ml-4 w-5 h-5" />
           </SeButton>
           <SeButton
-            @click="$trigger('service:add:open')"
+            :to="{name: 'ServiceInformation'}"
           >
             Add new service
             <Add class="ml-4 w-5 h-5" />
@@ -91,7 +91,7 @@
 import AddEditService from '@/components/admin/modals/AddEditService'
 import ViewService from '@/components/admin/modals/ViewService'
 import DataMixin from '@/mixins/data'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Services',
@@ -113,8 +113,12 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      data: (state) => state.services.services,
+    // ...mapState({
+    //   data: (state) => state.services.services,
+    // }),
+
+    ...mapGetters({
+      data: 'services/normalizedServices',
     }),
   },
 
