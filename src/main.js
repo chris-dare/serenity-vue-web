@@ -16,6 +16,9 @@ import '@/plugins'
 // global mixins
 import '@/mixins'
 
+// global directives
+import '@/directives'
+
 import '@/filters'
 import '@/globalComponents'
 import 'vue-multiselect/dist/vue-multiselect.min.css'

@@ -23,6 +23,7 @@
           <div class="mt-8">
             <cv-text-input
               v-model="form.email"
+              v-nested-keyup:input.enter="reset"
               class="my-4"
               label="Email"
             >
