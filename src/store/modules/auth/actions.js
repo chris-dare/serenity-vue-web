@@ -86,4 +86,15 @@ export default {
         throw result.data
       })
   },
+  // eslint-disable-next-line no-unused-vars
+  updateProfile({ commit }, params) {
+    return AuthAPI.updateProfile(params)
+      .then((result) => {
+        commit(SET_USER, result.data)
+        return result.data
+      })
+      .catch(result => {
+        throw result.data
+      })
+  },
 }
