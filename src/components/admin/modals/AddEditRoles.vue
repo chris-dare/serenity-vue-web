@@ -15,7 +15,7 @@
           placeholder="eg Valley Heights"
         />
         <div class="space-y-2">
-          <p class="text-primary text-left text-xs">Workspace access</p>
+          <p class="bx--label">Workspace access</p>
          
           <div class="grid grid-cols-3">
             <cv-checkbox
@@ -28,7 +28,7 @@
           </div>
         </div>
         <div class="space-y-2">
-          <p class="text-primary text-left text-xs">Set permissions</p>
+          <p class="bx--label">Set permissions</p>
           <cv-search
             v-model="search"
             placeholder="Search for feature"

@@ -74,7 +74,7 @@ export default {
   computed: {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
-    })
+    }),
   },
 
   methods: {

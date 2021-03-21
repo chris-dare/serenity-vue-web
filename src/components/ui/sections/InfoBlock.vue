@@ -23,6 +23,7 @@ export default {
       type: String,
       default: '',
     },
+
     description: {
       type: String,
       default: '',

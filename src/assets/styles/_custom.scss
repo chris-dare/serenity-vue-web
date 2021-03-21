@@ -147,6 +147,7 @@ $primary: #0b6b74;
 
 .se-no-title-modal {
   .bx--modal-header {
+    @apply bg-white;
     .bx--modal-header__label, .bx--modal-header__heading{
       @apply hidden;
       padding: 0!important;
@@ -155,7 +156,16 @@ $primary: #0b6b74;
   }
 
   .bx--modal-container {
-    @apply h-auto max-h-screen;
+    @apply h-auto max-h-screen bg-white;
+  }
+
+  .bx--modal-content{
+    padding-top: 0 !important;
+    @apply bg-white
+  }
+
+  .bx--text-input{
+    background-color: #f4f4f4;
   }
 }
 
@@ -244,18 +254,27 @@ button:focus {
 }
 
 
+
 .multiselect{
-  
+  input, .multiselect__single{
+    background: inherit
+  }
   .multiselect__tags{
     background-color: #f4f4f4;
     @apply rounded-none border-0;
     border-bottom: 1px solid #8d8d8d;
   }
   .multiselect__tag, .multiselect__option--highlight, .multiselect__option--highlight:after{
-    @apply bg-serenity-primary
+    @apply bg-serenity-primary;
   }
   .multiselect__tag-icon:after{
-    @apply text-white
+    @apply text-white;
+  }
+}
+
+.multiselect-white{
+  .multiselect__tags, .multiselect__tags{
+    @apply bg-white;
   }
 }
 
@@ -266,5 +285,6 @@ button:focus {
     border-bottom: 1px solid #8d8d8d !important;
     height: 2.5rem !important;
     width: 100% !important;
+    background-color: #f4f4f4;
   }
 }

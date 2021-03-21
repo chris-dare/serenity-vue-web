@@ -123,7 +123,7 @@ export default {
     return {
       form: {
         practitioner_specialty: '',
-        team_member_type: ''
+        team_member_type: '',
       },
       titles: [{label:'Clinical Staff', value: 'clinical_staff'}, {label:'Non-Clinical Staff', value: 'non_clinical_staff'}],
       loading: false,

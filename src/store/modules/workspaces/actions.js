@@ -37,11 +37,11 @@ export default {
   async deleteWorkspace({ commit, rootState}, id) {
     const provider = rootState.auth.provider
     const {data} = await WorkspacesAPI
-        .delete(provider.id,id)
-        .catch((error) => {
-          throw error.data || error
-        })
-      commit(DELETE_WORKSPACE, id)
-      return data
+      .delete(provider.id,id)
+      .catch((error) => {
+        throw error.data || error
+      })
+    commit(DELETE_WORKSPACE, id)
+    return data
   },
 }

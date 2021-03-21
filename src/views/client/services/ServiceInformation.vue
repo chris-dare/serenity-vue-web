@@ -43,7 +43,7 @@
     />
 
     <div>
-      <p class="text-primary text-left text-xs mb-2">Select service location (s)</p>
+      <p class="bx--label">Select service location (s)</p>
       <Multiselect
         v-model="form.healthcare_service_locations"
         :options="locations"
@@ -60,7 +60,7 @@
     </div>
 
     <div>
-      <p class="text-primary text-left text-xs mb-2">Select service category</p>
+      <p class="bx--label">Select service category</p>
       <Multiselect
         v-model="form.healthcare_service_categories"
         :options="categories"
@@ -77,7 +77,7 @@
     </div>
 
     <div>
-      <p class="text-primary text-left text-xs mb-2">Select service specialties</p>
+      <p class="bx--label">Select service specialties</p>
       <Multiselect
         v-model="form.healthcare_service_specialty"
         :options="specialties"

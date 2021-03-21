@@ -1,15 +1,15 @@
 <template>
   <div>
-    <p class="text-primary text-left text-xs mb-2">{{ description }}</p>
-    <Multiselect
+    <p class="bx--label">{{ title }}</p>
+    <VueMultiselect
       v-model="selected"
       :options="options"
       :multiple="multiple"
       :close-on-select="false"
       :clear-on-select="false"
       :preserve-search="true"
-      placeholder="Select one or more locations"
-      label="location_name"
+      :placeholder="placeholder"
+      :label="label"
       track-by="id"
       :preselect-first="true"
     />
@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import Multiselect from 'vue-multiselect'
+import VueMultiselect from 'vue-multiselect'
 export default {
   name: 'Multiselect',
 
-  components: { Multiselect },
+  components: { VueMultiselect },
 
   props: {
     options: {
@@ -35,7 +35,17 @@ export default {
       default: () => [],
     },
 
+    title: {
+      type: String,
+      default: '',
+    },
+
     label: {
+      type: String,
+      default: '',
+    },
+
+    placeholder: {
       type: String,
       default: '',
     },

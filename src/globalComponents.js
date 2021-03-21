@@ -9,12 +9,14 @@ import Dropdown from '@/components/ui/Dropdown'
 import DateTimePicker from '@/components/ui/DateTimePicker'
 import Button from '@/components/ui/Button'
 import FilterDropdown from '@/components/ui/FilterDropdown'
-import InfoBlock from '@/components/ui/InfoBlock'
+import InfoBlock from '@/components/ui/sections/InfoBlock'
 import Avatar from '@/components/ui/Avatar'
 import SuccessModal from '@/components/ui/modals/SuccessModal'
 import ConfirmDeleteModal from '@/components/ui/modals/ConfirmDeleteModal'
 import Timepicker from '@/components/ui/Timepicker'
 import ConfirmActionModal from '@/components/ui/ConfirmActionModal'
+import MultiSelect from '@/components/ui/MultiSelect'
+import InfoImageBlock from '@/components/ui/sections/InfoImageBlock'
 import AppRegisterLayout from '@/layout/AppRegisterLayout'
 
 
@@ -33,4 +35,6 @@ Vue.component('SuccessModal', SuccessModal)
 Vue.component('ConfirmDeleteModal', ConfirmDeleteModal)
 Vue.component('Timepicker', Timepicker)
 Vue.component('ConfirmActionModal', ConfirmActionModal)
+Vue.component('MultiSelect', MultiSelect)
+Vue.component('InfoImageBlock', InfoImageBlock)
 Vue.component('AppRegisterLayout', AppRegisterLayout)

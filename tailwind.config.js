@@ -25,6 +25,7 @@ module.exports = {
         table: '#eceeee',
         dark: '#121619',
         orange: '#F2994A',
+        darkbg: '#eaebec',
       },
       textColor: {
         primary: '#21272A',

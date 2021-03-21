@@ -58,7 +58,7 @@ export default {
     Download,
     Cross,
     Categories,
-    Folder
+    Folder,
   },
 
   props: {

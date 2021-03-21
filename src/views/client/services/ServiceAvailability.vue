@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-8">
     <div>
-      <p class="text-primary text-left text-xs mb-6 uppercase">Service available days</p>
-      <p class="text-primary text-left text-xs mb-2">Day</p>
+      <p class="bx--label mb-6 uppercase">Service available days</p>
+      <p class="bx--label">Day</p>
       <div class="grid grid-cols-7 items-center">
         <cv-checkbox
           v-for="(day, index) in ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']"
@@ -33,7 +33,7 @@
     </div>
 
     <div class="grid grid-cols-2 gap-x-4 gap-y-8">
-      <p class="text-primary text-left text-xs col-span-2 uppercase">Service unavailable days</p>
+      <p class="bx--label col-span-2 uppercase">Service unavailable days</p>
       <cv-date-picker
         v-model="form.healthcare_service_not_available_times[0].during.start"
         kind="single"

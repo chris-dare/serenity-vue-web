@@ -123,7 +123,7 @@ export default {
   computed: {
     ...mapState({
       countries: (state) => state.global.countries,
-    })
+    }),
   },
 
   events: {

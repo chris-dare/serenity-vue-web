@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="space-y-4">
     <cv-search
       v-if="!hideSearch"
       v-model="search"
       placeholder="Search for appointment"
     />
 
-    <div class="flex justify-end mt-4">
+    <div class="flex justify-end">
       <cv-date-picker
         v-model="date"
         class="flex-none se-date-picker"

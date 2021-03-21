@@ -82,7 +82,7 @@
         </div>
 
         <div>
-          <p class="text-primary text-left text-xs mb-2">Select service category</p>
+          <p class="bx--label">Select service category</p>
           <Multiselect
             v-model="form.healthcare_service_categories"
             :options="categories"
@@ -113,7 +113,7 @@
         </cv-select>
 
         <div>
-          <p class="text-primary text-left text-xs mb-2">Select service location (s)</p>
+          <p class="bx--label">Select service location (s)</p>
           <Multiselect
             v-model="form.healthcare_service_locations"
             :options="locations"
@@ -130,7 +130,7 @@
 
         <!-- Service available days -->
         <div>
-          <p class="text-primary text-left text-xs mb-2">Service available days</p>
+          <p class="bx--label">Service available days</p>
           <div class="grid grid-cols-7 items-center">
             <cv-checkbox
               v-for="(day, index) in ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']"
@@ -365,7 +365,7 @@ export default {
         healthcare_service_locations: [],
         healthcare_service_appointment_required: 'yes',
       }
-    }
+    },
 
   },
 

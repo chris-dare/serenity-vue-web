@@ -98,19 +98,19 @@ export default {
           label: 'New workspace',
           type: 'Cross',
           description: 'Create a new department or workspace',
-          action: 'workspace'
+          action: 'workspace',
         },
         {
           label: 'Inventory Item',
           type: 'Folder',
           description: 'Add new item to your inventory',
-          action: 'inventory'
+          action: 'inventory',
         },
         {
           label: 'Register patient',
           type: 'User',
           description: 'Create a new patient profile',
-          action: 'patient'
+          action: 'patient',
         },
       ]
 

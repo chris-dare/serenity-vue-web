@@ -7,8 +7,8 @@ Vue.directive('nested-keyup', {
     // Focus the element
     let keycode = Object.keys(binding.modifiers)[0]
     switch(keycode){
-      case 'enter':
-        keycode = 13
+    case 'enter':
+      keycode = 13
     }
     console.info(binding)
     const elements = el.querySelectorAll(binding.arg)

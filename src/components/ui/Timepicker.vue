@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="text-primary text-left text-xs mb-2">{{ label }}</p>
+    <p class="bx--label">{{ label }}</p>
     <VueTimepicker
       v-model="localValue"
       format="HH:mm:ss"
