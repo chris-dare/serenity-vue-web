@@ -25,7 +25,7 @@
       </div>
       <div class="flex items-center space-x-4 mr-4">
         <p class="text-green-500 font-semibold">Active</p>
-        <SeButton> Actions </SeButton>
+        <TeamDetailActionsDropdown />
       </div>
     </div>
 
@@ -45,11 +45,12 @@
 
 <script>
 import PatientSummaryCard from '@/components/patients/PatientSummaryCard'
+import TeamDetailActionsDropdown from '@/components/team/TeamDetailActionsDropdown'
 import { mapState } from 'vuex'
 export default {
   name: 'TeamDetail',
 
-  components: { PatientSummaryCard },
+  components: { PatientSummaryCard, TeamDetailActionsDropdown },
 
   computed: {
     ...mapState({
