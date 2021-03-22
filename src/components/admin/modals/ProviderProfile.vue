@@ -40,13 +40,13 @@
             <div class="grid grid-cols-2 gap-8 my-8">
               <cv-text-input
                 v-model="form.name"
-                label="Provider name(required)"
+                label="Provider name (required)"
                 placeholder="Provider name"
                 class="inherit-full-input"
               />
               <cv-text-input
                 v-model="form.email"
-                label="Email(required)"
+                label="Email (required)"
                 placeholder="Email"
                 type="email"
                 class="inherit-full-input"
@@ -66,9 +66,9 @@
               </cv-select>
             </div>
             <cv-text-input
-              v-model="form.email_address"
-              label="Full provider address(required)"
-              placeholder="Enter address"
+              v-model="form.address"
+              label="Full provider address (required)"
+              placeholder="Enter residential address"
               class="inherit-full-input mb-8"
             />
             <div class="flex items-center justify-between mt-4 mb-6">

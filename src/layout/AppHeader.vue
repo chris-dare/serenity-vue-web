@@ -14,7 +14,7 @@
           class="w-5 h-5 text-white"
         />
       </div>
-      <div class="flex justify-between items-center w-full">
+      <div class="flex justify-between items-center w-full px-4">
         <img
           src="@/assets/img/logo-full.svg"
           alt=""

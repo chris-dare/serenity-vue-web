@@ -54,7 +54,6 @@
         placeholder="Select one or more locations"
         label="location_name"
         track-by="id"
-        :preselect-first="true"
       />
       <p class="text-red-500 text-xs my-2">{{ $utils.validateRequiredField($v, 'healthcare_service_locations') }}</p>
     </div>
@@ -71,7 +70,6 @@
         placeholder="Select one or more categories"
         label="text"
         track-by="text"
-        :preselect-first="true"
       />
       <p class="text-red-500 text-xs my-2">{{ $utils.validateRequiredField($v, 'healthcare_service_categories') }}</p>
     </div>
@@ -88,7 +86,6 @@
         placeholder="Select one or more specialties"
         label="Display"
         track-by="Code"
-        :preselect-first="true"
       />
       <p class="text-red-500 text-xs my-2">{{ $utils.validateRequiredField($v, 'healthcare_service_specialty') }}</p>
     </div>

@@ -41,13 +41,13 @@
             <div class="grid grid-cols-2 gap-8 my-8">
               <cv-text-input
                 v-model="form.first_name"
-                label="First Name"
+                label="First Name (required)"
                 placeholder="Enter First name"
                 class="inherit-full-input"
               />
               <cv-text-input
                 v-model="form.last_name"
-                label="Last Name"
+                label="Last Name (required)"
                 placeholder="Enter Last name"
                 class="inherit-full-input"
               />
@@ -65,7 +65,7 @@
                 kind="single"
                 class="inherit-full-input"
                 placeholder="dd/mm/yyyy"
-                label="Date of birth"
+                date-label="Date of birth"
               />
               <cv-text-input
                 v-model="form.phone_number"
@@ -75,16 +75,15 @@
               />
               <cv-text-input
                 v-model="form.email"
-                label="Email address(required)"
+                label="Email address (required)"
                 placeholder="Email address"
                 class="inherit-full-input"
               />
             </div>
             <cv-text-input
-              v-model="form.email_address"
-              label="Full provider address(required)"
-              type="email"
-              placeholder="Enter email address"
+              v-model="form.address"
+              label="Full user address (required)"
+              placeholder="Residential address"
               class="inherit-full-input"
             />
             <div class="my-8">
