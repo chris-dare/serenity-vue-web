@@ -26,6 +26,7 @@
               v-nested-keyup:input.enter="reset"
               class="my-4"
               label="Email"
+              placeholder="Enter your email"
             >
               <template
                 v-if="$v.form.email.$error"
@@ -34,18 +35,6 @@
                 Email is required
               </template>
             </cv-text-input>
-            <!-- <cv-text-input
-              v-model="form.phone_number"
-              class="my-4"
-              label="Phone number"
-            >
-              <template
-                v-if="$v.form.phone_number.$error"
-                slot="invalid-message"
-              >
-                Phone number is required
-              </template>
-            </cv-text-input> -->
             <cv-button
               kind="primary"
               class="my-3 max-w-full w-full bg-serenity-primary justify-start"
@@ -79,7 +68,7 @@ export default {
   data() {
     return {
       form: {
-        email: 'terry.j@gmail.com',
+        email: '',
       },
       saving: false,
     }
@@ -111,7 +100,6 @@ export default {
   validations: {
     form: {
       email: { required },
-      // phone_number: { required },
     },
   },
 }
