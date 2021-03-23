@@ -28,7 +28,7 @@
       </div>
       <p
         class="text-serenity-primary px-4 py-2 cursor-pointer"
-        @click="$trigger('profile:edit')"
+        @click="$trigger('admin:profile:open')"
       >
         Profile information
       </p>

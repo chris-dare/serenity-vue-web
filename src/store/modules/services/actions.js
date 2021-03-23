@@ -51,4 +51,8 @@ export default {
   addToCurrentService({ commit }, data) {
     commit(ADD_SERVICE_DATA, data)
   },
+
+  refreshCurrentService({ commit }, data) {
+    commit(SET_SERVICE_DATA, {})
+  },
 }

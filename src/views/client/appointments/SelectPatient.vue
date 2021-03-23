@@ -16,6 +16,7 @@
         v-model="search"
         placeholder="Search for patient, enter name or MR number"
         class="mb-4"
+        autocomplete="off"
       />
       <cv-skeleton-text
         v-if="loading"

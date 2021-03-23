@@ -3,6 +3,7 @@
     <cv-search
       v-model="search"
       placeholder="Search for medication or date or condition"
+      autocomplete="off"
     />
     <div class="my-4 flex items-center justify-between">
       <div>

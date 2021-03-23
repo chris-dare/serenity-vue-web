@@ -16,6 +16,7 @@
     <cv-search
       v-model="search"
       placeholder="Search for location"
+      autocomplete="off"
     />
     <cv-data-table
       ref="table"

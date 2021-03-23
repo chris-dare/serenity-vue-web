@@ -14,6 +14,7 @@
           v-model="search"
           placeholder="Search for patient, enter name or MR number"
           class="my-4"
+          autocomplete="off"
         />
 
         <cv-data-table

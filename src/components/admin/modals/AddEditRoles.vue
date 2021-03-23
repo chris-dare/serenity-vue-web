@@ -32,6 +32,7 @@
           <cv-search
             v-model="search"
             placeholder="Search for feature"
+            autocomplete="off"
           />
 
           <div class="h-96 overflow-auto">

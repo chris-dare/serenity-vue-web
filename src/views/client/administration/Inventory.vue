@@ -22,6 +22,7 @@
       <cv-search
         v-model="search"
         placeholder="Search for inventory item"
+        autocomplete="off"
       />
 
       <cv-data-table

@@ -17,6 +17,7 @@
       <cv-search
         v-model="search"
         placeholder="Search for company"
+        autocomplete="off"
       />
 
       <cv-data-table

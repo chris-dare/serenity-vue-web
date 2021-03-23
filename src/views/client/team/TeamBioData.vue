@@ -15,7 +15,7 @@
           />
         </div>
 
-        <div class="grid grid-cols-2 gap-8 my-8">
+        <div class="grid grid-cols-2 gap-8 mt-8 mb-12">
           <cv-text-input
             v-model="form.first_name"
             label="First name (required)"
@@ -74,22 +74,18 @@
         </div>
 
         <div class="flex items-center justify-between mt-12 mb-6">
-          <cv-button
-            class="border-serenity-primary text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary px-6"
-            kind="tertiary"
+          <SeButton
+            :to="{name: 'Team'}"
+            variant="outline"
           >
             Cancel
-          </cv-button>
-          <div class="flex items-center">
-            <cv-button
-              :icon="icon"
-              kind="primary"
-              class="bg-serenity-primary ml-6"
-              @click="save"
-            >
-              Next
-            </cv-button>
-          </div>
+          </SeButton>
+          <SeButton
+            :icon="icon"
+            @click="save"
+          >
+            Next
+          </SeButton>
         </div>
       </div>
     </cv-form>
@@ -134,6 +130,7 @@ export default {
     ...mapActions({
       addToCurrentUser: 'practitioners/addToCurrentUser',
     }),
+
     save() {
       this.$v.$touch()
       if (this.$v.$invalid) {

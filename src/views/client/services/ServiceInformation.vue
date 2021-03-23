@@ -86,26 +86,25 @@
         placeholder="Select one or more specialties"
         label="Display"
         track-by="Code"
+        autocomplete.native="off"
       />
       <p class="text-red-500 text-xs my-2">{{ $utils.validateRequiredField($v, 'healthcare_service_specialty') }}</p>
     </div>
 
     <div class="flex items-center justify-between mt-12 mb-6">
-      <cv-button
-        class="border-serenity-primary text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary px-6"
-        kind="tertiary"
+      <SeButton
+        variant="outline"
+        @click="cancel"
       >
         Cancel
-      </cv-button>
+      </SeButton>
       <div class="flex items-center">
-        <cv-button
+        <SeButton
           :icon="icon"
-          kind="primary"
-          class="bg-serenity-primary ml-6"
           @click="save"
         >
           Next
-        </cv-button>
+        </SeButton>
       </div>
     </div>
   </div>
@@ -168,6 +167,7 @@ export default {
   methods: {
     ...mapActions({
       addToCurrentService: 'services/addToCurrentService',
+      refreshCurrentService: 'services/refreshCurrentService',
     }),
 
     save() {
@@ -192,6 +192,11 @@ export default {
       this.addToCurrentService(this.form)
       this.$router.push({ name: 'ServicePricing' })
     },
+
+    cancel() {
+      this.refreshCurrentService()
+      this.$router.push({name: 'Services'})
+    }
   },
 }
 </script>
