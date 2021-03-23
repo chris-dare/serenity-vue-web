@@ -288,3 +288,7 @@ button:focus {
     background-color: #f4f4f4;
   }
 }
+
+.error{
+  @apply text-sm text-red-600;
+}
