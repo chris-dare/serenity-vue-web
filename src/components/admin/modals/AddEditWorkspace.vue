@@ -13,10 +13,12 @@
           v-model="form.workspace_name"
           label="Name"
           placeholder="eg Out patient"
+          :invalid-message="$utils.validateRequiredField($v, 'workspace_name')"
         />
+
         <div>
-          <div class="flex flex-col items-start space-y-8">
-            <p>Workspace features access</p>
+          <div class="flex flex-col items-start space-y-6">
+            <p class="bx--label">Workspace features access</p>
             <cv-radio-button
               v-for="workspaceType in workspaceTypes"
               :key="workspaceType.value"
@@ -24,6 +26,12 @@
               :value="workspaceType.type"
               :label="workspaceType.name"
             />
+            <p
+              v-if="$utils.validateRequiredField($v, 'workspace_type')"
+              class="error"
+            >
+              Workspace type is required
+            </p>
           </div>
         </div>
         
@@ -50,6 +58,8 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
+
 export default {
   name: 'AddEditWorkspace',
 
@@ -86,18 +96,33 @@ export default {
     },
   },
 
+  validations: {
+    form: {
+      workspace_name: { required },
+      workspace_type: { required },
+    },
+  },
+
   methods: {
     ...mapActions({
       createWorkspace: 'workspaces/createWorkspace',
       updateWorkspace: 'workspaces/updateWorkspace',
     }),
+
     submit(){
+      this.$v.$touch()
+
+      if (this.$v.$invalid) {
+        return
+      }
+
       if (this.form.id) {
         this.update()
       } else {
         this.save()
       }
     },
+    
     async save() {
       this.loading = true
       const data = await this.createWorkspace(this.form).catch((error) => {
