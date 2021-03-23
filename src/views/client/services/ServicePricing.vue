@@ -64,21 +64,27 @@
     </div>
 
     <div class="flex items-center justify-between mt-12 mb-6">
-      <cv-button
-        class="border-serenity-primary text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary px-6"
-        kind="tertiary"
-      >
-        Cancel
-      </cv-button>
+      <div class="flex items-center space-x-2">
+        <SeButton
+          variant="outline"
+          @click="cancel"
+        >
+          Cancel
+        </SeButton>
+        <SeButton
+          :to="{ name: 'ServiceInformation' }"
+          variant="secondary"
+        >
+          Go back
+        </SeButton>
+      </div>
       <div class="flex items-center">
-        <cv-button
+        <SeButton
           :icon="icon"
-          kind="primary"
-          class="bg-serenity-primary ml-6"
           @click="save"
         >
           Next
-        </cv-button>
+        </SeButton>
       </div>
     </div>
   </div>
@@ -124,6 +130,7 @@ export default {
   methods: {
     ...mapActions({
       addToCurrentService: 'services/addToCurrentService',
+      refreshCurrentService: 'services/refreshCurrentService',
     }),
 
     save() {
@@ -147,6 +154,11 @@ export default {
     removeFromTiers(priceIndex) {
       this.form.price_tiers.splice(priceIndex, 1)
     },
+
+    cancel() {
+      this.refreshCurrentService()
+      this.$router.push({name: 'Services'})
+    }
   },
 
   validations: {

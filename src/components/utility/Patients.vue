@@ -3,6 +3,7 @@
     <cv-search
       v-model="search"
       placeholder="Search for patient"
+      autocomplete="off"
     />
 
     <div class="my-4 py-4">

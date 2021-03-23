@@ -13,7 +13,7 @@
             <p class="text-primary text-xl font-semibold">Update Admin Profile</p>
           </div>
         </div>
-        <cv-form @submit.prevent="submit">
+        <div>
           <div>
             <div class="flex flex-col items-center justify-center mt-8">
               <img
@@ -119,7 +119,7 @@
               </cv-button>
             </div>
           </div>
-        </cv-form>
+        </div>>
       </div>
     </template>
   </cv-modal>

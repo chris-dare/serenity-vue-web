@@ -56,12 +56,20 @@
     </div>
 
     <div class="flex items-center justify-between mt-12 mb-6">
-      <cv-button
-        class="border-serenity-primary text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary px-6"
-        kind="tertiary"
-      >
-        Cancel
-      </cv-button>
+      <div class="flex items-center space-x-2">
+        <SeButton
+          variant="outline"
+          @click="cancel"
+        >
+          Cancel
+        </SeButton>
+        <SeButton
+          :to="{ name: 'ServicePricing' }"
+          variant="secondary"
+        >
+          Go back
+        </SeButton>
+      </div>
       <div class="flex items-center">
         <SeButton
           :icon="icon"
@@ -139,6 +147,7 @@ export default {
   methods: {
     ...mapActions({
       createService: 'services/createService',
+      refreshCurrentService: 'services/refreshCurrentService',
     }),
 
     async save() {
@@ -164,6 +173,11 @@ export default {
       this.$router.push({name: 'Services'})
       this.loading = false
     },
+
+    cancel() {
+      this.refreshCurrentService()
+      this.$router.push({name: 'Services'})
+    }
   },
 }
 </script>

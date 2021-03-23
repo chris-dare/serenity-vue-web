@@ -30,6 +30,7 @@
             v-model="search"
             class="no-label-input h-12 flex-1 text-white"
             placeholder="Search for patient name or Phone number"
+            autocomplete="off"
           />
           <div
             class="bg-serenity-gray h-12 flex items-center justify-center px-4"

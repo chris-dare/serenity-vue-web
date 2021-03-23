@@ -3,6 +3,7 @@
     <cv-search
       v-model="search"
       placeholder="Search for patient, enter name or MR number"
+      autocomplete="off"
     />
     <div class="my-4 flex items-center justify-between">
       <div>

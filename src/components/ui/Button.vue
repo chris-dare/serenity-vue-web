@@ -3,10 +3,11 @@
     <cv-button-skeleton v-if="loading" />
     <cv-button
       v-else
-      :class="[buttonClass, full ? 'w-full' : '']"
-      class="px-4 flex items-center justify-center"
+      :class="[buttonClass, full ? 'w-full' : '', icon ? '' : 'px-4']"
+      class="flex items-center justify-center"
       kind="primary"
       :size="size"
+      :icon="icon"
       @click="go"
     >
       <slot>{{ label }}</slot>
@@ -28,6 +29,7 @@ export default {
       type: Boolean,
       default: false,
     },
+  
     loading: {
       type: Boolean,
       default: false,
@@ -37,7 +39,13 @@ export default {
       type: String,
       default: 'field',
     },
+
     to: {
+      type: [String,Object],
+      default: null,
+    },
+
+    icon: {
       type: [String,Object],
       default: null,
     },
@@ -57,7 +65,7 @@ export default {
   computed: {
     buttonClass() {
       if (this.variant == 'outline') {
-        return 'border-serenity-primary text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary'
+        return 'border-serenity-primary text-serenity-primary bg-white hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary'
       }
 
       if (this.variant  === 'secondary') {

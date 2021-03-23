@@ -22,6 +22,7 @@
       <cv-search
         v-model="search"
         placeholder="Search for service"
+        autocomplete="off"
       />
 
       <cv-data-table

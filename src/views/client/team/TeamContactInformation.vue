@@ -41,31 +41,26 @@
       class="inherit-full-input my-8"
     />
     <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center">
-        <cv-button
-          class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-          kind="tertiary"
+      <div class="flex items-center space-x-2">
+        <SeButton
+          :to="{ name: 'Team' }"
+          variant="outline"
         >
           Cancel
-        </cv-button>
-        <cv-button
-          class="bg-black px-6"
-          kind="primary"
-          @click="$router.push({ name: 'TeamBiodata' })"
+        </SeButton>
+        <SeButton
+          variant="secondary"
+          :to="{ name: 'TeamBiodata' }"
         >
           Go back
-        </cv-button>
+        </SeButton>
       </div>
-      <div class="flex items-center">
-        <cv-button
-          :icon="icon"
-          kind="primary"
-          class="bg-serenity-primary ml-6"
-          @click="save"
-        >
-          Next
-        </cv-button>
-      </div>
+      <SeButton
+        :icon="icon"
+        @click="save"
+      >
+        Next
+      </SeButton>
     </div>
   </div>
 </template>

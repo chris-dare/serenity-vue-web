@@ -80,32 +80,29 @@
     </div> -->
 
     <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center">
-        <cv-button
-          class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-          kind="tertiary"
+      <div class="flex items-center space-x-2">
+        <SeButton
+          :to="{ name: 'Team' }"
+          variant="outline"
         >
           Cancel
-        </cv-button>
-        <cv-button
-          class="bg-black px-6"
-          kind="primary"
-          @click="$router.push({ name: 'TeamContactInformation' })"
+        </SeButton>
+        <SeButton
+          variant="secondary"
+          :to="{ name: 'TeamContactInformation' }"
         >
           Go back
-        </cv-button>
+        </SeButton>
       </div>
       <div class="flex items-center">
-        <cv-button-skeleton v-if="loading" />
-        <cv-button
-          v-else
+        <SeButton
+          :loading="loading"
           :icon="icon"
-          kind="primary"
-          class="bg-serenity-primary ml-6"
+          variant="default"
           @click="save"
         >
           Submit
-        </cv-button>
+        </SeButton>
       </div>
     </div>
   </div>

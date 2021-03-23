@@ -9,6 +9,7 @@
         <cv-search
           v-model="search"
           placeholder="Search for patient"
+          autocomplete="off"
         />
         <div class="my-4 flex items-center space-x-2">
           <cv-button

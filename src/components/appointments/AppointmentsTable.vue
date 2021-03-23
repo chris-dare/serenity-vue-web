@@ -4,6 +4,7 @@
       v-if="!hideSearch"
       v-model="search"
       placeholder="Search for appointment"
+      autocomplete="off"
     />
 
     <div class="flex justify-end">

@@ -10853,6 +10853,11 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
+vue-disable-autocomplete@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/vue-disable-autocomplete/-/vue-disable-autocomplete-0.0.4.tgz#6318b515ade128247038121f33a6586c1d0899e8"
+  integrity sha512-NtEMoepVfFScR6f7d37g3tQh3F5VU75ai+5+GHoQ0pt3ftrLUeOWXi0ozQDExTwPFgLK3Yk86NeyokSZMlXvFg==
+
 vue-eslint-parser@^7.0.0:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-7.1.1.tgz#c43c1c715ff50778b9a7e9a4e16921185f3425d3"
