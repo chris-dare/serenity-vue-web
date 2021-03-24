@@ -107,7 +107,7 @@ export default {
   data() {
     return {
       form: {
-        name: 'Account',
+        name: '',
         permissions: {
           workspaces: [],
           resources: [],
