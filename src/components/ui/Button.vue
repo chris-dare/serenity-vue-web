@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <div class="w-auto">
     <cv-button-skeleton v-if="loading" />
     <cv-button
       v-else
@@ -12,7 +12,7 @@
     >
       <slot>{{ label }}</slot>
     </cv-button>
-  </span>
+  </div>
 </template>
 
 <script>
