@@ -127,7 +127,7 @@ export default {
   },
   validations: {
     form: {
-      name: { required }
+      name: { required },
     },
   },
 
@@ -183,12 +183,13 @@ export default {
           message: 'Please name is required!',
           type: 'error',
         })
-      } else {
+        return
+      }
+
       if (this.type === 'update') {
         this.update()
       } else {
         this.duplicate()
-      }
       }
     },
 

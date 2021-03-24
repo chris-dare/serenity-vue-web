@@ -13,14 +13,9 @@
           v-model="form.location_name"
           label="Location name"
           placeholder="eg Valley Heights"
-        >
-          <template
-            v-if="$v.form.location_name.$error"
-            slot="invalid-message"
-          >
-            Location name is required
-          </template>
-        </cv-text-input>
+          :invalid-message="$utils.validateRequiredField($v, 'location_name')"
+        />
+
         <cv-select
           v-model="form.country"
           label="Country"
@@ -35,61 +30,44 @@
             {{ country.name }}
           </cv-select-option>
         </cv-select>
+
         <cv-text-input
           v-model="form.city"
           label="City"
           placeholder="eg Accra"
-        >
-          <template
-            v-if="$v.form.city.$error"
-            slot="invalid-message"
-          >
-            City is required
-          </template>
-        </cv-text-input>
+          :invalid-message="$utils.validateRequiredField($v, 'city')"
+        />
+
         <cv-text-input
           v-model="form.street_address"
           label="Location Address"
           placeholder="eg No Bana Street"
-        >
-          <template
-            v-if="$v.form.street_address.$error"
-            slot="invalid-message"
-          >
-            Address is required
-          </template>
-        </cv-text-input>
+          :invalid-message="$utils.validateRequiredField($v, 'street_address')"
+        />
 
         <cv-text-input
           v-model="form.postal_code"
           label="Postal Code"
           placeholder="eg 00233"
+          :invalid-message="$utils.validateRequiredField($v, 'postal_code')"
         />
         
         <cv-text-input
           v-model="form.location_contact_number"
           label="Location contact number"
           placeholder="eg 022346786384"
-        >
-          <template
-            v-if="$v.form.location_contact_number.$error"
-            slot="invalid-message"
-          >
-            Location Phone number is required
-          </template>
-        </cv-text-input>
-        
-        <cv-button-skeleton
-          v-if="loading"
-          class="w-full"
+          :invalid-message="$utils.validateRequiredField($v, 'location_contact_number')"
         />
+        
         <SeButton
-          v-else
+          :loading="loading"
           full
+          class="mt-8"
           @click="submit"
         >
           {{ form.id ? 'Update location' : 'Create location' }}
         </SeButton>
+
         <p
           class="text-center"
           @click="visible = false"
@@ -142,6 +120,7 @@ export default {
       street_address: { required },
       city: { required },
       location_contact_number: { required },
+      postal_code: { required },
     },
   },
 
@@ -151,13 +130,20 @@ export default {
       updateLocation: 'locations/updateLocation',
     }),
 
-    submit(){
+    submit() {
+      this.$v.$touch()
+
+      if (this.$v.$invalid) {
+        return
+      }
+
       if (this.form.id) {
         this.update()
       } else {
         this.save()
       }
     },
+
     async save() {
       this.loading = true
       const data = await this.createLocation(this.form).catch(() => {
@@ -177,6 +163,7 @@ export default {
 
       this.loading = false
     },
+
     async update() {
       this.loading = true
       const data = await this.updateLocation(this.form).catch(() => {
