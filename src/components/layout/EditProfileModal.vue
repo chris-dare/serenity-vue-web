@@ -12,7 +12,7 @@
             <p class="text-primary text-xl font-semibold">Edit Profile</p>
           </div>
         </div>
-        <cv-form @submit.prevent="submit">
+        <cv-form @submit.prevent="">
           <div>
             <div class="flex flex-col items-center justify-center mt-8">
               <img

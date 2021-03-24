@@ -12,7 +12,7 @@
             <p class="text-primary text-xl font-semibold">Update Provider Profile</p>
           </div>
         </div>
-        <cv-form @submit.prevent="submit">
+        <cv-form @submit.prevent="">
           <div>
             <div class="flex flex-col items-center justify-center mt-8">
               <img
@@ -128,10 +128,6 @@ export default {
     }),
   },
 
-  created() {
-    this.form = {name: this.provider.organization_name}
-  },
-
   validations: {
     form: {
       name: { required },
@@ -147,6 +143,7 @@ export default {
     },
     'provider:profile:open': function(){
       this.visible = true
+      this.form = { name: this.provider.organization_name}
     },
   },
 
