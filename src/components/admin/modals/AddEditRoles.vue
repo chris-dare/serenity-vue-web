@@ -12,8 +12,15 @@
         <cv-text-input
           v-model="form.name"
           label="Name of role"
-          placeholder="eg Valley Heights"
-        />
+          placeholder="eg Account"
+        >
+          <template
+            v-if="$v.form.name.$error"
+            slot="invalid-message"
+          >
+            Name is required
+          </template>
+        </cv-text-input>
         <div class="space-y-2">
           <p class="bx--label">Workspace access</p>
          
@@ -93,12 +100,14 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
 export default {
   name: 'AddEditRole',
 
   data() {
     return {
       form: {
+        name: '',
         permissions: {
           workspaces: [],
           resources: [],
@@ -116,6 +125,12 @@ export default {
       type: 'update',
     }
   },
+  validations: {
+    form: {
+      name: { required }
+    },
+  },
+
 
   computed: {
     ...mapState({
@@ -145,6 +160,7 @@ export default {
     'role:duplicate:open': function(data){
       this.visible = true
       this.form = this.$utils.formatIncomingRoles(data.params[0])
+      this.form.name += ' Duplicate'
       this.type = 'duplicate'
     },
   },
@@ -161,10 +177,18 @@ export default {
     },
 
     submit(){
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.$toast.open({
+          message: 'Please name is required!',
+          type: 'error',
+        })
+      } else {
       if (this.type === 'update') {
         this.update()
       } else {
         this.duplicate()
+      }
       }
     },
 
