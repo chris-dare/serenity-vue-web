@@ -160,6 +160,7 @@ export default {
     'role:duplicate:open': function(data){
       this.visible = true
       this.form = this.$utils.formatIncomingRoles(data.params[0])
+      this.form.name += ' Duplicate'
       this.type = 'duplicate'
     },
   },
