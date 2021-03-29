@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="bx--label">{{ title }}</p>
+    <div class="bx--label">{{ title }}</div>
     <VueMultiselect
       v-model="selected"
       :options="options"
@@ -10,10 +10,16 @@
       :preserve-search="true"
       :placeholder="placeholder"
       :label="label"
-      track-by="id"
-      :preselect-first="true"
+      :track-by="trackBy"
+      :preselect-first="preselect"
+      :show-labels="false"
     />
-    <p v-if="error">{{ errorMessage }}</p>
+    <p
+      v-if="error || errorMessage"
+      class="error"
+    >
+      {{ errorMessage || 'This field is required' }}
+    </p>
   </div>
 </template>
 
@@ -44,6 +50,10 @@ export default {
       type: String,
       default: '',
     },
+    trackBy: {
+      type: String,
+      default: 'id',
+    },
 
     placeholder: {
       type: String,
@@ -51,16 +61,21 @@ export default {
     },
 
     error: {
-      type: Boolean,
+      type: [Boolean, String],
       default: false,
     },
 
     errorMessage: {
       type: String,
-      default: 'This field is required',
+      default: null,
     },
 
     multiple: {
+      type: Boolean,
+      default: false,
+    },
+
+    preselect: {
       type: Boolean,
       default: false,
     },

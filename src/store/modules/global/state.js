@@ -1,3 +1,4 @@
+import Currency from './currencies'
 export function initialState() {
   return {
     countries: [],
@@ -14,6 +15,7 @@ export function initialState() {
       {label: 'Virtual Care', value:'virtual-care'},
       {label: 'Admin', value:'admin'},
     ],
+    currencies: Currency.data,
   }
 }
 

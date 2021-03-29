@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-8">
-    <div>
+    <div class="flex flex-col">
       <p class="bx--label mb-6 uppercase">Service available days</p>
       <p class="bx--label">Day</p>
       <div class="grid grid-cols-7 items-center">
@@ -32,27 +32,45 @@
       </p>
     </div>
 
-    <div class="grid grid-cols-2 gap-x-4 gap-y-8">
-      <p class="bx--label col-span-2 uppercase">Service unavailable days</p>
-      <cv-date-picker
-        v-model="form.healthcare_service_not_available_times[0].during.start"
-        kind="single"
-        date-label="Start date"
-        class="inherit-full-input"
+    <p class="bx--label col-span-2 uppercase">Service unavailable days</p>
+    <div
+      v-for="(times, index) in form.healthcare_service_not_available_times"
+      :key="index"
+      class="grid grid-cols-11 gap-x-4 gap-y-8 items-center"
+    >
+      <div class="col-span-10 grid grid-cols-2 gap-x-4 gap-y-8">
+        <cv-date-picker
+          v-model="times.during.start"
+          kind="single"
+          date-label="Start date"
+          class="inherit-full-input"
+        />
+        <cv-date-picker
+          v-model="times.during.end"
+          kind="single"
+          date-label="End date"
+          class="inherit-full-input"
+        />
+        <cv-text-area
+          v-model="times.description"
+          label="Description of unavailable dates"
+          placeholder="eg New years eve"
+          :rows="2"
+          class="col-span-2"
+        />
+      </div>
+      <Trash
+        class="w-5 h-5 cursor-pointer"
+        @click="removeFromUnavailableDates(index)"
       />
-      <cv-date-picker
-        v-model="form.healthcare_service_not_available_times[0].during.end"
-        kind="single"
-        date-label="End date"
-        class="inherit-full-input"
-      />
-      <cv-text-area
-        v-model="form.healthcare_service_not_available_times[0].description"
-        label="Description of unavailable dates"
-        placeholder="eg New years eve"
-        :rows="2"
-        class="col-span-2"
-      />
+    </div>
+
+    <div
+      class="flex items-center space-x-2 text-serenity-primary my-4 cursor-pointer text-sm"
+      @click="addUnavailability"
+    >
+      <AddAlt class="w-5 h-5" />
+      <p class="text-serenity-primary">Add new unavailable date</p>
     </div>
 
     <div class="flex items-center justify-between mt-12 mb-6">
@@ -177,6 +195,20 @@ export default {
     cancel() {
       this.refreshCurrentService()
       this.$router.push({name: 'Services'})
+    },
+
+    addUnavailability() {
+      this.form.healthcare_service_not_available_times.push({
+        description: '',
+        during: {
+          start: '',
+          end: '',
+        },
+      })
+    },
+
+    removeFromUnavailableDates(index) {
+      this.form.healthcare_service_not_available_times.splice(index, 1)
     },
   },
 }

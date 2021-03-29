@@ -12,6 +12,7 @@ export default {
     dispatch('resources/getSpecialties', null,{ root:true })
     dispatch('resources/getCategories', null,{ root:true })
     dispatch('resources/getCodes', null,{ root:true })
+    dispatch('resources/getServiceTypes', null,{ root:true })
     dispatch('services/getServices', null,{ root:true })
     dispatch('getCountries')
   },
