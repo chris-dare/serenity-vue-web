@@ -9,7 +9,6 @@ export default {
     }
     const provider = rootState.auth.provider
     const { data } = await LocationAPI.list(provider.id).catch((error) => {
-      // this.$service.fail(error)
       throw error
     })
     commit(SET_LOCATIONS, data.data)
@@ -20,7 +19,6 @@ export default {
     const { data } = await LocationAPI
       .create(provider.id,payload)
       .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
         throw error
       })
 
@@ -33,23 +31,21 @@ export default {
     const { data } = await LocationAPI
       .update(provider.id, payload)
       .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
         throw error
       })
 
-    commit(UPDATE_LOCATION, data)
+    commit(UPDATE_LOCATION, data.data)
     return data
   },
 
   async deleteLocation({ commit, rootState}, id) {
     const provider = rootState.auth.provider
-    const { data } = await LocationAPI
+    await LocationAPI
       .delete(provider.id,id)
       .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
         throw error
       })
 
-    commit(DELETE_LOCATION, data)
+    commit(DELETE_LOCATION, id)
   },
 }
