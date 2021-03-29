@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-8">
-    <cv-select
+    <!-- <cv-select
       v-model="type"
       label="Select the type of service"
       class="inherit-full-input"
@@ -8,39 +8,42 @@
     >
       <cv-select-option value="single">Single</cv-select-option>
       <cv-select-option value="tiered">Tiered(multiple sub services)</cv-select-option>
-    </cv-select>
+    </cv-select> -->
     <!-- single -->
+    <p>Service Pricing Tiers</p>
     <div>
-      <cv-number-input
+      <!-- <cv-number-input
         v-if="type === 'single'"
         v-model="form.price_tiers[0].cost"
         label="Enter service price"
         placeholder="eg 50"
-      />
+      /> -->
 
-      <div
-        v-else
-      >
+      <div>
         <div
           v-for="(tier, index) in form.price_tiers"
           :key="index"
-          class="grid grid-cols-11 gap-4 mb-8"
+          class="grid grid-cols-11 gap-4 mb-8 items-end"
         >
           <cv-text-input
             v-model="tier.name"
             label="Service Tier"
             placeholder="Service tier name"
-            class="col-span-5"
+            class="col-span-4"
           />
           <cv-number-input
             v-model="tier.cost"
             label="Price"
             placeholder="Service tier price"
-            class="col-span-5"
+            class="col-span-4"
+          />
+          <CurrencySelect
+            v-model="tier.currency"
+            class="col-span-2"
           />
           <div class="flex items-end pb-3 justify-center">
             <Trash
-              class="w-5 h-5"
+              class="w-5 h-5 cursor-pointer"
               @click="removeFromTiers(index)"
             />
           </div>
@@ -59,7 +62,7 @@
         v-if="$utils.validateRequiredField($v, 'price_tiers')"
         class="text-red-600 text-xs my-3"
       >
-        Every price should be greater than 0
+        Every price is required
       </p>
     </div>
 
@@ -92,6 +95,7 @@
 
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+// eslint-disable-next-line no-unused-vars
 import { required, minLength, minValue } from 'vuelidate/lib/validators'
 import { mapActions, mapState } from 'vuex'
 
@@ -106,8 +110,19 @@ export default {
       form: {
         price_tiers: [
           {
-            name: 'standard',
+            name: 'Free',
             cost: 0,
+            currency: 'GHS',
+          },
+          {
+            name: 'Standard',
+            cost: 50,
+            currency: 'GHS',
+          },
+          {
+            name: 'Express',
+            cost: 100,
+            currency: 'GHS',
           },
         ],
       },
@@ -148,7 +163,7 @@ export default {
     },
 
     addTier() {
-      this.form.price_tiers.push({ name: '', cost: 0})
+      this.form.price_tiers.push({ name: '', cost: 0, currency: 'GHS'})
     },
 
     removeFromTiers(priceIndex) {
@@ -170,9 +185,12 @@ export default {
           name: {
             required,
           },
+          currency: {
+            required,
+          },
           cost: {
             required,
-            minValue: minValue(1),
+            // minValue: minValue(1),
           },
         },
       },

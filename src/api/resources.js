@@ -14,4 +14,8 @@ export default {
   codes() {
     return http.get('FHIR/healthcare-service-provision-codes')
   },
+
+  types() {
+    return http.get('FHIR/healthcare-service-types')
+  },
 }

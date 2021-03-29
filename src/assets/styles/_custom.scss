@@ -125,13 +125,18 @@ $primary: #0b6b74;
   div,
   select,
   input,
-  .bx--date-picker__input, .bx--time-picker {
+  .bx--date-picker__input, .bx--time-picker, .bx--select-input {
     width: 100% !important;
-    @apply text-left max-w-full;
+    
+    @apply text-left max-w-full min-w-0;
   }
 
   .bx--number__controls{
     @apply items-end
+  }
+
+  .bx--select-input{
+    padding: 0 1rem 0 1rem;
   }
 }
 
@@ -292,7 +297,7 @@ button:focus {
 }
 
 .error{
-  @apply text-sm text-red-600;
+  @apply text-xs text-red-600 mt-2;
 }
 
 .vue-phone-number-input{

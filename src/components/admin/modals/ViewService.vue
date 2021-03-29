@@ -38,21 +38,33 @@
             :description="form.locations"
           />
           <InfoBlock
+            label="Is service virtual?"
+            :description="form.virtual"
+          />
+          
+          
+          <InfoBlock
+            label="Is appointment required for this service?"
+            :description="form.required"
+          />
+
+          <InfoBlock
             label="Slot duration"
             :description="`${form.duration} mins`"
           />
           
           <InfoBlock
-            label="Is appointment required for this service?"
-            :description="form.healthcare_service_appointment_required ? 'Yes':'No'"
-          />
-          <InfoBlock
             label="Service categories"
             :description="form.categories"
           />
+
           <InfoBlock
             label="Service specialties"
             :description="form.specialties"
+          />
+          <InfoBlock
+            label="Service types"
+            :description="form.types"
           />
         </div>
         

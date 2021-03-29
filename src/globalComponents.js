@@ -15,7 +15,8 @@ import SuccessModal from '@/components/ui/modals/SuccessModal'
 import ConfirmDeleteModal from '@/components/ui/modals/ConfirmDeleteModal'
 import Timepicker from '@/components/ui/Timepicker'
 import ConfirmActionModal from '@/components/ui/ConfirmActionModal'
-import MultiSelect from '@/components/ui/MultiSelect'
+import MultiSelect from '@/components/ui/form/MultiSelect'
+import CurrencySelect from '@/components/ui/form/CurrencySelect'
 import InfoImageBlock from '@/components/ui/sections/InfoImageBlock'
 import AppRegisterLayout from '@/layout/AppRegisterLayout'
 
@@ -36,5 +37,6 @@ Vue.component('ConfirmDeleteModal', ConfirmDeleteModal)
 Vue.component('Timepicker', Timepicker)
 Vue.component('ConfirmActionModal', ConfirmActionModal)
 Vue.component('MultiSelect', MultiSelect)
+Vue.component('CurrencySelect', CurrencySelect)
 Vue.component('InfoImageBlock', InfoImageBlock)
 Vue.component('AppRegisterLayout', AppRegisterLayout)
