@@ -1,6 +1,9 @@
 <template>
   <div class="w-auto">
-    <cv-button-skeleton v-if="loading" />
+    <cv-button-skeleton
+      v-if="loading"
+      :class="[full ? 'w-full' : '']"
+    />
     <cv-button
       v-else
       :class="[buttonClass, full ? 'w-full' : '', icon ? '' : 'px-4']"

@@ -6,6 +6,7 @@ export default {
   },
 
   [UPDATE_LOCATION](state, location) {
+    console.log('locations updated', location)
     const index = state.locations.findIndex(a => a.id === location.id)
     if (index !== -1) {
       state.locations = state.locations.map(a => {

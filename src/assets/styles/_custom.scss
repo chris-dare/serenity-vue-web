@@ -278,17 +278,26 @@ button:focus {
   }
 }
 
-.vue__time-picker{
+.vue__time-picker, .vue-phone-number-input{
   @apply h-10 w-full;
   input{
     border: unset !important;
     border-bottom: 1px solid #8d8d8d !important;
     height: 2.5rem !important;
     width: 100% !important;
-    background-color: #f4f4f4;
+    background-color: #f4f4f4 !important;
+    border-radius: 0 !important;
   }
+
 }
 
 .error{
   @apply text-sm text-red-600;
+}
+
+.vue-phone-number-input{
+  background-color: #f4f4f4;
+  .input-tel.is-valid .input-tel__label{
+    @apply text-serenity-primary
+  }
 }

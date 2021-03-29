@@ -51,13 +51,22 @@
           placeholder="eg 00233"
           :invalid-message="$utils.validateRequiredField($v, 'postal_code')"
         />
-        
-        <cv-text-input
-          v-model="form.location_contact_number"
-          label="Location contact number"
-          placeholder="eg 022346786384"
-          :invalid-message="$utils.validateRequiredField($v, 'location_contact_number')"
-        />
+
+        <div>
+          <p class="bx--label">Location contact number</p>
+          <VuePhoneNumberInput
+            v-model="form.location_contact_number"
+            default-country-code="GH"
+            valid-color="#0B6B74"
+            required
+          />
+          <p
+            v-if="$utils.validateRequiredField($v, 'location_contact_number')"
+            class="error"
+          >
+            Location contact number is required
+          </p>
+        </div>
         
         <SeButton
           :loading="loading"

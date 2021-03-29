@@ -40,7 +40,7 @@ export default {
     LeftSidebarLayout,
     ChangePasswordModal,
     EditProfileModal,
-    AdminProfile
+    AdminProfile,
   },
   events: {
     'profile:edit': function(){

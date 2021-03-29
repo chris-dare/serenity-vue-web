@@ -45,22 +45,22 @@
             </div>
           </cv-data-table-cell>
           <!-- APIS not ready for these -->
-          <!-- <cv-data-table-cell>
+          <cv-data-table-cell>
             <div class="flex items-center space-x-6">
               <p
                 class="cursor-pointer"
                 @click="$trigger('location:edit:open', { ...row })"
               >
-                View
+                Edit
               </p>
               <p
                 class="text-red-500 cursor-pointer"
-                @click="remove(row.id)"
+                @click="$trigger('confirm:delete:open', { data:row.id, label: 'Are you sure you want to delete this location?' })"
               >
                 Delete
               </p>
             </div>
-          </cv-data-table-cell> -->
+          </cv-data-table-cell>
         </cv-data-table-row>
       </template>
     </cv-data-table>
@@ -71,6 +71,10 @@
       No locations to show
     </p>
     <AddEditLocation />
+    <ConfirmDeleteModal
+      :loading="loading"
+      @delete="remove"
+    />
   </div>
 </template>
 
@@ -88,7 +92,7 @@ export default {
 
   data() {
     return {
-      columns: ['Name', 'Address', 'City'],
+      columns: ['Name', 'Address', 'City', ''],
       loading: false,
     }
   },
@@ -115,10 +119,24 @@ export default {
       this.loading = false
     },
 
-    async remove(id) {
+    async remove(rowId) {
       this.loading = true
-      await this.deleteLocation(id)
-      this.loading = false
+      try {
+        await this.deleteLocation(rowId).then(()=>{
+          this.$toast.open({
+            message: 'Location successfully deleted',
+          })
+        })
+        this.loading = false
+        this.$trigger('confirm:delete:close')
+      } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+        throw error
+      }
     },
   },
 }

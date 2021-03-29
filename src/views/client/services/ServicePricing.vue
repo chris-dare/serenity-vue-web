@@ -158,7 +158,7 @@ export default {
     cancel() {
       this.refreshCurrentService()
       this.$router.push({name: 'Services'})
-    }
+    },
   },
 
   validations: {

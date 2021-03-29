@@ -44,7 +44,7 @@ export default {
     showEdit: {
       type: Boolean,
       default: false,
-    }
+    },
   },
 
   computed: {
