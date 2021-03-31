@@ -70,26 +70,32 @@ export default {
     ...mapState({
       currentUser: (state) => state.practitioners.currentUser,
     }),
+
     workspaces() {
       if (!this.currentUser || !this.currentUser.practitioner_role) {
         return ''
       }
-      return this.currentUser.practitioner_role.permissions.workspaces.join(
+      return this.currentUser.practitioner_role.permissions.workspaces.map(workspace => {
+        return workspace.split('.')[0]
+      }).join(
         ', ',
       )
     },
+
     roleName() {
       if (!this.currentUser || !this.currentUser.practitioner_role) {
         return ''
       }
       return this.currentUser.practitioner_role.name
     },
+
     specialtyName() {
       if (!this.currentUser || !this.currentUser.practitioner_specialty) {
         return ''
       }
-      return this.currentUser.practitioner_specialty[0]
+      return this.currentUser.practitioner_specialty.map(sp => sp.Display || sp).join(', ')
     },
+
     generalFields() {
       return [
         { label: 'First Name', value: this.currentUser.first_name },
