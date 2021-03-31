@@ -41,18 +41,21 @@
             <div class="grid grid-cols-2 gap-8 my-8">
               <cv-text-input
                 v-model="form.first_name"
+                :invalid-message="$utils.validateRequiredField($v, 'first_name')"
                 label="First Name (required)"
                 placeholder="Enter First name"
                 class="inherit-full-input"
               />
               <cv-text-input
                 v-model="form.last_name"
+                :invalid-message="$utils.validateRequiredField($v, 'last_name')"
                 label="Last Name (required)"
                 placeholder="Enter Last name"
                 class="inherit-full-input"
               />
               <cv-select
                 v-model="form.gender"
+                :invalid-message="$utils.validateRequiredField($v, 'gender')"
                 label="Gender (required)"
                 class="inherit-full-input"
                 placeholder="Male or female"
@@ -61,20 +64,23 @@
                 <cv-select-option value="female">Female</cv-select-option>
               </cv-select>
               <cv-date-picker
-                v-model="form.date_of_birth"
+                v-model="form.birth_date"
+                :invalid-message="$utils.validateRequiredField($v, 'birth_date')"
                 kind="single"
                 class="inherit-full-input"
                 placeholder="dd/mm/yyyy"
                 date-label="Date of birth"
               />
               <cv-text-input
-                v-model="form.phone_number"
+                v-model="form.mobile"
+                :invalid-message="$utils.validateRequiredField($v, 'mobile')"
                 label="Phone number (required)"
                 placeholder="eg 0349990390"
                 class="inherit-full-input"
               />
               <cv-text-input
                 v-model="form.email"
+                :invalid-message="$utils.validateRequiredField($v, 'email')"
                 label="Email address (required)"
                 placeholder="Email address"
                 class="inherit-full-input"
@@ -109,7 +115,11 @@
               >
                 Go Back
               </cv-button>
+              <cv-button-skeleton
+                v-if="loading"
+              />
               <cv-button
+                v-else
                 :icon="icon"
                 kind="primary"
                 class="bg-serenity-primary hover:bg-serenity-primary-highlight  ml-6"
@@ -127,6 +137,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { required, email } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Camera from '@carbon/icons-vue/es/camera/32'
 
@@ -137,7 +148,8 @@ export default {
 
   data() {
     return {
-      form: {},
+      form: {
+      },
       visible: false,
       loading: false,
       icon: ChevronRight,
@@ -155,8 +167,19 @@ export default {
       this.visible = true
     },
     'admin:profile:open': function(){
-      this.form = Object.assign({}, this.user)
+      this.form = Object.assign({}, this.form, this.user)
       this.visible = true
+    },
+  },
+
+  validations: {
+    form:  {
+      first_name: {required},
+      last_name: {required},
+      gender: {required},
+      birth_date: {required},
+      email: {required, email},
+      mobile: {required},
     },
   },
 
@@ -165,6 +188,10 @@ export default {
       update: 'auth/updateProfile',
     }),
     async submit() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return
+      }
       this.loading = true
       const data = await this.update(this.form).catch((error) => {
         this.$toast.open({
@@ -175,11 +202,17 @@ export default {
       })
 
       if (data) {
-        console.info(data)
-        this.$toast.open({
-          message: data.message || 'Profile updated successfully',
-        })
-        this.close()
+        if(data.successful){
+          this.$toast.open({
+            message: data.message || 'Profile updated successfully',
+          })
+          this.visible = false
+        }else{
+          this.$toast.open({
+            message: data.message || 'Something went wrong!',
+            type: 'error',
+          })
+        }
       }
 
       this.loading = false

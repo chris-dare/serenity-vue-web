@@ -37,7 +37,7 @@ export default {
   },
 
   updateProfile(params){
-    return http.post(`${this.url}user`, params)
+    return http.patch('user', params)
   },
 
   logout(){
