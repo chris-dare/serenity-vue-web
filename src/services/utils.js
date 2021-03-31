@@ -17,6 +17,10 @@ const validateRequiredField = ($v, field) => {
       return `${formattedField} should not be less than ${$field.$params.minLength.min} characters`
     }
 
+    if($field.email === false){
+      return `${formattedField} format is invalid`
+    }
+  
     return `${formattedField} is required`
   }
   return ''
