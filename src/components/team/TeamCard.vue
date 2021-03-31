@@ -19,17 +19,17 @@
       <p class="text-sm text-primary">General Practitioner</p>
       <p class="text-sm text-secondary">{{ user.email }}</p>
     </div>
-    <p
-      class="text-sm text-serenity-primary font-semibold cursor-pointer"
-      @click="go"
+    <router-link
+      class="text-sm text-serenity-router-linkrimary font-semibold cursor-pointer"
+      :to="{name: 'TeamDetail', params: {id: user.id}}"
     >
       View Profile
-    </p>
+    </router-link>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   name: 'TeamCard',
 
@@ -44,19 +44,6 @@ export default {
     ...mapState({
       cursor: (state) => state.practitioners.cursor,
     }),
-  },
-
-  methods: {
-    ...mapActions({
-      setCurrentUser: 'practitioners/setCurrentUser',
-      getUser: 'practitioners/getUser',
-    }),
-
-    async go() {
-      // this.setCurrentUser(this.user)
-      await this.getUser(this.user.id)
-      this.$router.push(`/team/${1}`)
-    },
   },
 }
 </script>

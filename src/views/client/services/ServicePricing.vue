@@ -125,7 +125,7 @@ export default {
     return {
       type: 'single',
       tiers: [],
-      code: null,
+      code: 'cost',
       form: {
         price_tiers: [
           {

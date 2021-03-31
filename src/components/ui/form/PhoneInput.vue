@@ -37,12 +37,15 @@ export default {
       type: String,
       default: '',
     },
-  },
+    raw: {
+      type: Boolean,
+      default: false,
+    },
 
-  data() {
-    return {
-      selectedDialCode: '+233',
-    }
+    countryCode: {
+      type: String,
+      default: '+233',
+    },
   },
 
   computed: {
@@ -53,6 +56,15 @@ export default {
       },
       get() {
         return this.convertFromFormattedPhoneNumber(this.value)
+      },
+    },
+
+    selectedDialCode: {
+      set(val) {
+        this.$emit('input', val)
+      },
+      get() {
+        return this.countryCode
       },
     },
 
@@ -72,7 +84,8 @@ export default {
       if (!value) {
         return
       }
-      return startsWith(value, '+') ? value : this.selectedDialCode.concat(value.replace(/\s/g, ''))
+      
+      return startsWith(value, '+') || this.raw ? value : this.selectedDialCode.concat(value.replace(/\s/g, ''))
     },
   },
 }

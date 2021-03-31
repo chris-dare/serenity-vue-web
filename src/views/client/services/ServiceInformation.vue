@@ -22,9 +22,9 @@
 
       <MultiSelect
         v-model="form.healthcare_service_types"
-        multiple
         :options="types"
         label="text"
+        :multiple="false"
         track-by="text"
         class="multiselect-white"
         title="Type of Service"
@@ -80,7 +80,7 @@
         <MultiSelect
           v-model="form.healthcare_service_categories"
           :options="categories"
-          :multiple="true"
+          :multiple="false"
           placeholder="Select one or more categories"
           label="text"
           track-by="text"

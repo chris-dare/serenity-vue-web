@@ -55,6 +55,8 @@
           v-model="form.location_contact_number"
           label="Location contact number"
           :error-message="$utils.validateRequiredField($v, 'location_contact_number')"
+          :country-code.sync="countryCode"
+          @input="$v.$touch()"
         />
         
         <SeButton
@@ -94,6 +96,7 @@ export default {
       },
       visible: false,
       loading: false,
+      countryCode: '',
     }
   },
 

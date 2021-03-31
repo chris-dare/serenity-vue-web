@@ -20,16 +20,16 @@ export default {
   },
 
   async createUser({ commit, rootState }, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await UsersAPI
-      .create(provider.id, payload)
-      .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
-        throw error
-      })
 
-    commit(UPDATE_USER, data.data)
-    return data
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await UsersAPI
+        .create(provider.id, payload)
+      commit(UPDATE_USER, data.data)
+      return data
+    } catch (error) {
+      throw error || error.message
+    }
   },
 
   addToCurrentUser({ commit }, data) {
@@ -47,26 +47,24 @@ export default {
   },
 
   async updateUser({ commit, rootState }, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await UsersAPI
-      .update(provider.id,payload)
-      .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
-        throw error
-      })
-
-    commit(UPDATE_USER, data.data)
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await UsersAPI
+        .update(provider.id,payload)
+      commit(UPDATE_USER, data.data)
+    } catch (error) {
+      throw error || error.message
+    }
   },
 
   async deleteUser({ commit, rootState }, id) {
-    const provider = rootState.auth.provider
-    const { data } = await UsersAPI
-      .delete(provider.id, id)
-      .catch(({ response: { data: error } }) => {
-        this.$service.fail(error)
-        throw error
-      })
-
-    commit(DELETE_USER, data)
+    try {
+      const provider = rootState.auth.provider
+      await UsersAPI
+        .delete(provider.id, id)
+      commit(DELETE_USER, id)
+    } catch (error) {
+      throw error || error.message
+    }
   },
 }

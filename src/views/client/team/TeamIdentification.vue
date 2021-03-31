@@ -63,7 +63,7 @@
           :loading="loading"
           :icon="icon"
           variant="default"
-          @click="save"
+          @click="submit"
         >
           Submit
         </SeButton>
@@ -124,24 +124,58 @@ export default {
     ...mapActions({
       addToStoreData: 'practitioners/addToCurrentUser',
       createUser: 'practitioners/createUser',
+      updateUser: 'practitioners/updateUser',
       reset: 'practitioners/reset',
     }),
 
-    async save() {
+    submit() {
       this.$v.$touch()
 
       if (this.$v.$invalid) {
         return
       }
+
+      if (this.form.id) {
+        this.update()
+      } else {
+        this.save()
+      }
+    },
+
+    async save() {
       this.loading = true
 
       this.addToStoreData(this.form)
 
       try {
-        await this.createUser(this.form).catch(() => {
-          this.reset()
-          this.$router.push({name: 'Team'})
+        await this.createUser(this.form)
+        this.$toast.open({
+          message: 'Team member successfully added',
         })
+        this.reset()
+        this.$router.push({name: 'Team'})
+      } catch (error) {
+        this.$toast.open({
+          message: 'Something went wrong!',
+          type: 'error',
+        })
+      }
+
+      this.loading = false
+    },
+
+    async update() {
+      this.loading = true
+
+      this.addToStoreData(this.form)
+
+      try {
+        await this.updateUser(this.form)
+        this.$toast.open({
+          message: 'Team member successfully updated',
+        })
+        this.reset()
+        this.$router.push({name: 'TeamDetail', params: { id:this.form.id }})
       } catch (error) {
         this.$toast.open({
           message: 'Something went wrong!',
