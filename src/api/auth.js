@@ -25,7 +25,7 @@ export default {
   },
 
   refresh(params){
-    return http.post(`${this.url}token/refresh`, params)
+    return authHttp.post(`${this.url}token/refresh`, params)
   },
 
   confirmReset(params){
