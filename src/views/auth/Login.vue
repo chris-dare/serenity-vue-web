@@ -73,7 +73,6 @@
 
 <script>
 import { mapActions } from 'vuex'
-// import {emailValidation, passwordValidation} from '@/validations'
 import { required, email } from 'vuelidate/lib/validators'
 
 export default {
@@ -111,7 +110,6 @@ export default {
         this.$router.push({ name: 'GetStarted' })
         console.info('result', result)
       }catch(error){
-        window.blah = this.$refs.loginButton.$el
         this.$refs.loginButton.$el.classList.add('shake-anim-active')
         setTimeout(()=> {
           this.$refs.loginButton.$el.classList.remove('shake-anim-active')
