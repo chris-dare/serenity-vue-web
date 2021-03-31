@@ -97,9 +97,9 @@
           >
             Cancel
           </SeButton>
-          <!-- <SeButton>
+          <SeButton @click="edit">
             Edit this service
-          </SeButton> -->
+          </SeButton>
         </div>
       </div>
     </template>
@@ -107,6 +107,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'ViewService',
 
@@ -129,9 +131,17 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      getService: 'services/getService',
+    }),
     close() {
       this.visible = false
       this.form = {}
+    },
+
+    async edit() {
+      await this.getService(this.form.id)
+      this.$router.push({ name: 'ServiceInformation'})
     },
   },
 }

@@ -15,7 +15,7 @@
         <SeButton
           @click="go"
         >
-          Add new user 
+          Add new team member
           <Add class="ml-4 w-5 h-5 text-white" />
         </SeButton>
       </div>

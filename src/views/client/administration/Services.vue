@@ -60,7 +60,12 @@
                 >
                   View
                 </p>
-                <!-- <p class="text-red-500">Delete</p> -->
+                <p
+                  class="text-red-500 cursor-pointer"
+                  @click="$trigger('confirm:delete:open', { data:row.id, label: 'Are you sure you want to delete this service?' })"
+                >
+                  Delete
+                </p>
               </div>
             </cv-data-table-cell>
             <template slot="expandedContent">
@@ -85,6 +90,10 @@
     </div>
     <AddEditService />
     <ViewService />
+    <ConfirmDeleteModal
+      :loading="loading"
+      @delete="remove"
+    />
   </div>
 </template>
 
@@ -92,7 +101,7 @@
 import AddEditService from '@/components/admin/modals/AddEditService'
 import ViewService from '@/components/admin/modals/ViewService'
 import DataMixin from '@/mixins/data'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Services',
@@ -114,10 +123,6 @@ export default {
   },
 
   computed: {
-    // ...mapState({
-    //   data: (state) => state.services.services,
-    // }),
-
     ...mapGetters({
       data: 'services/normalizedServices',
     }),
@@ -128,11 +133,34 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      deleteService: 'services/deleteService',
+    }),
     getLocations(services) {
       if(!services.length) {
         return ''
       }
       return services.map(service => service.location_name || service.display).join(',')
+    },
+
+    async remove(rowId) {
+      this.loading = true
+      try {
+        await this.deleteService(rowId).then(()=>{
+          this.$toast.open({
+            message: 'Service successfully deleted',
+          })
+        })
+        this.loading = false
+        this.$trigger('confirm:delete:close')
+      } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+        throw error
+      }
     },
   },
 

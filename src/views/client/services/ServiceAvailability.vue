@@ -86,7 +86,7 @@
           :icon="icon"
           variant="primary"
           :loading="loading"
-          @click="save"
+          @click="submit"
         >
           Next
         </SeButton>
@@ -163,31 +163,78 @@ export default {
   methods: {
     ...mapActions({
       createService: 'services/createService',
+      updateService: 'services/updateService',
       refreshCurrentService: 'services/refreshCurrentService',
       addToStoreData: 'services/addToCurrentService',
     }),
 
-    async save() {
+    submit() {
       this.$v.$touch()
 
       if (this.$v.$invalid) {
         return
       }
+
+      if (this.form.id) {
+        this.update()
+      } else {
+        this.save()
+      }
+    },
+
+    async save() {
     
       this.loading = true
-      await this.createService(this.form).catch((error) => {
+      try {
+        await this.createService(this.form)
+        this.$toast.open({
+          message: 'Service successfully added',
+        })
+        this.$router.push({name: 'Services'})
+        this.loading = false
+      } catch (error) {
         this.$toast.open({
           message: error.message || 'Something went wrong!',
           type: 'error',
         })
         this.loading = false
         throw error
-      })
+      }
+      // await this.createService(this.form).catch((error) => {
+      //   this.$toast.open({
+      //     message: error.message || 'Something went wrong!',
+      //     type: 'error',
+      //   })
+      //   this.loading = false
+      //   throw error
+      // })
 
-      this.$toast.open({
-        message: 'Service successfully added',
-      })
-      this.$router.push({name: 'Services'})
+      // this.$toast.open({
+      //   message: 'Service successfully added',
+      // })
+      // this.$router.push({name: 'Services'})
+      // this.loading = false
+    },
+
+    async update() {
+      this.loading = true
+
+      this.addToStoreData(this.form)
+
+      try {
+        await this.updateService(this.form)
+        this.$toast.open({
+          message: 'Service successfully updated',
+        })
+        this.reset()
+        this.$router.push({name: 'TeamDetail', params: { id:this.form.id }})
+      } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+      }
+
       this.loading = false
     },
 

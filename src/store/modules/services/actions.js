@@ -4,54 +4,69 @@ import { SET_SERVICES, UPDATE_SERVICE, DELETE_SERVICE, ADD_SERVICE_DATA, SET_SER
 
 export default {
   async getServices({ commit, rootState }) {
-    const provider = rootState.auth.provider
-    const { data } = await ServicesAPI.list(provider.id).catch((error) => {
-      throw error
-    })
-    commit(SET_SERVICES, data.data)
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ServicesAPI.list(provider.id)
+      commit(SET_SERVICES, data.data)
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
+  async getService({ commit, rootState }, id) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ServicesAPI.get(provider.id, id)
+      commit(SET_SERVICE_DATA, data.data)
+    } catch (error) {
+      throw error.data || error
+    }
   },
 
   async createService({ commit, rootState }, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await ServicesAPI
-      .create(provider.id,payload)
-      .catch((error) => {
-        throw error.data || error
-      })
-
-    commit(UPDATE_SERVICE, data.data)
-    commit(SET_SERVICE_DATA, {})
-    return data
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ServicesAPI
+        .create(provider.id,payload)
+      commit(UPDATE_SERVICE, data.data)
+      commit(SET_SERVICE_DATA, {})
+      return data
+    } catch (error) {
+      throw error.data || error
+    }
   },
 
-  async updateService({ commit, rootState}, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await ServicesAPI
-      .update(provider.id,payload)
-      .catch((error) => {
-        throw error
-      })
-
-    commit(UPDATE_SERVICE, data.data)
-    return data
+  async updateService({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ServicesAPI
+        .update(provider.id,payload)
+      commit(UPDATE_SERVICE, data.data)
+    } catch (error) {
+      throw error.data || error
+    }
   },
 
-  async deleteService({ commit, rootState}, id) {
-    const provider = rootState.auth.provider
-    await ServicesAPI
-      .delete(provider.id,id)
-      .catch((error) => {
-        throw error
-      })
-
-    commit(DELETE_SERVICE, id)
+  async deleteService({ commit, rootState }, id) {
+    try {
+      const provider = rootState.auth.provider
+      await ServicesAPI
+        .delete(provider.id, id)
+      commit(DELETE_SERVICE, id)
+    } catch (error) {
+      throw error.data || error
+    }
   },
 
   addToCurrentService({ commit }, data) {
     commit(ADD_SERVICE_DATA, data)
   },
 
-  refreshCurrentService({ commit }, data) {
+  refreshCurrentService({ commit }) {
     commit(SET_SERVICE_DATA, {})
+  },
+
+  setCurrentService({ commit }, data) {
+    commit(SET_SERVICE_DATA, data)
   },
 }

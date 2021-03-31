@@ -7,8 +7,12 @@ export default {
     return http.get(`${this.url}${providerId}/healthcare-services`)
   },
 
+  get(providerId, id) {
+    return http.get(`${this.url}${providerId}/healthcare-services/${id}`)
+  },
+
   create(providerId, params) {
-    return http.post(`${this.url}${providerId}/healthcare-services`, params)
+    return http.post(`${this.url}${providerId}/healthcare-services/${params.id}`, params)
   },
 
   update(providerId, params) {

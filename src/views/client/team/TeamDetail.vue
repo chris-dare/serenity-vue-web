@@ -25,7 +25,10 @@
       </div>
       <div class="flex items-center space-x-4 mr-4">
         <p class="text-green-500 font-semibold">Active</p>
-        <TeamDetailActionsDropdown />
+        <TeamDetailActionsDropdown
+          @edit="$router.push({ name: 'TeamBiodata' })"
+          @delete="$trigger('confirm:delete:open', { data:{}, label: 'Are you sure you want to delete this user?' })"
+        />
       </div>
     </div>
 
@@ -40,17 +43,28 @@
         :cols="1"
       />
     </div>
+
+    <ConfirmDeleteModal
+      :loading="loading"
+      @delete="remove"
+    />
   </div>
 </template>
 
 <script>
 import PatientSummaryCard from '@/components/patients/PatientSummaryCard'
 import TeamDetailActionsDropdown from '@/components/team/TeamDetailActionsDropdown'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'TeamDetail',
 
   components: { PatientSummaryCard, TeamDetailActionsDropdown },
+
+  data() {
+    return {
+      loading: false,
+    }
+  },
 
   computed: {
     ...mapState({
@@ -103,6 +117,43 @@ export default {
         { label: 'Specialty', value: this.specialtyName },
         { label: 'Medical Practice code', value: null },
       ]
+    },
+  },
+
+  async created() {
+    await this.getUser(this.$route.params.id)
+  },
+
+  methods: {
+    ...mapActions({
+      getUser: 'practitioners/getUser',
+      deleteUser: 'practitioners/deleteUser',
+      setCurrentUser: 'practitioners/setCurrentUser',
+    }),
+
+    edit() {
+      this.setCurrentUser()
+    },
+
+    async remove() {
+      this.loading = true
+      try {
+        await this.deleteUser(this.$route.params.id).then(()=>{
+          this.$toast.open({
+            message: 'User successfully deleted',
+          })
+        })
+        this.loading = false
+        this.$trigger('confirm:delete:close')
+        this.$router.push({ name: 'Team'})
+      } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+        throw error
+      }
     },
   },
 }

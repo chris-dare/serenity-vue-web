@@ -36,7 +36,7 @@ export default {
       options: [
         { label: 'Edit', event: 'edit'},
         { label: 'Suspend account', event: 'suspend'},
-        { label: 'Delete account', event: 'edit'},
+        { label: 'Delete account', event: 'delete'},
       ],
     }
   },
