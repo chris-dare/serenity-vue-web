@@ -7,6 +7,9 @@ const validateRequiredField = ($v, field) => {
     if($field.sameAsPassword === false){
       return 'Passwords do not match'
     }
+    if($field.email === false){
+      return `${formattedField} format is invalid`
+    }
     return `${formattedField} is required`
   }
   return ''

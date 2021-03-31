@@ -15,7 +15,6 @@
       </LeftSidebarLayout>
       <ChangePasswordModal ref="changePasswordModal" />
       <EditProfileModal ref="editProfileModal" />
-      <AdminProfile />
       <ConfirmActionModal />
     </div>
   </div>
@@ -28,7 +27,6 @@ import UtilityBar from '@/components/utility/UtilityBar'
 import LeftSidebarLayout from '@/layout/LeftSidebarLayout'
 import ChangePasswordModal from '@/components/layout/ChangePasswordModal'
 import EditProfileModal from '@/components/layout/EditProfileModal'
-import AdminProfile from '@/components/admin/modals/AdminProfile'
 import { mapActions } from 'vuex'
 
 export default {
@@ -40,7 +38,6 @@ export default {
     LeftSidebarLayout,
     ChangePasswordModal,
     EditProfileModal,
-    AdminProfile,
   },
   events: {
     'profile:edit': function(){
