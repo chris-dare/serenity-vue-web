@@ -2,22 +2,14 @@
   <div class="mx-auto w-4/5 space-y-4">
     <div class="flex items-center justify-between">
       <p class="text-xl font-bold">Roles ({{ roles.length }})</p>
-
-      <!-- <cv-button
-        class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
-        kind="primary"
-        @click="$trigger('role:add:open')"
-      >
-        Add new role 
-        <Add class="ml-4 w-5 h-5 text-white" />
-      </cv-button> -->
     </div>
 
-    <cv-search
-      v-model="search"
-      placeholder="Search for role"
-      autocomplete="off"
-    />
+    <cv-form autocomplete="off">
+      <cv-search
+        v-model="search"
+        placeholder="Search for role"
+      />
+    </cv-form>
 
     <cv-data-table
       ref="table"

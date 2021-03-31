@@ -12,12 +12,12 @@
         <Add class="ml-4 w-5 h-5 text-white" />
       </cv-button>
     </div>
-
-    <cv-search
-      v-model="search"
-      placeholder="Search for location"
-      autocomplete="off"
-    />
+    <cv-form autocomplete="off">
+      <cv-search
+        v-model="search"
+        placeholder="Search for location"
+      />
+    </cv-form>
     <cv-data-table
       ref="table"
       :data="filteredData"

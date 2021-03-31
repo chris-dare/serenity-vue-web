@@ -1,104 +1,119 @@
 <template>
   <div>
-    <div class="grid grid-cols-2 gap-8">
+    <cv-form
+      autocomplete="off"
+      @submit.prevent
+    >
+      <div class="grid grid-cols-2 gap-4 items-start">
+        <!-- <cv-text-input
+          v-model="form.phone_number"
+          label="Phone number (required)"
+          placeholder="eg 0349990390"
+          class="inherit-full-input"
+        >
+          <template
+            v-if="$v.form.phone_number.$error"
+            slot="invalid-message"
+          >
+            Phone number is required
+          </template>
+        </cv-text-input> -->
+        <PhoneInput
+          v-model="form.phone_number"
+          label="Phone number (required)"
+          :error-message="$utils.validateRequiredField($v, 'phone_number')"
+        />
+        <cv-text-input
+          v-model="form.email"
+          label="Email address(required)"
+          placeholder="Email address"
+          class="inherit-full-input"
+        >
+          <template
+            v-if="$v.form.email.$error"
+            slot="invalid-message"
+          >
+            A valid email address is required
+          </template>
+        </cv-text-input>
+      </div>
       <cv-text-input
-        v-model="form.phone_number"
-        label="Phone number (required)"
-        placeholder="eg 0349990390"
-        class="inherit-full-input"
-      >
-        <template
-          v-if="$v.form.phone_number.$error"
-          slot="invalid-message"
-        >
-          Phone number is required
-        </template>
-      </cv-text-input>
+        v-model="form.postal"
+        label="Postal Address"
+        placeholder="Postal Address"
+        class="inherit-full-input my-8"
+      />
       <cv-text-input
-        v-model="form.email"
-        label="Email address(required)"
-        placeholder="Email address"
-        class="inherit-full-input"
-      >
-        <template
-          v-if="$v.form.email.$error"
-          slot="invalid-message"
-        >
-          A valid email address is required
-        </template>
-      </cv-text-input>
-    </div>
-    <cv-text-input
-      v-model="form.postal"
-      label="Postal Address"
-      placeholder="Postal Address"
-      class="inherit-full-input my-8"
-    />
-    <cv-text-input
-      v-model="form.address"
-      label="Home/Residential address"
-      placeholder="Home/Residential address"
-      class="inherit-full-input my-8"
-    />
-    <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center space-x-2">
+        v-model="form.address"
+        label="Home/Residential address"
+        placeholder="Home/Residential address"
+        class="inherit-full-input my-8"
+      />
+      <div class="flex items-center justify-between mt-12 mb-6">
+        <div class="flex items-center space-x-2">
+          <SeButton
+            :to="{ name: 'Team' }"
+            variant="outline"
+          >
+            Cancel
+          </SeButton>
+          <SeButton
+            variant="secondary"
+            :to="{ name: 'TeamBiodata' }"
+          >
+            Go back
+          </SeButton>
+        </div>
         <SeButton
-          :to="{ name: 'Team' }"
-          variant="outline"
+          :icon="icon"
+          @click="save"
         >
-          Cancel
-        </SeButton>
-        <SeButton
-          variant="secondary"
-          :to="{ name: 'TeamBiodata' }"
-        >
-          Go back
+          Next
         </SeButton>
       </div>
-      <SeButton
-        :icon="icon"
-        @click="save"
-      >
-        Next
-      </SeButton>
-    </div>
+    </cv-form>
   </div>
 </template>
 
 <script>
-import { required, email } from 'vuelidate/lib/validators'
+import { required, email, minLength, maxLength} from 'vuelidate/lib/validators'
 import { mapActions, mapState } from 'vuex'
-import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import MultiStep from '@/mixins/multistep'
+import isEmpty from 'lodash/isEmpty'
+
 export default {
   name: 'TeamContactInformation',
+
+  mixins: [MultiStep],
 
   data() {
     return {
       form: {},
-      icon: ChevronRight,
     }
   },
 
   validations: {
     form: {
-      phone_number: { required },
+      phone_number: { required, maxLength: maxLength(15), minLength: minLength(10) },
       email: { required, email},
     },
   },
 
   computed: {
     ...mapState({
-      currentUser: (state) => state.practitioners.currentUser,
+      storeData: (state) => state.practitioners.currentUser,
     }),
   },
 
   created() {
-    this.form = this.currentUser
+    if (isEmpty(this.storeData)) {
+      this.$router.push({name: 'TeamBiodata'})
+    }
   },
 
   methods: {
     ...mapActions({
-      addToCurrentUser: 'practitioners/addToCurrentUser',
+      addToStoreData: 'practitioners/addToCurrentUser',
     }),
 
     save() {
@@ -106,7 +121,7 @@ export default {
       if (this.$v.$invalid) {
         return
       }
-      this.addToCurrentUser(this.form)
+      this.addToStoreData(this.form)
       this.$router.push({ name: 'TeamIdentification' })
     },
   },

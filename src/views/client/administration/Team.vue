@@ -22,11 +22,12 @@
     </div>
 
     <div>
-      <cv-search
-        v-model="search"
-        placeholder="Search for user"
-        autocomplete="off"
-      />
+      <cv-form autocomplete="off">
+        <cv-search
+          v-model="search"
+          placeholder="Search for user"
+        />
+      </cv-form>
       <div class="my-4 flex items-center space-x-2">
         <cv-button
           kind="primary"

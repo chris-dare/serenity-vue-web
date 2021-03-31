@@ -11,7 +11,7 @@ export default {
       service.categories= service.healthcare_service_categories ? service.healthcare_service_categories.map(service => service.text).join(', ') : '-'
       service.types= service.healthcare_service_types ? service.healthcare_service_types.map(service => service.text).join(', ') : '-'
       service.specialties= service.healthcare_service_specialties ? service.healthcare_service_specialties.map(service => service.Display).join(', ') : '-'
-      service.duration= service.slot_duration ? service.slot_duration : 0
+      service.duration= service.slot_duration && service.healthcare_service_appointment_required ? service.slot_duration : 0
               
         
       if (service.healthcare_service_not_available_times && service.healthcare_service_not_available_times.length && service.healthcare_service_not_available_times[0].during) {

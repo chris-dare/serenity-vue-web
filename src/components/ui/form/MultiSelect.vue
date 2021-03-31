@@ -5,7 +5,7 @@
       v-model="selected"
       :options="options"
       :multiple="multiple"
-      :close-on-select="false"
+      :close-on-select="!multiple"
       :clear-on-select="false"
       :preserve-search="true"
       :placeholder="placeholder"
@@ -13,6 +13,7 @@
       :track-by="trackBy"
       :preselect-first="preselect"
       :show-labels="false"
+      :internal-search="false"
     />
     <p
       v-if="error || errorMessage"

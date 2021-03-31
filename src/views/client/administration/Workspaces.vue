@@ -12,12 +12,12 @@
           <Add class="ml-4 w-5 h-5" />
         </cv-button>
       </div>
-
-      <cv-search
-        v-model="search"
-        placeholder="Search for workspace"
-        autocomplete="off"
-      />
+      <cv-form autocomplete="off">
+        <cv-search
+          v-model="search"
+          placeholder="Search for workspace"
+        />
+      </cv-form>
 
       <cv-data-table
         ref="table"

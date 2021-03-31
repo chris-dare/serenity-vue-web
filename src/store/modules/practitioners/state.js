@@ -9,7 +9,7 @@ export default () => ({
     first_name:'',
     last_name:'',
     title:'Mr.',
-    gender: 'male',
+    gender: '',
     address:'',
     email:'',
     phone_number:'',

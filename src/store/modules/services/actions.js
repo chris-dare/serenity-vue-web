@@ -16,7 +16,6 @@ export default {
     const { data } = await ServicesAPI
       .create(provider.id,payload)
       .catch((error) => {
-        console.log('error creating service', error)
         throw error.data || error
       })
 
