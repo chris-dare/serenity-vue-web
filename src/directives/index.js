@@ -12,7 +12,6 @@ Vue.directive('nested-keyup', {
     }
     console.info(binding)
     const elements = el.querySelectorAll(binding.arg)
-    console.log(elements)
     elements.forEach(function(element) {
       element.addEventListener('keyup', (ev) => {
         if(keycode == ev.keyCode){

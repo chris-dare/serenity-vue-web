@@ -33,23 +33,16 @@
     </div>
 
     <p class="bx--label col-span-2 uppercase">Service unavailable days</p>
+    
     <div
       v-for="(times, index) in form.healthcare_service_not_available_times"
       :key="index"
       class="grid grid-cols-11 gap-x-4 gap-y-8 items-center"
     >
       <div class="col-span-10 grid grid-cols-2 gap-x-4 gap-y-8">
-        <cv-date-picker
-          v-model="times.during.start"
-          kind="single"
-          date-label="Start date"
-          class="inherit-full-input"
-        />
-        <cv-date-picker
-          v-model="times.during.end"
-          kind="single"
-          date-label="End date"
-          class="inherit-full-input"
+        <DateRangePicker
+          v-model="times.during"
+          class="col-span-2"
         />
         <cv-text-area
           v-model="times.description"
@@ -103,12 +96,18 @@
 </template>
 
 <script>
-import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import { mapActions, mapState } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
+import isEmpty from 'lodash/isEmpty'
+import MultiStep from '@/mixins/multistep'
+import DateRangePicker from '@/components/ui/form/DateRangePicker'
 
 export default {
   name: 'ServiceAvailability',
+
+  components: {DateRangePicker},
+
+  mixins: [MultiStep],
 
   data() {
     return {
@@ -122,28 +121,27 @@ export default {
         }],
         healthcare_service_available_times: [
           {
-            daysOfWeek: [],
-            availableStartTime: '',
-            availableEndTime: '',
+            daysOfWeek: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+            availableStartTime: '08:00:00',
+            availableEndTime: '20:00:00',
           },
         ],
       },
-      icon: ChevronRight,
       loading: false,
+      
     }
   },
 
   computed: {
     ...mapState({
-      currentService: (state) => state.services.currentService,
+      storeData: (state) => state.services.currentService,
     }),
   },
 
   created() {
-    if (Object.keys(this.currentService).length === 0) {
+    if (isEmpty(this.storeData)) {
       this.$router.push({name: 'ServiceInformation'})
     }
-    this.form = { ...this.currentService, ...this.form }
   },
 
   validations: {
@@ -166,6 +164,7 @@ export default {
     ...mapActions({
       createService: 'services/createService',
       refreshCurrentService: 'services/refreshCurrentService',
+      addToStoreData: 'services/addToCurrentService',
     }),
 
     async save() {

@@ -278,13 +278,11 @@ export default {
         newForm.price_tiers = [{name: 'standard', cost: parseInt(this.price)}]
       } else {
         newForm.price_tiers = this.tiers.map(t => {
-          console.log('t', parseInt(t.cost))
           t.cost = parseInt(t.cost)
           return t
         })
       }
 
-      console.log('newForm', newForm)
       return newForm
     },
 

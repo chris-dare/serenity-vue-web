@@ -18,12 +18,12 @@
           </SeButton>
         </div>
       </div>
-
-      <cv-search
-        v-model="search"
-        placeholder="Search for service"
-        autocomplete="off"
-      />
+      <cv-form autocomplete="off">
+        <cv-search
+          v-model="search"
+          placeholder="Search for service"
+        />
+      </cv-form>
 
       <cv-data-table
         ref="table"

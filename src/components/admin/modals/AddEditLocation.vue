@@ -4,7 +4,7 @@
     close-aria-label="Close"
     :visible="visible"
     size="xs"
-    @modal-hidden="visible = false"
+    @modal-hidden="close"
   >
     <template slot="content">
       <div class="space-y-8">
@@ -51,22 +51,11 @@
           placeholder="eg 00233"
           :invalid-message="$utils.validateRequiredField($v, 'postal_code')"
         />
-
-        <div>
-          <p class="bx--label">Location contact number</p>
-          <VuePhoneNumberInput
-            v-model="form.location_contact_number"
-            default-country-code="GH"
-            valid-color="#0B6B74"
-            required
-          />
-          <p
-            v-if="$utils.validateRequiredField($v, 'location_contact_number')"
-            class="error"
-          >
-            Location contact number is required
-          </p>
-        </div>
+        <PhoneInput
+          v-model="form.location_contact_number"
+          label="Location contact number"
+          :error-message="$utils.validateRequiredField($v, 'location_contact_number')"
+        />
         
         <SeButton
           :loading="loading"
@@ -79,7 +68,7 @@
 
         <p
           class="text-center"
-          @click="visible = false"
+          @click="close"
         >
           Cancel
         </p>
@@ -90,7 +79,8 @@
 
 <script>
 import { mapActions, mapState} from 'vuex'
-import { required } from 'vuelidate/lib/validators'
+import { required, maxLength, minLength } from 'vuelidate/lib/validators'
+
 export default {
   name: 'AddEditLocation',
 
@@ -128,7 +118,7 @@ export default {
       location_name: { required },
       street_address: { required },
       city: { required },
-      location_contact_number: { required },
+      location_contact_number: { required, maxLength: maxLength(15), minLength: minLength(10)  },
       postal_code: { required },
     },
   },
@@ -191,6 +181,14 @@ export default {
       }
 
       this.loading = false
+    },
+
+    close() {
+      this.form = {
+        country: 'GH',
+      }
+      this.$v.$reset()
+      this.visible = false
     },
   },
 }

@@ -3,10 +3,20 @@ const validateRequiredField = ($v, field) => {
   const $field = $v.form[field]
   const formattedField = field.charAt(0).toUpperCase() 
     + field.slice(1).replace(/([-_]\w)/g, g => ' '+g[1].toUpperCase())
+
   if($field.$error && $field.$dirty){
     if($field.sameAsPassword === false){
       return 'Passwords do not match'
     }
+
+    if($field.maxLength === false){
+      return `${formattedField} should not exceed ${$field.$params.maxLength.max} characters`
+    }
+
+    if($field.minLength === false){
+      return `${formattedField} should not be less than ${$field.$params.minLength.min} characters`
+    }
+
     return `${formattedField} is required`
   }
   return ''

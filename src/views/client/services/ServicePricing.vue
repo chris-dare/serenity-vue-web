@@ -9,6 +9,22 @@
       <cv-select-option value="single">Single</cv-select-option>
       <cv-select-option value="tiered">Tiered(multiple sub services)</cv-select-option>
     </cv-select> -->
+
+    <cv-select
+      v-model="code"
+      label="Select service code"
+      class="inherit-full-input"
+      placeholder="Select code"
+      :invalid-message="$v.code.$error && $v.code.$dirty ? 'Service code is required' : ''"
+    >
+      <cv-select-option
+        v-for="(item, index) in codes"
+        :key="index"
+        :value="item.code"
+      >
+        {{ item.display_text }}
+      </cv-select-option>
+    </cv-select>
     <!-- single -->
     <p>Service Pricing Tiers</p>
     <div>
@@ -94,19 +110,22 @@
 </template>
 
 <script>
-import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 // eslint-disable-next-line no-unused-vars
 import { required, minLength, minValue } from 'vuelidate/lib/validators'
 import { mapActions, mapState } from 'vuex'
+import isEmpty from 'lodash/isEmpty'
+import MultiStep from '@/mixins/multistep'
 
 export default {
   name: 'ServicePricing',
+
+  mixins: [MultiStep],
 
   data() {
     return {
       type: 'single',
       tiers: [],
-      icon: ChevronRight,
+      code: null,
       form: {
         price_tiers: [
           {
@@ -131,20 +150,20 @@ export default {
 
   computed: {
     ...mapState({
-      currentService: (state) => state.services.currentService,
+      storeData: (state) => state.services.currentService,
+      codes: (state) => state.resources.codes,
     }),
   },
 
   created() {
-    if (Object.keys(this.currentService).length === 0) {
+    if (isEmpty(this.storeData)) {
       this.$router.push({name: 'ServiceInformation'})
     }
-    this.form = { ...this.currentService, ...this.form }
   },
 
   methods: {
     ...mapActions({
-      addToCurrentService: 'services/addToCurrentService',
+      addToStoreData: 'services/addToCurrentService',
       refreshCurrentService: 'services/refreshCurrentService',
     }),
 
@@ -158,7 +177,15 @@ export default {
         return
       }
 
-      this.addToCurrentService(this.form)
+      let code = this.codes.find(c => c.code === this.code)
+
+      this.form = {
+        ...this.form,
+        healthcare_service_service_provision_code: code.code,
+        healthcare_service_service_provision_display_text: code.display_text,
+      }
+
+      this.addToStoreData(this.form)
       this.$router.push({ name: 'ServiceAvailability' })
     },
 
@@ -195,6 +222,7 @@ export default {
         },
       },
     },
+    code: { required },
   },
 }
 </script>

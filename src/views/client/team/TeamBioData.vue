@@ -55,6 +55,7 @@
               label="Gender (required)"
               class="inherit-full-input my-8"
               placeholder="Male or female"
+              :invalid-message="$utils.validateRequiredField($v, 'gender')"
             >
               <!-- <cv-select-option
                 disabled
@@ -94,17 +95,21 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators'
-import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import { mapActions, mapState } from 'vuex'
+import MultiStep from '@/mixins/multistep'
+
 export default {
+  name: 'TeamBiodata',
+
+  mixins: [MultiStep],
+
   data() {
     return {
       form: {
         title: 'Mr.',
-        gender: 'male',
+        gender: '',
       },
       titles: ['Mr.', 'Mrs', 'Miss', 'Hon.', 'Dr.', 'Prof.', 'Master'],
-      icon: ChevronRight,
     }
   },
 
@@ -118,17 +123,13 @@ export default {
 
   computed: {
     ...mapState({
-      currentUser: (state) => state.practitioners.currentUser,
+      storeData: (state) => state.practitioners.currentUser,
     }),
-  },
-
-  created() {
-    this.form = this.currentUser
   },
 
   methods: {
     ...mapActions({
-      addToCurrentUser: 'practitioners/addToCurrentUser',
+      addToStoreData: 'practitioners/addToCurrentUser',
     }),
 
     save() {
@@ -136,7 +137,7 @@ export default {
       if (this.$v.$invalid) {
         return
       }
-      this.addToCurrentUser(this.form)
+      this.addToStoreData(this.form)
       this.$router.push({ name: 'TeamContactInformation' })
     },
   },
