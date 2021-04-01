@@ -12,7 +12,7 @@ export default {
   },
 
   create(providerId, params) {
-    return http.post(`${this.url}${providerId}/healthcare-services/${params.id}`, params)
+    return http.post(`${this.url}${providerId}/healthcare-services`, params)
   },
 
   update(providerId, params) {
