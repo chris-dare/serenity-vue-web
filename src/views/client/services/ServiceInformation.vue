@@ -21,7 +21,7 @@
       />
 
       <MultiSelect
-        v-model="form.healthcare_service_types"
+        v-model="form.healthcare_service_types[0]"
         :options="types"
         label="text"
         :multiple="false"
@@ -78,7 +78,7 @@
 
       <div>
         <MultiSelect
-          v-model="form.healthcare_service_categories"
+          v-model="form.healthcare_service_categories[0]"
           :options="categories"
           :multiple="false"
           placeholder="Select one or more categories"

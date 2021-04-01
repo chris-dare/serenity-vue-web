@@ -227,7 +227,7 @@ export default {
           message: 'Service successfully updated',
         })
         this.reset()
-        this.$router.push({name: 'TeamDetail', params: { id:this.form.id }})
+        this.$router.push({name: 'TeamDetail', params: { id: this.form.id }})
       } catch (error) {
         this.$toast.open({
           message: error.message || 'Something went wrong!',
