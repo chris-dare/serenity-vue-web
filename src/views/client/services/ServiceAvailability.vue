@@ -39,10 +39,10 @@
       :key="index"
       class="grid grid-cols-11 gap-x-4 gap-y-8 items-center"
     >
-      <div class="col-span-10 grid grid-cols-2 gap-x-4 gap-y-8">
+      <div class="col-span-10">
         <DateRangePicker
           v-model="times.during"
-          class="col-span-2"
+          class="col-span-2 mb-8"
         />
         <cv-text-area
           v-model="times.description"
@@ -52,11 +52,18 @@
           class="col-span-2"
         />
       </div>
+      
       <Trash
         class="w-5 h-5 cursor-pointer"
         @click="removeFromUnavailableDates(index)"
       />
     </div>
+    <p
+      v-if="$utils.validateRequiredField($v, 'healthcare_service_not_available_times')"
+      class="error col-span-2"
+    >
+      Description of unavailable dates is required when a date is added
+    </p>
 
     <div
       class="flex items-center space-x-2 text-serenity-primary my-4 cursor-pointer text-sm"
@@ -97,7 +104,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import { required, minLength } from 'vuelidate/lib/validators'
+import { required, minLength, requiredIf } from 'vuelidate/lib/validators'
 import isEmpty from 'lodash/isEmpty'
 import MultiStep from '@/mixins/multistep'
 import DateRangePicker from '@/components/ui/form/DateRangePicker'
@@ -155,6 +162,15 @@ export default {
           },
           availableStartTime: { required },
           availableEndTime: { required },
+        },
+      },
+      healthcare_service_not_available_times: {
+        $each: {
+          description: {
+            required: requiredIf(function (nestedModel) {
+              return !!nestedModel.during.start
+            }),
+          },
         },
       },
     },
