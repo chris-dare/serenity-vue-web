@@ -30,6 +30,7 @@
         title="Type of Service"
         placeholder="Choose a service type"
         :error-message="$utils.validateRequiredField($v, 'healthcare_service_types')"
+        preselect
       />
 
       <div class="grid grid-cols-2 gap-x-4">
@@ -142,6 +143,7 @@ export default {
         healthcare_service_types: [],
         slot_duration: 30,
         virtual_service: false,
+        healthcare_service_appointment_required: true,
       },
       required: 'Yes',
     }
