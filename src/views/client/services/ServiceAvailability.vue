@@ -62,7 +62,7 @@
       v-if="$utils.validateRequiredField($v, 'healthcare_service_not_available_times')"
       class="error col-span-2"
     >
-      Description of unavailable dates is required when a date ia added
+      Description of unavailable dates is required when a date is added
     </p>
 
     <div
@@ -147,7 +147,7 @@ export default {
 
   created() {
     if (isEmpty(this.storeData)) {
-      // this.$router.push({name: 'ServiceInformation'})
+      this.$router.push({name: 'ServiceInformation'})
     }
   },
 
@@ -168,7 +168,6 @@ export default {
         $each: {
           description: {
             required: requiredIf(function (nestedModel) {
-              console.log('nestedModel', nestedModel)
               return !!nestedModel.during.start
             }),
           },
