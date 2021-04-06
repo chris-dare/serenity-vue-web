@@ -11,7 +11,7 @@
             <Upload class="ml-4 w-5 h-5" />
           </SeButton>
           <SeButton
-            :to="{name: 'ServiceInformation'}"
+            @click="goTo"
           >
             Add new service
             <Add class="ml-4 w-5 h-5" />
@@ -135,6 +135,7 @@ export default {
   methods: {
     ...mapActions({
       deleteService: 'services/deleteService',
+      refreshCurrentService: 'services/refreshCurrentService',
     }),
     getLocations(services) {
       if(!services.length) {
@@ -161,6 +162,11 @@ export default {
         this.loading = false
         throw error
       }
+    },
+
+    goTo() {
+      this.refreshCurrentService()
+      this.$router.push({name: 'ServiceInformation'})
     },
   },
 

@@ -41,11 +41,9 @@
             class="multiselect-white"
           />
         </div>
-        <cv-date-picker
-          v-model="date"
+        <DateRangePicker
+          v-model="filters.date"
           class="flex-none se-date-picker"
-          kind="range"
-          :cal-options="calOptions"
         />
       </div>
 
@@ -61,11 +59,14 @@ import Calendar from '@/components/schedules/Calendar'
 import AddEditSchedule from '@/components/schedules/AddEditSchedule'
 import ViewScheduleDetails from '@/components/schedules/ViewScheduleDetails'
 import { mapState } from 'vuex'
+import DataMixin from '@/mixins/data'
 
 export default {
   name: 'Schedules',
 
   components: { Calendar, AddEditSchedule, ViewScheduleDetails },
+
+  mixin: [DataMixin],
 
   data() {
     return {
@@ -73,7 +74,9 @@ export default {
       calOptions: {
         dateFormat: 'm/d/Y',
       },
-      filters: {},
+      filters: {
+        date: {},
+      },
     }
   },
 
@@ -82,6 +85,7 @@ export default {
       workspaces: (state) => state.workspaces.workspaces,
       practitioners: (state) => state.practitioners.users,
       services: (state) => state.services.services,
+      data: (state) => state.schedules.schedules,
     }),
   },
 
