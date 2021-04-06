@@ -134,6 +134,7 @@ export default {
     ...mapActions({
       getService: 'services/getService',
     }),
+
     close() {
       this.visible = false
       this.form = {}

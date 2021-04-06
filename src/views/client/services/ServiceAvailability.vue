@@ -107,12 +107,9 @@ import { mapActions, mapState } from 'vuex'
 import { required, minLength, requiredIf } from 'vuelidate/lib/validators'
 import isEmpty from 'lodash/isEmpty'
 import MultiStep from '@/mixins/multistep'
-import DateRangePicker from '@/components/ui/form/DateRangePicker'
 
 export default {
   name: 'ServiceAvailability',
-
-  components: {DateRangePicker},
 
   mixins: [MultiStep],
 

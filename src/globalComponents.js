@@ -20,6 +20,8 @@ import CurrencySelect from '@/components/ui/form/CurrencySelect'
 import InfoImageBlock from '@/components/ui/sections/InfoImageBlock'
 import AppRegisterLayout from '@/layout/AppRegisterLayout'
 import PhoneInput from '@/components/ui/form/PhoneInput'
+import DateRangePicker from '@/components/ui/form/DateRangePicker'
+
 
 
 Vue.component('ToggleList', ToggleList)
@@ -42,3 +44,4 @@ Vue.component('CurrencySelect', CurrencySelect)
 Vue.component('InfoImageBlock', InfoImageBlock)
 Vue.component('AppRegisterLayout', AppRegisterLayout)
 Vue.component('PhoneInput', PhoneInput)
+Vue.component('DateRangePicker', DateRangePicker)

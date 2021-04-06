@@ -14,6 +14,7 @@ export default {
     dispatch('resources/getCodes', null,{ root:true })
     dispatch('resources/getServiceTypes', null,{ root:true })
     dispatch('services/getServices', null,{ root:true })
+    dispatch('schedules/getSchedules', null,{ root:true })
     dispatch('getCountries')
   },
   getCountries({ commit }) {
