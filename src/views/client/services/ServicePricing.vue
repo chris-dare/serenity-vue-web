@@ -45,6 +45,7 @@
             v-model="tier.name"
             label="Service Tier"
             placeholder="Service tier name"
+            type="text"
             class="col-span-4"
           />
           <cv-number-input

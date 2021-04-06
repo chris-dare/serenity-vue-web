@@ -11,6 +11,7 @@
         <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'New' }} location</p>
         <cv-text-input
           v-model="form.location_name"
+          type="text"
           label="Location name"
           placeholder="eg Valley Heights"
           :invalid-message="$utils.validateRequiredField($v, 'location_name')"
@@ -33,6 +34,7 @@
 
         <cv-text-input
           v-model="form.city"
+          type="text"
           label="City"
           placeholder="eg Accra"
           :invalid-message="$utils.validateRequiredField($v, 'city')"
@@ -40,6 +42,7 @@
 
         <cv-text-input
           v-model="form.street_address"
+          type="text"
           label="Location Address"
           placeholder="eg No Bana Street"
           :invalid-message="$utils.validateRequiredField($v, 'street_address')"
@@ -48,6 +51,7 @@
         <cv-text-input
           v-model="form.postal_code"
           label="Postal Code"
+          type="text"
           placeholder="eg 00233"
           :invalid-message="$utils.validateRequiredField($v, 'postal_code')"
         />

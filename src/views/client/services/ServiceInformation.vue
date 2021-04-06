@@ -8,6 +8,7 @@
         v-model="form.healthcare_service_name"
         label="Name of service"
         placeholder="eg General Consultation"
+        type="text"
         class="inherit-full-input"
         :invalid-message="$utils.validateRequiredField($v, 'healthcare_service_name')"
       />

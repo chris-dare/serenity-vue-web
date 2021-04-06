@@ -50,12 +50,14 @@
       <cv-text-input
         v-model="form.number"
         class="inherit-full-input"
+        type="text"
         label="Card Number"
         placeholder="0000 - 0000 - 0000 - 0000"
       />
       <cv-text-input
         v-model="form.name"
         class="inherit-full-input"
+        type="text"
         label="Name on Card"
         placeholder="James Baduor"
       />
@@ -63,11 +65,13 @@
         v-model="form.exp"
         class="inherit-full-input"
         label="Expiration (mm/yy)"
+        type="text"
         placeholder="12/20"
       />
       <cv-text-input
         v-model="form.cvc"
         class="inherit-full-input"
+        type="text"
         label="CVC"
       />
     </div>

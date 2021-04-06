@@ -65,6 +65,7 @@
         v-model="form.address"
         label="Home/Residential address"
         placeholder="Enter venue for the home care/visit"
+        type="text"
         class="inherit-full-input my-8"
       />
     </div>

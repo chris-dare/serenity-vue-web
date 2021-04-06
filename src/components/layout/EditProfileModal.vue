@@ -42,6 +42,7 @@
                 v-model="form.first_name"
                 label="First Name"
                 placeholder="Enter Firstname"
+                type="text"
                 class="inherit-full-input"
                 :invalid-message="$utils.validateRequiredField($v, 'first_name')"
               />
@@ -49,6 +50,7 @@
                 v-model="form.last_name"
                 label="Last Name"
                 placeholder="Enter Latname"
+                type="text"
                 class="inherit-full-input"
                 :invalid-message="$utils.validateRequiredField($v, 'last_name')"
               />

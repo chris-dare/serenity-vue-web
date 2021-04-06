@@ -5,11 +5,13 @@
         v-model="form.first_name"
         label="First Name"
         placeholder="First Name"
+        type="text"
         class="inherit-full-input"
       />
       <cv-text-input
         v-model="form.last_name"
         label="Last Name"
+        type="text"
         placeholder="Last Name"
         class="inherit-full-input"
       />
@@ -23,6 +25,7 @@
         v-model="form.emergency_contact"
         label="Place of work"
         placeholder="Emergency contact"
+        type="text"
         class="inherit-full-input"
       />
     </div>
@@ -30,12 +33,14 @@
       v-model="form.address"
       label="Home/Residential address"
       placeholder="Emergency contact’s home or residential address"
+      type="text"
       class="inherit-full-input my-8"
     />
     <cv-text-input
       v-model="form.address"
       label="Relationship type"
       placeholder="Who is this person to you?"
+      type="text"
       class="my-8"
     />
     <div class="flex items-center justify-between mt-12 mb-6">

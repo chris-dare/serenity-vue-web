@@ -20,6 +20,7 @@
             v-model="form.first_name"
             label="First name (required)"
             placeholder="Patient First Name"
+            type="text"
             class="inherit-full-input"
           >
             <template
@@ -33,6 +34,7 @@
             v-model="form.last_name"
             label="Last name (required)"
             placeholder="Patient last or family name"
+            type="text"
             class="inherit-full-input"
           >
             <template

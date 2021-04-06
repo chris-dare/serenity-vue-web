@@ -44,12 +44,14 @@
         v-model="form.postal"
         label="Postal Address"
         placeholder="Postal Address"
+        type="text"
         class="inherit-full-input my-8"
       />
       <cv-text-input
         v-model="form.address"
         label="Home/Residential address"
         placeholder="Home/Residential address"
+        type="text"
         class="inherit-full-input my-8"
       />
       <div class="flex items-center justify-between mt-12 mb-6">

@@ -12,6 +12,7 @@
         <cv-text-input
           v-model="form.workspace_name"
           label="Name"
+          type="text"
           placeholder="eg Out patient"
           :invalid-message="$utils.validateRequiredField($v, 'workspace_name')"
         />

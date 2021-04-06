@@ -11,6 +11,7 @@
         <p class="text-lg font-semibold">{{ type === 'update' ? 'Edit' : 'Duplicate' }} Role</p>
         <cv-text-input
           v-model="form.name"
+          type="text"
           label="Name of role"
           placeholder="eg Account"
         >

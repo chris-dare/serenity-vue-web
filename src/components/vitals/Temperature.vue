@@ -7,6 +7,7 @@
       <div class="flex items-end space-x-3">
         <cv-text-input
           v-model="internalForm.temperature"
+          type="text"
           label="Temperature"
         />
         <p class="mb-2">°C</p>

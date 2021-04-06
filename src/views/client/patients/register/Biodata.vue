@@ -21,6 +21,7 @@
             label="First name (required)"
             placeholder="Patient First Name"
             :invalid-message="$utils.validateRequiredField($v, 'first_name')"
+            type="text"
             class="inherit-full-input"
           />
           <cv-text-input
@@ -28,6 +29,7 @@
             label="Last name (required)"
             placeholder="Patient last or family name"
             :invalid-message="$utils.validateRequiredField($v, 'last_name')"
+            type="text"
             class="inherit-full-input"
           />
           <div>
@@ -35,6 +37,7 @@
               v-model="form.other_names"
               label="Other names"
               placeholder="Any other name"
+              type="text"
               class="inherit-full-input"
             />
             <cv-date-picker

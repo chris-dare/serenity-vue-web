@@ -11,16 +11,19 @@
         <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'Add new' }} item</p>
         <cv-text-input
           v-model="form.name"
+          type="text"
           label="Item name"
           placeholder="eg Plasters"
         />
         <cv-text-input
           v-model="form.price"
+          type="text"
           label="Quantity"
           placeholder="eg 50.00"
         />
         <cv-text-input
           v-model="form.inventory_id"
+          type="text"
           label="Item ID"
           placeholder="CV2399"
         />
