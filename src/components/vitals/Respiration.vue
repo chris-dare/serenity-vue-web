@@ -7,6 +7,7 @@
       <div class="flex items-end space-x-3">
         <cv-text-input
           v-model="internalForm.respiration_rate"
+          type="text"
           label="Respiratory rate"
         />
         <p class="mb-2">per min</p>
@@ -14,6 +15,7 @@
       <div class="flex items-end space-x-3">
         <cv-text-input
           v-model="internalForm.saturation"
+          type="text"
           label="Arterial blood oxygen saturation"
         />
         <p class="mb-2">%</p>

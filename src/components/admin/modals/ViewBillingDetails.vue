@@ -46,6 +46,7 @@
             <cv-text-input
               v-model="form.exp"
               class="inherit-full-input"
+              type="text"
               label="Amount Recieved"
               placeholder="0.00"
             />

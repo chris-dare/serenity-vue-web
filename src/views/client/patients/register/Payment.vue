@@ -45,6 +45,7 @@
         v-model="form.name_of_account"
         label="Name of Account"
         placeholder="Name of MoMo Account"
+        type="text"
         class="inherit-full-input"
       />
       <cv-text-input

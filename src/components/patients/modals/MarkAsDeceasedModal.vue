@@ -19,6 +19,7 @@
         <cv-text-input
           v-model="form.notes"
           label="Cause of death"
+          type="text"
           placeholder="Enter cause of death"
           class="inherit-full-input w-full mb-8"
           :rows="10"

@@ -44,12 +44,14 @@
                 :invalid-message="$utils.validateRequiredField($v, 'first_name')"
                 label="First Name (required)"
                 placeholder="Enter First name"
+                type="text"
                 class="inherit-full-input"
               />
               <cv-text-input
                 v-model="form.last_name"
                 :invalid-message="$utils.validateRequiredField($v, 'last_name')"
                 label="Last Name (required)"
+                type="text"
                 placeholder="Enter Last name"
                 class="inherit-full-input"
               />
@@ -82,6 +84,7 @@
                 v-model="form.email"
                 :invalid-message="$utils.validateRequiredField($v, 'email')"
                 label="Email address (required)"
+                type="email"
                 placeholder="Email address"
                 class="inherit-full-input"
               />
@@ -89,6 +92,7 @@
             <cv-text-input
               v-model="form.address"
               label="Full user address (required)"
+              type="text"
               placeholder="Residential address"
               class="inherit-full-input"
             />

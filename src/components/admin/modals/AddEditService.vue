@@ -11,6 +11,7 @@
         <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'Create new' }} service</p>
         <cv-text-input
           v-model="form.healthcare_service_name"
+          type="text"
           label="Name of service"
           placeholder="eg Valley Heights"
         >
@@ -61,6 +62,7 @@
           >
             <cv-text-input
               v-model="tier.name"
+              type="text"
               label="Service Tier"
               placeholder="Service tier name"
             />

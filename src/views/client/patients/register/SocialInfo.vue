@@ -53,11 +53,13 @@
         v-model="form.home_language"
         label="Home Language"
         placeholder="Primary language you speak"
+        type="text"
         class="inherit-full-input"
       />
       <cv-text-input
         v-model="form.email"
         label="Occupation"
+        type="text"
         placeholder="Occupation"
         class="inherit-full-input"
       />
@@ -65,6 +67,7 @@
         v-model="form.company"
         label="Company/Employer"
         placeholder="Where do you work?"
+        type="text"
         class="inherit-full-input"
       />
       <cv-text-input

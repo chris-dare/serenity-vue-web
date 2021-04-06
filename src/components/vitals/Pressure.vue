@@ -7,6 +7,7 @@
       <div class="flex items-end space-x-3">
         <cv-text-input
           v-model="internalForm.systolic"
+          type="text"
           label="BP Systolic"
         />
         <p class="mb-2">mmHg</p>
@@ -14,6 +15,7 @@
       <div class="flex items-end space-x-3">
         <cv-text-input
           v-model="internalForm.diastolic"
+          type="text"
           label="BP Diastolic"
         />
         <p class="mb-2">mmHg</p>
@@ -21,6 +23,7 @@
       <div class="flex items-end space-x-3">
         <cv-text-input
           v-model="internalForm.pulse"
+          type="text"
           label="Pulse"
         />
         <p class="mb-2">per min</p>

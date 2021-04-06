@@ -4,6 +4,7 @@
       <cv-text-input
         v-model="form.phone_number"
         label="Phone number (required)"
+        type="text"
         placeholder="Patient First Name"
         :invalid-message="$utils.validateRequiredField($v, 'phone_number')"
         class="inherit-full-input"
@@ -63,6 +64,7 @@
       <cv-text-input
         v-model="form.post_code"
         label="GhanaPost GPS"
+        type="text"
         placeholder="Ghana post code"
         class="inherit-full-input"
       />
@@ -71,6 +73,7 @@
       v-model="form.address"
       label="Home/Residential address"
       placeholder="Home/Residential address"
+      type="text"
       class="inherit-full-input my-8"
     />
     <div class="flex items-center justify-between mt-12 mb-6">

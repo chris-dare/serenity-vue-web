@@ -41,6 +41,7 @@
               <cv-text-input
                 v-model="form.name"
                 label="Provider name (required)"
+                type="text"
                 placeholder="Provider name"
                 class="inherit-full-input"
               />
@@ -69,6 +70,7 @@
               v-model="form.address"
               label="Full provider address (required)"
               placeholder="Enter residential address"
+              type="text"
               class="inherit-full-input mb-8"
             />
             <div class="flex items-center justify-between mt-4 mb-6">

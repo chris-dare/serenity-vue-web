@@ -80,6 +80,8 @@
           <cv-text-input
             v-model="form.schedule_name"
             label="For how many weeks"
+            type="text"
+
             placeholder="eg 4 weeks"
           />
         </div>

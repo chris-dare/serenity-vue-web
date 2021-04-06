@@ -7,6 +7,7 @@
           <cv-text-input
             v-model="form.first_name"
             label="First name (required)"
+            type="text"
             placeholder="Admin First Name"
             class="inherit-full-input"
           />
@@ -14,6 +15,7 @@
             v-model="form.last_name"
             label="Last name (required)"
             placeholder="Admin last or family name"
+            type="text"
             class="inherit-full-input"
           />
           <cv-text-input

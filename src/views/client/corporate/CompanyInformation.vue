@@ -8,6 +8,7 @@
             v-model="form.first_name"
             label="Company name (required)"
             placeholder="Company Name"
+            type="text"
             class="inherit-full-input"
           />
           <cv-text-input
@@ -34,6 +35,7 @@
           v-model="form.address"
           placeholder="Location address"
           label="Full provider address (required)"
+          type="text"
           class="w-full"
         />
             

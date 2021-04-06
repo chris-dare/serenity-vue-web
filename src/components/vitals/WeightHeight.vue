@@ -7,6 +7,7 @@
       <div class="flex items-end space-x-3">
         <cv-text-input
           v-model="internalForm.weight"
+          type="text"
           label="Weight"
         />
         <p class="mb-2">Kg</p>
@@ -14,6 +15,7 @@
       <div class="flex items-end space-x-3">
         <cv-text-input
           v-model="internalForm.height"
+          type="text"
           label="Height"
         />
         <p class="mb-2">cm</p>
@@ -21,6 +23,7 @@
       <div class="flex items-end space-x-3">
         <cv-text-input
           v-model="internalForm.bmi"
+          type="text"
           label="BMI (Calculated)"
         />
         <p class="mb-2">Patient BMI</p>
