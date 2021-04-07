@@ -45,12 +45,12 @@
                 :invalid-message="$utils.validateRequiredField($v, 'organization_name')"
                 class="inherit-full-input"
               />
-              <cv-text-input
+              <!-- <cv-text-input
                 v-model="form.email"
                 label="Email"
                 placeholder="Email"
                 class="inherit-full-input"
-              />
+              /> -->
               <cv-text-input
                 v-model="form.organization_telecom"
                 label="Contact Number"
@@ -58,9 +58,8 @@
                 placeholder="Enter phone number"
                 class="inherit-full-input"
               />
-              <!-- <cv-select
+              <cv-select
                 v-model="form.organization_type"
-                :invalid-message="$utils.validateRequiredField($v, 'organization_type')"
                 label="Provider type (required)"
                 class="inherit-full-input"
                 placeholder="Provider type (required)"
@@ -79,15 +78,15 @@
                 >
                   {{ type.name }}
                 </cv-select-option>
-              </cv-select> -->
+              </cv-select>
             </div>
-            <cv-text-input
+            <!-- <cv-text-input
               v-model="form.address"
               label="Full provider address (required)"
               placeholder="Enter residential address"
               type="text"
               class="inherit-full-input mb-8"
-            />
+            /> -->
             <div class="flex items-center justify-between mt-4 mb-6">
               <cv-button
                 class="border-gray-800 bg-gray-800 text-white focus:bg-gray-700 hover:bg-gray-700 px-6"
