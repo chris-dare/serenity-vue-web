@@ -17,6 +17,8 @@
       <EditProfileModal ref="editProfileModal" />
       <ConfirmActionModal />
     </div>
+
+    <Offline @detected-condition="handleConnectivityChange" />
   </div>
 </template>
 
@@ -28,9 +30,11 @@ import LeftSidebarLayout from '@/layout/LeftSidebarLayout'
 import ChangePasswordModal from '@/components/layout/ChangePasswordModal'
 import EditProfileModal from '@/components/layout/EditProfileModal'
 import { mapActions } from 'vuex'
+import Offline from 'v-offline'
 
 export default {
   name: 'Home',
+
   components: {
     AppHeader,
     AppSidebar,
@@ -38,7 +42,31 @@ export default {
     LeftSidebarLayout,
     ChangePasswordModal,
     EditProfileModal,
+    Offline,
   },
+
+  data() {
+    return {
+      isOnline: null,
+    }
+  },
+
+  // watch: {
+  //   isOnline: {
+  //     immediate: false,
+  //     handler(val, oldVal) {
+  //       if (val === oldVal) {
+  //         return
+  //       }
+  //       if (!val) {
+  //         this.$toast.default('You are offline!!')
+  //       } else {
+  //         this.$toast.default('You are back online!!')
+  //       }
+  //     },
+  //   },
+  // },
+
   events: {
     'profile:edit': function(){
       this.$refs.editProfileModal.open()
@@ -47,13 +75,19 @@ export default {
       this.$refs.changePasswordModal.open()
     },
   },
+
   created() {
     this.initApp()
   },
+
   methods: {
     ...mapActions({
       initApp: 'global/initApp',
     }),
+
+    handleConnectivityChange(status) {
+      this.isOnline = status
+    },
   },
 }
 </script>

@@ -14,7 +14,7 @@
       />
 
       <cv-text-area
-        v-model="form.healthcare_service_description"
+        v-model="form.healthcare_service_comment"
         label="Service description"
         placeholder="Give more information about the service"
         class="inherit-full-input"
@@ -145,6 +145,7 @@ export default {
         slot_duration: 30,
         virtual_service: false,
         healthcare_service_appointment_required: true,
+        healthcare_service_comment: '',
       },
       required: 'Yes',
     }

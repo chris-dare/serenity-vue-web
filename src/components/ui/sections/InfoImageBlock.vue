@@ -1,20 +1,42 @@
 <template>
-  <div class="flex items-center py-2 space-x-2">
-    <img
-      v-if="url"
-      class="w-10 h-10 rounded-full mr-3"
-      :src="url"
-      alt=""
-    >
-    <Avatar
+  <div>
+    <div v-if="loading">
+      <cv-skeleton-text
+        heading
+        width="15vh"
+      />
+      <cv-skeleton-text
+        paragraph
+        :line-count="1"
+        width="20vh"
+      />
+    </div>
+    <div
       v-else
-      :name="name || last"
-    />
-    <div>
-      <p class="text-secondary">{{ label }}</p>
-      <p class="text-secondary text-xs">
-        {{ description }}
-      </p>
+      class="flex items-center py-2"
+      :class="customClass.space"
+    >
+      <img
+        v-if="url"
+        class="rounded-full"
+        :class="customClass.img"
+        :src="url"
+        alt=""
+      >
+      <Avatar
+        v-else
+        :name="name || label"
+        :class="customClass.img"
+      />
+      <div>
+        <p class="font-semibold">{{ label }}</p>
+        <p
+          :class="customClass.description"
+          class="text-secondary capitalize"
+        >
+          {{ description }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -28,7 +50,13 @@ export default {
       type: String,
       default: '',
     },
+
     url: {
+      type: String,
+      default: '',
+    },
+
+    name: {
       type: String,
       default: '',
     },
@@ -42,10 +70,34 @@ export default {
       type: String,
       default: 'text-primary',
     },
+
+    size: {
+      type: String,
+      default: 'base',
+    },
+
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  computed: {
+    customClass() {
+      if (this.size === 'large') {
+        return {
+          img: 'w-16 h-16',
+          description: 'text-base',
+          space: 'space-x-4',
+        }
+      }
+
+      return {
+        img: 'w-10 h-10',
+        description: 'text-xs',
+        space: 'space-x-2',
+      }
+    },
   },
 }
 </script>
-
-<style>
-
-</style>

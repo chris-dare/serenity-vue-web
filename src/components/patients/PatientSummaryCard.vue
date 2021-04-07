@@ -7,6 +7,7 @@
           :key="index"
           :label="field.label"
           :description="field.value || 'N/A'"
+          :loading="loading"
         />
       </div>
     </div>
@@ -29,6 +30,10 @@ export default {
     cols: {
       type: Number,
       default: 2,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
   },
 }

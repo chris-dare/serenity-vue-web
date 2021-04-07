@@ -16,7 +16,7 @@
     
     <div class="space-y-1 flex items-center flex-col justify-center">
       <p class="font-semibold">{{ user.title }} {{ user.first_name }} {{ user.last_name }}</p>
-      <p class="text-sm text-primary">General Practitioner</p>
+      <p class="text-sm text-primary">{{ roleName }}</p>
       <p class="text-sm text-secondary">{{ user.email }}</p>
     </div>
     <router-link
@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
   name: 'TeamCard',
 
@@ -41,9 +40,13 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      cursor: (state) => state.practitioners.cursor,
-    }),
+
+    roleName() {
+      if (!this.user || !this.user.practitioner_role) {
+        return ''
+      }
+      return this.user.practitioner_role.name
+    },
   },
 }
 </script>

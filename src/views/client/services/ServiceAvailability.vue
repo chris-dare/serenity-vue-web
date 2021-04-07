@@ -213,20 +213,6 @@ export default {
         this.loading = false
         throw error
       }
-      // await this.createService(this.form).catch((error) => {
-      //   this.$toast.open({
-      //     message: error.message || 'Something went wrong!',
-      //     type: 'error',
-      //   })
-      //   this.loading = false
-      //   throw error
-      // })
-
-      // this.$toast.open({
-      //   message: 'Service successfully added',
-      // })
-      // this.$router.push({name: 'Services'})
-      // this.loading = false
     },
 
     async update() {
@@ -239,8 +225,8 @@ export default {
         this.$toast.open({
           message: 'Service successfully updated',
         })
-        this.reset()
-        this.$router.push({name: 'TeamDetail', params: { id: this.form.id }})
+        this.loading = false
+        this.$router.push({ name: 'Services' })
       } catch (error) {
         this.$toast.open({
           message: error.message || 'Something went wrong!',
