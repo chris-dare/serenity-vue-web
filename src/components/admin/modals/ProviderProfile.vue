@@ -39,32 +39,47 @@
             </div>
             <div class="grid grid-cols-2 gap-8 my-8">
               <cv-text-input
-                v-model="form.name"
+                v-model="form.organization_name"
                 label="Provider name (required)"
-                type="text"
-                placeholder="Provider name"
+                placeholder="Provider Name"
+                :invalid-message="$utils.validateRequiredField($v, 'organization_name')"
                 class="inherit-full-input"
               />
               <cv-text-input
                 v-model="form.email"
-                label="Email (required)"
+                label="Email"
                 placeholder="Email"
-                type="email"
                 class="inherit-full-input"
               />
               <cv-text-input
-                v-model="form.phone_number"
+                v-model="form.organization_telecom"
                 label="Contact Number"
+                :invalid-message="$utils.validateRequiredField($v, 'organization_telecom')"
                 placeholder="Enter phone number"
                 class="inherit-full-input"
               />
-              <cv-select
-                v-model="form.type"
+              <!-- <cv-select
+                v-model="form.organization_type"
+                :invalid-message="$utils.validateRequiredField($v, 'organization_type')"
                 label="Provider type (required)"
                 class="inherit-full-input"
+                placeholder="Provider type (required)"
               >
-                <!-- <cv-select-option value="male">Male</cv-select-option> -->
-              </cv-select>
+                <cv-select-option
+                  disabled
+                  selected
+                  hidden
+                >
+                  Provider type (required)
+                </cv-select-option>
+                <cv-select-option
+                  v-for="type in organizationTypes"
+                  :key="type.value"
+                  :value="type.value"
+                >
+                  {{ type.name }}
+                </cv-select-option>
+              </cv-select> -->
             </div>
             <cv-text-input
               v-model="form.address"
@@ -101,7 +116,7 @@
 import { required } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Camera from '@carbon/icons-vue/es/camera/32'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'ProviderProfile',
@@ -132,10 +147,8 @@ export default {
 
   validations: {
     form: {
-      name: { required },
-      emal: { required },
-      type: { required },
-      phone_number: { required },
+      organization_name: { required },
+      organization_telecom: { required },
     },
   },
 
@@ -145,12 +158,49 @@ export default {
     },
     'provider:profile:open': function(){
       this.visible = true
-      this.form = { name: this.provider.organization_name}
+      this.form = Object.assign(this.provider)
     },
   },
 
   methods: {
-    submit() {},
+    ...mapActions({
+      update: 'auth/updateProvider',
+    }),
+    async submit() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return
+      }
+      this.loading = true
+      let params = {
+        id: this.form.id,
+        name: this.form.organization_name,
+        mobile: this.form.organization_telecom,
+      }
+      const data = await this.update(params).catch((error) => {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+      })
+
+      if (data) {
+        if(data.success){
+          this.$toast.open({
+            message: data.message || 'Provider updated successfully',
+          })
+          this.visible = false
+        }else{
+          this.$toast.open({
+            message: data.message || 'Something went wrong!',
+            type: 'error',
+          })
+        }
+      }
+
+      this.loading = false
+    },
     close() {
       this.visible = false
       this.form = {}

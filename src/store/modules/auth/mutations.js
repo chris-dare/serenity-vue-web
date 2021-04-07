@@ -19,6 +19,7 @@ export default {
   },
 
   [SET_PRACTIONER_DATA](state, data) {
-    state.provider = { ...data, id: data.organization_uuid}
+    const provider = state.provider || {}
+    state.provider = Object.assign(provider, { ...data, id: data.organization_uuid})
   },
 }

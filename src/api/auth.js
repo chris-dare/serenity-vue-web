@@ -40,6 +40,13 @@ export default {
     return http.patch('user', params)
   },
 
+  updateProvider(params){
+    console.info('p ', params)
+    return http.patch(`providers/${params.id}`, params)
+  },
+  getProvider(id){
+    return http.get(`providers/${id}`)
+  },
   logout(){
     return http.get(`${this.url}logout`)
   },

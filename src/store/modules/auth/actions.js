@@ -21,7 +21,6 @@ export default {
         commit(SET_USER, result.user)
         commit(SET_PRACTIONER_DATA, result.practitioner_roles[0])
         commit(SET_LOGGED_IN, true)
-
         return result
       })
       .catch(result => {
@@ -98,5 +97,26 @@ export default {
       .catch(result => {
         throw result.data
       })
+  },
+  // eslint-disable-next-line no-unused-vars
+  updateProvider({ commit }, params) {
+    return AuthAPI.updateProvider(params)
+      .then(({data: result}) => {
+        if(result.success){
+          commit(SET_PRACTIONER_DATA, result.data)
+        }
+        return result
+      })
+      .catch(result => {
+        throw result.data
+      })
+  },
+  // eslint-disable-next-line no-unused-vars
+  async getProvider({ commit, rootState }) {
+    const provider = rootState.auth.provider
+    const { data } = await AuthAPI.getProvider(provider.id).catch((error) => {
+      throw error
+    })
+    commit(SET_PRACTIONER_DATA, data.data)
   },
 }
