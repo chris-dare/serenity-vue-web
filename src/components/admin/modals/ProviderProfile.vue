@@ -95,7 +95,11 @@
               >
                 Go Back
               </cv-button>
+              <cv-button-skeleton
+                v-if="loading"
+              />
               <cv-button
+                v-else
                 :icon="icon"
                 kind="primary"
                 class="bg-serenity-primary hover:bg-serenity-primary-highlight  ml-6"
@@ -125,7 +129,7 @@ export default {
   data(){
     return {
       visible: false,
-      saving: false,
+      loading: false,
       form: {
         first_name: this.$faker().name.firstName(),
         last_name: this.$faker().name.lastName(),
