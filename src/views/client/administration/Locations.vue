@@ -92,7 +92,7 @@ export default {
 
   data() {
     return {
-      columns: ['Name', 'Address', 'City', ''],
+      columns: ['Name', 'Address', 'Contact Number', ''],
       loading: false,
     }
   },

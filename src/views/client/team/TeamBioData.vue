@@ -51,6 +51,7 @@
               class="my-8 w-full max-w-full inherit-full-input"
               placeholder="dd/mm/yyyy"
               date-label="Date of Birth"
+              :cal-options="calOptions"
             />
             <cv-select
               v-model="form.gender"
@@ -59,12 +60,6 @@
               placeholder="Male or female"
               :invalid-message="$utils.validateRequiredField($v, 'gender')"
             >
-              <!-- <cv-select-option
-                disabled
-                hidden
-              >
-                Male or female
-              </cv-select-option> -->
               <cv-select-option value="male">Male</cv-select-option>
               <cv-select-option value="female">Female</cv-select-option>
             </cv-select>
@@ -112,6 +107,10 @@ export default {
         gender: '',
       },
       titles: ['Mr.', 'Mrs', 'Miss', 'Hon.', 'Dr.', 'Prof.', 'Master'],
+      calOptions: {
+        'dateFormat': 'm/d/Y',
+        maxDate: Date.now(),
+      },
     }
   },
 

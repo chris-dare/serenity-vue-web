@@ -7,7 +7,10 @@
     @modal-hidden="close"
   >
     <template slot="content">
-      <div class="space-y-8">
+      <cv-form
+        autocomplete="off"
+        class="space-y-8"
+      >
         <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'New' }} location</p>
         <cv-text-input
           v-model="form.location_name"
@@ -55,12 +58,12 @@
           placeholder="eg 00233"
           :invalid-message="$utils.validateRequiredField($v, 'postal_code')"
         />
+
         <PhoneInput
           v-model="form.location_contact_number"
           label="Location contact number"
           :error-message="$utils.validateRequiredField($v, 'location_contact_number')"
-          :country-code.sync="countryCode"
-          @input="$v.$touch()"
+          @input="$v.form.location_contact_number.$touch()"
         />
         
         <SeButton
@@ -78,7 +81,7 @@
         >
           Cancel
         </p>
-      </div>
+      </cv-form>
     </template>
   </cv-modal>
 </template>
@@ -100,7 +103,6 @@ export default {
       },
       visible: false,
       loading: false,
-      countryCode: '',
     }
   },
 

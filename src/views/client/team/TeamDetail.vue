@@ -96,18 +96,12 @@ export default {
         { label: 'Date of Birth', value: this.currentUser.date_of_birth },
         { label: 'Title', value: this.currentUser.title },
         { label: 'Sex', value: this.currentUser.gender },
-        { label: 'Home Address', value: this.currentUser.address },
-        { label: 'Postal Address', value: this.currentUser.address },
+        { label: 'Home Address', value: this.currentUser.home_address },
+        { label: 'Postal Address', value: this.currentUser.postal_address },
         { label: 'Signature', value: this.currentUser.signature },
       ]
     },
     workspaceFields() {
-      // let specialty
-      // if (this.currentUser) {
-      //   if (this.currentUser.practitioner_specialty) {
-      //     specialty = this.currentUser.practitioner_specialty[0]
-      //   }
-      // }
       return [
         { label: 'Workspaces', value: this.workspaces },
         { label: 'Clinical Role', value: this.roleName },
@@ -121,10 +115,6 @@ export default {
     this.loading = true
     await this.getUser(this.$route.params.id)
     this.loading = false
-  },
-
-  beforeDestroy() {
-    this.setCurrentUser({})
   },
 
   methods: {

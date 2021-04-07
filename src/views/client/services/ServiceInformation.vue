@@ -11,6 +11,7 @@
         type="text"
         class="inherit-full-input"
         :invalid-message="$utils.validateRequiredField($v, 'healthcare_service_name')"
+        @input="generate"
       />
 
       <cv-text-area
@@ -127,6 +128,7 @@
 <script>
 import { required, minLength, minValue, requiredIf } from 'vuelidate/lib/validators'
 import { mapActions, mapState } from 'vuex'
+import debounce from 'lodash/debounce'
 
 import MultiStep from '@/mixins/multistep'
 
@@ -175,6 +177,7 @@ export default {
       specialties: (state) => state.resources.specialties,
       types: (state) => state.resources.serviceTypes,
       storeData: (state) => state.services.currentService,
+      provider: (state) => state.auth.provider,
     }),
   },
 
@@ -201,6 +204,17 @@ export default {
     cancel() {
       this.refreshCurrentService()
       this.$router.push({name: 'Services'})
+    },
+
+    generate: debounce(function () {
+      this.generateServiceDescription()
+    }, 500),
+
+    generateServiceDescription() {
+      if (this.form.id) {
+        return
+      }
+      this.form.healthcare_service_comment = `Healthcare service for ${this.form.healthcare_service_name} at ${this.provider.organization_name}`
     },
   },
 }
