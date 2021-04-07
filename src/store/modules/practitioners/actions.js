@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import UsersAPI from '@/api/users'
+import User from '@/models/User'
 import { SET_USERS, DELETE_USER, UPDATE_USER, ADD_USER_DATA, SET_CURRENT_USER } from './mutation-types'
 
 export default {
@@ -16,15 +17,15 @@ export default {
     const { data } = await UsersAPI.get(provider.id, id).catch((error) => {
       throw error
     })
-    commit(SET_CURRENT_USER, data.data)
+    commit(SET_CURRENT_USER, new User(data.data).getUpdateView())
   },
 
   async createUser({ commit, rootState }, payload) {
-
+    const practitioner = new User(payload).getCreateView()
     try {
       const provider = rootState.auth.provider
       const { data } = await UsersAPI
-        .create(provider.id, payload)
+        .create(provider.id, practitioner)
       commit(UPDATE_USER, data.data)
       return data
     } catch (error) {
@@ -47,10 +48,11 @@ export default {
   },
 
   async updateUser({ commit, rootState }, payload) {
+    const practitioner = new User(payload).getEditView()
     try {
       const provider = rootState.auth.provider
       const { data } = await UsersAPI
-        .update(provider.id,payload)
+        .update(provider.id, practitioner)
       commit(UPDATE_USER, data.data)
     } catch (error) {
       throw error || error.message

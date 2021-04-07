@@ -30,6 +30,24 @@ const createRandom = (number = 10) => {
   return Math.floor(Math.random() * number) + 1
 }
 
+const renameKey = (object, key, newKey) => {
+  const clonedObj = { ...object }
+  const targetKey = clonedObj[key]
+  delete clonedObj[key]
+  clonedObj[newKey] = targetKey
+  return clonedObj
+
+}
+
+const renameKeys = (keysMap, obj) =>
+  Object.keys(obj).reduce(
+    (acc, key) => ({
+      ...acc,
+      ...{ [keysMap[key] || key]: obj[key] },
+    }),
+    {},
+  )
+
 const formatIncomingRoles = (data) => {
   let role = { ...data }
   let resources = data.permissions.resources
@@ -103,6 +121,8 @@ export default {
       createRandom,
       formatIncomingRoles,
       formatOutgoingRoles,
+      renameKey,
+      renameKeys,
     }
   },
 }

@@ -121,7 +121,7 @@ export default {
       location_name: { required },
       street_address: { required },
       city: { required },
-      location_contact_number: { required, maxLength: maxLength(15), minLength: minLength(10)  },
+      location_contact_number: { required, maxLength: maxLength(15), minLength: minLength(9)  },
       postal_code: { required },
     },
   },

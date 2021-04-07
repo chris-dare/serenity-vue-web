@@ -7,6 +7,7 @@
       default-country-code="GH"
       valid-color="#0B6B74"
       required
+      type="tel"
     />
     <p
       v-if="errorMessage"
@@ -51,6 +52,9 @@ export default {
   computed: {
     input: {
       set(val) {
+        if (val.length > 15) {
+          return
+        }
         this.selectedDialCode = split(this.formattedValue, ' ')[0]
         this.$emit('input', this.convertToFormattedPhoneNumber(val))
       },

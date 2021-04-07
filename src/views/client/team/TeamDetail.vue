@@ -2,26 +2,14 @@
   <div class="w-4/5 mx-auto space-y-4">
     <div class="bg-white py-8 px-4 my-2 flex items-center justify-between">
       <div class="flex">
-        <div class="flex items-center">
-          <img
-            v-if="currentUser.photo"
-            :src="currentUser.photo"
-            alt=""
-            class="w-16 h-16 rounded-full mx-4"
-          >
-          <Avatar
-            v-else
-            class="w-16 h-16 mx-4"
-            :name="`${currentUser.first_name}  ${currentUser.last_name}}`"
-          />
-          <div>
-            <p class="font-semibold">
-              {{ currentUser.title }} {{ currentUser.first_name }}
-              {{ currentUser.last_name }}
-            </p>
-            <p class="text-secondary capitalize">{{ specialtyName }}</p>
-          </div>
-        </div>
+        <InfoImageBlock
+          :name="`${currentUser.first_name}  ${currentUser.last_name}`"
+          :description="roleName"
+          :url="currentUser.photo"
+          :label="`${ currentUser.title } ${currentUser.first_name}  ${currentUser.last_name}`"
+          size="large"
+          :loading="loading"
+        />
       </div>
       <div class="flex items-center space-x-4 mr-4">
         <p class="text-green-500 font-semibold">Active</p>
@@ -36,11 +24,13 @@
       <PatientSummaryCard
         title="General Information"
         :fields="generalFields"
+        :loading="loading"
       />
       <PatientSummaryCard
         title="Workspaces, Role, and Location"
         :fields="workspaceFields"
         :cols="1"
+        :loading="loading"
       />
     </div>
 
@@ -55,6 +45,7 @@
 import PatientSummaryCard from '@/components/patients/PatientSummaryCard'
 import TeamDetailActionsDropdown from '@/components/team/TeamDetailActionsDropdown'
 import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'TeamDetail',
 
@@ -127,7 +118,13 @@ export default {
   },
 
   async created() {
+    this.loading = true
     await this.getUser(this.$route.params.id)
+    this.loading = false
+  },
+
+  beforeDestroy() {
+    this.setCurrentUser({})
   },
 
   methods: {

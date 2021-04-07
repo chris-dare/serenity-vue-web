@@ -5,19 +5,6 @@
       @submit.prevent
     >
       <div class="grid grid-cols-2 gap-4 items-start">
-        <!-- <cv-text-input
-          v-model="form.phone_number"
-          label="Phone number (required)"
-          placeholder="eg 0349990390"
-          class="inherit-full-input"
-        >
-          <template
-            v-if="$v.form.phone_number.$error"
-            slot="invalid-message"
-          >
-            Phone number is required
-          </template>
-        </cv-text-input> -->
         <PhoneInput
           v-model="form.phone_number"
           label="Phone number (required)"
@@ -97,7 +84,7 @@ export default {
 
   validations: {
     form: {
-      phone_number: { required, maxLength: maxLength(15), minLength: minLength(10) },
+      phone_number: { required, maxLength: maxLength(15), minLength: minLength(9) },
       email: { required, email},
     },
   },

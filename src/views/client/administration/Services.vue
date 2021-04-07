@@ -119,6 +119,7 @@ export default {
         'Locations',
         'Action',
       ],
+      loading: false,
     }
   },
 
