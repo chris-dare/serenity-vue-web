@@ -28,14 +28,14 @@
         </cv-text-input>
       </div>
       <cv-text-input
-        v-model="form.postal"
+        v-model="form.postal_address"
         label="Postal Address"
         placeholder="Postal Address"
         type="text"
         class="inherit-full-input my-8"
       />
       <cv-text-input
-        v-model="form.address"
+        v-model="form.home_address"
         label="Home/Residential address"
         placeholder="Home/Residential address"
         type="text"
