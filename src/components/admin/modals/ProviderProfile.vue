@@ -58,7 +58,7 @@
                 placeholder="Enter phone number"
                 class="inherit-full-input"
               />
-              <cv-select
+              <!-- <cv-select
                 v-model="form.organization_type"
                 label="Provider type (required)"
                 class="inherit-full-input"
@@ -78,7 +78,7 @@
                 >
                   {{ type.name }}
                 </cv-select-option>
-              </cv-select>
+              </cv-select> -->
             </div>
             <!-- <cv-text-input
               v-model="form.address"
