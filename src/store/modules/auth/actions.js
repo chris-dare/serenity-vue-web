@@ -16,9 +16,10 @@ export default {
   login({ commit }, loginData) {
     return AuthAPI.login(loginData)
       .then(({ data: result }) => {
+        const user = Object.assign({}, result.patient, result.user)
         commit(SET_TOKEN, result.access)
         commit(SET_REFRESH_TOKEN, result.refresh)
-        commit(SET_USER, result.user)
+        commit(SET_USER, user)
         commit(SET_PRACTIONER_DATA, result.practitioner_roles[0])
         commit(SET_LOGGED_IN, true)
         return result
