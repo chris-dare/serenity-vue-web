@@ -135,7 +135,8 @@ export default {
 
       if (data) {
         this.$toast.open({
-          message: data.message,
+          // TODO remove this once the backend is returning the right message
+          message: 'Workspace created successfully' || data.message,
         })
         this.close()
       }
