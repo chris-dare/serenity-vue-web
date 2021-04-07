@@ -64,6 +64,10 @@ export default {
     }),
   },
 
+  mounted() {
+    this.$store.dispatch('auth/getProvider')
+  },
+
   methods: {
     change(dashboard) {
       this.selected = dashboard.value
