@@ -51,12 +51,13 @@
                 placeholder="Email"
                 class="inherit-full-input"
               /> -->
-              <cv-text-input
+              <PhoneInput
                 v-model="form.organization_telecom"
                 label="Contact Number"
-                :invalid-message="$utils.validateRequiredField($v, 'organization_telecom')"
-                placeholder="Enter phone number"
-                class="inherit-full-input"
+                :error-message="$utils.validateRequiredField($v, 'organization_telecom')"
+                raw
+                :country-code.sync="form.country_code"
+                @input="$v.$touch()"
               />
               <!-- <cv-select
                 v-model="form.organization_type"
