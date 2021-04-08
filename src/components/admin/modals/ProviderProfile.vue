@@ -206,6 +206,7 @@ export default {
       this.loading = false
     },
     close() {
+      this.$v.$reset()
       this.visible = false
       this.form = {}
     },
