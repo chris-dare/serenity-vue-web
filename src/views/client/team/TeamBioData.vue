@@ -103,10 +103,10 @@ export default {
   data() {
     return {
       form: {
-        title: 'Mr.',
+        title: 'Mr',
         gender: '',
       },
-      titles: ['Mr.', 'Mrs', 'Miss', 'Hon.', 'Dr.', 'Prof.', 'Master'],
+      titles: ['Mr', 'Mrs', 'Miss', 'Hon', 'Dr', 'Prof', 'Master'],
       calOptions: {
         'dateFormat': 'm/d/Y',
         maxDate: Date.now(),
