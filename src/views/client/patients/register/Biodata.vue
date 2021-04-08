@@ -102,9 +102,9 @@ export default {
   data() {
     return {
       form: {
-        title: 'Mr.',
+        title: 'Mr',
       },
-      titles: ['Mr.', 'Mrs', 'Miss', 'Hon.', 'Dr.', 'Prof.', 'Master'],
+      titles: ['Mr', 'Mrs', 'Miss', 'Hon', 'Dr', 'Prof', 'Master'],
       icon: ChevronRight,
     }
   },
