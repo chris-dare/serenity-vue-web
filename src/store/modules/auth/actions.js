@@ -63,7 +63,7 @@ export default {
         return result.data
       })
       .catch(result => {
-        throw result.data.error
+        throw result.data
       })
   },
   // eslint-disable-next-line no-unused-vars
