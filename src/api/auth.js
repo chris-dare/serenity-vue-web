@@ -41,7 +41,6 @@ export default {
   },
 
   updateProvider(params){
-    console.info('p ', params)
     return http.patch(`providers/${params.id}`, params)
   },
   getProvider(id){

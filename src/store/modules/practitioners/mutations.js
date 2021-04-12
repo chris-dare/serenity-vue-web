@@ -7,15 +7,12 @@ export default {
 
   [UPDATE_USER](state, user) {
     const index = state.users.findIndex(a => a.id === user.id)
-    console.info('my user', index)
     if (index !== -1) {
-      console.info('found')
       state.users = state.users.map(a => {
         if (a.id === user.id) return user
         return a
       })
     } else {
-      console.info('not found')
       state.users.push(user)
     }
   },

@@ -9,6 +9,7 @@ export default {
       pageStart: 0,
     }
   },
+
   computed: {
     filteredData() {
       return this.data.filter(data => {

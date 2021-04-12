@@ -84,15 +84,16 @@ export default {
       if (this.$v.$invalid) {
         return
       }
+
       this.saving = true
-      try{
+      try {
         await this.resetPassword(this.form)
         this.$toast.open({
           message: 'Please check your email for a reset link',
         })
         this.$router.push({name: 'AuthLogin'})
-      }catch(e){
-        console.info(e)
+      } catch(e) {
+        this.$toast.error(e)
       }
       this.saving = false
     },

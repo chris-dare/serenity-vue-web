@@ -15,7 +15,6 @@
         @click="change(dashboard)"
       />
     </div>
-    <AdminProfile />
     <ProviderProfile />
   </div>
 </template>
@@ -23,14 +22,13 @@
 <script>
 import PatientCard from '@/components/appointments/PatientCard'
 import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
-import AdminProfile from '@/components/admin/modals/AdminProfile'
 import ProviderProfile from '@/components/admin/modals/ProviderProfile'
 import { mapState } from 'vuex'
 
 export default {
   name: 'Settings',
 
-  components: { PatientCard,UserDetailsHeader, AdminProfile, ProviderProfile },
+  components: { PatientCard,UserDetailsHeader, ProviderProfile },
 
   data() {
     return {
@@ -73,7 +71,7 @@ export default {
       this.selected = dashboard.value
 
       if (dashboard.value === 'profile') {
-        this.$trigger(this.workspaceType === 'admin' ? 'provider:profile:open':'profile:edit')
+        this.$trigger(this.workspaceType === 'admin' ? 'provider:profile:open' : 'profile:edit')
       }
       if (dashboard.value === 'admin') {
         this.$trigger('admin:profile:open')
