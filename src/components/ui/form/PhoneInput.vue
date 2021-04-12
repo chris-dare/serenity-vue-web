@@ -97,7 +97,6 @@ export default {
         this.selectedDialCode = `+${phoneNumber.countryCallingCode}`
 
         
-        console.log('phone', phoneNumber)
         this.code = phoneNumber.country
       }
     },

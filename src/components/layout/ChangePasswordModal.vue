@@ -142,7 +142,6 @@ export default {
 
       try{
         const response = await this.changePassword(this.form)
-        console.info(response)
         if(response.operation_successful){
           this.$toast.open({
             message: response.message || 'Password reset Successfull',

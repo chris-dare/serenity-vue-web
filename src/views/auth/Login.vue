@@ -106,15 +106,13 @@ export default {
       }
       this.saving = true
       try{
-        const result = await this.$store.dispatch('auth/login', this.form)
+        await this.$store.dispatch('auth/login', this.form)
         this.$router.push({ name: 'GetStarted' })
-        console.info('result', result)
       }catch(error){
         this.$refs.loginButton.$el.classList.add('shake-anim-active')
         setTimeout(()=> {
           this.$refs.loginButton.$el.classList.remove('shake-anim-active')
         }, 300)
-        console.info('error', error)
         this.errorMessage = error.detail || 'Failed to login'
         this.showNotification = true
       }

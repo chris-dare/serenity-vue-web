@@ -98,7 +98,6 @@ export default {
         })
         this.$router.push({name: 'AuthLogin'})
       }catch(error){
-        console.info(error)
         this.$toast.open({
           message: error.password ? error.password[0] : error.status,
           type: 'error',

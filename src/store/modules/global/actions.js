@@ -16,6 +16,7 @@ export default {
     dispatch('services/getServices', null,{ root:true })
     dispatch('getCountries')
   },
+
   getCountries({ commit }) {
     axios.get('https://restcountries.eu/rest/v2/all')
       .then(function (response) {
