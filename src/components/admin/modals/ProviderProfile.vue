@@ -55,8 +55,6 @@
                 v-model="form.organization_telecom"
                 label="Contact Number"
                 :error-message="$utils.validateRequiredField($v, 'organization_telecom')"
-                raw
-                :country-code.sync="form.country_code"
                 @input="$v.$touch()"
               />
               <!-- <cv-select
