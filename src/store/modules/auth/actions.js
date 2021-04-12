@@ -1,7 +1,6 @@
 import AuthAPI from '@/api/auth'
 import { SET_LOGGED_IN, SET_USER, SET_TOKEN, SET_REFRESH_TOKEN, SET_PRACTIONER_DATA } from './mutation-types'
 import router from '@/router'
-import get from 'lodash/get'
 
 export default {
   reset({ commit }) {
@@ -63,9 +62,8 @@ export default {
       .then(({ data: result }) => {
         return result.data
       })
-      .catch(error => {
-        let errorMessage = get(error.data, 'email[0]')
-        throw errorMessage || 'Email is invalid'
+      .catch(result => {
+        throw result.data
       })
   },
   // eslint-disable-next-line no-unused-vars
