@@ -63,9 +63,8 @@ export default {
       .then(({ data: result }) => {
         return result.data
       })
-      .catch(error => {
-        let errorMessage = get(error.data, 'email[0]')
-        throw errorMessage || 'Email is invalid'
+      .catch(result => {
+        throw result.data
       })
   },
   // eslint-disable-next-line no-unused-vars

@@ -92,8 +92,11 @@ export default {
           message: 'Please check your email for a reset link',
         })
         this.$router.push({name: 'AuthLogin'})
-      } catch(e) {
-        this.$toast.error(e)
+      }catch(error){
+        this.$toast.open({
+          message: error.email ? error.email[0] : error.status,
+          type: 'error',
+        })
       }
       this.saving = false
     },
