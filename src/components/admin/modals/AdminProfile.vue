@@ -73,12 +73,12 @@
                 placeholder="dd/mm/yyyy"
                 date-label="Date of birth"
               />
-              <cv-text-input
+              <PhoneInput
                 v-model="form.mobile"
-                :invalid-message="$utils.validateRequiredField($v, 'mobile')"
+                :error-message="$utils.validateRequiredField($v, 'mobile')"
                 label="Phone number (required)"
                 placeholder="eg 0349990390"
-                class="inherit-full-input"
+                @input="$v.$touch()"
               />
               <cv-text-input
                 v-model="form.email"

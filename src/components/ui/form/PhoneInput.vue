@@ -43,7 +43,7 @@ export default {
       default: '',
     },
   
-    raw: {
+    formatAsNational: {
       type: Boolean,
       default: false,
     },
@@ -68,7 +68,7 @@ export default {
         this.selectedDialCode = split(this.formattedValue, ' ')[0]
         if (val.length > 15) return
   
-        this.$emit('input', this.raw || !this.spaceLessValue ? val : this.spaceLessValue)
+        this.$emit('input', this.formatAsNational || !this.spaceLessValue ? val : this.spaceLessValue)
       },
       get() {
         return startsWith(this.value, '+')

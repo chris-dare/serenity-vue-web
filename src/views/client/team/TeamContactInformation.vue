@@ -9,7 +9,7 @@
           v-model="form.phone_number"
           label="Phone number (required)"
           :error-message="$utils.validateRequiredField($v, 'phone_number')"
-          raw
+          format-as-national
           :country-code.sync="form.country_code"
           @input="$v.$touch()"
         />
