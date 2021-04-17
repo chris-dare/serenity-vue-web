@@ -35,6 +35,7 @@
               :invalid-message="$utils.validateRequiredField($v, 'email')"
               class="my-4 se-dark-input"
               label="Your email address"
+              data-test="email"
             />
             <cv-text-input
               v-model="form.password"
@@ -43,14 +44,17 @@
               label="Your password"
               type="password"
               class="se-dark-input"
+              data-test="password"
             />
             <cv-button
               ref="loginButton"
               kind="primary"
               class="shake-anim my-6 max-w-full w-full bg-serenity-primary justify-start"
+              data-test="submit"
               @click="login"
             >
               <img
+                data-test="loading"
                 :class="{hidden: !saving}"
                 class="h-4 w-4 mr-4"
                 src="@/assets/img/eclipse.svg"
