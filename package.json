@@ -6,8 +6,11 @@
     "serve": "vue-cli-service serve --port 8083 --open",
     "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint",
     "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e",
+    "test:e2e": "VUE_CLI_KEEP_TEST_ATTRS=true vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
+  },
+  "resolutions": {
+    "cypress": "^5.6.0"
   },
   "dependencies": {
     "@carbon/charts": "^0.41.10",
@@ -47,7 +50,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-e2e-nightwatch": "~4.5.0",
+    "@vue/cli-plugin-e2e-cypress": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-pwa": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
@@ -64,15 +67,16 @@
     "lint-staged": "^9.5.0",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
+    "vue-cli-plugin-test-attrs": "~0.1.5",
     "vue-template-compiler": "^2.6.11"
-  },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
   },
   "postcss": {
     "plugins": {
       "autoprefixer": {}
     }
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "*.{js,jsx,vue}": [
