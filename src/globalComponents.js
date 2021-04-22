@@ -16,12 +16,17 @@ import ConfirmDeleteModal from '@/components/ui/modals/ConfirmDeleteModal'
 import Timepicker from '@/components/ui/form/Timepicker'
 import ConfirmActionModal from '@/components/ui/ConfirmActionModal'
 import MultiSelect from '@/components/ui/form/MultiSelect'
+import SingleSelect from '@/components/ui/form/SingleSelect'
 import CurrencySelect from '@/components/ui/form/CurrencySelect'
 import InfoImageBlock from '@/components/ui/sections/InfoImageBlock'
 import AppRegisterLayout from '@/layout/AppRegisterLayout'
 import BaseModal from '@/components/ui/BaseModal'
 import PhoneInput from '@/components/ui/form/PhoneInput'
+import MsisdnPhoneInput from '@/components/ui/form/MsisdnPhoneInput'
 import DateRangePicker from '@/components/ui/form/DateRangePicker'
+import Titles from '@/components/ui/form/Titles'
+import Address from '@/components/ui/form/Address'
+import FormCountrySelect from '@/components/ui/form/FormCountrySelect'
 
 
 
@@ -41,9 +46,14 @@ Vue.component('ConfirmDeleteModal', ConfirmDeleteModal)
 Vue.component('Timepicker', Timepicker)
 Vue.component('ConfirmActionModal', ConfirmActionModal)
 Vue.component('MultiSelect', MultiSelect)
+Vue.component('SingleSelect', SingleSelect)
 Vue.component('CurrencySelect', CurrencySelect)
 Vue.component('InfoImageBlock', InfoImageBlock)
 Vue.component('AppRegisterLayout', AppRegisterLayout)
 Vue.component('PhoneInput', PhoneInput)
 Vue.component('DateRangePicker', DateRangePicker)
 Vue.component('BaseModal', BaseModal)
+Vue.component('Titles', Titles)
+Vue.component('Address', Address)
+Vue.component('MsisdnPhoneInput', MsisdnPhoneInput)
+Vue.component('FormCountrySelect', FormCountrySelect)

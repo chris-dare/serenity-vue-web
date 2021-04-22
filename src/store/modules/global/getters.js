@@ -3,13 +3,22 @@ export default {
     return state.token ? `Bearer ${state.token}` : null
   },
 
+  maritalStatuses: state => {
+    return state.statuses.map(stat => {
+      return {
+        label: stat.split('_').join(' ').toLowerCase(),
+        value: stat,
+      }
+    })
+  },
+
   navItems: (state) => {
     if (state.workspaceType === 'admin') {
       return [
         { label: 'Get Started', to: 'GetStarted', component: 'Star' },
         { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
-        // { label: 'Patients', to: 'Patients', component: 'Reference', group_by: 'client care' },
-        // { label: 'Corporate Clients', to: 'CorporateClients', component: 'Baggage' },
+        { label: 'Patients', to: 'Patients', component: 'Reference', group_by: 'client care' },
+        { label: 'Corporate Clients', to: 'CorporateClients', component: 'Baggage' },
         // { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
         // { label: 'Billing', to: 'Billing', component: 'Align', group_by: 'hospital operations'},
         { label: 'Services & pricing', to: 'Services', component: 'Wallet', group_by: 'hospital operations'},

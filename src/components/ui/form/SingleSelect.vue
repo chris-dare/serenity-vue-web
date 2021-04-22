@@ -4,16 +4,11 @@
     <VueMultiselect
       v-model="selected"
       :options="options"
-      :multiple="multiple"
-      :close-on-select="!multiple"
-      :clear-on-select="false"
-      :preserve-search="true"
-      :placeholder="placeholder"
-      :label="label"
-      :track-by="trackBy"
-      :preselect-first="preselect"
+      :searchable="false"
+      close-on-select
       :show-labels="false"
-      :internal-search="false"
+      :placeholder="placeholder"
+      :preselect-first="preselect"
     />
     <p
       v-if="error || errorMessage"
@@ -27,7 +22,7 @@
 <script>
 import VueMultiselect from 'vue-multiselect'
 export default {
-  name: 'Multiselect',
+  name: 'SingleSelect',
 
   components: { VueMultiselect },
 
@@ -47,16 +42,6 @@ export default {
       default: '',
     },
 
-    label: {
-      type: String,
-      default: '',
-    },
-
-    trackBy: {
-      type: String,
-      default: 'id',
-    },
-
     placeholder: {
       type: String,
       default: '',
@@ -70,11 +55,6 @@ export default {
     errorMessage: {
       type: String,
       default: null,
-    },
-
-    multiple: {
-      type: Boolean,
-      default: false,
     },
 
     preselect: {
@@ -95,3 +75,7 @@ export default {
   },
 }
 </script>
+
+<style>
+
+</style>

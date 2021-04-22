@@ -1,108 +1,209 @@
 <template>
-  <div>
+  <cv-form
+    autocomplete="off"
+    @submit.prevent=""
+  >
     <div class="grid grid-cols-2 gap-8">
       <cv-text-input
-        v-model="form.first_name"
+        v-model="form.contact[0].first_name"
         label="First Name"
         placeholder="First Name"
         type="text"
         class="inherit-full-input"
       />
       <cv-text-input
-        v-model="form.last_name"
+        v-model="form.contact[0].last_name"
         label="Last Name"
         type="text"
         placeholder="Last Name"
         class="inherit-full-input"
       />
       <cv-text-input
-        v-model="form.phone_number"
-        label="Phone number"
-        placeholder="Other phone number"
+        v-model="form.contact[0].other_names"
+        label="Other Names"
+        type="text"
+        placeholder="Other Names"
         class="inherit-full-input"
       />
       <cv-text-input
-        v-model="form.emergency_contact"
-        label="Place of work"
-        placeholder="Emergency contact"
+        v-model="form.contact[0].address.line"
+        label="Home/Residential address"
+        placeholder="Home or residential address"
         type="text"
         class="inherit-full-input"
       />
+      <SingleSelect
+        v-model="form.contact[0].telecom.system"
+        :options="systemOptions"
+        title="Type of contact"
+      />
+      <SingleSelect
+        v-model="form.contact[0].telecom.use"
+        :options="['home', 'mobile']"
+        title="Use"
+      />
+      <cv-text-input
+        v-if="form.contact[0].telecom.system === 'email'"
+        v-model="form.contact[0].telecom.value"
+        label="Email"
+        placeholder="Email"
+        class="inherit-full-input col-span-2"
+      />
+      <!-- <cv-text-input
+        v-else
+        v-model="form.contact[0].telecom.value"
+        label="Phone number"
+        placeholder="Phone number"
+        class="inherit-full-input col-span-2"
+      /> -->
+      <MsisdnPhoneInput
+        v-else
+        v-model="form.contact[0].telecom.value"
+        label="Phone number"
+      />
     </div>
-    <cv-text-input
-      v-model="form.address"
-      label="Home/Residential address"
-      placeholder="Emergency contact’s home or residential address"
-      type="text"
-      class="inherit-full-input my-8"
-    />
-    <cv-text-input
-      v-model="form.address"
-      label="Relationship type"
-      placeholder="Who is this person to you?"
-      type="text"
-      class="my-8"
-    />
+    <p
+      v-if="$utils.validateRequiredField($v, 'contact')"
+      class="error col-span-2"
+    >
+      All fields are required when any field is filled
+    </p>
+
     <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center">
-        <cv-button
-          class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-          kind="tertiary"
+      <div class="flex items-center space-x-2">
+        <SeButton
+          variant="outline"
         >
           Cancel
-        </cv-button>
-        <cv-button
-          class="bg-black px-6"
-          kind="primary"
-          @click="$router.push({ name: 'ContactInfo' })"
+        </SeButton>
+        <SeButton
+          :to="{ name: previous }"
+          variant="secondary"
         >
           Go back
-        </cv-button>
+        </SeButton>
       </div>
       <div class="flex items-center">
-        <p class="text-primary underline">Save and close</p>
-        <cv-button
+        <SeButton
           :icon="icon"
-          kind="primary"
-          class="bg-serenity-primary ml-6"
-          @click="$router.push({ name: 'SocialInfo' })"
+          @click="save"
         >
-          Next: Social Info
-        </cv-button>
+          Next: Social Information
+        </SeButton>
       </div>
     </div>
-  </div>
+  </cv-form>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import MultiStep from '@/mixins/multistep'
+import { requiredIf } from 'vuelidate/lib/validators'
+
 export default {
   name: 'EmergencyContact',
 
+  mixins: [MultiStep],
+
   data() {
     return {
-      form: {},
-      icon: ChevronRight,
+      form: {
+        contact: [{
+          telecom: {},
+          address: {},
+        }],
+      },
+      parent: 'Patients',
+      previous: 'ContactInfo',
+      next: 'SocialInfo',
+      systemOptions: ['phone', 'email'],
     }
   },
 
   computed: {
     ...mapState({
-      countries: (state) => state.global.countries,
+      storeData: (state) => state.patients.currentPatient,
     }),
+
+    hasFirstName() {
+      return !!this.form.contact[0].first_name
+    },
+    hasLastName() {
+      return !!this.form.contact[0].last_name
+    },
+
+    empty() {
+      return this.$utils.checkForEmpty({ ...this.form.contact[0] })
+    },
   },
 
-  mounted() {
-    this.getCountries()
+  validations() {
+    return {
+      form: {
+        contact: {
+          $each: {
+            first_name: {
+              required: requiredIf(() => {
+                return !this.empty
+              }),
+            },
+            last_name: {
+              required: requiredIf(() => {
+                return !this.empty
+              }),
+            },
+            telecom: {
+              system: {
+                required: requiredIf(() => {
+                  return !this.empty
+                }),
+              },
+              value: {
+                required: requiredIf(() => {
+                  return !this.empty
+                }),
+              },
+              use: {
+                required: requiredIf(() => {
+                  return !this.empty
+                }),
+              },
+            },
+            address: {
+              line: {
+                required: requiredIf(() => {
+                  return !this.empty
+                }),
+              },
+            },
+          },
+        },
+      },
+    }
   },
-
-  
 
   methods: {
     ...mapActions({
-      getCountries: 'global/getCountries',
+      addToStoreData: 'patients/addToCurrentPatient',
+      refresh: 'patients/refreshCurrentPatient',
     }),
+
+    save() {
+      this.$v.$touch()
+
+      if (this.$v.$invalid) {
+        this.$toast.open({
+          message: 'Fill all required fields!',
+          type: 'error',
+        })
+        return
+      }
+
+      this.form.contact[0].relationship ='emergency_contact',
+
+      this.addToStoreData(this.form)
+      this.$router.push({ name: this.next })
+    },
   },
 }
 </script>

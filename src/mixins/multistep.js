@@ -6,10 +6,18 @@ export default {
     }
   },
   created() {
+    console.log('form', this.form)
     this.form = { ...this.form , ...this.storeData }
   },
     
   beforeDestroy() {
     this.addToStoreData(this.form)
+  },
+
+  methods: {
+    cancel() {
+      this.refresh()
+      this.$router.push({name: this.parent})
+    },
   },
 }
