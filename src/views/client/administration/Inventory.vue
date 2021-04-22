@@ -19,11 +19,14 @@
         </div>
       </div>
 
-      <cv-search
-        v-model="search"
-        placeholder="Search for inventory item"
-        autocomplete="off"
-      />
+      
+
+      <cv-form autocomplete="off">
+        <cv-search
+          v-model="search"
+          placeholder="Search for inventory item"
+        />
+      </cv-form>
 
       <cv-data-table
         ref="table"

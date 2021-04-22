@@ -1,10 +1,11 @@
 <template>
   <div>
-    <cv-search
-      v-model="search"
-      placeholder="Search for patient, enter name or MR number"
-      autocomplete="off"
-    />
+    <cv-form autocomplete="off">
+      <cv-search
+        v-model="search"
+        placeholder="Search for patient, enter name or MR number"
+      />
+    </cv-form>
     <div class="my-4 flex items-center justify-between">
       <div>
         <cv-button
