@@ -14,11 +14,12 @@
         </router-link>
       </div>
 
-      <cv-search
-        v-model="search"
-        placeholder="Search for company"
-        autocomplete="off"
-      />
+      <cv-form autocomplete="off">
+        <cv-search
+          v-model="search"
+          placeholder="Search for company"
+        />
+      </cv-form>
 
       <cv-data-table
         ref="table"
