@@ -1,10 +1,14 @@
 <template>
   <div>
-    <cv-search
-      v-model="search"
-      placeholder="Search for patient, enter name or MR number"
+    <cv-form
       autocomplete="off"
-    />
+      @submit.prevent
+    >
+      <cv-search
+        v-model="search"
+        placeholder="Search for patient, enter name or MR number"
+      />
+    </cv-form>
     <div class="my-4 flex items-center justify-between">
       <div>
         <cv-button
@@ -71,55 +75,42 @@
     <div>
       <cv-data-table
         ref="table"
-        v-model="rowSelects"
-        :row-size="rowSize"
-        :sortable="sortable"
         :columns="columns"
         :pagination="{
           numberOfItems: patientsCount,
         }"
-        :overflow-menu="sampleOverflowMenu"
-        :data="patients"
+        :data="filteredData"
         @pagination="actionOnPagination"
-        @row-select-change="actionRowSelectChange"
-        @sort="onSort"
-        @overflow-menu-click="onOverflowMenuClick"
       >
         <template slot="data">
           <cv-data-table-row
-            v-for="(row, rowIndex) in patients"
+            v-for="(row, rowIndex) in filteredData"
             :key="`${rowIndex}`"
             :value="`${rowIndex}`"
           >
             <cv-data-table-cell>
               <div class="flex items-center py-2">
-                <img
-                  class="w-12 h-12 rounded-full mr-3"
-                  :src="row.image"
-                  alt=""
-                >
-                <div>
-                  <p class="">{{ row.name }}</p>
-                  <p class="text-secondary text-xs">
-                    {{ row.gender }}, {{ row.age }} years
-                  </p>
-                </div>
+                <InfoImageBlock
+                  :label="row.name"
+                  :description="row.gender_age_description"
+                  size="base"
+                />
               </div>
             </cv-data-table-cell>
-            <cv-data-table-cell>
+            <!-- <cv-data-table-cell>
               <div>
-                <p class="">{{ row.weight }}kg</p>
+                <p>{{ row.weight }}kg</p>
                 <p class="text-secondary text-xs">{{ row.height }}cm</p>
               </div>
-            </cv-data-table-cell>
+            </cv-data-table-cell> -->
             <cv-data-table-cell>
               <div>
-                <p class="">{{ row.phone }}</p>
+                <p>{{ row.phone }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p class="">{{ row.recent }}</p>
+                <p>{{ row.recent }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
@@ -145,51 +136,57 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
+import DataMixin from '@/mixins/data'
 export default {
+  name: 'Patients',
+
+  mixins: [DataMixin],
+
   data() {
     return {
       rowSelects: null,
       columns: [
         'Patient',
-        'Weight/Height',
+        // 'Weight/Height',
         'Mobile',
         'Last encounter',
         'Action',
       ],
-      use_batchActions: true,
-      rowSize: '',
-      autoWidth: false,
-      sortable: false,
-      title: 'Table title',
-      actionBarAriaLabel: 'Custom action bar aria label',
-      batchCancelLabel: 'Cancel',
-      zebra: false,
-      search: '',
-      sampleOverflowMenu: [],
       selectedFilter: '',
     }
   },
+  
   computed: {
     ...mapState({
-      patients: (state) => state.patients.patients,
       patientsCount: (state) => state.patients.patientsCount,
       workspaceType: (state) => state.global.workspaceType,
     }),
 
+    ...mapGetters({
+      data: 'patients/patients',
+    }),
+
     maleCount() {
-      return this.patients.filter((p) => p.gender == 'male').length
+      return this.data.filter((p) => p.gender == 'MALE').length
     },
+
     femaleCount() {
-      return this.patients.filter((p) => p.gender == 'female').length
+      return this.data.filter((p) => p.gender == 'FEMALE').length
     },
   },
 
+  mounted() {
+    this.paginate = true
+    this.searchTerms = ['name', 'mr_number', 'mobile']
+    this.refresh()
+  },
+
   methods: {
-    onOverflowMenuClick() {},
-    onSort() {},
-    actionRowSelectChange() {},
-    actionOnPagination() {},
+    ...mapActions({
+      getData: 'patients/getPatients',
+    }),
+
   },
 }
 </script>

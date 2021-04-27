@@ -12,6 +12,23 @@ export default {
     })
   },
 
+  genders: state => {
+    return state.genders.map(gender => {
+      return {
+        label: gender,
+        value: gender.toUpperCase(),
+      }
+    })
+  },
+  religions: state => {
+    return state.religions.map(gender => {
+      return {
+        label: gender,
+        value: gender.toUpperCase(),
+      }
+    })
+  },
+
   navItems: (state) => {
     if (state.workspaceType === 'admin') {
       return [
@@ -19,11 +36,11 @@ export default {
         { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
         { label: 'Patients', to: 'Patients', component: 'Reference', group_by: 'client care' },
         { label: 'Corporate Clients', to: 'CorporateClients', component: 'Baggage' },
-        // { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
-        // { label: 'Billing', to: 'Billing', component: 'Align', group_by: 'hospital operations'},
+        { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
+        { label: 'Billing', to: 'Billing', component: 'Align', group_by: 'hospital operations'},
         { label: 'Services & pricing', to: 'Services', component: 'Wallet', group_by: 'hospital operations'},
-        // { label: 'Inventory', to: 'Inventory', component: 'Folder'},
-        // { label: 'Schedules', to: 'Schedules', component: 'Schedule'},
+        { label: 'Inventory', to: 'Inventory', component: 'Folder'},
+        { label: 'Schedules', to: 'Schedules', component: 'Schedule'},
         { label: 'Team', to: 'Team', component: 'Events', group_by: 'administration'},
         { label: 'Workspaces', to: 'Workspaces', component: 'Cross' },
         { label: 'Roles', to: 'Roles', component: 'Security' },

@@ -6,7 +6,6 @@ export default {
     }
   },
   created() {
-    console.log('form', this.form)
     this.form = { ...this.form , ...this.storeData }
   },
     

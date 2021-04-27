@@ -4,13 +4,10 @@
     @submit.prevent=""
   >
     <div class="grid grid-cols-2 gap-8 mb-8">
-      <cv-text-input
+      <MsisdnPhoneInput
         v-model="form.mobile"
         label="Phone number (required)"
-        type="text"
-        placeholder="Patient First Name"
-        :invalid-message="$utils.validateRequiredField($v, 'mobile')"
-        class="inherit-full-input"
+        :error-message="$utils.validateRequiredField($v, 'mobile')"
       />
       <cv-text-input
         v-model="form.email"

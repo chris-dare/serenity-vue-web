@@ -1,36 +1,32 @@
 import PatientsAPI from '@/api/patients'
 import Patient from '@/models/Patient'
-// import { createPatients } from '@/services/helpers'
 
 import {
   UPDATE_PATIENT,
   SET_PATIENTS,
   DELETE_PATIENT,
-  // SET_PATIENTS_COUNT,
+  SET_PATIENTS_COUNT,
   ADD_PATIENT_DATA,
   SET_PATIENT_DATA,
 } from './mutation-types'
 
 export default {
-  // getPatients({ commit }) {
-  //   commit(SET_PATIENTS, createPatients())
-  //   commit(SET_PATIENTS_COUNT, 10)
-  //   // return PatientsAPI.list(id, page)
-  //   //   .then(({ data: result }) => {
-  //   //     commit(SET_PATIENTS, result.data)
-  //   //     commit(SET_PATIENTS_COUNT, result.meta.total)
-  //   //     return result.data
-  //   //   })
-  //   //   .catch(result => {
-  //   //     throw result
-  //   //   })
-  // },
-
   async getPatients({ commit, rootState }) {
     try {
       const provider = rootState.auth.provider
       const { data } = await PatientsAPI.list(provider.id)
-      commit(SET_PATIENTS, data.data)
+      commit(SET_PATIENTS, data)
+      commit(SET_PATIENTS_COUNT, data.length)
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
+  async getPatient({ commit, rootState }, id) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await PatientsAPI.get(provider.id, id)
+      commit(SET_PATIENT_DATA, data)
     } catch (error) {
       throw error.data || error
     }
@@ -82,5 +78,14 @@ export default {
 
   setCurrentPatient({ commit }, data) {
     commit(SET_PATIENT_DATA, data)
+  },
+
+  findPatient({commit, state}, id) {
+    const patient = state.patients.find(patient => patient.id === id)
+
+    if (patient) {
+      const pat = new Patient(patient).getNormalizedView()
+      commit(SET_PATIENT_DATA, pat)
+    }
   },
 }

@@ -1,15 +1,63 @@
 import isEmpty from 'lodash/isEmpty'
-import Vue from 'vue'
+import differenceInYears from 'date-fns/differenceInYears'
+import parseISO from 'date-fns/parseISO'
+import format from 'date-fns/format'
 
 export default class Patient {
   constructor(data) {
     this.data = { ...data }
   }
 
+  getNormalizedView() {
+    let data = {
+      ...this.data,
+      age: this.data.birth_date ? differenceInYears(Date.now(), new Date(`${this.data.birth_date}`)) : null,
+      fullName: `${this.data.name_prefix || ''} ${this.data.first_name || ''} ${this.data.last_name || ''}`,
+      name: `${this.data.first_name || ''} ${this.data.last_name || ''}`,
+      phone: this.data.mobile || '-',
+      recent: format(parseISO(this.data.modified_at), 'MMM dd, yyyy'),
+    }
+
+    data.age_years = data.age ? `${data.age} years` : null
+    data.gender_age_description = ''
+
+    if (data.gender) {
+      data.gender_age_description = `${data.gender}`
+    }
+
+    if (data.age_years) {
+      data.gender_age_description = `${data.gender_age_description}, ${data.age_years}`
+    }
+
+    data.emergency_contact = { address: {}, telecom: {}}
+
+    if (data.contact && data.contact.length) {
+      data.emergency_contact = { ...data.contact.find(contact => contact.relationship === 'emergency_contact') }
+    }
+
+    data.payment_method = {payment_details: {}}
+
+    if (!isEmpty(data.payment_options)) {
+      data.payment_method = { ...data.payment_options[0] }
+    }
+
+    data.address_description = this.getAddressDescription(data.address)
+
+    data.religion = isEmpty(data.religious_affiliation) ? '' : data.religious_affiliation[0]
+
+    return data
+  }
+
+  getSingleView() {
+    let data = {
+      ...this.data,
+    }
+
+    return data
+  }
+
   getEmptyView() {
     let data = { ...patient, ...this.data }
-
-    console.log('data', data)
 
     if (isEmpty(data.address)) {
       delete data.address
@@ -33,15 +81,46 @@ export default class Patient {
       }
     }
 
-    data.marital_status = data.marital_status.value
+    if (data.mobile) {
+      data.mobile = this.convertToMsisdn(data.mobile)
+    }
 
-    console.log('Vue', Vue.$utils)
+    if (data.marital_status) {
+      data.marital_status = data.marital_status.value
+    }
+    if (data.religious_affiliation) {
+      data.religious_affiliation = [data.religious_affiliation.value]
+    }
+
+    data.gender = data.gender.toUpperCase()
 
     return this.removeEmpty(data)
   }
 
   isContactEmpty(contact) {
     return (isEmpty(contact.address) && isEmpty(contact.telecom) && Object.keys(contact).length === 3) 
+  }
+
+  convertToMsisdn(number) {
+    if (!number) {
+      return ''
+    }
+
+    return number.slice(1, number.length - 1)
+  }
+
+  convertFromMsisdn(number) {
+    if (!number) {
+      return ''
+    }
+
+    return `+${number}`
+  }
+
+  getAddressDescription(address) {
+    if (!address) return ''
+
+    return [address.line,address.city, address.district, address.state, address.country ].filter(name => name).join(', ')
   }
 
   removeEmpty(tree) {
@@ -101,7 +180,7 @@ const payment_options = {
 
 const patient = {
   'mr_number': '',
-  'birth_date': '',
+  'birth_date': null,
   'birth_time': null,
   'preferred_communication': ['en'],
   'email': '',
@@ -109,11 +188,8 @@ const patient = {
   'gender': '', // required: male | female | other | unknown
   'general_practitioner': '', // practitioner role id
   'last_name': '',
-  'marital_status': '',
   'meta': null,
   'mobile': '', // required: msisdn phone number format
   'name_prefix': 'Prof',
-  'name_suffix': '',
-  'other_names': '',
   'religious_affiliation': null, // will provider an endpoint to retrieve list
 }

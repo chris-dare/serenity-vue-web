@@ -13,27 +13,15 @@
         track_by="value"
         placeholder="Marital Status"
       />
-  
-      <cv-select
+      <MultiSelect
         v-model="form.religious_affiliation"
-        label="Religion"
-        class="inherit-full-input"
-      >
-        <cv-select-option
-          disabled
-          selected
-          hidden
-        >
-          Religion
-        </cv-select-option>
-        <cv-select-option
-          v-for="(religion, index) in religions"
-          :key="index"
-          :value="religion"
-        >
-          {{ religion }}
-        </cv-select-option>
-      </cv-select>
+        title="Religion"
+        :multiple="false"
+        :options="religions"
+        label="label"
+        track_by="value"
+        placeholder="Religion"
+      />
 
       <cv-text-input
         v-model="form.preferred_communication"
@@ -56,11 +44,9 @@
         type="text"
         class="inherit-full-input"
       />
-      <cv-text-input
+      <MsisdnPhoneInput
         v-model="form.meta.office_phone_number"
         label="Office Phone number"
-        placeholder="Workplace phone or telephone"
-        class="inherit-full-input"
       />
     </div>
     <div class="flex items-center justify-between mt-12 mb-6">
@@ -102,7 +88,6 @@ export default {
       form: {
         meta: {},
       },
-      religions: ['christianity', 'islam'],
       previous: 'EmergencyContact',
       next: 'Payment',
       parent: 'Patients',
@@ -115,6 +100,7 @@ export default {
     }),
     ...mapGetters({
       statuses: 'global/maritalStatuses',
+      religions: 'global/religions',
     }),
   },
 

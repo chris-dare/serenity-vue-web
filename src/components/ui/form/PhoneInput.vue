@@ -66,7 +66,7 @@ export default {
     input: {
       set(val) {
         this.selectedDialCode = split(this.formattedValue, ' ')[0]
-        if (val.length > 15) return
+        if (val.length > 15) return val.slice(0, 15)
   
         this.$emit('input', this.formatAsNational || !this.spaceLessValue ? val : this.spaceLessValue)
       },

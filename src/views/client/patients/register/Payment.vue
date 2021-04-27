@@ -146,7 +146,7 @@ export default {
         this.$toast.open({
           message: 'Patient successfully added',
         })
-        this.$router.push({name: 'Patients'})
+        this.visible = true
         this.loading = false
       } catch (error) {
         this.$toast.open({

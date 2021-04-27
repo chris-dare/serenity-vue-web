@@ -19,6 +19,7 @@ import MultiSelect from '@/components/ui/form/MultiSelect'
 import SingleSelect from '@/components/ui/form/SingleSelect'
 import CurrencySelect from '@/components/ui/form/CurrencySelect'
 import InfoImageBlock from '@/components/ui/sections/InfoImageBlock'
+import ImageBlock from '@/components/ui/sections/ImageBlock'
 import AppRegisterLayout from '@/layout/AppRegisterLayout'
 import BaseModal from '@/components/ui/BaseModal'
 import PhoneInput from '@/components/ui/form/PhoneInput'
@@ -57,3 +58,4 @@ Vue.component('Titles', Titles)
 Vue.component('Address', Address)
 Vue.component('MsisdnPhoneInput', MsisdnPhoneInput)
 Vue.component('FormCountrySelect', FormCountrySelect)
+Vue.component('ImageBlock', ImageBlock)

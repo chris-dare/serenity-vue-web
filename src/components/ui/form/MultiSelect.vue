@@ -14,6 +14,7 @@
       :preselect-first="preselect"
       :show-labels="false"
       :internal-search="false"
+      :custom-label="customLabel"
     />
     <p
       v-if="error || errorMessage"
@@ -26,6 +27,7 @@
 
 <script>
 import VueMultiselect from 'vue-multiselect'
+import isEmpty from 'lodash/isEmpty'
 export default {
   name: 'Multiselect',
 
@@ -80,6 +82,14 @@ export default {
     preselect: {
       type: Boolean,
       default: false,
+    },
+
+    customLabel: {
+      type: Function,
+      default (option, label) {
+        if (isEmpty(option)) return ''
+        return label ? option[label] : option
+      },
     },
   },
 

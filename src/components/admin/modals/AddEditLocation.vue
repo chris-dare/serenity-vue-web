@@ -59,7 +59,7 @@
           :invalid-message="$utils.validateRequiredField($v, 'postal_code')"
         />
 
-        <PhoneInput
+        <MsisdnPhoneInput
           v-model="form.location_contact_number"
           label="Location contact number"
           :error-message="$utils.validateRequiredField($v, 'location_contact_number')"

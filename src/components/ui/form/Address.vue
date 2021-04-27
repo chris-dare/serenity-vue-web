@@ -1,40 +1,5 @@
 <template>
   <div class="grid md:grid-cols-2 gap-8">
-    <!-- <SingleSelect
-      v-model="form.use"
-      :options="useOptions"
-      title="Use"
-      placeholder=""
-      preselect
-      :invalid-message="$utils.validateRequiredField($v, 'use')"
-      @input.native="onChange"
-    />
-    <SingleSelect
-      v-model="form.type"
-      :options="typeOptions"
-      title="Type"
-      placeholder=""
-      :invalid-message="$utils.validateRequiredField($v, 'type')"
-      preselect
-      @input.native="onChange"
-    /> -->
-    <!-- <cv-text-input
-      v-model="form.city"
-      label="City"
-      placeholder="City"
-      class="inherit-full-input"
-      :invalid-message="$utils.validateRequiredField($v, 'city')"
-      @input="onChange"
-    />
-    <cv-text-input
-      v-model="form.district"
-      label="District"
-      placeholder="District"
-      class="inherit-full-input"
-      :invalid-message="$utils.validateRequiredField($v, 'district')"
-      @input="onChange"
-    /> -->
-
     <cv-text-input
       v-model="form.postal_code"
       label="GhanaPost GPS"
@@ -130,26 +95,6 @@ export default {
   validations() {
     return {
       form: {
-        // city: {
-        //   required: requiredIf(() => {
-        //     return this.addressHasValue
-        //   }),
-        // },
-        // use: {
-        //   required: requiredIf(() => {
-        //     return this.addressHasValue
-        //   }),
-        // },
-        // type: {
-        //   required: requiredIf(() => {
-        //     return this.addressHasValue
-        //   }),
-        // },
-        // district: {
-        //   required: requiredIf(() => {
-        //     return this.addressHasValue
-        //   }),
-        // },
         state: {
           required: requiredIf(() => {
             return this.addressHasValue
@@ -194,8 +139,7 @@ export default {
     },
 
     internalDisabled: {
-      set(val) {
-        console.log('val', val)
+      set() {
         this.$emit('update:disabled', this.$v.$touch())
       },
       get() {

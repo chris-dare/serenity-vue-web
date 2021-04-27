@@ -15,6 +15,7 @@
           <InfoImageBlock
             label="Practitioner name"
             :description="form.healthcare_service_name"
+            label-class="font-semibold"
           />
         </div>
 

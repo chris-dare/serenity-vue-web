@@ -4,7 +4,7 @@
     <VuePhoneNumberInput
       ref="phoneInput"
       v-model="localValue"
-      default-country-code="GH"
+      :default-country-code="code"
       valid-color="#0B6B74"
       required
       type="tel"
@@ -21,7 +21,7 @@
 <script>
 import split from 'lodash/split'
 import get from 'lodash/get'
-import startsWith from 'lodash/startsWith'
+import parsePhoneNumber from 'libphonenumber-js'
 
 export default {
   name: 'MsisdnPhoneInput',
@@ -46,19 +46,18 @@ export default {
   data() {
     return {
       selectedDialCode: '+233',
+      code: 'GH',
     }
   },
 
   computed: {
     localValue: {
       get() {
-        return startsWith(this.value, '+')
-          ? this.unformattedValue
-          : this.value
+        return this.convertFromMsidn(this.value)
       },
       set(val) {
         this.selectedDialCode = split(this.formattedValue, ' ')[0]
-        this.$emit('input', this.convertTo(val))
+        this.$emit('input', this.convertToMsisdn(val))
       },
     },
 
@@ -66,27 +65,48 @@ export default {
       return get(this.$refs, 'phoneInput.phoneFormatted') ?  get(this.$refs, 'phoneInput.phoneFormatted') : this.value
     },
 
-    unformattedValue() {
-      return this.spaceLessValue.slice(this.selectedDialCode.length)
+    formatNational() {
+      const phoneNumber = parsePhoneNumber(this.localValue, 'GH')
+      return phoneNumber.format('E.164')
     },
+  },
 
-    spaceLessValue() {
-      return this.formattedValue.split(' ').join('')
+  watch: {
+    value(val) {
+      if (val.startsWith('+')) {
+        const phoneNumber = parsePhoneNumber(val, 'GH')
+        this.selectedDialCode = `+${phoneNumber.countryCallingCode}`
+
+        
+        this.code = phoneNumber.country
+      }
     },
   },
 
   methods: {
-    convertTo(val) {
-      if (!val) return ''
+    convertToMsisdn(val) {
+      if (!val) {
+        return ''
+      }
+
       if (val.length >= 15) {
         return val.slice(0, 15)
       }
+      const phoneNumber = parsePhoneNumber(val, this.code)
 
-      if (get(this.$refs, 'phoneInput.phoneFormatted')) {
-        return get(this.$refs, 'phoneInput.phoneFormatted').split(' ').join('')
+      return phoneNumber ? phoneNumber.format('E.164') : val
+    },
+
+    convertFromMsidn(val) {
+      if (!val) {
+        return ''
       }
+      const phoneNumber = parsePhoneNumber(val, this.code)
 
-      return val.split(' ').join('')
+      this.code = phoneNumber ? phoneNumber.country : 'GH'
+
+
+      return phoneNumber ? phoneNumber.formatNational() : val
     },
   },
 }

@@ -40,7 +40,7 @@ export default {
     },
 
     description: {
-      type: String,
+      type: [String,Object],
       default: '',
     },
 

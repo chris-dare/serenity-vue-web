@@ -3,14 +3,11 @@
     <div class="w-4/5 mx-auto space-y-4">
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Patients ({{ patientsCount }})</p>
-        <router-link
-          :to="{name:'Biodata'}"
-          tag="cv-button"
-          class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
-          kind="primary"
+        <SeButton
+          @click="goTo"
         >
           Add new patient <Add class="ml-4 w-5 h-5 text-white" />
-        </router-link>
+        </SeButton>
       </div>
 
       <PatientsTable />
@@ -26,29 +23,21 @@ export default {
 
   components: {  PatientsTable },
 
-  data() {
-    return {
-      search: '',
-    }
-  },
-
   computed: {
     ...mapState({
-      patients: (state) => state.patients.patients,
       patientsCount: (state) => state.patients.patientsCount,
     }),
   },
 
-  mounted() {
-    this.getPatients()
-  },
-
   methods: {
     ...mapActions({
-      getPatients: 'patients/getPatients',
+      refreshCurrentPatient: 'patients/refreshCurrentPatient',
     }),
+
+    goTo() {
+      this.refreshCurrentPatient()
+      this.$router.push({ name: 'Biodata' })
+    },
   },
 }
-</script>
-
-<style></style>
+</script>]

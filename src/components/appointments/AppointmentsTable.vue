@@ -19,7 +19,6 @@
     <div v-if="appointments.length">
       <cv-data-table
         ref="table"
-        v-model="rowSelects"
         :row-size="rowSize"
         :columns="columns"
         :pagination="{

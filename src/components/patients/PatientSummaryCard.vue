@@ -1,13 +1,13 @@
-<template>
-  <EditableCard :title="title">
+<template functional>
+  <EditableCard :title="props.title">
     <div>
-      <div :class="[`grid grid-cols-${cols} gap-6 text-xs my-5 w-full`]">
+      <div :class="[`grid grid-cols-${props.cols} gap-6 text-xs my-5 w-full`]">
         <InfoBlock
-          v-for="(field, index) in fields"
+          v-for="(field, index) in props.fields"
           :key="index"
           :label="field.label"
-          :description="field.value || 'N/A'"
-          :loading="loading"
+          :description="field.value || '-'"
+          :loading="props.loading"
         />
       </div>
     </div>

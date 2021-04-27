@@ -7,23 +7,27 @@ export default {
       page: 1,
       pageLength: 10,
       pageStart: 0,
+      paginate: false,
     }
   },
 
   computed: {
     filteredData() {
-      return this.data.filter(data => {
+
+      let data = this.data.filter(data => {
         if (!this.search) {
           return data
         }
 
         for (let index = 0; index < this.searchTerms.length; index++) {
           const element = this.searchTerms[index]
-          if (data[element].toLowerCase().includes(this.search.toLowerCase())) {
+          if (data[element]?.toLowerCase().includes(this.search.toLowerCase())) {
             return data
           }
         }
       })
+
+      return this.paginate ? data.slice(this.pageStart-1, this.pageStart + this.pageLength) : data
       //   for pagination
       //   .slice(this.pageStart-1, this.pageStart + this.pageLength)
       
