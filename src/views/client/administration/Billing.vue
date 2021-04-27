@@ -2,7 +2,7 @@
   <div>
     <div class="w-4/5 mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Bills ({{ 5 }})</p>
+        <p class="text-xl font-bold">Bills ({{ filteredBilling.length || 0 }})</p>
       </div>
 
       <cv-form autocomplete="off">
@@ -45,29 +45,29 @@
 
       <cv-data-table
         ref="table"
-        :data="[]"
+        :data="filteredBilling"
         :columns="columns"
-        :pagination="{ itemsPerPage:10, numberOfItems: 12, pageSizes: [10, 15, 20, 25] }"
+        :pagination="{ itemsPerPage:10, numberOfItems: filteredBilling.length, pageSizes: [10, 15, 20, 25] }"
       >
         <template slot="data">
           <cv-data-table-row
-            v-for="(row, rowIndex) in 10"
+            v-for="(row, rowIndex) in filteredBilling"
             :key="`${rowIndex}`"
             :value="`${rowIndex}`"
           >
             <cv-data-table-cell>
               <div class="flex items-center py-4 space-x-2">
-                <Avatar :name="$faker().name.findName()" />
+                <Avatar :name="row.patientname" />
                 <div>
-                  <p>{{ $faker().name.findName() }}</p>
-                  <p class="text-secondary text-xs">
+                  <p>{{ row.patientname }}</p>
+                  <!-- <p class="text-secondary text-xs">
                     {{ $faker().random.boolean() ? 'male' : 'female' }}, {{ $utils.createRandom(100) }} years
-                  </p>
+                  </p> -->
                 </div>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p>{{ $faker().phone.phoneNumber() }}</p>
+              <p>{{ row.service_or_product_name }}</p>
             </cv-data-table-cell>
             
             
@@ -75,15 +75,15 @@
               <p>{{ Math.round(Math.random()) }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p>{{ Math.round(Math.random()) }}</p>
+              <p>{{ row.paymentMethod }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p class="lowercase">{{ $faker().internet.email() }}</p>
+              <p class="camelcase">{{ row.status }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div
                 class="flex items-center cursor-pointer"
-                @click="$trigger('billing:detail:open')"
+                @click="$trigger('billing:detail:open', { ...row })"
               >
                 View bill
                 <div
@@ -107,6 +107,7 @@
 <script>
 // import Add from '@carbon/icons-vue/es/add/32'
 import ViewBillingDetails from '@/components/admin/modals/ViewBillingDetails'
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'Clients',
 
@@ -117,13 +118,39 @@ export default {
       search: '',
       columns: [
         'Patient',
-        'MR Number',
+        'Service / Product',
         'Amount Recieved',
         'Payment Method',
         'Status',
         'Action',
       ],
+      loading: false,
     }
+  },
+
+  computed: {
+    ...mapState({
+      billing: (state) => state.billing.billing,
+    }),
+    filteredBilling() {
+      return this.billing.filter(data => !this.search || data.patientname.toLowerCase().includes(this.search.toLowerCase()))
+    },
+  },
+
+  created() {
+    this.refresh()
+    console.log(this.billing)
+  },
+
+  methods: {
+    ...mapActions({
+      getBilling: 'billing/getBilling',
+    }),
+    async refresh() {
+      this.loading = true
+      await this.getBilling()
+      this.loading = false
+    },
   },
 }
 </script>
