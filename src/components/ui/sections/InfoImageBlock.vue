@@ -29,7 +29,7 @@
         :class="customClass.img"
       />
       <div>
-        <p class="font-semibold">{{ label }}</p>
+        <p :class="labelClass">{{ label }}</p>
         <p
           :class="customClass.description"
           class="text-secondary capitalize"
@@ -47,6 +47,11 @@ export default {
 
   props: {
     label: {
+      type: String,
+      default: '',
+    },
+
+    labelClass: {
       type: String,
       default: '',
     },

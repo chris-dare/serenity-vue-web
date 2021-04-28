@@ -7,12 +7,13 @@ export default {
       page: 1,
       pageLength: 10,
       pageStart: 0,
+      paginate: false,
     }
   },
 
   computed: {
     filteredData() {
-      return this.data.filter(data => {
+      let data = this.data.filter(data => {
         if (!this.search) {
           return data
         }
@@ -24,17 +25,19 @@ export default {
           }
         }
       })
+
+      return this.paginate ? data.slice(this.pageStart-1, this.pageStart + this.pageLength) : data
       //   for pagination
       //   .slice(this.pageStart-1, this.pageStart + this.pageLength)
       
     },
 
     dataCount() {
-      return this.data.length
+      return this.data.length || 0
     },
 
     pagination() {
-      return { numberOfItems: this.dataCount, pageSizes: [10, 15, 20, 25]  }
+      return { itemsPerPage: this.pageLength, numberOfItems: this.dataCount, pageSizes: [10, 15, 20, 25]  }
     },
   },
     

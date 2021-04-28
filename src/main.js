@@ -6,6 +6,7 @@ import store from './store'
 
 import DatePlugin from '@/services/date'
 import UtilsPlugin from '@/services/utils'
+import CurrencyPlugin from '@/services/currency'
 import Vuelidate from 'vuelidate'
 import VuePageTransition from 'vue-page-transition'
 import HasPermissionDirective from '@/plugins/has-permission'
@@ -33,6 +34,7 @@ Vue.use(require('vue-faker'))
 
 Vue.use(DatePlugin)
 Vue.use(UtilsPlugin)
+Vue.use(CurrencyPlugin)
 Vue.use(Vuelidate)
 Vue.use(VuePageTransition)
 

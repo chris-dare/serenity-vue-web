@@ -20,7 +20,7 @@
           </div>
           <div class="flex items-center justify-between py-4">
             <p>Total Cost</p>
-            <p class="text-lg font-bold">Ghc {{ billing.amount || 0.00 }} </p>
+            <p class="text-lg font-bold">{{ $currency(billing.amount).format() }} </p>
           </div>
           <div class="py-4">
             <cv-select
