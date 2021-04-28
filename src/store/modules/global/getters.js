@@ -20,13 +20,20 @@ export default {
       }
     })
   },
+
   religions: state => {
-    return state.religions.map(gender => {
-      return {
-        label: gender,
-        value: gender.toUpperCase(),
-      }
+    let religions = []
+    Object.keys(state.religions).forEach(element => {
+      religions.push({ value: element, label: state.religions[element] })
     })
+    return religions
+  },
+  languages: state => {
+    let languages = []
+    Object.keys(state.languages).forEach(element => {
+      languages.push({ value: element, label: state.languages[element] })
+    })
+    return languages
   },
 
   navItems: (state) => {

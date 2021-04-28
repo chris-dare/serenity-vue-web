@@ -2,14 +2,15 @@
   <div>
     <div class="w-4/5 mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Bills ({{ 5 }})</p>
+        <p class="text-xl font-bold">Bills ({{ dataCount }})</p>
       </div>
 
-      <cv-search
-        v-model="search"
-        placeholder="Search for patient"
-        autocomplete="off"
-      />
+      <cv-form autocomplete="off">
+        <cv-search
+          v-model="search"
+          placeholder="Search for patient"
+        />
+      </cv-form>
 
       <div class="my-4 flex items-center space-x-2">
         <cv-button
@@ -44,45 +45,43 @@
 
       <cv-data-table
         ref="table"
-        :data="[]"
+        :data="filteredData"
         :columns="columns"
-        :pagination="{ itemsPerPage:10, numberOfItems: 12, pageSizes: [10, 15, 20, 25] }"
+        :pagination="pagination"
+        @pagination="actionOnPagination"
       >
         <template slot="data">
           <cv-data-table-row
-            v-for="(row, rowIndex) in 10"
+            v-for="(row, rowIndex) in filteredData"
             :key="`${rowIndex}`"
             :value="`${rowIndex}`"
           >
             <cv-data-table-cell>
               <div class="flex items-center py-4 space-x-2">
-                <Avatar :name="$faker().name.findName()" />
-                <div>
-                  <p>{{ $faker().name.findName() }}</p>
-                  <p class="text-secondary text-xs">
-                    {{ $faker().random.boolean() ? 'male' : 'female' }}, {{ $utils.createRandom(100) }} years
-                  </p>
-                </div>
+                <InfoImageBlock
+                  :url="row.photo"
+                  :label="row.patientname"
+                />
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p>{{ $faker().phone.phoneNumber() }}</p>
+              <p>{{ row.service_or_product_name }}</p>
             </cv-data-table-cell>
             
             
             <cv-data-table-cell>
-              <p>{{ Math.round(Math.random()) }}</p>
+              <p>{{ $currency(Math.round(Math.random())).format() }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p>{{ Math.round(Math.random()) }}</p>
+              <p>{{ row.paymentMethod }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p class="lowercase">{{ $faker().internet.email() }}</p>
+              <p class="camelcase">{{ row.status }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div
                 class="flex items-center cursor-pointer"
-                @click="$trigger('billing:detail:open')"
+                @click="$trigger('billing:detail:open', { ...row })"
               >
                 View bill
                 <div
@@ -104,25 +103,48 @@
 </template>
 
 <script>
-// import Add from '@carbon/icons-vue/es/add/32'
 import ViewBillingDetails from '@/components/admin/modals/ViewBillingDetails'
+import { mapActions, mapState } from 'vuex'
+import DataMixin from '@/mixins/data'
+
 export default {
-  name: 'Clients',
+  name: 'Billing',
 
   components: { ViewBillingDetails },
+
+  mixins: [DataMixin],
 
   data() {
     return {
       search: '',
       columns: [
         'Patient',
-        'MR Number',
+        'Service / Product',
         'Amount Recieved',
         'Payment Method',
         'Status',
         'Action',
       ],
+      loading: false,
     }
+  },
+
+  computed: {
+    ...mapState({
+      data: (state) => state.billing.billing,
+    }),
+  },
+
+  created() {
+    this.paginate = true
+    this.searchTerms = ['patientname']
+    this.refresh()
+  },
+
+  methods: {
+    ...mapActions({
+      getData: 'billing/getBilling',
+    }),
   },
 }
 </script>

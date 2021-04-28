@@ -32,7 +32,8 @@ export default class Patient {
     data.emergency_contact = { address: {}, telecom: {}}
 
     if (data.contact && data.contact.length) {
-      data.emergency_contact = { ...data.contact.find(contact => contact.relationship === 'emergency_contact') }
+      data.emergency_contact = { ...data.contact.find(contact => contact.relationship === 'emergency_contact')  }
+      data.emergency_contact.emergency_contact_address_description = this.getAddressDescription(data.emergency_contact.address)
     }
 
     data.payment_method = {payment_details: {}}
@@ -42,6 +43,7 @@ export default class Patient {
     }
 
     data.address_description = this.getAddressDescription(data.address)
+    
 
     data.religion = isEmpty(data.religious_affiliation) ? '' : data.religious_affiliation[0]
 
@@ -179,7 +181,7 @@ const payment_options = {
 }
 
 const patient = {
-  'mr_number': '',
+  'mr_number': null,
   'birth_date': null,
   'birth_time': null,
   'preferred_communication': ['en'],

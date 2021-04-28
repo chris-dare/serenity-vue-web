@@ -13,7 +13,6 @@ export default {
 
   computed: {
     filteredData() {
-
       let data = this.data.filter(data => {
         if (!this.search) {
           return data
@@ -34,11 +33,11 @@ export default {
     },
 
     dataCount() {
-      return this.data.length
+      return this.data.length || 0
     },
 
     pagination() {
-      return { numberOfItems: this.dataCount, pageSizes: [10, 15, 20, 25]  }
+      return { itemsPerPage: this.pageLength, numberOfItems: this.dataCount, pageSizes: [10, 15, 20, 25]  }
     },
   },
     
