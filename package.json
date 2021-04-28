@@ -24,6 +24,7 @@
     "@fullcalendar/vue": "^5.5.0",
     "autoprefixer": "9",
     "core-js": "^3.6.5",
+    "currency.js": "^2.0.3",
     "d3": "5.x",
     "date-fns": "^2.16.1",
     "libphonenumber-js": "^1.9.16",

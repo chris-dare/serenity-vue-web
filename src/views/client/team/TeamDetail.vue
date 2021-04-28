@@ -9,6 +9,7 @@
           :label="`${ currentUser.title } ${currentUser.first_name}  ${currentUser.last_name}`"
           size="large"
           :loading="loading"
+          label-class="font-semibold"
         />
       </div>
       <div class="flex items-center space-x-4 mr-4">

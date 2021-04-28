@@ -15,16 +15,16 @@
               src="@/assets/img/qr.png"
               alt=""
             >
-            <p class="text-xs">Darlene Robertson</p>
-            <p class="text-secondary text-xs">Female, 23 years</p>
+            <p class="text-xs"> {{ billing.patientname }} </p>
+            <p class="text-secondary text-xs"> {{ billing.category }} </p>
           </div>
           <div class="flex items-center justify-between py-4">
             <p>Total Cost</p>
-            <p class="text-lg font-bold">Ghc1005.60</p>
+            <p class="text-lg font-bold">{{ $currency(billing.amount).format() }} </p>
           </div>
           <div class="py-4">
             <cv-select
-              v-model="form.mode_of_payment"
+              v-model="billing.paymentMethod"
               class="se-custom-input"
               label="Mode of payment"
             >
@@ -36,7 +36,7 @@
                 Please select a mode of payment
               </cv-select-option>
               <cv-select-option
-                value="network"
+                value="cash"
               >
                 Cash
               </cv-select-option>
@@ -44,7 +44,7 @@
           </div>
           <div class="py-4">
             <cv-text-input
-              v-model="form.exp"
+              v-model="billing.amount"
               class="inherit-full-input"
               type="text"
               label="Amount Recieved"
@@ -67,14 +67,15 @@ export default {
 
   data() {
     return {
-      form: {},
+      billing: {},
       visible: false,
     }
   },
 
   events: {
-    'billing:detail:open': function(){
+    'billing:detail:open': function(data){
       this.visible = true
+      this.billing = data.params[0]
     },
     'billing:detail:close': function(){
       this.visible = false
