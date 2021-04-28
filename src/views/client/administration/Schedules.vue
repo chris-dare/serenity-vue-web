@@ -14,23 +14,23 @@
       </div>
 
       <div class="flex items-end justify-between mt-4">
-        <div class="flex gap-1">
+        <div class="flex gap-1 w-2/5">
           <MultiSelect
             v-model="filters.practitioner"
             title="Practitioner"
             :multiple="false"
             :options="practitioners"
             label="first_name"
-            class="multiselect-white"
+            class="multiselect-white flex-1"
           />
 
           <MultiSelect
-            v-model="filters.workspace"
-            title="Clinic"
+            v-model="filters.location"
+            title="Location"
             :multiple="false"
-            :options="workspaces"
-            label="workspace_name"
-            class="multiselect-white"
+            :options="locations"
+            label="location_name"
+            class="multiselect-white flex-1"
           />
           <MultiSelect
             v-model="filters.service"
@@ -38,7 +38,7 @@
             :multiple="false"
             :options="services"
             label="healthcare_service_name"
-            class="multiselect-white"
+            class="multiselect-white flex-1"
           />
         </div>
         <DateRangePicker
@@ -82,7 +82,7 @@ export default {
 
   computed: {
     ...mapState({
-      workspaces: (state) => state.workspaces.workspaces,
+      locations: (state) => state.locations.locations,
       practitioners: (state) => state.practitioners.users,
       services: (state) => state.services.services,
       data: (state) => state.schedules.schedules,

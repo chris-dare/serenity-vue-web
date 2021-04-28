@@ -1,124 +1,129 @@
 <template>
-  <div>
+  <cv-form
+    autocomplete="off"
+    @submit.prevent=""
+  >
     <div class="grid grid-cols-2 gap-8">
-      <cv-select
+      <MultiSelect
         v-model="form.marital_status"
-        label="Marital status"
-        class="inherit-full-input"
-      >
-        <cv-select-option
-          disabled
-          selected
-          hidden
-        >
-          Country
-        </cv-select-option>
-        <cv-select-option
-          value="married"
-        >
-          Married
-        </cv-select-option>
-        <cv-select-option
-          value="single"
-        >
-          Single
-        </cv-select-option>
-        <cv-select-option
-          value="relationship"
-        >
-          In a relationship
-        </cv-select-option>
-      </cv-select>
-      <cv-select
-        v-model="form.religion"
-        label="Religion"
-        class="inherit-full-input"
-      >
-        <cv-select-option
-          disabled
-          selected
-          hidden
-        >
-          Region
-        </cv-select-option>
-        <cv-select-option
-          v-for="(religion, index) in religions"
-          :key="index"
-          :value="religion"
-        >
-          {{ religion }}
-        </cv-select-option>
-      </cv-select>
+        title="Marital Status"
+        :multiple="false"
+        :options="statuses"
+        label="label"
+        track_by="value"
+        placeholder="Marital Status"
+      />
+      <MultiSelect
+        v-model="form.religious_affiliation"
+        title="Religion"
+        :multiple="false"
+        :options="religions"
+        label="label"
+        track_by="value"
+        placeholder="Religion"
+      />
+
       <cv-text-input
-        v-model="form.home_language"
+        v-model="form.preferred_communication"
         label="Home Language"
         placeholder="Primary language you speak"
         type="text"
         class="inherit-full-input"
       />
       <cv-text-input
-        v-model="form.email"
+        v-model="form.meta.email"
         label="Occupation"
         type="text"
         placeholder="Occupation"
         class="inherit-full-input"
       />
       <cv-text-input
-        v-model="form.company"
+        v-model="form.meta.company"
         label="Company/Employer"
         placeholder="Where do you work?"
         type="text"
         class="inherit-full-input"
       />
-      <cv-text-input
-        v-model="form.office_phone_number"
+      <MsisdnPhoneInput
+        v-model="form.meta.office_phone_number"
         label="Office Phone number"
-        placeholder="Workplace phone or telephone"
-        class="inherit-full-input"
       />
     </div>
     <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center">
-        <cv-button
-          class="border-serenity-primary mr-6 px-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-          kind="tertiary"
+      <div class="flex items-center space-x-2">
+        <SeButton
+          variant="outline"
         >
           Cancel
-        </cv-button>
-        <cv-button
-          class="bg-black px-6"
-          kind="primary"
-          @click="$router.push({ name: 'EmergencyContact' })"
+        </SeButton>
+        <SeButton
+          :to="{ name: previous }"
+          variant="secondary"
         >
           Go back
-        </cv-button>
+        </SeButton>
       </div>
       <div class="flex items-center">
-        <p class="text-primary underline">Save and close</p>
-        <cv-button
+        <SeButton
           :icon="icon"
-          kind="primary"
-          class="bg-serenity-primary ml-6"
-          @click="$router.push({ name: 'Payment' })"
+          @click="save"
         >
           Next: Payment
-        </cv-button>
+        </SeButton>
       </div>
     </div>
-  </div>
+  </cv-form>
 </template>
 
 <script>
-import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import MultiStep from '@/mixins/multistep'
 export default {
   name: 'SocialInfo',
 
+  mixins: [MultiStep],
+
   data() {
     return {
-      form: {},
-      icon: ChevronRight,
-      religions: ['christianity', 'islam'],
+      form: {
+        meta: {},
+      },
+      previous: 'EmergencyContact',
+      next: 'Payment',
+      parent: 'Patients',
     }
+  },
+
+  computed: {
+    ...mapState({
+      storeData: (state) => state.patients.currentPatient,
+    }),
+    ...mapGetters({
+      statuses: 'global/maritalStatuses',
+      religions: 'global/religions',
+    }),
+  },
+
+  methods: {
+    ...mapActions({
+      addToStoreData: 'patients/addToCurrentPatient',
+      refresh: 'patients/refreshCurrentPatient',
+    }),
+
+    save() {
+      // this.$v.$touch()
+
+      // if (this.$v.$invalid) {
+      //   this.$toast.open({
+      //     message: 'Fill all required fields!',
+      //     type: 'error',
+      //   })
+      //   return
+      // }
+
+      this.addToStoreData(this.form)
+      this.$router.push({ name: this.next })
+    },
   },
 }
 </script>

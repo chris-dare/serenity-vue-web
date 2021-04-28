@@ -2,20 +2,19 @@
   <div class="w-4/5 mx-auto">
     <div class="bg-white py-8 px-4 my-2 flex items-center justify-between">
       <div class="flex">
-        <div class="flex items-center">
-          <img
-            class="w-16 h-16 rounded-full mx-4"
-            :src="$faker().image.image()"
-            alt=""
-          >
+        <div class="flex items-center space-x-4">
+          <ImageBlock
+            :url="patient.url"
+            :alt="patient.name"
+          />
           <div>
             <p>{{ patient.name }}</p>
             <p class="text-secondary  capitalize">
-              {{ patient.gender }}, {{ patient.age }} years
+              {{ patient.gender_age_description }}
             </p>
             <div class="mt-2 flex items-center">
-              <!-- <div class="bg-green-700 w-3 h-3 rounded-full mr-2"></div> -->
-              <p>MR No: 0012456</p>
+              <div class="bg-green-700 w-3 h-3 rounded-full mr-2" />
+              <p>MR No: {{ patient.mr_number }}</p>
             </div>
           </div>
         </div>
@@ -110,22 +109,12 @@ export default {
       hasEncounter: false,
       visible: false,
       admitModal: false,
-    //   links: [
-    //     { label: 'Summary', path: 'PatientSummary' },
-    //     { label: 'Chart', path: 'PatientCharts' },
-    //     { label: 'Encounters', path: 'PatientEncounters' },
-    //     { label: 'History', path: 'PatientHistory' },
-    //     { label: 'Prescriptions', path: 'PatientPrescriptions' },
-    //     { label: 'Orders/Billing', path: 'PatientOrders' },
-    //     { label: 'Reports', path: 'PatientReports' },
-    //     { label: 'Notes', path: 'PatientNotes' },
-    //   ],
     }
   },
 
   computed: {
     ...mapState({
-      patients: (state) => state.patients.patients,
+      patient: (state) => state.patients.currentPatient,
       workspaceType: (state) => state.global.workspaceType,
     }),
     links() {
@@ -147,30 +136,23 @@ export default {
       return links
 
     },
-    patient() {
-      return this.patients[0]
-    },
+
     isSelected() {
       return (index) => this.initialSelected === index
     },
-    summaryFields() {
-      return [
-        { label: 'Method', value: this.$faker().lorem.word() },
-        { label: 'Payment Network', value: this.$faker().lorem.word() },
-        { label: 'Phone Number', value: this.$faker().lorem.word() },
-        { label: 'Name on Account', value: this.$faker().lorem.word() },
-        { label: 'Secondary Method', value: this.$faker().lorem.word() },
-      ]
-    },
   },
 
-  mounted() {
-    this.getPatients()
+  created() {
+    this.findPatient(this.id)
+  },
+
+  updated() {
+    this.findPatient(this.id)
   },
 
   methods: {
     ...mapActions({
-      getPatients: 'patients/getPatients',
+      findPatient: 'patients/findPatient',
     }),
   },
 }

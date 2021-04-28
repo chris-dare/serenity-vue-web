@@ -1,19 +1,14 @@
 <template>
   <div>
-    <cv-form @submit.prevent="">
+    <cv-form
+      autocomplete="off"
+      @submit.prevent=""
+    >
       <!-- title -->
-      <div>
-        <p class="text-primary mb-4 text-left">Title</p>
-        <div class="flex items-center justify-between w-full">
-          <cv-radio-button
-            v-for="(item, index) in titles"
-            :key="index"
-            v-model="form.title"
-            name="group-1"
-            :label="item"
-            :value="item"
-          />
-        </div>
+      <div class="space-y-8">
+        <Titles
+          v-model="form.name_prefix"
+        />
 
         <div class="grid grid-cols-2 gap-8 my-8">
           <cv-text-input
@@ -24,6 +19,7 @@
             type="text"
             class="inherit-full-input"
           />
+
           <cv-text-input
             v-model="form.last_name"
             label="Last name (required)"
@@ -32,7 +28,7 @@
             type="text"
             class="inherit-full-input"
           />
-          <div>
+          <div class="space-y-8">
             <cv-text-input
               v-model="form.other_names"
               label="Other names"
@@ -41,53 +37,43 @@
               class="inherit-full-input"
             />
             <cv-date-picker
-              v-model="form.date"
+              v-model="form.birth_date"
               kind="single"
-              class="my-8 w-full max-w-full inherit-full-input"
+              class="w-full max-w-full inherit-full-input"
               placeholder="dd/mm/yyyy"
               date-label="Date of Birth"
+              :cal-options="calOptions"
             />
-            <cv-select
+
+            <SingleSelect
               v-model="form.gender"
-              label="Gender (required)"
-              class="inherit-full-input my-8"
+              :options="genders"
+              title="Gender (required)"
               placeholder="Male or female"
-            >
-              <cv-select-option
-                disabled
-                selected
-                hidden
-              >
-                Male or female
-              </cv-select-option>
-              <cv-select-option value="male">Male</cv-select-option>
-              <cv-select-option value="female">FeMale</cv-select-option>
-            </cv-select>
+              preselect
+            />
           </div>
           <div>
-            <p class="text-primary mb-2 text-left">Capture or Upload Patient Photo</p>
+            <p class="bx--label">Capture or Upload Patient Photo</p>
             <Webcam />
             <FileUploadButton title="Or upload patient photo" />
           </div>
         </div>
 
         <div class="flex items-center justify-between mt-12 mb-6">
-          <cv-button
-            class="border-serenity-primary text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary px-6"
-            kind="tertiary"
+          <SeButton
+            variant="outline"
+            @click="cancel"
           >
             Cancel
-          </cv-button>
+          </SeButton>
           <div class="flex items-center">
-            <p class="text-primary underline">Save and close</p>
-            <cv-button
+            <SeButton
               :icon="icon"
-              kind="primary"
-              class="bg-serenity-primary ml-6"
-              @click="$router.push({name: 'ContactInfo'})"
+              @click="save"
             >
               Next: Contact Info
-            </cv-button>
+            </SeButton>
           </div>
         </div>
       </div>
@@ -97,15 +83,24 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators'
-import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import MultiStep from '@/mixins/multistep'
+import { mapActions, mapState } from 'vuex'
+
 export default {
+  name: 'Biodata',
+
+  mixins: [MultiStep],
+
   data() {
     return {
       form: {
-        title: 'Mr',
+        name_prefix: 'Mr',
       },
-      titles: ['Mr', 'Mrs', 'Miss', 'Hon', 'Dr', 'Prof', 'Master'],
-      icon: ChevronRight,
+      next: 'ContactInfo',
+      parent: 'Patients',
+      calOptions: {
+        'dateFormat': 'Y-m-d',
+      },
     }
   },
 
@@ -117,10 +112,35 @@ export default {
     },
   },
 
+  computed: {
+    ...mapState({
+      storeData: (state) => state.patients.currentPatient,
+      genders: (state) => state.global.genders,
+    }),
+  },
+
   methods: {
+    ...mapActions({
+      addToStoreData: 'patients/addToCurrentPatient',
+      refresh: 'patients/refreshCurrentPatient',
+    }),
+
+    save() {
+      this.$v.$touch()
+
+      if (this.$v.$invalid) {
+        this.$toast.open({
+          message: 'Fill all required fields!',
+          type: 'error',
+        })
+        return
+      }
+
+      this.addToStoreData(this.form)
+      this.$router.push({ name: this.next })
+    },
+
     actionChange() {},
   },
 }
 </script>
-
-<style></style>

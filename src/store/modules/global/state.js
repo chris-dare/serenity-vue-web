@@ -16,6 +16,20 @@ export function initialState() {
       {label: 'Admin', value:'admin'},
     ],
     currencies: Currency.data,
+    titles: ['Mr', 'Mrs', 'Miss', 'Hon', 'Dr', 'Prof', 'Master'],
+    genders: ['female', 'male', 'other', 'unknown'],
+    // religions: ['christianity', 'islam'],
+    religions: {
+      'ADVENTIST': 'Adventist',
+      'AFRICAN_RELIGIONS': 'African Religions',
+      'LATTER_DAY_SAINTS': 'Latter Day Saints',
+    },
+    languages: {
+      EN: 'English',
+      FR: 'French',
+    },
+    statuses: ['ANNULLED' , 'DIVORCED' , 'INTERLOCUTORY' , 'LEGALLY_SEPARATED' , 'MARRIED' , 'POLYGAMOUS' , 'NEVER_MARRIED' , 'DOMESTIC_PARTNER' , 'UNMARRIED' , 'WIDOWED' , 'UNKNOWN'],
+    regions: ['Ahafo Region', 'Ashanti Region', 'Bono Region', 'Bono East Region', 'Central Region', 'Eastern Region', 'Greater Accra Region',  'North East Region',  'Northern Region', 'Oti Region', 'Savannah Region', 'Upper East Region', 'Volta Region', 'Upper West Region', 'Western North Region', 'Western Region'],
   }
 }
 

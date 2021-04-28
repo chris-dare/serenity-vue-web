@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <div class="grid grid-cols-2 gap-8">
-      <cv-text-input
-        v-model="form.phone_number"
+  <cv-form
+    autocomplete="off"
+    @submit.prevent=""
+  >
+    <div class="grid grid-cols-2 gap-8 mb-8">
+      <MsisdnPhoneInput
+        v-model="form.mobile"
         label="Phone number (required)"
-        type="text"
-        placeholder="Patient First Name"
-        :invalid-message="$utils.validateRequiredField($v, 'phone_number')"
-        class="inherit-full-input"
+        :error-message="$utils.validateRequiredField($v, 'mobile')"
       />
       <cv-text-input
         v-model="form.email"
@@ -15,134 +15,106 @@
         placeholder="Email address"
         class="inherit-full-input"
       />
-      <cv-text-input
-        v-model="form.other_phone"
-        label="Other phone number"
-        placeholder="Other phone number"
-        class="inherit-full-input"
-      />
-      <cv-select
-        v-model="form.country"
-        label="Country"
-        class="inherit-full-input"
-      >
-        <cv-select-option
-          disabled
-          selected
-          hidden
-        >
-          Country
-        </cv-select-option>
-        <cv-select-option
-          v-for="(country, index) in countries"
-          :key="index"
-          :value="country.name"
-        >
-          {{ country.name }}
-        </cv-select-option>
-      </cv-select>
-      <cv-select
-        v-model="form.region"
-        label="Region"
-        class="inherit-full-input"
-      >
-        <cv-select-option
-          disabled
-          selected
-          hidden
-        >
-          Region
-        </cv-select-option>
-        <cv-select-option
-          v-for="(country, index) in countries"
-          :key="index"
-          :value="country.name"
-        >
-          {{ country.name }}
-        </cv-select-option>
-      </cv-select>
-      <cv-text-input
-        v-model="form.post_code"
-        label="GhanaPost GPS"
-        type="text"
-        placeholder="Ghana post code"
-        class="inherit-full-input"
-      />
     </div>
-    <cv-text-input
+    <Address
       v-model="form.address"
-      label="Home/Residential address"
-      placeholder="Home/Residential address"
-      type="text"
-      class="inherit-full-input my-8"
+      :disabled="disabled"
     />
+
     <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center">
-        <cv-button
-          class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-          kind="tertiary"
+      <div class="flex items-center space-x-2">
+        <SeButton
+          variant="outline"
         >
           Cancel
-        </cv-button>
-        <cv-button
-          class="bg-black px-6"
-          kind="primary"
-          @click="$router.push({ name: 'Biodata' })"
+        </SeButton>
+        <SeButton
+          :to="{ name: previous }"
+          variant="secondary"
         >
           Go back
-        </cv-button>
+        </SeButton>
       </div>
       <div class="flex items-center">
-        <p class="text-primary underline">Save and close</p>
-        <cv-button
+        <SeButton
           :icon="icon"
-          kind="primary"
-          class="bg-serenity-primary ml-6"
-          @click="$router.push({ name: 'EmergencyContact' })"
+          @click="save"
         >
           Next: Emergency
-        </cv-button>
+        </SeButton>
       </div>
     </div>
-  </div>
+  </cv-form>
 </template>
 
 <script>
 import { required } from 'vuelidate/lib/validators'
 import { mapActions, mapState } from 'vuex'
-import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import MultiStep from '@/mixins/multistep'
+import isEmpty from 'lodash/isEmpty'
+
 export default {
   name: 'ContactInfo',
 
+  mixins: [MultiStep],
+
   data() {
     return {
-      form: {},
-      icon: ChevronRight,
+      form: {
+        address: {},
+      },
+      next: 'EmergencyContact',
+      previous: 'Biodata',
+      parent: 'Patients',
+      disabled: false,
     }
   },
 
-  validations: {
-    form: {
-      phone_number: { required },
-    },
+  validations() {
+    return {
+      form: {
+        mobile: { required },
+      },
+    }
   },
 
   computed: {
     ...mapState({
       countries: (state) => state.global.countries,
+      storeData: (state) => state.patients.currentPatient,
+      regions: (state) => state.global.regions,
     }),
+
+    addressHasValue() {
+      return !isEmpty(this.form.address)
+    },
   },
 
   mounted() {
     this.getCountries()
   },
 
-  
-
   methods: {
     ...mapActions({
       getCountries: 'global/getCountries',
+      addToStoreData: 'patients/addToCurrentPatient',
+      refresh: 'patients/refreshCurrentPatient',
     }),
+
+    save() {
+      this.$v.$touch()
+
+      if (this.$v.$invalid || this.disabled) {
+        this.$toast.open({
+          message: 'Fill all required fields!',
+          type: 'error',
+        })
+        return
+      }
+
+      this.addToStoreData(this.form)
+      this.$router.push({ name: this.next })
+    },
   },
 }
 </script>

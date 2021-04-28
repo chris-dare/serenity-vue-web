@@ -97,6 +97,14 @@ export default {
         }
       }
 
+      if (this.size === 'base') {
+        return {
+          img: 'w-12 h-12',
+          description: 'text-xs',
+          space: 'space-x-2',
+        }
+      }
+
       return {
         img: 'w-10 h-10',
         description: 'text-xs',

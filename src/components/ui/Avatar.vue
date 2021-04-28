@@ -1,5 +1,5 @@
 <template>
-  <div class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blus-800">
+  <div class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-800">
     {{ initials }}
   </div>
 </template>

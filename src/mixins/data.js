@@ -20,7 +20,7 @@ export default {
 
         for (let index = 0; index < this.searchTerms.length; index++) {
           const element = this.searchTerms[index]
-          if (data[element].toLowerCase().includes(this.search.toLowerCase())) {
+          if (data[element]?.toLowerCase().includes(this.search.toLowerCase())) {
             return data
           }
         }

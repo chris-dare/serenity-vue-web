@@ -11,7 +11,7 @@ export default {
     return http.get(`${this.url}${providerId}/practitioners/${practitionerId}/schedules/${id}`)
   },
 
-  create(providerId, practitionerId, params) {
+  create(providerId, practitionerId='be0c4b4a-d5a5-4717-a8f4-edcbbc1b7c3c', params) {
     return http.post(`${this.url}${providerId}/practitioners/${practitionerId}/schedules`, params)
   },
 

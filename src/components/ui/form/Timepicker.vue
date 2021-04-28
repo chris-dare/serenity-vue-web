@@ -5,6 +5,7 @@
       v-model="localValue"
       format="HH:mm:ss"
     />
+    <p class="error">{{ errorMessage }}</p>
   </div>
 </template>
 
@@ -20,6 +21,10 @@ export default {
     label: {
       type: String,
       default: '',
+    },
+    errorMessage: {
+      type: String,
+      default: null,
     },
   },
 

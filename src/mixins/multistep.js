@@ -12,4 +12,11 @@ export default {
   beforeDestroy() {
     this.addToStoreData(this.form)
   },
+
+  methods: {
+    cancel() {
+      this.refresh()
+      this.$router.push({name: this.parent})
+    },
+  },
 }

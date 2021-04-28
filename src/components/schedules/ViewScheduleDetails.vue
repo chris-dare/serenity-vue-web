@@ -14,8 +14,8 @@
           <p class="text-xs">Practitioner</p>
           <InfoImageBlock
             label="Practitioner name"
-            label-class="font-semibold"
             :description="form.healthcare_service_name"
+            label-class="font-semibold"
           />
         </div>
 

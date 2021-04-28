@@ -1,11 +1,9 @@
+import Patient from '@/models/Patient'
 export default {
-//   announcements: (state) => {
-//     if (!state.announcements) {
-//       return []
-//     }
-//     return state.announcements.map((announcement) => ({
-//       ...announcement,
-//       vv_station_ids: announcement.vv_stations.map((station) => station.uuid),
-//     }))
-//   },
+  patients: state => {
+    return state.patients.map(pat => {
+      const patient = new Patient(pat).getNormalizedView()
+      return patient
+    })
+  },
 }

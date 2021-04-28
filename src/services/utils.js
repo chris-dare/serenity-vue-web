@@ -1,4 +1,4 @@
-
+// import values from 'lodash/values'
 const validateRequiredField = ($v, field) => {
   const $field = $v.form[field]
   const formattedField = field.charAt(0).toUpperCase() 
@@ -114,6 +114,24 @@ const formatOutgoingRoles = (data) => {
   return role
 }
 
+const checkForEmpty = (tree) => {
+  Object
+    .entries(tree)
+    .forEach(([k, v]) => {
+      if (v && typeof v === 'object') {
+        checkForEmpty(v)
+      }
+      if (v && typeof v === 'object' && !Object.keys(v).length || v === null || v === undefined || v.length === 0) {
+        if (Array.isArray(tree)) {
+          tree.splice(k, 1)
+        } else {
+          delete tree[k]
+        }
+      }
+    })
+  return Object.keys(tree).length === 0
+}
+
 export default {
   install(Vue) {
     Vue.prototype.$utils = {
@@ -123,6 +141,7 @@ export default {
       formatOutgoingRoles,
       renameKey,
       renameKeys,
+      checkForEmpty,
     }
   },
 }

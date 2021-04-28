@@ -4,17 +4,11 @@
     <VueMultiselect
       v-model="selected"
       :options="options"
-      :multiple="multiple"
-      :close-on-select="!multiple"
-      :clear-on-select="false"
-      :preserve-search="true"
-      :placeholder="placeholder"
-      :label="label"
-      :track-by="trackBy"
-      :preselect-first="preselect"
+      :searchable="false"
+      close-on-select
       :show-labels="false"
-      :internal-search="false"
-      :custom-label="customLabel"
+      :placeholder="placeholder"
+      :preselect-first="preselect"
     />
     <p
       v-if="error || errorMessage"
@@ -27,9 +21,8 @@
 
 <script>
 import VueMultiselect from 'vue-multiselect'
-import isEmpty from 'lodash/isEmpty'
 export default {
-  name: 'Multiselect',
+  name: 'SingleSelect',
 
   components: { VueMultiselect },
 
@@ -49,16 +42,6 @@ export default {
       default: '',
     },
 
-    label: {
-      type: String,
-      default: '',
-    },
-
-    trackBy: {
-      type: String,
-      default: 'id',
-    },
-
     placeholder: {
       type: String,
       default: '',
@@ -74,22 +57,9 @@ export default {
       default: null,
     },
 
-    multiple: {
-      type: Boolean,
-      default: false,
-    },
-
     preselect: {
       type: Boolean,
       default: false,
-    },
-
-    customLabel: {
-      type: Function,
-      default (option, label) {
-        if (isEmpty(option)) return ''
-        return label ? option[label] : option
-      },
     },
   },
 
@@ -105,3 +75,7 @@ export default {
   },
 }
 </script>
+
+<style>
+
+</style>

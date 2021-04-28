@@ -1,47 +1,35 @@
 <template>
-  <div>
+  <cv-form
+    autocomplete="off"
+    @submit.prevent=""
+  >
     <div class="grid grid-cols-2 gap-8">
-      <cv-select
-        v-model="form.method_of_payment"
-        label="Primary method of payment"
-        class="inherit-full-input"
-      >
-        <cv-select-option
-          disabled
-          selected
-          hidden
-        >
-          Mobile Money
-        </cv-select-option>
-        <cv-select-option
-          v-for="(network, index) in networks"
-          :key="index"
-          :value="network"
-        >
-          {{ network }}
-        </cv-select-option>
-      </cv-select>
-      <cv-select
-        v-model="form.momo_network"
-        label="MoMo Network"
-        class="inherit-full-input"
-      >
-        <cv-select-option
-          disabled
-          selected
-          hidden
-        >
-          MTN Mobile Money
-        </cv-select-option>
-        <cv-select-option
-          v-for="(network, index) in networks"
-          :key="index"
-          :value="network"
-        >
-          {{ network }}
-        </cv-select-option>
-      </cv-select>
-      <cv-text-input
+      <SingleSelect
+        v-model="form.payment_options[0].payment_type"
+        :options="options"
+        title="Primary method of payment"
+        placeholder="Payment Type"
+        preselect
+      />
+      <SingleSelect
+        v-if="isMoMo"
+        v-model="form.payment_options[0].payment_details.payment_provider"
+        :options="networks"
+        title="Payment provider"
+        placeholder="Payment Type"
+      />
+      <MsisdnPhoneInput
+        v-if="isMoMo"
+        v-model="form.payment_options[0].payment_details.msisdn"
+        label="Phone number"
+      />
+      <FormCountrySelect
+        v-if="isMoMo"
+        v-model="form.payment_options[0].payment_details.country"
+        title="Country"
+        placeholder="Country"
+      />
+      <!-- <cv-text-input
         v-model="form.name_of_account"
         label="Name of Account"
         placeholder="Name of MoMo Account"
@@ -73,55 +61,102 @@
         >
           {{ network }}
         </cv-select-option>
-      </cv-select>
+      </cv-select> -->
     </div>
     <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center">
-        <cv-button
-          class="border-serenity-primary mr-6 px-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-          kind="tertiary"
+      <div class="flex items-center space-x-2">
+        <SeButton
+          variant="outline"
         >
           Cancel
-        </cv-button>
-        <cv-button
-          class="bg-black px-6"
-          kind="primary"
-          @click="$router.push({ name: 'SocialInfo' })"
+        </SeButton>
+        <SeButton
+          :to="{ name: previous }"
+          variant="secondary"
         >
           Go back
-        </cv-button>
+        </SeButton>
       </div>
       <div class="flex items-center">
-        <cv-button
+        <SeButton
           :icon="icon"
-          kind="primary"
-          class="bg-serenity-primary ml-6"
-          @click="visible = !visible"
+          :loading="loading"
+          @click="save"
         >
           Finish
-        </cv-button>
+        </SeButton>
       </div>
     </div>
     <PatientSuccessModal :visible.sync="visible" />
-  </div>
+  </cv-form>
 </template>
 
 <script>
 import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
 import PatientSuccessModal from '@/components/patients/modals/PatientSuccessModal'
+import { mapActions, mapState } from 'vuex'
+import MultiStep from '@/mixins/multistep'
+
 export default {
   name: 'Payment',
 
   components: {PatientSuccessModal},
 
+  mixins: [MultiStep],
+
   data() {
     return {
-      form: {},
+      form: {
+        payment_options: [{
+          payment_details: {},
+        }],
+      },
       icon: Checkmark,
       networks: ['MTN', 'Vodafone', 'AirtelTigo'],
+      options: ['cash' ,'momo' ,'insurance' ,'corporate' ,'card'],
       religions: ['christianity', 'islam'],
       visible: false,
+      parent: 'Patients',
+      previous: 'SocialInfo',
+      loading: false,
     }
+  },
+
+  computed: {
+    ...mapState({
+      storeData: (state) => state.patients.currentPatient,
+    }),
+
+    isMoMo() {
+      return this.form.payment_options[0].payment_type === 'momo'
+    },
+  },
+
+  methods: {
+    ...mapActions({
+      addToStoreData: 'patients/addToCurrentPatient',
+      refresh: 'patients/refreshCurrentPatient',
+      createPatient: 'patients/createPatient',
+    }),
+
+    async save() {
+      this.loading = true
+      try {
+        await this.createPatient(this.form)
+        this.$toast.open({
+          message: 'Patient successfully added',
+        })
+        this.visible = true
+        this.loading = false
+      } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+        throw error
+      }
+    },
   },
 }
 </script>

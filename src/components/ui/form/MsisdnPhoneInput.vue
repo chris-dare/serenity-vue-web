@@ -3,7 +3,7 @@
     <p class="bx--label text-primary leading-none">{{ label }}</p>
     <VuePhoneNumberInput
       ref="phoneInput"
-      v-model="input"
+      v-model="localValue"
       :default-country-code="code"
       valid-color="#0B6B74"
       required
@@ -19,13 +19,12 @@
 </template>
 
 <script>
-import startsWith from 'lodash/startsWith'
 import split from 'lodash/split'
 import get from 'lodash/get'
 import parsePhoneNumber from 'libphonenumber-js'
 
 export default {
-  name: 'PhoneInput',
+  name: 'MsisdnPhoneInput',
 
   props: {
     value: {
@@ -42,16 +41,6 @@ export default {
       type: String,
       default: '',
     },
-  
-    formatAsNational: {
-      type: Boolean,
-      default: false,
-    },
-
-    countryCode: {
-      type: String,
-      default: '+233',
-    },
   },
 
   data() {
@@ -61,19 +50,14 @@ export default {
     }
   },
 
-
   computed: {
-    input: {
+    localValue: {
+      get() {
+        return this.convertFromMsidn(this.value)
+      },
       set(val) {
         this.selectedDialCode = split(this.formattedValue, ' ')[0]
-        if (val.length > 15) return val.slice(0, 15)
-  
-        this.$emit('input', this.formatAsNational || !this.spaceLessValue ? val : this.spaceLessValue)
-      },
-      get() {
-        return startsWith(this.value, '+')
-          ? this.unformattedValue
-          : this.value
+        this.$emit('input', this.convertToMsisdn(val))
       },
     },
 
@@ -81,12 +65,9 @@ export default {
       return get(this.$refs, 'phoneInput.phoneFormatted') ?  get(this.$refs, 'phoneInput.phoneFormatted') : this.value
     },
 
-    unformattedValue() {
-      return this.spaceLessValue.slice(this.selectedDialCode.length)
-    },
-
-    spaceLessValue() {
-      return this.formattedValue.split(' ').join('')
+    formatNational() {
+      const phoneNumber = parsePhoneNumber(this.localValue, 'GH')
+      return phoneNumber.format('E.164')
     },
   },
 
@@ -99,6 +80,33 @@ export default {
         
         this.code = phoneNumber.country
       }
+    },
+  },
+
+  methods: {
+    convertToMsisdn(val) {
+      if (!val) {
+        return ''
+      }
+
+      if (val.length >= 15) {
+        return val.slice(0, 15)
+      }
+      const phoneNumber = parsePhoneNumber(val, this.code)
+
+      return phoneNumber ? phoneNumber.format('E.164') : val
+    },
+
+    convertFromMsidn(val) {
+      if (!val) {
+        return ''
+      }
+      const phoneNumber = parsePhoneNumber(val, this.code)
+
+      this.code = phoneNumber ? phoneNumber.country : 'GH'
+
+
+      return phoneNumber ? phoneNumber.formatNational() : val
     },
   },
 }

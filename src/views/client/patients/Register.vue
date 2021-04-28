@@ -1,5 +1,11 @@
 <template>
-  <div class="w-3/4 mx-auto">
+  <AppRegisterLayout
+    label="Register new patient"
+    :nav-items="navItems"
+  >
+    <router-view />
+  </AppRegisterLayout>
+  <!-- <div class="w-3/4 mx-auto">
     <p class="text-primary text-xl font-semibold">Register new patient</p>
     <div class="grid grid-cols-4 my-6 gap-6">
       <div>
@@ -41,7 +47,7 @@
         <router-view />
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
