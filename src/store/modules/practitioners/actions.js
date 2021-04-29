@@ -21,7 +21,7 @@ export default {
   },
 
   async createUser({ commit, rootState }, payload) {
-    const practitioner = new User(payload).getEmptyView()
+    const practitioner = new User(payload).getCreateView()
     try {
       const provider = rootState.auth.provider
       const { data } = await UsersAPI
