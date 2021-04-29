@@ -31,7 +31,7 @@ export default class User {
 
   getCreateView() {
     const practitioner_specialty = this.data.practitioner_specialty.map(sp => sp.Display)
-    let createData = { ...this.data, practitioner_specialty }
+    let createData = { ...user, ...this.data, practitioner_specialty }
     createData.practitioner_specialty.map(sp => sp.Display)
     return createData
   }
@@ -52,4 +52,19 @@ const renameKeys = (obj, keysMap) => {
 
 const checkArrayType = (obj) => {
   return typeof obj[0] === 'string' ? 'string' : 'object'
+}
+
+
+
+const user = {
+  'title': '',
+  'team_member_type': '',
+  'email': '',
+  'date_of_birth': '',
+  'phone_number': '',
+  'country_code': '',
+  'qualification': [],
+  'gender': '',
+  'postal_address':'',
+  'home_address':'',
 }
