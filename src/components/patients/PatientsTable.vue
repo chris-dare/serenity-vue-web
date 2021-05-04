@@ -114,6 +114,11 @@
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
+              <div>
+                <p>{{ row.mr_number }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
               <router-link
                 tag="div"
                 :to="`/patients/${row.id}`"
@@ -151,6 +156,7 @@ export default {
         // 'Weight/Height',
         'Mobile',
         'Last encounter',
+        'MR No.',
         'Action',
       ],
       selectedFilter: '',
