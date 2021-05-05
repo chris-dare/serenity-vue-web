@@ -132,6 +132,12 @@ export default {
     },
   },
 
+  created() {
+    if(!this.form.payment_options[0].payment_details.msisdn){ 
+      this.form.payment_options[0].payment_details.msisdn = this.form.mobile
+    }
+  },
+  
   methods: {
     ...mapActions({
       addToStoreData: 'patients/addToCurrentPatient',
