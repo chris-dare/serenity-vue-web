@@ -19,7 +19,7 @@
       :loading="loading"
     >
       <template #no-data>
-        <div class="bg-white w-full h-auto flex flex-col justify-center items-center py-6 my-4">
+        <div class="bg-white w-full h-auto flex flex-col justify-center items-center py-6">
           <img
             src="@/assets/img/calendar--event 1.svg"
             class="w-12 h-12"
