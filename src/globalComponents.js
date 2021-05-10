@@ -28,6 +28,7 @@ import DateRangePicker from '@/components/ui/form/DateRangePicker'
 import Titles from '@/components/ui/form/Titles'
 import Address from '@/components/ui/form/Address'
 import FormCountrySelect from '@/components/ui/form/FormCountrySelect'
+import DataTable from '@/components/ui/table/DataTable'
 
 
 
@@ -59,3 +60,4 @@ Vue.component('Address', Address)
 Vue.component('MsisdnPhoneInput', MsisdnPhoneInput)
 Vue.component('FormCountrySelect', FormCountrySelect)
 Vue.component('ImageBlock', ImageBlock)
+Vue.component('DataTable', DataTable)

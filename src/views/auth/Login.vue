@@ -99,6 +99,16 @@ export default {
     },
   },
 
+  computed: {
+    dateTime(){
+      var dayOfWeek = 0 //friday
+      var date = new Date()
+      date = new Date(date.getTime ())
+      date.setDate(date.getDate() + (dayOfWeek + 7 - date.getDay()) % 7)
+      return date
+    },
+  },
+
   methods: {
     ...mapActions({
       setLoggedIn: 'auth/setLoggedIn',

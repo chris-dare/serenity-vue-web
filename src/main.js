@@ -10,6 +10,7 @@ import CurrencyPlugin from '@/services/currency'
 import Vuelidate from 'vuelidate'
 import VuePageTransition from 'vue-page-transition'
 import HasPermissionDirective from '@/plugins/has-permission'
+import { registerBaseComponents } from '@/services/globals'
 
 // all vue plugins
 import '@/plugins'
@@ -21,7 +22,7 @@ import '@/mixins'
 import '@/directives'
 
 import '@/filters'
-import '@/globalComponents'
+// import '@/globalComponents'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import '@/assets/styles/tailwind.scss'
 import '@carbon/charts/styles.css'
@@ -37,7 +38,7 @@ Vue.use(UtilsPlugin)
 Vue.use(CurrencyPlugin)
 Vue.use(Vuelidate)
 Vue.use(VuePageTransition)
-
+registerBaseComponents(Vue)
 Vue.config.productionTip = false
 
 new Vue({

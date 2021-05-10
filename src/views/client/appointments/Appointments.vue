@@ -22,18 +22,15 @@
 <script>
 import { mapActions } from 'vuex'
 import AppointmentsTable from '@/components/appointments/AppointmentsTable'
+
 export default {
   name: 'Appointments',
 
   components: { AppointmentsTable },
 
-  mounted() {
-    this.getAppointments()
-  },
-
   methods: {
     ...mapActions({
-      getAppointments: 'appointments/getAppointments',
+      getData: 'appointments/getAppointments',
     }),
   },
 }

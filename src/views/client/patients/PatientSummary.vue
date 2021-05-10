@@ -44,7 +44,7 @@ export default {
       return [
         { label: 'First name', value: this.patient.emergency_contact.first_name },
         { label: 'Last name', value: this.patient.emergency_contact.last_name },
-        { label: 'Contact', value: this.patient.emergency_contact.telecom.value },
+        { label: 'Contact', value: this.patient.emergency_contact.telecom?.value },
         { label: 'Address', value: this.patient.emergency_contact.emergency_contact_address_description },
       ]
     },

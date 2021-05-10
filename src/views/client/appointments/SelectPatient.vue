@@ -12,11 +12,10 @@
     </div>
     <div class="mt-5">
       <p class="text-primary mb-4">Select your patient below</p>
-      <cv-search
+      <Search
         v-model="search"
         placeholder="Search for patient, enter name or MR number"
         class="mb-4"
-        autocomplete="off"
       />
       <cv-skeleton-text
         v-if="loading"

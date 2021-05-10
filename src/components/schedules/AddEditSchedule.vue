@@ -22,15 +22,16 @@
           placeholder="Select or search for practitioner"
           :custom-label="customLabel"
           :error-message="$utils.validateRequiredField($v, 'practitioner')"
+          :disabled="!!form.id"
         />
 
         <div class="grid grid-cols-2 gap-4">
           <MultiSelect
-            v-model="form.workspace"
+            v-model="form.location"
             title="Clinic/Workspace"
             :multiple="false"
-            :options="workspaces"
-            label="workspace_name"
+            :options="locations"
+            label="location_name"
             placeholder="Select workspace"
           />
 
@@ -47,7 +48,24 @@
 
         <div>
           <p class="bx--label">Which day(s)</p>
-          <div class="grid grid-cols-7 items-center">
+          <div
+            v-if="form.id"
+            class="grid grid-cols-7 items-center"
+          >
+            <cv-radio-button
+              v-for="(day, index) in ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']"
+              :key="index"
+              v-model="form.day"
+              :value="day"
+              :label="day"
+              class="capitalize"
+              name="days"
+            />
+          </div>
+          <div
+            v-else
+            class="grid grid-cols-7 items-center"
+          >
             <cv-checkbox
               v-for="(day, index) in ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']"
               :key="index"
@@ -55,6 +73,7 @@
               :value="day"
               :label="day"
               class="capitalize"
+              name="days"
             />
           </div>
           <p class="error">{{ $utils.validateRequiredField($v, 'days') }}</p>
@@ -91,14 +110,14 @@
 
           <cv-number-input
             v-if="form.check === 'yes'"
-            v-model="form.recurrent_count"
+            v-model="form.recurring_weeks"
             label="For how many weeks"
             placeholder="eg 4 weeks"
           />
         </div>
 
         <cv-text-area
-          v-model="form.comments"
+          v-model="form.comment"
           label="Any comments on this schedule"
           placeholder="Add special comments"
           :rows="2"
@@ -127,6 +146,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
+import format from 'date-fns/format'
 
 export default {
   name: 'AddEditSchedule',
@@ -135,6 +155,10 @@ export default {
     return {
       form: {
         workspace_type: '',
+        days: [],
+        start_time: '08:00:00',
+        end_time: '17:00:00',
+        comment: '',
       },
       visible: false,
       loading: false,
@@ -156,7 +180,30 @@ export default {
       workspaces: (state) => state.workspaces.workspaces,
       practitioners: (state) => state.practitioners.users,
       services: (state) => state.services.services,
+      locations: (state) => state.locations.locations,
     }),
+
+    dates() {
+      let dates = []
+
+      this.form.days.forEach(day => {
+        dates.push({
+          start: this.dateTime(day, this.form.start_time),
+          end: this.dateTime(day, this.form.end_time),
+        })
+      })
+
+      return dates
+    },
+
+    time(){
+      var dayOfWeek = 5 //friday
+      var date = new Date()
+      let time = '01:00:00'
+      date = new Date(`${format(date, 'MM dd, yyyy')} ${time}`)
+      date.setDate(date.getDate() + (dayOfWeek + 7 - date.getDay()) % 7)
+      return `${format(date, 'yyyy-MM-dd')}T${format(date, 'HH:mm:ss')}Z`
+    },
   },
 
   validations: {
@@ -174,6 +221,20 @@ export default {
       createSchedule: 'schedules/createSchedule',
       updateSchedule: 'schedules/updateSchedule',
     }),
+
+    getDayIndex(date) {
+      let days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+
+      return days.indexOf(date)
+    },
+
+    dateTime(day, time){
+      var dayOfWeek = this.getDayIndex(day)
+      var date = new Date()
+      date = new Date(`${format(date, 'MM dd, yyyy')} ${time}`)
+      date.setDate(date.getDate() + (dayOfWeek + 7 - date.getDay()) % 7)
+      return date
+    },
 
     submit() {
       this.$v.$touch()
@@ -198,22 +259,30 @@ export default {
         })
         this.close()
       } catch (error) {
-        this.$toast.open({
-          message: error || 'Something went wrong!',
-          type: 'error',
-        })
-      } finally {
+        // this.$toast.open({
+        //   message: error || 'Something went wrong!',
+        //   type: 'error',
+        // })
         this.loading = false
-      }
-
-      
+      } 
     },
 
-    update() {},
+    async update() {
+      try {
+        await this.updateSchedule(this.form)
+        this.$toast.open({
+          message: 'Schedule successfully updated',
+        })
+        this.close()
+      } catch (error) {
+        this.loading = false
+      } 
+    },
 
     close() {
       this.visible = false
       this.form = {}
+      this.loading = false
     },
 
     customLabel ({ first_name, last_name }) {

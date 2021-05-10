@@ -5,12 +5,10 @@
         <p class="text-xl font-bold">Bills ({{ dataCount }})</p>
       </div>
 
-      <cv-form autocomplete="off">
-        <cv-search
-          v-model="search"
-          placeholder="Search for patient"
-        />
-      </cv-form>
+      <Search
+        v-model="search"
+        placeholder="Search for patient"
+      />
 
       <div class="my-4 flex items-center space-x-2">
         <cv-button

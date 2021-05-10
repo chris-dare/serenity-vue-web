@@ -20,6 +20,7 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
+  name: 'UserDetailsHeader',
   computed: {
     ...mapGetters({
       fullName: 'auth/fullName',

@@ -2,7 +2,7 @@
   <div>
     <div class="w-4/5 mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Schedules ({{ 5 }})</p>
+        <p class="text-xl font-bold">Schedules ({{ dataCount || 0 }})</p>
         <cv-button
           class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
           kind="primary"
@@ -13,19 +13,25 @@
         </cv-button>
       </div>
 
-      <div class="flex items-end justify-between mt-4">
+      <cv-form
+        autocomplete="off"
+        class="flex items-end justify-between mt-4"
+        @submit.prevent
+      >
         <div class="flex gap-1 w-2/5">
           <MultiSelect
             v-model="filters.practitioner"
             title="Practitioner"
             :multiple="false"
             :options="practitioners"
+            :custom-label="$utils.customNameLabel"
             label="first_name"
             class="multiselect-white flex-1"
+            @input="filter"
           />
 
-          <MultiSelect
-            v-model="filters.location"
+          <!-- <MultiSelect
+            v-model="filters.locationId"
             title="Location"
             :multiple="false"
             :options="locations"
@@ -33,21 +39,21 @@
             class="multiselect-white flex-1"
           />
           <MultiSelect
-            v-model="filters.service"
+            v-model="filters.serviceId"
             title="Service"
             :multiple="false"
             :options="services"
             label="healthcare_service_name"
             class="multiselect-white flex-1"
-          />
+          /> -->
         </div>
-        <DateRangePicker
+        <!-- <DateRangePicker
           v-model="filters.date"
           class="flex-none se-date-picker"
-        />
-      </div>
+        /> -->
+      </cv-form>
 
-      <Calendar />
+      <Calendar :loading="loading" />
     </div>
     <AddEditSchedule />
     <ViewScheduleDetails />
@@ -58,7 +64,7 @@
 import Calendar from '@/components/schedules/Calendar'
 import AddEditSchedule from '@/components/schedules/AddEditSchedule'
 import ViewScheduleDetails from '@/components/schedules/ViewScheduleDetails'
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import DataMixin from '@/mixins/data'
 
 export default {
@@ -66,7 +72,7 @@ export default {
 
   components: { Calendar, AddEditSchedule, ViewScheduleDetails },
 
-  mixin: [DataMixin],
+  mixins: [DataMixin],
 
   data() {
     return {
@@ -87,6 +93,22 @@ export default {
       services: (state) => state.services.services,
       data: (state) => state.schedules.schedules,
     }),
+  },
+
+  methods: {
+    ...mapActions({
+      getSchedules: 'schedules/getSchedules',
+    }),
+
+    async filter() {
+      this.loading = true
+      try {
+        await this.getSchedules(this.filters)
+        this.loading = false
+      } catch (error) {
+        throw error || error
+      }
+    },
   },
 
 }

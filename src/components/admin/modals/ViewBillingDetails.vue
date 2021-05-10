@@ -11,6 +11,7 @@
         <div class="divide-y divide-black divide-solid">
           <div class="w-full flex justify-center items-center flex-col space-y-1 mb-4">
             <img
+              v-if="false"
               class="w-32"
               src="@/assets/img/qr.png"
               alt=""

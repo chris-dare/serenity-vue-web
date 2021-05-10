@@ -8,7 +8,7 @@ export default {
   },
 
   get(providerId, patientId) {
-    return http.get(`${this.url}${providerId}/patients/patients/${patientId}`)
+    return http.get(`${this.url}${providerId}/patients/${patientId}`)
   },
 
   create(providerId, params) {

@@ -15,6 +15,9 @@
       :show-labels="false"
       :internal-search="false"
       :custom-label="customLabel"
+      :disabled="disabled"
+      @input="$emit('input', $event)"
+      @select="$emit('select', $event)"
     />
     <p
       v-if="error || errorMessage"
@@ -29,7 +32,7 @@
 import VueMultiselect from 'vue-multiselect'
 import isEmpty from 'lodash/isEmpty'
 export default {
-  name: 'Multiselect',
+  name: 'MultiSelect',
 
   components: { VueMultiselect },
 
@@ -80,6 +83,11 @@ export default {
     },
 
     preselect: {
+      type: Boolean,
+      default: false,
+    },
+
+    disabled: {
       type: Boolean,
       default: false,
     },

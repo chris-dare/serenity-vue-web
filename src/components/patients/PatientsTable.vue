@@ -1,14 +1,9 @@
 <template>
   <div>
-    <cv-form
-      autocomplete="off"
-      @submit.prevent
-    >
-      <cv-search
-        v-model="search"
-        placeholder="Search for patient, enter name or MR number"
-      />
-    </cv-form>
+    <Search
+      v-model="search"
+      placeholder="Search for patient, enter name or MR number"
+    />
     <div class="my-4 flex items-center justify-between">
       <div>
         <cv-button
@@ -73,64 +68,59 @@
     </div>
 
     <div>
-      <cv-data-table
+      <DataTable
         ref="table"
         :columns="columns"
         :pagination="{
           numberOfItems: patientsCount,
         }"
         :data="filteredData"
+        :loading="loading"
         @pagination="actionOnPagination"
       >
-        <template slot="data">
-          <cv-data-table-row
-            v-for="(row, rowIndex) in filteredData"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
-          >
-            <cv-data-table-cell>
-              <div class="flex items-center py-2">
-                <InfoImageBlock
-                  :label="row.name"
-                  :description="row.gender_age_description"
-                  size="base"
-                />
-              </div>
-            </cv-data-table-cell>
-            <!-- <cv-data-table-cell>
+        <template #default="{ row }">
+          <cv-data-table-cell>
+            <div class="flex items-center py-2">
+              <InfoImageBlock
+                :label="row.name"
+                :description="row.gender_age_description"
+                size="base"
+              />
+            </div>
+          </cv-data-table-cell>
+          <!-- <cv-data-table-cell>
               <div>
                 <p>{{ row.weight }}kg</p>
                 <p class="text-secondary text-xs">{{ row.height }}cm</p>
               </div>
             </cv-data-table-cell> -->
-            <cv-data-table-cell>
-              <div>
-                <p>{{ row.phone }}</p>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.phone }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.recent }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <router-link
+              tag="div"
+              :to="`/patients/${row.id}`"
+              class="flex items-center cursor-pointer"
+            >
+              View
+              <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
+                <img
+                  src="@/assets/img/view 1.svg"
+                  alt=""
+                >
               </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ row.recent }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <router-link
-                tag="div"
-                :to="`/patients/${row.id}`"
-                class="flex items-center cursor-pointer"
-              >
-                View
-                <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
-                  <img
-                    src="@/assets/img/view 1.svg"
-                    alt=""
-                  >
-                </div>
-              </router-link>
-            </cv-data-table-cell>
-          </cv-data-table-row>
+            </router-link>
+          </cv-data-table-cell>
         </template>
-      </cv-data-table>
+      </DataTable>
     </div>
   </div>
 </template>
@@ -139,7 +129,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import DataMixin from '@/mixins/data'
 export default {
-  name: 'Patients',
+  name: 'PatientsTable',
 
   mixins: [DataMixin],
 
@@ -186,7 +176,6 @@ export default {
     ...mapActions({
       getData: 'patients/getPatients',
     }),
-
   },
 }
 </script>

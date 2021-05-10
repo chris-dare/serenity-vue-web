@@ -1,9 +1,8 @@
 <template>
   <div class="p-6">
-    <cv-search
+    <Search
       v-model="search"
       placeholder="Search for patient"
-      autocomplete="off"
     />
 
     <div class="my-4 py-4">

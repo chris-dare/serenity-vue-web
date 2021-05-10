@@ -1,14 +1,19 @@
 import {
   SET_APPOINTMENTS,
-  SET_APPOINTMENT,
+  UPDATE_APPOINTMENT,
   DELETE_APPOINTMENT,
   SET_APPOINTMENTS_COUNT,
   ADD_APPOINTMENT_DATA,
+  SET_SLOTS,
 } from './mutation-types'
 
 export default {
   [SET_APPOINTMENTS](state, appointments) {
     state.appointments = appointments
+  },
+
+  [SET_SLOTS](state, slots) {
+    state.slots = slots
   },
 
   [SET_APPOINTMENTS_COUNT](state, count) {
@@ -20,7 +25,7 @@ export default {
     state.currentAppointment = {...currentAppointment, ...data}
   },
 
-  [SET_APPOINTMENT](state, appointment) {
+  [UPDATE_APPOINTMENT](state, appointment) {
     const index = state.appointments.findIndex(a => a.uuid === appointment.uuid)
     if (index !== -1) {
       state.appointments = state.appointments.map(a => {
