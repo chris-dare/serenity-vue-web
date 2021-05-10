@@ -92,12 +92,6 @@
               />
             </div>
           </cv-data-table-cell>
-          <!-- <cv-data-table-cell>
-              <div>
-                <p>{{ row.weight }}kg</p>
-                <p class="text-secondary text-xs">{{ row.height }}cm</p>
-              </div>
-            </cv-data-table-cell> -->
           <cv-data-table-cell>
             <div>
               <p>{{ row.phone }}</p>
@@ -106,6 +100,11 @@
           <cv-data-table-cell>
             <div>
               <p>{{ row.recent }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.mr_number }}</p>
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
