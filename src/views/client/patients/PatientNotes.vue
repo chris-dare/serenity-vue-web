@@ -1,9 +1,8 @@
 <template>
   <div>
-    <cv-search
+    <Search
       v-model="search"
       placeholder="Search for medication or date or condition"
-      autocomplete="off"
     />
     <div class="my-4 flex items-center justify-between">
       <div>
@@ -41,65 +40,58 @@
         </div>
       </div>
 
-      <cv-data-table
+      <DataTable
         ref="table"
-        v-model="rowSelects"
         :columns="columns"
         :data="[]"
         class="transparent-table"
         size="tall"
       >
-        <template slot="data">
-          <cv-data-table-row
-            v-for="(row, rowIndex) in 3"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
-          >
-            <cv-data-table-cell>
-              <p class="">{{ $date.formatDate($faker().date.recent(), 'MMM. dd, yyyy') }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div class="flex items-center py-2">
+        <template>
+          <cv-data-table-cell>
+            <p class="">{{ $date.formatDate($faker().date.recent(), 'MMM. dd, yyyy') }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div class="flex items-center py-2">
+              <img
+                class="w-10 h-10 rounded-full mr-3"
+                :src="$faker().image.image()"
+                alt=""
+              >
+              <div>
+                <p>Dr. {{ $faker().name.findName() }}</p>
+                <p class="text-secondary text-xs">
+                  General Practitioner
+                </p>
+              </div>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>In Patient</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p class="font-semibold underline ml-2">View encounter</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div
+              class="flex items-center cursor-pointer "
+              @click="showOrder(row)"
+            >
+              View
+              <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
                 <img
-                  class="w-10 h-10 rounded-full mr-3"
-                  :src="$faker().image.image()"
+                  src="@/assets/img/view 1.svg"
                   alt=""
                 >
-                <div>
-                  <p>Dr. {{ $faker().name.findName() }}</p>
-                  <p class="text-secondary text-xs">
-                    General Practitioner
-                  </p>
-                </div>
               </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>In Patient</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p class="font-semibold underline ml-2">View encounter</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div
-                class="flex items-center cursor-pointer "
-                @click="showOrder(row)"
-              >
-                View
-                <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
-                  <img
-                    src="@/assets/img/view 1.svg"
-                    alt=""
-                  >
-                </div>
-              </div>
-            </cv-data-table-cell>
-          </cv-data-table-row>
+            </div>
+          </cv-data-table-cell>
         </template>
-      </cv-data-table>
+      </DataTable>
     </div>
     <PatientNotesModal :visible.sync="visible" />
   </div>
@@ -116,7 +108,6 @@ export default {
   data() {
     return {
       search: '',
-      rowSelects: null,
       columns: [
         'Date',
         'Written By',

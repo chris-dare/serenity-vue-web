@@ -118,7 +118,9 @@ export default {
       workspaceType: (state) => state.global.workspaceType,
     }),
     links() {
-      let links = [{ label: 'Summary', path: 'PatientSummary' }]
+      let links = [
+        { label: 'Summary', path: 'PatientSummary' },
+      ]
 
       if (this.workspaceType === 'Reception') {
         links.push({ label: 'Chart', path: 'PatientCharts' },{ label: 'Appointments', path: 'PatientAppointments' })
@@ -143,10 +145,6 @@ export default {
   },
 
   created() {
-    this.findPatient(this.id)
-  },
-
-  updated() {
     this.findPatient(this.id)
   },
 

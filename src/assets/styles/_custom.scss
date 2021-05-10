@@ -306,3 +306,9 @@ button:focus {
     @apply text-serenity-primary
   }
 }
+
+.se-no-label{
+  label {
+    display: none !important;
+  }
+}

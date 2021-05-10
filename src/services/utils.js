@@ -132,6 +132,16 @@ const checkForEmpty = (tree) => {
   return Object.keys(tree).length === 0
 }
 
+const error = (err, toast) => {
+  const error = err.error || err.message || err.data[0]
+  toast.open({ message: error, type: 'error' })
+  throw error
+}
+
+const customNameLabel = ({ first_name, last_name }) => {
+  return `${first_name} ${last_name}`
+}
+
 export default {
   install(Vue) {
     Vue.prototype.$utils = {
@@ -142,6 +152,8 @@ export default {
       renameKey,
       renameKeys,
       checkForEmpty,
+      customNameLabel,
+      error: err => error(err, Vue.prototype.$toast),
     }
   },
 }

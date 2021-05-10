@@ -30,7 +30,7 @@
 <script>
 import CloudUpload from '@carbon/icons-vue/es/cloud--upload/32'
 export default {
-  name: 'FIleUploadButton',
+  name: 'FileUploadButton',
 
   components: {CloudUpload},
 
