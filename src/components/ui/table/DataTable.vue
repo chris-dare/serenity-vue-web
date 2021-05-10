@@ -25,7 +25,7 @@
     </cv-data-table>
     <slot
       v-if="noData && !loading"
-      class="text-center w-full py-6"
+      class="text-center w-full"
       name="no-data"
     >
       <p class="text-center w-full py-6">
