@@ -10,6 +10,7 @@
           kind="primary"
           size="field"
           class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
+          @click="search = ''"
         >
           All ({{ patientsCount }})
         </cv-button>
@@ -26,6 +27,7 @@
           size="field"
           kind="ghost"
           class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+          @click="search = 'in-patient'"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
           In-patient ({{ 1 }})
@@ -43,6 +45,7 @@
           size="field"
           kind="ghost"
           class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+          @click="search = 'male'"
         >
           Male({{ maleCount }})
           <img
@@ -55,6 +58,7 @@
           size="field"
           kind="ghost"
           class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+          @click="search = 'female'"
         >
           Female({{ femaleCount }})
           <img
@@ -141,6 +145,7 @@ export default {
         // 'Weight/Height',
         'Mobile',
         'Last encounter',
+        'MR No.',
         'Action',
       ],
       selectedFilter: '',
