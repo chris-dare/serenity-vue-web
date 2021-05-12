@@ -21,6 +21,11 @@ export default class Patient {
     data.age_years = data.age ? `${data.age} years` : null
     data.gender_age_description = ''
 
+    if(data.user){
+      data.email = data.user.email
+      data.mobile = data.user.mobile
+    }
+
     if (data.gender) {
       data.gender_age_description = `${data.gender}`
     }

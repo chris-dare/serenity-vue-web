@@ -8,7 +8,7 @@ export default {
   },
 
   get(providerId, patientId) {
-    return http.get(`${this.url}${providerId}/patients/patients/${patientId}`)
+    return http.get(`${this.url}${providerId}/patients/${patientId}`)
   },
 
   create(providerId, params) {
@@ -20,6 +20,8 @@ export default {
   },
 
   update(providerId, params) {
+    delete params['user']
+    delete params['name']
     return http.patch(`${this.url}${providerId}/patients/${params.id}`, params)
   },
 

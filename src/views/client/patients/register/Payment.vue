@@ -81,7 +81,7 @@
         <SeButton
           :icon="icon"
           :loading="loading"
-          @click="save"
+          @click="submit"
         >
           Finish
         </SeButton>
@@ -143,7 +143,16 @@ export default {
       addToStoreData: 'patients/addToCurrentPatient',
       refresh: 'patients/refreshCurrentPatient',
       createPatient: 'patients/createPatient',
+      updatePatient: 'patients/updatePatient',
     }),
+
+    submit() {
+      if (this.form.id) {
+        this.update()
+      } else {
+        this.save()
+      }
+    },
 
     async save() {
       this.loading = true
@@ -162,6 +171,28 @@ export default {
         this.loading = false
         throw error
       }
+    },
+
+    async update() {
+      this.loading = true
+
+      this.addToStoreData(this.form)
+
+      try {
+        await this.updatePatient(this.form)
+        this.$toast.open({
+          message: 'Patient successfully updated',
+        })
+        this.$router.push({name: 'PatientSummary', params: { id:this.form.id }})
+      } catch (error) {
+        console.info(error)
+        this.$toast.open({
+          message: 'Something went wrong!',
+          type: 'error',
+        })
+      }
+
+      this.loading = false
     },
   },
 }
