@@ -33,7 +33,7 @@ export default {
   },
 
   async createPatient({ commit, rootState }, payload) {
-    const patient = new Patient(payload).getEmptyView()
+    const patient = new Patient(payload).getCreateView()
     try {
       const provider = rootState.auth.provider
       const { data } = await PatientsAPI

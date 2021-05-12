@@ -3,6 +3,7 @@ export function initialState() {
     appointments: [],
     appointmentsCount: 0,
     currentAppointment: {doctor: {}, patient: {}},
+    slots: [],
   }
 }
 

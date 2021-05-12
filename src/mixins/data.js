@@ -8,6 +8,7 @@ export default {
       pageLength: 10,
       pageStart: 0,
       paginate: false,
+      loading: false,
     }
   },
 
@@ -48,8 +49,14 @@ export default {
   methods: {
     async refresh() {
       this.loading = true
-      await this.getData()
-      this.loading = false
+
+      try {
+        await this.getData()
+      } catch (error) {
+        this.loading = false
+      } finally {
+        this.loading = false
+      }
     },
 
     actionOnPagination(ev) {

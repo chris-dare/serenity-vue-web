@@ -37,10 +37,9 @@
         </div>
         <div class="space-y-2">
           <p class="bx--label">Set permissions</p>
-          <cv-search
+          <Search
             v-model="search"
             placeholder="Search for feature"
-            autocomplete="off"
           />
 
           <div class="h-96 overflow-auto">

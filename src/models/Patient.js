@@ -14,7 +14,8 @@ export default class Patient {
       age: this.data.birth_date ? differenceInYears(Date.now(), new Date(`${this.data.birth_date}`)) : null,
       fullName: `${this.data.name_prefix || ''} ${this.data.first_name || ''} ${this.data.last_name || ''}`,
       name: `${this.data.first_name || ''} ${this.data.last_name || ''}`,
-      phone: this.data.mobile || '-',
+      phone: this.data.user?.mobile || '-',
+      email: this.data.user?.email || '-',
       recent: format(parseISO(this.data.modified_at), 'MMM dd, yyyy'),
     }
 
@@ -63,7 +64,7 @@ export default class Patient {
     return data
   }
 
-  getEmptyView() {
+  getCreateView() {
     let data = { ...patient, ...this.data }
 
     if (isEmpty(data.address)) {

@@ -1,9 +1,8 @@
 <template>
   <div>
-    <cv-search
+    <Search
       v-model="search"
       placeholder="Search for medication or date or condition"
-      autocomplete="off"
     />
     <div class="my-4 flex items-center space-x-2">
       <SeButton

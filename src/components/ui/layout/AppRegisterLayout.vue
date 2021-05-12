@@ -65,11 +65,6 @@ export default {
   data() {
     return {
       checked: '',
-    //   navItems: [
-    //     { label: 'Biodata', description: 'Basic information', path: 'TeamBiodata'},
-    //     { label: 'Contact Information', description: 'Phone and location', path: 'TeamContactInformation'},
-    //     { label: 'Roles & Permissions', description: 'Team identification and roles', path: 'TeamIdentification'},
-    //   ],
     }
   },
 

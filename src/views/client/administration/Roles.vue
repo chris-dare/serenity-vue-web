@@ -4,12 +4,10 @@
       <p class="text-xl font-bold">Roles ({{ roles.length }})</p>
     </div>
 
-    <cv-form autocomplete="off">
-      <cv-search
-        v-model="search"
-        placeholder="Search for role"
-      />
-    </cv-form>
+    <Search
+      v-model="search"
+      placeholder="Search for role"
+    />
 
     <cv-data-table
       ref="table"

@@ -13,8 +13,7 @@
         <div>
           <p class="text-xs">Practitioner</p>
           <InfoImageBlock
-            label="Practitioner name"
-            :description="form.healthcare_service_name"
+            :label="form.title"
             label-class="font-semibold"
           />
         </div>
@@ -24,21 +23,17 @@
         <div class="grid grid-cols-2 gap-8">
           <InfoBlock
             label="Days of the week"
-            :description="form.available_days"
+            :description="days"
             class="col-span-2"
           />
           <InfoBlock
             label="Time range"
-            :description="form.available_times"
+            :description="form.timeRange"
             class="col-span-2"
           />
           <InfoBlock
-            label="Start date"
-            :description="form.description"
-          />
-          <InfoBlock
-            label="End date"
-            :description="form.unavailable_times"
+            label="Date"
+            :description="form.fullDate"
           />
         </div>
 
@@ -50,14 +45,18 @@
         />
 
         <div class="space-y-4 grid">
-          <SeButton full>
+          <SeButton
+            full
+            @click="edit"
+          >
             Edit schedule
           </SeButton>
 
           <SeButton
             variant="danger"
             full
-            @click="close"
+            :loading="loading"
+            @click="remove"
           >
             Delete Schedule
           </SeButton>
@@ -68,6 +67,8 @@
 </template>
 
 <script>
+import { mapActions} from 'vuex'
+
 export default {
   name: 'ViewScheduleDetails',
 
@@ -77,6 +78,15 @@ export default {
       visible: false,
       loading: false,
     }
+  },
+
+  computed: {
+
+    days() {
+      if (!this.form.days) return ''
+
+      return this.form.days.join(', ')
+    },
   },
 
   events: {
@@ -90,9 +100,29 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      deleteSchedule: 'schedules/deleteSchedule',
+    }),
+
     close() {
       this.visible = false
       this.form = {}
+    },
+
+    edit() {
+      this.$trigger('schedule:edit:open', this.form)
+      this.close()
+    },
+
+    async remove() {
+      this.loading = true
+      try {
+        await this.deleteSchedule({practitionerId: this.form.practitioner_id, scheduleId: this.form.id })
+        this.loading = false
+        this.close()
+      } catch (error) {
+        this.loading = false
+      }
     },
   },
 }

@@ -1,9 +1,8 @@
 <template>
   <div>
-    <cv-search
+    <Search
       v-model="search"
       placeholder="Search for medication or date or condition"
-      autocomplete="off"
     />
     <div class="my-4 flex items-center justify-between">
       <div>
@@ -48,64 +47,54 @@
         </div>
       </div>
 
-      <cv-data-table
+      <DataTable
         ref="table"
-        v-model="rowSelects"
         :columns="columns"
         :pagination="{
           numberOfItems: 10,
         }"
         :data="[]"
         class="transparent-table"
-        size="tall"
       >
-        <template slot="data">
-          <cv-data-table-row
-            v-for="(row, rowIndex) in 10"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
+        <cv-data-table-cell>
+          <p class="">{{ $date.formatDate($faker().date.recent(), 'MMM dd, yyyy') }}</p>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <p class="">{{ $faker().finance.amount() | formatMoney | toCedis }}</p>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div>
+            <p class="">{{ $faker().finance.amount() | formatMoney | toCedis }}</p>
+          </div>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div>
+            <p class="">{{ $faker().finance.amount() | formatMoney | toCedis }}</p>
+          </div>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <p class="">{{ $faker().lorem.word() }}</p>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div class="flex items-center">
+            <div class="bg-success text-white text-xs py-1 px-2 rounded-full">{{ $faker().lorem.word() }}</div>
+          </div>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div
+            class="flex items-center cursor-pointer "
+            @click="showOrder(row)"
           >
-            <cv-data-table-cell>
-              <p class="">{{ $date.formatDate($faker().date.recent(), 'MMM dd, yyyy') }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p class="">{{ $faker().finance.amount() | formatMoney | toCedis }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p class="">{{ $faker().finance.amount() | formatMoney | toCedis }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p class="">{{ $faker().finance.amount() | formatMoney | toCedis }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p class="">{{ $faker().lorem.word() }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div class="flex items-center">
-                <div class="bg-success text-white text-xs py-1 px-2 rounded-full">{{ $faker().lorem.word() }}</div>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div
-                class="flex items-center cursor-pointer "
-                @click="showOrder(row)"
+            View
+            <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
+              <img
+                src="@/assets/img/view 1.svg"
+                alt=""
               >
-                View
-                <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
-                  <img
-                    src="@/assets/img/view 1.svg"
-                    alt=""
-                  >
-                </div>
-              </div>
-            </cv-data-table-cell>
-          </cv-data-table-row>
-        </template>
-      </cv-data-table>
+            </div>
+          </div>
+        </cv-data-table-cell>
+      </DataTable>
     </div>
     <OrderDetailsModal :visible.sync="visible" />
   </div>
@@ -122,7 +111,6 @@ export default {
   data() {
     return {
       search: '',
-      rowSelects: null,
       columns: [
         'Date',
         'Total Amount',

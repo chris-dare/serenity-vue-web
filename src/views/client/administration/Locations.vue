@@ -12,64 +12,49 @@
         <Add class="ml-4 w-5 h-5 text-white" />
       </cv-button>
     </div>
-    <cv-form autocomplete="off">
-      <cv-search
-        v-model="search"
-        placeholder="Search for location"
-      />
-    </cv-form>
-    <cv-data-table
-      ref="table"
-      :data="filteredData"
+    <Search
+      v-model="search"
+      placeholder="Search for location"
+    />
+    <DataTable
       :columns="columns"
+      :data="filteredData"
+      :loading="loading"
     >
-      <template slot="data">
-        <cv-data-table-row
-          v-for="(row, rowIndex) in filteredData"
-          :key="`${rowIndex}`"
-          :value="`${rowIndex}`"
-        >
-          <cv-data-table-cell>
-            <div class="flex items-center space-x-2 py-2">
-              <p>{{ row.location_name }}</p>
-            </div>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <div class="flex items-center space-x-2 py-2">
-              <p>{{ row.street_address }}</p>
-            </div>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <div class="flex items-center space-x-2 py-2">
-              <p>{{ row.location_contact_number }}</p>
-            </div>
-          </cv-data-table-cell>
-          <!-- APIS not ready for these -->
-          <cv-data-table-cell>
-            <div class="flex items-center space-x-6">
-              <p
-                class="cursor-pointer"
-                @click="$trigger('location:edit:open', { ...row })"
-              >
-                Edit
-              </p>
-              <p
-                class="text-red-500 cursor-pointer"
-                @click="$trigger('confirm:delete:open', { data:row.id, label: 'Are you sure you want to delete this location?' })"
-              >
-                Delete
-              </p>
-            </div>
-          </cv-data-table-cell>
-        </cv-data-table-row>
+      <template #default="{row}">
+        <cv-data-table-cell>
+          <div class="flex items-center space-x-2 py-2">
+            <p>{{ row.location_name }}</p>
+          </div>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div class="flex items-center space-x-2 py-2">
+            <p>{{ row.street_address }}</p>
+          </div>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div class="flex items-center space-x-2 py-2">
+            <p>{{ row.location_contact_number }}</p>
+          </div>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div class="flex items-center space-x-6">
+            <p
+              class="cursor-pointer"
+              @click="$trigger('location:edit:open', { ...row })"
+            >
+              Edit
+            </p>
+            <p
+              class="text-red-500 cursor-pointer"
+              @click="$trigger('confirm:delete:open', { data:row.id, label: 'Are you sure you want to delete this location?' })"
+            >
+              Delete
+            </p>
+          </div>
+        </cv-data-table-cell>
       </template>
-    </cv-data-table>
-    <p
-      v-if="!dataCount"
-      class="text-center w-full py-6"
-    >
-      No locations to show
-    </p>
+    </DataTable>
     <AddEditLocation />
     <ConfirmDeleteModal
       :loading="loading"
@@ -82,6 +67,7 @@
 import AddEditLocation from '@/components/admin/modals/AddEditLocation'
 import { mapActions, mapState } from 'vuex'
 import DataMixin from '@/mixins/data'
+
 
 export default {
   name: 'Locations',
