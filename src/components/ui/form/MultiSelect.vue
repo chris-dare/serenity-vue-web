@@ -16,7 +16,6 @@
       :internal-search="false"
       :custom-label="customLabel"
       :disabled="disabled"
-      @input="$emit('input', $event)"
       @select="$emit('select', $event)"
     />
     <p
@@ -99,15 +98,26 @@ export default {
         return label ? option[label] : option
       },
     },
+
+    customField: {
+      type:String,
+      default: null,
+    },
   },
 
   computed: {
     selected: {
       get() {
-        return this.value
+        let data = {}
+        if (this.customField) {
+          data = this.options.find(option => option[this.customField] === this.value)
+        } else {
+          data = this.value
+        }
+        return data
       },
       set(val) {
-        this.$emit('input', val)
+        this.$emit('input', this.customField && val[this.customField] ? val[this.customField] : val)
       },
     },
   },

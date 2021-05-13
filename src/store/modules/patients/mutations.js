@@ -17,10 +17,10 @@ export default {
   },
 
   [UPDATE_PATIENT](state, patient) {
-    const index = state.patients.findIndex(a => a.uuid === patient.uuid)
+    const index = state.patients.findIndex(a => a.id === patient.id)
     if (index !== -1) {
       state.patients = state.patients.map(a => {
-        if (a.uuid === patient.uuid) return patient
+        if (a.id === patient.id) return patient
         return a
       })
     } else {
@@ -29,7 +29,7 @@ export default {
   },
 
   [DELETE_PATIENT](state, patientId) {
-    state.patients = state.patients.filter((es) => es.uuid !== patientId)
+    state.patients = state.patients.filter((es) => es.id !== patientId)
   },
 
   [ADD_PATIENT_DATA](state, data) {

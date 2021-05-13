@@ -1,38 +1,36 @@
 <template>
-  <div class="w-auto">
-    <cv-button
-      :class="[buttonClass, full ? 'w-full' : '', icon ? '' : 'px-4']"
-      class="flex items-center justify-center"
-      kind="primary"
-      :size="size"
-      :icon="icon"
-      :disabled="loading"
-      @click="go"
+  <cv-button
+    :class="[buttonClass, full ? 'w-full' : '', icon ? '' : 'px-4']"
+    class="flex items-center justify-center"
+    kind="primary"
+    :size="size"
+    :icon="icon"
+    :disabled="loading || disabled"
+    @click="go"
+  >
+    <svg
+      v-if="loading"
+      class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
     >
-      <svg
-        v-if="loading"
-        class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <circle
-          class="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          stroke-width="4"
-        />
-        <path
-          class="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-        />
-      </svg>
-      <slot>{{ label }}</slot>
-    </cv-button>
-  </div>
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"
+      />
+      <path
+        class="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
+    <slot>{{ label }}</slot>
+  </cv-button>
 </template>
 
 <script>
@@ -51,6 +49,11 @@ export default {
     },
   
     loading: {
+      type: Boolean,
+      default: false,
+    },
+  
+    disabled: {
       type: Boolean,
       default: false,
     },
@@ -76,7 +79,7 @@ export default {
       validator: function (value) {
         // The value must match one of these strings
         return (
-          ['primary', 'secondary', 'tertiary', 'danger', 'outline', 'ghost', 'white', 'default'].indexOf(value) !== -1
+          ['primary', 'secondary', 'tertiary', 'danger', 'outline', 'ghost', 'white', 'default', 'danger-outline'].indexOf(value) !== -1
         )
       },
     },
@@ -94,6 +97,9 @@ export default {
 
       if (this.variant  === 'danger') {
         return 'bg-red-500 text-white'
+      }
+      if (this.variant  === 'danger-outline') {
+        return 'border-danger bg-transparent text-danger hover:text-white focus:bg-danger hover:bg-danger w-full'
       }
 
       if(this.variant === 'white') {

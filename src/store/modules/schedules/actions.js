@@ -8,8 +8,9 @@ export default {
   async getSchedules({ commit, rootState }, params) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await SchedulesAPI.list(provider.id, params.practitioner.id)
-      commit(SET_SCHEDULES, data.data)
+      const { data } = await SchedulesAPI.list(provider.id, params)
+      
+      commit(SET_SCHEDULES, data)
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error

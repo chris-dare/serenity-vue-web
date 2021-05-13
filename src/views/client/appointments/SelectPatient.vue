@@ -1,5 +1,10 @@
 <template>
-  <div class="">
+  <MultiStepBase
+    :icon="icon"
+    next-label="Next: Clinic and service"
+    @cancel="cancel"
+    @save="validateAndReroute"
+  >
     <div class="flex">
       <PatientCard
         v-for="(type, index) in patientTypes"
@@ -7,49 +12,16 @@
         :is-selected="selected === type.value"
         :details="type"
         :type="type.type"
-        @click="selected = type.value"
+        @click="onClick(type)"
       />
     </div>
     <div class="mt-5">
-      <p class="text-primary mb-4">Select your patient below</p>
-      <Search
-        v-model="search"
-        placeholder="Search for patient, enter name or MR number"
-        class="mb-4"
-      />
-      <cv-skeleton-text
-        v-if="loading"
-        :heading="false"
-        :paragraph="true"
-        :line-count="3"
-        width="100%"
-      />
       <SelectPatientTable
         :columns="columns"
-        :data="filteredPatients"
         :patient.sync="form.patient"
       />
     </div>
-    <div class="flex items-center justify-between mt-12 mb-6">
-      <cv-button
-        class="border-serenity-primary px-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-        kind="tertiary"
-      >
-        Cancel
-      </cv-button>
-      <div class="flex items-center">
-        <cv-button
-          :icon="icon"
-          kind="primary"
-          :disabled="disabled"
-          class="bg-serenity-primary ml-6"
-          @click="save"
-        >
-          Next: Clinic and service
-        </cv-button>
-      </div>
-    </div>
-  </div>
+  </MultiStepBase>
 </template>
 
 <script>
@@ -57,15 +29,20 @@ import PatientCard from '@/components/appointments/PatientCard'
 import SelectPatientTable from '@/components/appointments/tables/SelectPatientTable'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import { mapState, mapActions } from 'vuex'
+import MultiStep from '@/mixins/multistep'
+import { required, minLength } from 'vuelidate/lib/validators'
+
 export default {
   name: 'SelectPatient',
 
   components: { PatientCard, SelectPatientTable },
 
+  mixins: [MultiStep],
+
   data() {
     return {
       form: {},
-      columns: ['Patient', 'Weight/Height', 'Mobile'],
+      columns: ['Patient', 'Mobile'],
       radioVal: null,
       search: '',
       icon: ChevronRight,
@@ -85,42 +62,41 @@ export default {
       ],
       selected: 'existing',
       loading: false,
+      next: 'ClinicsServices',
+      parent: 'Appointments',
     }
   },
+
   computed: {
     ...mapState({
-      patients: (state) => state.patients.patients,
       patientsCount: (state) => state.patients.patientsCount,
+      storeData: (state) => state.appointments.currentAppointment,
     }),
-
-    filteredPatients() {
-      return this.patients.filter(
-        (data) =>
-          !this.search ||
-          data.name.toLowerCase().includes(this.search.toLowerCase()),
-      ).slice(0, 4)
-    },
 
     disabled() {
       return !this.form.patient
     },
   },
 
-  async mounted() {
-    this.loading = true
-    await this.getPatients()
-    this.loading = false
+  validations: {
+    form: {
+      patient: { minLength: minLength(1), required  },
+    },
   },
 
   methods: {
     ...mapActions({
-      addToCurrentAppointment: 'appointments/addToCurrentAppointment',
-      getPatients: 'patients/getPatients',
+      addToStoreData: 'appointments/addToCurrentAppointment',
+      refresh: 'appointments/refreshCurrentAppointment',
     }),
 
-    save() {
-      this.addToCurrentAppointment(this.form)
-      this.$router.push({ name: 'ClinicsServices' })
+    onClick(type) {
+      if (type.value === 'existing') {
+        this.selected = type.value
+      } else {
+        this.$router.push({ name: 'Biodata'})
+      }
+      
     },
   },
 }

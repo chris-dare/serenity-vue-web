@@ -9,36 +9,29 @@ export default {
       pageStart: 0,
       paginate: false,
       loading: false,
+      pageSizes: [10, 15, 20, 25],
     }
   },
 
   computed: {
+    normalizedData() {
+      return this.$utils.getFilteredData(this.data, this.search, this.searchTerms)
+    },
+
     filteredData() {
-      let data = this.data.filter(data => {
-        if (!this.search) {
-          return data
-        }
-
-        for (let index = 0; index < this.searchTerms.length; index++) {
-          const element = this.searchTerms[index]
-          if (data[element]?.toLowerCase().includes(this.search.toLowerCase())) {
-            return data
-          }
-        }
-      })
-
-      return this.paginate ? data.slice(this.pageStart-1, this.pageStart + this.pageLength) : data
-      //   for pagination
-      //   .slice(this.pageStart-1, this.pageStart + this.pageLength)
-      
+      return this.paginate ? this.normalizedData.slice(this.pageStart-1, this.pageStart + this.pageLength - 1) : this.normalizedData
     },
 
     dataCount() {
       return this.data.length || 0
     },
 
+    noData() {
+      return this.dataCount === 0
+    },
+
     pagination() {
-      return { itemsPerPage: this.pageLength, numberOfItems: this.dataCount, pageSizes: [10, 15, 20, 25]  }
+      return { itemsPerPage: this.pageLength, numberOfItems: this.dataCount, pageSizes: this.pageSizes  }
     },
   },
     
@@ -47,11 +40,11 @@ export default {
   // },
     
   methods: {
-    async refresh() {
+    async refresh(refreshData) {
       this.loading = true
 
       try {
-        await this.getData()
+        await this.getData(refreshData)
       } catch (error) {
         this.loading = false
       } finally {
@@ -62,7 +55,7 @@ export default {
     actionOnPagination(ev) {
       this.pageStart = ev.start
       this.pageLength = ev.length
-      this.page = ev.page
+      this.page = this.filteredData < ev.length ? 1 : ev.page
     },
   },
 }

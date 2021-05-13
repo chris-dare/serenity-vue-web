@@ -2,77 +2,89 @@
   <cv-modal
     class="se-no-title-modal"
     close-aria-label="Close"
-    :visible="modalVisible"
+    :visible="visible"
     size="xs"
   >
     <template slot="content">
       <div>
-        <div class="w-full flex justify-center items-center flex-col space-y-1 mb-4">
+        <div
+          v-if="appointment.patient"
+          class="w-full flex justify-center items-center flex-col space-y-1 mb-4"
+        >
           <img
             class="w-32"
             src="@/assets/img/qr.png"
             alt=""
           >
-          <p class="text-xs">Darlene Robertson</p>
-          <p class="text-secondary text-xs">Female, 23 years</p>
+          <p class="text-xs">{{ appointment.patient.fullName }}</p>
+          <p class="text-secondary text-xs">{{ appointment.patient.gender_age_description }}</p>
         </div>
 
-        <div class="grid grid-cols-1">
-          <div class="flex items-center space-x-6">
+        <div class="divide-y divide-secondary divide-solid">
+          <div
+            v-if="appointment.patient"
+            class="flex items-center space-x-6 py-4"
+          >
             <div>
-              <p class="text-xs">00232380</p>
+              <p class="text-xs">{{ appointment.patient.mr_number }}</p>
               <p class="text-secondary text-xs">MR no.</p>
             </div>
             <div>
-              <p class="text-xs">0549776944</p>
+              <p class="text-xs">{{ appointment.patient.phone }}</p>
               <p class="text-secondary text-xs">Phone number</p>
             </div>
           </div>
-          <div class="bg-secondary my-4 w-full h-px" />
-          <div class="space-y-4">
+          <div
+            v-if="appointment.service"
+            class="space-y-4 py-4"
+          >
             <p class="text-secondary text-xs">Clinic and Services</p>
 
             <div class="space-y-2">
-              <p class="font-bold text-xs">Diagnostics</p>
+              <p class="font-bold text-xs">{{ appointment.service.categories }}</p>
 
               <div class="flex items-center space-x-1">
                 <p class="text-secondary text-xs">Service:</p>
-                <p class="text-xs">SARS-COV 2 Laboratory test</p>
+                <p class="text-xs">{{ appointment.service.healthcare_service_name }}</p>
               </div>
-              <div class="flex items-center space-x-1">
+              <div
+                v-if="appointment.service_tier"
+                class="flex items-center space-x-1"
+              >
                 <p class="text-secondary text-xs">Price:</p>
-                <p class="text-xs">GHS 1.00 (Tier:express)</p>
+                <p class="text-xs">{{ appointment.service_tier.label }}</p>
               </div>
             </div>
           </div>
-          <div class="bg-secondary my-4 w-full h-px" />
-          <div class="space-y-4">
+          <div
+            v-if="appointment.slot"
+            class="space-y-4 py-4"
+          >
             <p class="text-secondary text-xs">Date and Doctor</p>
 
             <div class="space-y-2">
-              <p class="font-bold text-xs">Dr. Regina Amartey</p>
+              <p class="font-bold text-xs">{{ appointment.slot.practitioner.fullName }}</p>
 
               <div class="flex items-center space-x-1">
-                <p class="text-secondary text-xs">General Practitioner</p>
+                <p class="text-secondary text-xs">{{ appointment.slot.practitioner.role }}</p>
               </div>
               <div class="flex items-center space-x-1">
                 <p class="text-secondary text-xs">Appointment time:</p>
-                <p class="text-xs">10/12, 10:30am</p>
+                <p class="text-xs">{{ $date.formatDate(appointment.slot.start, 'dd MMM') }}, {{ appointment.slot.slot }}</p>
               </div>
             </div>
           </div>
-          <div class="bg-secondary my-4 w-full h-px" />
-          <div class="space-y-2">
+          <div class="space-y-2 py-4">
             <p class="text-secondary text-xs">Appointment notes</p>
 
-            <p class="text-xs">This is a note...</p>
+            <p class="text-xs">{{ appointment.comment }}</p>
           </div>
         </div>
 
         <div class="flex items-center justify-between">
           <div
             class="underline text-primary text-xs cursor-pointer"
-            @click="modalVisible = !modalVisible"
+            @click="returnToAppointment"
           >
             Return to appointments
           </div>
@@ -90,42 +102,41 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import {  mapActions } from 'vuex'
 export default {
-  name: 'BillingModal',
+  name: 'BillingDetailsModal',
 
   props: {
-    visible: {
-      type: Boolean,
-      default: false,
+    appointment: {
+      type: Object,
+      default: () => {},
     },
   },
 
   data() {
     return {
-      search: '',
-      columns: ['Patient', 'Appointment', 'Payment Type', 'Action'],
+      visible: false,
     }
   },
 
-  computed: {
-    ...mapState({
-      patients: (state) => state.patients.patients,
-    }),
-    filteredPatients() {
-      return this.patients.filter(
-        (data) =>
-          !this.search ||
-          data.name.toLowerCase().includes(this.search.toLowerCase()),
-      )
+  events: {
+    'billing:details:open': function() {
+      this.visible = true
     },
-    modalVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      },
+    'billing:details:close': function() {
+      this.close()
+    },
+  },
+
+  methods: {
+    ...mapActions({
+      refreshCurrentAppointment: 'appointments/refreshCurrentAppointment',
+    }),
+    returnToAppointment() {
+      this.visible = !this.visible
+      this.refreshCurrentAppointment()
+
+      this.$router.push({ name: 'Appointments'})
     },
   },
 }

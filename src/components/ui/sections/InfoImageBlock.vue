@@ -58,7 +58,7 @@ export default {
 
     url: {
       type: String,
-      default: '',
+      default: null,
     },
 
     name: {

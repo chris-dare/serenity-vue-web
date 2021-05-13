@@ -3,6 +3,7 @@ export default {
   data() {
     return {
       icon: ChevronRight,
+      loading:false,
     }
   },
   created() {
@@ -17,6 +18,27 @@ export default {
     cancel() {
       this.refresh()
       this.$router.push({name: this.parent})
+    },
+
+    validateAndReroute() {
+      this.$v.$touch()
+
+      if (this.$v.$invalid) {
+        this.$toast.open({
+          message: 'Fill all required fields!',
+          type: 'error',
+        })
+        return
+      }
+
+      this.addToStoreData(this.form)
+      this.$router.push({ name: this.next })
+    },
+
+    reRoute() {
+
+      this.addToStoreData(this.form)
+      this.$router.push({ name: this.next })
     },
   },
 }

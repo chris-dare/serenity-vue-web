@@ -1,43 +1,54 @@
 <template>
-  <div>
-    <div class="border-b border-solid border-subtle py-6">
+  <MultiStepBase
+    :icon="icon"
+    next-label="Book Appointment"
+    :previous="previous"
+    :loading="loading"
+    @cancel="cancel"
+    @save="save"
+  >
+    <div
+      
+      class="border-b border-solid border-subtle py-6"
+    >
       <p class="text-secondary mb-4">Patient</p>
-      <div class="grid grid-cols-7 gap-4">
-        <div class="flex items-center col-span-3">
-          <img
-            class="w-10 h-10 rounded-full mr-3"
-            :src="currentAppointment.patient.image || $faker().image.image()"
-            alt=""
-          >
-          <div>
-            <p class="text-black">{{ currentAppointment.patient.name || $faker().name.findName() }}</p>
-            <p class="text-secondary">
-              {{ currentAppointment.patient.gender || $faker().name.gender() }}, {{ currentAppointment.patient.age || $utils.createRandom(100) }} years
-            </p>
-          </div>
+      <div
+        v-if="storeData.patient"
+        class="grid grid-cols-7 gap-4 items-center"
+      >
+        <div class="col-span-3">
+          <InfoImageBlock
+            :label="storeData.patient.name"
+            :description="storeData.patient.gender_age_description"
+          />
         </div>
-        <div class="flex flex-col justify-center">
-          <p>{{ currentAppointment.patient.weight || $utils.createRandom(200) }}kg</p>
-          <p class="text-secondary">{{ currentAppointment.patient.height || $utils.createRandom(100) }}cm</p>
-        </div>
-        <div class="col-span-2">
-          <p>{{ currentAppointment.patient.phone || $faker().phone.phoneNumber() }}</p>
+        <div class="col-span-3">
+          <p>{{ storeData.patient.phone }}</p>
         </div>
         <div>
-          <div
+          <router-link
+            tag="div"
+            :to="{name: 'SelectPatient'}"
             class="bg-serenity-light-gray w-8 h-8 rounded-full ml-6 flex items-center justify-center"
           >
             <img
               src="@/assets/img/edit 1.svg"
               class="w-4 h-4"
             >
-          </div>
+          </router-link>
         </div>
       </div>
+      <p v-else>No patient selected</p>
     </div>
-    <div class="border-b border-solid border-subtle py-6">
+    <div
+      
+      class="border-b border-solid border-subtle py-6"
+    >
       <p class="text-secondary mb-4">Clinic and Services</p>
-      <div class="grid grid-cols-7 gap-4">
+      <div
+        v-if="storeData.service"
+        class="grid grid-cols-7 gap-4"
+      >
         <div class="flex items-center col-span-6">
           <div
             class="w-10 h-10 flex items-center justify-center rounded-full bg-serenity-primary mr-3"
@@ -45,109 +56,87 @@
             <Diagnostic class="w-7 h-7 text-white" />
           </div>
           <div>
-            <p class="text-black font-semibold mb-1">Diagnostics</p>
+            <p class="text-black font-semibold mb-1">{{ storeData.service.categories }}</p>
             <p class="text-secondary mb-1">
               Service:
-              <span class="text-primary"> SARS-COV 2 Laboratory test</span>
+              <span class="text-primary">{{ storeData.service.healthcare_service_name }}</span>
             </p>
             <p class="text-secondary">
-              Price: <span class="text-primary">GHS 1.00 (Tier:express)</span>
+              Price: <span class="text-primary">{{ storeData.service_tier.label }}</span>
             </p>
           </div>
         </div>
         <div>
-          <div
+          <router-link
+            tag="div"
+            :to="{name: 'ClinicsServices'}"
             class="bg-serenity-light-gray w-8 h-8 rounded-full ml-6 flex items-center justify-center"
           >
             <img
               src="@/assets/img/edit 1.svg"
               class="w-4 h-4"
             >
-          </div>
+          </router-link>
         </div>
       </div>
+      <p v-else>No service selected</p>
     </div>
     <div class="border-b border-solid border-subtle py-6">
       <p class="text-secondary mb-4">Date and Doctor</p>
-      <div class="grid grid-cols-7 gap-4">
-        <div class="flex col-span-6">
-          <img
-            class="w-10 h-10 rounded-full mr-3"
-            :src="$faker().image.image()"
-            alt=""
-          >
-          <div>
-            <p class="text-black font-semibold mb-1">
-              {{ currentAppointment.doctor.name || $faker().name.findName() }}
-            </p>
-            <p class="text-secondary mb-2">
-              General Practitioner
-            </p>
-            <p class="text-secondary">
-              Appointment time: <span class="text-primary">10/12, 10:30am</span>
-            </p>
-          </div>
+      <div
+        v-if="storeData.slot"
+        class="grid grid-cols-7 gap-4"
+      >
+        <div class="col-span-6">
+          <InfoImageBlock
+            :label="storeData.slot.practitioner.fullName"
+            :description="storeData.slot.practitioner.role"
+            description-color="text-primary text-base"
+          />
+          <p class="text-secondary text-sm">
+            Appointment time: <span class="text-primary text-base">{{ $date.formatDate(storeData.slot.start, 'dd MMM') }}, {{ storeData.slot.slot }}</span>
+          </p>
         </div>
         <div>
-          <div
+          <router-link
+            tag="div"
+            :to="{name: 'DateDoctor'}"
             class="bg-serenity-light-gray w-8 h-8 rounded-full ml-6 flex items-center justify-center"
           >
             <img
               src="@/assets/img/edit 1.svg"
               class="w-4 h-4"
             >
-          </div>
+          </router-link>
         </div>
       </div>
+      <p v-else>No date and doctor selected</p>
     </div>
     <div class="border-b border-solid border-subtle py-6">
       <p class="text-secondary mb-2">Appointment notes:</p>
       <div class="grid grid-cols-7 gap-4">
         <div class="flex items-center col-span-6">
-          <p>{{ currentAppointment.notes || 'This is a note...' }}</p>
+          <p>{{ storeData.comment }}</p>
         </div>
         <div>
-          <div
+          <router-link
+            tag="div"
+            :to="{name: 'AppointmentNotes'}"
             class="bg-serenity-light-gray w-8 h-8 rounded-full ml-6 flex items-center justify-center"
           >
             <img
               src="@/assets/img/edit 1.svg"
               class="w-4 h-4"
             >
-          </div>
+          </router-link>
         </div>
       </div>
     </div>
-    <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center">
-        <cv-button
-          class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-          kind="tertiary"
-        >
-          Cancel
-        </cv-button>
-        <cv-button
-          class="bg-black px-6"
-          kind="primary"
-          @click="$router.push({ name: 'AppointmentPayment' })"
-        >
-          Go back
-        </cv-button>
-      </div>
-      <div class="flex items-center">
-        <cv-button
-          :icon="icon"
-          kind="primary"
-          class="bg-serenity-primary"
-          @click="billingVisible = !billingVisible"
-        >
-          Book appointment
-        </cv-button>
-      </div>
-    </div>
     <AppointmentSuccessModal :visible.sync="visible" />
-    <BillingModal :visible.sync="billingVisible" />
-  </div>
+    <BillingModal
+      :appointment="storeData"
+    />
+  </MultiStepBase>
 </template>
 
 <script>
@@ -156,32 +145,67 @@ import Diagnostic from '@carbon/icons-vue/es/microscope/32'
 import AppointmentSuccessModal from '@/components/patients/modals/AppointmentSuccessModal'
 import BillingModal from '@/components/appointments/BillingModal'
 import { mapActions, mapState } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
+import MultiStep from '@/mixins/multistep'
+
 export default {
   name: 'AppointmentSummary',
 
   components: { Diagnostic, AppointmentSuccessModal, BillingModal },
 
+  mixins: [MultiStep],
+
   data() {
     return {
       icon: Checkmark,
       visible: false,
-      billingVisible: false,
+      previous: 'AppointmentNotes',
+      parent: 'Appointments',
     }
   },
 
+
   computed: {
     ...mapState({
-      currentAppointment: (state) => state.appointments.currentAppointment,
+      storeData: (state) => state.appointments.currentAppointment,
     }),
   },
+
+  beforeMount() {},
 
   methods: {
     ...mapActions({
       createAppointment: 'appointments/createAppointment',
+      refresh: 'appointments/refreshCurrentAppointment',
+      addToStoreData: 'appointments/addToCurrentAppointment',
     }),
 
-    save() {
-      this.createAppointment()
+    async save() {
+      this.$v.$touch()
+
+      if (this.$v.$invalid) {
+        this.$toast.open({
+          message: 'Fill all required fields from previous steps!',
+          type: 'error',
+        })
+        return
+      }
+      this.addToStoreData(this.form)
+
+      this.loading = true
+      await this.createAppointment(this.storeData)
+
+      this.$trigger('billing:details:open')
+      this.loading = false
+    },
+  },
+
+  validations: {
+    form: {
+      slot: { required  },
+      service: { required  },
+      patient: { required  },
+      appointmentType: { required  },
     },
   },
 }

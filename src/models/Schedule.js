@@ -8,14 +8,14 @@ export default class Schedule {
   getNormalizedView() {
     return {
       ...this.data,
-      title: `${this.data.practitioner_title || ''} ${this.data.practitioner_firstname} ${this.data.practitioner_lastname}`,
-      start: this.data.start_time,
-      end: this.data.end_time,
-      fullDate: format(parseISO(this.data.start_time), 'yyyy-MM-dd'),
-      day: format(parseISO(this.data.start_time), 'E').toLowerCase(),
-      timeRange: `${format(parseISO(this.data.start_time), 'HH:mm a')} - ${format(parseISO(this.data.end_time), 'hh:mm a')}`,
-      start_time: format(parseISO(this.data.start_time), 'HH:mm:ss'),
-      end_time: format(parseISO(this.data.end_time), 'HH:mm:ss'),
+      title: `${this.data.practitioner_name}`,
+      start: this.data.planning_horizon_start,
+      end: this.data.planning_horizon_end,
+      fullDate: format(parseISO(this.data.planning_horizon_start), 'yyyy-MM-dd'),
+      day: format(parseISO(this.data.planning_horizon_start), 'E').toLowerCase(),
+      timeRange: `${format(parseISO(this.data.planning_horizon_start), 'HH:mm a')} - ${format(parseISO(this.data.planning_horizon_end), 'hh:mm a')}`,
+      start_time: format(parseISO(this.data.planning_horizon_start), 'HH:mm:ss'),
+      end_time: format(parseISO(this.data.planning_horizon_end), 'HH:mm:ss'),
     }
   }
 

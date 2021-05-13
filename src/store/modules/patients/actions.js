@@ -11,7 +11,10 @@ import {
 } from './mutation-types'
 
 export default {
-  async getPatients({ commit, rootState }) {
+  async getPatients({ commit, rootState, state }, refresh = true) {
+    if (!refresh && state.patients.length) {
+      return
+    }
     try {
       const provider = rootState.auth.provider
       const { data } = await PatientsAPI.list(provider.id)

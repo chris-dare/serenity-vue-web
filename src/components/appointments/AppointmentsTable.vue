@@ -39,18 +39,11 @@
       </template>
       <template #default="{row}">
         <cv-data-table-cell>
-          <div class="flex items-center py-2">
-            <img
-              class="w-10 h-10 rounded-full mr-3"
-              :src="row.image"
-              alt=""
-            >
-            <div>
-              <p>{{ $faker().name.findName() }}</p>
-              <p class="text-secondary text-xs">
-                {{ $faker().random.boolean() ? 'male' : 'female' }}, {{ $utils.createRandom(100) }} years
-              </p>
-            </div>
+          <div class="py-2">
+            <InfoImageBlock
+              :label="row.patient.fullName"
+              :description="row.patient.gender_age_description"
+            />
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -61,42 +54,66 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>Specialist Appointment</p>
+            <p>{{ row.service.healthcare_service_name }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>Virtual</p>
+            <p>{{ row.service.categories }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ $faker().phone.phoneNumber() }}</p>
+            <p>{{ row.patient.phone }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
-          <div
-            class="flex items-center cursor-pointer"
-            @click="visible = !visible"
-          >
-            View
+          <div class="flex items-center cursor-pointer space-x-6">
             <div
-              class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center"
+              class="flex items-center cursor-pointer space-x-2"
+              @click="view(row)"
             >
-              <img
-                src="@/assets/img/view 1.svg"
-                alt=""
+              View
+              <div
+                class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center"
               >
+                <img
+                  src="@/assets/img/view 1.svg"
+                  alt=""
+                >
+              </div>
             </div>
+            <!-- <p
+              class="text-red-500 cursor-pointer"
+              @click="$trigger('confirm:delete:open', { data:row.id, label: 'Are you sure you want to delete this appointment?' })"
+            >
+              Delete
+            </p> -->
           </div>
         </cv-data-table-cell>
       </template>
     </DataTable>
+
     <AppointmentSummaryModal
-      :visible.sync="visible"
-      @print="billingVisible = !billingVisible"
+      :appointment="selectedAppointment"
+      @print="$trigger('billing:details:open')"
     />
-    <BillingModal :visible.sync="billingVisible" />
+
+    <BillingModal
+      :appointment="selectedAppointment"
+    />
+  
+    <NotesModal
+      label="Reason for cancellation"
+      save-label="Cancel Appointment"
+      required
+      @save="cancel"
+    />
+
+    <ConfirmDeleteModal
+      :loading="loading"
+      @delete="remove"
+    />
   </div>
 </template>
 
@@ -104,7 +121,7 @@
 import AppointmentSummaryModal from '@/components/appointments/AppointmentSummaryModal'
 import BillingModal from '@/components/appointments/BillingModal'
 import DataMixin from '@/mixins/data'
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'AppointmentsTable',
@@ -123,7 +140,6 @@ export default {
   data() {
     return {
       rowSelects: null,
-      billingVisible: false,
       date: {},
       columns: [
         'Patient',
@@ -134,25 +150,55 @@ export default {
         'Action',
       ],
       visible: false,
+      selectedAppointment: {},
     }
   },
 
   computed: {
-    ...mapState({
-      data: (state) => state.appointments.appointments,
+    ...mapGetters({
+      data: 'appointments/appointments',
     }),
   },
 
-  created() {
-    this.getSlots()
-    this.refresh()
+  beforeMount() {
+    this.searchTerms = ['']
+    this.refresh(false)
   },
 
   methods: {
     ...mapActions({
       getData: 'appointments/getAppointments',
-      getSlots: 'appointments/getSlots',
+      cancelAppointment: 'appointments/cancelAppointment',
+      deleteAppointment: 'appointments/deleteAppointment',
     }),
+
+    view(appointment) {
+      this.selectedAppointment = appointment
+      this.$trigger('appointment:summary:open')
+    },
+
+    async cancel(note) {
+      await this.cancelAppointment({appointmentId: 1, payload: { cancelationReason: note } })
+      this.$toast.open({message: 'Appointment successfully cancelled'})
+      this.$trigger('notes:close')
+    },
+
+
+    async remove(rowId) {
+      this.loading = true
+      try {
+        await this.deleteAppointment(rowId).then(() => {
+          this.$toast.open({
+            message: 'Appointment successfully deleted',
+          })
+        })
+        this.loading = false
+        this.$trigger('confirm:delete:close')
+      } catch (error) {
+        this.loading = false
+        throw error
+      }
+    },
   },
 }
 </script>

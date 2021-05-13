@@ -1,38 +1,30 @@
 <template>
-  <div>
+  <MultiStepBase
+    :icon="icon"
+    next-label="Next: Notes"
+    :previous="previous"
+    @cancel="cancel"
+    @save="validateAndReroute"
+  >
     <p class="text-primary my-4 font-bold">
       What time would the patient want to see the doctor?
     </p>
-    <div class="grid grid-cols-2 gap-4">
-      <cv-date-picker
+    <div class="grid">
+      <DatePicker
         v-model="form.date"
-        kind="single"
-        class="w-full max-w-full inherit-full-input"
-        placeholder="dd/mm/yyyy"
-        label="Date"
-      />
-      <cv-time-picker
-        label="Time"
-        :time="form.time"
-        ampm="AM"
-        :timezone="form.timezone"
-        :timezones="timezones"
-        :pattern="pattern"
-        class="inherit-full-input"
-        placeholder="hh:mm"
-        :form-item="true"
+        type="datetime"
       />
     </div>
     <div class="flex items-center space-x-4 my-4">
       <cv-button
-        :icon="icon"
+        :icon="time"
         kind="primary"
         class="bg-serenity-primary"
       >
         Give me the next time slot
       </cv-button>
       <cv-button
-        :icon="icon"
+        :icon="time"
         kind="primary"
         class="bg-success"
       >
@@ -41,97 +33,41 @@
     </div>
     <p
       class="text-primary mt-8 mb-4 font-bold"
-      @click="form.date = Date.now()"
     >
       Select a doctor for the appointment
     </p>
     <div class="grid">
-      <cv-skeleton-text
-        v-if="loading"
-        :heading="false"
-        :paragraph="true"
-        :line-count="3"
-        width="100%"
+      <SlotList
+        v-model="form.slot"
+        :data="filteredData"
       />
-      <div
-        v-for="(doctor, i) in filteredDoctors"
-        :key="i"
-      >
-        <div
-          class="flex justify-between items-center hover:bg-serenity-subtle-border p-4 cursor-pointer"
-          :class="{ 'bg-serenity-subtle-border': doctor.id === form.doctor.id }"
-          @click="form.doctor = doctor"
-        >
-          <div class="flex items-center">
-            <img
-              class="w-10 h-10 rounded-full mr-3"
-              :src="doctor.image"
-              alt=""
-            >
-            <div>
-              <p class="text-black font-semibold">Dr. {{ doctor.name }}</p>
-              <p class="text-xs text-secondary">{{ doctor.specialty }}</p>
-            </div>
-          </div>
-          <div>
-            <CheckmarkFilled
-              class="w-5 h-5 text-serenity-primary"
-              :class="[doctor.id === form.doctor.id ? 'text-serenity-primary' : 'text-secondary']"
-            />
-          </div>
-        </div>
-      </div>
     </div>
-
-    <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center">
-        <cv-button
-          class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-          kind="tertiary"
-        >
-          Cancel
-        </cv-button>
-        <cv-button
-          class="bg-black px-6"
-          kind="primary"
-          @click="$router.push({ name: 'ClinicsServices' })"
-        >
-          Go back
-        </cv-button>
-      </div>
-      <div class="flex items-center">
-        <cv-button
-          :icon="right"
-          :disabled="disabled"
-          kind="primary"
-          class="bg-serenity-primary"
-          @click="save"
-        >
-          Next: Payment
-        </cv-button>
-      </div>
-    </div>
-  </div>
+  </MultiStepBase>
 </template>
 
 <script>
 import Time from '@carbon/icons-vue/es/time/32'
-import CheckmarkFilled from '@carbon/icons-vue/es/checkmark--filled/32'
-import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
-import { mapActions, mapState } from 'vuex'
+import SlotList from '@/components/appointments/lists/SlotList'
+import { mapActions, mapState, mapGetters } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
+import MultiStep from '@/mixins/multistep'
+import startOfDay from 'date-fns/startOfDay'
 
 export default {
   name: 'DateDoctor',
 
-  components: { CheckmarkFilled },
+  components: { SlotList },
+
+  mixins: [MultiStep],
 
   data() {
     return {
       form: {
         doctor: {},
+        date: startOfDay(new Date()),
+        slot: {},
       },
-      icon: Time,
-      right: ChevronRight,
+      time: Time,
       loading: false,
       selected: 1,
       timezones: [
@@ -145,23 +81,25 @@ export default {
         },
       ],
       pattern: '(1[012]|[1-9]):[0-5][0-9](\\s)?(?i)',
+      previous: 'ClinicsServices',
+      parent: 'Appointments',
+      next: 'AppointmentNotes',
     }
   },
 
   computed: {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
-      doctors: (state) => state.doctors.doctors,
+      storeData: (state) => state.appointments.currentAppointment,
     }),
 
-    filteredDoctors() {
-      return this.doctors
-        .filter(
-          (data) =>
-            !this.search ||
-            data.name.toLowerCase().includes(this.search.toLowerCase()),
-        )
-        .slice(0, 4)
+    ...mapGetters({
+      availableSlots: 'appointments/availableSlots',
+    }),
+
+    filteredData() {
+      if (!this.form.date) return []
+      return this.availableSlots(this.form.date)
     },
 
     disabled() {
@@ -169,22 +107,33 @@ export default {
     },
   },
 
-  async mounted() {
+  async beforeMount() {
+    const specialty = this.storeData.specialty
+    if(!specialty){
+      this.$router.push({
+        name: 'ClinicsServices',
+      })
+      this.$toast.error('Please select a specialty before proceeding')
+
+      return
+    }
     this.loading = true
-    await this.getDoctors()
+    await this.getSlots(specialty.Code)
     this.loading = false
+  },
+
+  validations: {
+    form: {
+      slot: { required  },
+    },
   },
 
   methods: {
     ...mapActions({
-      addToCurrentAppointment: 'appointments/addToCurrentAppointment',
-      getDoctors: 'doctors/getDoctors',
+      addToStoreData: 'appointments/addToCurrentAppointment',
+      refresh: 'appointments/refreshCurrentAppointment',
+      getSlots: 'appointments/getSlots',
     }),
-
-    save() {
-      this.addToCurrentAppointment(this.form)
-      this.$router.push({ name: 'AppointmentPayment' })
-    },
   },
 }
 </script>
