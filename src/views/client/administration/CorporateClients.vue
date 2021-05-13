@@ -65,15 +65,20 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+import DataMixin from '@/mixins/data'
 import Add from '@carbon/icons-vue/es/add/32'
 export default {
   name: 'CorporateClients',
 
   components: { Add },
 
+  mixins: [DataMixin],
+
   data() {
     return {
       search: '',
+      loading: false,
       columns: [
         'Company name',
         'Mobile',
@@ -83,5 +88,22 @@ export default {
       ],
     }
   },
+
+  computed: {
+    ...mapState({
+      data: (state) => state.clients.clients,
+    }),
+  },
+
+  mounted() {
+    this.refresh()
+  },
+
+  methods: {
+    ...mapActions({
+      getData: 'clients/getClients',
+    }),
+  },
+
 }
 </script>

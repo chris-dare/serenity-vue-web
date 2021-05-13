@@ -1,0 +1,5 @@
+export const SET_CLIENTS = 'Set clients'
+export const DELETE_CLIENT = 'Delete clients'
+export const UPDATE_CLIENT = 'Update clients'
+export const UPDATE_FORM = 'Update form'
+export const RESET_FORM = 'Reset form'
