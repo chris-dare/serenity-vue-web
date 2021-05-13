@@ -34,7 +34,7 @@
         />
         <InfoBlock
           label="Phone Number"
-          :description="props.patient.phone|| '-'"
+          :description="props.patient.user.mobile|| '-'"
         />
         <InfoBlock
           label="Address"
@@ -42,7 +42,7 @@
         />
         <InfoBlock
           label="Email"
-          :description="props.patient.email|| '-'"
+          :description="props.patient.user.email|| '-'"
         />
         <!-- <div>
           <p class="text-secondary text-xs mb-1">Phone Number</p>

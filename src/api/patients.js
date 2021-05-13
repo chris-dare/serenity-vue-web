@@ -20,6 +20,8 @@ export default {
   },
 
   update(providerId, params) {
+    delete params['user']
+    delete params['name']
     return http.patch(`${this.url}${providerId}/patients/${params.id}`, params)
   },
 

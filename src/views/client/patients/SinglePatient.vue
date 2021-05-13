@@ -1,6 +1,9 @@
 <template>
   <div class="w-4/5 mx-auto">
-    <div class="bg-white py-8 px-4 my-2 flex items-center justify-between">
+    <div
+      v-if="patient"
+      class="bg-white py-8 px-4 my-2 flex items-center justify-between"
+    >
       <div class="flex">
         <div class="flex items-center space-x-4">
           <ImageBlock
@@ -24,6 +27,7 @@
           <img
             src="@/assets/img/edit 1.svg"
             class="w-4 h-4"
+            @click="$router.push({name: 'Biodata', params: {id: patient.id}})"
           >
         </div>
       </div>
@@ -106,6 +110,7 @@ export default {
 
   data() {
     return {
+      loading: false,
       hasEncounter: false,
       visible: false,
       admitModal: false,
@@ -144,13 +149,16 @@ export default {
     },
   },
 
-  created() {
-    this.findPatient(this.id)
+  async created() {
+    this.loading = true
+    await this.findPatient(this.id)
+    this.loading = false
   },
 
   methods: {
     ...mapActions({
       findPatient: 'patients/findPatient',
+      getPatient: 'patients/getPatient',
     }),
   },
 }
