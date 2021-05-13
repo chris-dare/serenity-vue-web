@@ -201,6 +201,16 @@ $primary: #0b6b74;
     @apply bg-white border-0 flex items-center;
   }
 }
+.se-white-date-picker {
+  .bx--date-picker-container {
+    width: auto !important;
+    border-bottom: 1px solid #8d8d8d;
+  }
+
+  input {
+    @apply bg-white border-0 flex items-center;
+  }
+}
 
 .se-custom-input {
   height: auto;

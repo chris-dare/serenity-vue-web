@@ -1,5 +1,11 @@
 <template>
-  <div class="">
+  <MultiStepBase
+    :icon="icon"
+    next-label="Next: Date, Doctor"
+    :previous="previous"
+    @cancel="cancel"
+    @save="validateAndReroute"
+  >
     <p class="text-primary my-4">
       Which clinic are you booking this appointment to?
     </p>
@@ -14,38 +20,50 @@
       />
     </div>
     <div class="grid grid-cols-2 gap-4 mt-8 mb-6">
-      <cv-select
+      <MultiSelect
+        v-model="form.appointmentType"
+        title="Choose an appointment type"
+        :multiple="false"
+        :options="types"
+        label="label"
+        track-by="value"
+        placeholder="Select type"
+        :error-message="$utils.validateRequiredField($v, 'appointmentType')"
+        preselect
+      />
+      <MultiSelect
         v-model="form.service"
-        label="Choose a service"
-        class="inherit-full-input"
-        placeholder="Male or female"
-      >
-        <cv-select-option
-          disabled
-          selected
-          hidden
-        >
-          In Patient General Practice
-        </cv-select-option>
-        <cv-select-option value="male">Male</cv-select-option>
-        <cv-select-option value="female">FeMale</cv-select-option>
-      </cv-select>
-      <cv-select
+        title="Choose a service"
+        :multiple="false"
+        :options="services"
+        label="healthcare_service_name"
+        placeholder="Select service"
+        :error-message="$utils.validateRequiredField($v, 'service')"
+        preselect
+      />
+
+      <MultiSelect
+        v-model="form.specialty"
+        title="Choose a specialty"
+        :multiple="false"
+        :options="specialties"
+        label="Display"
+        track-by="Code"
+        placeholder="Specialties"
+        :error-message="$utils.validateRequiredField($v, 'specialty')"
+        preselect
+      />
+
+      <MultiSelect
         v-model="form.service_tier"
-        label="Choose a service tier"
-        class="inherit-full-input"
-        placeholder="Male or female"
-      >
-        <cv-select-option
-          disabled
-          selected
-          hidden
-        >
-          Service tiers
-        </cv-select-option>
-        <cv-select-option value="male">Male</cv-select-option>
-        <cv-select-option value="female">FeMale</cv-select-option>
-      </cv-select>
+        title="Choose a service tier"
+        :multiple="false"
+        :options="serviceTiers"
+        label="label"
+        track-by="value"
+        placeholder="Service tiers"
+        preselect
+      />
     </div>
     <div v-if="selected === 'virtual-care'">
       <Information class="w-5 h-5 text-info" />
@@ -76,64 +94,44 @@
         class="se-checkbox"
       />
     </div>
-
-    <div class="flex items-center justify-between my-6">
-      <div class="flex items-center">
-        <cv-button
-          class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-          kind="tertiary"
-        >
-          Cancel
-        </cv-button>
-        <cv-button
-          class="bg-black px-6"
-          kind="primary"
-          @click="$router.push({ name: 'SelectPatient' })"
-        >
-          Go back
-        </cv-button>
-      </div>
-      <div class="flex items-center">
-        <cv-button
-          :icon="icon"
-          kind="primary"
-          class="bg-serenity-primary"
-          @click="save"
-        >
-          Next: Date, Doctor
-        </cv-button>
-      </div>
-    </div>
     <VirtualCareRequirementsModal :visible.sync="visible" />
-  </div>
+  </MultiStepBase>
 </template>
 
 <script>
 import Information from '@carbon/icons-vue/es/information/32'
 import PatientCard from '@/components/appointments/PatientCard'
 import VirtualCareRequirementsModal from '@/components/appointments/VirtualCareRequirementsModal'
-import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import { mapActions, mapState } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
+import MultiStep from '@/mixins/multistep'
+
 export default {
   name: 'ClinicsServices',
 
   components: { PatientCard, VirtualCareRequirementsModal, Information },
 
+  mixins: [MultiStep],
+
   data() {
     return {
       selected: 'in-patient',
       form: {
-        service:'In Patient General Practice',
-        service_tier: 'Service Tier',
+        service: null,
       },
       visible: false,
-      icon: ChevronRight,
+      next: 'DateDoctor',
+      previous: 'SelectPatient',
+      parent: 'Appointments',
     }
   },
 
   computed: {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
+      services: (state) => state.services.services,
+      storeData: (state) => state.appointments.currentAppointment,
+      types: (state) => state.appointments.appointmentTypes,
     }),
 
     appointmentTypes() {
@@ -193,17 +191,36 @@ export default {
         },
       ]
     },
+
+    serviceTiers() {
+      if (!this.form.service) return []
+      return this.form.service.price_tiers.map(tier => {
+        return {
+          label: `${tier.name} - ${tier.currency} ${tier.cost}`,
+          value: tier.cost,
+        }
+      })
+    },
+
+    specialties() {
+      if (!this.form.service) return []
+      return this.form.service.healthcare_service_specialties
+    },
+  },
+
+  validations: {
+    form: {
+      service: { required },
+      appointmentType: { required },
+      specialty: { required },
+    },
   },
 
   methods: {
     ...mapActions({
-      addToCurrentAppointment: 'appointments/addToCurrentAppointment',
+      addToStoreData: 'appointments/addToCurrentAppointment',
+      refresh: 'appointments/refreshCurrentAppointment',
     }),
-
-    save() {
-      this.addToCurrentAppointment(this.form)
-      this.$router.push({ name: 'DateDoctor' })
-    },
   },
 }
 </script>

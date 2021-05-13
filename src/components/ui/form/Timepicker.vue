@@ -1,6 +1,11 @@
 <template>
   <div>
-    <p class="bx--label">{{ label }}</p>
+    <p
+      v-if="label"
+      class="bx--label"
+    >
+      {{ label }}
+    </p>
     <VueTimepicker
       v-model="localValue"
       format="HH:mm:ss"
@@ -20,7 +25,7 @@ export default {
     },
     label: {
       type: String,
-      default: '',
+      default: null,
     },
     errorMessage: {
       type: String,

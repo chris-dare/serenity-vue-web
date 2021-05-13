@@ -12,6 +12,7 @@
       date-label="End date"
       class="inherit-full-input"
       :cal-options="calOptions"
+      @change="$emit('change', $event)"
     />
   </div>
 </template>

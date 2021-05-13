@@ -2,7 +2,7 @@
   <div class="w-4/5 mx-auto">
     <div>
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Appointments ({{ 23 }})</p>
+        <p class="text-xl font-bold">Appointments ({{ appointmentsCount || 0 }})</p>
         <router-link
           :to="{ name: 'SelectPatient' }"
           tag="cv-button"
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import AppointmentsTable from '@/components/appointments/AppointmentsTable'
 
 export default {
@@ -28,9 +28,9 @@ export default {
 
   components: { AppointmentsTable },
 
-  methods: {
-    ...mapActions({
-      getData: 'appointments/getAppointments',
+  computed: {
+    ...mapState({
+      appointmentsCount: (state) => state.appointments.appointmentsCount,
     }),
   },
 }

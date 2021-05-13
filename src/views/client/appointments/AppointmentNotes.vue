@@ -1,67 +1,46 @@
 <template>
-  <div>
+  <MultiStepBase
+    :icon="icon"
+    next-label="Summary"
+    :previous="previous"
+    @cancel="cancel"
+    @save="reRoute"
+  >
     <p class="text-primary my-4 font-bold">
       Additional notes for the appointment
     </p>
     <cv-text-area
-      v-model="form.notes"
-      :label="label"
+      v-model="form.comment"
       placeholder="Write additional information for this appointment here"
       :rows="10"
     />
-    <div class="flex items-center justify-between my-6">
-      <div class="flex items-center">
-        <cv-button
-          class="border-serenity-primary mr-6 px-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-          kind="tertiary"
-        >
-          Cancel
-        </cv-button>
-        <cv-button
-          class="bg-black px-6"
-          kind="primary"
-          @click="$router.push({ name: 'AppointmentPayment' })"
-        >
-          Go back
-        </cv-button>
-      </div>
-      <div class="flex items-center">
-        <cv-button
-          :icon="icon"
-          kind="primary"
-          class="bg-serenity-primary"
-          @click="save"
-        >
-          Next: Summary
-        </cv-button>
-      </div>
-    </div>
-  </div>
+  </MultiStepBase>
 </template>
 
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import { mapActions } from 'vuex'
+import MultiStep from '@/mixins/multistep'
+
 export default {
   name: 'AppointmentNotes',
+
+  mixins: [MultiStep],
 
   data() {
     return {
       form: {},
       icon: ChevronRight,
+      previous: 'DateDoctor',
+      parent: 'Appointments',
+      next: 'AppointmentSummary',
     }
   },
 
   methods: {
     ...mapActions({
-      addToCurrentAppointment: 'appointments/addToCurrentAppointment',
-      getDoctors: 'doctors/getDoctors',
+      addToStoreData: 'appointments/addToCurrentAppointment',
     }),
-
-    save() {
-      this.addToCurrentAppointment(this.form)
-      this.$router.push({ name: 'AppointmentSummary' })
-    },
   },
 }
 </script>

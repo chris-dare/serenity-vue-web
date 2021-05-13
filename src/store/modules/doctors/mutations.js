@@ -19,10 +19,10 @@ export default {
   },
 
   [SET_DOCTOR](state, doctor) {
-    const index = state.doctors.findIndex(a => a.uuid === doctor.uuid)
+    const index = state.doctors.findIndex(a => a.id === doctor.id)
     if (index !== -1) {
       state.doctors = state.doctors.map(a => {
-        if (a.uuid === doctor.uuid) return doctor
+        if (a.id === doctor.id) return doctor
         return a
       })
     } else {
@@ -31,6 +31,6 @@ export default {
   },
 
   [DELETE_DOCTOR](state, doctorId) {
-    state.doctors = state.doctors.filter((es) => es.uuid !== doctorId)
+    state.doctors = state.doctors.filter((es) => es.id !== doctorId)
   },
 }

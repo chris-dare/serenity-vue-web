@@ -133,13 +133,34 @@ const checkForEmpty = (tree) => {
 }
 
 const error = (err, toast) => {
-  const error = err.error || err.message || err.data[0]
-  toast.open({ message: error, type: 'error' })
+  console.log('error', err)
+  if (err) {
+    const error = err.data ? err.data[0] || err.data.detail : err.error || err.message
+    toast.open({ message: error, type: 'error' })
+  }
+  
   throw error
 }
 
 const customNameLabel = ({ first_name, last_name }) => {
   return `${first_name} ${last_name}`
+}
+
+const getFilteredData = (data, searchTerms, searchFields) => {
+  let filteredData = data.filter(data => {
+    if (!searchTerms) {
+      return data
+    }
+
+    for (let index = 0; index < searchFields.length; index++) {
+      const element = searchFields[index]
+      if (data[element]?.toLowerCase().includes(searchTerms.toLowerCase())) {
+        return data
+      }
+    }
+  })
+
+  return filteredData
 }
 
 export default {
@@ -154,6 +175,7 @@ export default {
       checkForEmpty,
       customNameLabel,
       error: err => error(err, Vue.prototype.$toast),
+      getFilteredData,
     }
   },
 }

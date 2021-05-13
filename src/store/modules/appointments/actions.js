@@ -8,10 +8,15 @@ import {
   SET_APPOINTMENTS_COUNT,
   ADD_APPOINTMENT_DATA,
   SET_SLOTS,
+  SET_APPOINTMENT_DATA,
 } from './mutation-types'
 
 export default {
-  async getAppointments({ commit, rootState }) {
+  // eslint-disable-next-line no-unused-vars
+  async getAppointments({ commit, rootState, state }, refresh = true) {
+    if (!refresh && state.appointments.length) {
+      return
+    }
     try {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI.list(provider.id)
@@ -23,11 +28,11 @@ export default {
     }
   },
 
-  async getSlots({ commit, rootState }) {
+  async getSlots({ commit, rootState }, specialtyId = 394804000) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await AppointmentsAPI.slots(provider.id)
-      commit(SET_SLOTS, data.data)
+      const { data } = await AppointmentsAPI.slots(provider.id, specialtyId)
+      commit(SET_SLOTS, data)
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
@@ -46,13 +51,26 @@ export default {
   },
 
   async createAppointment({ commit, rootState }, payload) {
-    const patient = new Appointment(payload).getCreateView()
+    const appointment = new Appointment(payload).getCreateView()
     try {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI
-        .create(provider.id, patient)
+        .create(provider.id, appointment)
       commit(UPDATE_APPOINTMENT, data.data)
       commit(ADD_APPOINTMENT_DATA, {})
+      return data
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
+  async cancelAppointment({ commit, rootState }, { appointmentId, payload }) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await AppointmentsAPI
+        .cancel(provider.id, appointmentId, payload)
+      commit(UPDATE_APPOINTMENT, data.data)
       return data
     } catch (error) {
       Vue.prototype.$utils.error(error)
@@ -86,5 +104,9 @@ export default {
 
   addToCurrentAppointment({ commit }, data) {
     commit(ADD_APPOINTMENT_DATA, data)
+  },
+
+  refreshCurrentAppointment({ commit }) {
+    commit(SET_APPOINTMENT_DATA, {})
   },
 }

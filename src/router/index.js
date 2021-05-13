@@ -2,6 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Client from '../views/Client.vue'
 import Dashboard from '../views/client/Dashboard.vue'
+import store from '@/store'
+
+// middlewares
+import fetchAppointment from './middleware/fetchAppointment'
+import middlewarePipeline from './middlewarePipeline'
 
 Vue.use(VueRouter)
 
@@ -198,13 +203,13 @@ const routes = [
       },
       {
         path: '/appointment',
-        name: 'Appointment',
         component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/NewAppointment.vue'),
         children: [
           {
             path: '',
             name: 'SelectPatient',
             component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/SelectPatient.vue'),
+            meta: {middleware: [fetchAppointment]},
           },
           {
             path: '/appointment/clinics-services',
@@ -235,7 +240,6 @@ const routes = [
       },
       {
         path: '/patients/:id',
-        name: 'SinglePatient',
         component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/SinglePatient.vue'),
         props: true,
         children: [
@@ -310,10 +314,30 @@ const routes = [
   },
 ]
 
+
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+})
+
+router.beforeEach((to, from, next) => {
+  if (!to.meta.middleware) {
+    return next()
+  }
+  const middleware = to.meta.middleware
+
+  const context = {
+    to,
+    from,
+    next,
+    store,
+  }
+
+  return middleware[0]({
+    ...context,
+    next: middlewarePipeline(context, middleware, 1),
+  })
 })
 
 export default router

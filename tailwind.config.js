@@ -14,6 +14,7 @@ module.exports = {
           'subtle-border': 'rgba(135, 141, 150, 0.2)',
           'primary-highlight': '#0C7882',
           auth: '#121619',
+          dark: '#8d8d8d',
         },
         success: '#24A148',
         warning: '#F1C21B',

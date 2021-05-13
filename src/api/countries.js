@@ -12,7 +12,7 @@ export default {
   },
 
   update(params) {
-    return http.patch(this.url + '/' + params.uuid, params)
+    return http.patch(this.url + '/' + params.id, params)
   },
 
   delete(id) {

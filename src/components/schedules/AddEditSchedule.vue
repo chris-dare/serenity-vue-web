@@ -172,6 +172,7 @@ export default {
     'schedule:edit:open': function(data){
       this.visible = true
       this.form = { ...data.params[0] }
+      this.form.check = parseInt(this.form.recurring_weeks) > 1 ? 'yes' : 'no'
     },
   },
 

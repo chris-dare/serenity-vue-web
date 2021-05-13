@@ -5176,6 +5176,11 @@ flatpickr@4.6.3:
   resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.6.3.tgz#15a8b76b6e34e3a072861250503a5995b9d3bc60"
   integrity sha512-007VucCkqNOMMb9ggRLNuJowwaJcyOh4sKAFcdGfahfGc7JQbf94zSzjdBq/wVyHWUEs5o3+idhFZ0wbZMRmVQ==
 
+flatpickr@^4.6.6:
+  version "4.6.9"
+  resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.6.9.tgz#9a13383e8a6814bda5d232eae3fcdccb97dc1499"
+  integrity sha512-F0azNNi8foVWKSF+8X+ZJzz8r9sE1G4hl06RyceIaLvyltKvDl6vqk9Lm/6AUUCi5HWaIjiUbk7UpeE/fOXOpw==
+
 flatted@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-2.0.2.tgz#4575b21e2bcee7434aa9be662f4b7b5f9c2b5138"
@@ -10876,6 +10881,13 @@ vue-faker@^3.0.0:
   dependencies:
     faker "^5.0.0"
     underscore "^1.8.3"
+
+vue-flatpickr-component@^8:
+  version "8.1.6"
+  resolved "https://registry.yarnpkg.com/vue-flatpickr-component/-/vue-flatpickr-component-8.1.6.tgz#8fb25dc72946ceb1ab005b871a8151461c0883f6"
+  integrity sha512-RUu/M/1lbuzQT+U3yP7O5/M2EIizr9vXLXqSc1eFOvCT3AHurQg8+iO02rjW+2l78Kit8pCNAUvHw7eexws6hw==
+  dependencies:
+    flatpickr "^4.6.6"
 
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"

@@ -6,6 +6,15 @@ export default class User {
     this.data = { ...data }
   }
 
+  getNormalizedView() {
+    return {
+      ...this.data,
+      fullName: `${this.data.title || ''} ${this.data.first_name || ''} ${this.data.last_name || ''}`,
+      specialties: this.data.practitioner_specialty.join(', '),
+      role: this.data.practitioner_role.name,
+    }
+  }
+
   getEditView() {
     const practitioner_specialty = this.data.practitioner_specialty.map(sp => sp.Display)
     let editData = renameKeys({ ...this.data, practitioner_specialty}, 
