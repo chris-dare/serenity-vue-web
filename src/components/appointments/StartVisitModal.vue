@@ -2,7 +2,7 @@
   <cv-modal
     class="se-no-title-modal"
     close-aria-label="Close"
-    :visible="modalVisible"
+    :visible="visible"
     size="sm"
   >
     <template slot="content">
@@ -74,24 +74,20 @@ import { mapState } from 'vuex'
 export default {
   name: 'StartVisitModal',
 
-  props: {
-    visible: {
-      type: Boolean,
-      default: false,
-    },
-  },
-
   data() {
     return {
       search: '',
       columns: ['Patient', 'Appointment', 'Payment Type', 'Action'],
+      visible: false,
     }
   },
 
   computed: {
+
     ...mapState({
       patients: (state) => state.patients.patients,
     }),
+
     filteredPatients() {
       return this.patients.filter(
         (data) =>
@@ -99,13 +95,14 @@ export default {
           data.name.toLowerCase().includes(this.search.toLowerCase()),
       )
     },
-    modalVisible: {
-      set(val) {
-        this.$emit('visible:update', val)
-      },
-      get() {
-        return this.visible
-      },
+  },
+
+  events: {
+    'visit:start:open': function(){
+      this.visible = true
+    },
+    'visit:start:close': function(){
+      this.visible = false
     },
   },
 }

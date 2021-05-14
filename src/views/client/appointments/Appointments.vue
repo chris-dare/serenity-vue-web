@@ -1,9 +1,13 @@
 <template>
-  <div class="w-4/5 mx-auto">
+  <ProtectedPage
+    permission="appointments.read"
+    class="w-4/5 mx-auto"
+  >
     <div>
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Appointments ({{ appointmentsCount || 0 }})</p>
         <router-link
+          v-if="$userCan('appointments.write')"
           :to="{ name: 'SelectPatient' }"
           tag="cv-button"
           class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
@@ -16,7 +20,7 @@
 
       <AppointmentsTable />
     </div>
-  </div>
+  </ProtectedPage>
 </template>
 
 <script>

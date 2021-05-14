@@ -29,7 +29,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await PatientsAPI.get(provider.id, id)
-      commit(SET_PATIENT_DATA, data)
+      commit(SET_PATIENT_DATA, new Patient(data.data).getNormalizedView())
     } catch (error) {
       throw error.data || error
     }

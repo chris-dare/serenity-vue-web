@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <ProtectedPage
+    permission="bills.read"
+  >
     <div class="w-4/5 mx-auto space-y-4">
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Bills ({{ dataCount }})</p>
@@ -97,7 +99,7 @@
       </cv-data-table>
     </div>
     <ViewBillingDetails />
-  </div>
+  </ProtectedPage>
 </template>
 
 <script>

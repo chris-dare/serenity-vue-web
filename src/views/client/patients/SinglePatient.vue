@@ -1,5 +1,8 @@
 <template>
-  <div class="w-4/5 mx-auto">
+  <ProtectedPage
+    permission="patient.read"
+    class="w-4/5 mx-auto"
+  >
     <div class="bg-white py-8 px-4 my-2 flex items-center justify-between">
       <div class="flex">
         <div class="flex items-center space-x-4">
@@ -66,36 +69,24 @@
     </div>
 
     <div>
-      <div class="mt-2 bg-white flex">
-        <router-link
-          v-for="(link, index) in links"
-          :key="index"
-          tag="div"
-          :to="{ name: link.path }"
-          class="relative cursor-pointer flex-1 items-center justify-center flex border-b-2 py-4 border-serenity-primary-highlight"
-        >
-          {{ link.label }}
-          <div
-            class="w-4/5 mx-auto h-0.5 absolute bg-serenity-light-gray bottom-0"
-            :class="{ 'bg-serenity-primary-highlight': link.path === $route.name }"
-          />
-        </router-link>
-      </div>
+      <PatientDetailsNav />
+      
       <router-view />
     </div>
     <SinglePatientModals />
-  </div>
+  </ProtectedPage>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 import AddNewDropdown from '@/components/patients/AddNewDropdown'
 import SinglePatientModals from '@/components/patients/modals/SinglePatientModals'
+import PatientDetailsNav from '@/components/patients/PatientDetailsNav'
 
 export default {
   name: 'SinglePatient',
 
-  components: { AddNewDropdown, SinglePatientModals },
+  components: { AddNewDropdown, SinglePatientModals, PatientDetailsNav },
 
   props: {
     id: {
@@ -119,6 +110,7 @@ export default {
     }),
     links() {
       let links = [
+        { label: 'Actions', path: 'PatientActions' },
         { label: 'Summary', path: 'PatientSummary' },
       ]
 
@@ -144,13 +136,13 @@ export default {
     },
   },
 
-  created() {
-    this.findPatient(this.id)
+  beforeRouteEnter (to, from, next) {
+    next(vm => vm.getPatient(vm.id))
   },
 
   methods: {
     ...mapActions({
-      findPatient: 'patients/findPatient',
+      getPatient: 'patients/getPatient',
     }),
   },
 }

@@ -26,6 +26,7 @@ export default class Appointment {
     createData.healthcareservice_id = this.data.service.id
     createData.slot_id = this.data.slot ? this.data.slot.id : null
     createData.patient_id = this.data.patient ? this.data.patient.id : null
+    createData.service_tier = this.data.service_tier ? this.data.service_tier.value : null
     // createData.patient_id = 'f45195f3-05f6-4adf-985c-63acb648a688'
     
     return createData

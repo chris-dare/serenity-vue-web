@@ -33,12 +33,23 @@ export default {
   data() {
     return {
       visible: false,
-      options: [
-        { label: 'Edit', event: 'edit'},
-        { label: 'Suspend account', event: 'suspend'},
-        { label: 'Delete account', event: 'delete'},
-      ],
     }
+  },
+
+  computed: {
+    options() {
+      let options = []
+
+      if (this.$userCan('practioners.write')) {
+        options.push({ label: 'Edit', event: 'edit'})
+      }
+      options.push({ label: 'Suspend account', event: 'suspend'})
+
+      if (this.$userCan('practioners.delete')) {
+        options.push({ label: 'Delete account', event: 'delete'})
+      }
+      return options
+    },
   },
 
   methods: {

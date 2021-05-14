@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import WorkspacesAPI from '@/api/workspaces'
-import { SET_WORKSPACES, DELETE_WORKSPACE, UPDATE_WORKSPACE } from './mutation-types'
+import { SET_WORKSPACES, DELETE_WORKSPACE, UPDATE_WORKSPACE, SET_WORKSPACES_COUNT } from './mutation-types'
 
 export default {
   async getWorkspaces({ commit, rootState }) {
@@ -9,6 +9,7 @@ export default {
       throw error
     })
     commit(SET_WORKSPACES, data.data)
+    commit(SET_WORKSPACES_COUNT, data.data.length)
   },
 
   async createWorkspace({ commit, rootState }, payload) {

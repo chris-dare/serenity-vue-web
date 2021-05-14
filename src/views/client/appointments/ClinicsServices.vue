@@ -197,7 +197,7 @@ export default {
       return this.form.service.price_tiers.map(tier => {
         return {
           label: `${tier.name} - ${tier.currency} ${tier.cost}`,
-          value: tier.cost,
+          value: tier.name,
         }
       })
     },

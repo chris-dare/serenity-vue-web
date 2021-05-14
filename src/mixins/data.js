@@ -6,7 +6,7 @@ export default {
       search: '',
       page: 1,
       pageLength: 10,
-      pageStart: 0,
+      pageStart: 1,
       paginate: false,
       loading: false,
       pageSizes: [10, 15, 20, 25],
@@ -19,7 +19,7 @@ export default {
     },
 
     filteredData() {
-      return this.paginate ? this.normalizedData.slice(this.pageStart-1, this.pageStart + this.pageLength - 1) : this.normalizedData
+      return this.paginate ? this.normalizedData.slice(this.pageStart - 1, this.pageStart + this.pageLength - 1) : this.normalizedData
     },
 
     dataCount() {

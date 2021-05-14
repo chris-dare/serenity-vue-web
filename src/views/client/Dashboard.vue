@@ -1,46 +1,34 @@
 <template>
   <div class="w-4/5 mx-auto">
     <UserDetailsHeader />
-    <p class="text-serenity-primary my-6 font-semibold">
-      What would you like to do?
-    </p>
-    <div class="grid grid-cols-5 gap-2 lg:gap-6 my-4">
-      <PatientCard
-        v-for="(dashboard, index) in dashboardTypes"
-        :key="index"
-        :is-selected="selected === dashboard.value"
-        :details="dashboard"
-        :type="dashboard.type"
-        custom-class="bg-white border-0"
-        @click="change(dashboard)"
-      />
-    </div>
-    <p class="text-serenity-primary my-6 font-semibold">
-      Here are your appointments ({{ appointmentsCount }})
-    </p>
-    <AppointmentsTable hide-search />
+
+    <component :is="workspaceComponent" />
+    
     <GetStartedModal :visible.sync="visible" />
-    <StartVisitModal :visible.sync="visitVisible" />
+    <StartVisitModal />
+    <SearchPatientsModal />
   </div>
 </template>
 
 <script>
-import PatientCard from '@/components/appointments/PatientCard'
-import AppointmentsTable from '@/components/appointments/AppointmentsTable'
+
 import GetStartedModal from '@/components/dashboard/GetStartedModal'
 import StartVisitModal from '@/components/appointments/StartVisitModal'
 import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
+
+const DiagnosticDashboard = () => import('@/components/diagnostic/DiagnosticDashboard')
+const OPDDashboard = () => import('@/components/opd/OPDDashboard')
 import { mapState } from 'vuex'
+
 export default {
   name: 'Dashboard',
 
-  components: { PatientCard, AppointmentsTable, GetStartedModal, StartVisitModal, UserDetailsHeader },
+  components: { GetStartedModal, StartVisitModal, UserDetailsHeader, DiagnosticDashboard, OPDDashboard },
 
   data() {
     return {
       selected: 'search',
       visible: false,
-      visitVisible: false,
     }
   },
 
@@ -50,47 +38,16 @@ export default {
       appointmentsCount: (state) => state.appointments.appointmentsCount,
     }),
 
-    dashboardTypes() {
-      const types = [
-        {
-          label: 'Find a patient',
-          description: 'Quickly search for a patient by name',
-          type: 'search',
-          value: 'search',
-        },
-      ]
-
-      if (this.workspaceType === 'Reception') {
-        types.push({
-          label: 'Start patient visit',
-          description: 'Start visit for walk-in or appointments',
-          type: 'destination',
-          value: 'visit',
-        })
+    workspaceComponent() {
+      if (this.workspaceType === 'DIAG') {
+        return 'DiagnosticDashboard'
+      }
+  
+      if (this.workspaceType === 'OPD') {
+        return 'OPDDashboard'
       }
 
-      types.push(
-        {
-          label: 'Book appointment',
-          description: 'Help a patient schedule an appointment',
-          type: 'schedule',
-          value: 'schedule',
-        },
-        {
-          label: 'Register a patient',
-          description: 'Create record for a new patient',
-          type: 'newpatient',
-          value: 'register',
-        },
-        {
-          label: 'Book COVID-19 test',
-          description: 'Schedule a patient for COVID test',
-          type: 'book',
-          value: 'book',
-        },
-      )
-
-      return types
+      return 'DefaultDashboard'
     },
   },
 
@@ -100,23 +57,6 @@ export default {
     // }
   },
 
-  methods: {
-    change(dashboard) {
-      this.selected = dashboard.value
-
-      if (dashboard.value === 'visit') {
-        this.visitVisible = true
-      }
-
-      if (dashboard.value === 'register') {
-        this.$router.push({ name: 'Biodata'})
-      }
-
-      if (dashboard.value === 'schedule') {
-        this.$router.push({ name: 'SelectPatient'})
-      }
-      
-    },
-  },
+  
 }
 </script>

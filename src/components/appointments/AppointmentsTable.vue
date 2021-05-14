@@ -69,6 +69,11 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div class="flex items-center cursor-pointer space-x-6">
+            <router-link
+              :to="{ name: 'SelectPatient', query: {id: row.id}}"
+            >
+              Edit
+            </router-link>
             <div
               class="flex items-center cursor-pointer space-x-2"
               @click="view(row)"

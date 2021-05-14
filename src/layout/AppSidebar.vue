@@ -45,13 +45,16 @@ import Align from '@carbon/icons-vue/es/align-box--bottom-left/32'
 import Folder from '@carbon/icons-vue/es/folder/32'
 import Security from '@carbon/icons-vue/es/security/32'
 import Categories from '@carbon/icons-vue/es/categories/32'
+import Medical from '@carbon/icons-vue/es/image--medical/32'
+import Insights from '@carbon/icons-vue/es/activity/32'
+import Money from '@carbon/icons-vue/es/money/32'
 import AppNavItem from '@/layout/AppNavItem'
 import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'AppSidebar',
 
-  components: { AppNavItem, Security, Categories, Template, Cross, Reference, Events, Settings, Baggage, Notification, Help, Schedule, Star, Wallet, Align, Folder },
+  components: { AppNavItem, Money, Insights, Security, Categories, Template, Cross, Reference, Events, Settings, Baggage, Notification, Help, Schedule, Star, Wallet, Align, Folder, Medical },
 
   data() {
     return {

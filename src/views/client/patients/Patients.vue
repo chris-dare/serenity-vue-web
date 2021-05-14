@@ -1,9 +1,12 @@
 <template>
-  <div>
+  <ProtectedPage
+    permission="patient.read"
+  >
     <div class="w-4/5 mx-auto space-y-4">
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Patients ({{ patientsCount }})</p>
         <SeButton
+          v-if="$userCan('patient.write')"
           @click="goTo"
         >
           Add new patient <Add class="ml-4 w-5 h-5 text-white" />
@@ -12,7 +15,7 @@
 
       <PatientsTable />
     </div>
-  </div>
+  </ProtectedPage>
 </template>
 
 <script>

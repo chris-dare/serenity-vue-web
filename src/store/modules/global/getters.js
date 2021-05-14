@@ -1,3 +1,4 @@
+// import Vue from 'vue'
 export default {
   sideBarlinks: state => {
     return state.token ? `Bearer ${state.token}` : null
@@ -37,7 +38,7 @@ export default {
   },
 
   navItems: (state) => {
-    if (state.workspaceType === 'admin') {
+    if (state.workspaceType === 'ADMIN') {
       return [
         { label: 'Get Started', to: 'GetStarted', component: 'Star' },
         { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
@@ -56,15 +57,42 @@ export default {
       ]
     }
 
-    else {
+    if (state.workspaceType === 'DIAG' || state.workspaceType === 'OPD') {
       return [
         { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
         { label: 'Patients', to: 'Patients', component: 'Reference' },
+        { label: 'Visits', to: 'Visits', component: 'Medical' },
+        { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
+        { label: 'Notifications', to: 'Notifications', component: 'Notification' },
+        { label: 'Team', to: 'Team', component: 'Events'},
+        { label: 'Insights', to: 'Insights', component: 'Insights'},
+        { label: 'Settings', to: 'Settings', component: 'Settings' },
+        { label: 'Support', to: 'Support', component: 'Help' },
+      ]
+    }
+
+    if (state.workspaceType === 'BILL') {
+      return [
+        { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
+        { label: 'Patients', to: 'Patients', component: 'Reference' },
+        { label: 'Billing', to: 'Billing', component: 'Align'},
+        { label: 'Payments', to: 'Payments', component: 'Money'},
+        { label: 'Add', to: 'Add', component: 'Add'},
         { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
         { label: 'Notifications', to: 'Notifications', component: 'Notification' },
         { label: 'Settings', to: 'Settings', component: 'Settings' },
         { label: 'Support', to: 'Support', component: 'Help' },
       ]
     }
+
+    
+    return [
+      { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
+      { label: 'Patients', to: 'Patients', component: 'Reference' },
+      { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
+      { label: 'Notifications', to: 'Notifications', component: 'Notification' },
+      { label: 'Settings', to: 'Settings', component: 'Settings' },
+      { label: 'Support', to: 'Support', component: 'Help' },
+    ]
   },
 }

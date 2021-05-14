@@ -1,19 +1,20 @@
 import Currency from './currencies'
+
 export function initialState() {
   return {
     countries: [],
     networks: ['MTN', 'Vodafone', 'AirtelTigo'],
-    workspaceType: 'admin',
+    workspaceType: 'OPD',
     workspaces: [
-      {label: 'Out Patient', value:'out-patient'},
-      {label: 'Reception', value:'reception'},
-      {label: 'In Patient', value:'in-patient'},
+      {label: 'Out Patient', value:'OPD'},
+      {label: 'Reception', value:'RECEPT'},
+      {label: 'In Patient', value:'IPD'},
       {label: 'Pharmacy', value:'pharmacy'},
       {label: 'Diagnostics', value:'diagnostics'},
       {label: 'Billing', value:'billing'},
       {label: 'COVID-19', value:'covid-19'},
       {label: 'Virtual Care', value:'virtual-care'},
-      {label: 'Admin', value:'admin'},
+      {label: 'Admin', value:'ADMIN'},
     ],
     currencies: Currency.data,
     titles: ['Mr', 'Mrs', 'Miss', 'Hon', 'Dr', 'Prof', 'Master'],

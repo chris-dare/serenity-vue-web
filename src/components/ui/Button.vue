@@ -1,6 +1,6 @@
 <template>
   <cv-button
-    :class="[buttonClass, full ? 'w-full' : '', icon ? '' : 'px-4']"
+    :class="[buttonClass, full ? 'w-full' : 'w-auto', icon ? '' : 'px-4']"
     class="flex items-center justify-center"
     kind="primary"
     :size="size"
@@ -99,7 +99,7 @@ export default {
         return 'bg-red-500 text-white'
       }
       if (this.variant  === 'danger-outline') {
-        return 'border-danger bg-transparent text-danger hover:text-white focus:bg-danger hover:bg-danger w-full'
+        return 'border-danger bg-transparent text-danger hover:text-white focus:bg-danger hover:bg-danger'
       }
 
       if(this.variant === 'white') {
