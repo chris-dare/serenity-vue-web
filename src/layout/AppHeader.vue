@@ -119,12 +119,12 @@ export default {
   computed: {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
-      workspaces: (state) => state.global.workspaces,
+      // workspaces: (state) => state.global.workspaces,
       locations: (state) => state.locations.locations,
     }),
 
     ...mapGetters({
-      // workspaces: 'auth/userWorkspaces',
+      workspaces: 'auth/userWorkspaces',
     }),
   
     selected: {
