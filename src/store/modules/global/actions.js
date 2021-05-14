@@ -3,6 +3,7 @@ import { SET_COUNTRIES, SET_GLOBAL_TYPE } from './mutation-types'
 
 export default {
   initApp({dispatch}) {
+    dispatch('setDefaultWorkpace')
     dispatch('appointments/getAppointments', null,{ root:true })
     dispatch('patients/getPatients', null,{ root:true })
     dispatch('practitioners/getUsers', null,{ root:true })
@@ -29,5 +30,13 @@ export default {
 
   setworkspaceType({ commit }, type) {
     commit(SET_GLOBAL_TYPE, type)
+  },
+
+  setDefaultWorkpace({ commit, rootGetters }) {
+    const workspaces = rootGetters['auth/userWorkspaces']
+    const admin = workspaces.find(workspace => workspace.value === 'ADMIN')
+    const opd = workspaces.find(workspace => workspace.value === 'OPD')
+    let workspace = !!admin ? admin.value : !!opd ? opd.value : workspaces[0].value
+    commit(SET_GLOBAL_TYPE, workspace)
   },
 }
