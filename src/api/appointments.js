@@ -4,7 +4,7 @@ export default {
   url: 'providers/',
   
   list(providerId) {
-    return http.get(`${this.url}${providerId}/appointment`)
+    return http.get(`${this.url}${providerId}/appointments`)
   },
 
   get(providerId, appointmentId) {

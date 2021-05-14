@@ -48,8 +48,8 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ $date.formatDate($faker().date.recent(), 'yyyy/MM/dd') }}</p>
-            <p class="text-secondary text-xs">{{ $date.formatDate($faker().date.recent(), 'HH:mm a') }}</p>
+            <p>{{ $date.formatDate(row.slot.start, 'yyyy/MM/dd') }}</p>
+            <p class="text-secondary text-xs">{{ $date.formatDate(row.slot.start, 'HH:mm a') }} - {{ $date.formatDate(row.slot.end, 'HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -59,7 +59,7 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ row.service.categories }}</p>
+            <p>{{ row.appointmentType | capitalize }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -69,6 +69,12 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div class="flex items-center cursor-pointer space-x-6">
+            <!-- <router-link
+              tag="div"
+              :to="{ name:'SelectPatient', query: { id:row.id } }"
+            >
+              Edit
+            </router-link> -->
             <div
               class="flex items-center cursor-pointer space-x-2"
               @click="view(row)"
