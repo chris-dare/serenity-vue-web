@@ -82,7 +82,7 @@ export default {
       this.visible = false
     },
     print() {
-      this.$emit('print')
+      this.$trigger('billing:details:open')
       this.visible = false
     },
 

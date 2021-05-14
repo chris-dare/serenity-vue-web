@@ -1,4 +1,4 @@
-import store from '@/store'
+import Vue from 'vue'
 export default class Appointment {
   constructor(data) {
     this.data = { ...data }
@@ -7,12 +7,13 @@ export default class Appointment {
   getNormalizedView() {
     let data = {
       ...this.data,
-      patient: this.getPatient(this.data.patient),
-      practitioner: this.getPractioner(this.data.practitioner),
-      service: this.getService(this.data.Healthcareservice),
+      patient: this.formatPatientData(this.data.patient),
+      practitioner: this.formatPatientData(this.data.practitioner),
+      service: this.formatServiceData(this.data.Healthcareservice),
+      slot: this.formatSlotData(this.data.slot),
+      service_tier: this.formatServiceTierData(this.data.service_tier),
       isCancelled: this.data.status === 'cancelled',
       isPending: this.data.status === 'pending',
-      slot: null,
     }
 
     return data
@@ -31,21 +32,32 @@ export default class Appointment {
     return createData
   }
 
-  getPatient(id) {
-    const patients = store.getters['patients/patients']
-
-    return patients ? patients.find(pat => pat.id === id) : null
+  formatServiceData(data) {
+    return {
+      ...data,
+      categories: data.healthcare_service_category,
+    }
+  }
+  formatServiceTierData(data) {
+    return {
+      ...data,
+      label: `${data.name} - ${data.currency} ${data.cost}`,
+    }
   }
 
-  getService(id) {
-    const services = store.getters['services/normalizedServices']
-
-    return services ? services.find(pat => pat.id === id) : null
+  formatPatientData(data) {
+    return {
+      ...data,
+      phone: data.telephone,
+      fullName: data.full_name,
+    }
   }
 
-  getPractioner(id) {
-    const practitioners = store.getters['practitioners/practitioners']
-
-    return practitioners ? practitioners.find(pat => pat.id === id) : null
+  formatSlotData(data) {
+    return {
+      ...data,
+      date: `${Vue.prototype.$date.formatDate(data.start, 'dd MMM')}`,
+      slot: `${ Vue.prototype.$date.formatDate(data.start, 'HH:mm a') } - ${ Vue.prototype.$date.formatDate(data.end, 'HH:mm a') }`,
+    }
   }
 }

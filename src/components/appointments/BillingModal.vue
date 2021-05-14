@@ -63,10 +63,10 @@
             <p class="text-secondary text-xs">Date and Doctor</p>
 
             <div class="space-y-2">
-              <p class="font-bold text-xs">{{ appointment.slot.practitioner.fullName }}</p>
+              <p class="font-bold text-xs">{{ practitioner.fullName }}</p>
 
               <div class="flex items-center space-x-1">
-                <p class="text-secondary text-xs">{{ appointment.slot.practitioner.role }}</p>
+                <p class="text-secondary text-xs">{{ practitioner.role }}</p>
               </div>
               <div class="flex items-center space-x-1">
                 <p class="text-secondary text-xs">Appointment time:</p>
@@ -117,6 +117,13 @@ export default {
     return {
       visible: false,
     }
+  },
+
+  computed: {
+    practitioner() {
+      if (this.appointment.practitioner) return this.appointment.practitioner
+      return this.appointment.slot.practitioner
+    },
   },
 
   events: {

@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 
 export function capitalize (value) {
   if (!value) return ''
-  value = value.toString()
+  value = value.toString().toLowerCase()
   return value.charAt(0).toUpperCase() + value.slice(1)
 }
 
@@ -21,7 +21,7 @@ function formatMoney(num) {
 //   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
 
-const filters = { toCedis, formatMoney, formatDate }
+const filters = { toCedis, formatMoney, formatDate, capitalize }
 
 export default Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

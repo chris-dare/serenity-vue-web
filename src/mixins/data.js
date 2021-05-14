@@ -6,7 +6,7 @@ export default {
       search: '',
       page: 1,
       pageLength: 10,
-      pageStart: 0,
+      pageStart: 1,
       paginate: false,
       loading: false,
       pageSizes: [10, 15, 20, 25],
@@ -45,9 +45,8 @@ export default {
 
       try {
         await this.getData(refreshData)
-      } catch (error) {
         this.loading = false
-      } finally {
+      } catch (error) {
         this.loading = false
       }
     },
