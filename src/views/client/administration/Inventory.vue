@@ -47,13 +47,13 @@
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p class="lowercase">{{ row.id }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
               <p>{{ row.unit_price }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <p>{{ row.selling_price }}</p>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <p>{{ row.in_hand_quantity }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <p>{{ row.expiry_date }}</p>
@@ -68,7 +68,7 @@
                   Edit
                 </p>
                 <p
-                  class="text-red-500"
+                  class="text-red-500 cursor-pointer"
                   @click="remove(row)"
                 >
                   Delete
@@ -100,9 +100,9 @@ export default {
       search: '',
       columns: [
         'Item name',
-        'Item Id',
         'Unit Price',
         'Selling Price',
+        'Item Quantity',
         'Expiry Date',
         'Action',
       ],
@@ -126,6 +126,7 @@ export default {
       getData: 'inventory/getInventory',
       deleteInventory: 'inventory/deleteInventory',
     }),
+
     remove(data) {
       const id = data.id
       this.$trigger('confirm-action-modal:open', {

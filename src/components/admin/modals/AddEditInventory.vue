@@ -60,7 +60,7 @@
         <div class="grid grid-cols-2 gap-8">
           <cv-text-input
             v-model="form.initial_quantity"
-            type="text"
+            type="number"
             label="Item quantity"
             placeholder=""
           />
@@ -107,6 +107,7 @@ export default {
         sub_group: 'Medication',
         category: 'medical-stock',
       },
+      loading: false,
       visible: false,
       type: 'add',
     }
@@ -121,10 +122,12 @@ export default {
   events: {
     'inventory:add:open': function(){
       this.visible = true
+      this.type = 'add'
     },
     'inventory:edit:open': function(data){
       this.visible = true
       this.form = data.params[0]
+      this.type = 'update'
     },
   },
 
@@ -179,7 +182,7 @@ export default {
     async update() {
       this.loading = true
       // const params = this.$utils.formatOutgoingRoles(this.form)
-      await this.updateInventory(this.form).catch((error) => {
+      const data =  await this.updateInventory(this.form).catch((error) => {
         this.$toast.open({
           message: error.message || 'Something went wrong!',
           type: 'error',
@@ -188,10 +191,12 @@ export default {
         throw error
       })
 
-      this.$toast.open({
-        message: 'Role successfully updated',
-      })
-      this.visible = false
+      if(data){
+        this.$toast.open({
+          message: 'Role successfully updated',
+        })
+        this.visible = false
+      }
 
       this.loading = false
     },
