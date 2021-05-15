@@ -1,4 +1,4 @@
-import { SET_CLIENTS, UPDATE_CLIENT, DELETE_CLIENT, UPDATE_FORM } from './mutation-types'
+import { SET_CLIENTS, UPDATE_CLIENT, DELETE_CLIENT, UPDATE_FORM, SET_FORM } from './mutation-types'
 
 export default {
   [SET_CLIENTS](state, clients) {
@@ -15,6 +15,10 @@ export default {
     } else {
       state.clients.push(client)
     }
+  },
+
+  [SET_FORM](state, data) {
+    state.form = data
   },
 
   [UPDATE_FORM](state, data) {

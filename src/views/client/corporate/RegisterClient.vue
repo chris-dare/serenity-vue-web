@@ -47,10 +47,12 @@
 <script>
 import CircleFilled from '@carbon/icons-vue/es/circle--filled/32'
 import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
+import { mapActions } from 'vuex'
 export default {
   name: 'RegisterProvider',
   // eslint-disable-next-line vue/no-unused-components
   components: { CircleFilled, Checkmark },
+  props: ['id'],
   data() {
     return {
       checked: '',
@@ -69,6 +71,18 @@ export default {
         this.checked = val.name
       },
     },
+  },
+
+  created() {
+    if(!this.id){
+      this.refresh()
+    }
+  },
+  
+  methods: {
+    ...mapActions({
+      refresh: 'clients/refreshForm',
+    }),
   },
 }
 </script>

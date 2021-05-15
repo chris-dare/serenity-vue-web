@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import ClientAPI from '@/api/clients'
-import { SET_LOCATIONS, DELETE_LOCATION, UPDATE_LOCATION, UPDATE_FORM } from './mutation-types'
+import { SET_LOCATIONS, DELETE_LOCATION, UPDATE_LOCATION, UPDATE_FORM, SET_FORM } from './mutation-types'
 
 export default {
   async getClients({ commit, rootState, state }, refresh = true) {
@@ -22,7 +22,8 @@ export default {
         throw error
       })
 
-    commit(UPDATE_LOCATION, data.data)
+    commit(UPDATE_FORM, data.returnedData)
+    commit(SET_FORM, {})
     return data
   },
 
@@ -40,6 +41,10 @@ export default {
 
     commit(UPDATE_LOCATION, data.data)
     return data
+  },
+
+  refreshForm({ commit}) {
+    commit(SET_FORM, {})
   },
 
   async deleteClient({ commit, rootState}, id) {

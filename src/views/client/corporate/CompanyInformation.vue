@@ -44,21 +44,19 @@
            
 
         <div class="flex items-center justify-between mt-12 mb-6 w-full">
-          <cv-button
-            class="border-serenity-primary text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary px-6"
-            kind="tertiary"
+          <SeButton
+            variant="outline"
+            @click="cancel"
           >
             Cancel
-          </cv-button>
+          </SeButton>
           <div class="flex items-center">
-            <cv-button
+            <SeButton
               :icon="icon"
-              kind="primary"
-              class="bg-serenity-primary ml-6"
               @click="save"
             >
               Next
-            </cv-button>
+            </SeButton>
           </div>
         </div>
       </div>
@@ -70,11 +68,16 @@
 import { mapActions, mapState } from 'vuex'
 import { required, email } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import MultiStep from '@/mixins/multistep'
+
 export default {
+  mixins: [MultiStep],
+
   data() {
     return {
       form: {},
       icon: ChevronRight,
+      parent: 'CorporateClients',
     }
   },
 
@@ -98,6 +101,7 @@ export default {
   methods: {
     ...mapActions({
       addToStoreData: 'clients/addToCurrentUser',
+      refresh: 'clients/refreshForm',
     }),
     actionChange() {},
     save() {

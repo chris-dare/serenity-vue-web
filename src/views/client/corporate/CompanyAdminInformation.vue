@@ -35,12 +35,21 @@
         </div>
 
         <div class="flex items-center justify-between mt-12 mb-6">
-          <cv-button
-            class="border-serenity-primary text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary px-6"
-            kind="tertiary"
-          >
-            Cancel
-          </cv-button>
+          <div class="flex">
+            <SeButton
+              class="mr-4"
+              variant="outline"
+              @click="cancel"
+            >
+              Cancel
+            </SeButton>
+            <SeButton
+              :to="{ name: previous }"
+              variant="secondary"
+            >
+              Go back
+            </SeButton>
+          </div>
           <cv-button
             :icon="icon"
             kind="primary"
@@ -52,7 +61,6 @@
         </div>
       </div>
     </cv-form>
-    <SuccessModal />
   </div>
 </template>
 
@@ -60,13 +68,20 @@
 import { mapState, mapActions } from 'vuex'
 import { required, email } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import MultiStep from '@/mixins/multistep'
+
 export default {
   name: 'CompanyAdminInformation',
+
+  mixins: [MultiStep],
+
   data() {
     return {
       form: {
       },
       icon: ChevronRight,
+      previous: 'CompanyInformation',
+      parent: 'CorporateClients',
     }
   },
 
@@ -93,6 +108,7 @@ export default {
       addToStoreData: 'clients/addToCurrentUser',
       createClient: 'clients/create',
       updateClient: 'clients/update',
+      refresh: 'clients/refreshForm',
     }),
     actionChange() {},
     submit() {
@@ -115,7 +131,6 @@ export default {
         this.$toast.open({
           message: 'Company successfully created!',
         })
-        this.reset()
         this.$router.push({name: 'CorporateClients'})
       } catch (error) {
         this.$toast.open({
