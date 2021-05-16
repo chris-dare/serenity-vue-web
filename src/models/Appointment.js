@@ -10,7 +10,8 @@ export default class Appointment {
       patient: this.formatPatientData(this.data.patient),
       practitioner: this.formatPatientData(this.data.practitioner),
       service: this.formatServiceData(this.data.Healthcareservice),
-      slot: this.formatSlotData(this.data.slot),
+      slot: this.formatSlotData(this.data.slot, this.data.practitioner),
+      date: Vue.prototype.$date.formatDate(this.data.slot.start),
       service_tier: this.formatServiceTierData(this.data.service_tier),
       isCancelled: this.data.status === 'cancelled',
       isPending: this.data.status === 'pending',
@@ -23,13 +24,25 @@ export default class Appointment {
     let createData = { }
     
     createData.comment = this.data.comment || ''
-    createData.appointmentType = this.data.appointmentType.value || 'ROUTINE'
+    createData.appointmentType = this.data.appointmentType || 'ROUTINE'
     createData.healthcareservice_id = this.data.service.id
     createData.slot_id = this.data.slot ? this.data.slot.id : null
     createData.patient_id = this.data.patient ? this.data.patient.id : null
+    createData.service_tier = this.data.service_tier ? this.data.service_tier.value : null
     // createData.patient_id = 'f45195f3-05f6-4adf-985c-63acb648a688'
     
     return createData
+  }
+
+  getUpdateView() {
+    let updateData = { }
+    
+    updateData.comment = this.data.comment || ''
+    updateData.appointmentType = this.data.appointmentType || 'ROUTINE'
+    updateData.slot_id = this.data.slot ? this.data.slot.id : null
+    updateData.service_tier = this.data.service_tier ? this.data.service_tier.value : null
+    
+    return updateData
   }
 
   formatServiceData(data) {
@@ -38,10 +51,12 @@ export default class Appointment {
       categories: data.healthcare_service_category,
     }
   }
+
   formatServiceTierData(data) {
     return {
       ...data,
       label: `${data.name} - ${data.currency} ${data.cost}`,
+      value: data.name,
     }
   }
 
@@ -50,14 +65,16 @@ export default class Appointment {
       ...data,
       phone: data.telephone,
       fullName: data.full_name,
+      name: data.full_name,
     }
   }
 
-  formatSlotData(data) {
+  formatSlotData(data, practitioner) {
     return {
       ...data,
       date: `${Vue.prototype.$date.formatDate(data.start, 'dd MMM')}`,
       slot: `${ Vue.prototype.$date.formatDate(data.start, 'HH:mm a') } - ${ Vue.prototype.$date.formatDate(data.end, 'HH:mm a') }`,
+      practitioner: this.formatPatientData(practitioner),
     }
   }
 }

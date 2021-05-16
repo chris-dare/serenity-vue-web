@@ -36,7 +36,9 @@
     >
       Select a doctor for the appointment
     </p>
-    <div class="grid">
+    <div
+      class="grid"
+    >
       <SlotList
         v-model="form.slot"
         :data="filteredData"

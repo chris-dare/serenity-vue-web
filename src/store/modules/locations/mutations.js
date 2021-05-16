@@ -1,8 +1,12 @@
-import { SET_LOCATIONS, UPDATE_LOCATION, DELETE_LOCATION } from './mutation-types'
+import { SET_LOCATIONS, UPDATE_LOCATION, DELETE_LOCATION, SET_LOCATIONS_COUNT } from './mutation-types'
 
 export default {
   [SET_LOCATIONS](state, locations) {
     state.locations = locations
+  },
+
+  [SET_LOCATIONS_COUNT](state, locationsCount) {
+    state.locationsCount = locationsCount
   },
 
   [UPDATE_LOCATION](state, location) {

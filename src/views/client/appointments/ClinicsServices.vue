@@ -30,6 +30,7 @@
         placeholder="Select type"
         :error-message="$utils.validateRequiredField($v, 'appointmentType')"
         preselect
+        custom-field="value"
       />
       <MultiSelect
         v-model="form.service"
@@ -130,6 +131,7 @@ export default {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
       services: (state) => state.services.services,
+      specialties: (state) => state.resources.specialties,
       storeData: (state) => state.appointments.currentAppointment,
       types: (state) => state.appointments.appointmentTypes,
     }),
@@ -193,17 +195,18 @@ export default {
     },
 
     serviceTiers() {
-      if (!this.form.service) return []
+      if (!this.form.service || !this.form.service.price_tiers) return []
       return this.form.service.price_tiers.map(tier => {
         return {
           label: `${tier.name} - ${tier.currency} ${tier.cost}`,
-          value: tier.cost,
+          value: tier.name,
         }
       })
     },
 
     specialties() {
       if (!this.form.service) return []
+      if (this.form.id) return this.services.find(service => service.id === this.form.service.id).healthcare_service_specialties
       return this.form.service.healthcare_service_specialties
     },
   },

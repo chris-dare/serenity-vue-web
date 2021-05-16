@@ -75,7 +75,7 @@
             <cv-select-option
               v-for="(item, index) in workspaces"
               :key="index"
-              class="text-white font-light"
+              class="text-white font-light capitalize"
               :value="item.value"
             >
               {{ item.label }}
@@ -96,7 +96,8 @@ import UserHeaderDropdown from '@/components/layout/UserHeaderDropdown'
 import NotificationDetailsDropdown from '@/components/layout/NotificationDetailsDropdown'
 import Close32 from '@carbon/icons-vue/es/close/32'
 import Menu32 from '@carbon/icons-vue/es/menu/32'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
+
 export default {
   name: 'AppHeader',
 
@@ -118,8 +119,12 @@ export default {
   computed: {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
-      workspaces: (state) => state.global.workspaces,
+      // workspaces: (state) => state.global.workspaces,
       locations: (state) => state.locations.locations,
+    }),
+
+    ...mapGetters({
+      workspaces: 'auth/userWorkspaces',
     }),
   
     selected: {
@@ -145,6 +150,7 @@ export default {
 
     actionChange(value) {
       this.setworkspaceType(value)
+      this.$router.push({ name: this.workspaceType === 'ADMIN' ? 'GetStarted' : 'Dashboard'}).catch(()=>{})
     },
 
     selectLocation() {},
@@ -152,6 +158,13 @@ export default {
     change() {
       this.open = !this.open
       this.$trigger('update:nav', this.open)
+    },
+
+    setDefaultWorkspace() {
+      const admin = this.workspaces.find(workspace => workspace.value === 'ADMIN')
+      const opd = this.workspaces.find(workspace => workspace.value === 'ADMIN')
+      let workspace = !!admin ? admin.value : !!opd ? opd.value : this.workspaces[0].value
+      this.setworkspaceType(workspace)
     },
   },
 }

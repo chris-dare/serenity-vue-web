@@ -32,7 +32,7 @@ export default {
   computed: {
     modalVisible: {
       set(val) {
-        this.$emit('visible:update', val)
+        this.$emit('update:visible', val)
       },
       get() {
         return this.visible
@@ -49,7 +49,20 @@ export default {
       },
     },
   },
+
+  mounted () {
+    document.addEventListener('click', this.close)
+  },
+  beforeDestroy () {
+    document.removeEventListener('click', this.close)
+  },
+
+  methods: {
+    close (e) {
+      if (!this.$el.contains(e.target)) {
+        this.modalVisible = false
+      }
+    },
+  },
 }
 </script>
-
-<style></style>

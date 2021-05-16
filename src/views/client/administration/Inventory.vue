@@ -26,56 +26,51 @@
         placeholder="Search for inventory item"
       />
 
-      <cv-data-table
+      <DataTable
         ref="table"
         :data="filteredData"
         :columns="columns"
         :pagination="pagination"
+        :loading="loading"
         @pagination="actionOnPagination"
       >
-        <template slot="data">
-          <cv-data-table-row
-            v-for="(row, rowIndex) in filteredData"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
-          >
-            <cv-data-table-cell>
-              <div class="flex items-center space-x-2 py-2">
-                <p>{{ row.name }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ row.unit_price }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ row.selling_price }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ row.in_hand_quantity }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ row.expiry_date }}</p>
-            </cv-data-table-cell>
+        <template #default="{row}">
+          <cv-data-table-cell>
+            <div class="flex items-center space-x-2 py-2">
+              <p>{{ row.name }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.unit_price }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.selling_price }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.in_hand_quantity }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.expiry_date }}</p>
+          </cv-data-table-cell>
             
-            <cv-data-table-cell>
-              <div class="flex items-center space-x-6">
-                <p
-                  class="cursor-pointer"
-                  @click="$trigger('inventory:edit:open', {...row})"
-                >
-                  Edit
-                </p>
-                <p
-                  class="text-red-500 cursor-pointer"
-                  @click="remove(row)"
-                >
-                  Delete
-                </p>
-              </div>
-            </cv-data-table-cell>
-          </cv-data-table-row>
+          <cv-data-table-cell>
+            <div class="flex items-center space-x-6">
+              <p
+                class="cursor-pointer"
+                @click="$trigger('inventory:edit:open', {...row})"
+              >
+                Edit
+              </p>
+              <p
+                class="text-red-500 cursor-pointer"
+                @click="remove(row)"
+              >
+                Delete
+              </p>
+            </div>
+          </cv-data-table-cell>
         </template>
-      </cv-data-table>
+      </DataTable>
     </div>
     <AddEditInventory />
   </div>

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import LocationAPI from '@/api/locations'
-import { SET_LOCATIONS, DELETE_LOCATION, UPDATE_LOCATION } from './mutation-types'
+import { SET_LOCATIONS, DELETE_LOCATION, UPDATE_LOCATION, SET_LOCATIONS_COUNT } from './mutation-types'
 
 export default {
   async getLocations({ commit, rootState, state }, refresh = true) {
@@ -12,6 +12,7 @@ export default {
       throw error
     })
     commit(SET_LOCATIONS, data.data)
+    commit(SET_LOCATIONS_COUNT, data.data.length)
   },
 
   async createLocation({ commit, rootState}, payload) {

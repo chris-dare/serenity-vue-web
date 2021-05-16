@@ -1,9 +1,5 @@
 <template>
   <div class="w-4/5 mx-auto">
-    <UserDetailsHeader />
-    <p class="text-serenity-primary my-6 font-semibold">
-      What would you like to do?
-    </p>
     <div class="flex my-4">
       <PatientCard
         v-for="(dashboard, index) in availableActions"
@@ -15,16 +11,13 @@
         @click="change(dashboard)"
       />
     </div>
-    <GetStartedModal :visible.sync="visible" />
     <NonPatientPrescriptionModal />
   </div>
 </template>
 
 <script>
 import PatientCard from '@/components/appointments/PatientCard'
-import GetStartedModal from '@/components/dashboard/GetStartedModal'
 import NonPatientPrescriptionModal from '@/components/pharmacy/modals/NonPatientPrescriptionModal'
-import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
 import { mapState } from 'vuex'
 
 export default {
@@ -32,9 +25,7 @@ export default {
 
   components: { 
     PatientCard,
-    GetStartedModal,
     NonPatientPrescriptionModal,
-    UserDetailsHeader,
   },
 
   data() {

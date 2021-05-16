@@ -1,19 +1,20 @@
 <template>
-  <div>
+  <div class="space-y-4">
     <Search
       v-model="search"
       placeholder="Search for patient, enter name or MR number"
     />
-    <div class="my-4 flex items-center justify-between">
-      <div>
-        <cv-button
-          kind="primary"
-          size="field"
-          class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
+    <div
+      v-if="!modal"
+      class="my-4 flex items-center justify-between"
+    >
+      <div class="space-x-2 flex items-center">
+        <SeButton
+          :variant="search === '' ? 'primary' : 'white'"
           @click="search = ''"
         >
           All ({{ patientsCount }})
-        </cv-button>
+        </SeButton>
         <!-- <cv-button
           size="field"
           kind="ghost"
@@ -23,15 +24,13 @@
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
           Delayed ({{ 1 }})
         </cv-button> -->
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+        <SeButton
+          :variant="search === 'in-patient' ? 'primary' : 'white'"
           @click="search = 'in-patient'"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
           In-patient ({{ 1 }})
-        </cv-button>
+        </SeButton>
         <!-- <cv-button
           size="field"
           kind="ghost"
@@ -41,10 +40,8 @@
           <div class="w-2 h-2 rounded-full bg-warning mr-2"></div>
           Urgent ({{ 1 }})
         </cv-button> -->
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+        <SeButton
+          :variant="search === 'male' ? 'primary' : 'white'"
           @click="search = 'male'"
         >
           Male({{ maleCount }})
@@ -53,11 +50,9 @@
             class="ml-2"
             alt=""
           >
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+        </SeButton>
+        <SeButton
+          :variant="search === 'female' ? 'primary' : 'white'"
           @click="search = 'female'"
         >
           Female({{ femaleCount }})
@@ -66,7 +61,7 @@
             class="ml-2"
             alt=""
           >
-        </cv-button>
+        </SeButton>
       </div>
       <FilterDropdown v-model="selectedFilter" />
     </div>
@@ -75,9 +70,7 @@
       <DataTable
         ref="table"
         :columns="columns"
-        :pagination="{
-          numberOfItems: patientsCount,
-        }"
+        :pagination="pagination"
         :data="filteredData"
         :loading="loading"
         @pagination="actionOnPagination"
@@ -136,6 +129,13 @@ export default {
 
   mixins: [DataMixin],
 
+  props: {
+    modal: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
   data() {
     return {
       rowSelects: null,
@@ -170,10 +170,17 @@ export default {
     },
   },
 
+  beforeMount() {
+    if (this.modal) {
+      this.pageSizes = [5, 10, 15]
+      this.pageLength = 5
+    }
+  },
+
   mounted() {
     this.paginate = true
-    this.searchTerms = ['name', 'mr_number', 'mobile']
-    this.refresh()
+    this.searchTerms = ['name', 'mr_number', 'mobile', 'gender']
+    this.refresh(false)
   },
 
   methods: {

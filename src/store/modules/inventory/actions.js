@@ -1,4 +1,5 @@
 import InventoryAPI from '@/api/inventory'
+import Vue from 'vue'
 import { SET_INVENTORY, DELETE_INVENTORY, UPDATE_INVENTORY } from './mutation-types'
 
 export default {
@@ -19,7 +20,8 @@ export default {
       const { data } = await InventoryAPI.create(payload)
       console.log(data)
       commit(UPDATE_INVENTORY, data.data)
-    } catch ({ response: { data: error } }) {
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error
     }
   },

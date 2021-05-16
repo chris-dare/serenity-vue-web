@@ -1,8 +1,12 @@
-import { SET_WORKSPACES, UPDATE_WORKSPACE, DELETE_WORKSPACE } from './mutation-types'
+import { SET_WORKSPACES, UPDATE_WORKSPACE, DELETE_WORKSPACE, SET_WORKSPACES_COUNT } from './mutation-types'
 
 export default {
   [SET_WORKSPACES](state, workspaces) {
     state.workspaces = workspaces
+  },
+
+  [SET_WORKSPACES_COUNT](state, count) {
+    state.workspacesCount = count
   },
 
   [UPDATE_WORKSPACE](state, workspace) {

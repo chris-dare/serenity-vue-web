@@ -31,15 +31,15 @@
 </template>
 
 <script>
-import DashboardCard from '@/components/ui/cards/DashboardCard'
-import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
+
 import AddEditWorkspace from '@/components/admin/modals/AddEditWorkspace'
 import AddEditInventory from '@/components/admin/modals/AddEditInventory'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Dashboard',
 
-  components: { DashboardCard, UserDetailsHeader, AddEditWorkspace, AddEditInventory },
+  components: { AddEditWorkspace, AddEditInventory },
 
   data() {
     return {
@@ -50,6 +50,13 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      patientsCount: (state) => state.patients.patientsCount,
+      appointmentsCount: (state) => state.appointments.appointmentsCount,
+      workspacesCount: (state) => state.workspaces.workspacesCount,
+      locationsCount: (state) => state.locations.locationsCount,
+    }),
+  
     dashboardTypes() {
       const types = [
         // {
@@ -60,7 +67,7 @@ export default {
         {
           label: 'Patients',
           type: 'Reference',
-          value: '8,670',
+          value: this.patientsCount,
         },
         {
           label: 'Corporate Clients',
@@ -70,17 +77,17 @@ export default {
         {
           label: 'Appointment',
           type: 'Calendar',
-          value: '0',
+          value: this.appointmentsCount,
         },
         {
           label: 'Workspaces',
           type: 'Cross',
-          value: '0',
+          value: this.workspacesCount,
         },
         {
           label: 'Locations',
           type: 'Categories',
-          value: '0',
+          value: this.locationsCount,
         },
       ]
 

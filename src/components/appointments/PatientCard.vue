@@ -41,7 +41,12 @@ import Insurance from '@carbon/icons-vue/es/keep-dry/32'
 import Destination from '@carbon/icons-vue/es/purchase/32'
 import User from '@carbon/icons-vue/es/user/32'
 import Security from '@carbon/icons-vue/es/security/32'
+import Lab from '@carbon/icons-vue/es/chemistry/32'
 import Medication from '@carbon/icons-vue/es/medication/32'
+import Reference from '@carbon/icons-vue/es/watson-health/cross-reference/32'
+import Care from '@carbon/icons-vue/es/airline--passenger-care/32'
+import Followup from '@carbon/icons-vue/es/arrow--down-right/32'
+import Referral from '@carbon/icons-vue/es/airline--manage-gates/32'
 
 export default {
   name: 'PatientCard',
@@ -63,7 +68,12 @@ export default {
     Destination,
     User,
     Security,
+    Lab,
     Medication,
+    Reference,
+    Care,
+    Followup,
+    Referral,
   },
 
   props: {

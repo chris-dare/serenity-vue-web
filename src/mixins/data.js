@@ -19,7 +19,7 @@ export default {
     },
 
     filteredData() {
-      return this.paginate ? this.normalizedData.slice(this.pageStart-1, this.pageStart + this.pageLength - 1) : this.normalizedData
+      return this.paginate ? this.normalizedData.slice(this.pageStart - 1, this.pageStart + this.pageLength - 1) : this.normalizedData
     },
 
     dataCount() {

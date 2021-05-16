@@ -6,7 +6,7 @@
       :rows="5"
     />
     <cv-data-table
-      v-else
+      v-else-if="!loading && !noData"
       ref="table"
       :data="[]"
       :columns="columns"
@@ -28,7 +28,7 @@
       class="text-center w-full"
       name="no-data"
     >
-      <p class="text-center w-full py-6">
+      <p class="text-center w-full py-6 bg-white">
         {{ noDataLabel }}
       </p>
     </slot>

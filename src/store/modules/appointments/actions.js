@@ -32,7 +32,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI.slots(provider.id, specialtyId)
-      commit(SET_SLOTS, data)
+      commit(SET_SLOTS, data.data)
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
@@ -43,20 +43,20 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI.get(provider.id, id)
-      commit(ADD_APPOINTMENT_DATA, data.data)
+      commit(ADD_APPOINTMENT_DATA, new Appointment(data.data).getNormalizedView())
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
     }
   },
 
-  async createAppointment({ commit, rootState }, payload) {
+  async createAppointment({ commit, rootState, dispatch }, payload) {
     const appointment = new Appointment(payload).getCreateView()
     try {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI
         .create(provider.id, appointment)
-      commit(UPDATE_APPOINTMENT, data.data)
+      dispatch('getAppointments', true)
       commit(ADD_APPOINTMENT_DATA, {})
       return data
     } catch (error) {
@@ -80,9 +80,10 @@ export default {
 
   async updateAppointment({ commit, rootState }, payload) {
     try {
+      const appointment = new Appointment(payload).getUpdateView()
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI
-        .update(provider.id,payload)
+        .update(provider.id,payload.id, appointment)
       commit(UPDATE_APPOINTMENT, data.data)
     } catch (error) {
       Vue.prototype.$utils.error(error)

@@ -135,7 +135,7 @@ const checkForEmpty = (tree) => {
 const error = (err, toast) => {
   console.log('error', err)
   if (err) {
-    const error = err.data ? err.data[0] || err.data.detail : err.error || err.message
+    const error = err.data ? err.data[0] || err.data.detail || err.data.message : err.error || err.message
     toast.open({ message: error, type: 'error' })
   }
   

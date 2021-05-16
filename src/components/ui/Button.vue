@@ -1,6 +1,6 @@
 <template>
   <cv-button
-    :class="[buttonClass, full ? 'w-full' : '', icon ? '' : 'px-4']"
+    :class="[buttonClass, full ? 'w-full' : 'w-auto', icon ? '' : 'px-4']"
     class="flex items-center justify-center"
     kind="primary"
     :size="size"

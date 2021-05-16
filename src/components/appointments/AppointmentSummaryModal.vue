@@ -27,6 +27,7 @@
           <SeButton
             v-if="!appointment.isCancelled"
             variant="danger-outline"
+            full
             @click="cancel"
           >
             Cancel Appointment

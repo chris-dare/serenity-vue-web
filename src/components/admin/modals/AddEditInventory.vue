@@ -8,35 +8,7 @@
   >
     <template slot="content">
       <div class="space-y-8">
-        <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'Add new' }} item</p>
-        <!-- <div class="grid grid-cols-2 gap-8">
-          <cv-text-input
-            v-model="form.sub_group"
-            type="text"
-            label="Item sub group"
-            placeholder=""
-          >
-            <template
-              v-if="$v.form.sub_group.$error"
-              slot="invalid-message"
-            >
-              Sub group is required
-            </template>
-          </cv-text-input>
-          <cv-text-input
-            v-model="form.category"
-            type="text"
-            label="Item Category"
-            placeholder="eg medical-stock"
-          >
-            <template
-              v-if="$v.form.category.$error"
-              slot="invalid-message"
-            >
-              Category is required
-            </template>
-          </cv-text-input>
-        </div> -->
+        <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'Add new' }} inventory</p>
         <cv-text-input
           v-model="form.name"
           type="text"
@@ -52,7 +24,7 @@
           />
           <cv-text-input
             v-model="form.selling_price"
-            type="text"
+            type="number"
             label="Selling Rate"
             placeholder="eg 50.00"
           />
@@ -77,18 +49,15 @@
           label="Batch Nummber"
           placeholder="CV2399"
         />
-        <div class="flex justify-center">
-          <cv-button-skeleton
-            v-if="loading"
-          />
+        <div class="flex justify-between items-center">
+          <p class="text-center">Cancel</p>
           <SeButton 
-            v-else 
+            :loading="loading"
             @click="submit"
           >
-            {{ form.id ? 'Update inventory' : 'Add new item' }}
+            {{ form.id ? 'Update inventory' : 'Add new inventory' }}
           </SeButton>
         </div>
-        <p class="text-center">Cancel</p>
       </div>
     </template>
   </cv-modal>
@@ -160,43 +129,33 @@ export default {
 
     async save() {
       this.loading = true
-      const data = await this.createInventory(this.form).catch((error) => {
-        console.log(data)
+
+      try {
+        await this.createInventory(this.form)
         this.$toast.open({
-          message: error.message || 'Something went wrong!',
-          type: 'error',
+          message: 'Inventory successfully added',
         })
+        this.visible = false
+
         this.loading = false
-      })
-
-
-      this.$toast.open({
-        message: 'Inventory successfully added',
-      })
-      this.visible = false
-
-      this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
     },
 
     async update() {
       this.loading = true
-      // const params = this.$utils.formatOutgoingRoles(this.form)
-      const data =  await this.updateInventory(this.form).catch((error) => {
-        console.log(data)
+      try {
+        await this.updateInventory(this.form)
         this.$toast.open({
-          message: error.message || 'Something went wrong!',
-          type: 'error',
+          message: 'Inventory successfully updated',
         })
+        this.visible = false
+
         this.loading = false
-        throw error
-      })
-
-      this.$toast.open({
-        message: 'Role successfully updated',
-      })
-      this.visible = false
-
-      this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
     },
   },
 }

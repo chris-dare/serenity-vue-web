@@ -46,7 +46,6 @@
           </SeButton>
           <SeButton
             :loading="loading"
-            full
             @click="submit"
           >
             {{ form.id ? 'Save changes' : 'Create new workspace' }}

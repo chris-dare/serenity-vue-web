@@ -6,6 +6,8 @@ import store from '@/store'
 
 // middlewares
 import fetchAppointment from './middleware/fetchAppointment'
+import isAdmin from './middleware/isAdmin'
+import isProtectedByPermission from './middleware/isProtectedByPermission'
 import middlewarePipeline from './middlewarePipeline'
 
 Vue.use(VueRouter)
@@ -26,16 +28,19 @@ const routes = [
         path: '/admin-dashboard',
         name: 'AdminDashboard',
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/AdminDashboard.vue'),
+        meta: { middleware: [isAdmin] },
       },
       {
         path: '/get-started',
         name: 'GetStarted',
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/GetStarted.vue'),
+        meta: { middleware: [isAdmin] },
       },
       {
         path: '/locations',
         name: 'Locations',
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Locations.vue'),
+        meta: { middleware: [isAdmin] },
       },
       {
         path: '/services',
@@ -51,11 +56,13 @@ const routes = [
         path: '/workspaces',
         name: 'Workspaces',
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Workspaces.vue'),
+        meta: { middleware: [isAdmin] },
       },
       {
         path: '/patients',
         name: 'Patients',
         component: () => import(/* webpackChunkName: "client" */ '../views/client/patients/Patients.vue'),
+        meta: { middleware: [isProtectedByPermission], permission: 'patient.read' },
       },
       {
         path: '/settings',
@@ -68,14 +75,41 @@ const routes = [
         component: () => import(/* webpackChunkName: "client" */ '../views/client/Visits.vue'),
       },
       {
+        path: '/support',
+        name: 'Support',
+        component: () => import(/* webpackChunkName: "opd" */ '../views/client/Support.vue'),
+      },
+      {
+        path: '/notifications',
+        name: 'Notifications',
+        component: () => import(/* webpackChunkName: "opd" */ '../views/client/Notifications.vue'),
+      },
+      {
+        path: '/reports',
+        name: 'Reports',
+        component: () => import(/* webpackChunkName: "opd" */ '../views/client/Reports.vue'),
+      },
+      {
+        path: '/orders',
+        name: 'Orders',
+        component: () => import(/* webpackChunkName: "opd" */ '../views/client/Orders.vue'),
+      },
+      {
+        path: '/insights',
+        name: 'Insights',
+        component: () => import(/* webpackChunkName: "opd" */ '../views/client/Insights.vue'),
+      },
+      {
         path: '/team',
         name: 'Team',
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Team.vue'),
+        meta: { middleware: [isAdmin] },
       },
       {
         path: '/team/:id',
         name: 'TeamDetail',
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/team/TeamDetail.vue'),
+        meta: { middleware: [isAdmin] },
       },
       {
         path: '/inventory',
@@ -91,6 +125,7 @@ const routes = [
         path: '/roles',
         name: 'Roles',
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Roles.vue'),
+        meta: { middleware: [isAdmin] },
       },
       {
         path: '/clients',
@@ -209,6 +244,11 @@ const routes = [
             path: '',
             name: 'SelectPatient',
             component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/SelectPatient.vue'),
+          },
+          {
+            path: '/appointment/:id/update',
+            name: 'AppointmentUpdate',
+            component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/AppointmentUpdate.vue'),
             meta: {middleware: [fetchAppointment]},
           },
           {
@@ -245,6 +285,11 @@ const routes = [
         children: [
           {
             path: '',
+            name: 'PatientActions',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientActions.vue'),
+          },
+          {
+            path: '/patients/:id/summary',
             name: 'PatientSummary',
             component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientSummary.vue'),
           },
@@ -296,11 +341,6 @@ const routes = [
         ],
       },
       {
-        path: '/pharmacy',
-        name: 'Pharmacy',
-        component: () => import(/* webpackChunkName: "admin" */ '../views/client/pharmacy/Pharmacy.vue'),
-      },
-      {
         path: '/pharmacy/patients',
         name: 'Pharmacy:Patients',
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/pharmacy/Patients.vue'),
@@ -328,6 +368,11 @@ const routes = [
     name: 'ResetPassword',
     component: () => import(/* webpackChunkName: "auth" */ '../views/auth/ResetPassword.vue'),
   },
+  // {
+  //   path: '*',
+  //   name: 'NotFound',
+  //   component: () => import(/* webpackChunkName: "auth" */ '../views/NotFound.vue'),
+  // },
 ]
 
 
@@ -348,6 +393,7 @@ router.beforeEach((to, from, next) => {
     from,
     next,
     store,
+    permission: to.meta.permission ? to.meta.permission : null,
   }
 
   return middleware[0]({
