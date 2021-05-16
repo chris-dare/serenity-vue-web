@@ -18,12 +18,13 @@ import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
 
 const DiagnosticDashboard = () => import('@/components/diagnostic/DiagnosticDashboard')
 const OPDDashboard = () => import('@/components/opd/OPDDashboard')
+const PharmacyDashboard = () => import('@/components/pharmacy/PharmacyDashboard')
 import { mapState } from 'vuex'
 
 export default {
   name: 'Dashboard',
 
-  components: { GetStartedModal, StartVisitModal, UserDetailsHeader, DiagnosticDashboard, OPDDashboard },
+  components: { GetStartedModal, StartVisitModal, UserDetailsHeader, DiagnosticDashboard, OPDDashboard, PharmacyDashboard },
 
   data() {
     return {
@@ -45,6 +46,9 @@ export default {
   
       if (this.workspaceType === 'OPD') {
         return 'OPDDashboard'
+      }
+      if (this.workspaceType === 'PHARM') {
+        return 'PharmacyDashboard'
       }
 
       return 'DefaultDashboard'

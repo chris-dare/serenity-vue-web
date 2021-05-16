@@ -1,6 +1,5 @@
 <template>
-  <ProtectedPage
-    permission="practioners.read"
+  <div
     class="mx-auto w-4/5 space-y-4"
   >
     <div class="flex items-center justify-between">
@@ -81,7 +80,7 @@
     >
       No team members to show
     </p>
-  </ProtectedPage>
+  </div>
 </template>
 
 <script>

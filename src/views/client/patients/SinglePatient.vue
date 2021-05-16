@@ -1,6 +1,5 @@
 <template>
-  <ProtectedPage
-    permission="patient.read"
+  <div
     class="w-4/5 mx-auto"
   >
     <div class="bg-white py-8 px-4 my-2 flex items-center justify-between">
@@ -75,7 +74,7 @@
       <router-view />
     </div>
     <SinglePatientModals />
-  </ProtectedPage>
+  </div>
 </template>
 
 <script>

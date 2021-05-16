@@ -340,6 +340,17 @@ const routes = [
           },
         ],
       },
+      {
+        path: '/pharmacy/patients',
+        name: 'Pharmacy:Patients',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/pharmacy/Patients.vue'),
+      },
+      {
+        path: '/pharmacy/patients/:id',
+        name: 'Pharmacy:Patient',
+        props: true,
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/pharmacy/Patient.vue'),
+      },
     ],
   },
   {

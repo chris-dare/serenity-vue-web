@@ -2,7 +2,7 @@
   <div>
     <div class="w-4/5 mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Inventory ({{ 5 }})</p>
+        <p class="text-xl font-bold">Inventory ({{ dataCount }})</p>
         <div class="flex items-center space-x-2">
           <SeButton
             variant="secondary"
@@ -26,50 +26,51 @@
         placeholder="Search for inventory item"
       />
 
-      <cv-data-table
+      <DataTable
         ref="table"
-        :data="[]"
+        :data="filteredData"
         :columns="columns"
-        :pagination="{ itemsPerPage:10, numberOfItems: 12, pageSizes: [10, 15, 20, 25] }"
+        :pagination="pagination"
+        :loading="loading"
+        @pagination="actionOnPagination"
       >
-        <template slot="data">
-          <cv-data-table-row
-            v-for="(row, rowIndex) in 10"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
-          >
-            <cv-data-table-cell>
-              <div class="flex items-center space-x-2 py-2">
-                <p>{{ $faker().lorem.word() }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p class="lowercase">{{ Math.random() }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ 100.00 }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ $date.formatDate($faker().date.recent(), 'yyyy/MM/dd') }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ $faker().name.findName() }}</p>
-            </cv-data-table-cell>
+        <template #default="{row}">
+          <cv-data-table-cell>
+            <div class="flex items-center space-x-2 py-2">
+              <p>{{ row.name }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.unit_price }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.selling_price }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.in_hand_quantity }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.expiry_date }}</p>
+          </cv-data-table-cell>
             
-            <cv-data-table-cell>
-              <div class="flex items-center space-x-6">
-                <p
-                  class="cursor-pointer"
-                  @click="$trigger('inventory:edit:open', {name:$faker().name.findName()})"
-                >
-                  Edit
-                </p>
-                <p class="text-red-500">Delete</p>
-              </div>
-            </cv-data-table-cell>
-          </cv-data-table-row>
+          <cv-data-table-cell>
+            <div class="flex items-center space-x-6">
+              <p
+                class="cursor-pointer"
+                @click="$trigger('inventory:edit:open', {...row})"
+              >
+                Edit
+              </p>
+              <p
+                class="text-red-500 cursor-pointer"
+                @click="remove(row)"
+              >
+                Delete
+              </p>
+            </div>
+          </cv-data-table-cell>
         </template>
-      </cv-data-table>
+      </DataTable>
     </div>
     <AddEditInventory />
   </div>
@@ -77,23 +78,71 @@
 
 <script>
 import AddEditInventory from '@/components/admin/modals/AddEditInventory'
+import { mapActions, mapState } from 'vuex'
+import DataMixin from '@/mixins/data'
+
 export default {
   name: 'Inventory',
 
   components: {AddEditInventory},
+
+  mixins: [DataMixin],
 
   data() {
     return {
       search: '',
       columns: [
         'Item name',
-        'Item Id',
-        'In stock',
-        'Last updated',
-        'Updated by',
+        'Unit Price',
+        'Selling Price',
+        'Item Quantity',
+        'Expiry Date',
         'Action',
       ],
     }
+  },
+
+  computed: {
+    ...mapState({
+      data: (state) => state.inventory.inventory,
+    }),
+  },
+
+  created() {
+    this.paginate = true
+    this.searchTerms = ['name', 'category', 'selling_price']
+    this.refresh()
+  },
+
+  methods: {
+    ...mapActions({
+      getData: 'inventory/getInventory',
+      deleteInventory: 'inventory/deleteInventory',
+    }),
+
+    remove(data) {
+      const id = data.id
+      this.$trigger('confirm-action-modal:open', {
+        label: data.name,
+        type: 'delete',
+        callback: async ()=>{
+          this.loading = true
+          try {
+            await this.deleteInventory(id)
+            this.$toast.open({
+              message: 'Inventory deleted successfully',
+            })
+          } catch (error) {
+            this.$toast.open({
+              message: 'Something went wrong!',
+              type: 'error',
+            })
+          }finally{
+            this.loading = false
+          }
+        },
+      })
+    },
   },
 }
 </script>

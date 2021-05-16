@@ -1,7 +1,7 @@
 export default {
   data: {
     RECEPT: [
-      { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
+      { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference', group_by: 'client care' },
       { label: 'Visits', to: 'Visits', component: 'Medical' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
@@ -28,7 +28,7 @@ export default {
       { label: 'Settings', to: 'Settings', component: 'Settings' },
     ],
     OPD: [
-      { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
+      { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference' },
       { label: 'Visits', to: 'Visits', component: 'Medical' },
       { label: 'Orders', to: 'Orders', component: 'Medical' },
@@ -42,7 +42,7 @@ export default {
       { label: 'Settings', to: 'Settings', component: 'Settings' },
     ],
     VIRT: [
-      { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
+      { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference' },
       { label: 'Visits', to: 'Visits', component: 'Medical' },
       { label: 'Orders', to: 'Orders', component: 'Medical' },
@@ -56,7 +56,7 @@ export default {
       { label: 'Settings', to: 'Settings', component: 'Settings' },
     ],
     HOME: [
-      { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
+      { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference' },
       { label: 'Visits', to: 'Visits', component: 'Medical' },
       { label: 'Orders', to: 'Orders', component: 'Medical' },
@@ -70,7 +70,7 @@ export default {
       { label: 'Settings', to: 'Settings', component: 'Settings' },
     ],
     BILL: [
-      { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
+      { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference' },
       { label: 'Bills', to: 'Billing', component: 'Align'},
       { label: 'Corporate Clients', to: 'CorporateClients', component: 'Baggage' },
@@ -81,7 +81,7 @@ export default {
       { label: 'Settings', to: 'Settings', component: 'Settings' },
     ],
     PHARM: [
-      { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
+      { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference' },
       { label: 'Visits', to: 'Visits', component: 'Medical' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
@@ -95,7 +95,7 @@ export default {
       { label: 'Settings', to: 'Settings', component: 'Settings' },
     ],
     COVID: [
-      { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
+      { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference' },
       { label: 'WHO forms', to: 'Visits', component: 'Medical' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
@@ -106,7 +106,7 @@ export default {
       { label: 'Settings', to: 'Settings', component: 'Settings' },
     ],
     DIAG: [
-      { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
+      { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference'},
       { label: 'Orders', to: 'Orders', component: 'Medical' },
       { label: 'Reports', to: 'Reports', component: 'Report' },
@@ -118,17 +118,17 @@ export default {
       { label: 'Settings', to: 'Settings', component: 'Settings' },
     ],
     IPD: [
-      { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
+      { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Support', to: 'Support', component: 'Help' },
       { label: 'Settings', to: 'Settings', component: 'Settings' },
     ],
     MOM: [
-      { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
+      { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Support', to: 'Support', component: 'Help' },
       { label: 'Settings', to: 'Settings', component: 'Settings' },
     ],
     EMERG: [
-      { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
+      { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Support', to: 'Support', component: 'Help' },
       { label: 'Settings', to: 'Settings', component: 'Settings' },
     ],

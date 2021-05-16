@@ -1,6 +1,5 @@
 <template>
-  <ProtectedPage
-    permission="appointments.read"
+  <div
     class="w-4/5 mx-auto"
   >
     <div>
@@ -20,7 +19,7 @@
 
       <AppointmentsTable />
     </div>
-  </ProtectedPage>
+  </div>
 </template>
 
 <script>
