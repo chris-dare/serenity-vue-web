@@ -42,6 +42,7 @@ export default {
         { label: 'Get Started', to: 'GetStarted', component: 'Star' },
         { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
         { label: 'Patients', to: 'Patients', component: 'Reference', group_by: 'client care' },
+        { label: 'Pharmacy', to: 'Pharmacy', component: 'Medication' },
         { label: 'Corporate Clients', to: 'CorporateClients', component: 'Baggage' },
         { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
         { label: 'Billing', to: 'Billing', component: 'Align', group_by: 'hospital operations'},
@@ -60,6 +61,7 @@ export default {
       return [
         { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
         { label: 'Patients', to: 'Patients', component: 'Reference' },
+        { label: 'Pharmacy', to: 'Pharmacy', component: 'Medication' },
         { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
         { label: 'Notifications', to: 'Notifications', component: 'Notification' },
         { label: 'Settings', to: 'Settings', component: 'Settings' },

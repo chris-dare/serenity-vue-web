@@ -2,7 +2,7 @@
   <div>
     <div class="flex justify-between items-center">
       <p class="text-secondary font-semibold text-xl">
-        Welcome back,
+        {{ greeting }},
         <span class="text-primary">{{ fullName || "Dr. Grey Strep" }}</span>
       </p>
       <div class="text-right">
@@ -21,6 +21,12 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'UserDetailsHeader',
+  props: {
+    greeting: {
+      type: String,
+      default: 'Welcome Back',
+    },
+  },
   computed: {
     ...mapGetters({
       fullName: 'auth/fullName',

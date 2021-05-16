@@ -38,6 +38,7 @@ import Settings from '@carbon/icons-vue/es/settings/32'
 import Baggage from '@carbon/icons-vue/es/shopping--bag/32'
 import Schedule from '@carbon/icons-vue/es/event--schedule/32'
 import Notification from '@carbon/icons-vue/es/notification/32'
+import Medication from '@carbon/icons-vue/es/medication/32'
 import Help from '@carbon/icons-vue/es/help/32'
 import Star from '@carbon/icons-vue/es/star/32'
 import Wallet from '@carbon/icons-vue/es/wallet/32'
@@ -51,7 +52,9 @@ import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'AppSidebar',
 
-  components: { AppNavItem, Security, Categories, Template, Cross, Reference, Events, Settings, Baggage, Notification, Help, Schedule, Star, Wallet, Align, Folder },
+  components: { AppNavItem, Security, Categories, Template, Cross, Reference, Events, Settings, Baggage, Notification, Help, Schedule, Star, Wallet, Align, Folder,
+    Medication,
+  },
 
   data() {
     return {

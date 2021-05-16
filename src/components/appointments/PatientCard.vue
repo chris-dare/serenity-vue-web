@@ -41,6 +41,7 @@ import Insurance from '@carbon/icons-vue/es/keep-dry/32'
 import Destination from '@carbon/icons-vue/es/purchase/32'
 import User from '@carbon/icons-vue/es/user/32'
 import Security from '@carbon/icons-vue/es/security/32'
+import Medication from '@carbon/icons-vue/es/medication/32'
 
 export default {
   name: 'PatientCard',
@@ -62,6 +63,7 @@ export default {
     Destination,
     User,
     Security,
+    Medication,
   },
 
   props: {

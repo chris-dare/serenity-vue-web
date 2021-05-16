@@ -22,6 +22,8 @@
     "@fullcalendar/daygrid": "^5.5.0",
     "@fullcalendar/interaction": "^5.5.0",
     "@fullcalendar/vue": "^5.5.0",
+    "@vue/babel-helper-vue-jsx-merge-props": "^1.2.1",
+    "@vue/babel-preset-jsx": "^1.2.4",
     "autoprefixer": "9",
     "core-js": "^3.6.5",
     "currency.js": "^2.0.3",
