@@ -135,13 +135,13 @@ export default {
         callback: async ()=>{
           this.loading = true
           try {
-            const data = await this.deleteInventory(id)
+            await this.deleteInventory(id)
             this.$toast.open({
-              message: data.message,
+              message: 'Inventory deleted successfully',
             })
           } catch (error) {
             this.$toast.open({
-              message: error.message || 'Something went wrong!',
+              message: 'Something went wrong!',
               type: 'error',
             })
           }finally{

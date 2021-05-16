@@ -16,10 +16,10 @@ export default {
   },
 
   update( params) {
-    return http.patch(`${this.url}/inventory/${params.id}`, params)
+    return http.patch(`${this.url}/inventory/${params.id}/`, params)
   },
 
   delete( id) {
-    return http.delete(`${this.url}/inventory/${id}`)
+    return http.delete(`${this.url}/inventory/${id}/`)
   },
 }

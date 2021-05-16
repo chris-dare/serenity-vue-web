@@ -161,6 +161,7 @@ export default {
     async save() {
       this.loading = true
       const data = await this.createInventory(this.form).catch((error) => {
+        console.log(data)
         this.$toast.open({
           message: error.message || 'Something went wrong!',
           type: 'error',
@@ -169,12 +170,10 @@ export default {
       })
 
 
-      if (data) {
-        this.$toast.open({
-          message: 'Inventory successfully added',
-        })
-        this.visible = false
-      }
+      this.$toast.open({
+        message: 'Inventory successfully added',
+      })
+      this.visible = false
 
       this.loading = false
     },
@@ -183,6 +182,7 @@ export default {
       this.loading = true
       // const params = this.$utils.formatOutgoingRoles(this.form)
       const data =  await this.updateInventory(this.form).catch((error) => {
+        console.log(data)
         this.$toast.open({
           message: error.message || 'Something went wrong!',
           type: 'error',
@@ -191,12 +191,10 @@ export default {
         throw error
       })
 
-      if(data){
-        this.$toast.open({
-          message: 'Role successfully updated',
-        })
-        this.visible = false
-      }
+      this.$toast.open({
+        message: 'Role successfully updated',
+      })
+      this.visible = false
 
       this.loading = false
     },

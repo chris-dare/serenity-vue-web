@@ -17,7 +17,8 @@ export default {
       const provider = rootState.auth.provider
       payload.provider_id = provider.id
       const { data } = await InventoryAPI.create(payload)
-      commit(UPDATE_INVENTORY, data)
+      console.log(data)
+      commit(UPDATE_INVENTORY, data.data)
     } catch ({ response: { data: error } }) {
       throw error
     }
@@ -25,8 +26,9 @@ export default {
 
   async updateInventory({ commit }, payload) {
     try {
+      delete payload.provider
       const { data } = await InventoryAPI.update(payload)
-      commit(UPDATE_INVENTORY, data)
+      commit(UPDATE_INVENTORY, data.data)
     } catch ({ response: { data: error } }) {
       throw error
     }
