@@ -41,7 +41,9 @@ export default {
 
   data() {
     return {
-      form: {},
+      form: {
+        patient: {},
+      },
       columns: ['Patient', 'Mobile'],
       radioVal: null,
       search: '',

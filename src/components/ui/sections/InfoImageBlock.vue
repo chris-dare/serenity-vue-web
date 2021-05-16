@@ -31,7 +31,7 @@
       <div>
         <p :class="labelClass">{{ label }}</p>
         <p
-          :class="customClass.description"
+          :class="[customClass.description, descriptionClass]"
           class="text-secondary capitalize"
         >
           {{ description }}
@@ -71,7 +71,7 @@ export default {
       default: '',
     },
 
-    descriptionColor: {
+    descriptionClass: {
       type: String,
       default: 'text-primary',
     },

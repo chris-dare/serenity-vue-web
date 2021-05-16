@@ -7,6 +7,7 @@ import store from '@/store'
 // middlewares
 import fetchAppointment from './middleware/fetchAppointment'
 import isAdmin from './middleware/isAdmin'
+import isProtectedByPermission from './middleware/isProtectedByPermission'
 import middlewarePipeline from './middlewarePipeline'
 
 Vue.use(VueRouter)
@@ -61,6 +62,7 @@ const routes = [
         path: '/patients',
         name: 'Patients',
         component: () => import(/* webpackChunkName: "client" */ '../views/client/patients/Patients.vue'),
+        meta: { middleware: [isProtectedByPermission], permission: 'patient.read' },
       },
       {
         path: '/settings',
@@ -81,6 +83,16 @@ const routes = [
         path: '/notifications',
         name: 'Notifications',
         component: () => import(/* webpackChunkName: "opd" */ '../views/client/Notifications.vue'),
+      },
+      {
+        path: '/reports',
+        name: 'Reports',
+        component: () => import(/* webpackChunkName: "opd" */ '../views/client/Reports.vue'),
+      },
+      {
+        path: '/orders',
+        name: 'Orders',
+        component: () => import(/* webpackChunkName: "opd" */ '../views/client/Orders.vue'),
       },
       {
         path: '/insights',
@@ -232,6 +244,11 @@ const routes = [
             path: '',
             name: 'SelectPatient',
             component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/SelectPatient.vue'),
+          },
+          {
+            path: '/appointment/:id/update',
+            name: 'AppointmentUpdate',
+            component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/AppointmentUpdate.vue'),
             meta: {middleware: [fetchAppointment]},
           },
           {
@@ -340,6 +357,11 @@ const routes = [
     name: 'ResetPassword',
     component: () => import(/* webpackChunkName: "auth" */ '../views/auth/ResetPassword.vue'),
   },
+  // {
+  //   path: '*',
+  //   name: 'NotFound',
+  //   component: () => import(/* webpackChunkName: "auth" */ '../views/NotFound.vue'),
+  // },
 ]
 
 
@@ -360,6 +382,7 @@ router.beforeEach((to, from, next) => {
     from,
     next,
     store,
+    permission: to.meta.permission ? to.meta.permission : null,
   }
 
   return middleware[0]({

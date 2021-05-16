@@ -150,7 +150,7 @@ export default {
 
     actionChange(value) {
       this.setworkspaceType(value)
-      this.$router.push({ name: this.workspaceType === 'ADMIN' ? 'GetStarted' : 'Dashboard'})
+      this.$router.push({ name: this.workspaceType === 'ADMIN' ? 'GetStarted' : 'Dashboard'}).catch(()=>{})
     },
 
     selectLocation() {},

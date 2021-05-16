@@ -27,6 +27,7 @@
           <SeButton
             v-if="!appointment.isCancelled"
             variant="danger-outline"
+            full
             @click="cancel"
           >
             Cancel Appointment
@@ -82,7 +83,7 @@ export default {
       this.visible = false
     },
     print() {
-      this.$emit('print')
+      this.$trigger('billing:details:open')
       this.visible = false
     },
 

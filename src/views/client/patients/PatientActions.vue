@@ -12,8 +12,6 @@ export default {
 
   components: { DiagnosticPatientActions },
 
-  
-
   computed: {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,

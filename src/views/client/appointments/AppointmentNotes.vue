@@ -40,6 +40,7 @@ export default {
   methods: {
     ...mapActions({
       addToStoreData: 'appointments/addToCurrentAppointment',
+      refresh: 'appointments/refreshCurrentAppointment',
     }),
   },
 }

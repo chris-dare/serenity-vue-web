@@ -27,6 +27,7 @@
           <img
             src="@/assets/img/edit 1.svg"
             class="w-4 h-4"
+            @click="$router.push({name: 'Biodata', params: {id: patient.id}})"
           >
         </div>
       </div>
@@ -97,6 +98,7 @@ export default {
 
   data() {
     return {
+      loading: false,
       hasEncounter: false,
       visible: false,
       admitModal: false,
@@ -108,6 +110,7 @@ export default {
       patient: (state) => state.patients.currentPatient,
       workspaceType: (state) => state.global.workspaceType,
     }),
+
     links() {
       let links = [
         { label: 'Actions', path: 'PatientActions' },

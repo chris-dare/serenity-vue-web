@@ -48,8 +48,8 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ $date.formatDate($faker().date.recent(), 'yyyy/MM/dd') }}</p>
-            <p class="text-secondary text-xs">{{ $date.formatDate($faker().date.recent(), 'HH:mm a') }}</p>
+            <p>{{ $date.formatDate(row.slot.start, 'yyyy/MM/dd') }}</p>
+            <p class="text-secondary text-xs">{{ $date.formatDate(row.slot.start, 'HH:mm a') }} - {{ $date.formatDate(row.slot.end, 'HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -59,7 +59,7 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ row.service.categories }}</p>
+            <p>{{ row.appointmentType | capitalize }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -69,31 +69,11 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div class="flex items-center cursor-pointer space-x-6">
-            <router-link
-              :to="{ name: 'SelectPatient', query: {id: row.id}}"
-            >
-              Edit
-            </router-link>
-            <div
-              class="flex items-center cursor-pointer space-x-2"
-              @click="view(row)"
-            >
-              View
-              <div
-                class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center"
-              >
-                <img
-                  src="@/assets/img/view 1.svg"
-                  alt=""
-                >
-              </div>
-            </div>
-            <!-- <p
-              class="text-red-500 cursor-pointer"
-              @click="$trigger('confirm:delete:open', { data:row.id, label: 'Are you sure you want to delete this appointment?' })"
-            >
-              Delete
-            </p> -->
+            <AppointmentTableActions
+              @edit="edit(row)"
+              @delete="confirmRemove(row)"
+              @view="view(row)"
+            />
           </div>
         </cv-data-table-cell>
       </template>
@@ -124,6 +104,7 @@
 
 <script>
 import AppointmentSummaryModal from '@/components/appointments/AppointmentSummaryModal'
+import AppointmentTableActions from '@/components/appointments/tables/AppointmentTableActions'
 import BillingModal from '@/components/appointments/BillingModal'
 import DataMixin from '@/mixins/data'
 import { mapGetters, mapActions } from 'vuex'
@@ -131,7 +112,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'AppointmentsTable',
 
-  components: {AppointmentSummaryModal, BillingModal},
+  components: {AppointmentSummaryModal, BillingModal, AppointmentTableActions},
 
   mixins: [DataMixin],
 
@@ -182,10 +163,18 @@ export default {
       this.$trigger('appointment:summary:open')
     },
 
+    edit(row) {
+      this.$router.push({name: 'AppointmentUpdate', params: { id: row.id }})
+    },
+
     async cancel(note) {
       await this.cancelAppointment({appointmentId: 1, payload: { cancelationReason: note } })
       this.$toast.open({message: 'Appointment successfully cancelled'})
       this.$trigger('notes:close')
+    },
+
+    confirmRemove(row) {
+      this.$trigger('confirm:delete:open', { data:row.id, label: 'Are you sure you want to delete this appointment?' })
     },
 
 

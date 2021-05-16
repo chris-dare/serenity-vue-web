@@ -23,8 +23,8 @@ export default {
     return http.get(`${this.url}${providerId}/slots/availableslots`, { params: { specialty } })
   },
 
-  update(providerId, params) {
-    return http.patch(`${this.url}${providerId}/appointments/${params.id}`, params)
+  update(providerId, appointmentId, params) {
+    return http.patch(`${this.url}${providerId}/appointment/${appointmentId}`, params)
   },
 
   delete(providerId,id) {

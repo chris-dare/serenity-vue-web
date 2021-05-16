@@ -83,12 +83,14 @@ export default {
     commit(SET_PATIENT_DATA, data)
   },
 
-  findPatient({commit, state}, id) {
+  async findPatient({commit, dispatch, state}, id) {
     const patient = state.patients.find(patient => patient.id === id)
 
     if (patient) {
       const pat = new Patient(patient).getNormalizedView()
       commit(SET_PATIENT_DATA, pat)
+    }else{
+      await dispatch('getPatient', id)
     }
   },
 }

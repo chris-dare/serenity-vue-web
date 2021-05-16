@@ -45,9 +45,8 @@ export default {
 
       try {
         await this.getData(refreshData)
-      } catch (error) {
         this.loading = false
-      } finally {
+      } catch (error) {
         this.loading = false
       }
     },

@@ -1,4 +1,4 @@
-import store from '@/store'
+import Vue from 'vue'
 export default class Appointment {
   constructor(data) {
     this.data = { ...data }
@@ -7,12 +7,14 @@ export default class Appointment {
   getNormalizedView() {
     let data = {
       ...this.data,
-      patient: this.getPatient(this.data.patient),
-      practitioner: this.getPractioner(this.data.practitioner),
-      service: this.getService(this.data.Healthcareservice),
+      patient: this.formatPatientData(this.data.patient),
+      practitioner: this.formatPatientData(this.data.practitioner),
+      service: this.formatServiceData(this.data.Healthcareservice),
+      slot: this.formatSlotData(this.data.slot, this.data.practitioner),
+      date: Vue.prototype.$date.formatDate(this.data.slot.start),
+      service_tier: this.formatServiceTierData(this.data.service_tier),
       isCancelled: this.data.status === 'cancelled',
       isPending: this.data.status === 'pending',
-      slot: null,
     }
 
     return data
@@ -22,7 +24,7 @@ export default class Appointment {
     let createData = { }
     
     createData.comment = this.data.comment || ''
-    createData.appointmentType = this.data.appointmentType.value || 'ROUTINE'
+    createData.appointmentType = this.data.appointmentType || 'ROUTINE'
     createData.healthcareservice_id = this.data.service.id
     createData.slot_id = this.data.slot ? this.data.slot.id : null
     createData.patient_id = this.data.patient ? this.data.patient.id : null
@@ -32,21 +34,47 @@ export default class Appointment {
     return createData
   }
 
-  getPatient(id) {
-    const patients = store.getters['patients/patients']
-
-    return patients ? patients.find(pat => pat.id === id) : null
+  getUpdateView() {
+    let updateData = { }
+    
+    updateData.comment = this.data.comment || ''
+    updateData.appointmentType = this.data.appointmentType || 'ROUTINE'
+    updateData.slot_id = this.data.slot ? this.data.slot.id : null
+    updateData.service_tier = this.data.service_tier ? this.data.service_tier.value : null
+    
+    return updateData
   }
 
-  getService(id) {
-    const services = store.getters['services/normalizedServices']
-
-    return services ? services.find(pat => pat.id === id) : null
+  formatServiceData(data) {
+    return {
+      ...data,
+      categories: data.healthcare_service_category,
+    }
   }
 
-  getPractioner(id) {
-    const practitioners = store.getters['practitioners/practitioners']
+  formatServiceTierData(data) {
+    return {
+      ...data,
+      label: `${data.name} - ${data.currency} ${data.cost}`,
+      value: data.name,
+    }
+  }
 
-    return practitioners ? practitioners.find(pat => pat.id === id) : null
+  formatPatientData(data) {
+    return {
+      ...data,
+      phone: data.telephone,
+      fullName: data.full_name,
+      name: data.full_name,
+    }
+  }
+
+  formatSlotData(data, practitioner) {
+    return {
+      ...data,
+      date: `${Vue.prototype.$date.formatDate(data.start, 'dd MMM')}`,
+      slot: `${ Vue.prototype.$date.formatDate(data.start, 'HH:mm a') } - ${ Vue.prototype.$date.formatDate(data.end, 'HH:mm a') }`,
+      practitioner: this.formatPatientData(practitioner),
+    }
   }
 }

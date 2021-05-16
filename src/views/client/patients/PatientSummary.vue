@@ -41,6 +41,7 @@ export default {
     },
   
     emergencyFields() {
+      if(!this.patient.emergency_contact)return []
       return [
         { label: 'First name', value: this.patient.emergency_contact.first_name },
         { label: 'Last name', value: this.patient.emergency_contact.last_name },
@@ -50,6 +51,7 @@ export default {
     },
 
     socialFields() {
+      if(!this.patient)return []
       return [
         { label: 'Marital Status', value: this.patient.marital_status },
         { label: 'Religion', value: this.patient.religion },
@@ -61,6 +63,7 @@ export default {
     },
   
     summaryFields() {
+      if(!this.patient.payment_method)return []
       return [
         { label: 'Method', value: this.patient.payment_method.payment_type },
         { label: 'Payer', value: this.patient.payment_method.payer },

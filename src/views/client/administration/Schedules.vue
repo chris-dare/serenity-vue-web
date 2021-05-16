@@ -85,8 +85,8 @@ export default {
   data() {
     return {
       date: {
-        // start: this.$date.startOfMonth(),
-        // end: this.$date.endOfMonth(),
+        start: this.$date.startOfMonth(),
+        end: this.$date.endOfMonth(),
       },
       calOptions: {
         dateFormat: 'm/d/Y',

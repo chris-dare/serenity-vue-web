@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import AppointmentsTable from '@/components/appointments/AppointmentsTable'
 
 export default {
@@ -36,6 +36,16 @@ export default {
     ...mapState({
       appointmentsCount: (state) => state.appointments.appointmentsCount,
     }),
+  },
+
+  methods: {
+    ...mapActions({
+      refresh: 'appointments/refreshCurrentAppointment',
+    }),
+    createAppointment() {
+      this.refresh()
+      this.$router.push({ name: 'SelectPatient' })
+    },
   },
 }
 </script>
