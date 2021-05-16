@@ -5,23 +5,25 @@
       <div>
         <div class="grid grid-cols-2 gap-8 my-8">
           <cv-text-input
-            v-model="form.first_name"
+            v-model="form.company_name"
             label="Company name (required)"
             placeholder="Company Name"
             type="text"
             class="inherit-full-input"
+            :invalid-message="$utils.validateRequiredField($v, 'company_name')"
           />
           <cv-text-input
             v-model="form.email"
             label="Email (required)"
             placeholder="Email address"
             class="inherit-full-input"
+            :error-message="$utils.validateRequiredField($v, 'email')"
           />
-          <cv-text-input
-            v-model="form.other_names"
-            label="Phone number"
-            placeholder="Phone number"
-            class="inherit-full-input"
+          <PhoneInput
+            v-model="form.phone_number"
+            label="Phone number (required)"
+            placeholder="eg 0349990390"
+            @input="$v.$touch()"
           />
           <cv-text-input
             v-model="form.tin"
@@ -42,21 +44,19 @@
            
 
         <div class="flex items-center justify-between mt-12 mb-6 w-full">
-          <cv-button
-            class="border-serenity-primary text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary px-6"
-            kind="tertiary"
+          <SeButton
+            variant="outline"
+            @click="cancel"
           >
             Cancel
-          </cv-button>
+          </SeButton>
           <div class="flex items-center">
-            <cv-button
+            <SeButton
               :icon="icon"
-              kind="primary"
-              class="bg-serenity-primary ml-6"
-              @click="$router.push({name: 'CompanyAdminInformation'})"
+              @click="save"
             >
               Next
-            </cv-button>
+            </SeButton>
           </div>
         </div>
       </div>
@@ -65,28 +65,53 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
+import { mapActions, mapState } from 'vuex'
+import { required, email } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import MultiStep from '@/mixins/multistep'
+
 export default {
+  mixins: [MultiStep],
+
   data() {
     return {
-      form: {
-        title: 'Mr.',
-      },
+      form: {},
       icon: ChevronRight,
+      parent: 'CorporateClients',
     }
+  },
+
+  created() {
+    this.form = this.storeData
+  },
+
+  computed: {
+    ...mapState({
+      storeData: (state) => state.clients.form,
+    }),
   },
 
   validations: {
     form: {
-      first_name: { required },
-      last_name: { required },
-      gender: { required },
+      company_name: { required },
+      email: { email },
     },
   },
 
   methods: {
+    ...mapActions({
+      addToStoreData: 'clients/addToCurrentUser',
+      refresh: 'clients/refreshForm',
+    }),
     actionChange() {},
+    save() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return
+      }
+      this.addToStoreData(this.form)
+      this.$router.push({name: 'CompanyAdminInformation'})
+    },
   },
 }
 </script>
