@@ -3,6 +3,7 @@ export default {
     RECEPT: [
       { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference', group_by: 'client care' },
+      { label: 'Pharmacy', to: 'Pharmacy', component: 'Medication' },
       { label: 'Visits', to: 'Visits', component: 'Medical' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
       { label: 'Reports', to: 'Reports', component: 'Report' },
@@ -15,6 +16,7 @@ export default {
       { label: 'Get Started', to: 'GetStarted', component: 'Star' },
       { label: 'Dashboard', to: 'AdminDashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference', group_by: 'client care' },
+      { label: 'Pharmacy', to: 'Pharmacy', component: 'Medication' },
       { label: 'Corporate Clients', to: 'CorporateClients', component: 'Baggage' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
       { label: 'Billing', to: 'Billing', component: 'Align', group_by: 'hospital operations'},
@@ -30,6 +32,7 @@ export default {
     OPD: [
       { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference' },
+      { label: 'Pharmacy', to: 'Pharmacy', component: 'Medication' },
       { label: 'Visits', to: 'Visits', component: 'Medical' },
       { label: 'Orders', to: 'Orders', component: 'Medical' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
@@ -58,6 +61,7 @@ export default {
     HOME: [
       { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference' },
+      { label: 'Pharmacy', to: 'Pharmacy', component: 'Medication' },
       { label: 'Visits', to: 'Visits', component: 'Medical' },
       { label: 'Orders', to: 'Orders', component: 'Medical' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
@@ -83,6 +87,7 @@ export default {
     PHARM: [
       { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference' },
+      { label: 'Pharmacy', to: 'Pharmacy', component: 'Medication' },
       { label: 'Visits', to: 'Visits', component: 'Medical' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
       { label: 'Bills', to: 'Billing', component: 'Align'},
@@ -97,6 +102,7 @@ export default {
     COVID: [
       { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference' },
+      { label: 'Pharmacy', to: 'Pharmacy', component: 'Medication' },
       { label: 'WHO forms', to: 'Visits', component: 'Medical' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
       { label: 'Bills', to: 'Billing', component: 'Align'},
