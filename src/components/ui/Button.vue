@@ -94,6 +94,9 @@ export default {
       if (this.variant  === 'secondary') {
         return 'bg-black text-white'
       }
+      if (this.variant  === 'warning') {
+        return 'bg-warning hover:bg-warning text-black'
+      }
 
       if (this.variant  === 'secondary-outline') {
         return 'border-black bg-transparent text-black hover:text-white focus:bg-black hover:bg-black'

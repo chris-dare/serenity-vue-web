@@ -98,5 +98,7 @@ export default {
       this.visible = false
     },
   },
+
+  methods: {},
 }
 </script>

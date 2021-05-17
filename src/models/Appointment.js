@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import isAfter from 'date-fns/isAfter'
+import parseISO from 'date-fns/parseISO'
 export default class Appointment {
   constructor(data) {
     this.data = { ...data }
@@ -15,6 +17,7 @@ export default class Appointment {
       service_tier: this.formatServiceTierData(this.data.service_tier),
       isCancelled: this.data.status === 'cancelled',
       isPending: this.data.status === 'pending',
+      isPast: isAfter(Date.now(), parseISO(this.data.slot.end)),
     }
 
     return data
@@ -29,7 +32,7 @@ export default class Appointment {
     createData.slot_id = this.data.slot ? this.data.slot.id : null
     createData.patient_id = this.data.patient ? this.data.patient.id : null
     createData.service_tier = this.data.service_tier ? this.data.service_tier.value : null
-    // createData.patient_id = 'f45195f3-05f6-4adf-985c-63acb648a688'
+    // createData.patient_id = '471d2637-56c4-420e-bde6-1489c3b93c79'
     
     return createData
   }

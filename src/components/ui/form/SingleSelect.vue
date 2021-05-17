@@ -9,6 +9,7 @@
       :show-labels="false"
       :placeholder="placeholder"
       :preselect-first="preselect"
+      :custom-label="customLabel"
     />
     <p
       v-if="error || errorMessage"
@@ -21,6 +22,8 @@
 
 <script>
 import VueMultiselect from 'vue-multiselect'
+import isEmpty from 'lodash/isEmpty'
+
 export default {
   name: 'SingleSelect',
 
@@ -61,6 +64,14 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    customLabel: {
+      type: Function,
+      default (option, label) {
+        if (isEmpty(option)) return ''
+        return label ? option[label] : option
+      },
+    },
   },
 
   computed: {
@@ -75,7 +86,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

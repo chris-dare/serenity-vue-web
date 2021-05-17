@@ -38,4 +38,8 @@ export default {
       return slot
     })
   },
+
+  patientAppointments: (state, getters) => (id) => {
+    return getters.appointments.filter(appointment => appointment.id === id)
+  },
 }

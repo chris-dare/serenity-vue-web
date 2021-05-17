@@ -5,6 +5,7 @@ import {
   SET_PATIENTS_COUNT,
   ADD_PATIENT_DATA,
   SET_PATIENT_DATA,
+  SET_MEDICATION,
 } from './mutation-types'
 
 export default {
@@ -39,5 +40,9 @@ export default {
 
   [SET_PATIENT_DATA](state, data) {
     state.currentPatient = data
+  },
+
+  [SET_MEDICATION](state, data) {
+    state.patientMedications = data
   },
 }

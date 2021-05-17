@@ -1,15 +1,17 @@
 <template>
   <div class="mb-4">
     <div
-      class="flex items-center justify-between"
-      @click="isClosed = !isClosed"
+      class="flex items-center justify-between w-full"
     >
-      <div class="flex items-center">
+      <div class="flex items-center w-full">
         <CaretUp32
           :class="[isClosed ? 'rotate-90' : 'rotate-180']"
           class="transform transition-all duration-100 ease-linear mr-2 text-serenity-primary w-5 h-5 cursor-pointer"
+          @click="isClosed = !isClosed"
         />
-        <slot name="title"> {{ title }} </slot>
+        <div class="flex-1">
+          <slot name="title"> {{ title }} </slot>
+        </div>
       </div>
     </div>
     <div

@@ -19,8 +19,7 @@
         <p class="text-secondary mb-2">Date and Time of Encounter</p>
         <div class="flex items-center text-primary">
           <p>
-            Thursday, Mar 13, 2020
-            8:15 am
+            {{ $date.formatDate(currentEncounter.start_time, 'EEEE,  MMM dd, yyyy hh:mm a') }}
           </p>
         </div>
       </div>
@@ -28,9 +27,15 @@
     <div>
       <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
         <div slot="title">
-          <p class="text-serenity-primary">Diagnosis</p>
+          <div class="flex items-center justify-between">
+            <p class="text-serenity-primary">Diagnosis</p>
+            <AddFilled
+              class="w-5 h-5 text-serenity-primary"
+              @click="$trigger('encounter:add:diagnosis:open')"
+            />
+          </div>
         </div>
-        <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
+        <EncounterDiagnosis />
       </ToggleList>
       <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
         <div slot="title">
@@ -62,18 +67,46 @@
         <EncounterPatientVitals />
       </ToggleList>
     </div>
+
+    <EncounterDiagnosisModal />
   </div>
 </template>
 
 <script>
 import EncounterPatientVitals from './EncounterPatientVitals'
-export default {
-  name: 'Encounters',
+import EncounterDiagnosis from './EncounterDiagnosis'
+import EncounterDiagnosisModal from './EncounterDiagnosisModal'
+import { mapState } from 'vuex'
 
-  components: {EncounterPatientVitals},
+export default {
+  name: 'EncounterDetailCard',
+
+  components: { EncounterPatientVitals, EncounterDiagnosis, EncounterDiagnosisModal },
+
+  computed: {
+    ...mapState({
+      currentEncounter: state => state.encounters.currentEncounter,
+    }),
+  },
+
+  methods: {
+    end() {
+      this.$trigger('visit:end:open', {
+        callback: async () => {
+          this.loading = true
+          try {
+            await this.endEncounter()
+            this.$toast.open({
+              message: 'Encounter ended successfully',
+            })
+          } catch (error) {
+            // empty
+          } finally {
+            this.loading = false
+          }
+        },
+      })
+    },
+  },
 }
 </script>
-
-<style>
-
-</style>

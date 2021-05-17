@@ -31,40 +31,36 @@
         </div>
       </div>
       <div class="flex items-center space-x-4">
-        <p
-          class="underline cursor-pointer"
-          @click="$trigger('visit:end:open')"
-        >
-          End Visit
-        </p>
-        <AddNewDropdown />
-        <cv-button
-          v-if="!hasEncounter"
-          kind="primary"
-          size="field"
-          class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
-          @click="$router.push({ name: 'SelectPatient' })"
-        >
-          Record a new encounter
-          <Add class="ml-2 w-5 h-5 text-white" />
-        </cv-button>
-        <cv-button
-          v-else
-          kind="primary"
-          size="field"
-          class="px-4 bg-warning hover:bg-warning mr-2 text-black"
-          @click="$router.push({ name: 'SelectPatient' })"
-        >
-          Open ongoing encounter
-          <Add class="ml-2 w-5 h-5 text-white" />
-        </cv-button>
         <SeButton
-          v-if="false"
-          variant="danger"
-          @click="$trigger('profile:deceased-info:open')"
+          v-if="!hasActiveEncounter"
+          variant="secondary"
+          @click="$trigger('start:encounter:open')"
         >
-          Patient is deceaseed - read more
+          Start Encounter
+          <Add class="ml-2 w-5 h-5 text-white" />
         </SeButton>
+        <div class="flex items-center space-x-4">
+          <p
+            class="underline cursor-pointer"
+            @click="end"
+          >
+            End Encounter
+          </p>
+          <AddNewDropdown />
+        
+          <SeButton
+            variant="warning"
+          >
+            Begin Consultation
+          </SeButton>
+          <SeButton
+            v-if="false"
+            variant="danger"
+            @click="$trigger('profile:deceased-info:open')"
+          >
+            Patient is deceaseed - read more
+          </SeButton>
+        </div>
       </div>
     </div>
 
@@ -78,7 +74,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import AddNewDropdown from '@/components/patients/AddNewDropdown'
 import SinglePatientModals from '@/components/patients/modals/SinglePatientModals'
 import PatientDetailsNav from '@/components/patients/PatientDetailsNav'
@@ -110,6 +106,10 @@ export default {
       workspaceType: (state) => state.global.workspaceType,
     }),
 
+    ...mapGetters({
+      hasActiveEncounter: 'encounters/hasActiveEncounter',
+    }),
+
     links() {
       let links = [
         { label: 'Actions', path: 'PatientActions' },
@@ -139,13 +139,37 @@ export default {
   },
 
   beforeRouteEnter (to, from, next) {
-    next(vm => vm.getPatient(vm.id))
+    next(async vm => {
+      await vm.getPatient(vm.id)
+      vm.getEncounters(vm.id)
+    })
   },
 
   methods: {
     ...mapActions({
       getPatient: 'patients/getPatient',
+      getEncounters: 'encounters/getEncounters',
+      endEncounter: 'encounters/endEncounter',
     }),
+
+
+    end() {
+      this.$trigger('visit:end:open', {
+        callback: async () => {
+          this.loading = true
+          try {
+            await this.endEncounter()
+            this.$toast.open({
+              message: 'Encounter ended successfully',
+            })
+          } catch (error) {
+            // empty
+          } finally {
+            this.loading = false
+          }
+        },
+      })
+    },
   },
 }
 </script>

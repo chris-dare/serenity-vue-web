@@ -8,6 +8,7 @@ import {
   SET_PATIENTS_COUNT,
   ADD_PATIENT_DATA,
   SET_PATIENT_DATA,
+  SET_MEDICATION,
 } from './mutation-types'
 
 export default {
@@ -91,6 +92,26 @@ export default {
       commit(SET_PATIENT_DATA, pat)
     }else{
       await dispatch('getPatient', id)
+    }
+  },
+
+  async getMedication({ commit, rootState }) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await PatientsAPI.getMedication(provider.id)
+      commit(SET_MEDICATION, data)
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
+  async createMedication({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await PatientsAPI.createMedication(provider.id, payload)
+      commit(SET_MEDICATION, data)
+    } catch (error) {
+      throw error.data || error
     }
   },
 }

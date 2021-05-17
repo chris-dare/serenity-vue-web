@@ -17,10 +17,15 @@
           class="w-10 h-10 text-red-500"
         />
         <p>{{ label }}</p>
-        <SeButton full>{{ buttonLabel }}</SeButton>
+        <SeButton
+          full
+          @click="confirm"
+        >
+          {{ buttonLabel }}
+        </SeButton>
         <p
           class="underline cursor-pointer"
-          @click="visible = false"
+          @click="close"
         >
           Go back
         </p>
@@ -45,7 +50,7 @@ export default {
 
     label: {
       type: String,
-      default: 'Are you sure you want to end this visit?',
+      default: 'Are you sure you want to end this encounter?',
     },
     buttonLabel: {
       type: String,
@@ -56,14 +61,37 @@ export default {
   data() {
     return {
       visible: false,
+      callback: null,
     }
   },
 
   events: {
-    'visit:end:open': function(){
+    'visit:end:open': function(_ev, { callback }){
+      if(this.visible)return
+      this.callback = callback
       this.visible = true
     },
+
     'visit:end:close': function(){
+      this.visible = false
+    },
+  },
+
+  methods: {
+    async confirm() {
+      this.visible = false
+      if(this.callback){
+        try {
+          await this.callback(this.data)
+        } catch {
+          //empty
+        } finally {
+          this.close()
+        }
+      }
+    },
+  
+    close() {
       this.visible = false
     },
   },

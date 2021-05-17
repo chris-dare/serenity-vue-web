@@ -13,7 +13,7 @@
       :track-by="trackBy"
       :preselect-first="preselect"
       :show-labels="false"
-      :internal-search="false"
+      :internal-search="enableSearch"
       :custom-label="customLabel"
       :disabled="disabled"
       @select="$emit('select', $event)"
@@ -102,6 +102,11 @@ export default {
     customField: {
       type:String,
       default: null,
+    },
+
+    enableSearch: {
+      type: Boolean,
+      default: false,
     },
   },
 

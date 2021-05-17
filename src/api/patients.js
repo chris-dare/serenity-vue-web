@@ -28,4 +28,8 @@ export default {
   delete(providerId,id) {
     return http.delete(`${this.url}${providerId}/patients/${id}`)
   },
+
+  getMedication(providerId) {
+    return http.get(`${this.url}${providerId}/patients`)
+  },
 }

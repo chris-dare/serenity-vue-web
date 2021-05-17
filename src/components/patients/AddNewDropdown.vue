@@ -21,21 +21,25 @@
       <div
         v-for="(option, index) in options"
         :key="index"
-        class="flex items-center justify-between p-4 hover:bg-gray-200 cursor-pointer"
-        :to="{name: option.path}"
+        :to="{ name: option.path }"
         tag="div"
         @click="onClick(option)"
       >
-        <p :class="{'text-orange text-lg': option.noIcon}">{{ option.label }}</p>
         <div
-          v-if="!option.noIcon"
-          class="flex justify-center items-center rounded-full h-4 w-4 mr-3"
-          :class="option.color"
+          v-if="!option.permission || $userCan(option.permission)"
+          class="flex items-center justify-between p-4 hover:bg-gray-200 cursor-pointer"
         >
-          <component
-            :is="option.component"
-            class="w-3 h-3 text-black"
-          />
+          <p :class="{'text-orange text-lg': option.noIcon}">{{ option.label }}</p>
+          <div
+            v-if="!option.noIcon"
+            class="flex justify-center items-center rounded-full h-4 w-4 mr-3"
+            :class="option.color"
+          >
+            <component
+              :is="option.component"
+              class="w-3 h-3 text-black"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -70,41 +74,48 @@ export default {
           component: 'Cursor32',
           color: 'bg-tetiary',
           slug: 'admit',
+          permission: null,
         },
         {
           label: 'Capture vitals',
           component: 'HealthCross',
           color: 'bg-tetiary',
           path: 'Vitals',
+          permission: 'vitals.write',
         },
         {
           label: 'Diagnostic test',
           component: 'Microscope',
           color: 'bg-tetiary',
           slug: 'test',
+          permission: null,
         },
         {
           label: 'Medication',
           component: 'Medication',
           color: 'bg-tetiary',
           slug: 'medication',
+          permission: 'medication.orders.write',
         },
         {
           label: 'Note',
           component: 'DicomOverlay',
           color: 'bg-tetiary',
           slug: 'notes',
+          permission: null,
         },
         {
           label: 'Referral',
           component: 'StudySkip',
           color: 'bg-tetiary',
           path: 'Vitals',
+          permission: null,
         },
         {
           label: 'Mark as deceased',
           noIcon: true,
           slug: 'deceased',
+          permission: null,
         },
       ]
     },

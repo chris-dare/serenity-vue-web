@@ -64,11 +64,14 @@ export default {
       visible: false,
       form: {},
       loading: false,
+      callback: null,
     }
   },
 
   events: {
-    'notes:open': function() {
+    'notes:open': function(_ev, { callback }){
+      if(this.visible)return
+      this.callback = callback
       this.visible = true
     },
     'notes:edit': function(data) {
@@ -104,14 +107,26 @@ export default {
       this.$emit('close')
     },
 
-    save() {
+    async save() {
       this.$v.$touch()
 
       if (this.$v.$invalid) {
         return
       }
       this.loading = true
-      this.$emit('save', this.form.notes)
+      
+
+      if(this.callback){
+        try {
+          await this.callback(this.form)
+        } catch {
+          //empty
+        } finally {
+          this.close()
+        }
+      } else {
+        this.$emit('save', this.form.notes)
+      }
     },
   },
 }
