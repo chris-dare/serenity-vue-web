@@ -134,7 +134,7 @@ export default {
         this.$router.push({name: 'CorporateClients'})
       } catch (error) {
         this.$toast.open({
-          message: 'Something went wrong!',
+          message: error.message || 'Something went wrong!',
           type: 'error',
         })
       }
