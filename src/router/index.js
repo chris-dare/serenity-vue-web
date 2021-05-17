@@ -341,6 +341,11 @@ const routes = [
         ],
       },
       {
+        path: '/pharmacy',
+        name: 'Pharmacy',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/pharmacy/Pharmacy.vue'),
+      },
+      {
         path: '/pharmacy/patients',
         name: 'Pharmacy:Patients',
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/pharmacy/Patients.vue'),
