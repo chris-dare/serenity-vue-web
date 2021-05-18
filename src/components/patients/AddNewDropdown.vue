@@ -69,18 +69,19 @@ export default {
   computed: {
     options() {
       return [
-        {
-          label: 'Admit Patient',
-          component: 'Cursor32',
-          color: 'bg-tetiary',
-          slug: 'admit',
-          permission: null,
-        },
+        // {
+        //   label: 'Admit Patient',
+        //   component: 'Cursor32',
+        //   color: 'bg-tetiary',
+        //   slug: 'admit',
+        //   permission: null,
+        //   hide: this.workspaceType === 'IPD',
+        // },
         {
           label: 'Capture vitals',
           component: 'HealthCross',
           color: 'bg-tetiary',
-          path: 'Vitals',
+          path: { name: 'Vitals', query: {id: this.$route.params.id} },
           permission: 'vitals.write',
         },
         {
@@ -94,7 +95,7 @@ export default {
           label: 'Medication',
           component: 'Medication',
           color: 'bg-tetiary',
-          slug: 'medication',
+          slug: 'medication:request',
           permission: 'medication.orders.write',
         },
         {
@@ -108,7 +109,7 @@ export default {
           label: 'Referral',
           component: 'StudySkip',
           color: 'bg-tetiary',
-          path: 'Vitals',
+          path: { name: 'Vitals', query: {id: this.$route.params.id} },
           permission: null,
         },
         {
@@ -124,7 +125,7 @@ export default {
   methods: {
     onClick(option) {
       if (option.path) {
-        this.$router.push({ name: option.path})
+        this.$router.push(option.path)
         return
       } else {
         this.$trigger(`profile:${option.slug}:open`)

@@ -8,6 +8,8 @@
     <DeceasedDetailsModal />
     <EndVisitConfirmationModal />
     <StartEncounterModal />
+    <ServiceRequestModal />
+    <MedicationRequestModal />
   </div>
 </template>
 
@@ -20,11 +22,13 @@ const MarkAsDeceasedModal = () => import('@/components/patients/modals/MarkAsDec
 const DeceasedDetailsModal = () => import('@/components/patients/modals/DeaceasedDetailsModal')
 const EndVisitConfirmationModal = () => import('@/components/patients/modals/EndVisitConfirmationModal')
 const StartEncounterModal = () => import('@/components/patients/encounters/StartEncounterModal')
+const ServiceRequestModal = () => import('@/components/patients/modals/ServiceRequestModal')
+const MedicationRequestModal = () => import('@/components/patients/modals/MedicationRequestModal')
 
 
 
 export default {
   name: 'SinglePatientModals',
-  components: { AdmitPatientModal, StartEncounterModal, RequestDiagnosticTestModal, AddMedicationModal, AddNotesModal, MarkAsDeceasedModal, DeceasedDetailsModal, EndVisitConfirmationModal },
+  components: { AdmitPatientModal, MedicationRequestModal, StartEncounterModal, ServiceRequestModal, RequestDiagnosticTestModal, AddMedicationModal, AddNotesModal, MarkAsDeceasedModal, DeceasedDetailsModal, EndVisitConfirmationModal },
 }
 </script>

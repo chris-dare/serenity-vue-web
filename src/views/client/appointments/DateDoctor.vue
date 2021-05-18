@@ -12,7 +12,8 @@
     <div class="grid">
       <DatePicker
         v-model="form.date"
-        type="datetime"
+        type="date"
+        @change="filter"
       />
     </div>
     <div class="flex items-center space-x-4 my-4">
@@ -54,6 +55,7 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
 import startOfDay from 'date-fns/startOfDay'
+// import endOfDay from 'date-fns/endOfDay'
 
 export default {
   name: 'DateDoctor',
@@ -69,6 +71,7 @@ export default {
         date: startOfDay(new Date()),
         slot: {},
       },
+      filters: '',
       time: Time,
       loading: false,
       selected: 1,
@@ -119,9 +122,7 @@ export default {
 
       return
     }
-    this.loading = true
-    await this.getSlots(specialty.Code)
-    this.loading = false
+    this.filter()
   },
 
   validations: {
@@ -136,6 +137,22 @@ export default {
       refresh: 'appointments/refreshCurrentAppointment',
       getSlots: 'appointments/getSlots',
     }),
+
+    async filter() {
+      this.loading = true
+      // const filters = this.convertFromDatePickerFormat(this.filters)
+      // console.log('filters', filters)
+      await this.getSlots({ service_specialty: this.storeData.specialty.Code })
+      this.loading = false
+    },
+
+    convertFromDatePickerFormat(val) {
+      console.log('val', val)
+      return {
+        start_date: this.$date.formatQueryParamsDate(val.split('to')[0]),
+        end_date: val.includes('to') ? this.$date.formatQueryParamsDate(val.split('to')[1]) : this.$date.formatQueryParamsDate(this.$date.endOfDate(val.split('to')[0])),
+      }
+    },
   },
 }
 </script>

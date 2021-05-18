@@ -41,60 +41,55 @@
         </cv-button>
       </div>
 
-      <cv-data-table
+      <DataTable
         ref="table"
         :data="filteredData"
         :columns="columns"
+        :loading="loading"
         :pagination="pagination"
         @pagination="actionOnPagination"
       >
-        <template slot="data">
-          <cv-data-table-row
-            v-for="(row, rowIndex) in filteredData"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
-          >
-            <cv-data-table-cell>
-              <div class="flex items-center py-4 space-x-2">
-                <InfoImageBlock
-                  :url="row.photo"
-                  :label="row.patientname"
-                />
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ row.service_or_product_name }}</p>
-            </cv-data-table-cell>
+        <template #default="{row}">
+          <cv-data-table-cell>
+            <div class="flex items-center py-4 space-x-2">
+              <InfoImageBlock
+                :url="row.photo"
+                :label="row.patientname"
+              />
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.service_or_product_name }}</p>
+          </cv-data-table-cell>
             
             
-            <cv-data-table-cell>
-              <p>{{ $currency(Math.round(Math.random())).format() }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ row.paymentMethod }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p class="camelcase">{{ row.status }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ $currency(Math.round(Math.random())).format() }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.paymentMethod }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p class="camelcase">{{ row.status }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div
+              class="flex items-center cursor-pointer"
+              @click="$trigger('billing:detail:open', { ...row })"
+            >
+              View bill
               <div
-                class="flex items-center cursor-pointer"
-                @click="$trigger('billing:detail:open', { ...row })"
+                class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center"
               >
-                View bill
-                <div
-                  class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center"
+                <img
+                  src="@/assets/img/view 1.svg"
+                  alt=""
                 >
-                  <img
-                    src="@/assets/img/view 1.svg"
-                    alt=""
-                  >
-                </div>
               </div>
-            </cv-data-table-cell>
-          </cv-data-table-row>
+            </div>
+          </cv-data-table-cell>
         </template>
-      </cv-data-table>
+      </DataTable>
     </div>
     <ViewBillingDetails />
   </div>

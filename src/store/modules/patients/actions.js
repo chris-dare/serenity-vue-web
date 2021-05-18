@@ -1,5 +1,9 @@
 import PatientsAPI from '@/api/patients'
 import Patient from '@/models/Patient'
+import ServiceRequestsAPI from '@/api/service-requests'
+import MedicationAPI from '@/api/medication'
+import ObservationsAPI from '@/api/observations'
+import Vue from 'vue'
 
 import {
   UPDATE_PATIENT,
@@ -8,10 +12,22 @@ import {
   SET_PATIENTS_COUNT,
   ADD_PATIENT_DATA,
   SET_PATIENT_DATA,
-  SET_MEDICATION,
+  SET_MEDICATION_REQUESTS,
+  UPDATE_SERVICE_REQUEST,
+  SET_SERVICE_REQUESTS,
+  SET_OBSERVATIONS,
+  UPDATE_OBSERVATION,
 } from './mutation-types'
 
 export default {
+  async initSinglePatientInformation({dispatch}, id) {
+    dispatch('getPatient', id)
+    dispatch('getServiceRequests')
+    dispatch('getMedicationRequests')
+    dispatch('getObservations')
+    dispatch('encounters/getEncounters', id , { root:true })
+  },
+
   async getPatients({ commit, rootState, state }, refresh = true) {
     if (!refresh && state.patients.length) {
       return
@@ -95,23 +111,98 @@ export default {
     }
   },
 
-  async getMedication({ commit, rootState }) {
+  async getMedicationRequests({ commit, rootState, state}, refresh = false) {
+    if (!refresh && state.patientMedications.length) {
+      return
+    }
     try {
       const provider = rootState.auth.provider
-      const { data } = await PatientsAPI.getMedication(provider.id)
-      commit(SET_MEDICATION, data)
+      const { data } = await MedicationAPI.list(provider.id)
+      commit(SET_MEDICATION_REQUESTS, data)
     } catch (error) {
       throw error.data || error
     }
   },
 
-  async createMedication({ commit, rootState }, payload) {
+  async createMedicationRequest({ commit, rootState }, payload) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await PatientsAPI.createMedication(provider.id, payload)
-      commit(SET_MEDICATION, data)
+      const { data } = await MedicationAPI.create(provider.id, payload)
+      commit(SET_MEDICATION_REQUESTS, data)
     } catch (error) {
       throw error.data || error
+    }
+  },
+
+  //  lab requests
+  async getServiceRequests({ commit, rootState, state }, refresh = true) {
+    if (!refresh && state.patientServiceRequests.length) {
+      return
+    }
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ServiceRequestsAPI.list(provider.id)
+      commit(SET_SERVICE_REQUESTS, data)
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
+  async createServiceRequest({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ServiceRequestsAPI.create(provider.id, payload)
+      commit(UPDATE_SERVICE_REQUEST, data)
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
+  async updateServiceRequest({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ServiceRequestsAPI.update(provider.id, payload)
+      commit(UPDATE_SERVICE_REQUEST, data)
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
+  //  lab requests
+  async getObservations({ commit, rootState, state }, refresh = true) {
+    if (!refresh && state.patientObservations.length) {
+      return
+    }
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ObservationsAPI.list(provider.id)
+      commit(SET_OBSERVATIONS, data)
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
+  async createObservation({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ObservationsAPI.create(provider.id, payload)
+      commit(UPDATE_OBSERVATION, data)
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
+  async updateObservation({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ObservationsAPI.update(provider.id, payload)
+      commit(UPDATE_OBSERVATION, data)
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
     }
   },
 }

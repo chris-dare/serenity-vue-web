@@ -1,19 +1,18 @@
 <template>
-  <div class="bg-white pb-4">
+  <div v-if="hasNoCurrentEncounter">
+    There's no current encounter
+  </div>
+  <div
+    v-else
+    class="bg-white pb-4"
+  >
     <div class="p-4 grid grid-cols-2">
       <div>
-        <p class="text-secondary mb-2">Doctor in charge</p>
-        <div class="flex items-center">
-          <img
-            class="w-10 h-10 rounded-full mr-3"
-            :src="$faker().image.image()"
-            alt=""
-          >
-          <div>
-            <p class="text-black">Dr. {{ $faker().name.findName() }}</p>
-            <p class=" text-secondary">General practitioner</p>
-          </div>
-        </div>
+        <p class="text-secondary">Doctor in charge</p>
+        <InfoImageBlock
+          :label="fullName"
+          description="General practitioner"
+        />
       </div>
       <div>
         <p class="text-secondary mb-2">Date and Time of Encounter</p>
@@ -25,34 +24,36 @@
       </div>
     </div>
     <div>
-      <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
-        <div slot="title">
-          <div class="flex items-center justify-between">
-            <p class="text-serenity-primary">Diagnosis</p>
-            <AddFilled
-              class="w-5 h-5 text-serenity-primary"
-              @click="$trigger('encounter:add:diagnosis:open')"
-            />
-          </div>
-        </div>
-        <EncounterDiagnosis />
+      <ToggleList
+        title="Diagnosis"
+        has-create
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+        @create="$trigger('encounter:add:diagnosis:open')"
+      >
+        <EncounterDiagnosis :data="currentEncounterDiagnosis" />
       </ToggleList>
-      <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
-        <div slot="title">
-          <p class="text-serenity-primary">Presenting Complaint</p>
-        </div>
-        <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
+      <ToggleList
+        title="Presenting Complaint"
+        has-create
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+        @create="$trigger('encounter:add:diagnosis:open', 'chief-complaint')"
+      >
+        <p class="text-gray-500">{{ currentEncounterPresentingComplaint }}</p>
       </ToggleList>
-      <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
-        <div slot="title">
-          <p class="text-serenity-primary">History of Presenting Complaint</p>
-        </div>
-        <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
+      <ToggleList
+        title="History of Presenting Complaint"
+        has-create
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+        @create="$trigger('encounter:add:diagnosis:open', 'chief-complaint')"
+      >
+        <EncounterDiagnosis :data="currentEncounterComplaints" />
       </ToggleList>
-      <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
-        <div slot="title">
-          <p class="text-serenity-primary">Patient Vitals</p>
-        </div>
+      <ToggleList
+        title="Patient Vitals"
+        :has-create="$userCan('vitals.write')"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+        @create="$trigger('profile:medication:request:open')"
+      >
         <EncounterPatientVitals />
       </ToggleList>
       <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
@@ -60,52 +61,121 @@
           <p class="text-serenity-primary">Social History</p>
         </div>
       </ToggleList>
+      <ToggleList
+        title="Laboratory Tests"
+        has-create
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+        @create="$trigger('service:request:open', 'laboratory-procedure')"
+      >
+        <EncounterServiceRequests />
+      </ToggleList>
       <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
         <div slot="title">
-          <p class="text-serenity-primary">Laboratory Tests</p>
+          <p class="text-serenity-primary">Reports / Documents</p>
         </div>
-        <EncounterPatientVitals />
       </ToggleList>
+      <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
+        <div slot="title">
+          <p class="text-serenity-primary">Review of Systems</p>
+        </div>
+      </ToggleList>
+      <ToggleList
+        title="Medications / Treatment Plan"
+        :has-create="$userCan('medication.orders.write')"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+        @create="$trigger('profile:medication:request:open')"
+      />
+      <ToggleList
+        title="Notes"
+        has-create
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+        @create="$trigger('notes:open')"
+      >
+        <EncounterNotes />
+      </ToggleList>
+      <ToggleList
+        title="Bills / Receipts"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      />
     </div>
 
     <EncounterDiagnosisModal />
+    <NotesModal
+      required
+      @save="createNote"
+      @update="updateNote"
+    />
   </div>
 </template>
 
 <script>
 import EncounterPatientVitals from './EncounterPatientVitals'
 import EncounterDiagnosis from './EncounterDiagnosis'
+import EncounterNotes from './EncounterNotes'
 import EncounterDiagnosisModal from './EncounterDiagnosisModal'
-import { mapState } from 'vuex'
+import EncounterServiceRequests from './EncounterServiceRequests'
+import { mapState, mapActions, mapGetters } from 'vuex'
+import isEmpty from 'lodash/isEmpty'
 
 export default {
   name: 'EncounterDetailCard',
 
-  components: { EncounterPatientVitals, EncounterDiagnosis, EncounterDiagnosisModal },
+  components: { EncounterPatientVitals, EncounterDiagnosis, EncounterDiagnosisModal, EncounterNotes, EncounterServiceRequests },
 
   computed: {
     ...mapState({
       currentEncounter: state => state.encounters.currentEncounter,
     }),
+    ...mapGetters({
+      fullName: 'auth/fullName',
+      currentEncounterComplaints: 'encounters/currentEncounterComplaints',
+      currentEncounterDiagnosis: 'encounters/currentEncounterDiagnosis',
+      currentEncounterPresentingComplaint: 'encounters/currentEncounterPresentingComplaint',
+    }),
+    
+    hasNoCurrentEncounter() {
+      return !!isEmpty(this.currentEncounter)
+    },
   },
 
   methods: {
-    end() {
-      this.$trigger('visit:end:open', {
-        callback: async () => {
-          this.loading = true
-          try {
-            await this.endEncounter()
-            this.$toast.open({
-              message: 'Encounter ended successfully',
-            })
-          } catch (error) {
-            // empty
-          } finally {
-            this.loading = false
-          }
-        },
-      })
+    ...mapActions({
+      createPatientNote: 'encounters/createNote',
+      updatePatientNote: 'encounters/updateNote',
+    }),
+
+    async createNote(notes) {
+      this.loading = true
+      try {
+        const noteForm = { display: notes, encounter_patient_id: this.$route.params.id }
+        await this.createPatientNote(noteForm)
+        this.$toast.open({
+          message: 'Notes created successfully',
+        })
+        this.$trigger('notes:close')
+      } catch (error) {
+        // empty
+      } finally {
+        this.loading = false
+      }
+    },
+  
+    async updateNote(data) {
+      this.loading = true
+      try {
+        
+        const noteForm = { ...data, display: data.notes }
+        delete noteForm.notes
+        await this.updatePatientNote(noteForm)
+        this.$toast.open({
+          message: 'Notes created successfully',
+        })
+        this.$trigger('notes:close')
+      } catch (error) {
+        // empty
+      } finally {
+        this.loading = false
+      }
     },
   },
 }

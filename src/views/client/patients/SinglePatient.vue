@@ -26,7 +26,7 @@
           <img
             src="@/assets/img/edit 1.svg"
             class="w-4 h-4"
-            @click="$router.push({name: 'Biodata', params: {id: patient.id}})"
+            @click="$router.push({ name: 'Biodata', params: { id: patient.id } })"
           >
         </div>
       </div>
@@ -39,7 +39,10 @@
           Start Encounter
           <Add class="ml-2 w-5 h-5 text-white" />
         </SeButton>
-        <div class="flex items-center space-x-4">
+        <div
+          v-else
+          class="flex items-center space-x-4"
+        >
           <p
             class="underline cursor-pointer"
             @click="end"
@@ -140,15 +143,15 @@ export default {
 
   beforeRouteEnter (to, from, next) {
     next(async vm => {
-      await vm.getPatient(vm.id)
-      vm.getEncounters(vm.id)
+      vm.loading = true
+      await vm.initSinglePatientInformation(vm.id)
+      vm.loading = false
     })
   },
 
   methods: {
     ...mapActions({
-      getPatient: 'patients/getPatient',
-      getEncounters: 'encounters/getEncounters',
+      initSinglePatientInformation: 'patients/initSinglePatientInformation',
       endEncounter: 'encounters/endEncounter',
     }),
 
@@ -162,10 +165,10 @@ export default {
             this.$toast.open({
               message: 'Encounter ended successfully',
             })
+            this.loading = false
           } catch (error) {
             // empty
-          } finally {
-            this.loading = false
+            throw error || error.message
           }
         },
       })

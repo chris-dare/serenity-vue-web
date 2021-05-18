@@ -23,17 +23,19 @@
           custom-field="id"
           track-by="id"
           enable-search
+          :error-message="$utils.validateRequiredField($v, 'service_type')"
         />
         <MultiSelect
           v-model="form.encounter_class"
-          title="Code"
+          title="Encounter class"
           :multiple="false"
           :options="codes"
-          label="label"
+          label="code"
           placeholder="Select code"
-          custom-field="label"
-          track-by="value"
+          custom-field="code"
+          track-by="code"
           enable-search
+          :error-message="$utils.validateRequiredField($v, 'encounter_class')"
         />
         <cv-number-input
           v-model="form.priority"
@@ -62,6 +64,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'StartEncounterModal',
@@ -76,8 +79,9 @@ export default {
 
   computed: {
     ...mapState({
-      codes: state => state.encounters.encounterCodes,
+      codes: state => state.resources.encounterClasses,
       services: state => state.services.services,
+      provider: state => state.auth.provider,
     }),
   },
 
@@ -90,15 +94,35 @@ export default {
     },
   },
 
+  validations() {
+    return {
+      form: {
+        service_type: { required },
+        encounter_class: { required },
+      },
+    }
+  },
+
   methods: {
     ...mapActions({
       startEncounter: 'encounters/createEncounter',
     }),
 
     async start() {
+      this.$v.$touch()
+
+      if (this.$v.$invalid || this.disabled) {
+        this.$toast.error('Fill all required fields!')
+        return
+      }
+
+      let form = { patient: this.$route.params.id, ...this.form }
+      // TODO
+      // form.encounter_participant = [{ practitioner: this.provider.id }]
+
       try {
         this.loading = true
-        await this.startEncounter({patient: this.$route.params.id, ...this.form })
+        await this.startEncounter(form)
         this.$toast.open({ message: 'Encounter has started' })
         this.loading = false
         this.visible = false

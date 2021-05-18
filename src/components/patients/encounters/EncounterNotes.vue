@@ -9,17 +9,12 @@
       <template #default="{ row }">
         <cv-data-table-cell>
           <div class="py-2">
-            {{ row.performer_name }}
+            {{ getSinglePractitioner(row.encounter_practitioner_id).fullName }}
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ row.role | removeDash }}</p>
-          </div>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <div>
-            <p>{{ row.condition }}</p>
+            <p>{{ row.display }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -27,14 +22,14 @@
             <p>{{ $date.formatDate(row.modified_at, 'yyyy/MM/dd HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
-        <!-- <cv-data-table-cell>
+        <cv-data-table-cell>
           <div>
             <Edit
               class="text-serenity-primary w-5 h-5"
-              @click="$trigger('encounter:add:diagnosis:edit', row)"
+              @click="$trigger('notes:edit', { ...row , notes: row.display })"
             />
           </div>
-        </cv-data-table-cell> -->
+        </cv-data-table-cell>
       </template>
     </DataTable>
   </div>
@@ -48,10 +43,10 @@ export default {
   data() {
     return {
       columns: [
-        'Performer name',
-        'Role',
-        'Condition',
+        'Practitioner',
+        'Note',
         'Date',
+        '',
       ],
     }
   },
@@ -59,7 +54,9 @@ export default {
   computed: {
     ...mapGetters({
       currentEncounterNotes: 'encounters/currentEncounterNotes',
+      getSinglePractitioner: 'practitioners/getSinglePractitioner',
     }),
+    
   },
 }
 </script>

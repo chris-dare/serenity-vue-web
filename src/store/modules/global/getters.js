@@ -4,14 +4,14 @@ export default {
     return state.token ? `Bearer ${state.token}` : null
   },
 
-  maritalStatuses: state => {
-    return state.statuses.map(stat => {
-      return {
-        label: stat.split('_').join(' ').toLowerCase(),
-        value: stat,
-      }
-    })
-  },
+  // maritalStatuses: state => {
+  //   return state.statuses.map(stat => {
+  //     return {
+  //       label: stat.split('_').join(' ').toLowerCase(),
+  //       value: stat,
+  //     }
+  //   })
+  // },
 
   genders: state => {
     return state.genders.map(gender => {

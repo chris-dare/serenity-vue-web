@@ -6,12 +6,10 @@
       placeholder="Search for appointment"
     />
 
-    <div class="flex justify-end">
-      <DateRangePicker
-        v-model="date"
-        class="flex-none se-date-picker se-no-label"
-      />
-    </div>
+    <AppointmentTableFilters
+      v-model="filters"
+      @change="filter"
+    />
 
     <DataTable
       :columns="columns"
@@ -105,6 +103,7 @@
 <script>
 import AppointmentSummaryModal from '@/components/appointments/AppointmentSummaryModal'
 import AppointmentTableActions from '@/components/appointments/tables/AppointmentTableActions'
+import AppointmentTableFilters from '@/components/appointments/tables/AppointmentTableFilters'
 import BillingModal from '@/components/appointments/BillingModal'
 import DataMixin from '@/mixins/data'
 import { mapGetters, mapActions } from 'vuex'
@@ -112,7 +111,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'AppointmentsTable',
 
-  components: {AppointmentSummaryModal, BillingModal, AppointmentTableActions},
+  components: {AppointmentSummaryModal, BillingModal, AppointmentTableActions, AppointmentTableFilters},
 
   mixins: [DataMixin],
 
@@ -127,6 +126,7 @@ export default {
     return {
       rowSelects: null,
       date: {},
+      filters: {},
       columns: [
         'Patient',
         'Date/Time',
@@ -148,7 +148,7 @@ export default {
 
   beforeMount() {
     this.searchTerms = ['']
-    this.refresh(false)
+    this.filter(false)
   },
 
   methods: {
@@ -157,6 +157,16 @@ export default {
       cancelAppointment: 'appointments/cancelAppointment',
       deleteAppointment: 'appointments/deleteAppointment',
     }),
+
+    async filter(refresh = true) {
+      this.loading = true
+      try {
+        await this.getData({refresh, filters: { ...this.filters } })
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
+    },
 
     view(appointment) {
       this.selectedAppointment = appointment

@@ -5,7 +5,7 @@
       v-if="confirmed"
       :form="form"
     />
-    <div
+    <cv-form
       v-else
       class="grid grid-cols-4 my-6 gap-6"
     >
@@ -63,28 +63,14 @@
         </cv-radio-group>
       </div>
       <div class="col-span-3 bg-white py-4 px-8">
-        <WeightHeight
-          v-if="checked === 0"
+        <component
+          :is="stepComponent"
           :form.sync="form"
           @next="nextStep"
-        />
-        <Temperature
-          v-else-if="checked === 1"
-          :form.sync="form"
-          @next="nextStep"
-        />
-        <Pressure
-          v-else-if="checked === 2"
-          :form.sync="form"
-          @next="nextStep"
-        />
-        <Respiration
-          v-else
-          :form.sync="form"
-          @confirm="visible = !visible"
+          @confirm="confirmed = true"
         />
       </div>
-    </div>
+    </cv-form>
   </div>
 </template>
 
@@ -96,6 +82,7 @@ import Respiration from '@/components/vitals/Respiration'
 import ConfirmVitalsModal from '@/components/vitals/ConfirmVitalsModal'
 import CircleFilled from '@carbon/icons-vue/es/circle--filled/32'
 import CheckmarkOutline from '@carbon/icons-vue/es/checkmark--outline/32.js'
+
 export default {
   name: 'PatientVitals',
 
@@ -104,7 +91,7 @@ export default {
   data() {
     return {
       checked: 0,
-      confirmed: true,
+      confirmed: false,
       navItems: [
         { label: 'Weight and Height', description: 'Patient biological information', value: 'weight', index: 0},
         { label: 'Temperature', description: 'Phone and location of patient', value: 'temperature', index: 1},
@@ -113,6 +100,22 @@ export default {
       ],
       form: {},
     }
+  },
+
+  computed: {
+    stepComponent() {
+      if (this.checked === 0) {
+        return 'WeightHeight'
+      }
+      if (this.checked === 1) {
+        return 'Temperature'
+      }
+      if (this.checked === 2) {
+        return 'Pressure'
+      }
+
+      return 'Respiration'
+    },
   },
 
   methods: {

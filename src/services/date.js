@@ -10,10 +10,10 @@ const formatDate = (date, formatString = 'yyyy-MM-dd HH:mm') => format(new Date(
 const sortDate = (dates) => {
   return dates.sort((a, b) => b.date - a.date)
 }
-const startOfDate = (date = new Date()) => startOfDay(date)
-const endOfDate = (date = new Date()) => endOfDay(date)
-const startOfMonthDate = (date = new Date()) => startOfMonth(date)
-const endOfMonthDate = (date = new Date()) => endOfMonth(date)
+const startOfDate = (date = new Date()) => startOfDay(new Date(date))
+const endOfDate = (date = new Date()) => endOfDay(new Date(date))
+const startOfMonthDate = (date = new Date()) => startOfMonth(new Date(date))
+const endOfMonthDate = (date = new Date()) => endOfMonth(new Date(date))
 
 const distanceInWords = (date) => formatDistance(
   new Date(date),
@@ -23,6 +23,7 @@ const distanceInWords = (date) => formatDistance(
 
 const formatQueryParamsDate = (dateString) => {
   let date = new Date(dateString)
+  console.log('date', date)
   return `${format(date, 'yyyy-MM-dd')}T${format(date, 'HH:mm:ss')}Z`
 }
 

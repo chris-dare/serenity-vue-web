@@ -1,7 +1,7 @@
 <template>
   <ListCard
-    is-active="true"
-    class="mt-2"
+    :is-active="isCurrentEncounter"
+    class="mt-2 cursor-pointer"
   >
     <p class=" text-serenity-primary">
       <span class="capitalize">{{ encounter.encounter_class }}</span> <span class="text-secondary">({{ $date.distanceInWords(encounter.start_time) }})</span>
@@ -20,6 +20,11 @@ export default {
     encounter: {
       type: Object,
       default: () => {},
+    },
+
+    isCurrentEncounter: {
+      type: Boolean,
+      default: false,
     },
   },
 }

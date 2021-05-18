@@ -6,4 +6,18 @@ export default {
       return patient
     })
   },
+
+  patientMedications: state => {
+    if (!state.currentPatient) {
+      return []
+    }
+    return state.patientMedications.filter(medication => medication.patient === state.currentPatient.id)
+  },
+
+  patientLabRequests: state => {
+    if (!state.currentPatient) {
+      return []
+    }
+    return state.patientServiceRequests.filter(lab => lab.patient === state.currentPatient.id && lab.category === 'laboratory-proceedure')
+  },
 }

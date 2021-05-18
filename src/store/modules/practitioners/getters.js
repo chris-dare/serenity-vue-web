@@ -6,4 +6,7 @@ export default {
       return user
     })
   },
+  getSinglePractitioner: (state, getters) => id => {
+    return getters.practitioners.find(pat => pat.id === id) || {}
+  },
 }

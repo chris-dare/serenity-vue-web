@@ -40,17 +40,17 @@ export default {
   props: {
     label: {
       type: String,
-      default: '',
+      default: 'Add note',
     },
 
     placeholder: {
       type: String,
-      default: '',
+      default: 'Add note',
     },
 
     saveLabel: {
       type: String,
-      default: '',
+      default: 'save',
     },
 
     required: {
@@ -69,14 +69,12 @@ export default {
   },
 
   events: {
-    'notes:open': function(_ev, { callback }){
-      if(this.visible)return
-      this.callback = callback
+    'notes:open': function(){
       this.visible = true
     },
     'notes:edit': function(data) {
       this.visible = true
-      this.form.notes = data.params[0]
+      this.form = { ...data.params[0] }
     },
     'notes:loading': function(data) {
       this.loading = data.params[0]
@@ -114,19 +112,14 @@ export default {
         return
       }
       this.loading = true
-      
 
-      if(this.callback){
-        try {
-          await this.callback(this.form)
-        } catch {
-          //empty
-        } finally {
-          this.close()
-        }
+      if (this.form.id) {
+        this.$emit('update', this.form)
       } else {
         this.$emit('save', this.form.notes)
       }
+      
+      
     },
   },
 }

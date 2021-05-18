@@ -13,25 +13,27 @@ import {
 
 export default {
   // eslint-disable-next-line no-unused-vars
-  async getAppointments({ commit, rootState, state }, refresh = true) {
+  async getAppointments({ commit, rootState, state }, { refresh = true, filters }) {
+    console.log('appointments')
     if (!refresh && state.appointments.length) {
       return
     }
     try {
       const provider = rootState.auth.provider
-      const { data } = await AppointmentsAPI.list(provider.id)
+      const { data } = await AppointmentsAPI.list(provider.id, filters)
       commit(SET_APPOINTMENTS, data.data)
       commit(SET_APPOINTMENTS_COUNT, data.data.length)
     } catch (error) {
-      Vue.prototype.$utils.error(error)
-      throw error
+      // Vue.prototype.$utils.error(error)
+      throw error || error.message
     }
   },
 
-  async getSlots({ commit, rootState }, specialtyId = 394804000) {
+  async getSlots({ commit, rootState }, filters) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await AppointmentsAPI.slots(provider.id, specialtyId)
+      console.log('filter', filters)
+      const { data } = await AppointmentsAPI.slots(provider.id, filters)
       commit(SET_SLOTS, data.data)
     } catch (error) {
       Vue.prototype.$utils.error(error)
@@ -56,7 +58,7 @@ export default {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI
         .create(provider.id, appointment)
-      dispatch('getAppointments', true)
+      dispatch('getAppointments', {refresh: true })
       commit(ADD_APPOINTMENT_DATA, {})
       return data
     } catch (error) {

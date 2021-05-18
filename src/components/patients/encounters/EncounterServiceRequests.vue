@@ -3,7 +3,7 @@
     <DataTable
       ref="table"
       :columns="columns"
-      :data="data"
+      :data="currentEncounterServiceRequests"
       class="small-table"
     >
       <template #default="{ row }">
@@ -27,29 +27,23 @@
             <p>{{ $date.formatDate(row.modified_at, 'yyyy/MM/dd HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
-        <cv-data-table-cell>
+        <!-- <cv-data-table-cell>
           <div>
             <Edit
               class="text-serenity-primary w-5 h-5"
               @click="$trigger('encounter:add:diagnosis:edit', row)"
             />
           </div>
-        </cv-data-table-cell>
+        </cv-data-table-cell> -->
       </template>
     </DataTable>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
-  name: 'EncounterDiagnosis',
-
-  props: {
-    data: {
-      type: Array,
-      default: () => [],
-    },
-  },
+  name: 'EncounterServiceRequests',
 
   data() {
     return {
@@ -60,6 +54,12 @@ export default {
         'Date',
       ],
     }
+  },
+
+  computed: {
+    ...mapGetters({
+      currentEncounterServiceRequests: 'encounters/currentEncounterServiceRequests',
+    }),
   },
 }
 </script>

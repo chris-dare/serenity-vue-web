@@ -15,7 +15,8 @@
         v-for="(encounter, index) in encounters"
         :key="index"
         :encounter="encounter"
-        @click="setCurrentEncounter(encounter.id)"
+        :is-current-encounter="encounter.id === currentEncounter.id"
+        @click.native="setCurrentEncounter(encounter.id)"
       />
     </div>
   </div>
@@ -23,7 +24,7 @@
 
 <script>
 import EncounterListCardItem from '@/components/patients/encounters/EncounterListCardItem'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'EncountersList',
@@ -48,6 +49,9 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      currentEncounter: state => state.encounters.currentEncounter,
+    }),
     noEncounters() {
       return this.encounters.length === 0
     },

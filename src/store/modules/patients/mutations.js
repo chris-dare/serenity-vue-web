@@ -5,7 +5,11 @@ import {
   SET_PATIENTS_COUNT,
   ADD_PATIENT_DATA,
   SET_PATIENT_DATA,
-  SET_MEDICATION,
+  SET_MEDICATION_REQUESTS,
+  UPDATE_SERVICE_REQUEST,
+  SET_SERVICE_REQUESTS,
+  SET_OBSERVATIONS,
+  UPDATE_OBSERVATION,
 } from './mutation-types'
 
 export default {
@@ -29,6 +33,8 @@ export default {
     }
   },
 
+  
+
   [DELETE_PATIENT](state, patientId) {
     state.patients = state.patients.filter((es) => es.id !== patientId)
   },
@@ -42,7 +48,39 @@ export default {
     state.currentPatient = data
   },
 
-  [SET_MEDICATION](state, data) {
+  [SET_MEDICATION_REQUESTS](state, data) {
     state.patientMedications = data
+  },
+
+  [SET_SERVICE_REQUESTS](state, requests) {
+    state.patientServiceRequests = requests
+  },
+
+  [UPDATE_SERVICE_REQUEST](state, request) {
+    const index = state.patientServiceRequests.findIndex(a => a.id === request.id)
+    if (index !== -1) {
+      state.patientServiceRequests = state.patientServiceRequests.map(a => {
+        if (a.id === request.id) return request
+        return a
+      })
+    } else {
+      state.patientpatientServiceRequests.push(request)
+    }
+  },
+
+  [SET_OBSERVATIONS](state, observations) {
+    state.patientObservations = observations
+  },
+
+  [UPDATE_OBSERVATION](state, observation) {
+    const index = state.patientObservations.findIndex(a => a.id === observation.id)
+    if (index !== -1) {
+      state.patientObservations = state.patientObservations.map(a => {
+        if (a.id === observation.id) return observation
+        return a
+      })
+    } else {
+      state.patientpatientObservations.push(observation)
+    }
   },
 }

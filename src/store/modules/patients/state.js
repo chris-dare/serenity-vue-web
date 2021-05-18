@@ -4,6 +4,8 @@ export function initialState() {
     patientsCount: 0,
     currentPatient: {},
     patientMedications: [],
+    patientServiceRequests: [],
+    patientObservations: [],
   }
 }
 

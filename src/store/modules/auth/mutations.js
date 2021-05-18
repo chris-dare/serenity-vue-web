@@ -20,6 +20,6 @@ export default {
 
   [SET_PRACTIONER_DATA](state, data) {
     const provider = state.provider || {}
-    state.provider = Object.assign(provider, { ...data, id: data.organization_uuid})
+    state.provider = Object.assign(provider, { ...data, practitionerRoleId: data.id, id: data.organization_uuid})
   },
 }

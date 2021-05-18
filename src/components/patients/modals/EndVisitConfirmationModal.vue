@@ -83,10 +83,9 @@ export default {
       if(this.callback){
         try {
           await this.callback(this.data)
+          this.close()
         } catch {
           //empty
-        } finally {
-          this.close()
         }
       }
     },

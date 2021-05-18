@@ -5,6 +5,7 @@ export function initialState() {
     countries: [],
     networks: ['MTN', 'Vodafone', 'AirtelTigo'],
     workspaceType: 'OPD',
+    location: '',
     workspaces: [
       {label: 'Out Patient', value:'OPD'},
       {label: 'Reception', value:'RECEPT'},
@@ -29,7 +30,8 @@ export function initialState() {
       EN: 'English',
       FR: 'French',
     },
-    statuses: ['ANNULLED' , 'DIVORCED' , 'INTERLOCUTORY' , 'LEGALLY_SEPARATED' , 'MARRIED' , 'POLYGAMOUS' , 'NEVER_MARRIED' , 'DOMESTIC_PARTNER' , 'UNMARRIED' , 'WIDOWED' , 'UNKNOWN'],
+    priorities: [ 'routine', 'urgent', 'asap', 'stat' ],
+    // statuses: ['ANNULLED' , 'DIVORCED' , 'INTERLOCUTORY' , 'LEGALLY_SEPARATED' , 'MARRIED' , 'POLYGAMOUS' , 'NEVER_MARRIED' , 'DOMESTIC_PARTNER' , 'UNMARRIED' , 'WIDOWED' , 'UNKNOWN'],
     regions: ['Ahafo Region', 'Ashanti Region', 'Bono Region', 'Bono East Region', 'Central Region', 'Eastern Region', 'Greater Accra Region',  'North East Region',  'Northern Region', 'Oti Region', 'Savannah Region', 'Upper East Region', 'Volta Region', 'Upper West Region', 'Western North Region', 'Western Region'],
   }
 }
