@@ -24,27 +24,20 @@
           :error-message="$utils.validateRequiredField($v, 'role')"
         /> -->
 
-        <cv-text-input
+        <cv-text-area
           v-model="form.condition"
           type="text"
           label="Condition"
           placeholder="eg Malaria"
           :invalid-message="$utils.validateRequiredField($v, 'condition')"
+          :rows="5"
+          class="se-input-gray"
         />
+
         <cv-text-input
           v-model="form.rank"
           type="number"
           label="Rank"
-        />
-        <cv-text-input
-          v-model="form.performer_name"
-          type="text"
-          label="Performer name"
-        />
-        <cv-text-input
-          v-model="form.taken_by"
-          type="text"
-          label="Taken by"
         />
 
         <SeButton

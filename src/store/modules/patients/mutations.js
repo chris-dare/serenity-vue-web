@@ -10,6 +10,7 @@ import {
   SET_SERVICE_REQUESTS,
   SET_OBSERVATIONS,
   UPDATE_OBSERVATION,
+  SET_DIAGNOSTIC_REPORTS,
 } from './mutation-types'
 
 export default {
@@ -50,6 +51,10 @@ export default {
 
   [SET_MEDICATION_REQUESTS](state, data) {
     state.patientMedications = data
+  },
+
+  [SET_DIAGNOSTIC_REPORTS](state, reports) {
+    state.patientDiagnosticReports = reports
   },
 
   [SET_SERVICE_REQUESTS](state, requests) {

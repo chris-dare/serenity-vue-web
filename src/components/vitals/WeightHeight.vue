@@ -6,7 +6,7 @@
     <div class="grid grid-cols-2 gap-6">
       <div class="flex items-end space-x-3">
         <cv-text-input
-          v-model="internalForm.weight"
+          v-model="localValue.weight"
           type="text"
           label="Weight"
         />
@@ -14,7 +14,7 @@
       </div>
       <div class="flex items-end space-x-3">
         <cv-text-input
-          v-model="internalForm.height"
+          v-model="localValue.height"
           type="text"
           label="Height"
         />
@@ -22,7 +22,7 @@
       </div>
       <div class="flex items-end space-x-3">
         <cv-text-input
-          v-model="internalForm.bmi"
+          v-model="localValue.bmi"
           type="text"
           label="BMI (Calculated)"
         />
@@ -31,37 +31,36 @@
     </div>
 
     <div class="flex items-center justify-between mt-12 mb-6">
-      <cv-button
-        class="border-serenity-primary px-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-        kind="tertiary"
+      <SeButton
+        variant="secondary"
         @click="$router.push({ name: 'PatientCharts' })"
       >
         Cancel
-      </cv-button>
-      <div class="flex items-center">
-        <cv-button
-          :icon="icon"
-          kind="primary"
-          :disabled="disabled"
-          class="bg-serenity-primary ml-6"
-          @click="$emit('next', 1)"
-        >
-          Next
-        </cv-button>
-      </div>
+      </SeButton>
+      <SeButton
+        :icon="icon"
+        :disabled="disabled"
+        @click="$emit('next', 1)"
+      >
+        Next
+      </SeButton>
     </div>
   </div>
 </template>
 
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import ModelMixin from '@/mixins/model'
+
 export default {
   name: 'WeightHeight',
 
+  mixins: [ModelMixin],
+
   props: {
-    form: {
-      type: Object,
-      default: () => {},
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -69,17 +68,6 @@ export default {
     return {
       icon: ChevronRight,
     }
-  },
-
-  computed: {
-    internalForm: {
-      get() {
-        return this.form
-      },
-      set(value) {
-        this.$emit('update:form', value)
-      },
-    },
   },
 }
 </script>

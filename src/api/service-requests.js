@@ -7,6 +7,10 @@ export default {
     return http.get(`${this.url}${providerId}/servicerequests`)
   },
 
+  reports(providerId) {
+    return http.get(`${this.url}${providerId}/diagnosticreports`)
+  },
+
   create(providerId, params) {
     return http.post(`${this.url}${providerId}/servicerequests`, params)
   },

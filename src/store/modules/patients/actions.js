@@ -1,5 +1,6 @@
 import PatientsAPI from '@/api/patients'
 import Patient from '@/models/Patient'
+import Observation from '@/models/Observation'
 import ServiceRequestsAPI from '@/api/service-requests'
 import MedicationAPI from '@/api/medication'
 import ObservationsAPI from '@/api/observations'
@@ -15,6 +16,7 @@ import {
   SET_MEDICATION_REQUESTS,
   UPDATE_SERVICE_REQUEST,
   SET_SERVICE_REQUESTS,
+  SET_DIAGNOSTIC_REPORTS,
   SET_OBSERVATIONS,
   UPDATE_OBSERVATION,
 } from './mutation-types'
@@ -25,6 +27,7 @@ export default {
     dispatch('getServiceRequests')
     dispatch('getMedicationRequests')
     dispatch('getObservations')
+    dispatch('getDiagnosticReports')
     dispatch('encounters/getEncounters', id , { root:true })
   },
 
@@ -148,6 +151,16 @@ export default {
     }
   },
 
+  async getDiagnosticReports({ commit, rootState }) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ServiceRequestsAPI.reports(provider.id)
+      commit(SET_DIAGNOSTIC_REPORTS, data)
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
   async createServiceRequest({ commit, rootState }, payload) {
     try {
       const provider = rootState.auth.provider
@@ -184,11 +197,18 @@ export default {
     }
   },
 
-  async createObservation({ commit, rootState }, payload) {
+  async createObservation({ commit, rootState }, { patient, payload }) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await ObservationsAPI.create(provider.id, payload)
-      commit(UPDATE_OBSERVATION, data)
+      const encounter = rootState.encounters.currentEncounter
+      console.log('encounter', encounter)
+      const vitals = new Observation(payload).getCreateVitalsView(encounter, patient)
+
+      vitals.forEach(async vital => {
+        const { data } = await ObservationsAPI.create(provider.id, vital)
+        commit(UPDATE_OBSERVATION, data)
+      })
+      
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error

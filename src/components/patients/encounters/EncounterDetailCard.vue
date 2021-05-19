@@ -69,10 +69,11 @@
       >
         <EncounterServiceRequests />
       </ToggleList>
-      <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
-        <div slot="title">
-          <p class="text-serenity-primary">Reports / Documents</p>
-        </div>
+      <ToggleList
+        title="Reports / Documents"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      >
+        <EncounterDiagnosticReports />
       </ToggleList>
       <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
         <div slot="title">
@@ -114,13 +115,14 @@ import EncounterDiagnosis from './EncounterDiagnosis'
 import EncounterNotes from './EncounterNotes'
 import EncounterDiagnosisModal from './EncounterDiagnosisModal'
 import EncounterServiceRequests from './EncounterServiceRequests'
+import EncounterDiagnosticReports from './EncounterDiagnosticReports'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import isEmpty from 'lodash/isEmpty'
 
 export default {
   name: 'EncounterDetailCard',
 
-  components: { EncounterPatientVitals, EncounterDiagnosis, EncounterDiagnosisModal, EncounterNotes, EncounterServiceRequests },
+  components: { EncounterPatientVitals, EncounterDiagnosis, EncounterDiagnosisModal, EncounterNotes, EncounterServiceRequests, EncounterDiagnosticReports },
 
   computed: {
     ...mapState({

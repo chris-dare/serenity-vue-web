@@ -39,11 +39,14 @@ export default {
     return getters.currentEncounterComplaints[0].condition
   },
 
-
-
   currentEncounterServiceRequests: (state, getters, rootState) => {
     if (!state.currentEncounter) return []
     return rootState.patients.patientServiceRequests.filter(service => service.encounter === state.currentEncounter.id)
+  },
+
+  currentEncounterDiagnosticReports: (state, getters, rootState) => {
+    if (!state.currentEncounter) return []
+    return rootState.patients.patientDiagnosticReports.filter(report => report.encounter === state.currentEncounter.id)
   },
 
   currentEncounterMedicationRequests: (state, getters, rootState) => {

@@ -6,6 +6,7 @@ export function initialState() {
     patientMedications: [],
     patientServiceRequests: [],
     patientObservations: [],
+    patientDiagnosticReports: [],
   }
 }
 

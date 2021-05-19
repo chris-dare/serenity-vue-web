@@ -3,11 +3,16 @@
     <p class="text-primary text-xl font-semibold">Capture vitals</p>
     <ConfirmVitalsModal
       v-if="confirmed"
+      :loading="loading"
       :form="form"
+      @save="save"
+      @back="confirmed = false"
     />
     <cv-form
       v-else
+      autocomplete="off"
       class="grid grid-cols-4 my-6 gap-6"
+      @submit.prevent
     >
       <div>
         <cv-radio-group :vertical="true">
@@ -65,7 +70,7 @@
       <div class="col-span-3 bg-white py-4 px-8">
         <component
           :is="stepComponent"
-          :form.sync="form"
+          v-model="form"
           @next="nextStep"
           @confirm="confirmed = true"
         />
@@ -82,6 +87,8 @@ import Respiration from '@/components/vitals/Respiration'
 import ConfirmVitalsModal from '@/components/vitals/ConfirmVitalsModal'
 import CircleFilled from '@carbon/icons-vue/es/circle--filled/32'
 import CheckmarkOutline from '@carbon/icons-vue/es/checkmark--outline/32.js'
+import { decimal } from 'vuelidate/lib/validators'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'PatientVitals',
@@ -99,6 +106,7 @@ export default {
         { label: 'Respiration Rate and SPO2', description: 'Work, religion, other addresses', value: 'respiration', index: 3},
       ],
       form: {},
+      loading: false,
     }
   },
 
@@ -119,8 +127,47 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      createVitals: 'patients/createObservation',
+    }),
+
     nextStep(step) {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.$toast.open({
+          message: 'These fields should be decimal',
+          type: 'error',
+        })
+        return
+      }
       this.checked = step
+    },
+
+    async save() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.$toast.open({
+          message: 'These fields should be decimal',
+          type: 'error',
+        })
+        return
+      }
+
+      try {
+        this.loading = true
+        await this.createVitals({ payload: this.form, patient: this.$route.query.id })
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
+    },
+  },
+
+  validations: {
+    localValue: {
+      weight: { decimal },
+      height: { decimal },
+      bmi: { decimal },
     },
   },
 }

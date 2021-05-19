@@ -3,38 +3,35 @@
     <DataTable
       ref="table"
       :columns="columns"
-      :data="currentEncounterServiceRequests"
+      :data="currentEncounterDiagnosticReports"
       class="small-table"
     >
       <template #default="{ row }">
         <cv-data-table-cell>
           <div class="py-2">
-            {{ row.priority }}
+            {{ row.diagnostic_report_category[0].display }}
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ row.code }}</p>
+            <p>{{ row.diagnostic_report_specimen[0].display }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ row.patient_instruction }}</p>
+            <p>{{ row.diagnostic_report_results[0].display }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ $date.formatDate(row.authored_on, 'yyyy/MM/dd HH:mm a') }}</p>
+            <p>{{ $date.formatDate(row.issued_date, 'yyyy/MM/dd HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
-        <!-- <cv-data-table-cell>
+        <cv-data-table-cell>
           <div>
-            <Edit
-              class="text-serenity-primary w-5 h-5"
-              @click="$trigger('encounter:add:diagnosis:edit', row)"
-            />
+            <Tag>{{ row.status }}</Tag>
           </div>
-        </cv-data-table-cell> -->
+        </cv-data-table-cell>
       </template>
     </DataTable>
   </div>
@@ -43,22 +40,23 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  name: 'EncounterServiceRequests',
+  name: 'EncounterDiagnosticReports',
 
   data() {
     return {
       columns: [
-        'Priority',
-        'Code',
-        'Patient Instruction',
+        'Category',
+        'Specimen',
+        'Results',
         'Date',
+        'Status',
       ],
     }
   },
 
   computed: {
     ...mapGetters({
-      currentEncounterServiceRequests: 'encounters/currentEncounterServiceRequests',
+      currentEncounterDiagnosticReports: 'encounters/currentEncounterDiagnosticReports',
     }),
   },
 }
