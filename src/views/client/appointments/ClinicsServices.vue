@@ -10,7 +10,7 @@
       Which clinic are you booking this appointment to?
     </p>
     <div class="grid grid-cols-3 gap-4">
-      <PatientCard
+      <InfoLinkCard
         v-for="(appointment, index) in appointmentTypes"
         :key="index"
         :is-selected="selected === appointment.value"
@@ -101,7 +101,6 @@
 
 <script>
 import Information from '@carbon/icons-vue/es/information/32'
-import PatientCard from '@/components/appointments/PatientCard'
 import VirtualCareRequirementsModal from '@/components/appointments/VirtualCareRequirementsModal'
 import { mapActions, mapState } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
@@ -110,7 +109,7 @@ import MultiStep from '@/mixins/multistep'
 export default {
   name: 'ClinicsServices',
 
-  components: { PatientCard, VirtualCareRequirementsModal, Information },
+  components: {  VirtualCareRequirementsModal, Information },
 
   mixins: [MultiStep],
 

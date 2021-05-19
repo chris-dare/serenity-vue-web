@@ -10,7 +10,7 @@ export default {
       const provider = rootState.auth.provider
       const { data } = await SchedulesAPI.list(provider.id, params)
       
-      commit(SET_SCHEDULES, data.data)
+      commit(SET_SCHEDULES, data)
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
@@ -34,7 +34,7 @@ export default {
       const provider = rootState.auth.provider
       const { data } = await SchedulesAPI
         .create(provider.id, payload.practitioner.id, schedule)
-      dispatch('getSchedules', payload)
+      dispatch('getSchedules', {})
       return data
     } catch (error) {
       Vue.prototype.$utils.error(error)

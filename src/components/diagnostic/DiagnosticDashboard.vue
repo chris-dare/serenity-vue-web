@@ -4,7 +4,7 @@
       What would you like to do?
     </p>
     <div class="grid grid-cols-5 gap-2 lg:gap-6">
-      <PatientCard
+      <InfoLinkCard
         v-for="(dashboard, index) in dashboardTypes"
         :key="index"
         :details="dashboard"
@@ -21,13 +21,12 @@
 </template>
 
 <script>
-import PatientCard from '@/components/appointments/PatientCard'
 import VisitsTable from '@/components/visits/VisitsTable'
 
 export default {
   name: 'DiagnosticDashboard',
 
-  components: { PatientCard, VisitsTable },
+  components: { VisitsTable },
 
   data() {
     return {

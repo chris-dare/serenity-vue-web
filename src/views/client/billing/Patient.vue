@@ -33,7 +33,7 @@
     </div>
 
     
-    <PatientCard
+    <InfoLinkCard
       :is-selected="false"
       :details="dashboard"
       :type="dashboard.type"
@@ -101,14 +101,13 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import PatientCard from '@/components/appointments/PatientCard'
 import ActiveBillingModal from '@/components/billing/ActiveBillingModal'
 import TransactionDetailsModal from '@/components/billing/TransactionDetailsModal'
 
 export default {
   name: 'SinglePatient',
 
-  components: { PatientCard, ActiveBillingModal, TransactionDetailsModal },
+  components: { ActiveBillingModal, TransactionDetailsModal },
 
   props: {
     id: {

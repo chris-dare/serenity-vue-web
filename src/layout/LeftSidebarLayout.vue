@@ -49,8 +49,8 @@
       </div>
     </div>
     <div
-      class="overflow-y-auto overflow-x-hidden bg-serenity-light-gray py-10 px-12"
-      :class="{ 'w-full': !isOpen, 'w-4/5': isOpen }"
+      class="overflow-y-auto overflow-x-hidden bg-serenity-light-gray "
+      :class="[isOpen ? 'w-4/5' : 'w-full', hidePadding ? 'p-0' : 'py-10 px-12']"
     >
       <slot />
     </div>
@@ -75,6 +75,10 @@ export default {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
     }),
+
+    hidePadding() {
+      return this.$route.meta.noPadding
+    },
   },
 
   methods: {
