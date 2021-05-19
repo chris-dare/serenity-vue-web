@@ -4,7 +4,7 @@
       What would you like to do?
     </p>
     <div class="grid grid-cols-5 gap-2 lg:gap-6 my-4">
-      <PatientCard
+      <InfoLinkCard
         v-for="(dashboard, index) in dashboardTypes"
         :key="index"
         :is-selected="selected === dashboard.value"
@@ -23,12 +23,11 @@
 
 <script>
 import { mapState } from 'vuex'
-import PatientCard from '@/components/appointments/PatientCard'
 import AppointmentsTable from '@/components/appointments/AppointmentsTable'
 export default {
   name: 'OPDDashboard',
 
-  components: { PatientCard, AppointmentsTable },
+  components: { AppointmentsTable },
 
   data() {
     return {

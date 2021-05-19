@@ -79,7 +79,7 @@ export default {
       validator: function (value) {
         // The value must match one of these strings
         return (
-          ['primary', 'secondary', 'tertiary', 'danger', 'outline', 'ghost', 'white', 'default', 'danger-outline'].indexOf(value) !== -1
+          ['primary', 'secondary', 'secondary-outline', 'tertiary', 'danger', 'outline', 'ghost', 'white', 'default', 'danger-outline'].indexOf(value) !== -1
         )
       },
     },

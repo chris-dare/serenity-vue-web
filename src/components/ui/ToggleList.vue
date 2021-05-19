@@ -1,7 +1,7 @@
 <template>
   <div class="mb-4">
     <div
-      class="flex items-center justify-between"
+      class="flex items-center justify-between cursor-pointer"
       @click="isClosed = !isClosed"
     >
       <div class="flex items-center">
@@ -9,7 +9,7 @@
           :class="[isClosed ? 'rotate-90' : 'rotate-180']"
           class="transform transition-all duration-100 ease-linear mr-2 text-serenity-primary w-5 h-5 cursor-pointer"
         />
-        <slot name="title"> {{ title }} </slot>
+        <slot name="title"> <p class="text-serenity-primary">{{ title }}</p> </slot>
       </div>
     </div>
     <div

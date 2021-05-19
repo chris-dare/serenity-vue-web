@@ -4,7 +4,7 @@
       Perform action
     </p>
     <div class="grid grid-cols-5 gap-2 lg:gap-4 my-4">
-      <PatientCard
+      <InfoLinkCard
         v-for="(dashboard, index) in dashboardTypes"
         :key="index"
         :is-selected="selected === dashboard.value"
@@ -26,8 +26,6 @@
 </template>
 
 <script>
-import PatientCard from '@/components/appointments/PatientCard'
-
 import LabsTable from '@/components/diagnostic/LabsTable'
 import AddLabResultsModal from '@/components/diagnostic/modals/AddLabResultsModal'
 import ViewLabResultsModal from '@/components/diagnostic/modals/ViewLabResultsModal'
@@ -35,7 +33,7 @@ import ViewLabResultsModal from '@/components/diagnostic/modals/ViewLabResultsMo
 export default {
   name: 'DiagnosticPatientActions',
 
-  components: { PatientCard, LabsTable, AddLabResultsModal, ViewLabResultsModal },
+  components: { LabsTable, AddLabResultsModal, ViewLabResultsModal },
 
   data() {
     return {

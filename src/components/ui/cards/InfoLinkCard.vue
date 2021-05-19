@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-56 h-40  px-4 py-6 mr-4 cursor-pointer"
+    class="w-full h-40 max-w-56 px-4 py-6 mr-4 cursor-pointer"
     :class="[customClass, isSelected ? 'bg-serenity-primary': '']"
     @click="$emit('click')"
   >
@@ -50,7 +50,7 @@ import Followup from '@carbon/icons-vue/es/arrow--down-right/32'
 import Referral from '@carbon/icons-vue/es/airline--manage-gates/32'
 
 export default {
-  name: 'PatientCard',
+  name: 'InfoLinkCard',
 
   components: {
     Search,

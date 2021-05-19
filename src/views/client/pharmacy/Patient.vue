@@ -31,7 +31,7 @@
     </div>
 
     <div class="flex my-4 mb-8">
-      <PatientCard
+      <InfoLinkCard
         v-for="(dashboard, index) in availableActions"
         :key="index"
         :is-selected="selected === dashboard.value"
@@ -106,14 +106,12 @@
 import { mapState, mapActions } from 'vuex'
 import ConfirmPrescriptionModal from '@/components/pharmacy/modals/ConfirmPrescriptionModal'
 import AddPrescriptionModal from '@/components/pharmacy/modals/AddPrescriptionModal'
-import PatientCard from '@/components/appointments/PatientCard'
 
 export default {
   name: 'Patient',
 
   components: { 
     ConfirmPrescriptionModal,
-    PatientCard,
     AddPrescriptionModal,
   },
 

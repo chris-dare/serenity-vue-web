@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-5 gap-2 lg:gap-4 my-4">
-    <PatientCard
+    <InfoLinkCard
       v-for="(dashboard, index) in dashboardTypes"
       :key="index"
       :is-selected="selected === dashboard.value"
@@ -13,12 +13,10 @@
 </template>
 
 <script>
-import PatientCard from '@/components/appointments/PatientCard'
 
 export default {
   name: 'DefaultPatientActions',
 
-  components: { PatientCard},
 
   data() {
     return {
