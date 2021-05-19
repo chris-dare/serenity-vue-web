@@ -4,7 +4,7 @@
       What is the preferred payment method?
     </p>
     <div class="grid grid-cols-3 gap-4">
-      <PatientCard
+      <InfoLinkCard
         v-for="(payment, index) in paymentTypes"
         :key="index"
         :is-selected="form.payment_type === payment.value"
@@ -107,12 +107,10 @@
 
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
-import PatientCard from '@/components/appointments/PatientCard'
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'AppointmentPayment',
 
-  components: { PatientCard },
 
   data() {
     return {

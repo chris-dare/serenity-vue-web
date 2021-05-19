@@ -49,6 +49,10 @@ export default {
       type: String,
       default: 'date',
     },
+    disableDatesBeforeToday: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -97,11 +101,15 @@ export default {
           mode: 'range',
           dateFormat: 'Y-m-d',
           defaultDate: Date.now(),
+          minDate: this.disableDatesBeforeToday ? 'today' : null,
         },
         datetimerange: {
           mode: 'range',
           enableTime: true,
+          allowInput: true,
           dateFormat: 'Y-m-d H:i',
+          minDate: this.disableDatesBeforeToday ? 'today' : null,
+          // defaultDate: Date.now(),
         },
       }, 
     }

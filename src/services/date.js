@@ -23,7 +23,6 @@ const distanceInWords = (date) => formatDistance(
 
 const formatQueryParamsDate = (dateString) => {
   let date = new Date(dateString)
-  console.log('date', date)
   return `${format(date, 'yyyy-MM-dd')}T${format(date, 'HH:mm:ss')}Z`
 }
 

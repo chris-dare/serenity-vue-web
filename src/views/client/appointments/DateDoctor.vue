@@ -11,8 +11,8 @@
     </p>
     <div class="grid">
       <DatePicker
-        v-model="form.date"
-        type="date"
+        v-model="filters"
+        type="datetimerange"
         @change="filter"
       />
     </div>
@@ -56,6 +56,8 @@ import { required } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
 import startOfDay from 'date-fns/startOfDay'
 // import endOfDay from 'date-fns/endOfDay'
+import isSameDay from 'date-fns/isSameDay'
+
 
 export default {
   name: 'DateDoctor',
@@ -71,7 +73,7 @@ export default {
         date: startOfDay(new Date()),
         slot: {},
       },
-      filters: '',
+      filters: [new Date()],
       time: Time,
       loading: false,
       selected: 1,
@@ -138,19 +140,17 @@ export default {
       getSlots: 'appointments/getSlots',
     }),
 
-    async filter() {
+    async filter(val) {
       this.loading = true
-      // const filters = this.convertFromDatePickerFormat(this.filters)
-      // console.log('filters', filters)
-      await this.getSlots({ service_specialty: this.storeData.specialty.Code })
+      const filters = this.convertFromDatePickerFormat(val || this.filters)
+      await this.getSlots({ service_specialty: this.storeData.specialty.Code, ...filters })
       this.loading = false
     },
 
     convertFromDatePickerFormat(val) {
-      console.log('val', val)
       return {
-        start_date: this.$date.formatQueryParamsDate(val.split('to')[0]),
-        end_date: val.includes('to') ? this.$date.formatQueryParamsDate(val.split('to')[1]) : this.$date.formatQueryParamsDate(this.$date.endOfDate(val.split('to')[0])),
+        start_date: this.$date.formatQueryParamsDate(val[0]),
+        end_date: isSameDay(val[0], val[1]) || !val[1] ? this.$date.formatQueryParamsDate(this.$date.endOfDate(val[1])) : this.$date.formatQueryParamsDate(val[1]),
       }
     },
   },

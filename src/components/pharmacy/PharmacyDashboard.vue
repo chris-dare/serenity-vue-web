@@ -1,7 +1,7 @@
 <template>
   <div class="w-4/5 mx-auto">
     <div class="flex my-4">
-      <PatientCard
+      <InfoLinkCard
         v-for="(dashboard, index) in availableActions"
         :key="index"
         :is-selected="selected === dashboard.value"
@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import PatientCard from '@/components/appointments/PatientCard'
 import NonPatientPrescriptionModal from '@/components/pharmacy/modals/NonPatientPrescriptionModal'
 import { mapState } from 'vuex'
 
@@ -24,7 +23,6 @@ export default {
   name: 'Dashboard',
 
   components: { 
-    PatientCard,
     NonPatientPrescriptionModal,
   },
 

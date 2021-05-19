@@ -5,7 +5,7 @@
       What would you like to do?
     </p>
     <div class="grid grid-cols-5 gap-2 lg:gap-6 my-4">
-      <PatientCard
+      <InfoLinkCard
         v-for="(dashboard, index) in dashboardTypes"
         :key="index"
         :is-selected="selected === dashboard.value"
@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import PatientCard from '@/components/appointments/PatientCard'
 import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
 import ProviderProfile from '@/components/admin/modals/ProviderProfile'
 import { mapState } from 'vuex'
@@ -28,7 +27,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'Settings',
 
-  components: { PatientCard,UserDetailsHeader, ProviderProfile },
+  components: { UserDetailsHeader, ProviderProfile },
 
   data() {
     return {

@@ -6,7 +6,7 @@
     @save="validateAndReroute"
   >
     <div class="flex">
-      <PatientCard
+      <InfoLinkCard
         v-for="(type, index) in patientTypes"
         :key="index"
         :is-selected="selected === type.value"
@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import PatientCard from '@/components/appointments/PatientCard'
 import SelectPatientTable from '@/components/appointments/tables/SelectPatientTable'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import { mapState, mapActions } from 'vuex'
@@ -35,7 +34,7 @@ import { required, minLength } from 'vuelidate/lib/validators'
 export default {
   name: 'SelectPatient',
 
-  components: { PatientCard, SelectPatientTable },
+  components: { SelectPatientTable },
 
   mixins: [MultiStep],
 

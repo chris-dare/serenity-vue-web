@@ -1,7 +1,7 @@
 <template>
   <div class="mb-4">
     <div
-      class="flex items-center justify-between w-full"
+      class="flex items-center justify-between w-full cursor-pointer"
       @click="isClosed = !isClosed"
     >
       <div class="flex items-center w-full">

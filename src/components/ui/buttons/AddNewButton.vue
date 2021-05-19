@@ -1,10 +1,12 @@
 <template>
   <div
-    class="flex item-center space-x-2 text-serenity-primary"
+    class="flex item-center space-x-1 text-serenity-primary"
     @click="$emit('click')"
   >
-    <AddFilled class="w-4 h-4 text-serenity-primary" />
-    <span>Add new</span>
+    <AddFilled class="w-5 h-5 text-serenity-primary" />
+    <span>
+      <slot>Add new</slot>
+    </span>
   </div>
 </template>
 

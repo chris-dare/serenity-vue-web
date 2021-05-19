@@ -20,7 +20,7 @@
       >
         <div class="flex items-center gap-1 w-2/5">
           <MultiSelect
-            v-model="filters.practitioner__id"
+            v-model="filters.practitioner"
             title="Practitioner"
             :multiple="false"
             :options="practitioners"
@@ -32,7 +32,7 @@
           />
 
           <MultiSelect
-            v-model="filters.location__id"
+            v-model="filters.location"
             title="Location"
             :multiple="false"
             :options="locations"
@@ -42,7 +42,7 @@
             @input="filter"
           />
           <MultiSelect
-            v-model="filters.healthcare_service__id"
+            v-model="filters.healthcare_service"
             title="Service"
             :multiple="false"
             :options="services"
@@ -126,14 +126,14 @@ export default {
     },
 
     convertFromDatePickerFormat() {
-      this.filters.planning_horizon_start = this.date.start ? this.$date.formatQueryParamsDate(this.date.start) : null
-      this.filters.planning_horizon_end = this.date.end ? this.$date.formatQueryParamsDate(this.date.end) : null
+      this.filters.planning_horizon_start__gte = this.date.start ? this.$date.formatQueryParamsDate(this.date.start) : null
+      this.filters.planning_horizon_end__lte = this.date.end ? this.$date.formatQueryParamsDate(this.date.end) : null
     },
 
     convertToDatePickerFormat() {
       this.date = {
-        start: this.filters.planning_horizon_start,
-        end: this.filters.planning_horizon_end,
+        start: this.filters.planning_horizon_start__gte,
+        end: this.filters.planning_horizon_end__lte,
       }
     },
   },

@@ -201,7 +201,6 @@ export default {
     try {
       const provider = rootState.auth.provider
       const encounter = rootState.encounters.currentEncounter
-      console.log('encounter', encounter)
       const vitals = new Observation(payload).getCreateVitalsView(encounter, patient)
 
       vitals.forEach(async vital => {

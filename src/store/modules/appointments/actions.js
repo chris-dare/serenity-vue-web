@@ -14,7 +14,6 @@ import {
 export default {
   // eslint-disable-next-line no-unused-vars
   async getAppointments({ commit, rootState, state }, { refresh = true, filters }) {
-    console.log('appointments')
     if (!refresh && state.appointments.length) {
       return
     }
@@ -32,7 +31,6 @@ export default {
   async getSlots({ commit, rootState }, filters) {
     try {
       const provider = rootState.auth.provider
-      console.log('filter', filters)
       const { data } = await AppointmentsAPI.slots(provider.id, filters)
       commit(SET_SLOTS, data.data)
     } catch (error) {

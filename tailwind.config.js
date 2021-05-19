@@ -40,6 +40,7 @@ module.exports = {
       },
       maxWidth: {
         102: '32rem',
+        56: '14rem',
       },
       fontFamily: {
         graphik: 'Graphik, Open Sans',
@@ -63,6 +64,8 @@ module.exports = {
   variants: {
     extend: {
       zIndex: ['hover', 'active'],
+      borderWidth: ['last'],
+      visibility: ['group-hover'],
     },
   },
   plugins: [],

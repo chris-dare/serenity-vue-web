@@ -5,7 +5,7 @@
       What would you like to do?
     </p>
     <div class="flex my-4">
-      <PatientCard
+      <InfoLinkCard
         v-for="(dashboard, index) in availableActions"
         :key="index"
         :is-selected="selected === dashboard.value"
@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import PatientCard from '@/components/appointments/PatientCard'
 import GetStartedModal from '@/components/dashboard/GetStartedModal'
 import NonPatientPrescriptionModal from '@/components/pharmacy/modals/NonPatientPrescriptionModal'
 import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
@@ -31,7 +30,6 @@ export default {
   name: 'Dashboard',
 
   components: { 
-    PatientCard,
     GetStartedModal,
     NonPatientPrescriptionModal,
     UserDetailsHeader,

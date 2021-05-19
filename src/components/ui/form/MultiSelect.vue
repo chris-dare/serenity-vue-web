@@ -1,23 +1,35 @@
 <template>
   <div>
     <div class="bx--label">{{ title }}</div>
-    <VueMultiselect
-      v-model="selected"
-      :options="options"
-      :multiple="multiple"
-      :close-on-select="!multiple"
-      :clear-on-select="false"
-      :preserve-search="true"
-      :placeholder="placeholder"
-      :label="label"
-      :track-by="trackBy"
-      :preselect-first="preselect"
-      :show-labels="false"
-      :internal-search="enableSearch"
-      :custom-label="customLabel"
-      :disabled="disabled"
-      @select="$emit('select', $event)"
-    />
+    <div class="flex item-center group relative">
+      <VueMultiselect
+        v-model="selected"
+        :options="options"
+        :multiple="multiple"
+        :close-on-select="!multiple"
+        :preserve-search="true"
+        :placeholder="placeholder"
+        :label="label"
+        :track-by="trackBy"
+        :preselect-first="preselect"
+        :show-labels="false"
+        :internal-search="enableSearch"
+        :custom-label="customLabel"
+        :disabled="disabled"
+        class="group"
+        @input="$emit('select', $event)"
+      />
+      <div
+        class="flex items-center border-b border-solid border-secondary h-full absolute right-0"
+        :class="{'px-2': !selected}"
+      >
+        <Close
+          v-if="selected"
+          class="w-4 z-50 cursor-pointer invisible group-hover:visible"
+          @click="clear"
+        />
+      </div>
+    </div>
     <p
       v-if="error || errorMessage"
       class="error"
@@ -110,6 +122,12 @@ export default {
     },
   },
 
+  data() {
+    return {
+      cleared: false,
+    }
+  },
+
   computed: {
     selected: {
       get() {
@@ -122,8 +140,18 @@ export default {
         return data
       },
       set(val) {
+        if (val === '') {
+          this.$emit('input', null)
+          return
+        }
         this.$emit('input', this.customField && val[this.customField] ? val[this.customField] : val)
       },
+    },
+  },
+
+  methods: {
+    clear() {
+      this.selected = ''
     },
   },
 }
