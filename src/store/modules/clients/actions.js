@@ -18,7 +18,7 @@ export default {
     const provider = rootState.auth.provider
     const { data } = await ClientAPI
       .create(provider.id,payload)
-      .catch(({ response: { data: error } }) => {
+      .catch(({data: error}) => {
         throw error
       })
 

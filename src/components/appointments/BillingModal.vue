@@ -4,6 +4,7 @@
     close-aria-label="Close"
     :visible="visible"
     size="xs"
+    @modal-hidden="visible= false"
   >
     <template slot="content">
       <div>

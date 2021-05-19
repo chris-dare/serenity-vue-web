@@ -341,6 +341,11 @@ const routes = [
         ],
       },
       {
+        path: '/pharmacy',
+        name: 'Pharmacy',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/pharmacy/Pharmacy.vue'),
+      },
+      {
         path: '/pharmacy/patients',
         name: 'Pharmacy:Patients',
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/pharmacy/Patients.vue'),
@@ -350,6 +355,17 @@ const routes = [
         name: 'Pharmacy:Patient',
         props: true,
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/pharmacy/Patient.vue'),
+      },
+      {
+        path: '/billing/patients',
+        name: 'Billing:Patients',
+        component: () => import(/* webpackChunkName: "billing" */ '../views/client/billing/Patients.vue'),
+      },
+      {
+        path: '/billing/patients/:id',
+        name: 'Billing:Patient',
+        props: true,
+        component: () => import(/* webpackChunkName: "billing" */ '../views/client/billing/Patient.vue'),
       },
     ],
   },
