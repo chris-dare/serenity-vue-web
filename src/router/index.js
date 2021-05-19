@@ -356,6 +356,17 @@ const routes = [
         props: true,
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/pharmacy/Patient.vue'),
       },
+      {
+        path: '/billing/patients',
+        name: 'Billing:Patients',
+        component: () => import(/* webpackChunkName: "billing" */ '../views/client/billing/Patients.vue'),
+      },
+      {
+        path: '/billing/patients/:id',
+        name: 'Billing:Patient',
+        props: true,
+        component: () => import(/* webpackChunkName: "billing" */ '../views/client/billing/Patient.vue'),
+      },
     ],
   },
   {
