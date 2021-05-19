@@ -65,6 +65,7 @@ module.exports = {
     extend: {
       zIndex: ['hover', 'active'],
       borderWidth: ['last'],
+      visibility: ['group-hover'],
     },
   },
   plugins: [],
