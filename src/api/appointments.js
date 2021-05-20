@@ -3,8 +3,9 @@ import http from '@/http'
 export default {
   url: 'providers/',
   
-  list(providerId) {
-    return http.get(`${this.url}${providerId}/appointments`)
+  list(providerId, params) {
+    console.log('params', params)
+    return http.get(`${this.url}${providerId}/appointments`, { params: {...params } })
   },
 
   get(providerId, appointmentId) {
@@ -19,8 +20,9 @@ export default {
     return http.post(`${this.url}${providerId}/appointment/cancel/${appointmentId}`, params)
   },
 
-  slots(providerId, specialty) {
-    return http.get(`${this.url}${providerId}/slots/availableslots`, { params: { specialty } })
+  slots(providerId, params) {
+    console.log('params', params)
+    return http.get(`${this.url}${providerId}/slots/availableslots`, { params: { ...params } })
   },
 
   update(providerId, appointmentId, params) {

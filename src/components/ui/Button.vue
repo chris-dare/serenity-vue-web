@@ -79,7 +79,7 @@ export default {
       validator: function (value) {
         // The value must match one of these strings
         return (
-          ['primary', 'secondary', 'secondary-outline', 'tertiary', 'danger', 'outline', 'ghost', 'white', 'default', 'danger-outline'].indexOf(value) !== -1
+          ['primary', 'secondary', 'secondary-outline', 'tertiary', 'danger', 'outline', 'ghost', 'white', 'default', 'danger-outline', 'warning'].indexOf(value) !== -1
         )
       },
     },
@@ -93,6 +93,9 @@ export default {
 
       if (this.variant  === 'secondary') {
         return 'bg-black text-white'
+      }
+      if (this.variant  === 'warning') {
+        return 'bg-warning hover:bg-warning text-black'
       }
 
       if (this.variant  === 'secondary-outline') {

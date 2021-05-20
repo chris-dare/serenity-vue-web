@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'DefaultPatientActions',
@@ -25,6 +26,12 @@ export default {
   },
 
   computed: {
+    ...mapGetters({
+      hasActiveEncounter: 'encounters/hasActiveEncounter',
+    }),
+    types() {
+      return this.dashboardTypes.filter(type => !type.hide)
+    },
     dashboardTypes() {
       return [
         {
@@ -38,12 +45,14 @@ export default {
           description: 'Order patient medical labs',
           type: 'lab',
           value: 'lab',
+          hide: !this.hasActiveEncounter,
         },
         {
           label: 'Medication',
           description: 'Prescribe medication and view medication records',
           type: 'medication',
           value: 'medication',
+          hide: !this.$userCan('medication.orders.write'),
         },
         {
           label: 'View Records',
@@ -62,6 +71,7 @@ export default {
           description: 'Book a follow up appointment',
           type: 'followup',
           value: 'followup',
+          hide: !this.$userCan('appointments.write'),
         },
         {
           label: 'Referral',
@@ -74,6 +84,7 @@ export default {
           description: 'End the encounter with patientx',
           type: 'close',
           value: 'close',
+          hide: !this.hasActiveEncounter,
         },
       ]
     },
@@ -86,10 +97,13 @@ export default {
         this.$trigger('profile:notes:open')
         break
       case 'medication':
-        this.$trigger('profile:medication:open')
+        this.$trigger('profile:medication:request:open')
         break
       case 'lab':
-        this.$trigger('profile:test:open')
+        this.$trigger('service:request:open', 'laboratory-procedure')
+        break
+      case 'followup':
+        this.$router.push({ name: 'SelectPatient' })
         break
           
       default:

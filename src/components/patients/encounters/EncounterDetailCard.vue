@@ -1,53 +1,51 @@
 <template>
-  <div class="bg-white pb-4">
+  <div v-if="hasNoCurrentEncounter">
+    There's no current encounter
+  </div>
+  <div
+    v-else
+    class="bg-white pb-4"
+  >
     <div class="p-4 grid grid-cols-2">
       <div>
-        <p class="text-secondary mb-2">Doctor in charge</p>
-        <div class="flex items-center">
-          <img
-            class="w-10 h-10 rounded-full mr-3"
-            :src="$faker().image.image()"
-            alt=""
-          >
-          <div>
-            <p class="text-black">Dr. {{ $faker().name.findName() }}</p>
-            <p class=" text-secondary">General practitioner</p>
-          </div>
-        </div>
+        <p class="text-secondary">Doctor in charge</p>
+        <InfoImageBlock
+          :label="fullName"
+          description="General practitioner"
+        />
       </div>
       <div>
         <p class="text-secondary mb-2">Date and Time of Encounter</p>
         <div class="flex items-center text-primary">
           <p>
-            Thursday, Mar 13, 2020
-            8:15 am
+            {{ $date.formatDate(currentEncounter.start_time, 'EEEE,  MMM dd, yyyy hh:mm a') }}
           </p>
         </div>
       </div>
     </div>
     <div>
-      <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
-        <div slot="title">
-          <p class="text-serenity-primary">Diagnosis</p>
-        </div>
-        <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
+      <ToggleList
+        title="Diagnosis"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      >
+        <EncounterDiagnosis :data="currentEncounterDiagnosis" />
       </ToggleList>
-      <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
-        <div slot="title">
-          <p class="text-serenity-primary">Presenting Complaint</p>
-        </div>
-        <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
+      <ToggleList
+        title="Presenting Complaint"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      >
+        <p class="text-gray-500">{{ currentEncounterPresentingComplaint }}</p>
       </ToggleList>
-      <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
-        <div slot="title">
-          <p class="text-serenity-primary">History of Presenting Complaint</p>
-        </div>
-        <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
+      <ToggleList
+        title="History of Presenting Complaint"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      >
+        <EncounterDiagnosis :data="currentEncounterComplaints" />
       </ToggleList>
-      <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
-        <div slot="title">
-          <p class="text-serenity-primary">Patient Vitals</p>
-        </div>
+      <ToggleList
+        title="Patient Vitals"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      >
         <EncounterPatientVitals />
       </ToggleList>
       <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
@@ -55,25 +53,118 @@
           <p class="text-serenity-primary">Social History</p>
         </div>
       </ToggleList>
+      <ToggleList
+        title="Laboratory Tests"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      >
+        <EncounterServiceRequests />
+      </ToggleList>
+      <ToggleList
+        title="Reports / Documents"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      >
+        <EncounterDiagnosticReports />
+      </ToggleList>
       <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
         <div slot="title">
-          <p class="text-serenity-primary">Laboratory Tests</p>
+          <p class="text-serenity-primary">Review of Systems</p>
         </div>
-        <EncounterPatientVitals />
       </ToggleList>
+      <ToggleList
+        title="Medications / Treatment Plan"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      />
+      <ToggleList
+        title="Notes"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      >
+        <EncounterNotes />
+      </ToggleList>
+      <ToggleList
+        title="Bills / Receipts"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      />
     </div>
+
+    <EncounterDiagnosisModal />
+    <NotesModal
+      required
+      @save="createNote"
+      @update="updateNote"
+    />
   </div>
 </template>
 
 <script>
 import EncounterPatientVitals from './EncounterPatientVitals'
-export default {
-  name: 'Encounters',
+import EncounterDiagnosis from './EncounterDiagnosis'
+import EncounterNotes from './EncounterNotes'
+import EncounterDiagnosisModal from './EncounterDiagnosisModal'
+import EncounterServiceRequests from './EncounterServiceRequests'
+import EncounterDiagnosticReports from './EncounterDiagnosticReports'
+import { mapState, mapActions, mapGetters } from 'vuex'
+import isEmpty from 'lodash/isEmpty'
 
-  components: {EncounterPatientVitals},
+export default {
+  name: 'EncounterDetailCard',
+
+  components: { EncounterPatientVitals, EncounterDiagnosis, EncounterDiagnosisModal, EncounterNotes, EncounterServiceRequests, EncounterDiagnosticReports },
+
+  computed: {
+    ...mapState({
+      currentEncounter: state => state.encounters.currentEncounter,
+    }),
+    ...mapGetters({
+      fullName: 'auth/fullName',
+      currentEncounterComplaints: 'encounters/currentEncounterComplaints',
+      currentEncounterDiagnosis: 'encounters/currentEncounterDiagnosis',
+      currentEncounterPresentingComplaint: 'encounters/currentEncounterPresentingComplaint',
+    }),
+    
+    hasNoCurrentEncounter() {
+      return !!isEmpty(this.currentEncounter)
+    },
+  },
+
+  methods: {
+    ...mapActions({
+      createPatientNote: 'encounters/createNote',
+      updatePatientNote: 'encounters/updateNote',
+    }),
+
+    async createNote(notes) {
+      this.loading = true
+      try {
+        const noteForm = { display: notes, encounter_patient_id: this.$route.params.id }
+        await this.createPatientNote(noteForm)
+        this.$toast.open({
+          message: 'Notes created successfully',
+        })
+        this.$trigger('notes:close')
+      } catch (error) {
+        // empty
+      } finally {
+        this.loading = false
+      }
+    },
+  
+    async updateNote(data) {
+      this.loading = true
+      try {
+        
+        const noteForm = { ...data, display: data.notes }
+        delete noteForm.notes
+        await this.updatePatientNote(noteForm)
+        this.$toast.open({
+          message: 'Notes created successfully',
+        })
+        this.$trigger('notes:close')
+      } catch (error) {
+        // empty
+      } finally {
+        this.loading = false
+      }
+    },
+  },
 }
 </script>
-
-<style>
-
-</style>

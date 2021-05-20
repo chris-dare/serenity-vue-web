@@ -4,6 +4,7 @@
     class="se-no-title-modal"
     :visible="modalVisible"
     size="xs"
+    @modal-hidden="modalVisible = false"
   >
     <template
       slot="content"

@@ -7,6 +7,18 @@ export default {
     return http.get(`${this.url}${providerId}/admin/resources`)
   },
 
+  encounterClass() {
+    return http.get(`${this.url}valueset/encounter-class`)
+  },
+
+  paymentMethods() {
+    return http.get(`${this.url}valueset/payment-methods`)
+  },
+
+  maritalStatuses() {
+    return http.get(`${this.url}valueset/marital-status`)
+  },
+
   categories() {
     return http.get('FHIR/healthcare-service-categories')
   },

@@ -11,8 +11,9 @@
     </p>
     <div class="grid">
       <DatePicker
-        v-model="form.date"
-        type="datetime"
+        v-model="filters"
+        type="datetimerange"
+        @change="filter"
       />
     </div>
     <div class="flex items-center space-x-4 my-4">
@@ -54,6 +55,9 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
 import startOfDay from 'date-fns/startOfDay'
+// import endOfDay from 'date-fns/endOfDay'
+import isSameDay from 'date-fns/isSameDay'
+
 
 export default {
   name: 'DateDoctor',
@@ -69,6 +73,7 @@ export default {
         date: startOfDay(new Date()),
         slot: {},
       },
+      filters: [new Date()],
       time: Time,
       loading: false,
       selected: 1,
@@ -97,11 +102,13 @@ export default {
 
     ...mapGetters({
       availableSlots: 'appointments/availableSlots',
+      slots: 'appointments/slots',
     }),
 
     filteredData() {
       if (!this.form.date) return []
-      return this.availableSlots(this.form.date)
+      // return this.availableSlots(this.form.date)
+      return this.slots
     },
 
     disabled() {
@@ -119,9 +126,7 @@ export default {
 
       return
     }
-    this.loading = true
-    await this.getSlots(specialty.Code)
-    this.loading = false
+    this.filter()
   },
 
   validations: {
@@ -136,6 +141,20 @@ export default {
       refresh: 'appointments/refreshCurrentAppointment',
       getSlots: 'appointments/getSlots',
     }),
+
+    async filter(val) {
+      this.loading = true
+      const filters = this.convertFromDatePickerFormat(val || this.filters)
+      await this.getSlots({ service_specialty: this.storeData.specialty.Code, ...filters })
+      this.loading = false
+    },
+
+    convertFromDatePickerFormat(val) {
+      return {
+        start: this.$date.formatQueryParamsDate(val[0]),
+        end: isSameDay(val[0], val[1]) || !val[1] ? this.$date.formatQueryParamsDate(this.$date.endOfDate(val[1])) : this.$date.formatQueryParamsDate(val[1]),
+      }
+    },
   },
 }
 </script>

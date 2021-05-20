@@ -95,7 +95,7 @@ export default {
 
   beforeMount() {
     this.searchTerms = ['']
-    this.refresh(false)
+    this.refresh({refresh: false})
   },
 
   methods: {

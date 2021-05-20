@@ -3,65 +3,112 @@
     <SeForm class="space-y-8">
       <p class="font-semibold">Order Labs/ imaging</p>
 
-      <MultiSelect
-        v-model="form.type"
-        title="Choose lab type"
-        :multiple="false"
-        :options="[]"
-        label="first_name"
-        placeholder="Search or choose a lab text to be performed"
-      />
 
-      <cv-text-area
-        label="Order details"
-        placeholder="Details for this order"
-        :rows="4"
-      />
-      <cv-text-area
-        label="Note"
-        placeholder="Leave a note for the lab tecnician"
-        :rows="4"
-      />
-
-      <MultiSelect
-        v-model="form.priority"
-        title="Priority"
-        :multiple="false"
-        :options="[]"
-        label="first_name"
-        placeholder="Routine, ASAP, Urgent"
-      />
-
-      <div class="grid grid-cols-2 gap-4">
+      <div class="space-y-4">
         <MultiSelect
-          v-model="form.body_site"
-          title="Body site"
+          v-model="form.service_request_category[0].display"
+          title="Choose lab type"
           :multiple="false"
-          :options="[]"
-          placeholder="Body site"
+          :options="categories"
+          :track_by="null"
+          placeholder="Search or choose a lab text to be performed"
+          :custom-label="customLabel"
+          :invalid-message="$utils.validateRequiredField($v, 'service_request_category')"
         />
-        <MultiSelect
-          v-model="form.specimen"
-          title="Specimen"
-          :multiple="false"
-          :options="[]"
-          placeholder="Specimen"
+
+  
+        <cv-text-area
+          v-model="form.order_detail[0].display"
+          label="Order details"
+          placeholder="Details for this order"
+          :rows="4"
+          class="col-span-2"
+          :invalid-message="$utils.validateRequiredField($v, 'order_detail')"
         />
+
+        <cv-text-area
+          v-model="form.patient_instruction"
+          label="Note"
+          placeholder="Leave a note for the lab tecnician"
+          :rows="4"
+          class="col-span-2"
+        />
+
+        <SingleSelect
+          v-model="form.priority"
+          title="Priority"
+          :options="priorities"
+          placeholder="Routine, ASAP, Urgent"
+        />
+        
+
+        <div class="grid grid-cols-2 gap-4">
+          <cv-text-input
+            v-model="form.service_request_bodysite[0].display"
+            type="text"
+            label="Bodysite"
+            placeholder="Body site"
+            :invalid-message="$utils.validateRequiredField($v, 'service_request_bodysite')"
+          />
+
+          <cv-text-input
+            v-model="form.code"
+            type="text"
+            label="Specimen"
+            placeholder="Specimen"
+          />
+        </div>
       </div>
 
-      <SeButton :icon="add">Add Another test</SeButton>
+      <SeButton
+        :loading="loading"
+        :icon="add"
+        @click="submit"
+      >
+        Add Another test
+      </SeButton>
     
 
       <div>
-        <p>Previous Labs</p>
+        <p class="mb-2 font-semibold">Previous Labs</p>
+
+        <div
+          v-if="!currentEncounterServiceRequests.length"
+          class="flex items-center my-4"
+        >
+          No labs available
+        </div>
+        <div
+          v-else
+          class="space-y-3"
+        >
+          <div
+            v-for="(diagnosis, index) in currentEncounterServiceRequests"
+            :key="index"
+            class="flex items-center space-x-2"
+          >
+            <router-link
+              class="underline"
+              :to="{ name: 'EncounterReview', params: { ...$route.params } }"
+            >
+              view encounter
+            </router-link>
+          </div>
+        </div>
       </div>
     </SeForm>
 
     <div class="flex justify-between items-center">
-      <SeButton :to="{name: 'EncounterDiagnosis', params: { id: $route.params.id }}">Back to diagnosis</SeButton>
       <SeButton
-        :to="{name: 'EncounterMedications', params: { id: $route.params.id }}"
+        variant="secondary"
+        :to="{name: 'EncounterDiagnosis', params: { id: $route.params.id }}"
+      >
+        Back to diagnosis
+      </SeButton>
+      <SeButton
         :icon="icon"
+        :loading="loading"
+        @click="submit(true)"
       >
         Submit and go to Medications
       </SeButton>
@@ -72,6 +119,9 @@
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Add from '@carbon/icons-vue/es/chevron--right/32'
+import { mapActions, mapState, mapGetters } from 'vuex'
+import { required, minLength } from 'vuelidate/lib/validators'
+
 export default {
   name: 'EncountersLabs',
 
@@ -79,8 +129,117 @@ export default {
     return {
       icon: ChevronRight,
       add: Add,
-      form: {},
+      form: {
+        order_detail: [{display: ''}],
+        service_request_bodysite: [{display: ''}],
+        service_request_category: [{display: ''}],
+      },
+      categories: [ 'laboratory-procedure', 'imaging', 'counselling', 'education', 'surgical-procedure' ],
+      loading: false,
     }
+  },
+
+  validations: {
+    form: {
+      service_request_category: { required },
+      order_detail: {
+        required,
+        minLength: minLength(1),
+        $each: {
+          display: { required },
+        },
+      },
+      service_request_bodysite: {
+        required,
+        minLength: minLength(1),
+        $each: {
+          display: { required },
+        },
+      },
+    },
+  },
+
+  computed: {
+    ...mapState({
+      provider: (state) => state.auth.provider,
+      location: (state) => state.global.location,
+      priorities: (state) => state.global.priorities,
+      encounter: (state) => state.encounters.currentEncounter,
+    }),
+
+    ...mapGetters({
+      currentEncounterServiceRequests: 'encounters/currentEncounterServiceRequests',
+    }),
+  },
+
+  methods: {
+    ...mapActions({
+      createServiceRequest: 'patients/createServiceRequest',
+      updateServiceRequest: 'patients/updateServiceRequest',
+    }),
+
+    submit(reroute= false) {
+      this.$v.$touch()
+
+      if (this.$v.$invalid) {
+        this.$toast.error('Please fill all required fields')
+        return
+      }
+
+      if (this.form.id) {
+        this.update()
+      } else {
+        // this.form.requesting_practitioner_role = this.provider.practitionerRoleId
+        this.form.patient = this.$route.params.id
+        this.form.location = this.location.id
+        this.form.encounter = this.encounter.id
+        this.save(reroute)
+      }
+    },
+
+    async save(reroute) {
+      this.loading = true
+
+      try {
+        await this.createServiceRequest([this.form])
+        this.loading = false
+        this.$toast.open({
+          message: 'Service Request successfully added',
+        })
+        this.close()
+        if (reroute) {
+          this.$router.push({ name: 'EncounterMedications'})
+        }
+      } catch (error) {
+        this.loading = false
+      }
+    },
+
+    async update() {
+      try {
+        await this.updateServiceRequest(this.form)
+        this.loading = false
+        this.$toast.open({
+          message: 'Service Request successfully updated',
+        })
+        this.close()
+      } catch (error) {
+        this.loading = false
+      }
+    },
+
+    close() {
+      this.form = {
+        order_detail: [{display: ''}],
+        service_request_bodysite: [{display: ''}],
+        service_request_category: [{display: ''}],
+      }
+      this.$v.$reset()
+    },
+
+    customLabel (value) {
+      return value.split('-').join(' ')
+    },
   },
 }
 </script>

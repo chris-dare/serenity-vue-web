@@ -1,4 +1,4 @@
-import { SET_RESOURCES, UPDATE_RESOURCE, DELETE_RESOURCE, SET_SPECIALTIES, SET_CATEGORIES, SET_CODES, SET_SERVICE_TYPES } from './mutation-types'
+import { SET_RESOURCES, UPDATE_RESOURCE, SET_CLINICAL_OPTIONS, DELETE_RESOURCE, SET_SPECIALTIES, SET_CATEGORIES, SET_CODES, SET_SERVICE_TYPES, SET_PAYMENT_METHODS, SET_ENCOUNTER_CLASSES, SET_MARITAL_STATUSES, SET_MEDICATION_OPTIONS } from './mutation-types'
 
 export default {
   [SET_RESOURCES](state, resources) {
@@ -38,5 +38,25 @@ export default {
 
   [SET_SERVICE_TYPES](state, types) {
     state.serviceTypes = types
+  },
+
+  [SET_PAYMENT_METHODS](state, methods) {
+    state.paymentMethods = methods
+  },
+
+  [SET_ENCOUNTER_CLASSES](state, classes) {
+    state.encounterClasses = classes
+  },
+
+  [SET_MARITAL_STATUSES](state, classes) {
+    state.maritalStatuses = classes
+  },
+
+  [SET_MEDICATION_OPTIONS](state, classes) {
+    state.medicationOptions = classes
+  },
+
+  [SET_CLINICAL_OPTIONS](state, classes) {
+    state.clinicalOptions = classes
   },
 }

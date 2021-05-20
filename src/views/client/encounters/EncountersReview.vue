@@ -5,10 +5,10 @@
       <EncounterDetails />
     </div>
 
-    <div class="flex justify-end absolute w-full right-0 bottom-8">
+    <div class="flex justify-end mt-12">
       <SeButton
         :to="{name: 'EncounterDiagnosis', params: {id: $route.params.id}}"
-        :icon="ChevronRight"
+        :icon="icon"
       >
         Add Diagnosis
       </SeButton>

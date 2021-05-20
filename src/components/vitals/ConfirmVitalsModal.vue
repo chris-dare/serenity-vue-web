@@ -1,4 +1,4 @@
-<template>
+<template functional>
   <div class="bg-white p-6 my-6">
     <div>
       <p class="mb-6 text-lg text-serenity-primary">Confirm Vitals Submission</p>
@@ -7,8 +7,18 @@
         :form="form"
       />
       <div class="flex items-center justify-between mt-12">
-        <SeButton variant="secondary">Go back</SeButton>
-        <SeButton>Submit<ChevronRight class="w-4 h-4 text-white ml-4" /></SeButton>
+        <SeButton
+          variant="secondary"
+          @click="listeners['back']"
+        >
+          Go back
+        </SeButton>
+        <SeButton
+          :loading="props.loading"
+          @click="listeners['save']"
+        >
+          Submit
+        </SeButton>
       </div>
     </div>
   </div>

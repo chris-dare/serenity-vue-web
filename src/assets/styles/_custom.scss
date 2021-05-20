@@ -324,3 +324,25 @@ button:focus {
     display: none !important;
   }
 }
+
+// input customization
+.se-input-gray{
+  input, textarea{
+    background-color: #f4f4f4 !important;
+  }
+}
+
+// tables
+.small-table{
+  .bx--table-header-label{
+    @apply text-xs font-medium uppercase tracking-wide
+  }
+
+  tr{
+    @apply h-9
+  }
+
+  td p {
+    @apply text-sm
+  }
+}

@@ -29,10 +29,13 @@ import modelMixin from '@/mixins/model'
   
 export default {   
   name: 'DatePicker',
+
   components: {
     flatPickr,
-  }, 
+  },
+
   mixins: [modelMixin],
+
   props: {
     label: {
       type: String,
@@ -45,6 +48,10 @@ export default {
     type: {
       type: String,
       default: 'date',
+    },
+    disableDatesBeforeToday: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -71,7 +78,7 @@ export default {
         datetime: {
           // wrap: true,
           enableTime: true,
-          // dateFormat: 'd-m-Y H:i',
+          dateFormat: 'd-m-Y H:i',
           allowInput: true,
           defaultHour: 0,
           defaultMinute: 0,
@@ -92,14 +99,17 @@ export default {
         },
         range: {
           mode: 'range',
-          // minDate: 'today',
           dateFormat: 'Y-m-d',
-          // disable: [
-          //   function(date) {
-          //   // disable every multiple of 8
-          //     return !(date.getDate() % 8)
-          //   },
-          // ],
+          defaultDate: Date.now(),
+          minDate: this.disableDatesBeforeToday ? 'today' : null,
+        },
+        datetimerange: {
+          mode: 'range',
+          enableTime: true,
+          allowInput: true,
+          dateFormat: 'Y-m-d H:i',
+          minDate: this.disableDatesBeforeToday ? 'today' : null,
+          // defaultDate: Date.now(),
         },
       }, 
     }

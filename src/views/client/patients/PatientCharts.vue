@@ -6,7 +6,7 @@
         <!-- <p class="text-gray-500  ml-3">Updated: Today</p> -->
         <div
           class="flex items-center space-x-1 cursor-pointer"
-          @click="$router.push({name: 'Vitals'})"
+          @click="$router.push({ name: 'Vitals', query: { id: $route.params.id }})"
         >
           <AddFilled class="w-4 h-4 text-serenity-primary" />
           <p>Add new</p>

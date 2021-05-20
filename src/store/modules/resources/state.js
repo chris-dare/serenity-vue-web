@@ -5,4 +5,9 @@ export default () => ({
   codes: [],
   serviceTypes: [],
   currentResource: {},
+  paymentMethods: [],
+  encounterClasses: [],
+  maritalStatuses: [],
+  medicationOptions: [],
+  clinicalOptions: [],
 })

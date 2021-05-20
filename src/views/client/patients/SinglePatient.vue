@@ -26,45 +26,45 @@
           <img
             src="@/assets/img/edit 1.svg"
             class="w-4 h-4"
-            @click="$router.push({name: 'Biodata', params: {id: patient.id}})"
+            @click="$router.push({ name: 'Biodata', params: { id: patient.id } })"
           >
         </div>
       </div>
       <div class="flex items-center space-x-4">
-        <p
-          class="underline cursor-pointer"
-          @click="$trigger('visit:end:open')"
-        >
-          End Visit
-        </p>
-        <AddNewDropdown />
-        <cv-button
-          v-if="!hasEncounter"
-          kind="primary"
-          size="field"
-          class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
-          @click="$router.push({ name: 'SelectPatient' })"
-        >
-          Record a new encounter
-          <Add class="ml-2 w-5 h-5 text-white" />
-        </cv-button>
-        <cv-button
-          v-else
-          kind="primary"
-          size="field"
-          class="px-4 bg-warning hover:bg-warning mr-2 text-black"
-          @click="$router.push({ name: 'SelectPatient' })"
-        >
-          Open ongoing encounter
-          <Add class="ml-2 w-5 h-5 text-white" />
-        </cv-button>
         <SeButton
-          v-if="false"
-          variant="danger"
-          @click="$trigger('profile:deceased-info:open')"
+          v-if="!hasActiveEncounter"
+          variant="secondary"
+          @click="$trigger('start:encounter:open')"
         >
-          Patient is deceaseed - read more
+          Start Encounter
+          <Add class="ml-2 w-5 h-5 text-white" />
         </SeButton>
+        <div
+          v-else
+          class="flex items-center space-x-4"
+        >
+          <p
+            class="underline cursor-pointer"
+            @click="end"
+          >
+            End Encounter
+          </p>
+          <AddNewDropdown />
+
+          <SeButton
+            variant="warning"
+            :to="{ name: 'EncounterReview', params: { encounter: encounter.id, id: $route.params.id } }"
+          >
+            Begin Consultation
+          </SeButton>
+          <SeButton
+            v-if="false"
+            variant="danger"
+            @click="$trigger('profile:deceased-info:open')"
+          >
+            Patient is deceaseed - read more
+          </SeButton>
+        </div>
       </div>
     </div>
 
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import AddNewDropdown from '@/components/patients/AddNewDropdown'
 import SinglePatientModals from '@/components/patients/modals/SinglePatientModals'
 import PatientDetailsNav from '@/components/patients/PatientDetailsNav'
@@ -107,7 +107,12 @@ export default {
   computed: {
     ...mapState({
       patient: (state) => state.patients.currentPatient,
+      encounter: (state) => state.encounters.currentEncounter,
       workspaceType: (state) => state.global.workspaceType,
+    }),
+
+    ...mapGetters({
+      hasActiveEncounter: 'encounters/hasActiveEncounter',
     }),
 
     links() {
@@ -139,13 +144,37 @@ export default {
   },
 
   beforeRouteEnter (to, from, next) {
-    next(vm => vm.getPatient(vm.id))
+    next(async vm => {
+      vm.loading = true
+      await vm.initSinglePatientInformation(vm.id)
+      vm.loading = false
+    })
   },
 
   methods: {
     ...mapActions({
-      getPatient: 'patients/getPatient',
+      initSinglePatientInformation: 'patients/initSinglePatientInformation',
+      endEncounter: 'encounters/endEncounter',
     }),
+
+
+    end() {
+      this.$trigger('visit:end:open', {
+        callback: async () => {
+          this.loading = true
+          try {
+            await this.endEncounter()
+            this.$toast.open({
+              message: 'Encounter ended successfully',
+            })
+            this.loading = false
+          } catch (error) {
+            // empty
+            throw error || error.message
+          }
+        },
+      })
+    },
   },
 }
 </script>

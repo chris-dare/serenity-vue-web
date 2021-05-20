@@ -1,15 +1,30 @@
 <template>
   <div class="mb-4">
     <div
-      class="flex items-center justify-between cursor-pointer"
+      class="flex items-center justify-between w-full cursor-pointer"
       @click="isClosed = !isClosed"
     >
-      <div class="flex items-center">
+      <div class="flex items-center w-full">
         <CaretUp32
           :class="[isClosed ? 'rotate-90' : 'rotate-180']"
           class="transform transition-all duration-100 ease-linear mr-2 text-serenity-primary w-5 h-5 cursor-pointer"
         />
-        <slot name="title"> <p class="text-serenity-primary">{{ title }}</p> </slot>
+        <div class="flex-1">
+          <slot name="title">
+            <div class="flex items-center justify-between">
+              <p
+                class="text-serenity-primary w-full"
+              >
+                {{ title }}
+              </p>
+              <AddFilled
+                v-if="hasCreate"
+                class="w-5 h-5 text-serenity-primary"
+                @click.stop="$emit('create')"
+              />
+            </div>
+          </slot>
+        </div>
       </div>
     </div>
     <div
@@ -32,6 +47,11 @@ export default {
     title: {
       type: String,
       default: null,
+    },
+
+    hasCreate: {
+      type: Boolean,
+      default: false,
     },
   },
 

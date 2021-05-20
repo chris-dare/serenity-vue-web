@@ -53,7 +53,6 @@
               v-model="selectedLocation"
               class="no-label-input se-black-input hover:bg-serenity-gray focus:bg-serenity-gray mx-2 lg:mx-6"
               label="false"
-              @change="selectLocation"
             >
               <cv-select-option
                 v-for="(item, index) in locations"
@@ -112,7 +111,6 @@ export default {
     return {
       search: '',
       open: '',
-      selectedLocation: '',
     }
   },
 
@@ -121,6 +119,7 @@ export default {
       workspaceType: (state) => state.global.workspaceType,
       // workspaces: (state) => state.global.workspaces,
       locations: (state) => state.locations.locations,
+      location: (state) => state.global.location,
     }),
 
     ...mapGetters({
@@ -135,6 +134,15 @@ export default {
         this.setworkspaceType(value)
       },
     },
+
+    selectedLocation: {
+      get() {
+        return this.location
+      },
+      set(value) {
+        this.setGlobalLocation(value)
+      },
+    },
   },
 
   async created() {
@@ -145,6 +153,7 @@ export default {
   methods: {
     ...mapActions({
       setworkspaceType: 'global/setworkspaceType',
+      setGlobalLocation: 'global/setGlobalLocation',
       getLocations: 'locations/getLocations',
     }),
 
@@ -152,8 +161,6 @@ export default {
       this.setworkspaceType(value)
       this.$router.push({ name: this.workspaceType === 'ADMIN' ? 'GetStarted' : 'Dashboard'}).catch(()=>{})
     },
-
-    selectLocation() {},
 
     change() {
       this.open = !this.open

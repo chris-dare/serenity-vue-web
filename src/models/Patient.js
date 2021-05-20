@@ -1,7 +1,7 @@
 import isEmpty from 'lodash/isEmpty'
 import differenceInYears from 'date-fns/differenceInYears'
-import parseISO from 'date-fns/parseISO'
-import format from 'date-fns/format'
+// import parseISO from 'date-fns/parseISO'
+// import format from 'date-fns/format'
 
 export default class Patient {
   constructor(data) {
@@ -12,11 +12,9 @@ export default class Patient {
     let data = {
       ...this.data,
       age: this.data.birth_date ? differenceInYears(Date.now(), new Date(`${this.data.birth_date}`)) : null,
-      fullName: `${this.data.name_prefix || ''} ${this.data.first_name || ''} ${this.data.last_name || ''}`,
-      name: `${this.data.first_name || ''} ${this.data.last_name || ''}`,
       phone: this.data.user?.mobile || '-',
       email: this.data.user?.email || '-',
-      recent: format(parseISO(this.data.modified_at), 'MMM dd, yyyy'),
+      // recent: format(parseISO(this.data.modified_at), 'MMM dd, yyyy'),
     }
 
     data.age_years = data.age ? `${data.age} years` : null
@@ -25,6 +23,8 @@ export default class Patient {
     if(data.user){
       data.email = data.user.email
       data.mobile = data.user.mobile
+      data.fullName = `${data.user.name_prefix || ''} ${data.user.first_name || ''} ${data.user.last_name || ''}`
+      data.name = `${data.user.first_name || ''} ${data.user.last_name || ''}`
     }
 
     if (data.gender) {
@@ -93,9 +93,9 @@ export default class Patient {
       data.mobile = this.convertToMsisdn(data.mobile)
     }
 
-    if (data.marital_status) {
-      data.marital_status = data.marital_status.value
-    }
+    // if (data.marital_status) {
+    //   data.marital_status = data.marital_status.value
+    // }
     if (data.religious_affiliation) {
       data.religious_affiliation = [data.religious_affiliation.value]
     }

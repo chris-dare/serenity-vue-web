@@ -1,58 +1,56 @@
 <template>
   <div>
     <div>
-      <cv-data-table
+      <DataTable
         ref="table"
         :columns="columns"
-        :data="[]"
+        :data="filteredData"
       >
-        <template slot="data">
-          <cv-data-table-row
-            v-for="(row, rowIndex) in 5"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
-          >
-            <cv-data-table-cell>
-              <div class="flex items-center py-2">
-                <img
-                  class="w-10 h-10 rounded-full mr-3"
-                  :src="$faker().image.image()"
-                  alt=""
-                >
-                <div>
-                  <p>{{ $faker().name.findName() }}</p>
-                  <p class="text-secondary text-xs">
-                    Outpatient
-                  </p>
-                </div>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>Specialist Appointment</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>Virtual</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ $date.formatDate($faker().date.recent(), 'yyyy/MM/dd') }}</p>
-                <p class="text-secondary text-xs">{{ $date.formatDate($faker().date.recent(), 'HH:mm a') }}</p>
-              </div>
-            </cv-data-table-cell>
-          </cv-data-table-row>
+        <template #default="{ row }">
+          <cv-data-table-cell>
+            <div class="py-2">
+              <InfoImageBlock
+                :label="row.patient.fullName"
+                :description="row.patient.gender_age_description"
+              />
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.service.healthcare_service_name }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.appointmentType | capitalize }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ $date.formatDate(row.slot.start, 'yyyy/MM/dd') }}</p>
+              <p class="text-secondary text-xs">{{ $date.formatDate(row.slot.start, 'HH:mm a') }} - {{ $date.formatDate(row.slot.end, 'HH:mm a') }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <Tag :variant="row.isPast ? 'error' : 'success'">{{ row.isPast ? 'past' : row.status }}</Tag>
+            </div>
+          </cv-data-table-cell>
         </template>
-      </cv-data-table>
+      </DataTable>
     </div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+import DataMixin from '@/mixins/data'
+
 export default {
   name: 'PatientAppointmentTable',
+
+  mixins: [DataMixin],
+
   data() {
     return {
       columns: [
@@ -60,8 +58,20 @@ export default {
         'Service',
         'Type of Appointment',
         'Date',
+        '',
       ],
     }
+  },
+
+  computed: {
+    ...mapGetters({
+      appointments: 'appointments/patientAppointments',
+      data: 'appointments/appointments',
+    }),
+
+    // data() {
+    //   return this.appointments(this.$route.params.id)
+    // },
   },
 }
 </script>

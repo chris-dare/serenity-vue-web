@@ -9,9 +9,10 @@
         title="Marital Status"
         :multiple="false"
         :options="statuses"
-        label="label"
-        track_by="value"
+        label="display"
+        track_by="code"
         placeholder="Marital Status"
+        custom-field="code"
       />
       <MultiSelect
         v-model="form.religious_affiliation"
@@ -97,9 +98,11 @@ export default {
   computed: {
     ...mapState({
       storeData: (state) => state.patients.currentPatient,
+      statuses: state => state.resources.maritalStatuses,
     }),
+  
     ...mapGetters({
-      statuses: 'global/maritalStatuses',
+      // statuses: 'global/maritalStatuses',
       religions: 'global/religions',
     }),
   },

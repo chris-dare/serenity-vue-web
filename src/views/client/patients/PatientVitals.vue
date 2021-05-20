@@ -3,11 +3,16 @@
     <p class="text-primary text-xl font-semibold">Capture vitals</p>
     <ConfirmVitalsModal
       v-if="confirmed"
+      :loading="loading"
       :form="form"
+      @save="save"
+      @back="confirmed = false"
     />
-    <div
+    <cv-form
       v-else
+      autocomplete="off"
       class="grid grid-cols-4 my-6 gap-6"
+      @submit.prevent
     >
       <div>
         <cv-radio-group :vertical="true">
@@ -63,28 +68,14 @@
         </cv-radio-group>
       </div>
       <div class="col-span-3 bg-white py-4 px-8">
-        <WeightHeight
-          v-if="checked === 0"
-          :form.sync="form"
+        <component
+          :is="stepComponent"
+          v-model="form"
           @next="nextStep"
-        />
-        <Temperature
-          v-else-if="checked === 1"
-          :form.sync="form"
-          @next="nextStep"
-        />
-        <Pressure
-          v-else-if="checked === 2"
-          :form.sync="form"
-          @next="nextStep"
-        />
-        <Respiration
-          v-else
-          :form.sync="form"
-          @confirm="visible = !visible"
+          @confirm="confirmed = true"
         />
       </div>
-    </div>
+    </cv-form>
   </div>
 </template>
 
@@ -96,6 +87,9 @@ import Respiration from '@/components/vitals/Respiration'
 import ConfirmVitalsModal from '@/components/vitals/ConfirmVitalsModal'
 import CircleFilled from '@carbon/icons-vue/es/circle--filled/32'
 import CheckmarkOutline from '@carbon/icons-vue/es/checkmark--outline/32.js'
+import { decimal } from 'vuelidate/lib/validators'
+import { mapActions } from 'vuex'
+
 export default {
   name: 'PatientVitals',
 
@@ -104,7 +98,7 @@ export default {
   data() {
     return {
       checked: 0,
-      confirmed: true,
+      confirmed: false,
       navItems: [
         { label: 'Weight and Height', description: 'Patient biological information', value: 'weight', index: 0},
         { label: 'Temperature', description: 'Phone and location of patient', value: 'temperature', index: 1},
@@ -112,12 +106,68 @@ export default {
         { label: 'Respiration Rate and SPO2', description: 'Work, religion, other addresses', value: 'respiration', index: 3},
       ],
       form: {},
+      loading: false,
     }
   },
 
+  computed: {
+    stepComponent() {
+      if (this.checked === 0) {
+        return 'WeightHeight'
+      }
+      if (this.checked === 1) {
+        return 'Temperature'
+      }
+      if (this.checked === 2) {
+        return 'Pressure'
+      }
+
+      return 'Respiration'
+    },
+  },
+
   methods: {
+    ...mapActions({
+      createVitals: 'patients/createVitals',
+    }),
+
     nextStep(step) {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.$toast.open({
+          message: 'These fields should be decimal',
+          type: 'error',
+        })
+        return
+      }
       this.checked = step
+    },
+
+    async save() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.$toast.open({
+          message: 'These fields should be decimal',
+          type: 'error',
+        })
+        return
+      }
+
+      try {
+        this.loading = true
+        await this.createVitals({ payload: this.form, patient: this.$route.query.id })
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
+    },
+  },
+
+  validations: {
+    localValue: {
+      weight: { decimal },
+      height: { decimal },
+      bmi: { decimal },
     },
   },
 }

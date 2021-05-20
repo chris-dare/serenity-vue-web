@@ -1,0 +1,25 @@
+import http from '@/http'
+
+export default {
+  url: 'providers/',
+  
+  list(providerId) {
+    return http.get(`${this.url}${providerId}/observations`)
+  },
+
+  get(providerId, patientId) {
+    return http.get(`${this.url}${providerId}/observations/${patientId}`)
+  },
+
+  create(providerId, params) {
+    return http.post(`${this.url}${providerId}/observations`, params)
+  },
+
+  update(providerId, params) {
+    return http.patch(`${this.url}${providerId}/observations/${params.id}`, params)
+  },
+
+  delete(providerId,id) {
+    return http.delete(`${this.url}${providerId}/observations/${id}`)
+  },
+}

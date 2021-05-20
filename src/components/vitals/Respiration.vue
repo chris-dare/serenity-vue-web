@@ -6,7 +6,7 @@
     <div class="grid grid-cols-2 gap-6">
       <div class="flex items-end space-x-3">
         <cv-text-input
-          v-model="internalForm.respiration_rate"
+          v-model="localValue.respiration_rate"
           type="text"
           label="Respiratory rate"
         />
@@ -14,7 +14,7 @@
       </div>
       <div class="flex items-end space-x-3">
         <cv-text-input
-          v-model="internalForm.saturation"
+          v-model="localValue.saturation"
           type="text"
           label="Arterial blood oxygen saturation"
         />
@@ -23,32 +23,27 @@
     </div>
 
     <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center">
-        <cv-button
-          class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-          kind="tertiary"
+      <div class="flex items-center space-x-2">
+        <SeButton
           @click="$router.push({ name: 'PatientCharts' })"
         >
           Cancel
-        </cv-button>
-        <cv-button
-          class="bg-black px-6"
-          kind="primary"
+        </SeButton>
+        <SeButton
+          variant="secondary"
           @click="$emit('next', 3)"
         >
           Go back
-        </cv-button>
+        </SeButton>
       </div>
       <div class="flex items-center">
-        <cv-button
+        <SeButton
           :icon="icon"
-          kind="primary"
           :disabled="disabled"
-          class="bg-serenity-primary ml-6"
           @click="$emit('confirm')"
         >
           Confirm
-        </cv-button>
+        </SeButton>
       </div>
     </div>
   </div>
@@ -56,13 +51,17 @@
 
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import ModelMixin from '@/mixins/model'
+
 export default {
   name: 'Respiration',
 
+  mixins: [ModelMixin],
+
   props: {
-    form: {
-      type: Object,
-      default: () => {},
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -70,17 +69,6 @@ export default {
     return {
       icon: ChevronRight,
     }
-  },
-
-  computed: {
-    internalForm: {
-      get() {
-        return this.form
-      },
-      set(value) {
-        this.$emit('update:form', value)
-      },
-    },
   },
 }
 </script>

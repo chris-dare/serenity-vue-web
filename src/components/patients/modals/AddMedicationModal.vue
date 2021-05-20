@@ -78,6 +78,8 @@
 <script>
 import Add32 from '@carbon/icons-vue/es/add/32'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'AddMedicationModal',
 
@@ -97,6 +99,18 @@ export default {
     'profile:medication:close': function(){
       this.visible = false
     },
+  },
+
+  computed: {
+    ...mapState({
+      priorities: (state) => state.global.priorities,
+    }),
+  },
+
+  methods: {
+    ...mapActions({
+      createMedicationRequest: 'patients/createMedicationRequest',
+    }),
   },
 }
 </script>
