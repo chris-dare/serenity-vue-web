@@ -35,7 +35,9 @@ export default {
 
   computed: {
     fullName() {
+      if (this.doctor.practitioner_name) return this.doctor.practitioner_name
       if (!this.doctor.practitioner) return ''
+
       return `${this.doctor.practitioner.title || ''} ${this.doctor.practitioner.first_name || ''} ${this.doctor.practitioner.last_name || ''}`
     },
 

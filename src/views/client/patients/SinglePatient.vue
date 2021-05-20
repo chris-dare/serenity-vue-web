@@ -50,9 +50,10 @@
             End Encounter
           </p>
           <AddNewDropdown />
-        
+
           <SeButton
             variant="warning"
+            :to="{ name: 'EncounterReview', params: { encounter: encounter.id, id: $route.params.id } }"
           >
             Begin Consultation
           </SeButton>
@@ -106,6 +107,7 @@ export default {
   computed: {
     ...mapState({
       patient: (state) => state.patients.currentPatient,
+      encounter: (state) => state.encounters.currentEncounter,
       workspaceType: (state) => state.global.workspaceType,
     }),
 

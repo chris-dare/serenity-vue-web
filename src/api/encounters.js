@@ -7,6 +7,10 @@ export default {
     return http.get(`${this.url}${providerId}/encounter`, { params: { patient } })
   },
 
+  get(providerId, encounterId) {
+    return http.get(`${this.url}${providerId}/encounter/${encounterId}`)
+  },
+
   create(providerId, params) {
     return http.post(`${this.url}${providerId}/encounter`, params)
   },

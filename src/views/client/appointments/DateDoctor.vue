@@ -102,11 +102,13 @@ export default {
 
     ...mapGetters({
       availableSlots: 'appointments/availableSlots',
+      slots: 'appointments/slots',
     }),
 
     filteredData() {
       if (!this.form.date) return []
-      return this.availableSlots(this.form.date)
+      // return this.availableSlots(this.form.date)
+      return this.slots
     },
 
     disabled() {
@@ -149,8 +151,8 @@ export default {
 
     convertFromDatePickerFormat(val) {
       return {
-        start_date: this.$date.formatQueryParamsDate(val[0]),
-        end_date: isSameDay(val[0], val[1]) || !val[1] ? this.$date.formatQueryParamsDate(this.$date.endOfDate(val[1])) : this.$date.formatQueryParamsDate(val[1]),
+        start: this.$date.formatQueryParamsDate(val[0]),
+        end: isSameDay(val[0], val[1]) || !val[1] ? this.$date.formatQueryParamsDate(this.$date.endOfDate(val[1])) : this.$date.formatQueryParamsDate(val[1]),
       }
     },
   },

@@ -28,6 +28,16 @@ const formatQueryParamsDate = (dateString) => {
 
 const queryNow = () => formatQueryParamsDate(new Date())
 
+const sortByDate = (data, field) => {
+  if (!data.length) return data
+
+  return data.sort((a, b) => {
+    const dateA = new Date(a[field || 'date'])
+    const dateB = new Date(b[field || 'date'])
+    return dateA < dateB ? -1 : dateA > dateB ? 1 : 0
+  })
+}
+
 export default {
   install(Vue) {
     Vue.prototype.$date = {
@@ -40,6 +50,7 @@ export default {
       endOfMonth: endOfMonthDate,
       queryNow,
       distanceInWords,
+      sortByDate,
     }
   },
 }

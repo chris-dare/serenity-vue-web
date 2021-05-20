@@ -7,9 +7,15 @@
       <div class="space-y-4">
         <VitalsDetail
           small
-          :form="form"
+          :form="vitals"
         />
-        <SeButton variant="secondary-outline">Record new Vitals <Add class="w-5 ml-2" /></SeButton>
+        <SeButton
+          v-if="$userCan('vitals.write')"
+          variant="secondary-outline"
+          @click="$trigger('capture:vitals:open')"
+        >
+          Record new Vitals <Add class="w-5 ml-2" />
+        </SeButton>
       </div>
     </ToggleList>
     <ToggleList
@@ -41,7 +47,9 @@
     <ToggleList
       title="Social History"
       class="pt-4"
-    />
+    >
+      <EncounterSocialHistory />
+    </ToggleList>
     <ToggleList
       title="Family History"
       class="pt-4"
@@ -62,15 +70,24 @@
 <script>
 import VitalsDetail from '@/components/vitals/VitalsDetail'
 import EncounterMedicalHistory from '@/components/patients/encounters/EncounterMedicalHistory'
+import EncounterSocialHistory from '@/components/patients/encounters/EncounterSocialHistory'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'EncounterDetails',
 
-  components: { VitalsDetail, EncounterMedicalHistory },
+  components: { VitalsDetail, EncounterMedicalHistory, EncounterSocialHistory },
 
   data() {
     return {
       form: {},
     }
+  },
+
+  computed: {
+    ...mapGetters({
+      vitals: 'encounters/currentEncounterLatestVitals',
+    }),
   },
 }
 </script>

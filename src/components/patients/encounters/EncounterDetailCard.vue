@@ -26,33 +26,25 @@
     <div>
       <ToggleList
         title="Diagnosis"
-        has-create
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
-        @create="$trigger('encounter:add:diagnosis:open')"
       >
         <EncounterDiagnosis :data="currentEncounterDiagnosis" />
       </ToggleList>
       <ToggleList
         title="Presenting Complaint"
-        has-create
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
-        @create="$trigger('encounter:add:diagnosis:open', 'chief-complaint')"
       >
         <p class="text-gray-500">{{ currentEncounterPresentingComplaint }}</p>
       </ToggleList>
       <ToggleList
         title="History of Presenting Complaint"
-        has-create
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
-        @create="$trigger('encounter:add:diagnosis:open', 'chief-complaint')"
       >
         <EncounterDiagnosis :data="currentEncounterComplaints" />
       </ToggleList>
       <ToggleList
         title="Patient Vitals"
-        :has-create="$userCan('vitals.write')"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
-        @create="$trigger('profile:medication:request:open')"
       >
         <EncounterPatientVitals />
       </ToggleList>
@@ -63,9 +55,7 @@
       </ToggleList>
       <ToggleList
         title="Laboratory Tests"
-        has-create
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
-        @create="$trigger('service:request:open', 'laboratory-procedure')"
       >
         <EncounterServiceRequests />
       </ToggleList>
@@ -82,15 +72,11 @@
       </ToggleList>
       <ToggleList
         title="Medications / Treatment Plan"
-        :has-create="$userCan('medication.orders.write')"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
-        @create="$trigger('profile:medication:request:open')"
       />
       <ToggleList
         title="Notes"
-        has-create
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
-        @create="$trigger('notes:open')"
       >
         <EncounterNotes />
       </ToggleList>

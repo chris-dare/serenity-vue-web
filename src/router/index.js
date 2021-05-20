@@ -341,32 +341,32 @@ const routes = [
         ],
       },
       {
-        path: '/encounters/:id',
-        component: () => import(/* webpackChunkName: "patient" */ '../views/client/encounters/EncountersIndex.vue'),
+        path: 'patients/:id/encounters/:encounter',
+        component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncountersIndex.vue'),
         props: true,
         children: [
           {
             path: '',
             name: 'EncounterReview',
-            component: () => import(/* webpackChunkName: "patient" */ '../views/client/encounters/EncountersReview.vue'),
+            component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncountersReview.vue'),
             meta: { noPadding: true },
           },
           {
             path: 'diagnosis',
             name: 'EncounterDiagnosis',
-            component: () => import(/* webpackChunkName: "patient" */ '../views/client/encounters/EncountersDiagnosis.vue'),
+            component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncountersDiagnosis.vue'),
             meta: { noPadding: true },
           },
           {
             path: 'labs',
             name: 'EncounterLabs',
-            component: () => import(/* webpackChunkName: "patient" */ '../views/client/encounters/EncounterLabs.vue'),
+            component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncounterLabs.vue'),
             meta: { noPadding: true },
           },
           {
             path: 'medications',
             name: 'EncounterMedications',
-            component: () => import(/* webpackChunkName: "patient" */ '../views/client/encounters/EncounterMedications.vue'),
+            component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncounterMedications.vue'),
             meta: { noPadding: true },
           },
         ],

@@ -19,11 +19,12 @@ export default {
     commit(SET_ENCOUNTER, state.encounters.find(encounter => encounter.id === id))
   },
 
-  async getEncounter({ commit, rootState }) {
+  async getEncounter({ commit, rootState }, id) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await EncountersAPI.get(provider.id)
+      const { data } = await EncountersAPI.get(provider.id, id)
       commit(SET_ENCOUNTER, data)
+      return
     } catch ({ response: { data: error } }) {
       throw error
     }

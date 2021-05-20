@@ -25,7 +25,7 @@ export default {
   async initSinglePatientInformation({dispatch}, id) {
     dispatch('getPatient', id)
     dispatch('getServiceRequests')
-    dispatch('getMedicationRequests')
+    // dispatch('getMedicationRequests')
     dispatch('getObservations')
     dispatch('getDiagnosticReports')
     dispatch('encounters/getEncounters', id , { root:true })
@@ -165,7 +165,10 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await ServiceRequestsAPI.create(provider.id, payload)
-      commit(UPDATE_SERVICE_REQUEST, data)
+      data.forEach(request => {
+        commit(UPDATE_SERVICE_REQUEST, request)
+      })
+      
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
@@ -194,6 +197,23 @@ export default {
       commit(SET_OBSERVATIONS, data)
     } catch (error) {
       throw error.data || error
+    }
+  },
+
+  async createVitals({ commit, rootState }, { patient, payload }) {
+    try {
+      const provider = rootState.auth.provider
+      const encounter = rootState.encounters.currentEncounter
+      const vitals = new Observation(payload).getCreateVitalsView(encounter, patient)
+
+      vitals.forEach(async vital => {
+        const { data } = await ObservationsAPI.create(provider.id, vital)
+        commit(UPDATE_OBSERVATION, data)
+      })
+      
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
     }
   },
 

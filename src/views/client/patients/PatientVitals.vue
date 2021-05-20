@@ -128,7 +128,7 @@ export default {
 
   methods: {
     ...mapActions({
-      createVitals: 'patients/createObservation',
+      createVitals: 'patients/createVitals',
     }),
 
     nextStep(step) {

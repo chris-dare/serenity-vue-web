@@ -69,7 +69,7 @@ export default {
         return a
       })
     } else {
-      state.patientpatientServiceRequests.push(request)
+      state.patientServiceRequests.push(request)
     }
   },
 
@@ -85,7 +85,7 @@ export default {
         return a
       })
     } else {
-      state.patientpatientObservations.push(observation)
+      state.patientObservations.push(observation)
     }
   },
 }

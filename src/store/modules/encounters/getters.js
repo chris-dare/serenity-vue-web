@@ -58,4 +58,29 @@ export default {
     if (!state.currentEncounter) return []
     return rootState.patients.patientObservations.filter(obs => obs.encounter === state.currentEncounter.id)
   },
+
+  currentEncounterLatestVitals: (state, getters) => {
+    if (!getters.currentEncounterObservations) return {}
+    const options = ['height', 'weight', 'temperature', 'respiration_rate', 'saturation', 'diastolic', 'systolic']
+    let vitals = {}
+  
+    const sortedVitals = sortByDate(getters.currentEncounterObservations, 'issued')
+    options.forEach(option => {
+      const observation = sortedVitals.find(obs => obs.code === option)
+      vitals[option] = observation ? observation.value : 0
+    })
+
+    return vitals
+  },
+}
+
+
+const sortByDate = (data, field) => {
+  if (!data.length) return data
+
+  return data.sort((a, b) => {
+    const dateA = new Date(a[field || 'date'])
+    const dateB = new Date(b[field || 'date'])
+    return dateA < dateB ? 1 : dateA > dateB ? -1 : 0
+  })
 }
