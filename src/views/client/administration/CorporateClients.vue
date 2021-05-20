@@ -19,47 +19,50 @@
         placeholder="Search for company"
       />
 
-      <cv-data-table
+      <DataTable
         ref="table"
-        :data="[]"
+        :data="filteredData"
         :columns="columns"
-        :pagination="{ itemsPerPage:10, numberOfItems: 12, pageSizes: [10, 15, 20, 25] }"
+        :pagination="pagination"
+        :loading="loading"
+        @pagination="actionOnPagination"
       >
-        <template slot="data">
-          <cv-data-table-row
-            v-for="(row, rowIndex) in 10"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
-          >
-            <cv-data-table-cell>
-              <div class="flex items-center space-x-2 py-2">
-                <Avatar :name="$faker().name.findName()" />
-                <p>{{ $faker().name.findName() }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ $faker().phone.phoneNumber() }}</p>
-            </cv-data-table-cell>
+        <template #default="{row}">
+          <cv-data-table-cell>
+            <div class="flex items-center space-x-2 py-2">
+              <Avatar :name="row.company_name" />
+              <p>{{ row.company_name }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.admin_phoneno }}</p>
+          </cv-data-table-cell>
             
             
-            <cv-data-table-cell>
-              <p>{{ Math.round(Math.random()) }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p class="lowercase">{{ $faker().internet.email() }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <router-link
-                tag="div"
-                :to="`/clients/${Math.random()}`"
-                class="flex items-center cursor-pointer font-semibold"
-              >
-                View client
-              </router-link>
-            </cv-data-table-cell>
-          </cv-data-table-row>
+          <cv-data-table-cell>
+            <p>{{ row.tin_number }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p class="lowercase">{{ row.admin_email }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <cv-tag
+              :disabled="false"
+              :kind="row.state != 'verified' ? 'red' : 'green'"
+              :label="row.state"
+            />
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <router-link
+              tag="div"
+              :to="`/clients/${Math.random()}`"
+              class="flex items-center cursor-pointer font-semibold"
+            >
+              View client
+            </router-link>
+          </cv-data-table-cell>
         </template>
-      </cv-data-table>
+      </DataTable>
     </div>
   </div>
 </template>
@@ -84,6 +87,7 @@ export default {
         'Mobile',
         'TIN Number',
         'Email',
+        'Status',
         'Action',
       ],
     }
@@ -95,7 +99,9 @@ export default {
     }),
   },
 
-  mounted() {
+  created() {
+    this.paginate = true
+    this.searchTerms = ['company_name', 'tin_number', 'state']
     this.refresh()
   },
 
