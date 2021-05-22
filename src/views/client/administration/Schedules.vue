@@ -3,14 +3,12 @@
     <div class="w-4/5 mx-auto space-y-4">
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Schedules ({{ dataCount || 0 }})</p>
-        <cv-button
-          class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
-          kind="primary"
+        <SeButton
           @click="$trigger('schedule:add:open')"
         >
           Add new schedule
           <Add class="ml-4 w-5 h-5" />
-        </cv-button>
+        </SeButton>
       </div>
 
       <cv-form

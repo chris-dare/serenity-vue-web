@@ -32,37 +32,27 @@
         placeholder="Search for user"
       />
       <div class="my-4 flex items-center space-x-2">
-        <cv-button
-          kind="primary"
-          size="field"
-          class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
-        >
+        <SeButton>
           All ({{ users.length }})
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white text-serenity-placeholder"
+        </SeButton>
+        <SeButton
+          variant="white"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
           Reception ({{ 0 }})
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white text-serenity-placeholder"
+        </SeButton>
+        <SeButton
+          variant="white"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
           In Patient ({{ 0 }})
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white text-serenity-placeholder"
+        </SeButton>
+        <SeButton
+          variant="white"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
           Out Patient ({{ 0 }})
-        </cv-button>
+        </SeButton>
       </div>
     </div>
 

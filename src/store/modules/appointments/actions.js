@@ -39,6 +39,22 @@ export default {
     }
   },
 
+  async getNextAvailableSlot({ commit, rootState, rootGetters }, filters) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await AppointmentsAPI.nextSlot(provider.id, filters)
+
+      const slot = {
+        ...data.data,
+        practitioner: rootGetters['practitioners/practitioners'].find(a => a.id === data.data.practitionerid),
+      }
+      commit(ADD_APPOINTMENT_DATA, { slot })
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
   async getAppointment({ commit, rootState }, id) {
     try {
       const provider = rootState.auth.provider

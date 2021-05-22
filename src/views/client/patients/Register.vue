@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -31,6 +32,16 @@ export default {
         this.checked = val.name
       },
     },
+  },
+
+  beforeRouteEnter (to, from, next) {
+    next(vm => vm.getReligiousAffliations())
+  },
+
+  methods: {
+    ...mapActions({
+      getReligiousAffliations: 'resources/getReligiousAffliations',
+    }),
   },
 }
 </script>

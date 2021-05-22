@@ -20,14 +20,13 @@
 </template>
 
 <script>
-import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
 import ProviderProfile from '@/components/admin/modals/ProviderProfile'
 import { mapState } from 'vuex'
 
 export default {
   name: 'Settings',
 
-  components: { UserDetailsHeader, ProviderProfile },
+  components: { ProviderProfile },
 
   data() {
     return {

@@ -20,13 +20,13 @@
 
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import MultiStep from '@/mixins/multistep'
 
 export default {
   name: 'AppointmentSelectNotes',
 
-  mixins: [MultiStep],
+  mixins: [ MultiStep ],
 
   props: {
     modal: {
@@ -43,6 +43,12 @@ export default {
       parent: 'Appointments',
       next: 'AppointmentSummary',
     }
+  },
+
+  computed: {
+    ...mapState({
+      storeData: (state) => state.appointments.currentAppointment,
+    }),
   },
 
   methods: {

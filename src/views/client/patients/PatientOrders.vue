@@ -6,35 +6,25 @@
     />
     <div class="my-4 flex items-center justify-between">
       <div>
-        <cv-button
-          kind="primary"
-          size="field"
-          class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
-        >
+        <SeButton>
           All ({{ 23 }})
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+        </SeButton>
+        <SeButton
+          variant="white"
           @click="visible = !visible"
         >
           Paid ({{ 1 }})
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+        </SeButton>
+        <SeButton
+          variant="white"
         >
           Unpaid ({{ 1 }})
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+        </SeButton>
+        <SeButton
+          variant="white"
         >
           Cancelled ({{ 1 }})
-        </cv-button>
+        </SeButton>
       </div>
     </div>
     <div class="bg-white p-3">

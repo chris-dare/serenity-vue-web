@@ -20,6 +20,12 @@
           :value="`${rowIndex}`"
         >
           <slot :row="row" />
+          <template slot="expandedContent">
+            <slot
+              :row="row"
+              name="expand"
+            />
+          </template>
         </cv-data-table-row>
       </template>
     </cv-data-table>

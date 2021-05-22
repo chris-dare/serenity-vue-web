@@ -5,32 +5,24 @@
       placeholder="Search for medication or date or condition"
     />
     <div class="my-4 flex items-center justify-between">
-      <div>
-        <cv-button
-          kind="primary"
-          size="field"
-          class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
-        >
+      <div class="space-x-2">
+        <SeButton>
           All ({{ 23 }})
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+        </SeButton>
+        <SeButton
+          variant="white"
           @click="visible = !visible"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
           Medications ({{ 1 }})
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+        </SeButton>
+        <SeButton
+          variant="white"
           @click="treatmentVisible = !treatmentVisible"
         >
           <div class="w-2 h-2 rounded-full bg-warning mr-2" />
           Treatment plans ({{ 1 }})
-        </cv-button>
+        </SeButton>
       </div>
     </div>
     <div class="bg-white p-3">

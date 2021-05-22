@@ -27,9 +27,7 @@
           <p class="text-secondary font-light mb-6">You currently have no active or incoming appointments.</p>
           <router-link
             :to="{name:'SelectPatient'}"
-            tag="cv-button"
-            class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
-            kind="primary"
+            tag="SeButton"
           >
             Book an appointment <Add class="ml-4 w-5 h-5 text-white" />
           </router-link>

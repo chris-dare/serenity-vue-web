@@ -11,6 +11,14 @@ export default {
     return http.get(`${this.url}valueset/encounter-class`)
   },
 
+  encounterStatus() {
+    return http.get(`${this.url}valueset/encounter-status`)
+  },
+
+  religiousAffiliations() {
+    return http.get(`${this.url}valueset/religious-affiliation`)
+  },
+
   paymentMethods() {
     return http.get(`${this.url}valueset/payment-methods`)
   },

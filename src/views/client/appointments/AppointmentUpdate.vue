@@ -64,20 +64,18 @@
       />
     </div>
     <div class="flex items-center space-x-4 my-4">
-      <cv-button
+      <SeButton
         :icon="time"
-        kind="primary"
-        class="bg-serenity-primary"
       >
         Give me the next time slot
-      </cv-button>
-      <cv-button
+      </SeButton>
+      <SeButton
+        v-if="false"
         :icon="time"
-        kind="primary"
-        class="bg-success"
+        variant="success"
       >
         Join a wait queue
-      </cv-button>
+      </SeButton>
     </div>
     <p
       class="text-primary mt-8 mb-4 font-bold"

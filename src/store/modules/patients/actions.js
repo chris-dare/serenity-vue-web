@@ -29,6 +29,9 @@ export default {
     dispatch('getObservations')
     dispatch('getDiagnosticReports')
     dispatch('encounters/getEncounters', id , { root:true })
+    dispatch('resources/getEncounterClasses', null, { root:true })
+    dispatch('resources/getEncounterStatuses', null, { root:true })
+
   },
 
   async getPatients({ commit, rootState, state }, refresh = true) {

@@ -96,6 +96,7 @@ import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
 import PatientSuccessModal from '@/components/patients/modals/PatientSuccessModal'
 import { mapActions, mapState } from 'vuex'
 import MultiStep from '@/mixins/multistep'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'Payment',
@@ -137,6 +138,15 @@ export default {
       this.form.payment_options[0].payment_details.msisdn = this.form.mobile
     }
   },
+
+  validations: {
+    form: {
+      first_name: { required },
+      last_name: { required },
+      gender: { required },
+      mobile: { required },
+    },
+  },
   
   methods: {
     ...mapActions({
@@ -147,6 +157,12 @@ export default {
     }),
 
     submit() {
+      this.$v.$touch()
+
+      if (this.$v.$invalid || this.disabled) {
+        this.$toast.error('Fill all required fields in previous steps!')
+        return
+      }
       if (this.form.id) {
         this.update()
       } else {

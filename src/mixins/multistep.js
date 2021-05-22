@@ -7,8 +7,17 @@ export default {
     }
   },
 
-  created() {
-    this.form = { ...this.form , ...this.storeData }
+  // created() {
+  //   this.form = { ...this.form , ...this.storeData }
+  // },
+
+  watch: {
+    storeData: {
+      immediate: true,
+      handler(val) {
+        this.form = { ...this.form , ...val }
+      },
+    },
   },
     
   beforeDestroy() {

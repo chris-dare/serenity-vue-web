@@ -1,8 +1,5 @@
 <template>
-  <cv-form
-    autocomplete="off"
-    @submit.prevent=""
-  >
+  <SeForm>
     <div class="grid grid-cols-2 gap-8">
       <MultiSelect
         v-model="form.marital_status"
@@ -19,9 +16,10 @@
         title="Religion"
         :multiple="false"
         :options="religions"
-        label="label"
-        track_by="value"
+        label="display"
+        track_by="code"
         placeholder="Religion"
+        custom-field="code"
       />
 
       <cv-text-input
@@ -73,12 +71,13 @@
         </SeButton>
       </div>
     </div>
-  </cv-form>
+  </SeForm>
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import MultiStep from '@/mixins/multistep'
+
 export default {
   name: 'SocialInfo',
 
@@ -99,11 +98,7 @@ export default {
     ...mapState({
       storeData: (state) => state.patients.currentPatient,
       statuses: state => state.resources.maritalStatuses,
-    }),
-  
-    ...mapGetters({
-      // statuses: 'global/maritalStatuses',
-      religions: 'global/religions',
+      religions: state => state.resources.religiousAffiliations,
     }),
   },
 

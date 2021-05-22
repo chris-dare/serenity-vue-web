@@ -23,6 +23,10 @@ export default {
     return http.get(`${this.url}${providerId}/slots/availableslots`, { params: { ...params } })
   },
 
+  nextSlot(providerId, params) {
+    return http.get(`${this.url}${providerId}/slots/nextavailableslot`, { params: { ...params } })
+  },
+
   update(providerId, appointmentId, params) {
     return http.patch(`${this.url}${providerId}/appointment/${appointmentId}`, params)
   },

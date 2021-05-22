@@ -14,36 +14,37 @@
       <DatePicker
         v-model="filters"
         type="datetimerange"
+        disable-dates-before-today
         @change="filter"
       />
     </div>
     <div class="flex items-center space-x-4 my-4">
-      <cv-button
+      <SeButton
         :icon="time"
-        kind="primary"
-        class="bg-serenity-primary"
+        @click="getNextSlot"
       >
         Give me the next time slot
-      </cv-button>
-      <cv-button
+      </SeButton>
+      <SeButton
+        v-if="false"
         :icon="time"
-        kind="primary"
-        class="bg-success"
+        variant="success"
       >
         Join a wait queue
-      </cv-button>
+      </SeButton>
     </div>
     <p
-      class="text-primary mt-8 mb-4 font-bold"
+      class="text-primary mt-8 my-4 font-bold"
     >
       Select a doctor for the appointment
     </p>
     <div
-      class="grid"
+      class="grid min-h-full"
     >
       <SlotList
         v-model="form.slot"
         :data="filteredData"
+        :data-loading="loading"
       />
     </div>
   </MultiStepBase>
@@ -52,18 +53,19 @@
 <script>
 import Time from '@carbon/icons-vue/es/time/32'
 import SlotList from '@/components/appointments/lists/SlotList'
+import SlotListItem from '@/components/appointments/lists/SlotListItem'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
 import startOfDay from 'date-fns/startOfDay'
-// import endOfDay from 'date-fns/endOfDay'
 import isSameDay from 'date-fns/isSameDay'
 
 
 export default {
   name: 'AppointmentSelectSlot',
 
-  components: { SlotList },
+  // eslint-disable-next-line vue/no-unused-components
+  components: { SlotList, SlotListItem },
 
   mixins: [MultiStep],
 
@@ -121,6 +123,8 @@ export default {
     disabled() {
       return !this.form.date || !this.form.doctor
     },
+
+    
   },
 
   async beforeMount() {
@@ -138,6 +142,7 @@ export default {
       addToStoreData: 'appointments/addToCurrentAppointment',
       refresh: 'appointments/refreshCurrentAppointment',
       getSlots: 'appointments/getSlots',
+      getNextAvailableSlot: 'appointments/getNextAvailableSlot',
     }),
 
     async filter(val) {
@@ -147,10 +152,16 @@ export default {
       this.loading = false
     },
 
+    async getNextSlot() {
+      this.loading = true
+      await this.getNextAvailableSlot({ service_specialty: this.storeData.specialty.Code })
+      this.loading = false
+    },
+
     convertFromDatePickerFormat(val) {
       return {
         start: this.$date.formatQueryParamsDate(val[0]),
-        end: isSameDay(val[0], val[1]) || !val[1] ? this.$date.formatQueryParamsDate(this.$date.endOfDate(val[1])) : this.$date.formatQueryParamsDate(val[1]),
+        end: isSameDay(val[0], val[1]) || !val[1] ? this.$date.formatQueryParamsDate(this.$date.endOfDate(val[0])) : this.$date.formatQueryParamsDate(val[1]),
       }
     },
   },

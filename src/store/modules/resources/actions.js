@@ -2,7 +2,7 @@
 import ResourceAPI from '@/api/resources'
 import SpecialtiesAPI from '@/api/specialties'
 import axios from 'axios'
-import { SET_RESOURCES, SET_SPECIALTIES, SET_CATEGORIES, SET_CLINICAL_OPTIONS, SET_CODES, SET_SERVICE_TYPES, SET_PAYMENT_METHODS, SET_ENCOUNTER_CLASSES, SET_MARITAL_STATUSES, SET_MEDICATION_OPTIONS } from './mutation-types'
+import { SET_RESOURCES, SET_SPECIALTIES, SET_CATEGORIES, SET_CLINICAL_OPTIONS, SET_CODES, SET_SERVICE_TYPES, SET_PAYMENT_METHODS, SET_ENCOUNTER_CLASSES, SET_MARITAL_STATUSES, SET_MEDICATION_OPTIONS, SET_ENCOUNTER_STATUSES, SET_RELIGIOUS_AFFLIATIONS } from './mutation-types'
 
 export default {
   async getResources({ commit, rootState }) {
@@ -63,6 +63,20 @@ export default {
     commit(SET_MARITAL_STATUSES, data)
   },
 
+  async getEncounterStatuses({ commit }) {
+    const { data } = await ResourceAPI.encounterStatus().catch((error) => {
+      throw error
+    })
+    commit(SET_ENCOUNTER_STATUSES, data)
+  },
+
+  async getReligiousAffliations({ commit }) {
+    const { data } = await ResourceAPI.religiousAffiliations().catch((error) => {
+      throw error
+    })
+    commit(SET_RELIGIOUS_AFFLIATIONS, data)
+  },
+
   getMedicationOptions({ commit }) {
     axios.get('https://www.nhs.uk/medicines/')
       .then(function (response) {
@@ -73,8 +87,8 @@ export default {
       })
   },
 
-  getClinicalOptions({ commit }) {
-    axios.get('https://clinicaltables.nlm.nih.gov/')
+  getDiagnosisCodeOptions({ commit }, term) {
+    axios.get('https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search')
       .then(function (response) {
         commit(SET_CLINICAL_OPTIONS, response.data)
       })
