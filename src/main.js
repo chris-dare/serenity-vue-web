@@ -23,7 +23,6 @@ import '@/mixins'
 import '@/directives'
 
 import '@/filters'
-// import '@/globalComponents'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import '@/assets/styles/tailwind.scss'
 import '@carbon/charts/styles.css'

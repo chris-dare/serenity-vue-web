@@ -36,6 +36,7 @@ export default {
       const encounter = new Encounter(payload).getCreateView()
       const { data } = await EncountersAPI.create(provider.id, encounter)
       commit(UPDATE_ENCOUNTER, data)
+      commit(SET_ENCOUNTER, data)
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error

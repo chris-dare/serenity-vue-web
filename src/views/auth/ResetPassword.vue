@@ -36,9 +36,8 @@
               type="password"
               class="se-dark-input"
             />
-            <cv-button
-              kind="primary"
-              class="my-3 max-w-full w-full bg-serenity-primary justify-start"
+            <SeButton
+              full
               @click="reset"
             >
               <img
@@ -47,7 +46,7 @@
                 src="@/assets/img/eclipse.svg"
               >
               Reset password
-            </cv-button>
+            </SeButton>
             <router-link
               tag="div"
               to="/login"

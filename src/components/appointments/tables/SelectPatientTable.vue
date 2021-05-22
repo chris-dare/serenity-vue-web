@@ -6,60 +6,61 @@
       placeholder="Search for patient, enter name or MR number"
       class="mb-4"
     />
+
+    <cv-data-table-skeleton
+      v-if="dataLoading"
+      :columns="2"
+      :rows="3"
+    />
     
     <!-- header -->
-    <div
-      :class="[`grid-cols-${columns.length + 1}`]"
-      class="grid gap-4 px-4 h-12 bg-table"
-    >
+    <div v-else>
       <div
-        v-for="(column, index) in columns"
-        :key="index"
-        class="flex items-center"
+        :class="[`grid-cols-${columns.length + 1}`]"
+        class="grid gap-4 px-4 h-12 bg-table"
       >
-        <p class="font-semibold">{{ column }}</p>
-      </div>
-    </div>
-    <!-- body -->
-    <cv-skeleton-text
-      v-if="dataLoading"
-      :heading="false"
-      :paragraph="true"
-      :line-count="3"
-      width="100%"
-    />
-    <div
-      v-else
-      class="divide-y divide-dark divide-opacity-10 divide-solid"
-    >
-      <div
-        v-for="(row, rowIndex) in filteredData"
-        :key="`${rowIndex}`"
-        :class="[`grid-cols-${columns.length + 1}`, internalPatient.id === row.id ? 'bg-gray-100' : 'bg-white']"
-        class="grid gap-4 items-center hover:bg-gray-100 p-4 cursor-pointer"
-        @click="internalPatient = row"
-      >
-        <InfoImageBlock
-          :label="row.name"
-          :description="row.gender_age_description"
-          size="base"
-        />
-        <p>{{ row.phone }}</p>
-        <div class="flex justify-end">
-          <CheckmarkFilled
-            class="w-5 h-5 text-serenity-primary"
-            :class="[internalPatient.id === row.id ? 'text-serenity-primary' : 'text-secondary']"
-          />
+        <div
+          v-for="(column, index) in columns"
+          :key="index"
+          class="flex items-center"
+        >
+          <p class="font-semibold">{{ column }}</p>
         </div>
       </div>
-      <cv-pagination
-        :number-of-items="normalizedData.length"
-        :page="page" 
-        :backwards-button-disabled="page === 1"
-        :forwards-button-disabled="false"
-        :page-sizes="pagination.pageSizes"
-        @change="actionOnPagination"
-      />
+      <!-- body -->
+      <div
+      
+        class="divide-y divide-dark divide-opacity-10 divide-solid"
+      >
+        <div
+          v-for="(row, rowIndex) in filteredData"
+          :key="`${rowIndex}`"
+          :class="[`grid-cols-${columns.length + 1}`, internalPatient.id === row.id ? 'bg-gray-100' : 'bg-white']"
+          class="grid gap-4 items-center hover:bg-gray-100 p-4 cursor-pointer"
+          @click="internalPatient = row"
+        >
+          <InfoImageBlock
+            :label="row.name"
+            :description="row.gender_age_description"
+            size="base"
+          />
+          <p>{{ row.phone }}</p>
+          <div class="flex justify-end">
+            <CheckmarkFilled
+              class="w-5 h-5 text-serenity-primary"
+              :class="[internalPatient.id === row.id ? 'text-serenity-primary' : 'text-secondary']"
+            />
+          </div>
+        </div>
+        <cv-pagination
+          :number-of-items="normalizedData.length"
+          :page="page" 
+          :backwards-button-disabled="page === 1"
+          :forwards-button-disabled="false"
+          :page-sizes="pagination.pageSizes"
+          @change="actionOnPagination"
+        />
+      </div>
     </div>
   </div>
 </template>

@@ -11,34 +11,24 @@
       />
 
       <div class="my-4 flex items-center space-x-2">
-        <cv-button
-          kind="primary"
-          size="field"
-          class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
-        >
+        <SeButton>
           All (5)
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white text-serenity-placeholder"
+        </SeButton>
+        <SeButton
+          variant="white"
         >
           Fully Paid
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white text-serenity-placeholder"
+        </SeButton>
+        <SeButton
+          variant="white"
         >
           Pending
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white text-serenity-placeholder"
+        </SeButton>
+        <SeButton
+          variant="white"
         >
           Canceled
-        </cv-button>
+        </SeButton>
       </div>
 
       <DataTable

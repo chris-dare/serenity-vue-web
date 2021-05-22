@@ -15,7 +15,6 @@
 
 import GetStartedModal from '@/components/dashboard/GetStartedModal'
 import StartVisitModal from '@/components/appointments/StartVisitModal'
-import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
 
 const DiagnosticDashboard = () => import('@/components/diagnostic/DiagnosticDashboard')
 const OPDDashboard = () => import('@/components/opd/OPDDashboard')
@@ -28,7 +27,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'Dashboard',
 
-  components: { GetStartedModal, StartVisitModal, UserDetailsHeader, DiagnosticDashboard, OPDDashboard, PharmacyDashboard, BookAppointmentModal, ReceptionDashboard },
+  components: { GetStartedModal, StartVisitModal, DiagnosticDashboard, OPDDashboard, PharmacyDashboard, BookAppointmentModal, ReceptionDashboard },
 
   data() {
     return {

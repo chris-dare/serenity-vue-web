@@ -17,13 +17,9 @@
 </template>
 
 <script>
-import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
-import WorkspaceCard from '@/components/ui/cards/WorkspaceCard'
 
 export default {
   name: 'GetStarted',
-
-  components: { UserDetailsHeader, WorkspaceCard },
 
   data() {
     return {

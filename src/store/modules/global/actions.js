@@ -16,7 +16,6 @@ export default {
     dispatch('resources/getServiceTypes', null, { root:true })
     dispatch('services/getServices', null, { root:true })
     dispatch('resources/getMaritalStatuses', null, { root:true })
-    dispatch('resources/getEncounterClasses', null, { root:true })
     dispatch('resources/getPaymentMethods', null, { root:true })
     // TODO
     // dispatch('resources/getMedicationOptions', null, { root:true })

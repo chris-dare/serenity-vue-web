@@ -82,20 +82,18 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between space-y-3">
           <div
             class="underline text-primary text-xs cursor-pointer"
             @click="returnToAppointment"
           >
             Return to appointments
           </div>
-          <cv-button
-            kind="primary"
-            class="my-3 flex items-center justify-center bg-serenity-primary px-4"
+          <SeButton
             @click="$emit('print')"
           >
             Print Bill
-          </cv-button>
+          </SeButton>
         </div>
       </div>
     </template>

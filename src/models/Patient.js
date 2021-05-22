@@ -97,7 +97,7 @@ export default class Patient {
     //   data.marital_status = data.marital_status.value
     // }
     if (data.religious_affiliation) {
-      data.religious_affiliation = [data.religious_affiliation.value]
+      data.religious_affiliation = [data.religious_affiliation]
     }
 
     data.gender = data.gender.toUpperCase()

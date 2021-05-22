@@ -23,7 +23,6 @@
 <script>
 import GetStartedModal from '@/components/dashboard/GetStartedModal'
 import NonPatientPrescriptionModal from '@/components/pharmacy/modals/NonPatientPrescriptionModal'
-import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
 import { mapState } from 'vuex'
 
 export default {
@@ -32,7 +31,6 @@ export default {
   components: { 
     GetStartedModal,
     NonPatientPrescriptionModal,
-    UserDetailsHeader,
   },
 
   data() {

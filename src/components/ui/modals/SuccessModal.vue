@@ -10,13 +10,11 @@
       <div class="w-full flex flex-col items-center justify-center pt-6 space-y-4">
         <Checkmark class="text-serenity-primary w-12 h-12" />
         <p class="text-serenity-primary my-4 text-lg">{{ label }}</p>
-        <cv-button
-          kind="primary"
-          class="my-6 flex items-center justify-center bg-serenity-primary px-12"
+        <SeButton
           @click="visible = false"
         >
           Close
-        </cv-button>
+        </SeButton>
       </div>
     </template>
   </cv-modal>

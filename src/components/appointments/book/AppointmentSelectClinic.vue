@@ -63,6 +63,7 @@
         label="label"
         track-by="value"
         placeholder="Service tiers"
+        :error-message="$utils.validateRequiredField($v, 'service_tier')"
         preselect
       />
     </div>

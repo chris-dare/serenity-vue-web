@@ -33,21 +33,16 @@
           Patient is not a child with persistent fever (Temperature >38.5 °C)
         </p>
         <div class="flex items-center justify-between mt-2">
-          <cv-button
-            class="border-danger text-danger hover:text-white focus:bg-danger hover:bg-danger px-4"
-            kind="tertiary"
-            size="field"
+          <SeButton
+            variant="danger-outline"
           >
             Patient is not fit
-          </cv-button>
-          <cv-button
+          </SeButton>
+          <SeButton
             :icon="icon"
-            kind="primary"
-            size="field"
-            class="bg-serenity-primary"
           >
             Patient is fit
-          </cv-button>
+          </SeButton>
         </div>
       </div>
     </template>
