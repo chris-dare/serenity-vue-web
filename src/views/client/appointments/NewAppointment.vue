@@ -2,6 +2,7 @@
   <AppRegisterLayout
     :label="title"
     :nav-items="navItems"
+    :checked="checked"
   >
     <router-view />
   </AppRegisterLayout>
@@ -10,6 +11,14 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
+  name: 'NewAppointment',
+
+  data() {
+    return {
+      checked: '',
+    }
+  },
+  
   computed: {
     title() {
       return this.isUpdate ? 'Update Appointment' : 'New Appointment'
@@ -36,6 +45,16 @@ export default {
         { label: 'Notes', description: 'Any notes to take', path: 'AppointmentNotes', completed: false, slug: 'notes'},
         { label: 'Summary', description: 'Overview of appointment', path: 'AppointmentSummary', completed: false, slug: 'overview'},
       ]
+    },
+  },
+
+  watch: {
+    $route: {
+      deep: true,
+      immediate: true,
+      handler: function (val) {
+        this.checked = val.name
+      },
     },
   },
 

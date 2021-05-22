@@ -6,12 +6,13 @@ export default {
       loading:false,
     }
   },
+
   created() {
     this.form = { ...this.form , ...this.storeData }
   },
     
   beforeDestroy() {
-    this.addToStoreData(this.form)
+    this.addToStoreData({ ...this.form , ...this.storeData })
   },
 
   methods: {
@@ -32,12 +33,21 @@ export default {
       }
 
       this.addToStoreData(this.form)
+
+      if (this.modal) {
+        this.$emit('next')
+        return
+      }
       this.$router.push({ name: this.next })
     },
 
     reRoute() {
-
       this.addToStoreData(this.form)
+
+      if (this.modal) {
+        this.$emit('next')
+        return
+      }
       this.$router.push({ name: this.next })
     },
   },

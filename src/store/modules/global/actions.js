@@ -4,7 +4,7 @@ import { SET_COUNTRIES, SET_GLOBAL_TYPE, SET_GLOBAL_LOCATION } from './mutation-
 export default {
   initApp({dispatch}) {
     dispatch('setDefaultWorkpace')
-    dispatch('appointments/getAppointments', null, { root:true })
+    dispatch('appointments/getAppointments', {refresh: true}, { root:true })
     dispatch('patients/getPatients', null, { root:true })
     dispatch('practitioners/getUsers', null, { root:true })
     dispatch('roles/getRoles', null, { root:true })

@@ -2,12 +2,8 @@ export default {
   data: {
     RECEPT: [
       { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
-      { label: 'Patients', to: 'Patients', component: 'Reference', group_by: 'client care' },
-      { label: 'Pharmacy', to: 'Pharmacy', component: 'Medication' },
-      { label: 'Visits', to: 'Visits', component: 'Medical' },
+      { label: 'Patients', to: 'Patients', component: 'Reference' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
-      { label: 'Reports', to: 'Reports', component: 'Report' },
-      { label: 'Schedules', to: 'Schedules', component: 'Schedule'},
       { label: 'Notifications', to: 'Notifications', component: 'Notification' },
       { label: 'Support', to: 'Support', component: 'Help' },
       { label: 'Settings', to: 'Settings', component: 'Settings' },
@@ -32,7 +28,6 @@ export default {
     OPD: [
       { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference' },
-      { label: 'Pharmacy', to: 'Pharmacy', component: 'Medication' },
       { label: 'Visits', to: 'Visits', component: 'Medical' },
       { label: 'Orders', to: 'Orders', component: 'Medical' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
@@ -86,7 +81,7 @@ export default {
     ],
     PHARM: [
       { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
-      { label: 'Patients', to: 'Patients', component: 'Reference' },
+      { label: 'Patients', to: 'Pharmacy:Patients', component: 'Reference' },
       { label: 'Pharmacy', to: 'Pharmacy', component: 'Medication' },
       { label: 'Visits', to: 'Visits', component: 'Medical' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
@@ -113,7 +108,7 @@ export default {
     ],
     DIAG: [
       { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
-      { label: 'Patients', to: 'Patients', component: 'Reference'},
+      { label: 'Patients', to: 'Diagnostic:Patients', component: 'Reference'},
       { label: 'Orders', to: 'Orders', component: 'Medical' },
       { label: 'Reports', to: 'Reports', component: 'Report' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },

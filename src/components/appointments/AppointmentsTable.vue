@@ -82,7 +82,7 @@
       @print="$trigger('billing:details:open')"
     />
 
-    <BillingModal
+    <BillingDetailsModal
       :appointment="selectedAppointment"
     />
   
@@ -104,14 +104,14 @@
 import AppointmentSummaryModal from '@/components/appointments/AppointmentSummaryModal'
 import AppointmentTableActions from '@/components/appointments/tables/AppointmentTableActions'
 import AppointmentTableFilters from '@/components/appointments/tables/AppointmentTableFilters'
-import BillingModal from '@/components/appointments/BillingModal'
+import BillingDetailsModal from '@/components/appointments/BillingDetailsModal'
 import DataMixin from '@/mixins/data'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'AppointmentsTable',
 
-  components: {AppointmentSummaryModal, BillingModal, AppointmentTableActions, AppointmentTableFilters},
+  components: {AppointmentSummaryModal, BillingDetailsModal, AppointmentTableActions, AppointmentTableFilters},
 
   mixins: [DataMixin],
 

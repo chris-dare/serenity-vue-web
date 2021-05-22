@@ -9,7 +9,7 @@
     
     <!-- header -->
     <div
-      :class="[`grid-cols-${columns.length}`]"
+      :class="[`grid-cols-${columns.length + 1}`]"
       class="grid gap-4 px-4 h-12 bg-table"
     >
       <div
@@ -35,25 +35,21 @@
       <div
         v-for="(row, rowIndex) in filteredData"
         :key="`${rowIndex}`"
-        :class="[`grid-cols-${columns.length}`, internalPatient === row ? 'bg-serenity-subtle-border' : 'bg-white']"
-        class="grid gap-4 px-4 cursor-pointer"
+        :class="[`grid-cols-${columns.length + 1}`, internalPatient.id === row.id ? 'bg-gray-100' : 'bg-white']"
+        class="grid gap-4 items-center hover:bg-gray-100 p-4 cursor-pointer"
         @click="internalPatient = row"
       >
-        <div class="flex items-center py-4 space-x-3">
-          <cv-radio-button
-            v-model="internalPatient"
-            :value="row"
-            name="group-1"
+        <InfoImageBlock
+          :label="row.name"
+          :description="row.gender_age_description"
+          size="base"
+        />
+        <p>{{ row.phone }}</p>
+        <div class="flex justify-end">
+          <CheckmarkFilled
+            class="w-5 h-5 text-serenity-primary"
+            :class="[internalPatient.id === row.id ? 'text-serenity-primary' : 'text-secondary']"
           />
-
-          <InfoImageBlock
-            :label="row.name"
-            :description="row.gender_age_description"
-            size="base"
-          />
-        </div>
-        <div class="flex items-center ">
-          <p class="">{{ row.phone }}</p>
         </div>
       </div>
       <cv-pagination
@@ -94,7 +90,6 @@ export default {
   data () {
     return {
       selected: false,
-      // search: '',
     }
   },
   
@@ -123,6 +118,10 @@ export default {
     this.paginate= true
     this.pageLength = 5
     this.pageSizes = [5,10, 15, 20, 25]
+
+    if (this.patient.first_name) {
+      this.search = this.patient.first_name
+    }
   },
 }
 </script>

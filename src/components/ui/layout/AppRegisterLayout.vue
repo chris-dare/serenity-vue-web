@@ -1,16 +1,15 @@
 <template>
-  <div class="w-3/4 mx-auto">
+  <div class="max-w-5xl mx-auto">
     <p class="text-primary text-xl font-semibold">{{ label }}</p>
     <div class="grid grid-cols-4 my-6 gap-6">
       <div>
         <cv-radio-group :vertical="true">
-          <router-link
+          <div
             v-for="(item, index) in navItems"
             :key="index"
-            tag="div"
-            :to="{name: item.path}"
             :class="[checked == item.path ? 'border-serenity-primary' : 'border-serenity-subtle-border']"
             class="border-l-2  h-20 flex items-center border-solid px-4 cursor-pointer"
+            @click="goTo(item)"
           >
             <div class="flex">
               <div>
@@ -34,7 +33,7 @@
                 <p class="text-xs text-secondary leading-7">{{ item.description }}</p>
               </div>
             </div>
-          </router-link>
+          </div>
         </cv-radio-group>
       </div>
       <div class="col-span-3 bg-white py-4 px-8">
@@ -57,24 +56,45 @@ export default {
       type: Array,
       default: () => [],
     },
+
     label: {
       type: String,
       default: '',
     },
-  },
-  data() {
-    return {
-      checked: '',
-    }
-  },
+    checked: {
+      type: [Number, String],
+      default: '',
+    },
 
-  watch: {
-    $route: {
-      deep: true,
-      immediate: true,
-      handler: function (val) {
-        this.checked = val.name
-      },
+    modal: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  
+  // data() {
+  //   return {
+  //     checked: '',
+  //   }
+  // },
+
+  // watch: {
+  //   $route: {
+  //     deep: true,
+  //     immediate: true,
+  //     handler: function (val) {
+  //       this.checked = val.name
+  //     },
+  //   },
+  // },
+
+  methods: {
+    goTo(item) {
+      if (this.modal) {
+        this.$emit('next', item.step)
+        return
+      }
+      this.$router.push({ name: item.path })
     },
   },
 }

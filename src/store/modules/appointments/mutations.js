@@ -23,7 +23,7 @@ export default {
 
   [ADD_APPOINTMENT_DATA](state, data) {
     let currentAppointment = state.currentAppointment
-    state.currentAppointment = {...currentAppointment, ...data}
+    state.currentAppointment = { ...currentAppointment, ...data }
   },
 
   [SET_APPOINTMENT_DATA](state, data) {

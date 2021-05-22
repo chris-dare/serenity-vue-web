@@ -4,7 +4,7 @@
 $ui-05: #0b6b74;
 $interactive-01: #0b6b74;
 
-body {
+body, input {
   font-family: 'Graphik', 'Open Sans';
   overflow: hidden;
 }
@@ -41,4 +41,9 @@ button:focus{
 
 .v-toast__text{
   max-width: 600px;
+}
+
+::placeholder, .multiselect__input::placeholder, input::placeholder {
+  font-family: 'Graphik', 'Open Sans' !important;
+  color: #878D96 !important;
 }
