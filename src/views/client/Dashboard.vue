@@ -7,6 +7,7 @@
     <GetStartedModal :visible.sync="visible" />
     <StartVisitModal />
     <SearchPatientsModal />
+    <BookAppointmentModal />
   </div>
 </template>
 
@@ -19,12 +20,15 @@ import UserDetailsHeader from '@/components/ui/headers/UserDetailsHeader'
 const DiagnosticDashboard = () => import('@/components/diagnostic/DiagnosticDashboard')
 const OPDDashboard = () => import('@/components/opd/OPDDashboard')
 const PharmacyDashboard = () => import('@/components/pharmacy/PharmacyDashboard')
+const ReceptionDashboard = () => import('@/components/reception/ReceptionDashboard')
+const BookAppointmentModal = () => import('@/components/appointments/book/BookAppointmentModal')
+
 import { mapState } from 'vuex'
 
 export default {
   name: 'Dashboard',
 
-  components: { GetStartedModal, StartVisitModal, UserDetailsHeader, DiagnosticDashboard, OPDDashboard, PharmacyDashboard },
+  components: { GetStartedModal, StartVisitModal, UserDetailsHeader, DiagnosticDashboard, OPDDashboard, PharmacyDashboard, BookAppointmentModal, ReceptionDashboard },
 
   data() {
     return {
@@ -49,6 +53,9 @@ export default {
       }
       if (this.workspaceType === 'PHARM') {
         return 'PharmacyDashboard'
+      }
+      if (this.workspaceType === 'RECEPT') {
+        return 'ReceptionDashboard'
       }
 
       return 'DefaultDashboard'

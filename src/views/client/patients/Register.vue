@@ -2,17 +2,14 @@
   <AppRegisterLayout
     label="Register new patient"
     :nav-items="navItems"
+    :checked="checked"
   >
     <router-view />
   </AppRegisterLayout>
 </template>
 
 <script>
-import CircleFilled from '@carbon/icons-vue/es/circle--filled/32'
-import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
 export default {
-  // eslint-disable-next-line vue/no-unused-components
-  components: { CircleFilled, Checkmark },
   data() {
     return {
       checked: '',

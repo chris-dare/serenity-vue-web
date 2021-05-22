@@ -2,6 +2,7 @@
   <AppRegisterLayout
     label="Add a new service"
     :nav-items="navItems"
+    :checked="checked"
   >
     <router-view />
   </AppRegisterLayout>
@@ -18,7 +19,18 @@ export default {
         { label: 'Service Pricing', description: 'Type and prices', path: 'ServicePricing'},
         { label: 'Service Availability', description: 'Available and unavailable dates', path: 'ServiceAvailability'},
       ],
+      checked: '',
     }
+  },
+
+  watch: {
+    $route: {
+      deep: true,
+      immediate: true,
+      handler: function (val) {
+        this.checked = val.name
+      },
+    },
   },
 }
 </script>

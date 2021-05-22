@@ -1,119 +1,20 @@
 <template>
-  <MultiStepBase
-    :icon="icon"
-    next-label="Next: Notes"
-    :previous="previous"
-    @cancel="cancel"
-    @save="validateAndReroute"
-  >
-    <p class="text-primary my-4 font-bold">
-      What time would the patient want to see the doctor?
-    </p>
-    <div class="grid">
-      <DatePicker
-        v-model="filters"
-        type="datetimerange"
-        @change="filter"
-      />
-    </div>
-    <div class="flex items-center space-x-4 my-4">
-      <cv-button
-        :icon="time"
-        kind="primary"
-        class="bg-serenity-primary"
-      >
-        Give me the next time slot
-      </cv-button>
-      <cv-button
-        :icon="time"
-        kind="primary"
-        class="bg-success"
-      >
-        Join a wait queue
-      </cv-button>
-    </div>
-    <p
-      class="text-primary mt-8 mb-4 font-bold"
-    >
-      Select a doctor for the appointment
-    </p>
-    <div
-      class="grid"
-    >
-      <SlotList
-        v-model="form.slot"
-        :data="filteredData"
-      />
-    </div>
-  </MultiStepBase>
+  <AppointmentSelectSlot />
 </template>
 
 <script>
-import Time from '@carbon/icons-vue/es/time/32'
-import SlotList from '@/components/appointments/lists/SlotList'
-import { mapActions, mapState, mapGetters } from 'vuex'
-import { required } from 'vuelidate/lib/validators'
-import MultiStep from '@/mixins/multistep'
-import startOfDay from 'date-fns/startOfDay'
-// import endOfDay from 'date-fns/endOfDay'
-import isSameDay from 'date-fns/isSameDay'
-
+import AppointmentSelectSlot from '@/components/appointments/book/AppointmentSelectSlot'
+import { mapState } from 'vuex'
 
 export default {
   name: 'DateDoctor',
 
-  components: { SlotList },
-
-  mixins: [MultiStep],
-
-  data() {
-    return {
-      form: {
-        doctor: {},
-        date: startOfDay(new Date()),
-        slot: {},
-      },
-      filters: [new Date()],
-      time: Time,
-      loading: false,
-      selected: 1,
-      timezones: [
-        {
-          label: 'GMT',
-          value: 'GMT',
-        },
-        {
-          label: 'Timezone-2',
-          value: 'timezone2',
-        },
-      ],
-      pattern: '(1[012]|[1-9]):[0-5][0-9](\\s)?(?i)',
-      previous: 'ClinicsServices',
-      parent: 'Appointments',
-      next: 'AppointmentNotes',
-    }
-  },
+  components: { AppointmentSelectSlot },
 
   computed: {
     ...mapState({
-      workspaceType: (state) => state.global.workspaceType,
       storeData: (state) => state.appointments.currentAppointment,
     }),
-
-    ...mapGetters({
-      availableSlots: 'appointments/availableSlots',
-      slots: 'appointments/slots',
-    }),
-
-    filteredData() {
-      if (!this.form.date) return []
-      // return this.availableSlots(this.form.date)
-      return this.slots
-    },
-
-    disabled() {
-      return !this.form.date || !this.form.doctor
-    },
   },
 
   async beforeMount() {
@@ -126,35 +27,7 @@ export default {
 
       return
     }
-    this.filter()
-  },
-
-  validations: {
-    form: {
-      slot: { required  },
-    },
-  },
-
-  methods: {
-    ...mapActions({
-      addToStoreData: 'appointments/addToCurrentAppointment',
-      refresh: 'appointments/refreshCurrentAppointment',
-      getSlots: 'appointments/getSlots',
-    }),
-
-    async filter(val) {
-      this.loading = true
-      const filters = this.convertFromDatePickerFormat(val || this.filters)
-      await this.getSlots({ service_specialty: this.storeData.specialty.Code, ...filters })
-      this.loading = false
-    },
-
-    convertFromDatePickerFormat(val) {
-      return {
-        start: this.$date.formatQueryParamsDate(val[0]),
-        end: isSameDay(val[0], val[1]) || !val[1] ? this.$date.formatQueryParamsDate(this.$date.endOfDate(val[1])) : this.$date.formatQueryParamsDate(val[1]),
-      }
-    },
+    // this.filter()
   },
 }
 </script>

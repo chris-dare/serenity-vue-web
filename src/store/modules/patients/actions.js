@@ -25,7 +25,7 @@ export default {
   async initSinglePatientInformation({dispatch}, id) {
     dispatch('getPatient', id)
     dispatch('getServiceRequests')
-    // dispatch('getMedicationRequests')
+    dispatch('getMedicationRequests')
     dispatch('getObservations')
     dispatch('getDiagnosticReports')
     dispatch('encounters/getEncounters', id , { root:true })

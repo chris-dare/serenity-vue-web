@@ -25,7 +25,7 @@
 import { mapState } from 'vuex'
 import AppointmentsTable from '@/components/appointments/AppointmentsTable'
 export default {
-  name: 'DefaultDashboard',
+  name: 'ReceptionDashboard',
 
   components: { AppointmentsTable },
 
@@ -50,6 +50,12 @@ export default {
           description: 'Quickly search for a patient by name',
           type: 'search',
           value: 'search',
+        },
+        {
+          label: 'Start patient visit',
+          description: 'Start visit for walk-in or appointments',
+          type: 'destination',
+          value: 'visit',
         },
         {
           label: 'Book appointment',

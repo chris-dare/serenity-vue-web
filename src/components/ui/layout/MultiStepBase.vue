@@ -8,13 +8,14 @@
     <div class="flex items-center justify-between mt-12 mb-6">
       <div class="flex items-center space-x-2">
         <SeButton
+          v-if="!props.modal"
           variant="outline"
           @click="listeners['cancel']"
         >
           Cancel
         </SeButton>
         <SeButton
-          v-if="props.previous"
+          v-if="props.previous && !props.modal"
           :to="{ name: props.previous }"
           variant="secondary"
         >

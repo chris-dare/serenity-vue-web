@@ -103,7 +103,7 @@
           <cv-data-table-cell>
             <router-link
               tag="div"
-              :to="`/patients/${row.id}`"
+              :to="{ name: route, params: { id: row.id} }"
               class="flex items-center cursor-pointer"
             >
               View
@@ -133,6 +133,11 @@ export default {
     modal: {
       type: Boolean,
       default: false,
+    },
+
+    route: {
+      type: String,
+      default: 'PatientSummary',
     },
   },
 

@@ -89,7 +89,6 @@ export default {
       this.form.role = data.params[0] || 'admission-diagnosis'
     },
     'encounter:add:diagnosis:edit': function(data){
-      console.log('here')
       this.visible = true
       this.form = { ...data.params[0] }
     },

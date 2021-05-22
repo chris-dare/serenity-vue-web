@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="showLinks"
     class="mt-2 bg-white flex"
   >
     <router-link
@@ -31,20 +30,16 @@ export default {
     }),
 
     links() {
-      if (this.workspaceType === 'DIAG') {
-        return [{ label: 'Actions', path: 'PatientActions' }]
-      }
 
       let links = [
-        { label: 'Actions', path: 'PatientActions' },
         { label: 'Summary', path: 'PatientSummary' },
       ]
 
-      if (this.workspaceType === 'RECEPT') {
-        links.push({ label: 'Chart', path: 'PatientCharts' },{ label: 'Appointments', path: 'PatientAppointments' })
+      if (this.workspaceType !== 'RECEPT') {
+        links.push({ label: 'Timeline', path: 'PatientTimeline' })
       } 
+    
       links.push(
-        { label: 'Timeline', path: 'PatientTimeline' },
         { label: 'Chart', path: 'PatientCharts' },
         { label: 'Appointments', path: 'PatientAppointments' },
         { label: 'Encounters', path: 'PatientEncounters' },
@@ -56,14 +51,6 @@ export default {
       return links
 
     },
-
-    showLinks() {
-      return this.links.length > 1
-    },
   },
 }
 </script>
-
-<style>
-
-</style>

@@ -79,8 +79,7 @@ export default {
 
   methods: {
     async confirm() {
-      this.visible = false
-      if(this.callback){
+      if (this.callback) {
         try {
           await this.callback(this.data)
           this.close()

@@ -69,20 +69,25 @@
     </div>
 
     <CaptureVitalsModal />
+    <EndVisitConfirmationModal />
   </AppStatePage>
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
 import { mapState, mapActions, mapGetters } from 'vuex'
 import EncounterBasicInfo from '@/components/patients/encounters/EncounterBasicInfo'
 import EncounterActions from '@/components/patients/encounters/EncounterActions'
-import CaptureVitalsModal from '@/components/vitals/CaptureVitalsModal'
+
 
 export default {
   name: 'EncountersIndex',
 
-  components: { EncounterBasicInfo, EncounterActions, CaptureVitalsModal },
+  components: {
+    EncounterBasicInfo,
+    EncounterActions, 
+    CaptureVitalsModal: () => import('@/components/vitals/CaptureVitalsModal'),
+    EndVisitConfirmationModal: () => import('@/components/patients/modals/EndVisitConfirmationModal'),
+  },
 
   props: {
     id: {

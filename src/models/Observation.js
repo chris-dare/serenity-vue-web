@@ -9,7 +9,6 @@ export default class Observation {
   }
 
   getCreateVitalsView(encounter, patient) {
-    console.log('enc', encounter)
     let createData = []
 
     Object.keys(this.data).forEach(vital => {

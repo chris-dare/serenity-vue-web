@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'EncounterActions',
 
@@ -78,18 +80,40 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      endEncounter: 'encounters/endEncounter',
+    }),
     onCardClick(action) {
       if (action.path) {
         return this.$router.push({ name: action.path})
       }
-      switch (action) {
+      switch (action.value) {
       case 'close':
-        this.$trigger('encounter:close')
+        this.end()
         break
-          
+            
       default:
         break
       }
+    },
+
+    end() {
+      this.$trigger('visit:end:open', {
+        callback: async () => {
+          this.loading = true
+          try {
+            await this.endEncounter()
+            this.$toast.open({
+              message: 'Encounter ended successfully',
+            })
+            this.loading = false
+            this.$router.push({ name: 'PatientSummary', params: { id:this.$route.params.id } })
+          } catch (error) {
+            // empty
+            throw error || error.message
+          }
+        },
+      })
     },
   },
 }

@@ -63,7 +63,7 @@
         <div v-if="props.editable">
           <router-link
             tag="div"
-            :to="{name: 'ClinicsServices'}"
+            :to="{ name: 'ClinicsServices' }"
             class="bg-serenity-light-gray w-8 h-8 rounded-full ml-6 flex items-center justify-center"
           >
             <img
@@ -85,14 +85,14 @@
           class="w-12 h-12 flex items-center justify-center rounded-full bg-serenity-primary mr-3"
         >
           <ImageBlock
-            :alt="props.appointment.practitioner.fullName"
+            :alt="props.appointment.slot.practitioner_name ? props.appointment.slot.practitioner_name : props.appointment.practitioner.fullName"
             custom-class="w-12 h-12"
           />
         </div>
         <div class="space-y-1">
-          <p class="text-black font-semibold">{{ props.appointment.service.categories }}</p>
+          <p class="text-black font-semibold">{{ props.appointment.slot.practitioner_name ? props.appointment.slot.practitioner_name : props.appointment.practitioner.fullName }}</p>
           <p class="text-secondary text-sm">
-            {{ props.appointment.practitioner.role }}
+            {{ props.appointment.practitioner ? props.appointment.practitioner.role : props.appointment.slot.practitioner.role }}
           </p>
           <p
             v-if="props.appointment.service_tier"

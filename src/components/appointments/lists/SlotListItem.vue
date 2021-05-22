@@ -1,7 +1,7 @@
 <template>
   <div
-    class="flex justify-between items-center hover:bg-serenity-subtle-border p-4 cursor-pointer"
-    :class="{ 'bg-serenity-subtle-border': doctor.id === localValue.id }"
+    class="flex justify-between items-center hover:bg-gray-100 p-4 cursor-pointer"
+    :class="{ 'bg-gray-100': doctor.id === localValue.id }"
     @click="localValue = doctor"
   >
     <InfoImageBlock

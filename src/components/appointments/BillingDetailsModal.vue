@@ -4,7 +4,7 @@
     close-aria-label="Close"
     :visible="visible"
     size="xs"
-    @modal-hidden="visible= false"
+    @modal-hidden="close"
   >
     <template slot="content">
       <div>
@@ -145,6 +145,11 @@ export default {
       this.refreshCurrentAppointment()
 
       this.$router.push({ name: 'Appointments'})
+    },
+
+    close() {
+      this.refreshCurrentAppointment
+      this.visible = false
     },
   },
 }

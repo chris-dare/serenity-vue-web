@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="w-4/5 mx-auto space-y-4">
-      <UserDetailsHeader greeting="Hello" />
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Find patient</p>
       </div>

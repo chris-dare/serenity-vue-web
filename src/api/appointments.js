@@ -4,7 +4,6 @@ export default {
   url: 'providers/',
   
   list(providerId, params) {
-    console.log('params', params)
     return http.get(`${this.url}${providerId}/appointments`, { params: {...params } })
   },
 
@@ -21,7 +20,6 @@ export default {
   },
 
   slots(providerId, params) {
-    console.log('params', params)
     return http.get(`${this.url}${providerId}/slots/availableslots`, { params: { ...params } })
   },
 

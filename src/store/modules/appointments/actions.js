@@ -50,14 +50,13 @@ export default {
     }
   },
 
-  async createAppointment({ commit, rootState, dispatch }, payload) {
+  async createAppointment({ rootState, dispatch }, payload) {
     const appointment = new Appointment(payload).getCreateView()
     try {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI
         .create(provider.id, appointment)
-      dispatch('getAppointments', {refresh: true })
-      commit(ADD_APPOINTMENT_DATA, {})
+      dispatch('getAppointments', { refresh: true })
       return data
     } catch (error) {
       Vue.prototype.$utils.error(error)
@@ -105,6 +104,10 @@ export default {
 
   addToCurrentAppointment({ commit }, data) {
     commit(ADD_APPOINTMENT_DATA, data)
+  },
+
+  setCurrentAppointment({ commit }, data) {
+    commit(SET_APPOINTMENT_DATA, data)
   },
 
   refreshCurrentAppointment({ commit }) {

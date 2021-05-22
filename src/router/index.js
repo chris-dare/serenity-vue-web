@@ -285,11 +285,6 @@ const routes = [
         children: [
           {
             path: '',
-            name: 'PatientActions',
-            component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientActions.vue'),
-          },
-          {
-            path: '/patients/:id/summary',
             name: 'PatientSummary',
             component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientSummary.vue'),
           },
@@ -397,6 +392,18 @@ const routes = [
         name: 'Billing:Patient',
         props: true,
         component: () => import(/* webpackChunkName: "billing" */ '../views/client/billing/Patient.vue'),
+      },
+      {
+        path: '/diagnostics/patients',
+        name: 'Diagnostic:Patients',
+        props: true,
+        component: () => import(/* webpackChunkName: "diagnostics" */ '../views/client/diagnostic/Patients.vue'),
+      },
+      {
+        path: '/diagnostics/patients/:id',
+        name: 'Diagnostic:Patient',
+        props: true,
+        component: () => import(/* webpackChunkName: "diagnostics" */ '../views/client/diagnostic/Patient.vue'),
       },
     ],
   },

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-4/5 mx-auto">
+  <div class="">
     <div class="flex my-4">
       <InfoLinkCard
         v-for="(dashboard, index) in availableActions"

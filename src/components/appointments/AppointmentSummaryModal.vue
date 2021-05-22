@@ -4,6 +4,7 @@
     close-aria-label="Close"
     :visible="visible"
     size="xs"
+    @modal-hidden="close"
   >
     <template slot="content">
       <div>
@@ -18,7 +19,24 @@
         <AppointmentDetail :appointment="appointment" />
         
         <div class="flex items-center justify-center flex-col space-y-3 mt-6">
+          <div
+            v-if="canStartVisit"
+            class="w-full space-y-3"
+          >
+            <SeButton
+              full
+            >
+              Start Visit
+            </SeButton>
+            <SeButton
+              full
+              variant="secondary"
+            >
+              Rescedule Appointment
+            </SeButton>
+          </div>
           <SeButton
+            v-else
             full
             @click="print"
           >
@@ -46,6 +64,7 @@
 
 <script>
 import AppointmentDetail from '@/components/appointments/AppointmentDetail'
+import { mapState } from 'vuex'
 
 export default {
   name: 'AppointmentSummaryModal',
@@ -75,6 +94,16 @@ export default {
     },
     'appointment:summary:close': function() {
       this.close()
+    },
+  },
+
+  computed: {
+    ...mapState({
+      workspaceType: (state) => state.global.workspaceType,
+    }),
+
+    canStartVisit() {
+      return this.workspaceType === 'RECEPT'
     },
   },
 
