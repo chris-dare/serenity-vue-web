@@ -14,7 +14,7 @@
       >
         <p class="my-2 font-semibold">{{ form.id ? 'Edit' : 'New' }} {{ title }}</p>
 
-        <!-- <SingleSelect
+        <!-- <MultiSelect
           v-model="form.role"
           title="Role"
           :options="roles"
@@ -22,6 +22,7 @@
           placeholder="Select role"
           :custom-label="customLabel"
           :error-message="$utils.validateRequiredField($v, 'role')"
+          :multiple="false"
         /> -->
 
         <cv-text-area

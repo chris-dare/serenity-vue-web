@@ -405,6 +405,38 @@ const routes = [
         props: true,
         component: () => import(/* webpackChunkName: "diagnostics" */ '../views/client/diagnostic/Patient.vue'),
       },
+      {
+        path: '/virtual-care/patients',
+        name: 'VirtualCare:Patients',
+        props: true,
+        component: () => import(/* webpackChunkName: "virtual-care" */ '../views/client/virtual-care/Patients.vue'),
+      },
+      {
+        path: '/virtual-care/patients/:id',
+        name: 'VirtualCare:Patient',
+        props: true,
+        component: () => import(/* webpackChunkName: "virtual-care" */ '../views/client/virtual-care/Patient.vue'),
+      },
+
+      {
+        path: 'patients/:id/virtual-care/:care',
+        component: () => import(/* webpackChunkName: "virtual-care" */ '../views/client/virtual-care/VirtualCareIndex.vue'),
+        props: true,
+        children: [
+          {
+            path: '',
+            name: 'VirtualCareChat',
+            component: () => import(/* webpackChunkName: "virtual-care" */ '../views/client/virtual-care/VirtualCareChat.vue'),
+            meta: { noPadding: true },
+          },
+          {
+            path: 'video',
+            name: 'VirtualCareVideo',
+            component: () => import(/* webpackChunkName: "virtual-care" */ '../views/client/virtual-care/VirtualCareVideo.vue'),
+            meta: { noPadding: true },
+          },
+        ],
+      },
     ],
   },
   {

@@ -63,6 +63,20 @@
               <cv-select-option value="male">Male</cv-select-option>
               <cv-select-option value="female">Female</cv-select-option>
             </cv-select>
+
+            <!-- <MultiSelect
+              v-model="form.gender"
+              :options="genders"
+              title="Gender (required)"
+              placeholder="Male or female"
+              track-by="code"
+              label="display"
+              custom-field="code"
+              class="my-8"
+              preselect
+              :multiple="false"
+              :error-message="$utils.validateRequiredField($v, 'gender')"
+            /> -->
           </div>
           <div>
             <p class="text-primary mb-2 text-left">Capture or Upload Patient Photo</p>
@@ -125,6 +139,7 @@ export default {
   computed: {
     ...mapState({
       storeData: (state) => state.practitioners.currentUser,
+      genders: (state) => state.resources.genders,
     }),
   },
 

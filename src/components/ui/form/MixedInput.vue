@@ -11,6 +11,11 @@
         class="col-span-4 se-no-label"
       />
       <div class="flex items-center h-full absolute right-2 top-0 text-secondary">
+        <component
+          :is="suffixIcon"
+          class="w-5"
+          @click="$emit('click')"
+        />
         {{ suffixText }}
       </div>
     </div>
@@ -39,6 +44,10 @@ export default {
       default: '',
     },
     suffixText: {
+      type: String,
+      default: '',
+    },
+    suffixIcon: {
       type: String,
       default: '',
     },

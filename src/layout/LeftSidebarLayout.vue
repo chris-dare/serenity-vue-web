@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col md:flex-row h-full overflow-hidden">
     <div
-      v-if="workspaceType !== 'admin'"
+      v-if="workspaceType !== 'ADMIN'"
       class="border-r overflow-hidden relative transition-all duration-500 ease-in-out"
       :class="{ 'w-12': !isOpen, 'w-1/5': isOpen }"
     >

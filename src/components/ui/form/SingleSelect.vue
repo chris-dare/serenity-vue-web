@@ -10,7 +10,19 @@
       :placeholder="placeholder"
       :preselect-first="preselect"
       :custom-label="customLabel"
-    />
+    >
+      <template
+        slot="clear"
+      >
+        <div
+          v-if="!isEmptyData"
+          class="multiselect__clear"
+          @mousedown.prevent.stop="clear"
+        >
+          <Close class="w-4" />
+        </div>
+      </template>
+    </VueMultiselect>
     <p
       v-if="error || errorMessage"
       class="error"
@@ -82,6 +94,16 @@ export default {
       set(val) {
         this.$emit('input', val)
       },
+    },
+
+    isEmptyData() {
+      return isEmpty(this.selected)
+    },
+  },
+
+  methods: {
+    clear() {
+      this.selected = ''
     },
   },
 }

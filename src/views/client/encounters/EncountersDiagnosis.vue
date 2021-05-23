@@ -3,10 +3,11 @@
     <SeForm class="space-y-8">
       <p class="font-semibold">Add diagnosis</p>
 
-      <SingleSelect
+      <MultiSelect
         v-model="form.role"
         title="Select a Diagnosis"
         :options="roles"
+        :multiple="false"
         placeholder="Choose a lab text to be performed"
         :custom-label="customLabel"
         :error-message="$utils.validateRequiredField($v, 'role')"

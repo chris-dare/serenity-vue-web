@@ -34,9 +34,10 @@
           class="col-span-2"
         />
 
-        <SingleSelect
+        <MultiSelect
           v-model="form.priority"
           title="Priority"
+          :multiple="false"
           :options="priorities"
           placeholder="Routine, ASAP, Urgent"
         />

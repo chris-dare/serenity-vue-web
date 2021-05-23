@@ -41,7 +41,7 @@ export default {
     ],
     VIRT: [
       { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
-      { label: 'Patients', to: 'Patients', component: 'Reference' },
+      { label: 'Patients', to: 'VirtualCare:Patients', component: 'Reference' },
       { label: 'Visits', to: 'Visits', component: 'Medical' },
       { label: 'Orders', to: 'Orders', component: 'Medical' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },

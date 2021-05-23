@@ -20,6 +20,7 @@ const DiagnosticDashboard = () => import('@/components/diagnostic/DiagnosticDash
 const OPDDashboard = () => import('@/components/opd/OPDDashboard')
 const PharmacyDashboard = () => import('@/components/pharmacy/PharmacyDashboard')
 const ReceptionDashboard = () => import('@/components/reception/ReceptionDashboard')
+const VirtualCareDashboard = () => import('@/components/virtual-care/VirtualCareDashboard')
 const BookAppointmentModal = () => import('@/components/appointments/book/BookAppointmentModal')
 
 import { mapState } from 'vuex'
@@ -27,7 +28,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'Dashboard',
 
-  components: { GetStartedModal, StartVisitModal, DiagnosticDashboard, OPDDashboard, PharmacyDashboard, BookAppointmentModal, ReceptionDashboard },
+  components: { GetStartedModal, StartVisitModal, DiagnosticDashboard, OPDDashboard, PharmacyDashboard, BookAppointmentModal, ReceptionDashboard, VirtualCareDashboard },
 
   data() {
     return {
@@ -55,6 +56,10 @@ export default {
       }
       if (this.workspaceType === 'RECEPT') {
         return 'ReceptionDashboard'
+      }
+      
+      if (this.workspaceType === 'VIRT') {
+        return 'VirtualCareDashboard'
       }
 
       return 'DefaultDashboard'

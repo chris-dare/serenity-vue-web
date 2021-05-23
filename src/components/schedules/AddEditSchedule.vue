@@ -19,6 +19,7 @@
           :multiple="false"
           :options="practitioners"
           label="first_name"
+          track-by="id"
           placeholder="Select or search for practitioner"
           :custom-label="customLabel"
           :error-message="$utils.validateRequiredField($v, 'practitioner')"
@@ -32,6 +33,7 @@
             :multiple="false"
             :options="locations"
             label="location_name"
+            track-by="id"
             placeholder="Select workspace"
           />
 
@@ -41,6 +43,7 @@
             :multiple="false"
             :options="services"
             label="healthcare_service_name"
+            track-by="id"
             placeholder="Select service"
             :error-message="$utils.validateRequiredField($v, 'health_service')"
           />

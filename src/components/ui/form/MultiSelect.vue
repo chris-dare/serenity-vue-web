@@ -9,26 +9,25 @@
         :close-on-select="!multiple"
         :preserve-search="true"
         :placeholder="placeholder"
-        :label="label"
-        :track-by="trackBy"
         :preselect-first="preselect"
         :show-labels="false"
-        :internal-search="enableSearch"
         :custom-label="customLabel"
-        :disabled="disabled"
         class="group"
+        v-bind="$attrs"
         @input="$emit('select', $event)"
-      />
-      <div
-        class="flex items-center border-b border-solid border-secondary h-full absolute right-0"
-        :class="{'px-2': !selected}"
       >
-        <Close
-          v-if="selected"
-          class="w-4 z-50 cursor-pointer invisible group-hover:visible"
-          @click="clear"
-        />
-      </div>
+        <template
+          slot="clear"
+        >
+          <div
+            v-if="!isEmptyData"
+            class="multiselect__clear"
+            @mousedown.prevent.stop="clear"
+          >
+            <Close class="w-4" />
+          </div>
+        </template>
+      </VueMultiselect>
     </div>
     <p
       v-if="error || errorMessage"
@@ -63,16 +62,6 @@ export default {
       default: '',
     },
 
-    label: {
-      type: String,
-      default: '',
-    },
-
-    trackBy: {
-      type: String,
-      default: 'id',
-    },
-
     placeholder: {
       type: String,
       default: '',
@@ -98,11 +87,6 @@ export default {
       default: false,
     },
 
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-
     customLabel: {
       type: Function,
       default (option, label) {
@@ -114,11 +98,6 @@ export default {
     customField: {
       type:String,
       default: null,
-    },
-
-    enableSearch: {
-      type: Boolean,
-      default: false,
     },
   },
 
@@ -146,6 +125,10 @@ export default {
         }
         this.$emit('input', this.customField && val[this.customField] ? val[this.customField] : val)
       },
+    },
+
+    isEmptyData() {
+      return isEmpty(this.selected)
     },
   },
 

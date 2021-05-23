@@ -22,7 +22,7 @@
           placeholder="Select service type"
           custom-field="id"
           track-by="id"
-          enable-search
+          internal-search
           :error-message="$utils.validateRequiredField($v, 'service_type')"
         />
         <MultiSelect
@@ -34,7 +34,7 @@
           placeholder="Select code"
           custom-field="code"
           track-by="code"
-          enable-search
+          internal-search
           :error-message="$utils.validateRequiredField($v, 'encounter_class')"
         />
         <cv-number-input

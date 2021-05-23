@@ -2,6 +2,16 @@ import axios from 'axios'
 import { SET_COUNTRIES, SET_GLOBAL_TYPE, SET_GLOBAL_LOCATION } from './mutation-types'
 
 export default {
+  beforeLoginInit({ dispatch }) {
+    dispatch('getCountries')
+    dispatch('resources/getMaritalStatuses', null, { root:true })
+    dispatch('resources/getPaymentMethods', null, { root:true })
+    dispatch('resources/getCategories', null, { root:true })
+    dispatch('resources/getCodes', null, { root:true })
+    dispatch('resources/getServiceTypes', null, { root:true })
+    dispatch('resources/getGenders', null, { root:true })
+  },
+
   initApp({dispatch}) {
     dispatch('setDefaultWorkpace')
     dispatch('appointments/getAppointments', {refresh: true}, { root:true })
@@ -11,16 +21,16 @@ export default {
     dispatch('resources/getResources', null, { root:true })
     dispatch('workspaces/getWorkspaces', null, { root:true })
     dispatch('resources/getSpecialties', null, { root:true })
-    dispatch('resources/getCategories', null, { root:true })
-    dispatch('resources/getCodes', null, { root:true })
-    dispatch('resources/getServiceTypes', null, { root:true })
+    // dispatch('resources/getCategories', null, { root:true })
+    // dispatch('resources/getCodes', null, { root:true })
+    // dispatch('resources/getServiceTypes', null, { root:true })
     dispatch('services/getServices', null, { root:true })
-    dispatch('resources/getMaritalStatuses', null, { root:true })
-    dispatch('resources/getPaymentMethods', null, { root:true })
+    // dispatch('resources/getMaritalStatuses', null, { root:true })
+    // dispatch('resources/getPaymentMethods', null, { root:true })
     // TODO
     // dispatch('resources/getMedicationOptions', null, { root:true })
     // dispatch('resources/getClinicalOptions', null, { root:true })
-    dispatch('getCountries')
+    // dispatch('getCountries')
   },
 
   initAdmin({ dispatch }) {

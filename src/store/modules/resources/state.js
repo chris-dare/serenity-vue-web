@@ -12,4 +12,5 @@ export default () => ({
   clinicalOptions: [],
   encounterStatuses: [],
   religiousAffiliations: [],
+  genders: [],
 })

@@ -285,7 +285,9 @@ button:focus {
   .multiselect__tag-icon:after{
     @apply text-white;
   }
-
+  .multiselect__clear {
+  @apply flex items-center justify-center h-10 w-10 cursor-pointer z-10 absolute right-5;
+}
   
 }
 
@@ -329,6 +331,11 @@ button:focus {
 .se-input-gray{
   input, textarea{
     background-color: #f4f4f4 !important;
+  }
+}
+.borderless-input{
+  input, textarea{
+    @apply border-0
   }
 }
 

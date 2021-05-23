@@ -45,12 +45,16 @@
               :cal-options="calOptions"
             />
 
-            <SingleSelect
+            <MultiSelect
               v-model="form.gender"
               :options="genders"
               title="Gender (required)"
               placeholder="Male or female"
+              track-by="code"
+              label="display"
+              custom-field="code"
               preselect
+              :multiple="false"
             />
           </div>
           <div>
@@ -115,7 +119,7 @@ export default {
   computed: {
     ...mapState({
       storeData: (state) => state.patients.currentPatient,
-      genders: (state) => state.global.genders,
+      genders: (state) => state.resources.genders,
     }),
   },
 

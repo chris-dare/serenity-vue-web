@@ -39,6 +39,7 @@
         :multiple="false"
         :options="services"
         label="healthcare_service_name"
+        track-by="id"
         placeholder="Select service"
         :error-message="$utils.validateRequiredField($v, 'service')"
         preselect

@@ -2,7 +2,7 @@
 import ResourceAPI from '@/api/resources'
 import SpecialtiesAPI from '@/api/specialties'
 import axios from 'axios'
-import { SET_RESOURCES, SET_SPECIALTIES, SET_CATEGORIES, SET_CLINICAL_OPTIONS, SET_CODES, SET_SERVICE_TYPES, SET_PAYMENT_METHODS, SET_ENCOUNTER_CLASSES, SET_MARITAL_STATUSES, SET_MEDICATION_OPTIONS, SET_ENCOUNTER_STATUSES, SET_RELIGIOUS_AFFLIATIONS } from './mutation-types'
+import { SET_RESOURCES, SET_SPECIALTIES, SET_CATEGORIES, SET_CLINICAL_OPTIONS, SET_CODES, SET_SERVICE_TYPES, SET_PAYMENT_METHODS, SET_ENCOUNTER_CLASSES, SET_MARITAL_STATUSES, SET_MEDICATION_OPTIONS, SET_ENCOUNTER_STATUSES, SET_RELIGIOUS_AFFLIATIONS, SET_GENDERS } from './mutation-types'
 
 export default {
   async getResources({ commit, rootState }) {
@@ -33,6 +33,13 @@ export default {
       throw error
     })
     commit(SET_CODES, data.data)
+  },
+
+  async getGenders({ commit }) {
+    const { data } = await ResourceAPI.genders().catch((error) => {
+      throw error
+    })
+    commit(SET_GENDERS, data)
   },
 
   async getServiceTypes({ commit }) {

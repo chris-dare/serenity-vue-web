@@ -26,10 +26,11 @@
                 type="text"
                 class="inherit-full-input col-span-2"
               />
-              <SingleSelect
+              <MultiSelect
                 v-model="detail.course_of_therapy_type"
                 title="Course of therapy"
                 :options="therapyTypes"
+                :multiple="false"
               />
               <cv-text-input
                 v-model="detail.medication_request_dosage_instruction[0].frequency"
@@ -88,15 +89,17 @@
           <p class="text-serenity-primary">Add new drug</p>
         </div>
         <div class="grid grid-cols-3 gap-4 items-center">
-          <SingleSelect
+          <MultiSelect
             v-model="form.extra_details.priority"
             title="Priority"
             :options="priorities"
+            :multiple="false"
           />
-          <SingleSelect
+          <MultiSelect
             v-model="form.extra_details.medication_request_category"
             title="Medication request category"
             :options="categories"
+            :multiple="false"
           />
           <cv-text-input
             v-model="form.extra_details.category"

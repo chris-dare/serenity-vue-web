@@ -32,15 +32,17 @@
         type="text"
         class="inherit-full-input"
       />
-      <SingleSelect
+      <MultiSelect
         v-model="form.contact[0].telecom.system"
         :options="systemOptions"
         title="Type of contact"
+        :multiple="false"
       />
-      <SingleSelect
+      <MultiSelect
         v-model="form.contact[0].telecom.use"
         :options="['home', 'mobile']"
         title="Use"
+        :multiple="false"
       />
       <cv-text-input
         v-if="form.contact[0].telecom.system === 'email'"

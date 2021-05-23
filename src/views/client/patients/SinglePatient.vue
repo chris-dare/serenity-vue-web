@@ -2,7 +2,9 @@
   <div
     class="max-w-7xl mx-auto"
   >
-    <PatientInfoCard />
+    <PatientInfoCard>
+      <component :is="actionComponent" />
+    </PatientInfoCard>
 
     <div>
       <PatientDetailsNav />
@@ -14,7 +16,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import SinglePatientModals from '@/components/patients/modals/SinglePatientModals'
 import PatientDetailsNav from '@/components/patients/PatientDetailsNav'
 import PatientInfoCard from '@/components/patients/PatientInfoCard'
@@ -26,6 +28,8 @@ export default {
     SinglePatientModals,
     PatientDetailsNav,
     PatientInfoCard,
+    ReceptionActions: () => import('@/components/patients/actions/ReceptionActions'),
+    OPDActions: () => import(/* webpackPrefetch: true */ '@/components/patients/actions/OPDActions'),
   },
 
   props: {
@@ -39,6 +43,16 @@ export default {
     return {
       loading: false,
     }
+  },
+
+  computed: {
+    ...mapState({
+      workspaceType: (state) => state.global.workspaceType,
+    }),
+    actionComponent() {
+      if (this.workspaceType === 'RECEPT') return 'ReceptionActions'
+      return 'OPDActions'
+    },
   },
 
   beforeRouteEnter (to, from, next) {
