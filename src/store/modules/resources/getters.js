@@ -1,4 +1,5 @@
 import uniq from 'lodash/uniq'
+import meds from './meds'
 export default {
   resources: state => {
     const resources = []
@@ -27,5 +28,9 @@ export default {
 
 
     return resources
+  },
+
+  medications: () => {
+    return meds[0].split(', ')
   },
 }

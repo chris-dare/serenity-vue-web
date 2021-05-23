@@ -72,11 +72,13 @@ export default {
     }
   },
 
+  // eslint-disable-next-line no-unused-vars
   async updatePatient({ commit, rootState }, payload) {
     try {
+      const patient = new Patient(payload).getUpdateView()
       const provider = rootState.auth.provider
       const { data } = await PatientsAPI
-        .update(provider.id,payload)
+        .update(provider.id,patient)
       commit(UPDATE_PATIENT, data.data)
     } catch (error) {
       throw error.data || error

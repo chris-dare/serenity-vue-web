@@ -11,16 +11,15 @@
         <p class="text-serenity-green font-semibold mb-4">{{ index+1 }}.</p>
         <div class="grid grid-cols-12 gap-x-4 gap-y-8 items-center">
           <div class="col-span-11 grid grid-cols-3 gap-4 items-center">
-            <cv-text-input
+            <AutoCompleteMedication
               v-model="detail.medication_detail[0].display"
-              label="Drug"
-              type="text"
-              class="inherit-full-input col-span-2"
+              class="col-span-3"
             />
-            <SingleSelect
+            <MultiSelect
               v-model="detail.course_of_therapy_type"
               title="Course of therapy"
               :options="therapyTypes"
+              :multiple="false"
             />
             <cv-text-input
               v-model="detail.medication_request_dosage_instruction[0].frequency"
@@ -79,15 +78,17 @@
         <p class="text-serenity-primary">Add new drug</p>
       </div>
       <div class="grid grid-cols-3 gap-4 items-center">
-        <SingleSelect
+        <MultiSelect
           v-model="form.extra_details.priority"
           title="Priority"
           :options="priorities"
+          :multiple="false"
         />
-        <SingleSelect
+        <MultiSelect
           v-model="form.extra_details.medication_request_category"
           title="Medication request category"
           :options="categories"
+          :multiple="false"
         />
         <cv-text-input
           v-model="form.extra_details.category"
@@ -115,7 +116,7 @@
           class="inherit-full-input"
         />
         <cv-text-area
-          v-model="form.extra_details.medication_notes[0].display"
+          v-model="form.extra_details.medication_request_notes[0].display"
           label="Medication notes"
           type="text"
           placeholder="Instruction on how to use the drug"
@@ -195,7 +196,7 @@ export default {
       add: Add,
       form: {
         extra_details: {
-          medication_notes: [{display: ''}],
+          medication_request_notes: [{display: ''}],
         },
         drugs: [
           {
@@ -339,7 +340,7 @@ export default {
     close() {
       this.form = {
         extra_details: {
-          medication_notes: [{display: ''}],
+          medication_request_notes: [{display: ''}],
         },
         drugs: [
           {

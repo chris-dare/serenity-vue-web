@@ -5,7 +5,7 @@
     @submit.prevent
   >
     <div class="flex items-center gap-1 w-1/2">
-      <SingleSelect
+      <MultiSelect
         v-model="localValue.status"
         title="Status"
         :multiple="false"
@@ -14,7 +14,7 @@
         @input="$emit('change', localValue)"
       />
 
-      <SingleSelect
+      <MultiSelect
         v-model="localValue.appointmentType"
         title="Type"
         :multiple="false"
@@ -30,6 +30,7 @@
         :options="patients"
         :custom-label="$utils.customNameLabel"
         label="first_name"
+        track-by="id"
         class="multiselect-white flex-1"
         custom-field="id"
         @input="$emit('change', localValue)"
@@ -41,6 +42,7 @@
         :multiple="false"
         :options="services"
         label="healthcare_service_name"
+        track-by="id"
         class="multiselect-white flex-1"
         custom-field="id"
         @input="$emit('change', localValue)"

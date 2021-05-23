@@ -19,8 +19,7 @@ export function initialState() {
     ],
     currencies: Currency.data,
     titles: ['Mr', 'Mrs', 'Miss', 'Hon', 'Dr', 'Prof', 'Master'],
-    genders: ['female', 'male', 'other', 'unknown'],
-    // religions: ['christianity', 'islam'],
+    // genders: ['female', 'male', 'other', 'unknown'],
     religions: {
       'ADVENTIST': 'Adventist',
       'AFRICAN_RELIGIONS': 'African Religions',

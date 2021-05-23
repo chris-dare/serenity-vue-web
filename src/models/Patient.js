@@ -100,7 +100,16 @@ export default class Patient {
       data.religious_affiliation = [data.religious_affiliation]
     }
 
-    data.gender = data.gender.toUpperCase()
+    return this.removeEmpty(data)
+  }
+
+  getUpdateView() {
+    let data = { ...this.data }
+    
+    data.mobile = this.convertToMsisdn(data.mobile)
+    if (data.religious_affiliation) {
+      data.religious_affiliation = [data.religious_affiliation]
+    }
 
     return this.removeEmpty(data)
   }
@@ -114,7 +123,7 @@ export default class Patient {
       return ''
     }
 
-    return number.slice(1, number.length - 1)
+    return number.slice(1, number.length)
   }
 
   convertFromMsisdn(number) {

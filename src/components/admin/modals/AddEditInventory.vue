@@ -4,7 +4,7 @@
     close-aria-label="Close"
     :visible="visible"
     size="sm"
-    @modal-hidden="visible = false"
+    @modal-hidden="close"
   >
     <template slot="content">
       <div class="space-y-8">
@@ -50,7 +50,12 @@
           placeholder="CV2399"
         />
         <div class="flex justify-between items-center">
-          <p class="text-center">Cancel</p>
+          <SeButton
+            variant="secondary"
+            @click="close"
+          >
+            Cancel
+          </SeButton>
           <SeButton 
             :loading="loading"
             @click="submit"
@@ -135,7 +140,7 @@ export default {
         this.$toast.open({
           message: 'Inventory successfully added',
         })
-        this.visible = false
+        this.close()
 
         this.loading = false
       } catch (error) {
@@ -150,12 +155,21 @@ export default {
         this.$toast.open({
           message: 'Inventory successfully updated',
         })
-        this.visible = false
+        this.close()
 
         this.loading = false
       } catch (error) {
         this.loading = false
       }
+    },
+
+    close() {
+      this.form = {
+        sub_group: 'Medication',
+        category: 'medical-stock',
+      }
+      this.$v.$reset()
+      this.visible = false
     },
   },
 }

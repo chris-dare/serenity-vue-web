@@ -22,12 +22,12 @@
       >
         <img
           src="@/assets/img/edit 1.svg"
-          class="w-4 h-4"
+          class="w-4 h-4 cursor-pointer"
           @click="$router.push({ name: 'Biodata', params: { id: patient.id } })"
         >
       </div>
     </div>
-    <component :is="actionComponent" />
+    <slot />
   </div>
 </template>
 
@@ -37,21 +37,10 @@ import { mapState } from 'vuex'
 export default {
   name: 'PatientInfoCard',
 
-  components: {
-    ReceptionActions: () => import('@/components/patients/actions/ReceptionActions'),
-    OPDActions: () => import(/* webpackPrefetch: true */ '@/components/patients/actions/OPDActions'),
-    DiagnoticActions: () => import(/* webpackPrefetch: true */ '@/components/patients/actions/DiagnoticActions'),
-  },
-
   computed: {
     ...mapState({
       patient: (state) => state.patients.currentPatient,
-      workspaceType: (state) => state.global.workspaceType,
     }),
-    actionComponent() {
-      if (this.workspaceType === 'RECEPT') return 'ReceptionActions'
-      return 'OPDActions'
-    },
   },
 }
 </script>

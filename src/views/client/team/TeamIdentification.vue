@@ -10,6 +10,7 @@
       v-model="form.practitioner_role"
       :options="roles"
       label="name"
+      track-by="id"
       title="Clinical Role"
       placeholder="Select a clinical role"
       :error-message="$utils.validateRequiredField($v, 'practitioner_role')"

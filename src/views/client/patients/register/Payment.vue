@@ -4,19 +4,21 @@
     @submit.prevent=""
   >
     <div class="grid grid-cols-2 gap-8">
-      <SingleSelect
+      <MultiSelect
         v-model="form.payment_options[0].payment_type"
         :options="options"
         title="Primary method of payment"
         placeholder="Payment Type"
+        :multiple="false"
         preselect
       />
-      <SingleSelect
+      <MultiSelect
         v-if="isMoMo"
         v-model="form.payment_options[0].payment_details.payment_provider"
         :options="networks"
         title="Payment provider"
         placeholder="Payment Type"
+        :multiple="false"
       />
       <MsisdnPhoneInput
         v-if="isMoMo"
@@ -199,7 +201,7 @@ export default {
         this.$toast.open({
           message: 'Patient successfully updated',
         })
-        this.$router.push({name: 'PatientSummary', params: { id:this.form.id }})
+        // this.$router.push({name: 'PatientSummary', params: { id:this.form.id }})
       } catch (error) {
         console.info(error)
         this.$toast.open({

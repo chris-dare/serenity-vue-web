@@ -27,6 +27,10 @@ export default {
     return http.get(`${this.url}valueset/marital-status`)
   },
 
+  genders() {
+    return http.get(`${this.url}valueset/administrative-gender`)
+  },
+
   categories() {
     return http.get('FHIR/healthcare-service-categories')
   },

@@ -1,6 +1,8 @@
 <template>
   <div>
-    <PatientInfoCard />
+    <PatientInfoCard>
+      <DiagnoticActions />
+    </PatientInfoCard>
     <div class="space-y-4 my-6">
       <p class="text-serenity-primary font-semibold">
         Perform action
@@ -38,7 +40,8 @@ import PatientInfoCard from '@/components/patients/PatientInfoCard'
 export default {
   name: 'Patient',
 
-  components: { LabsTable, AddLabResultsModal, ViewLabResultsModal, PatientInfoCard },
+    
+  components: { LabsTable, AddLabResultsModal, ViewLabResultsModal, PatientInfoCard, DiagnoticActions: () => import(/* webpackPrefetch: true */ '@/components/patients/actions/DiagnoticActions') },
 
   data() {
     return {
