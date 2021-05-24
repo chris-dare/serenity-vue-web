@@ -26,6 +26,7 @@
         v-model="form.chief_complaint"
         :rows="5"
         placeholder="Reason for visit"
+        @input="throttledSend"
       />
     </ToggleList>
     <ToggleList
@@ -33,9 +34,10 @@
       class="pt-4"
     >
       <cv-text-area
-        v-model="form.progress"
+        v-model="form.history_of_presenting_illness"
         :rows="5"
         placeholder="Progress of complaint"
+        @input="throttledSend"
       />
     </ToggleList>
     <ToggleList
@@ -55,39 +57,94 @@
       class="pt-4"
     >
       <cv-text-area
-        v-model="form.family_history"
+        v-model="family.FAMILY_HISTORY"
         :rows="5"
-        placeholder="Progress of complaint"
+        placeholder="Family history"
       />
+
+      <div class="flex justify-end mt-2">
+        <SeButton @click="throttledSendHistory">save</SeButton>
+      </div>
     </ToggleList>
     <ToggleList
       title="Review of systems"
       class="pt-4"
-    />
+    >
+      <EncounterReviewSystems />
+    </ToggleList>
   </div>
 </template>
 
 <script>
-import VitalsDetail from '@/components/vitals/VitalsDetail'
-import EncounterMedicalHistory from '@/components/patients/encounters/EncounterMedicalHistory'
-import EncounterSocialHistory from '@/components/patients/encounters/EncounterSocialHistory'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import debounce from 'lodash/debounce'
 
 export default {
   name: 'EncounterDetails',
 
-  components: { VitalsDetail, EncounterMedicalHistory, EncounterSocialHistory },
+  components: {
+    VitalsDetail: () => import(/* webpackPrefetch: true */ '@/components/vitals/VitalsDetail'),
+    EncounterMedicalHistory: () => import('@/components/patients/encounters/EncounterMedicalHistory'),
+    EncounterSocialHistory: () => import('@/components/patients/encounters/EncounterSocialHistory'),
+    EncounterReviewSystems: () => import('@/components/patients/encounters/EncounterReviewSystems'),
+  },
 
   data() {
     return {
       form: {},
+      family: {},
     }
   },
 
+
+
   computed: {
+    ...mapState({
+      encounter: state => state.encounters.currentEncounter,
+    }),
     ...mapGetters({
       vitals: 'encounters/currentEncounterLatestVitals',
+      currentPatientSocialHistory: 'encounters/currentPatientSocialHistory',
     }),
+  },
+
+  watch: {
+    encounter: {
+      immediate: true,
+      handler(val, oldVal) {
+        if (val !== oldVal) {
+          this.form = { ...val }
+        }
+      },
+    },
+
+    currentPatientSocialHistory: {
+      immediate: true,
+      handler(val, oldVal) {
+        if (val !== oldVal) {
+          this.family = { ...val }
+        }
+      },
+    },
+  },
+
+  methods: {
+    ...mapActions({
+      updateEncounter: 'encounters/updateEncounter',
+      createObservation: 'patients/createObservation',
+    }),
+
+    async submitAnswer() {
+      await this.updateEncounter(this.form)
+    },
+
+    throttledSend: debounce(function() {
+      this.submitAnswer()
+    }, 1500),
+
+    async throttledSendHistory() {
+      await this.createObservation({ payload: { FAMILY_HISTORY: this.family.FAMILY_HISTORY }, patient: this.$route.params.id })
+    },
   },
 }
 </script>

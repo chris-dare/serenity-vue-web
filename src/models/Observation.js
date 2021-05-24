@@ -15,16 +15,42 @@ export default class Observation {
       createData.push({
         observation_category: [{display: 'vital-signs'}],
         value: this.data[vital],
-        code: vital,
+        unit: vital,
         status: 'registered',
         patient: patient,
         encounter: encounter.id,
       })
     })
+    
+    return createData
+  }
 
-    // if (!isEmpty(encounter)) {
-    //   createData.encounter = encounter.id
-    // }
+  getCreateObservationView(encounter, patient, field, value, category = 'social-history') {
+    let createData = {
+      observation_category: [{display: category}],
+      value: value,
+      unit: field,
+      status: 'registered',
+      patient: patient,
+      encounter: encounter.id,
+    }
+    
+    return createData
+  }
+
+  getCreateMultipleObservationView(encounter, patient, category = 'social-history') {
+    let createData = []
+
+    Object.keys(this.data).forEach(vital => {
+      createData.push({
+        observation_category: [{display: category}],
+        value: this.data[vital],
+        unit: vital,
+        status: 'registered',
+        patient: patient,
+        encounter: encounter.id,
+      })
+    })
     
     return createData
   }

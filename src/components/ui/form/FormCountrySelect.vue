@@ -4,9 +4,11 @@
     :title="title"
     :multiple="false"
     :options="countries"
-    label="name"
-    track_by="alpha2Code"
+    label="display"
+    track_by="code"
+    custom-field="code"
     :placeholder="placeholder"
+    v-bind="$attrs"
   />
 </template>
 
@@ -30,11 +32,13 @@ export default {
       type: String,
       default: '',
     },
+
     placeholder: {
       type: String,
       default: '',
     },
   },
+
   computed: {
     ...mapState({
       countries: state => state.global.countries,

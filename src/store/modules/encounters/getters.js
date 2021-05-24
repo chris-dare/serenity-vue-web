@@ -25,12 +25,12 @@ export default {
   },
 
   currentEncounterDiagnosis: state => {
-    if (!state.currentEncounter) return []
-    return state.currentEncounter.encounter_diagnosis.filter(diag => diag.role.includes('diagnosis'))
+    if (!state.currentEncounter || !state.currentEncounter.encounter_diagnosis) return []
+    return state.currentEncounter.encounter_diagnosis
   },
 
   currentEncounterComplaints: state => {
-    if (!state.currentEncounter) return []
+    if (!state.currentEncounter || !state.currentEncounter.encounter_diagnosis) return []
     return state.currentEncounter.encounter_diagnosis.filter(diag => diag.role.includes('complaint'))
   },
 
@@ -59,18 +59,42 @@ export default {
     return rootState.patients.patientObservations.filter(obs => obs.encounter === state.currentEncounter.id)
   },
 
-  currentEncounterLatestVitals: (state, getters) => {
+  currentEncounterLatestVitals: (state, getters, rootState) => {
     if (!getters.currentEncounterObservations) return {}
-    const options = ['height', 'weight', 'temperature', 'respiration_rate', 'saturation', 'diastolic', 'systolic']
+    const options = rootState.resources.vitalsUnitTypes.map(vital => vital.code)
     let vitals = {}
   
     const sortedVitals = sortByDate(getters.currentEncounterObservations, 'issued')
     options.forEach(option => {
       const observation = sortedVitals.find(obs => obs.code === option)
-      vitals[option] = observation ? observation.value : 0
+      vitals[option] = observation ? observation.value : null
     })
 
     return vitals
+  },
+
+  currentPatientSocialHistory: (state, getters, rootState, rootGetters) => {
+    const observations = rootGetters['patients/patientObservations']
+    if (!observations) return {}
+
+    const history = rootState.resources.socialUnitTypes.map(social => social.code)
+    let vitals = {}
+
+    const sortedObservations = sortByDate(observations, 'issued')
+  
+    history.forEach(option => {
+      const observation = sortedObservations.find(obs => obs.unit === option)
+      vitals[option] = observation ? observation.value : ''
+    })
+
+    return vitals
+  },
+
+  currentPatientExamSystems: (state, getters, rootState, rootGetters) => {
+    const observations = rootGetters['patients/patientObservations']
+    if (!observations) return {}
+
+    return observations.filter(obs => obs.observation_category[0].display === 'exam' && obs.value)
   },
 }
 

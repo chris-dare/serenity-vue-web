@@ -15,6 +15,7 @@
         class="group"
         v-bind="$attrs"
         @input="$emit('select', $event)"
+        @search-change="$emit('search-change', $event)"
       >
         <template
           slot="clear"

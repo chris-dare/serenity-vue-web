@@ -41,28 +41,14 @@
         {{ region }}
       </cv-select-option>
     </cv-select>
-    <cv-select
+
+    <FormCountrySelect
       v-model="form.country"
-      label="Country"
-      class="inherit-full-input"
-      :invalid-message="$utils.validateRequiredField($v, 'country')"
+      title="Country"
+      placeholder="Select a country"
+      :error-message="$utils.validateRequiredField($v, 'country')"
       @input="onChange"
-    >
-      <cv-select-option
-        disabled
-        selected
-        hidden
-      >
-        Country
-      </cv-select-option>
-      <cv-select-option
-        v-for="(country, index) in countries"
-        :key="index"
-        :value="country.name"
-      >
-        {{ country.name }}
-      </cv-select-option>
-    </cv-select>
+    />
   </div>
 </template>
 
@@ -121,7 +107,6 @@ export default {
 
   computed: {
     ...mapState({
-      countries: (state) => state.global.countries,
       regions: (state) => state.global.regions,
     }),
 

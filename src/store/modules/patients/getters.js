@@ -20,4 +20,11 @@ export default {
     }
     return state.patientServiceRequests.filter(lab => lab.patient === state.currentPatient.id && lab.category === 'laboratory-proceedure')
   },
+
+  patientObservations: state => {
+    if (!state.currentPatient) {
+      return []
+    }
+    return state.patientObservations.filter(lab => lab.patient === state.currentPatient.id)
+  },
 }

@@ -43,11 +43,12 @@ export default {
     }
   },
 
-  async updateEncounter({ commit }, payload) {
+  async updateEncounter({ commit, rootState }, payload) {
     try {
-      delete payload.provider
-      const { data } = await EncountersAPI.update(payload)
-      commit(UPDATE_ENCOUNTER, data.data)
+      const provider = rootState.auth.provider
+      const { data } = await EncountersAPI.update(provider.id, payload)
+      commit(SET_ENCOUNTER, data)
+      commit(UPDATE_ENCOUNTER, data)
     } catch ({ response: { data: error } }) {
       throw error
     }

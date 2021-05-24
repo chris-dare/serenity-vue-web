@@ -23,7 +23,7 @@ import {
 
 export default {
   async initSinglePatientInformation({dispatch}, id) {
-    dispatch('getPatient', id)
+    await dispatch('getPatient', id)
     dispatch('getServiceRequests')
     dispatch('getMedicationRequests')
     dispatch('getObservations')
@@ -31,6 +31,10 @@ export default {
     dispatch('encounters/getEncounters', id , { root:true })
     dispatch('resources/getEncounterClasses', null, { root:true })
     dispatch('resources/getEncounterStatuses', null, { root:true })
+    dispatch('resources/getObservationUnitTypes', null, { root:true })
+    dispatch('resources/getVitalsUnitTypes', null, { root:true })
+    dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
+    dispatch('resources/getSystemExamUnitTypes', null, { root:true })
 
   },
 
@@ -226,12 +230,29 @@ export default {
     try {
       const provider = rootState.auth.provider
       const encounter = rootState.encounters.currentEncounter
-      const vitals = new Observation(payload).getCreateVitalsView(encounter, patient)
+      const vitals = new Observation(payload).getCreateMultipleObservationView(encounter, patient)
 
+      
       vitals.forEach(async vital => {
         const { data } = await ObservationsAPI.create(provider.id, vital)
         commit(UPDATE_OBSERVATION, data)
       })
+      
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
+  async createSystem({ commit, rootState }, { patient, payload }) {
+    try {
+      const provider = rootState.auth.provider
+      const encounter = rootState.encounters.currentEncounter
+      const system = new Observation(payload).getCreateObservationView(encounter, patient, payload.field, payload.value, 'exam')
+
+      
+      const { data } = await ObservationsAPI.create(provider.id, system)
+      commit(UPDATE_OBSERVATION, data)
       
     } catch (error) {
       Vue.prototype.$utils.error(error)

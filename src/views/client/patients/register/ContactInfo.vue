@@ -80,7 +80,6 @@ export default {
 
   computed: {
     ...mapState({
-      countries: (state) => state.global.countries,
       storeData: (state) => state.patients.currentPatient,
       regions: (state) => state.global.regions,
     }),

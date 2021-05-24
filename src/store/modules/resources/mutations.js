@@ -1,4 +1,24 @@
-import { SET_RESOURCES, UPDATE_RESOURCE, SET_ENCOUNTER_STATUSES, SET_GENDERS, SET_RELIGIOUS_AFFLIATIONS, SET_CLINICAL_OPTIONS, DELETE_RESOURCE, SET_SPECIALTIES, SET_CATEGORIES, SET_CODES, SET_SERVICE_TYPES, SET_PAYMENT_METHODS, SET_ENCOUNTER_CLASSES, SET_MARITAL_STATUSES, SET_MEDICATION_OPTIONS } from './mutation-types'
+import {
+  SET_RESOURCES,
+  UPDATE_RESOURCE,
+  SET_ENCOUNTER_STATUSES,
+  SET_GENDERS,
+  SET_RELIGIOUS_AFFLIATIONS,
+  SET_CLINICAL_OPTIONS,
+  DELETE_RESOURCE,
+  SET_SPECIALTIES,
+  SET_CATEGORIES,
+  SET_CODES,
+  SET_SERVICE_TYPES,
+  SET_PAYMENT_METHODS,
+  SET_ENCOUNTER_CLASSES,
+  SET_MARITAL_STATUSES,
+  SET_MEDICATION_OPTIONS,
+  SET_OBSERVATION_UNIT_TYPES,
+  SET_SYSTEM_EXAM_UNIT_TYPES,
+  SET_SOCIAL_HISTORY_UNIT_TYPES,
+  SET_VITALS_UNIT_TYPES,
+} from './mutation-types'
 
 export default {
   [SET_RESOURCES](state, resources) {
@@ -70,5 +90,21 @@ export default {
 
   [SET_GENDERS](state, genders) {
     state.genders = genders
+  },
+
+  [SET_OBSERVATION_UNIT_TYPES](state, unitTypes) {
+    state.unitTypes = unitTypes
+  },
+
+  [SET_SYSTEM_EXAM_UNIT_TYPES](state, examUnitTypes) {
+    state.examUnitTypes = examUnitTypes
+  },
+
+  [SET_SOCIAL_HISTORY_UNIT_TYPES](state, socialUnitTypes) {
+    state.socialUnitTypes = socialUnitTypes
+  },
+
+  [SET_VITALS_UNIT_TYPES](state, vitalsUnitTypes) {
+    state.vitalsUnitTypes = vitalsUnitTypes
   },
 }
