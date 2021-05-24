@@ -50,10 +50,15 @@
               Go back
             </SeButton>
           </div>
+          <cv-button-skeleton
+            v-if="loading"
+          />
           <cv-button
+            v-else
             :icon="icon"
             kind="primary"
             class="bg-serenity-primary"
+            :loading="loading"
             @click="submit"
           >
             Create company
@@ -82,6 +87,7 @@ export default {
       icon: ChevronRight,
       previous: 'CompanyInformation',
       parent: 'CorporateClients',
+      loading: false,
     }
   },
 
@@ -128,6 +134,7 @@ export default {
       }
     },
     async save(){
+      this.loading = true
       console.info(JSON.parse(JSON.stringify(this.storeData)))
       let payload = {
         company_name : this.form.company_name,
@@ -144,6 +151,7 @@ export default {
         this.$toast.open({
           message: 'Company successfully created!',
         })
+        this.loading = false
         this.$router.push({name: 'CorporateClients'})
       } catch (error) {
         this.$toast.open({
