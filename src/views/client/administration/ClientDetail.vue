@@ -4,19 +4,30 @@
       <div class="flex">
         <div class="flex items-center">
           <div class="space-y-1">
-            <p class="font-semibold">Barclays Bank Ghana</p>
+            <p class="font-semibold">{{ client && client.company_name }}</p>
             <p class="text-secondary">
               Corporate Client
             </p>
             <div class="flex items-center">
-              <p>Client No: 0012456</p>
+              <p>Client TIN No: {{ client && client.tin_number }}</p>
             </div>
           </div>
         </div>
       </div>
       <div class="flex items-center space-x-2">
-        <SeButton>
-          Raise claim
+        <div v-if="client && client.state != 'verified'">
+          <!-- <SeButton>
+            Raise claim
+          </SeButton> -->
+          <SeButton @click="editClient">
+            Edit Client
+          </SeButton>
+        </div>
+        <SeButton 
+          v-else 
+          @click="$trigger('client:add:open')"
+        >
+          Verify Client
         </SeButton>
       </div>
     </div>
@@ -116,19 +127,23 @@
         </template>
       </cv-data-table>
     </div>
+    <EditClient />
   </div>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
 import Add from '@carbon/icons-vue/es/add/32'
+import EditClient from '@/components/admin/modals/EditClient'
 import PatientSummaryCard from '@/components/patients/PatientSummaryCard'
 export default {
   name: 'ClientDetail',
 
-  components: { PatientSummaryCard },
+  components: { PatientSummaryCard, EditClient },
 
   data() {
     return {
+      loading: false,
       add: Add,
       date: '',
       items: [
@@ -153,22 +168,60 @@ export default {
       ],
     }
   },
+
   computed: {
+    ...mapState({
+      client: (state) => state.clients.client,
+    }),
     generalFields() {
       return [
-        { label: 'Date of Birth', value: this.$faker().lorem.word() },
-        { label: 'Phone', value: this.$faker().lorem.word() },
-        { label: 'Address', value: this.$faker().lorem.word() },
-        { label: 'Email', value: this.$faker().lorem.word() },
+        { label: 'State', value: this.client.state },
+        { label: 'Authorized By', value: this.client.authorizedBy },
+        { label: 'Address', value: this.client.address },
+        // { label: 'Email', value: this.$faker().lorem.word() },
       ]
     },
+    
     emergencyFields() {
       return [
-        { label: 'First Name', value: this.$faker().lorem.word() },
-        { label: 'Last Name', value: this.$faker().lorem.word() },
-        { label: 'Phone Number', value: this.$faker().lorem.word() },
-        { label: 'Admin Email', value: this.$faker().lorem.word() },
+        { label: 'First Name', value: this.client.admin_first_name },
+        { label: 'Last Name', value: this.client.admin_last_name },
+        { label: 'Phone Number', value: this.client.admin_phoneno },
+        { label: 'Admin Email', value: this.client.admin_email },
       ]
+    },
+  },
+
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      vm.loading = true
+      await vm.loadClient()
+      vm.loading = false
+    })
+  },
+
+  methods: {
+    ...mapActions({
+      getClient: 'clients/getClientBy',
+      addToStoreData: 'clients/addToCurrentUser',
+    }),
+    goBack() {
+      this.$router.go(-1)
+    },
+    editClient(){
+      this.$router.push({name:'CompanyInformation'})
+      this.addToStoreData(this.client)
+    },
+    loadClient() {
+      let id = this.$route.params.id
+      console.log('load', this.$route.params.id)
+      this.getClient( id )
+        .then(({data}) => {
+          this.client = data.returnedData
+        })
+        .catch(() => {
+          // this.goBack()
+        })
     },
   },
 

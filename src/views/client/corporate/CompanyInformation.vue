@@ -26,10 +26,11 @@
             @input="$v.$touch()"
           />
           <cv-text-input
-            v-model="form.tin"
+            v-model="form.tin_number"
             label="TIN Number"
             placeholder="TIN Number"
             class="inherit-full-input"
+            :invalid-message="$utils.validateRequiredField($v, 'tin_number')"
           />
         </div>
 
@@ -66,7 +67,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import { required, email } from 'vuelidate/lib/validators'
+import { required, email, minLength } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import MultiStep from '@/mixins/multistep'
 
@@ -81,20 +82,22 @@ export default {
     }
   },
 
-  created() {
-    this.form = this.storeData
-  },
-
   computed: {
     ...mapState({
       storeData: (state) => state.clients.form,
     }),
   },
 
+  created() {
+    this.form = this.storeData
+  },
+
+
   validations: {
     form: {
       company_name: { required },
       email: { email },
+      tin_number: { minLength: minLength(10)},
     },
   },
 
