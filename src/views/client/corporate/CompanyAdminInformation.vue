@@ -158,6 +158,7 @@ export default {
           message: error.message || 'Something went wrong!',
           type: 'error',
         })
+        this.loading = false
       }
       this.loading = false
       // $trigger('success:open', 'Company successfully created!!')

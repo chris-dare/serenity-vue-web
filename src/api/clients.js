@@ -13,6 +13,13 @@ export default {
     return http.get(`${this.url}corporates/onboard/${companyId}/`)
   },
 
+  getClientAccount({
+    id = '',
+    providerId = '',
+  } = {}){
+    return http.get(`${this.url}${providerId}/client-accounts?companyId=${id}`)
+  },
+
   create(providerId, params) {
     return http.post(`${this.url}${providerId}/clients`, params)
   },

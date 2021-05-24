@@ -23,7 +23,18 @@ export default {
       })
 
     commit(SET_CURRENT_CLIENT, data.returnedData)
-    commit(SET_FORM, {})
+    return data
+  },
+
+  async getClientAccount({ commit, rootState}, payload) {
+    const provider = rootState.auth.provider
+    const { data } = await ClientAPI
+      .getClientAccount({providerId: provider.id, id: payload})
+      .catch(({data: error}) => {
+        throw error
+      })
+
+    commit(SET_CURRENT_CLIENT, data.returnedData)
     return data
   },
 
