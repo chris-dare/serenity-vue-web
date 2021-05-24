@@ -7,8 +7,14 @@ export default {
     return http.get(`${this.url}clients/`)
   },
 
+  getClientBy({
+    companyId = '',
+  } = {}) {
+    return http.get(`${this.url}corporates/onboard/${companyId}/`)
+  },
+
   create(providerId, params) {
-    return http.post(`${this.url}corporates/onboard`, params)
+    return http.post(`${this.url}${providerId}/clients`, params)
   },
 
   update(providerId, params) {

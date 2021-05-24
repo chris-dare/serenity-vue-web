@@ -2,7 +2,7 @@
   <div>
     <div class="w-4/5 mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Corporate Clients ({{ 5 }})</p>
+        <p class="text-xl font-bold">Corporate Clients ({{ filteredData.length }})</p>
         <router-link
           :to="{name:'CompanyInformation'}"
           tag="cv-button"
@@ -55,7 +55,7 @@
           <cv-data-table-cell>
             <router-link
               tag="div"
-              :to="`/clients/${Math.random()}`"
+              :to="`/clients/${row.main_branch_id}`"
               class="flex items-center cursor-pointer font-semibold"
             >
               View client
@@ -99,7 +99,7 @@ export default {
     }),
   },
 
-  created() {
+  mounted() {
     this.paginate = true
     this.searchTerms = ['company_name', 'tin_number', 'state']
     this.refresh()

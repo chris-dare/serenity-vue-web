@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { required, email } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import MultiStep from '@/mixins/multistep'
@@ -85,14 +85,17 @@ export default {
     }
   },
 
-  created() {
-    this.form = this.storeData
-  },
-
   computed: {
     ...mapState({
       storeData: (state) => state.clients.form,
     }),
+    ...mapGetters({
+      userName: 'auth/fullName',
+    }),
+  },
+
+  created() {
+    this.form = this.storeData
   },
 
   validations: {
@@ -118,7 +121,7 @@ export default {
         return
       }
       this.addToStoreData(this.form)
-      if (this.form.id) {
+      if (this.form.main_branch_id) {
         this.update()
       } else {
         this.save()
@@ -126,8 +129,18 @@ export default {
     },
     async save(){
       console.info(JSON.parse(JSON.stringify(this.storeData)))
+      let payload = {
+        company_name : this.form.company_name,
+        tin_number: this.form.tin_number,
+        address: this.form.address,
+        admin_first_name: this.form.admin_first_name,
+        admin_last_name: this.form.admin_last_name,
+        admin_phoneno : this.form.admin_phoneno,
+        admin_email: this.form.admin_email,
+        authorizedBy: this.userName,
+      }
       try {
-        await this.createClient(this.form)
+        await this.createClient(payload)
         this.$toast.open({
           message: 'Company successfully created!',
         })
