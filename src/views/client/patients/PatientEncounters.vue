@@ -1,6 +1,6 @@
 <template>
   <div class="mt-3 grid grid-cols-4 gap-4">
-    <div>
+    <div class="h-avg overflow-y-auto">
       <EncountersList
         name="current"
         :encounters="onGoingEncounters"
@@ -14,7 +14,6 @@
     <div class="col-span-3">
       <div class="flex justify-between items-center">
         <p class="text-serenity-placeholder my-3">Encounter Details</p>
-        <AddNewButton />
       </div>
       <EncounterDetailCard />
     </div>

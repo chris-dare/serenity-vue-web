@@ -24,31 +24,33 @@
             <cv-text-input
               v-model="detail.medication_request_dosage_instruction[0].frequency"
               label="Frequency"
-              type="text"
-              placeholder="eg twice daily"
+              type="number"
+              placeholder="eg 2 for twice frequency unit"
               class="inherit-full-input"
+            />
+            <MultiSelect
+              v-model="detail.medication_request_dosage_instruction[0].frequency_unit"
+              title="Frequency unit"
+              :options="units"
+              :multiple="false"
+              preselect
             />
             <cv-text-input
               v-model="detail.medication_request_dosage_instruction[0].period"
               label="Period"
-              type="text"
+              type="number"
               placeholder="eg 4 days"
               class="inherit-full-input"
             />
-            <cv-text-input
+
+            <MultiSelect
               v-model="detail.medication_request_dosage_instruction[0].period_unit"
-              label="Period unit"
-              placeholder="eg mml"
-              type="text"
-              class="inherit-full-input"
+              title="Period unit"
+              :options="units"
+              :multiple="false"
+              preselect
             />
-            <cv-text-input
-              v-model="detail.medication_request_dosage_instruction[0].frequency_unit"
-              label="Frequency unit"
-              placeholder="eg 50mml"
-              type="text"
-              class="inherit-full-input"
-            />
+            
             <cv-text-input
               v-model="detail.medication_request_dosage_instruction[0].strength"
               label="Strength"
@@ -125,13 +127,15 @@
         />
       </div>
 
-      <SeButton
-        :loading="loading"
-        :icon="add"
-        @click="submit"
-      >
-        Add Drug
-      </SeButton>
+      <div class="flex justify-end">
+        <SeButton
+          :loading="loading"
+          :icon="add"
+          @click="submit"
+        >
+          Save
+        </SeButton>
+      </div>
     
 
       <div>
@@ -250,6 +254,7 @@ export default {
       priorities: (state) => state.global.priorities,
       provider: (state) => state.auth.provider,
       encounter: (state) => state.encounters.currentEncounter,
+      units: (state) => state.global.units,
     }),
 
     ...mapGetters({

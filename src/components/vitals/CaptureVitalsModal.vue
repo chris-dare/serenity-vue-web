@@ -104,7 +104,9 @@ export default {
       try {
         this.loading = true
         await this.createVitals({ payload: this.form, patient: this.$route.params.id })
+        this.$toast.open({message: 'Vitals saved'})
         this.loading = false
+        this.close()
       } catch (error) {
         this.loading = false
       }

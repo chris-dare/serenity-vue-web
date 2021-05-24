@@ -1,6 +1,7 @@
 <template>
   <AppStatePage
     :loading="loading"
+    :error="error"
     class="max-w-7xl mx-auto"
   >
     <PatientInfoCard>
@@ -43,6 +44,7 @@ export default {
   data() {
     return {
       loading: false,
+      error: null,
     }
   },
 
@@ -58,15 +60,29 @@ export default {
 
   beforeRouteEnter (to, from, next) {
     next(async vm => {
-      vm.loading = true
-      await vm.initSinglePatientInformation(vm.id)
-      vm.loading = false
+      try {
+        vm.loading = true
+        await vm.initSinglePatientInformation(vm.id)
+        vm.loading = false
+      } catch (error) {
+        vm.error = true
+        vm.loading = false
+      }
+      
+      
+    })
+  },
+
+  beforeRouteLeave (to, from, next) {
+    next(async vm => {
+      await vm.refresh()
     })
   },
 
   methods: {
     ...mapActions({
       initSinglePatientInformation: 'patients/initSinglePatientInformation',
+      refresh: 'patients/refreshCurrentPatient',
     }),
   },
 }

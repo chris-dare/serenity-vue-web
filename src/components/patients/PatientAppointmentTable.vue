@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div class="space-y-4">
+    <!-- <Search
+      v-model="search"
+      placeholder="Search for slot"
+    /> -->
     <div>
       <DataTable
         ref="table"
@@ -66,12 +70,11 @@ export default {
   computed: {
     ...mapGetters({
       appointments: 'appointments/patientAppointments',
-      data: 'appointments/appointments',
     }),
 
-    // data() {
-    //   return this.appointments(this.$route.params.id)
-    // },
+    data() {
+      return this.appointments(this.$route.params.id)
+    },
   },
 }
 </script>

@@ -34,6 +34,7 @@ import {
   CvNumberInput,
   CvDataTableSkeleton,
   CvPagination,
+  CvLoading,
 } from '@carbon/vue/src/index'
 
 Vue.component(CvButton.name, CvButton)
@@ -67,6 +68,7 @@ Vue.component(CvMultiSelect.name, CvMultiSelect)
 Vue.component(CvNumberInput.name, CvNumberInput)
 Vue.component(CvDataTableSkeleton.name, CvDataTableSkeleton)
 Vue.component(CvPagination.name, CvPagination)
+Vue.component(CvLoading.name, CvLoading)
 
 Vue.use(CarbonCharts)
 // Vue.use(DisableAutocomplete)

@@ -8,6 +8,7 @@
         <EncounterPatientSummary
           :patient="patient"
           :vitals="vitals"
+          :status="status"
         />
 
         <div class="px-4">
@@ -91,6 +92,7 @@ export default {
 
     ...mapGetters({
       vitals: 'encounters/currentEncounterLatestVitals',
+      status: 'encounters/currentEncounterStatus',
     }),
 
     links() {

@@ -50,6 +50,6 @@ export default {
   },
 
   patientAppointments: (state, getters) => (id) => {
-    return getters.appointments.filter(appointment => appointment.id === id)
+    return getters.appointments.filter(appointment => appointment.patient.id === id)
   },
 }

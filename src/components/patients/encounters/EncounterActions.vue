@@ -21,7 +21,6 @@ export default {
   computed: {
     dashboardTypes() {
       return [
-        
         {
           label: 'Review patient',
           description: 'See patient medical record',
@@ -51,24 +50,27 @@ export default {
           path: 'EncounterMedications',
         },
         
-        // {
-        //   label: 'Care Plan',
-        //   description: 'See patient medical record',
-        //   type: 'care',
-        //   value: 'care',
-        // },
-        // {
-        //   label: 'Follow Up',
-        //   description: 'Book a follow up appointment',
-        //   type: 'followup',
-        //   value: 'followup',
-        // },
-        // {
-        //   label: 'Referral',
-        //   description: 'Refer the patient to another doctor',
-        //   type: 'referral',
-        //   value: 'referral',
-        // },
+        {
+          label: 'Care Plan',
+          description: 'See patient medical record',
+          type: 'care',
+          value: 'care',
+          path: 'EncounterCarePlan',
+        },
+        {
+          label: 'Follow Up',
+          description: 'Book a follow up appointment',
+          type: 'followup',
+          value: 'followup',
+          path: 'EncounterFollowUp',
+        },
+        {
+          label: 'Referral',
+          description: 'Refer the patient to another doctor',
+          type: 'referral',
+          value: 'referral',
+          path: 'EncounterReferral',
+        },
         {
           label: 'Close Encounter',
           description: 'End the encounter with patientx',
@@ -83,9 +85,10 @@ export default {
     ...mapActions({
       endEncounter: 'encounters/endEncounter',
     }),
+
     onCardClick(action) {
       if (action.path) {
-        return this.$router.push({ name: action.path})
+        return this.$router.push({ name: action.path })
       }
       switch (action.value) {
       case 'close':

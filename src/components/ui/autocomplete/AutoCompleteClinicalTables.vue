@@ -4,7 +4,7 @@
       <MultiSelect
         v-model="localValue"
         placeholder="Type to search"
-        title="Drug"
+        title="Condition"
         :options="options"
         :multiple="multiple"
         :searchable="true"

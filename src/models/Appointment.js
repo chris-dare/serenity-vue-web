@@ -18,6 +18,8 @@ export default class Appointment {
       isCancelled: this.data.status === 'cancelled',
       isPending: this.data.status === 'pending',
       isPast: isAfter(Date.now(), parseISO(this.data.slot.end)),
+      healthcare_service_name: this.data.Healthcareservice?.healthcare_service_name,
+      patient_name: this.data.patient?.full_name,
     }
 
     return data
