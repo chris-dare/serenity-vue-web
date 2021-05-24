@@ -1,6 +1,6 @@
 <template>
-  <div class="relative h-full">
-    <div class="space-y-8 divide-y divide-solid divide-subtle">
+  <div class="relative h-full flex flex-col">
+    <div class="space-y-8 divide-y divide-solid divide-subtle flex-1">
       <p class="font-semibold">Patient Review</p>
       <EncounterDetails />
     </div>

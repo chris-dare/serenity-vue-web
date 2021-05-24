@@ -47,14 +47,15 @@ export default {
   data() {
     return {
       options: [
-        { label: 'Height (cm)', prop: 'height', unit: 'cm'},
-        { label: 'Weight (kg)', prop: 'weight', unit: 'kg'},
-        { label: '(Calculated) BMI', prop: 'bmi', unit: ''},
-        { label: 'Temperature (C)', prop: 'temperature', unit: '°C'},
-        { label: 'Pulse', prop: 'pulse', unit: '/min'},
-        { label: 'Respiratory rate', prop: 'respiration_rate', unit: '/min'},
-        { label: 'Blood Pressure', prop: 'systolic', extra_prop: 'diastolic'},
-        { label: 'Arterial blood oxygen saturation', prop: 'saturation', unit: '%'},
+        { label: 'Height (cm)', prop: 'HEIGHT_CM', unit: 'cm'},
+        { label: 'Weight (kg)', prop: 'WEIGHT_KG', unit: 'kg'},
+        { label: '(Calculated) BMI', prop: 'BMI', unit: ''},
+        { label: 'Temperature (C)', prop: 'DEGREES_CELCIUS', unit: '°C'},
+        { label: 'Pulse', prop: 'PULSE', unit: '/min'},
+        { label: 'SPO2', prop: 'SPO2', unit: ''},
+        { label: 'Respiratory rate', prop: 'RESPIRATORY_RATE', unit: '/min'},
+        { label: 'Blood Pressure', prop: 'BLOOD_PRESSURE'},
+        { label: 'Arterial blood oxygen saturation', prop: 'OXYGEN_SATURATION', unit: '%'},
       ],
     }
   },

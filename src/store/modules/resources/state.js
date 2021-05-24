@@ -13,4 +13,8 @@ export default () => ({
   encounterStatuses: [],
   religiousAffiliations: [],
   genders: [],
+  unitTypes: [],
+  examUnitTypes: [],
+  socialUnitTypes: [],
+  vitalsUnitTypes: [],
 })

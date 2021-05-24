@@ -20,20 +20,11 @@
           :invalid-message="$utils.validateRequiredField($v, 'location_name')"
         />
 
-        <cv-select
+        <FormCountrySelect
           v-model="form.country"
-          label="Country"
-          class="inherit-full-input"
+          title="Country"
           placeholder="Select a country"
-        >
-          <cv-select-option
-            v-for="(country, index) in countries"
-            :key="index"
-            :value="country.alpha2Code"
-          >
-            {{ country.name }}
-          </cv-select-option>
-        </cv-select>
+        />
 
         <cv-text-input
           v-model="form.city"
@@ -87,7 +78,7 @@
 </template>
 
 <script>
-import { mapActions, mapState} from 'vuex'
+import { mapActions } from 'vuex'
 import { required, maxLength, minLength } from 'vuelidate/lib/validators'
 
 export default {
@@ -104,12 +95,6 @@ export default {
       visible: false,
       loading: false,
     }
-  },
-
-  computed: {
-    ...mapState({
-      countries: (state) => state.global.countries,
-    }),
   },
 
   events: {

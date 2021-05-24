@@ -1,5 +1,6 @@
 <template>
-  <div
+  <AppStatePage
+    :loading="loading"
     class="max-w-7xl mx-auto"
   >
     <PatientInfoCard>
@@ -12,7 +13,7 @@
       <router-view />
     </div>
     <SinglePatientModals />
-  </div>
+  </AppStatePage>
 </template>
 
 <script>

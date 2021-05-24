@@ -11,49 +11,11 @@
     <template slot="content">
       <div class="grid grid-cols-2 gap-4">
         <MixedInput
-          v-model="form.weight"
-          label="Weight"
-          suffix-text="Kg"
-        />
-        <MixedInput
-          v-model="form.height"
-          label="Height"
-          suffix-text="cm"
-        />
-        <MixedInput
-          v-model="form.bmi"
-          label="BMI (Calculated)"
-          suffix-text="bmi"
-        />
-        <MixedInput
-          v-model="form.temperature"
-          label="Temperature"
-          suffix-text="°C"
-        />
-        <MixedInput
-          v-model="form.systolic"
-          label="BP Systolic"
-          suffix-text="mmHg"
-        />
-        <MixedInput
-          v-model="form.diastolic"
-          label="BP Diastolic"
-          suffix-text="mmHg"
-        />
-        <MixedInput
-          v-model="form.pulse"
-          label="Pulse"
-          suffix-text="per min"
-        />
-        <MixedInput
-          v-model="form.respiration_rate"
-          label="Respiratory rate"
-          suffix-text="per min"
-        />
-        <MixedInput
-          v-model="form.saturation"
-          label="Arterial blood oxygen saturation"
-          suffix-text="%"
+          v-for="(vital, index) in units"
+          :key="index"
+          v-model="form[vital.code]"
+          :suffix-text="vital.display"
+          :label="vital.label"
         />
       </div>
       <div class="space-y-4 mt-8">
@@ -77,8 +39,7 @@
 </template>
 
 <script>
-import { decimal } from 'vuelidate/lib/validators'
-import { mapActions } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'CaptureVitalsModal',
@@ -93,7 +54,6 @@ export default {
 
   events: {
     'capture:vitals:open': function(){
-      this.$resetData()
       this.visible = true
     },
     'capture:vitals:close': function(){
@@ -101,13 +61,32 @@ export default {
     },
   },
 
-  validations: {
-    form: {
-      weight: { decimal },
-      height: { decimal },
-      bmi: { decimal },
-      saturation: { decimal },
-      temperature: { decimal },
+  computed: {
+    ...mapState({
+      vitalsOptions: state => state.resources.vitalsUnitTypes,
+    }),
+
+    ...mapGetters({
+      currentEncounterLatestVitals: 'encounters/currentEncounterLatestVitals',
+    }),
+
+    units() {
+      return this.vitalsOptions.map(option => {
+        option.label = option.code === 'DEGREES_CELCIUS' ? 'temperature' : option.code.split('_').join(' ').toLowerCase()
+        return option
+      })
+    },
+  },
+
+  watch: {
+    currentEncounterLatestVitals: {
+      immediate: true,
+      handler(val, oldVal) {
+        
+        if (val !== oldVal) {
+          this.form = { ...val }
+        }
+      },
     },
   },
 
@@ -121,15 +100,10 @@ export default {
     },
 
     async save() {
-      this.$v.$touch()
-      if (this.$v.$invalid) {
-        this.$toast.error('All fields should be decimal')
-        return
-      }
 
       try {
         this.loading = true
-        await this.createVitals({ payload: this.form, patient: this.$route.params.patient })
+        await this.createVitals({ payload: this.form, patient: this.$route.params.id })
         this.loading = false
       } catch (error) {
         this.loading = false

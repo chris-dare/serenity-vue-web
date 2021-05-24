@@ -24,11 +24,11 @@
       />
       <InfoSubBlock
         label="Weight"
-        :description="`${props.vitals.weight}kg`"
+        :description="`${props.vitals.WEIGHT_KG}kg`"
       />
       <InfoSubBlock
         label="Height"
-        :description="`${props.vitals.height}cm`"
+        :description="`${props.vitals.HEIGHT_CM}cm`"
       />
     </div>
   </div>

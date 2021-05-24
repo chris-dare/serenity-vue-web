@@ -3,6 +3,13 @@
     <SeForm class="space-y-8">
       <p class="font-semibold">Add diagnosis</p>
 
+      <AutoCompleteClinicalTables
+        v-model="form.condition"
+        :error-message="$utils.validateRequiredField($v, 'condition')"
+        title="Select or type diagnosis"
+        placeholder="Write the patients medical complaint"
+      />
+
       <MultiSelect
         v-model="form.role"
         title="Select a Diagnosis"
@@ -13,18 +20,9 @@
         :error-message="$utils.validateRequiredField($v, 'role')"
       />
 
-      <cv-text-area
-        v-model="form.condition"
-        type="text"
-        label="Notes"
-        placeholder="Write the patients medical complaint"
-        :invalid-message="$utils.validateRequiredField($v, 'condition')"
-        :rows="5"
-        class="se-input-gray"
-      />
-
       <SeButton
         :icon="add"
+        :loading="loading"
         @click="submit"
       >
         Add Status Localis
@@ -47,15 +45,9 @@
           <div
             v-for="(diagnosis, index) in currentEncounterDiagnosis"
             :key="index"
-            class="flex items-center space-x-2"
+            class="flex items-center space-x-4"
           >
-            <p>{{ diagnosis.condition }} - {{ $date.formatDate(diagnosis.created_at) }}</p>
-            <router-link
-              class="underline"
-              :to="{ name: 'EncounterReview', params: { ...$route.params } }"
-            >
-              view encounter
-            </router-link>
+            <p><span class="text-serenity-primary">{{ diagnosis.condition }}</span> - {{ $date.formatDate(diagnosis.created_at) }} - {{ diagnosis.role }}</p>
           </div>
         </div>
       </div>
@@ -92,6 +84,7 @@ export default {
       icon: ChevronRight,
       add: Add,
       form: {},
+      loading: false,
       roles: [ 'admission-diagnosis', 'discharge-diagnosis', 'chief-complaint', 'comorbidity-diagnosis', 'pre-op-diagnosis', 'post-op-diagnosis', 'billing' ],
     }
   },

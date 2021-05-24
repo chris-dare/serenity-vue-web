@@ -7,6 +7,10 @@ export default {
     return http.get(`${this.url}${providerId}/admin/resources`)
   },
 
+  countries() {
+    return http.get(`${this.url}valueset/country`)
+  },
+
   encounterClass() {
     return http.get(`${this.url}valueset/encounter-class`)
   },
@@ -20,7 +24,7 @@ export default {
   },
 
   paymentMethods() {
-    return http.get(`${this.url}valueset/payment-methods`)
+    return http.get(`${this.url}valueset/payment-method`)
   },
 
   maritalStatuses() {

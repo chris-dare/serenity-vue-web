@@ -3,7 +3,7 @@
     autocomplete="off"
     @submit.prevent
   >
-    <p class="bx--label">{{ label }}</p>
+    <p class="bx--label capitalize">{{ label }}</p>
     <div class="items-center relative">
       <cv-text-input
         v-model="localValue"

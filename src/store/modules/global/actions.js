@@ -1,4 +1,4 @@
-import axios from 'axios'
+import ResourcesAPI from '@/api/resources'
 import { SET_COUNTRIES, SET_GLOBAL_TYPE, SET_GLOBAL_LOCATION } from './mutation-types'
 
 export default {
@@ -38,14 +38,18 @@ export default {
     dispatch('roles/getRoles', null,{ root:true })
   },
 
-  getCountries({ commit }) {
-    axios.get('https://restcountries.eu/rest/v2/all')
-      .then(function (response) {
-        commit(SET_COUNTRIES, response.data)
-      })
-      .catch(function (error) {
-        throw error
-      })
+  async getCountries({ commit, state }) {
+    if (state.countries.length) {
+      return
+    }
+    try {
+      const { data } = await ResourcesAPI
+        .countries()
+      commit(SET_COUNTRIES, data)
+      return data
+    } catch (error) {
+      throw error || error.message
+    }
   },
 
   setworkspaceType({ commit }, type) {

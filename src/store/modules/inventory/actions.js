@@ -18,7 +18,6 @@ export default {
       const provider = rootState.auth.provider
       payload.provider_id = provider.id
       const { data } = await InventoryAPI.create(payload)
-      console.log(data)
       commit(UPDATE_INVENTORY, data.data)
     } catch (error) {
       Vue.prototype.$utils.error(error)
