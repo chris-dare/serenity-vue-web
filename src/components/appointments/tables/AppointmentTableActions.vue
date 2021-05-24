@@ -12,10 +12,15 @@
       <div
         v-for="(item, index) in data"
         :key="index"
-        class="h-12 flex items-center px-6 hover:bg-gray-50 capitalize"
+        
         @click="$emit(item)"
       >
-        {{ item }}
+        <div
+          v-if="$userCan(item === 'delete' ? 'pppointments.delete' : 'appointments.write')"
+          class="h-12 flex items-center px-6 hover:bg-gray-50 capitalize"
+        >
+          {{ item }}
+        </div>
       </div>
     </div>
   </Dropdown>

@@ -4,7 +4,6 @@ export default {
       service.locations= service.healthcare_service_locations && service.healthcare_service_locations.length ? service.healthcare_service_locations.map(service => service.display || service.location_name).join(', ') : '-'
       service.required= service.healthcare_service_appointment_required ? 'Yes' : 'No'
       service.virtual= service.virtual_service ? 'Yes' : 'No'
-      service.available_times= service.healthcare_service_available_times && service.healthcare_service_available_times.length ? `${service.healthcare_service_available_times[0].availableStartTime || 0} - ${service.healthcare_service_available_times[0].availableEndTime || 0} ` : '-'
       service.available_days= service.healthcare_service_available_times && service.healthcare_service_available_times.length ? service.healthcare_service_available_times[0].daysOfWeek.join(', ') : '-'
       service.description= service.healthcare_service_not_available_times && service.healthcare_service_not_available_times.length ? service.healthcare_service_not_available_times[0].description :'-'
       service.unavailable_times= ''
@@ -17,6 +16,14 @@ export default {
       if (service.healthcare_service_not_available_times && service.healthcare_service_not_available_times.length && service.healthcare_service_not_available_times[0].during) {
         service.unavailable_times = `${service.healthcare_service_not_available_times[0].during.start || 0} - ${service.healthcare_service_not_available_times[0].during.end || 0}`
       }
+
+      service.healthcare_service_available_times.map(serve => {
+        serve.availableStartTime = serve.availableStartTime.includes('Z') ? serve.availableStartTime.slice(0, -1) : serve.availableStartTime
+        serve.availableEndTime = serve.availableEndTime.includes('Z') ? serve.availableEndTime.slice(0, -1) : serve.availableEndTime
+        return serve
+      })
+
+      service.available_times= service.healthcare_service_available_times && service.healthcare_service_available_times.length ? `${service.healthcare_service_available_times[0].availableStartTime || 0} - ${service.healthcare_service_available_times[0].availableEndTime || 0} ` : '-'
 
       return service
     })

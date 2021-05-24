@@ -13,8 +13,10 @@
 
     <DataTable
       :columns="columns"
+      :pagination="pagination"
       :data="filteredData"
       :loading="loading"
+      @pagination="actionOnPagination"
     >
       <template #no-data>
         <div class="bg-white w-full h-auto flex flex-col justify-center items-center py-6">
@@ -124,7 +126,10 @@ export default {
     return {
       rowSelects: null,
       date: {},
-      filters: {},
+      filters: {
+        status: 'pending',
+        start: new Date(),
+      },
       columns: [
         'Patient',
         'Date/Time',
@@ -145,8 +150,13 @@ export default {
   },
 
   beforeMount() {
-    this.searchTerms = ['']
-    this.filter(false)
+    if (this.hideSearch) {
+      this.pageSizes = [5, 10, 15]
+      this.pageLength = 5
+    }
+    this.paginate = true
+    this.searchTerms = ['patient_name', 'healthcare_service_name']
+    this.filter(true)
   },
 
   methods: {
@@ -159,7 +169,19 @@ export default {
     async filter(refresh = true) {
       this.loading = true
       try {
-        await this.getData({refresh, filters: { ...this.filters } })
+        let filters = { ...this.filters }
+
+        if (this.filters.end) {
+          filters.end__lte = this.$date.formatQueryParamsDate(this.filters.end)
+          delete filters.end
+        }
+
+        if (this.filters.start) {
+          filters.start__gte = this.$date.formatQueryParamsDate(this.filters.start)
+          delete filters.start
+        }
+
+        await this.getData({ refresh, filters })
         this.loading = false
       } catch (error) {
         this.loading = false

@@ -364,6 +364,18 @@ const routes = [
             component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncounterMedications.vue'),
             meta: { noPadding: true },
           },
+          {
+            path: 'care-plan',
+            name: 'EncounterCarePlan',
+            component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncounterCarePlan.vue'),
+            meta: { noPadding: true },
+          },
+          {
+            path: 'referral',
+            name: 'EncounterReferral',
+            component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncountersReferral.vue'),
+            meta: { noPadding: true },
+          },
         ],
       },
       {

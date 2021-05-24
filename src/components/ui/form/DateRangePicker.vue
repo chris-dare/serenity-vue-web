@@ -5,6 +5,7 @@
       kind="single"
       date-label="Start date"
       class="inherit-full-input"
+      @change="$emit('change', $event)"
     />
     <cv-date-picker
       v-model="date.end"

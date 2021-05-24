@@ -198,6 +198,11 @@ export default {
     async save() {
     
       this.loading = true
+      this.form.healthcare_service_available_times.map(time => {
+        time.availableStartTime = this.convertToTimeZone(time.availableStartTime)
+        time.availableEndTime = this.convertToTimeZone(time.availableEndTime)
+        return time
+      })
       try {
         await this.createService(this.form)
         this.$toast.open({
@@ -217,6 +222,13 @@ export default {
 
     async update() {
       this.loading = true
+
+      this.form.healthcare_service_available_times.map(time => {
+        time.availableStartTime = this.convertToTimeZone(time.availableStartTime)
+        time.availableEndTime = this.convertToTimeZone(time.availableEndTime)
+        return time
+      })
+      
 
       this.addToStoreData(this.form)
 
@@ -254,6 +266,10 @@ export default {
 
     removeFromUnavailableDates(index) {
       this.form.healthcare_service_not_available_times.splice(index, 1)
+    },
+
+    convertToTimeZone(time) {
+      return `${time}Z`
     },
   },
 }

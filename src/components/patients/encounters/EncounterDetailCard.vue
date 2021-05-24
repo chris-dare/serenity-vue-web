@@ -40,17 +40,30 @@
         title="History of Presenting Complaint"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
       >
-        <EncounterDiagnosis :data="currentEncounterComplaints" />
+        <p class="text-gray-500">{{ currentEncounterHistoryComplaint }}</p>
       </ToggleList>
       <ToggleList
         title="Patient Vitals"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
       >
-        <EncounterPatientVitals />
+        <VitalsDetail
+          small
+          :form="vitals"
+        />
       </ToggleList>
-      <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
-        <div slot="title">
-          <p class="text-serenity-primary">Social History</p>
+      <ToggleList
+        title="Social History"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      >
+        <div class="py-6 space-y-4">
+          <div
+            v-for="(item, index) in currentEncounterSocialHistory"
+            :key="index"
+            class=" capitalize grid grid-cols-2"
+          >
+            <div class="text-serenity-primary">{{ index.split("_").join(" ").toLowerCase() }}</div>
+            <div>{{ item || 'N/A' }}</div>
+          </div>
         </div>
       </ToggleList>
       <ToggleList
@@ -65,10 +78,11 @@
       >
         <EncounterDiagnosticReports />
       </ToggleList>
-      <ToggleList class="border-solid border-t border-serenity-subtle-border px-4 pt-4">
-        <div slot="title">
-          <p class="text-serenity-primary">Review of Systems</p>
-        </div>
+      <ToggleList
+        title="Review of Systems"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      >
+        <EncounterReviewSystemTable />
       </ToggleList>
       <ToggleList
         title="Medications / Treatment Plan"
@@ -96,7 +110,6 @@
 </template>
 
 <script>
-import EncounterPatientVitals from './EncounterPatientVitals'
 import EncounterDiagnosis from './EncounterDiagnosis'
 import EncounterNotes from './EncounterNotes'
 import EncounterDiagnosisModal from './EncounterDiagnosisModal'
@@ -108,7 +121,15 @@ import isEmpty from 'lodash/isEmpty'
 export default {
   name: 'EncounterDetailCard',
 
-  components: { EncounterPatientVitals, EncounterDiagnosis, EncounterDiagnosisModal, EncounterNotes, EncounterServiceRequests, EncounterDiagnosticReports },
+  components: {
+    VitalsDetail: () => import(/* webpackPrefetch: true */ '@/components/vitals/VitalsDetail'),
+    EncounterDiagnosis,
+    EncounterDiagnosisModal,
+    EncounterNotes,
+    EncounterServiceRequests,
+    EncounterDiagnosticReports,
+    EncounterReviewSystemTable: () => import(/* webpackPrefetch: true */ './EncounterReviewSystemTable'),
+  },
 
   computed: {
     ...mapState({
@@ -119,6 +140,10 @@ export default {
       currentEncounterComplaints: 'encounters/currentEncounterComplaints',
       currentEncounterDiagnosis: 'encounters/currentEncounterDiagnosis',
       currentEncounterPresentingComplaint: 'encounters/currentEncounterPresentingComplaint',
+      currentEncounterHistoryComplaint: 'encounters/currentEncounterHistoryComplaint',
+      vitals: 'encounters/currentEncounterLatestVitals',
+      currentEncounterSocialHistory: 'encounters/currentEncounterSocialHistory',
+      currentEncounterExamSystems: 'encounters/currentEncounterExamSystems',
     }),
     
     hasNoCurrentEncounter() {

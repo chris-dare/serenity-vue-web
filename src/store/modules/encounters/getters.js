@@ -14,6 +14,11 @@ export default {
     return state.encounters.filter(encounter => encounter.status !== 'finished' || (!encounter.end_time && isAfter(Date.now(), parseISO(encounter.start_time))))
   },
 
+  currentEncounterStatus: state => {
+    if (!state.currentEncounter) return ''
+    return state.currentEncounter.status.split('-').join(' ')
+  },
+
   currentEncounterLocations: state => {
     if (!state.currentEncounter) return []
     return state.currentEncounter.encounter_location
@@ -22,6 +27,11 @@ export default {
   currentEncounterNotes: state => {
     if (!state.currentEncounter) return []
     return state.currentEncounter.encounter_patient_notes
+  },
+
+  currentEncounterCarePlans: state => {
+    if (!state.currentEncounter || !state.currentEncounter.encounter_care_plan) return []
+    return state.currentEncounter.encounter_care_plan
   },
 
   currentEncounterDiagnosis: state => {
@@ -34,9 +44,14 @@ export default {
     return state.currentEncounter.encounter_diagnosis.filter(diag => diag.role.includes('complaint'))
   },
 
-  currentEncounterPresentingComplaint: (state, getters) => {
-    if (!getters.currentEncounterComplaints.length) return 'No complaint available'
-    return getters.currentEncounterComplaints[0].condition
+  currentEncounterPresentingComplaint: (state) => {
+    if (!state.currentEncounter) return 'No complaint available'
+    return state.currentEncounter.chief_complaint
+  },
+
+  currentEncounterHistoryComplaint: (state) => {
+    if (!state.currentEncounter) return 'No complaint available'
+    return state.currentEncounter.history_of_presenting_illness
   },
 
   currentEncounterServiceRequests: (state, getters, rootState) => {
@@ -66,7 +81,7 @@ export default {
   
     const sortedVitals = sortByDate(getters.currentEncounterObservations, 'issued')
     options.forEach(option => {
-      const observation = sortedVitals.find(obs => obs.code === option)
+      const observation = sortedVitals.find(obs => obs.unit === option)
       vitals[option] = observation ? observation.value : null
     })
 
@@ -90,11 +105,37 @@ export default {
     return vitals
   },
 
+  currentEncounterSocialHistory: (state, getters, rootState, rootGetters) => {
+    const observations = rootGetters['patients/patientObservations']
+    if (!observations) return {}
+
+    const currentEncounterObservations = observations.filter(enc => enc.encounter === state.currentEncounter.id)
+
+    const history = rootState.resources.socialUnitTypes.map(social => social.code)
+    let vitals = {}
+
+    const sortedObservations = sortByDate(currentEncounterObservations, 'issued')
+  
+    history.forEach(option => {
+      const observation = sortedObservations.find(obs => obs.unit === option)
+      vitals[option] = observation ? observation.value : ''
+    })
+
+    return vitals
+  },
+
   currentPatientExamSystems: (state, getters, rootState, rootGetters) => {
     const observations = rootGetters['patients/patientObservations']
     if (!observations) return {}
 
     return observations.filter(obs => obs.observation_category[0].display === 'exam' && obs.value)
+  },
+
+  currentEncounterExamSystems: (state, getters, rootState, rootGetters) => {
+    const observations = rootGetters['patients/patientObservations']
+    if (!observations) return {}
+
+    return observations.filter(obs => obs.observation_category[0].display === 'exam' && obs.value && obs.encounter === state.currentEncounter.id)
   },
 }
 

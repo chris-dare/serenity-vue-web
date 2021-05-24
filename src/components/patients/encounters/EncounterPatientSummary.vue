@@ -13,7 +13,7 @@
         </p>
         <div class="mt-2 flex items-center">
           <div class="bg-green-700 w-3 h-3 rounded-full mr-2" />
-          <p>Delayed</p>
+          <p class="capitalize">{{ props.status }}</p>
         </div>
       </div>
     </div>
@@ -24,11 +24,11 @@
       />
       <InfoSubBlock
         label="Weight"
-        :description="`${props.vitals.WEIGHT_KG}kg`"
+        :description="`${props.vitals.WEIGHT_KG || 0}kg`"
       />
       <InfoSubBlock
         label="Height"
-        :description="`${props.vitals.HEIGHT_CM}cm`"
+        :description="`${props.vitals.HEIGHT_CM || 0}cm`"
       />
     </div>
   </div>

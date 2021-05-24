@@ -5,7 +5,7 @@
       placeholder="Search for medication or date or condition"
     />
     <div class="my-4 flex items-center justify-between">
-      <div class="space-x-2">
+      <div class="space-x-2 flex items-center">
         <SeButton>
           All ({{ 23 }})
         </SeButton>
