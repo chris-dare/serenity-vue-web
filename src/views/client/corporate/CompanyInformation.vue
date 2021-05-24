@@ -19,7 +19,7 @@
             class="inherit-full-input"
             :error-message="$utils.validateRequiredField($v, 'email')"
           />
-          <PhoneInput
+          <PhoneInput 
             v-model="form.phone_number"
             label="Phone number (required)"
             placeholder="eg 0349990390"
@@ -41,8 +41,6 @@
           type="text"
           class="w-full"
         />
-            
-           
 
         <div class="flex items-center justify-between mt-12 mb-6 w-full">
           <SeButton
@@ -90,8 +88,8 @@ export default {
 
   created() {
     this.form = this.storeData
+    console.log(this.storeData)
   },
-
 
   validations: {
     form: {

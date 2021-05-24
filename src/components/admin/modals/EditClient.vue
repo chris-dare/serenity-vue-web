@@ -69,7 +69,7 @@ import { mapActions } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 
 export default {
-  name: 'AddEditInventory',
+  name: 'AddEditClient',
 
   data() {
     return {
@@ -80,6 +80,7 @@ export default {
       loading: false,
       visible: false,
       type: 'add',
+      vertical: true,
     }
   },
 
@@ -106,10 +107,6 @@ export default {
       createInventory: 'inventory/createInventory',
       updateInventory: 'inventory/updateInventory',
     }),
-
-    getValue(resource,permission){
-      return `${resource}.${permission}`
-    },
 
     submit(){
       this.$v.$touch()

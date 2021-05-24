@@ -4,18 +4,18 @@
       <div class="flex">
         <div class="flex items-center">
           <div class="space-y-1">
-            <p class="font-semibold">{{ client && client.company_name }}</p>
+            <p class="font-semibold">{{ client && client.companyName }}</p>
             <p class="text-secondary">
               Corporate Client
             </p>
             <div class="flex items-center">
-              <p>Client TIN No: {{ client && client.tin_number }}</p>
+              <p>Client TIN No: {{ client && client.company.tin_number }}</p>
             </div>
           </div>
         </div>
       </div>
       <div class="flex items-center space-x-2">
-        <div v-if="client && client.state != 'verified'">
+        <div v-if="client && client.company.state != 'verified'">
           <!-- <SeButton>
             Raise claim
           </SeButton> -->
@@ -33,12 +33,34 @@
     </div>
     <div class="bg-white px-4 py-6 grid grid-cols-5 divide-x divide-gray-100 divide-solid">
       <div
-        v-for="(item, index) in items"
-        :key="index"
         class="flex flex-col items-center justify-center h-24"
       >
-        <p class="text-xl font-semibold">{{ item.value }}</p>
-        <p class="text-secondary text-sm">{{ item.label }}</p>
+        <p class="text-xl font-semibold">{{ client && client.state }}</p>
+        <p class="text-secondary text-sm">Account type</p>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center h-24"
+      >
+        <p class="text-xl font-semibold">{{ client && client.amount }}</p>
+        <p class="text-secondary text-sm">Current Balance</p>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center h-24"
+      >
+        <p class="text-xl font-semibold">{{ client && client.creditDurationInDays || '-' }}</p>
+        <p class="text-secondary text-sm">Credit duration</p>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center h-24"
+      >
+        <p class="text-xl font-semibold">{{ client && client.maximum_employees_allowed || '-' }}</p>
+        <p class="text-secondary text-sm">Maximum employees allowed</p>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center h-24"
+      >
+        <p class="text-xl font-semibold">{{ client && $date.formatDate(client.creditStartDate, 'yyyy/MM/dd') }}</p>
+        <p class="text-secondary text-sm">Credit start date</p>
       </div>
     </div>
 
@@ -146,13 +168,7 @@ export default {
       loading: false,
       add: Add,
       date: '',
-      items: [
-        {label: 'Account type', value: 'limited-debit-active'},
-        {label: 'Current balance', value: 125},
-        {label: 'Credit start date', value: '08-Feb-2021'},
-        {label: 'Credit duration', value: '30 days'},
-        {label: 'Credit end date', value: '38-Feb-2021'},
-      ],
+      clientAccount: [],
       selected: 'about',
       links: [
         { label: 'About', value: 'about' },
@@ -177,17 +193,17 @@ export default {
       return [
         { label: 'State', value: this.client.state },
         { label: 'Authorized By', value: this.client.authorizedBy },
-        { label: 'Address', value: this.client.address },
+        { label: 'Address', value: this.client.company.address },
         // { label: 'Email', value: this.$faker().lorem.word() },
       ]
     },
     
     emergencyFields() {
       return [
-        { label: 'First Name', value: this.client.admin_first_name },
-        { label: 'Last Name', value: this.client.admin_last_name },
-        { label: 'Phone Number', value: this.client.admin_phoneno },
-        { label: 'Admin Email', value: this.client.admin_email },
+        { label: 'First Name', value: this.client.company.admin_first_name },
+        { label: 'Last Name', value: this.client.company.admin_last_name },
+        { label: 'Phone Number', value: this.client.company.admin_phoneno },
+        { label: 'Admin Email', value: this.client.company.admin_email },
       ]
     },
   },
@@ -195,7 +211,7 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(async vm => {
       vm.loading = true
-      await vm.loadClient()
+      await vm.loadClientAccount()
       vm.loading = false
     })
   },
@@ -203,14 +219,26 @@ export default {
   methods: {
     ...mapActions({
       getClient: 'clients/getClientBy',
+      getClientAccount: 'clients/getClientAccount',
       addToStoreData: 'clients/addToCurrentUser',
     }),
     goBack() {
       this.$router.go(-1)
     },
     editClient(){
+      this.addToStoreData(this.client.company)
       this.$router.push({name:'CompanyInformation'})
-      this.addToStoreData(this.client)
+    },
+    loadClientAccount() {
+      let id = this.$route.params.id
+      console.log('load', this.$route.params.id)
+      this.getClientAccount( id )
+        .then( data => {
+          this.client = data.returnedData
+        })
+        .catch(() => {
+          // this.goBack()
+        })
     },
     loadClient() {
       let id = this.$route.params.id
