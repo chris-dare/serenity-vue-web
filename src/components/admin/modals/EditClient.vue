@@ -9,7 +9,28 @@
     <template slot="content">
       <div class="space-y-8">
         <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'Update' }} client account</p>
-        <div class="grid grid-cols-2 gap-8">
+        <div
+          v-if="type === 'update'"
+          class="grid grid-cols-1 gap-8"
+        >
+          <cv-text-input
+            v-model="form.company_name"
+            type="text"
+            label="Company name"
+            placeholder=""
+            disabled
+          />
+          <!-- <cv-text-input
+            v-model="form.credit_duration"
+            type="number"
+            label="Credit duration in days"
+            placeholder=""
+          /> -->
+        </div>
+        <div
+          v-else
+          class="grid grid-cols-2 gap-8"
+        >
           <cv-text-input
             v-model="form.maximum_employees_allowed"
             type="number"
@@ -23,21 +44,25 @@
             placeholder=""
           />
         </div>
-        <div class="grid justify-center">
-          <cv-radio-group 
-            :vertical="vertical"
-          >
+        <div
+          v-if="type === 'update'"
+          class="grid justify-center"
+        >
+          <cv-radio-group>
             <cv-radio-button
+              v-model="form.state"
               name="Verified"
               label="Verified"
               value="verified"
             />
             <cv-radio-button
+              v-model="form.state"
               name="Unverified"
               label="Unverfied"
               value="unverified"
             />
             <cv-radio-button
+              v-model="form.state"
               name="Suspended"
               label="Suspended"
               value="suspended"
@@ -45,6 +70,7 @@
           </cv-radio-group>
         </div>
         <cv-text-input
+          v-else
           v-model="form.amount"
           type="number"
           label="Amount"
@@ -56,7 +82,7 @@
             :loading="loading"
             @click="submit"
           >
-            {{ form.id ? 'Update client account' : 'Update client account' }}
+            {{ type === 'update' ? 'Update client account' : 'Edit client' }}
           </SeButton>
         </div>
       </div>
@@ -73,14 +99,11 @@ export default {
 
   data() {
     return {
-      form: {
-        sub_group: 'Medication',
-        category: 'medical-stock',
-      },
       loading: false,
       visible: false,
       type: 'add',
       vertical: true,
+      form: {},
     }
   },
 

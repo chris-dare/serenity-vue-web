@@ -20,11 +20,16 @@
             class="inherit-full-input"
             :invalid-message="$utils.validateRequiredField($v, 'admin_last_name')"
           />
-          <PhoneInput
+          <!-- <PhoneInput
             v-model="form.admin_phoneno"
             label="Phone number (required)"
             placeholder="eg 0349990390"
             @input="$v.$touch()"
+          /> -->
+          <MsisdnPhoneInput
+            v-model="form.admin_phoneno"
+            label="Phone number (required)"
+            :error-message="$utils.validateRequiredField($v, 'admin_phoneno')"
           />
           <cv-text-input
             v-model="form.admin_email"
@@ -108,6 +113,7 @@ export default {
     form: {
       admin_first_name: { required },
       admin_last_name: { required },
+      admin_phoneno: { required },
       admin_email: { email },
     },
   },

@@ -20,8 +20,20 @@ export default {
     return http.get(`${this.url}${providerId}/client-accounts?companyId=${id}`)
   },
 
+  getClientBills({
+    id = '',
+    providerId = '',
+  } = {}){
+    return http.get(`${this.url}${providerId}/corporates/${id}/bills`)
+  },
+
+
   create(providerId, params) {
     return http.post(`${this.url}${providerId}/clients`, params)
+  },
+
+  deposit(params) {
+    return http.post(`${this.url}client-accounts/deposit`, params)
   },
 
   update(providerId, params) {

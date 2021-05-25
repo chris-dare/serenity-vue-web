@@ -14,21 +14,21 @@
           />
           <cv-text-input
             v-model="form.email"
+            type="email"
             label="Email (required)"
             placeholder="Email address"
             class="inherit-full-input"
             :error-message="$utils.validateRequiredField($v, 'email')"
           />
-          <PhoneInput 
+          <MsisdnPhoneInput
             v-model="form.phone_number"
             label="Phone number (required)"
-            placeholder="eg 0349990390"
-            @input="$v.$touch()"
+            :error-message="$utils.validateRequiredField($v, 'phone_number')"
           />
           <cv-text-input
             v-model="form.tin_number"
-            label="TIN Number"
-            placeholder="TIN Number"
+            label="TIN"
+            placeholder="TIN"
             class="inherit-full-input"
             :invalid-message="$utils.validateRequiredField($v, 'tin_number')"
           />
@@ -88,13 +88,13 @@ export default {
 
   created() {
     this.form = this.storeData
-    console.log(this.storeData)
   },
 
   validations: {
     form: {
       company_name: { required },
-      email: { email },
+      email: { email: email(), required },
+      phone_number: { required },
       tin_number: { minLength: minLength(10)},
     },
   },
@@ -102,7 +102,7 @@ export default {
   methods: {
     ...mapActions({
       addToStoreData: 'clients/addToCurrentUser',
-      refresh: 'clients/refreshForm',
+      // refresh: 'clients/refreshForm',
     }),
     actionChange() {},
     save() {
