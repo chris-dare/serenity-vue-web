@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="flex items-center space-x-2">
-        <div v-if="client && client.company.state != 'verified'">
+        <div v-if="client && client.company.state === 'verified'">
           <!-- <SeButton>
             Raise claim
           </SeButton> -->
@@ -25,7 +25,7 @@
         </div>
         <SeButton 
           v-else 
-          @click="$trigger('client:add:open')"
+          @click="$trigger('client:edit:open', {...client.company})"
         >
           Verify Client
         </SeButton>
@@ -85,11 +85,11 @@
     >
       <PatientSummaryCard
         title="General Information"
-        :fields="generalFields"
+        :fields="companyFields"
       />
       <PatientSummaryCard
         title="Admin Information"
-        :fields="emergencyFields"
+        :fields="adminFields"
       />
     </div>
     <div v-else>
@@ -103,51 +103,47 @@
           }"
         />
       </div>
-      <cv-data-table
+      <DataTable
+        ref="table"
         :columns="columns"
+        :loading="loading"
         :pagination="{
           numberOfItems: 5,
           pageSizes: [5, 10, 15, 20, 25]
         }"
-        :data="[]"
+        :data="bills" 
       >
-        <template slot="data">
-          <cv-data-table-row
-            v-for="(row, rowIndex) in 5"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
-          >
-            <cv-data-table-cell>
-              {{ $date.formatDate($faker().date.recent(), 'yyyy/MM/dd') }}
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                {{ Math.random() }}
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>Specialist Appointment</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>Virtual</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ $faker().phone.phoneNumber() }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ $faker().phone.phoneNumber() }}</p>
-              </div>
-            </cv-data-table-cell>
-          </cv-data-table-row>
+        <template #default="{row}">
+          <cv-data-table-cell>
+            {{ $date.formatDate(row.transactionData.created_at, 'yyyy/MM/dd') }}
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              {{ row.transactionData.id }}
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.providerDetails.name }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.transactionData.amount }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.transactionData.createdBy }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.transactionData.status }}</p>
+            </div>
+          </cv-data-table-cell>
         </template>
-      </cv-data-table>
+      </DataTable>
     </div>
     <EditClient />
   </div>
@@ -168,77 +164,98 @@ export default {
       loading: false,
       add: Add,
       date: '',
+      bills: [],
       clientAccount: [],
       selected: 'about',
       links: [
         { label: 'About', value: 'about' },
         { label: 'Bills', path: 'bills' },
       ],
+      form: {},
+      client: '',
       columns: [
         'Date',
         'Bill ID',
-        'Service',
+        'Service Provider',
         'Price',
         'Practitioner',
-        'Payment Method',
+        'Status',
       ],
     }
   },
 
   computed: {
     ...mapState({
-      client: (state) => state.clients.client,
+      // client: (state) => state.clients.client,
+      storeData: (state) => state.clients.form,
     }),
-    generalFields() {
+    companyFields() {
       return [
-        { label: 'State', value: this.client.state },
-        { label: 'Authorized By', value: this.client.authorizedBy },
-        { label: 'Address', value: this.client.company.address },
+        { label: 'State', value: this.client && this.client.state },
+        { label: 'Authorized By', value: this.client && this.client.authorizedBy },
+        { label: 'Address', value: this.client && this.client.company.address },
         // { label: 'Email', value: this.$faker().lorem.word() },
       ]
     },
     
-    emergencyFields() {
+    adminFields() {
       return [
-        { label: 'First Name', value: this.client.company.admin_first_name },
-        { label: 'Last Name', value: this.client.company.admin_last_name },
-        { label: 'Phone Number', value: this.client.company.admin_phoneno },
-        { label: 'Admin Email', value: this.client.company.admin_email },
+        { label: 'First Name', value: this.client && this.client.company.admin_first_name },
+        { label: 'Last Name', value: this.client && this.client.company.admin_last_name },
+        { label: 'Phone Number', value: this.client && this.client.company.admin_phoneno },
+        { label: 'Admin Email', value: this.client && this.client.company.admin_email },
       ]
     },
   },
 
-  beforeRouteEnter (to, from, next) {
-    next(async vm => {
-      vm.loading = true
-      await vm.loadClientAccount()
-      vm.loading = false
-    })
+  // beforeRouteEnter (to, from, next) {
+  //   next(async vm => {
+  //     vm.loading = true
+  //     vm.loading = false
+  //   })
+  // },
+
+  created(){
+    this.loadClientAccount()
+    this.loadClientBills()
   },
 
   methods: {
     ...mapActions({
       getClient: 'clients/getClientBy',
       getClientAccount: 'clients/getClientAccount',
-      addToStoreData: 'clients/addToCurrentUser',
+      getClientBills: 'clients/getClientBills',
+      addToStoreClient: 'clients/addToCurrentClient',
     }),
     goBack() {
       this.$router.go(-1)
     },
     editClient(){
-      this.addToStoreData(this.client.company)
+      this.addToStoreClient(this.client.company)
       this.$router.push({name:'CompanyInformation'})
     },
-    loadClientAccount() {
+    async loadClientAccount() {
       let id = this.$route.params.id
-      console.log('load', this.$route.params.id)
-      this.getClientAccount( id )
+      await this.getClientAccount( id )
         .then( data => {
           this.client = data.returnedData
         })
         .catch(() => {
           // this.goBack()
         })
+    },
+    async loadClientBills() {
+      this.loading = true
+      let id = this.$route.params.id
+      await this.getClientBills( id )
+        .then( data => {
+          this.bills = data.returnedData
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
+      this.loading = false
     },
     loadClient() {
       let id = this.$route.params.id
