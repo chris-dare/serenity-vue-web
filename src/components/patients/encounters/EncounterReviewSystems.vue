@@ -100,6 +100,7 @@ export default {
         await this.createSystem({ payload: this.form, patient: this.$route.params.id })
         this.loading = false
         this.form = {}
+        this.$v.$reset()
       } catch (error) {
         this.loading = false
       }
