@@ -66,7 +66,7 @@
             :loading="loading"
             @click="submit"
           >
-            Create company
+            {{ form.main_branch_id ? 'Update company' : 'Create company' }}
           </cv-button>
         </div>
       </div>
@@ -169,8 +169,24 @@ export default {
       this.loading = false
       // $trigger('success:open', 'Company successfully created!!')
     },
-    update(){
+    async update(){
+      this.loading = true
       console.info(JSON.parse(JSON.stringify(this.storeData)))
+      try {
+        await this.updateClient(this.form)
+        this.$toast.open({
+          message: 'Company successfully updated!',
+        })
+        this.loading = false
+        this.$router.push({name: 'CorporateClients'})
+      } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+      }
+      this.loading = false
     },
   },
 }

@@ -4,21 +4,27 @@
       <div class="flex">
         <div class="flex items-center">
           <div class="space-y-1">
-            <p class="font-semibold">{{ client && client.companyName }}</p>
+            <p class="font-semibold">{{ selectedClient && selectedClient.companyName }}</p>
             <p class="text-secondary">
               Corporate Client
             </p>
             <div class="flex items-center">
-              <p>Client TIN No: {{ client && client.company.tin_number }}</p>
+              <p>Client TIN No: {{ selectedClient && selectedClient.company.tin_number }}</p>
             </div>
           </div>
         </div>
       </div>
       <div class="flex items-center space-x-2">
-        <div v-if="client && client.company.state === 'verified'">
-          <!-- <SeButton>
+        <div 
+          v-if="selectedClient && selectedClient.company.state === 'verified'"
+          class="grid grid-cols-2 " 
+        >
+          <SeButton 
+            class="mx-2"
+            @click="$trigger('client:add:open', {...client})"
+          >
             Raise claim
-          </SeButton> -->
+          </SeButton>
           <SeButton @click="editClient">
             Edit Client
           </SeButton>
@@ -35,31 +41,31 @@
       <div
         class="flex flex-col items-center justify-center h-24"
       >
-        <p class="text-xl font-semibold">{{ client && client.state }}</p>
+        <p class="text-xl font-semibold">{{ selectedClient && selectedClient.state }}</p>
         <p class="text-secondary text-sm">Account type</p>
       </div>
       <div
         class="flex flex-col items-center justify-center h-24"
       >
-        <p class="text-xl font-semibold">{{ client && client.amount }}</p>
+        <p class="text-xl font-semibold">{{ selectedClient && selectedClient.amount }}</p>
         <p class="text-secondary text-sm">Current Balance</p>
       </div>
       <div
         class="flex flex-col items-center justify-center h-24"
       >
-        <p class="text-xl font-semibold">{{ client && client.creditDurationInDays || '-' }}</p>
+        <p class="text-xl font-semibold">{{ selectedClient && selectedClient.creditDurationInDays || '-' }}</p>
         <p class="text-secondary text-sm">Credit duration</p>
       </div>
       <div
         class="flex flex-col items-center justify-center h-24"
       >
-        <p class="text-xl font-semibold">{{ client && client.maximum_employees_allowed || '-' }}</p>
+        <p class="text-xl font-semibold">{{ selectedClient && selectedClient.maximum_employees_allowed || '-' }}</p>
         <p class="text-secondary text-sm">Maximum employees allowed</p>
       </div>
       <div
         class="flex flex-col items-center justify-center h-24"
       >
-        <p class="text-xl font-semibold">{{ client && $date.formatDate(client.creditStartDate, 'yyyy/MM/dd') }}</p>
+        <p class="text-xl font-semibold">{{ selectedClient && $date.formatDate(client.creditStartDate, 'yyyy/MM/dd') }}</p>
         <p class="text-secondary text-sm">Credit start date</p>
       </div>
     </div>
@@ -173,6 +179,7 @@ export default {
       ],
       form: {},
       // client: '',
+      selectedClient: {},
       columns: [
         'Date',
         'Bill ID',
@@ -191,19 +198,19 @@ export default {
     }),
     companyFields() {
       return [
-        { label: 'State', value: this.client && this.client.state },
-        { label: 'Authorized By', value: this.client && this.client.authorizedBy },
-        { label: 'Address', value: this.client && this.client.company.address },
+        { label: 'State', value: this.selectedClient && this.selectedClient.state },
+        { label: 'Authorized By', value: this.selectedClient && this.selectedClient.authorizedBy },
+        { label: 'Address', value: this.selectedClient && this.selectedClient.company.address },
         // { label: 'Email', value: this.$faker().lorem.word() },
       ]
     },
     
     adminFields() {
       return [
-        { label: 'First Name', value: this.client && this.client.company.admin_first_name },
-        { label: 'Last Name', value: this.client && this.client.company.admin_last_name },
-        { label: 'Phone Number', value: this.client && this.client.company.admin_phoneno },
-        { label: 'Admin Email', value: this.client && this.client.company.admin_email },
+        { label: 'First Name', value: this.selectedClient && this.selectedClient.company.admin_first_name },
+        { label: 'Last Name', value: this.selectedClient && this.selectedClient.company.admin_last_name },
+        { label: 'Phone Number', value: this.selectedClient && this.selectedClient.company.admin_phoneno },
+        { label: 'Admin Email', value: this.selectedClient && this.selectedClient.company.admin_email },
       ]
     },
   },
@@ -216,6 +223,7 @@ export default {
   // },
 
   created(){
+    this.selectedClient = this.client
     this.loadClientAccount()
     this.loadClientBills()
   },
@@ -231,14 +239,14 @@ export default {
       this.$router.go(-1)
     },
     editClient(){
-      this.addToStoreClient(this.client.company)
+      this.addToStoreClient(this.selectedClient.company)
       this.$router.push({name:'CompanyInformation'})
     },
     async loadClientAccount() {
       let id = this.$route.params.id
       await this.getClientAccount( id )
         .then( data => {
-          this.client = data.returnedData
+          this.selectedClient = data.returnedData
         })
         .catch(() => {
           // this.goBack()
@@ -262,7 +270,7 @@ export default {
       console.log('load', this.$route.params.id)
       this.getClient( id )
         .then(({data}) => {
-          this.client = data.returnedData
+          this.selectedClient = data.returnedData
         })
         .catch(() => {
           // this.goBack()
