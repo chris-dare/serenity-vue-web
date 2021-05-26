@@ -172,7 +172,7 @@ export default {
         { label: 'Bills', path: 'bills' },
       ],
       form: {},
-      client: '',
+      // client: '',
       columns: [
         'Date',
         'Bill ID',
@@ -186,7 +186,7 @@ export default {
 
   computed: {
     ...mapState({
-      // client: (state) => state.clients.client,
+      client: (state) => state.clients.client,
       storeData: (state) => state.clients.form,
     }),
     companyFields() {

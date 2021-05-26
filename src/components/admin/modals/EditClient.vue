@@ -77,7 +77,13 @@
           placeholder=""
         />
         <div class="flex justify-between items-center">
-          <p class="text-center">Cancel</p>
+          <p 
+            class="text-center" 
+            style="cursor: pointer" 
+            @click="visible = false"
+          >
+            Cancel
+          </p>
           <SeButton 
             :loading="loading"
             @click="submit"
@@ -92,7 +98,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { required } from 'vuelidate/lib/validators'
+// import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'AddEditClient',
@@ -108,9 +114,6 @@ export default {
   },
 
   validations: {
-    form: {
-      category: { required },
-    },
   },
 
   events: {
@@ -127,8 +130,8 @@ export default {
 
   methods: {
     ...mapActions({
-      createInventory: 'inventory/createInventory',
-      updateInventory: 'inventory/updateInventory',
+      createClient: 'clients/create',
+      updateClient: 'clients/update',
     }),
 
     submit(){
@@ -152,9 +155,9 @@ export default {
       this.loading = true
 
       try {
-        await this.createInventory(this.form)
+        await this.createClient(this.form)
         this.$toast.open({
-          message: 'Inventory successfully added',
+          message: 'Client successfully updated',
         })
         this.visible = false
 
@@ -167,9 +170,9 @@ export default {
     async update() {
       this.loading = true
       try {
-        await this.updateInventory(this.form)
+        await this.updateClient(this.form)
         this.$toast.open({
-          message: 'Inventory successfully updated',
+          message: 'Client successfully verified',
         })
         this.visible = false
 
