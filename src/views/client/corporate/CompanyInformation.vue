@@ -83,11 +83,12 @@ export default {
   computed: {
     ...mapState({
       storeData: (state) => state.clients.form,
+      client: (state) => state.clients.client,
     }),
   },
 
   created() {
-    this.form = this.storeData
+    this.form = this.client.company ? this.client.company : this.storeData
   },
 
   validations: {

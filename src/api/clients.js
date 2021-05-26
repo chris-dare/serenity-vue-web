@@ -36,8 +36,8 @@ export default {
     return http.post(`${this.url}client-accounts/deposit`, params)
   },
 
-  update(providerId, params) {
-    return http.patch(`${this.url}${providerId}/corporates/${params.id}`, params)
+  update(params) {
+    return http.patch(`${this.url}corporates/onboard/${params.main_branch_id}/`, params)
   },
 
   delete(providerId,id) {

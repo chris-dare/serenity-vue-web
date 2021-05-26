@@ -69,15 +69,31 @@
             />
           </cv-radio-group>
         </div>
-        <cv-text-input
-          v-else
-          v-model="form.amount"
-          type="number"
-          label="Amount"
-          placeholder=""
-        />
+        <div 
+          v-else 
+          class="grid grid-cols-2 gap-8"
+        >
+          <cv-text-input
+            v-model="form.amount"
+            type="number"
+            label="Amount"
+            placeholder=""
+          />
+          <cv-date-picker
+            v-model="form.creditStartDate"
+            kind="single"
+            date-label="Credit start date"
+            class="inherit-full-input"
+          />
+        </div>
         <div class="flex justify-between items-center">
-          <p class="text-center">Cancel</p>
+          <p 
+            class="text-center" 
+            style="cursor: pointer" 
+            @click="visible = false"
+          >
+            Cancel
+          </p>
           <SeButton 
             :loading="loading"
             @click="submit"
@@ -91,8 +107,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import { required } from 'vuelidate/lib/validators'
+import { mapActions, mapGetters } from 'vuex'
+// import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'AddEditClient',
@@ -107,15 +123,16 @@ export default {
     }
   },
 
-  validations: {
-    form: {
-      category: { required },
-    },
+  computed:{
+    ...mapGetters({
+      userName: 'auth/fullName',
+    }),
   },
 
   events: {
-    'client:add:open': function(){
+    'client:add:open': function(data){
       this.visible = true
+      this.form = data.params[0]
       this.type = 'add'
     },
     'client:edit:open': function(data){
@@ -127,19 +144,19 @@ export default {
 
   methods: {
     ...mapActions({
-      createInventory: 'inventory/createInventory',
-      updateInventory: 'inventory/updateInventory',
+      depositClient: 'clients/deposit',
+      updateClient: 'clients/update',
     }),
 
     submit(){
-      this.$v.$touch()
-      if (this.$v.$invalid) {
-        this.$toast.open({
-          message: 'Please these fields are required!',
-          type: 'error',
-        })
-        return
-      }
+      // this.$v.$touch()
+      // if (this.$v.$invalid) {
+      //   this.$toast.open({
+      //     message: 'Please these fields are required!',
+      //     type: 'error',
+      //   })
+      //   return
+      // }
 
       if (this.type === 'update') {
         this.update()
@@ -150,14 +167,21 @@ export default {
 
     async save() {
       this.loading = true
-
+      let payload = {    
+        amount: parseFloat(this.form.amount), // required
+        accountId: this.form.id, //provider client account(required)
+        creditDurationInDays: this.form.credit_duration, //required
+        creditStartDate: this.form.creditStartDate, //required
+        depositType: this.form.state, //either limited-credit-active or limited-debit-activerequired
+        depositedBy: this.userName, //required
+      }
       try {
-        await this.createInventory(this.form)
+        await this.depositClient(payload)
         this.$toast.open({
-          message: 'Inventory successfully added',
+          message: 'Client successfully updated',
         })
         this.visible = false
-
+        this.$router.go(-1)
         this.loading = false
       } catch (error) {
         this.loading = false
@@ -167,12 +191,12 @@ export default {
     async update() {
       this.loading = true
       try {
-        await this.updateInventory(this.form)
+        await this.updateClient(this.form)
         this.$toast.open({
-          message: 'Inventory successfully updated',
+          message: 'Client successfully verified',
         })
+        this.$router.go(-1)
         this.visible = false
-
         this.loading = false
       } catch (error) {
         this.loading = false

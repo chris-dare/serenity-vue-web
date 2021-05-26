@@ -81,15 +81,14 @@ export default {
     commit(SET_FORM, data)
   },
 
-  async update({ commit, rootState}, payload) {
-    const provider = rootState.auth.provider
+  async update({ commit }, payload) {
     const { data } = await ClientAPI
-      .update(provider.id, payload)
+      .update(payload)
       .catch(({ response: { data: error } }) => {
         throw error
       })
 
-    commit(UPDATE_CLIENT, data.data)
+    commit(UPDATE_CLIENT, data.returnedData)
     return data
   },
 
