@@ -35,8 +35,9 @@ export default {
     try {
       const provider = rootState.auth.provider
       // TODO
-      // payload.encounter = rootGetters['appointments/patientNextAppointment'].id
-      const encounter = new Encounter(payload).getCreateView()
+      let appointment = rootGetters['appointments/patientNextAppointment']
+      let user = rootState.auth.user
+      const encounter = new Encounter(payload).getCreateView(user,appointment)
       const { data } = await EncountersAPI.create(provider.id, encounter)
       commit(UPDATE_ENCOUNTER, data)
       commit(SET_ENCOUNTER, data)
