@@ -12,25 +12,24 @@
             class="inherit-full-input"
             :invalid-message="$utils.validateRequiredField($v, 'company_name')"
           />
-          <cv-text-input
+          <!-- <cv-text-input
             v-model="form.email"
             type="email"
             label="Email (required)"
             placeholder="Email address"
             class="inherit-full-input"
             :error-message="$utils.validateRequiredField($v, 'email')"
-          />
-          <MsisdnPhoneInput
+          /> -->
+          <!-- <MsisdnPhoneInput
             v-model="form.phone_number"
             label="Phone number (required)"
             :error-message="$utils.validateRequiredField($v, 'phone_number')"
-          />
+          /> -->
           <cv-text-input
             v-model="form.tin_number"
             label="TIN"
             placeholder="TIN"
             class="inherit-full-input"
-            :invalid-message="$utils.validateRequiredField($v, 'tin_number')"
           />
         </div>
 
@@ -65,7 +64,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import { required, email, minLength } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import MultiStep from '@/mixins/multistep'
 
@@ -83,20 +82,19 @@ export default {
   computed: {
     ...mapState({
       storeData: (state) => state.clients.form,
-      client: (state) => state.clients.client,
     }),
   },
 
   created() {
-    this.form = this.client.company ? this.client.company : this.storeData
+    this.form = this.storeData 
   },
 
   validations: {
     form: {
       company_name: { required },
-      email: { email: email(), required },
-      phone_number: { required },
-      tin_number: { minLength: minLength(10)},
+      // email: { email: email(), required },
+      // phone_number: { required },
+      // tin_number: { minLength: minLength(10)},
     },
   },
 
@@ -106,6 +104,7 @@ export default {
       // refresh: 'clients/refreshForm',
     }),
     actionChange() {},
+    refresh(){},
     save() {
       this.$v.$touch()
       if (this.$v.$invalid) {

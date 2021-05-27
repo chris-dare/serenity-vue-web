@@ -2,41 +2,37 @@
   <div>
     <cv-form @submit.prevent="">
       <!-- title -->
-      <div>
-        <div class="grid grid-cols-2 gap-8 my-8">
-          <cv-text-input
-            v-model="form.admin_first_name"
-            label="First name (required)"
-            type="text"
-            placeholder="Admin First Name"
-            class="inherit-full-input"
-            :invalid-message="$utils.validateRequiredField($v, 'admin_first_name')"
-          />
-          <cv-text-input
-            v-model="form.admin_last_name"
-            label="Last name (required)"
-            placeholder="Admin last or family name"
-            type="text"
-            class="inherit-full-input"
-            :invalid-message="$utils.validateRequiredField($v, 'admin_last_name')"
-          />
-          <!-- <PhoneInput
-            v-model="form.admin_phoneno"
-            label="Phone number (required)"
-            placeholder="eg 0349990390"
-            @input="$v.$touch()"
-          /> -->
-          <MsisdnPhoneInput
-            v-model="form.admin_phoneno"
-            label="Phone number (required)"
-            :error-message="$utils.validateRequiredField($v, 'admin_phoneno')"
-          />
-          <cv-text-input
-            v-model="form.admin_email"
-            label="Email"
-            placeholder="Email"
-            class="inherit-full-input"
-          />
+      <div class=" gap-8 my-8">
+        <cv-text-input
+          v-model="form.company_name"
+          type="text"
+          label="Company name"
+          placeholder=""
+          disabled
+        />
+        <div
+          class="grid justify-center my-8"
+        >
+          <cv-radio-group>
+            <cv-radio-button
+              v-model="form.state"
+              name="Verified"
+              label="Verified"
+              value="verified"
+            />
+            <cv-radio-button
+              v-model="form.state"
+              name="Unverified"
+              label="Unverfied"
+              value="unverified"
+            />
+            <cv-radio-button
+              v-model="form.state"
+              name="Suspended"
+              label="Suspended"
+              value="suspended"
+            />
+          </cv-radio-group>
         </div>
 
         <div class="flex items-center justify-between mt-12 mb-6">
@@ -66,7 +62,7 @@
             :loading="loading"
             @click="submit"
           >
-            {{ form.main_branch_id ? 'Next' : 'Create company' }}
+            {{ form.main_branch_id ? 'Update Company' : 'Create company' }}
           </cv-button>
         </div>
       </div>
@@ -81,7 +77,7 @@ import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import MultiStep from '@/mixins/multistep'
 
 export default {
-  name: 'CompanyAdminInformation',
+  name: 'Verification',
 
   mixins: [MultiStep],
 
@@ -90,7 +86,7 @@ export default {
       form: {
       },
       icon: ChevronRight,
-      previous: 'CompanyInformation',
+      previous: 'CompanyAdminInformation',
       parent: 'CorporateClients',
       loading: false,
     }
@@ -170,8 +166,23 @@ export default {
       // $trigger('success:open', 'Company successfully created!!')
     },
     async update(){
-      this.addToStoreData(this.form)
-      this.$router.push({name: 'Verification'})
+      this.loading = true
+      console.info(JSON.parse(JSON.stringify(this.storeData)))
+      try {
+        await this.updateClient(this.form)
+        this.$toast.open({
+          message: 'Company successfully updated!',
+        })
+        this.loading = false
+        this.$router.push({name: 'CorporateClients'})
+      } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+      }
+      this.loading = false
     },
   },
 }

@@ -23,7 +23,7 @@
             class="mx-2"
             @click="$trigger('client:add:open', {...client})"
           >
-            Raise claim
+            Update Account
           </SeButton>
           <SeButton @click="editClient">
             Edit Client
@@ -91,23 +91,39 @@
     >
       <PatientSummaryCard
         title="General Information"
+        :loading="loading"
         :fields="companyFields"
       />
       <PatientSummaryCard
         title="Admin Information"
+        :loading="loading"
         :fields="adminFields"
       />
     </div>
     <div v-else>
       <div class="flex justify-end">
-        <cv-date-picker
-          v-model="date"
-          class="flex-none se-date-picker"
-          kind="range"
-          :cal-options="{
-            dateFormat: 'm/d/Y',
-          }"
-        />
+        <div
+          class="grid grid-cols-2 gap-2"
+        >
+          <cv-date-picker
+            v-model="date1"
+            kind="single"
+            class="flex-none se-date-picker"
+            date-label="Start date"
+            :cal-options="{
+              dateFormat: 'm/d/Y',
+            }"
+          />
+          <cv-date-picker
+            v-model="date2"
+            kind="single"
+            date-label="End date"
+            class="flex-none se-date-picker"
+            :cal-options="{
+              dateFormat: 'm/d/Y',
+            }"
+          />
+        </div>
       </div>
       <DataTable
         ref="table"
@@ -117,7 +133,7 @@
           numberOfItems: 5,
           pageSizes: [5, 10, 15, 20, 25]
         }"
-        :data="bills" 
+        :data="bills && bills" 
       >
         <template #default="{row}">
           <cv-data-table-cell>
@@ -169,7 +185,8 @@ export default {
     return {
       loading: false,
       add: Add,
-      date: '',
+      date1: '',
+      date2: '',
       bills: [],
       clientAccount: [],
       selected: 'about',
@@ -233,14 +250,19 @@ export default {
       getClient: 'clients/getClientBy',
       getClientAccount: 'clients/getClientAccount',
       getClientBills: 'clients/getClientBills',
-      addToStoreClient: 'clients/addToCurrentClient',
+      addToStoreData: 'clients/addToCurrentUser',
     }),
     goBack() {
       this.$router.go(-1)
     },
+    async refresh() {
+      this.loading = true
+      await this.loadClientAccount()
+      this.loading = false
+    },
     editClient(){
-      this.addToStoreClient(this.selectedClient.company)
-      this.$router.push({name:'CompanyInformation'})
+      this.addToStoreData(this.selectedClient.company)
+      this.$router.push({name:'RegisterProvider', params: {id: this.selectedClient.company.main_branch_id}})
     },
     async loadClientAccount() {
       let id = this.$route.params.id
@@ -274,6 +296,7 @@ export default {
         })
         .catch(() => {
           // this.goBack()
+          this.$router.go(-1)
         })
     },
   },

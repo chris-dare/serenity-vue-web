@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import ClientAPI from '@/api/clients'
-import { SET_CLIENTS, DELETE_CLIENT, UPDATE_CLIENT, UPDATE_FORM, SET_FORM, SET_CURRENT_CLIENT, SET_BILLS } from './mutation-types'
+import { SET_CLIENTS, DELETE_CLIENT, UPDATE_CLIENT, UPDATE_FORM, SET_FORM, SET_CURRENT_CLIENT, SET_CURRENT_UPDATE, SET_BILLS } from './mutation-types'
 
 export default {
   async getClients({ commit, rootState, state }, refresh = true) {
@@ -77,6 +77,10 @@ export default {
     commit(UPDATE_FORM, data)
   },
 
+  addClientAccount({ commit }, data) {
+    commit(SET_CURRENT_CLIENT, data)
+  },
+
   addToCurrentClient({ commit }, data) {
     commit(SET_FORM, data)
   },
@@ -88,6 +92,7 @@ export default {
         throw error
       })
 
+    commit(SET_CURRENT_UPDATE, data.returnedData)
     commit(UPDATE_CLIENT, data.returnedData)
     return data
   },

@@ -144,6 +144,8 @@ const routes = [
       },
       {
         path: '/register-client',
+        name: 'RegisterProvider',
+        props: true,
         component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/corporate/RegisterClient.vue'),
         children: [
           {
@@ -155,6 +157,11 @@ const routes = [
             path: '/register-client/admin-information',
             name: 'CompanyAdminInformation',
             component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/corporate/CompanyAdminInformation.vue'),
+          },
+          {
+            path: '/register-client/verification',
+            name: 'Verification',
+            component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/corporate/Verification.vue'),
           },
         ],
       },
