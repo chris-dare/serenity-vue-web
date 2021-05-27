@@ -7,12 +7,15 @@
           <router-link
             v-for="(item, index) in navItems"
             :key="index"
-            tag="div"
-            :to="{name: item.path}"
+            :tag="item.verify ? 'div' : ''"
+            to=""
             :class="[checked == item.path ? 'border-serenity-primary' : 'border-serenity-subtle-border']"
-            class="border-l-2  h-20 flex items-center border-solid px-4 cursor-pointer"
+            class="flex items-center h-20 border-l-2 border-solid   px-4 cursor-pointer"
           >
-            <div class="flex">
+            <div 
+              v-if="item.verify"
+              class="flex" 
+            >
               <div>
                 <CircleFilled
                   v-if="checked == item.path"
@@ -52,13 +55,20 @@ export default {
   name: 'RegisterProvider',
   // eslint-disable-next-line vue/no-unused-components
   components: { CircleFilled, Checkmark },
-  props: ['id'],
+  props: {
+    id: {
+      type: Number,
+      required: false,
+      default: undefined,
+    }, 
+  },
   data() {
     return {
       checked: '',
       navItems: [
-        { label: 'Company Information', description: 'Basic provider info', path: 'CompanyInformation'},
-        { label: 'Admin Information', description: 'Corporate admin', path: 'CompanyAdminInformation'},
+        { label: 'Company Information', description: 'Basic provider info', path: 'CompanyInformation', verify: true},
+        { label: 'Admin Information', description: 'Corporate admin', path: 'CompanyAdminInformation', verify: true},
+        { label: 'Verification', description: 'Client Verification', path: 'Verification', verify: true},
       ],
     }
   },
@@ -75,8 +85,10 @@ export default {
 
   created() {
     if(!this.id){
+      this.navItems[2].verify = false
       this.refresh()
     }
+    this.$router.push({name:'CompanyInformation'})
   },
   
   methods: {

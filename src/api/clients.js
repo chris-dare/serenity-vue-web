@@ -20,12 +20,24 @@ export default {
     return http.get(`${this.url}${providerId}/client-accounts?companyId=${id}`)
   },
 
+  getClientBills({
+    id = '',
+    providerId = '',
+  } = {}){
+    return http.get(`${this.url}${providerId}/corporates/${id}/bills`)
+  },
+
+
   create(providerId, params) {
     return http.post(`${this.url}${providerId}/clients`, params)
   },
 
-  update(providerId, params) {
-    return http.patch(`${this.url}${providerId}/corporates/${params.id}`, params)
+  deposit(params) {
+    return http.post(`${this.url}client-accounts/deposit`, params)
+  },
+
+  update(params) {
+    return http.patch(`${this.url}corporates/onboard/${params.main_branch_id}/`, params)
   },
 
   delete(providerId,id) {

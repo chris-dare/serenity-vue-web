@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import ClientAPI from '@/api/clients'
-import { SET_CLIENTS, DELETE_CLIENT, UPDATE_CLIENT, UPDATE_FORM, SET_FORM, SET_CURRENT_CLIENT } from './mutation-types'
+import { SET_CLIENTS, DELETE_CLIENT, UPDATE_CLIENT, UPDATE_FORM, SET_FORM, SET_CURRENT_CLIENT, SET_CURRENT_UPDATE, SET_BILLS } from './mutation-types'
 
 export default {
   async getClients({ commit, rootState, state }, refresh = true) {
@@ -38,6 +38,18 @@ export default {
     return data
   },
 
+  async getClientBills({ commit, rootState }, payload) {
+    const provider = rootState.auth.provider
+    const { data } = await ClientAPI
+      .getClientBills({ providerId: provider.id, id: payload })
+      .catch(({data: error}) => {
+        throw error
+      })
+
+    commit(SET_BILLS, data.returnedData)
+    return data
+  },
+
   async create({ commit, rootState}, payload) {
     const provider = rootState.auth.provider
     const { data } = await ClientAPI
@@ -51,19 +63,37 @@ export default {
     return data
   },
 
+  async deposit({ commit }, payload) {
+    const { data } = await ClientAPI
+      .deposit(payload)
+      .catch(({data: error}) => {
+        throw error
+      })
+
+    return data
+  },
+
   addToCurrentUser({ commit }, data) {
     commit(UPDATE_FORM, data)
   },
 
-  async update({ commit, rootState}, payload) {
-    const provider = rootState.auth.provider
+  addClientAccount({ commit }, data) {
+    commit(SET_CURRENT_CLIENT, data)
+  },
+
+  addToCurrentClient({ commit }, data) {
+    commit(SET_FORM, data)
+  },
+
+  async update({ commit }, payload) {
     const { data } = await ClientAPI
-      .update(provider.id, payload)
+      .update(payload)
       .catch(({ response: { data: error } }) => {
         throw error
       })
 
-    commit(UPDATE_CLIENT, data.data)
+    commit(SET_CURRENT_UPDATE, data.returnedData)
+    commit(UPDATE_CLIENT, data.returnedData)
     return data
   },
 

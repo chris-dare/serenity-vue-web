@@ -4,28 +4,34 @@
       <div class="flex">
         <div class="flex items-center">
           <div class="space-y-1">
-            <p class="font-semibold">{{ client && client.companyName }}</p>
+            <p class="font-semibold">{{ selectedClient && selectedClient.companyName }}</p>
             <p class="text-secondary">
               Corporate Client
             </p>
             <div class="flex items-center">
-              <p>Client TIN No: {{ client && client.company.tin_number }}</p>
+              <p>Client TIN No: {{ selectedClient && selectedClient.company.tin_number }}</p>
             </div>
           </div>
         </div>
       </div>
       <div class="flex items-center space-x-2">
-        <div v-if="client && client.company.state != 'verified'">
-          <!-- <SeButton>
-            Raise claim
-          </SeButton> -->
+        <div 
+          v-if="selectedClient && selectedClient.company.state === 'verified'"
+          class="grid grid-cols-2 " 
+        >
+          <SeButton 
+            class="mx-2"
+            @click="$trigger('client:add:open', {...client})"
+          >
+            Update Account
+          </SeButton>
           <SeButton @click="editClient">
             Edit Client
           </SeButton>
         </div>
         <SeButton 
           v-else 
-          @click="$trigger('client:add:open')"
+          @click="$trigger('client:edit:open', {...client.company})"
         >
           Verify Client
         </SeButton>
@@ -35,31 +41,31 @@
       <div
         class="flex flex-col items-center justify-center h-24"
       >
-        <p class="text-xl font-semibold">{{ client && client.state }}</p>
+        <p class="text-xl font-semibold">{{ selectedClient && selectedClient.state }}</p>
         <p class="text-secondary text-sm">Account type</p>
       </div>
       <div
         class="flex flex-col items-center justify-center h-24"
       >
-        <p class="text-xl font-semibold">{{ client && client.amount }}</p>
+        <p class="text-xl font-semibold">{{ selectedClient && selectedClient.amount }}</p>
         <p class="text-secondary text-sm">Current Balance</p>
       </div>
       <div
         class="flex flex-col items-center justify-center h-24"
       >
-        <p class="text-xl font-semibold">{{ client && client.creditDurationInDays || '-' }}</p>
+        <p class="text-xl font-semibold">{{ selectedClient && selectedClient.creditDurationInDays || '-' }}</p>
         <p class="text-secondary text-sm">Credit duration</p>
       </div>
       <div
         class="flex flex-col items-center justify-center h-24"
       >
-        <p class="text-xl font-semibold">{{ client && client.maximum_employees_allowed || '-' }}</p>
+        <p class="text-xl font-semibold">{{ selectedClient && selectedClient.maximum_employees_allowed || '-' }}</p>
         <p class="text-secondary text-sm">Maximum employees allowed</p>
       </div>
       <div
         class="flex flex-col items-center justify-center h-24"
       >
-        <p class="text-xl font-semibold">{{ client && $date.formatDate(client.creditStartDate, 'yyyy/MM/dd') }}</p>
+        <p class="text-xl font-semibold">{{ selectedClient && $date.formatDate(client.creditStartDate, 'yyyy/MM/dd') }}</p>
         <p class="text-secondary text-sm">Credit start date</p>
       </div>
     </div>
@@ -85,69 +91,81 @@
     >
       <PatientSummaryCard
         title="General Information"
-        :fields="generalFields"
+        :loading="loading"
+        :fields="companyFields"
       />
       <PatientSummaryCard
         title="Admin Information"
-        :fields="emergencyFields"
+        :loading="loading"
+        :fields="adminFields"
       />
     </div>
     <div v-else>
       <div class="flex justify-end">
-        <cv-date-picker
-          v-model="date"
-          class="flex-none se-date-picker"
-          kind="range"
-          :cal-options="{
-            dateFormat: 'm/d/Y',
-          }"
-        />
+        <div
+          class="grid grid-cols-2 gap-2"
+        >
+          <cv-date-picker
+            v-model="date1"
+            kind="single"
+            class="flex-none se-date-picker"
+            date-label="Start date"
+            :cal-options="{
+              dateFormat: 'm/d/Y',
+            }"
+          />
+          <cv-date-picker
+            v-model="date2"
+            kind="single"
+            date-label="End date"
+            class="flex-none se-date-picker"
+            :cal-options="{
+              dateFormat: 'm/d/Y',
+            }"
+          />
+        </div>
       </div>
-      <cv-data-table
+      <DataTable
+        ref="table"
         :columns="columns"
+        :loading="loading"
         :pagination="{
           numberOfItems: 5,
           pageSizes: [5, 10, 15, 20, 25]
         }"
-        :data="[]"
+        :data="bills && bills" 
       >
-        <template slot="data">
-          <cv-data-table-row
-            v-for="(row, rowIndex) in 5"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
-          >
-            <cv-data-table-cell>
-              {{ $date.formatDate($faker().date.recent(), 'yyyy/MM/dd') }}
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                {{ Math.random() }}
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>Specialist Appointment</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>Virtual</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ $faker().phone.phoneNumber() }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ $faker().phone.phoneNumber() }}</p>
-              </div>
-            </cv-data-table-cell>
-          </cv-data-table-row>
+        <template #default="{row}">
+          <cv-data-table-cell>
+            {{ $date.formatDate(row.transactionData.created_at, 'yyyy/MM/dd') }}
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              {{ row.transactionData.id }}
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.providerDetails.name }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.transactionData.amount }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.transactionData.createdBy }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.transactionData.status }}</p>
+            </div>
+          </cv-data-table-cell>
         </template>
-      </cv-data-table>
+      </DataTable>
     </div>
     <EditClient />
   </div>
@@ -167,20 +185,25 @@ export default {
     return {
       loading: false,
       add: Add,
-      date: '',
+      date1: '',
+      date2: '',
+      bills: [],
       clientAccount: [],
       selected: 'about',
       links: [
         { label: 'About', value: 'about' },
         { label: 'Bills', path: 'bills' },
       ],
+      form: {},
+      // client: '',
+      selectedClient: {},
       columns: [
         'Date',
         'Bill ID',
-        'Service',
+        'Service Provider',
         'Price',
         'Practitioner',
-        'Payment Method',
+        'Status',
       ],
     }
   },
@@ -188,67 +211,92 @@ export default {
   computed: {
     ...mapState({
       client: (state) => state.clients.client,
+      storeData: (state) => state.clients.form,
     }),
-    generalFields() {
+    companyFields() {
       return [
-        { label: 'State', value: this.client.state },
-        { label: 'Authorized By', value: this.client.authorizedBy },
-        { label: 'Address', value: this.client.company.address },
+        { label: 'State', value: this.selectedClient && this.selectedClient.state },
+        { label: 'Authorized By', value: this.selectedClient && this.selectedClient.authorizedBy },
+        { label: 'Address', value: this.selectedClient && this.selectedClient.company.address },
         // { label: 'Email', value: this.$faker().lorem.word() },
       ]
     },
     
-    emergencyFields() {
+    adminFields() {
       return [
-        { label: 'First Name', value: this.client.company.admin_first_name },
-        { label: 'Last Name', value: this.client.company.admin_last_name },
-        { label: 'Phone Number', value: this.client.company.admin_phoneno },
-        { label: 'Admin Email', value: this.client.company.admin_email },
+        { label: 'First Name', value: this.selectedClient && this.selectedClient.company.admin_first_name },
+        { label: 'Last Name', value: this.selectedClient && this.selectedClient.company.admin_last_name },
+        { label: 'Phone Number', value: this.selectedClient && this.selectedClient.company.admin_phoneno },
+        { label: 'Admin Email', value: this.selectedClient && this.selectedClient.company.admin_email },
       ]
     },
   },
 
-  beforeRouteEnter (to, from, next) {
-    next(async vm => {
-      vm.loading = true
-      await vm.loadClientAccount()
-      vm.loading = false
-    })
+  // beforeRouteEnter (to, from, next) {
+  //   next(async vm => {
+  //     vm.loading = true
+  //     vm.loading = false
+  //   })
+  // },
+
+  created(){
+    this.selectedClient = this.client
+    this.loadClientAccount()
+    this.loadClientBills()
   },
 
   methods: {
     ...mapActions({
       getClient: 'clients/getClientBy',
       getClientAccount: 'clients/getClientAccount',
+      getClientBills: 'clients/getClientBills',
       addToStoreData: 'clients/addToCurrentUser',
     }),
     goBack() {
       this.$router.go(-1)
     },
-    editClient(){
-      this.addToStoreData(this.client.company)
-      this.$router.push({name:'CompanyInformation'})
+    async refresh() {
+      this.loading = true
+      await this.loadClientAccount()
+      this.loading = false
     },
-    loadClientAccount() {
+    editClient(){
+      this.addToStoreData(this.selectedClient.company)
+      this.$router.push({name:'RegisterProvider', params: {id: this.selectedClient.company.main_branch_id}})
+    },
+    async loadClientAccount() {
       let id = this.$route.params.id
-      console.log('load', this.$route.params.id)
-      this.getClientAccount( id )
+      await this.getClientAccount( id )
         .then( data => {
-          this.client = data.returnedData
+          this.selectedClient = data.returnedData
         })
         .catch(() => {
           // this.goBack()
         })
+    },
+    async loadClientBills() {
+      this.loading = true
+      let id = this.$route.params.id
+      await this.getClientBills( id )
+        .then( data => {
+          this.bills = data.returnedData
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
+      this.loading = false
     },
     loadClient() {
       let id = this.$route.params.id
       console.log('load', this.$route.params.id)
       this.getClient( id )
         .then(({data}) => {
-          this.client = data.returnedData
+          this.selectedClient = data.returnedData
         })
         .catch(() => {
           // this.goBack()
+          this.$router.go(-1)
         })
     },
   },
