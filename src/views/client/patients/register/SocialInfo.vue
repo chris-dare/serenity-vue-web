@@ -1,5 +1,14 @@
 <template>
-  <SeForm>
+  <MultiStepBase
+    next-label="Next: Payment"
+    :loading="loading"
+    :next="next"
+    :previous="previous"
+    :icon="icon"
+    :query="$route.query"
+    @cancel="cancel"
+    @save="reRoute"
+  >
     <div class="grid grid-cols-2 gap-8">
       <MultiSelect
         v-model="form.marital_status"
@@ -21,13 +30,17 @@
         placeholder="Religion"
         custom-field="code"
       />
-
-      <cv-text-input
+    
+      <MultiSelect
         v-model="form.preferred_communication"
-        label="Home Language"
+        title="Home Language"
+        :multiple="false"
+        :options="languages"
+        label="display"
+        track_by="code"
         placeholder="Primary language you speak"
-        type="text"
-        class="inherit-full-input"
+        custom-field="code"
+        preselect
       />
       <cv-text-input
         v-model="form.meta.email"
@@ -48,7 +61,7 @@
         label="Office Phone number"
       />
     </div>
-    <div class="flex items-center justify-between mt-12 mb-6">
+    <!-- <div class="flex items-center justify-between mt-12 mb-6">
       <div class="flex items-center space-x-2">
         <SeButton
           variant="outline"
@@ -56,7 +69,7 @@
           Cancel
         </SeButton>
         <SeButton
-          :to="{ name: previous }"
+          :to="{ name: previous, query: { ...this.$route.query } }"
           variant="secondary"
         >
           Go back
@@ -70,8 +83,8 @@
           Next: Payment
         </SeButton>
       </div>
-    </div>
-  </SeForm>
+    </div> -->
+  </MultiStepBase>
 </template>
 
 <script>
@@ -99,6 +112,7 @@ export default {
       storeData: (state) => state.patients.currentPatient,
       statuses: state => state.resources.maritalStatuses,
       religions: state => state.resources.religiousAffiliations,
+      languages: state => state.resources.languages,
     }),
   },
 
@@ -120,7 +134,7 @@ export default {
       // }
 
       this.addToStoreData(this.form)
-      this.$router.push({ name: this.next })
+      this.$router.push({ name: this.next, query: { ...this.$route.query } })
     },
   },
 }

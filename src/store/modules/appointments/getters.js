@@ -50,6 +50,12 @@ export default {
   },
 
   patientAppointments: (state, getters) => (id) => {
-    return getters.appointments.filter(appointment => appointment.patient.id === id)
+    const apps = id ? getters.appointments.filter(appointment => appointment.patient.id === id) : getters.appointments
+    return Vue.prototype.$date.sortByDate(apps, 'start', 'asc')
+  },
+
+  patientNextAppointment: (state, getters) => {
+    if (!getters.patientAppointments() && !getters.patientAppointments().length) return {}
+    return getters.patientAppointments()[0]
   },
 }

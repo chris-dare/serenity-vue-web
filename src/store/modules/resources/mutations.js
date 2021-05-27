@@ -18,6 +18,8 @@ import {
   SET_SYSTEM_EXAM_UNIT_TYPES,
   SET_SOCIAL_HISTORY_UNIT_TYPES,
   SET_VITALS_UNIT_TYPES,
+  SET_LANGUAGES,
+  SET_VENDORS,
 } from './mutation-types'
 
 export default {
@@ -106,5 +108,12 @@ export default {
 
   [SET_VITALS_UNIT_TYPES](state, vitalsUnitTypes) {
     state.vitalsUnitTypes = vitalsUnitTypes
+  },
+
+  [SET_LANGUAGES](state, languages) {
+    state.languages = languages
+  },
+  [SET_VENDORS](state, vendors) {
+    state.vendors = vendors
   },
 }

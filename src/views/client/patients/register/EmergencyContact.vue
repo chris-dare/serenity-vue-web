@@ -1,7 +1,13 @@
 <template>
-  <cv-form
-    autocomplete="off"
-    @submit.prevent=""
+  <MultiStepBase
+    next-label="Next: Social Information"
+    :loading="loading"
+    :next="next"
+    :previous="previous"
+    :icon="icon"
+    :query="$route.query"
+    @cancel="cancel"
+    @save="save"
   >
     <div class="grid grid-cols-2 gap-8">
       <cv-text-input
@@ -51,13 +57,6 @@
         placeholder="Email"
         class="inherit-full-input col-span-2"
       />
-      <!-- <cv-text-input
-        v-else
-        v-model="form.contact[0].telecom.value"
-        label="Phone number"
-        placeholder="Phone number"
-        class="inherit-full-input col-span-2"
-      /> -->
       <MsisdnPhoneInput
         v-else
         v-model="form.contact[0].telecom.value"
@@ -70,31 +69,7 @@
     >
       All fields are required when any field is filled
     </p>
-
-    <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center space-x-2">
-        <SeButton
-          variant="outline"
-        >
-          Cancel
-        </SeButton>
-        <SeButton
-          :to="{ name: previous }"
-          variant="secondary"
-        >
-          Go back
-        </SeButton>
-      </div>
-      <div class="flex items-center">
-        <SeButton
-          :icon="icon"
-          @click="save"
-        >
-          Next: Social Information
-        </SeButton>
-      </div>
-    </div>
-  </cv-form>
+  </MultiStepBase>
 </template>
 
 <script>
@@ -204,7 +179,7 @@ export default {
       this.form.contact[0].relationship ='emergency_contact',
 
       this.addToStoreData(this.form)
-      this.$router.push({ name: this.next })
+      this.$router.push({ name: this.next, query: { ...this.$route.query } })
     },
   },
 }

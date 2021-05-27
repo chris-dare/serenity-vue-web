@@ -27,12 +27,6 @@
           >
           <p class="my-2">Uh oh! You have no appointments.</p>
           <p class="text-secondary font-light mb-6">You currently have no active or incoming appointments.</p>
-          <router-link
-            :to="{name:'SelectPatient'}"
-            tag="SeButton"
-          >
-            Book an appointment <Add class="ml-4 w-5 h-5 text-white" />
-          </router-link>
         </div>
       </template>
       <template #default="{row}">
@@ -46,8 +40,8 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ $date.formatDate(row.slot.start, 'yyyy/MM/dd') }}</p>
-            <p class="text-secondary text-xs">{{ $date.formatDate(row.slot.start, 'HH:mm a') }} - {{ $date.formatDate(row.slot.end, 'HH:mm a') }}</p>
+            <p>{{ $date.formatDate(row.start, 'yyyy/MM/dd') }}</p>
+            <p class="text-secondary text-xs">{{ $date.formatDate(row.start, 'HH:mm a') }} - {{ $date.formatDate(row.end, 'HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -71,6 +65,7 @@
               @edit="edit(row)"
               @delete="confirmRemove(row)"
               @view="view(row)"
+              @reschedule="reschedule(row)"
             />
           </div>
         </cv-data-table-cell>
@@ -127,8 +122,7 @@ export default {
       rowSelects: null,
       date: {},
       filters: {
-        status: 'pending',
-        start: new Date(),
+        ordering: 'start',
       },
       columns: [
         'Patient',
@@ -164,6 +158,7 @@ export default {
       getData: 'appointments/getAppointments',
       cancelAppointment: 'appointments/cancelAppointment',
       deleteAppointment: 'appointments/deleteAppointment',
+      setCurrentAppointment: 'appointments/setCurrentAppointment',
     }),
 
     async filter(refresh = true) {
@@ -194,7 +189,13 @@ export default {
     },
 
     edit(row) {
-      this.$router.push({name: 'AppointmentUpdate', params: { id: row.id }})
+      this.setCurrentAppointment(row)
+      this.$router.push({name: 'AppointmentUpdate', params: { id: row.id }, query: {type: 'update'}})
+    },
+
+    reschedule(row) {
+      this.setCurrentAppointment(row)
+      this.$router.push({name: 'AppointmentUpdate', params: { id: row.id }, query: {type: 'reschedule'}})
     },
 
     async cancel(note) {

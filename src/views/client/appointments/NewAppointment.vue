@@ -21,20 +21,25 @@ export default {
   
   computed: {
     title() {
-      return this.isUpdate ? 'Update Appointment' : 'New Appointment'
+      return this.isUpdate ? 'Update Appointment' : this.isReschedule ? 'Reschedule Appointment' : 'New Appointment'
     },
     isUpdate() {
-      return this.$route.name.toLowerCase().includes('update')
+      return this.$route.query.type === 'update'
     },
 
     isReschedule() {
-      return this.$route.type == 'reschedule'
+      return this.$route.query.type == 'reschedule'
     },
 
     navItems() {
       if (this.isUpdate) {
         return[
           { label: 'Update Appointment', description: 'Update existing appointment', path: 'AppointmentUpdate', completed: false, slug: 'select-patient'},
+        ]
+      }
+      if (this.isReschedule) {
+        return[
+          { label: 'Reschedule Appointment', description: 'Reschedule existing appointment', path: 'AppointmentUpdate', completed: false, slug: 'select-patient'},
         ]
       }
       return[
@@ -62,9 +67,15 @@ export default {
     this.getPatients(false)
   },
 
+  beforeRouteLeave(to, from, next) {
+    this.refresh()
+    next()
+  },
+
   methods: {
     ...mapActions({
       getPatients: 'patients/getPatients',
+      refresh: 'appointments/refreshCurrentAppointment',
     }),  
   },
 }

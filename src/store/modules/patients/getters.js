@@ -7,6 +7,11 @@ export default {
     })
   },
 
+  patientIsDeceased: state => {
+    if (!state.currentPatient) return false
+    return state.currentPatient.is_deceased
+  },
+
   patientMedications: state => {
     if (!state.currentPatient) {
       return []

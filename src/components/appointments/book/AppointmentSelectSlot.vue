@@ -4,6 +4,7 @@
     next-label="Next: Notes"
     :previous="previous"
     :modal="modal"
+    :query="$route.query"
     @cancel="cancel"
     @save="validateAndReroute"
   >

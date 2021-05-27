@@ -1,8 +1,13 @@
 <template>
   <div>
-    <cv-form
-      autocomplete="off"
-      @submit.prevent=""
+    <MultiStepBase
+      next-label="Next: Contact Info"
+      :loading="loading"
+      :next="next"
+      :icon="icon"
+      :query="$route.query"
+      @cancel="cancel"
+      @save="validateAndReroute"
     >
       <!-- title -->
       <div class="space-y-8">
@@ -36,13 +41,13 @@
               type="text"
               class="inherit-full-input"
             />
-            <cv-date-picker
+            <DatePicker
               v-model="form.birth_date"
               kind="single"
-              class="w-full max-w-full inherit-full-input"
+              class="w-full max-w-full inherit-full-input se-input-gray"
               placeholder="dd/mm/yyyy"
-              date-label="Date of Birth"
-              :cal-options="calOptions"
+              label="Date of Birth"
+              max-date="today"
             />
 
             <MultiSelect
@@ -55,6 +60,7 @@
               custom-field="code"
               preselect
               :multiple="false"
+              :invalid-message="$utils.validateRequiredField($v, 'gender')"
             />
           </div>
           <div>
@@ -63,25 +69,8 @@
             <FileUploadButton title="Or upload patient photo" />
           </div>
         </div>
-
-        <div class="flex items-center justify-between mt-12 mb-6">
-          <SeButton
-            variant="outline"
-            @click="cancel"
-          >
-            Cancel
-          </SeButton>
-          <div class="flex items-center">
-            <SeButton
-              :icon="icon"
-              @click="save"
-            >
-              Next: Contact Info
-            </SeButton>
-          </div>
-        </div>
       </div>
-    </cv-form>
+    </MultiStepBase>
   </div>
 </template>
 
@@ -128,23 +117,6 @@ export default {
       addToStoreData: 'patients/addToCurrentPatient',
       refresh: 'patients/refreshCurrentPatient',
     }),
-
-    save() {
-      this.$v.$touch()
-
-      if (this.$v.$invalid) {
-        this.$toast.open({
-          message: 'Fill all required fields!',
-          type: 'error',
-        })
-        return
-      }
-
-      this.addToStoreData(this.form)
-      this.$router.push({ name: this.next })
-    },
-
-    actionChange() {},
   },
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-full">
+  <div class="relative h-enc">
     <SeForm class="space-y-8">
       <p class="font-semibold">Add diagnosis</p>
 
@@ -53,7 +53,7 @@
       </div>
     </SeForm>
 
-    <div class="flex justify-between items-center absolute w-full right-0 bottom-8">
+    <div class="flex justify-between items-center absolute w-full right-0 bottom-12">
       <SeButton
         variant="secondary"
         :to="{name: 'EncounterReview', params: { id: $route.params.id }}"
@@ -134,7 +134,7 @@ export default {
         })
         this.reset()
         if (reroute) {
-          this.$router.push({ name: 'EncounterLabs'})
+          this.$router.push({ name: 'EncounterLabs', params: { id: this.$route.params.id }})
         }
       } catch (error) {
         this.loading = false

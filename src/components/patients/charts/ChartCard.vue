@@ -1,34 +1,36 @@
 <template>
   <div class="bg-white">
     <div class="p-3 px-4">
-      <p class=" mb-2">
-        {{ chart.title }} <span class="text-gray-500">(8)</span>
+      <p class="capitalize mb-2">
+        {{ chart.title | removeUnderscore }} <span class="text-gray-500">({{ chart.data.length }})</span>
       </p>
-      <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <p class="text-lg font-bold">{{ chart.value }}</p>
-          <p class="ml-4 text-xs font-light text-gray-500">{{ chart.per }}</p>
+      <div>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <p class="text-lg font-bold">{{ chart.value }}</p>
+            <p class="ml-4 text-xs font-light text-gray-500">{{ chart.per }}</p>
+          </div>
+          <p
+            class=""
+            :class="[
+              chart.status_color === 'success'
+                ? 'text-green-500'
+                : 'text-danger',
+            ]"
+          >
+            {{ chart.status }}
+          </p>
         </div>
-        <p
-          class=""
-          :class="[
-            chart.status_color === 'success'
-              ? 'text-green-500'
-              : 'text-danger',
-          ]"
-        >
-          {{ chart.status }}
-        </p>
-      </div>
-      <div class="flex items-center space-x-2">
-        <p class="text-xs font-light text-gray-500">as at:</p>
-        <p class="text-xs font-bold">{{ $date.formatDate($faker().date.recent(), 'dd/MM/yyyy HH:mm a') }}</p>
+        <div class="flex items-center space-x-2">
+          <p class="text-xs font-light text-gray-500">as at:</p>
+          <p class="text-xs font-bold">{{ $date.formatDate(chart.date, 'dd/MM/yyyy HH:mm a') }}</p>
+        </div>
       </div>
     </div>
     <div>
       <ccv-area-chart
         class="chart"
-        :data="data"
+        :data="chart.data"
         :options="options"
       />
     </div>

@@ -1,6 +1,9 @@
 <template>
   <div class="mt-2 grid grid-cols-2 gap-2">
-    <PatientGeneralInfoCard :patient="patient" />
+    <PatientGeneralInfoCard
+      :patient="patient"
+      :vitals="vitals"
+    />
 
     <PatientSummaryCard
       title="Emergency Contact"
@@ -19,7 +22,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import PatientGeneralInfoCard from '@/components/patients/PatientGeneralInfoCard'
 import PatientSummaryCard from '@/components/patients/PatientSummaryCard'
 
@@ -34,6 +37,10 @@ export default {
   computed: {
     ...mapState({
       patient: (state) => state.patients.currentPatient,
+    }),
+
+    ...mapGetters({
+      vitals: 'encounters/currentEncounterLatestVitals',
     }),
 
     isSelected() {

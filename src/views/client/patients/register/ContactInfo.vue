@@ -1,7 +1,13 @@
 <template>
-  <cv-form
-    autocomplete="off"
-    @submit.prevent=""
+  <MultiStepBase
+    next-label="Next: Emergency"
+    :loading="loading"
+    :next="next"
+    :previous="previous"
+    :icon="icon"
+    :query="$route.query"
+    @cancel="cancel"
+    @save="validateAndReroute"
   >
     <div class="grid grid-cols-2 gap-8 mb-8">
       <MsisdnPhoneInput
@@ -20,31 +26,7 @@
       v-model="form.address"
       :disabled="disabled"
     />
-
-    <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center space-x-2">
-        <SeButton
-          variant="outline"
-        >
-          Cancel
-        </SeButton>
-        <SeButton
-          :to="{ name: previous }"
-          variant="secondary"
-        >
-          Go back
-        </SeButton>
-      </div>
-      <div class="flex items-center">
-        <SeButton
-          :icon="icon"
-          @click="save"
-        >
-          Next: Emergency
-        </SeButton>
-      </div>
-    </div>
-  </cv-form>
+  </MultiStepBase>
 </template>
 
 <script>
@@ -99,21 +81,6 @@ export default {
       addToStoreData: 'patients/addToCurrentPatient',
       refresh: 'patients/refreshCurrentPatient',
     }),
-
-    save() {
-      this.$v.$touch()
-
-      if (this.$v.$invalid || this.disabled) {
-        this.$toast.open({
-          message: 'Fill all required fields!',
-          type: 'error',
-        })
-        return
-      }
-
-      this.addToStoreData(this.form)
-      this.$router.push({ name: this.next })
-    },
   },
 }
 </script>

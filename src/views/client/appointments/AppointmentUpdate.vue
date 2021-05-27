@@ -1,9 +1,9 @@
 <template>
   <MultiStepBase
     :icon="icon"
-    next-label="Update Appointment"
+    :next-label="title"
     @cancel="cancel"
-    @save="update"
+    @save="submit"
   >
     <div
       class="space-y-4"
@@ -39,6 +39,7 @@
         track-by="Code"
         placeholder="Specialties"
         preselect
+        @change="updateStore"
       />
 
       <!-- <MultiSelect
@@ -53,53 +54,7 @@
       /> -->
     </div>
 
-    <!-- date doctor -->
-    <p class="text-primary my-4 font-bold">
-      What time would the patient want to see the doctor?
-    </p>
-    <div class="grid">
-      <DatePicker
-        v-model="form.date"
-        type="datetime"
-      />
-    </div>
-    <div class="flex items-center space-x-4 my-4">
-      <SeButton
-        :icon="time"
-      >
-        Give me the next time slot
-      </SeButton>
-      <SeButton
-        v-if="false"
-        :icon="time"
-        variant="success"
-      >
-        Join a wait queue
-      </SeButton>
-    </div>
-    <p
-      class="text-primary mt-8 mb-4 font-bold"
-    >
-      Select a doctor for the appointment
-    </p>
-    <div v-if="form.slot && form.practitioner && hideSlots">
-      <SlotInfoListItem
-        :slot="form.slot.slot"
-        :name="form.practitioner.fullName"
-        :specialty="specialty.Display"
-        @change="hideSlots = false"
-      />
-    </div>
-    <div
-      v-else
-      class="grid"
-    >
-      <SlotList
-        v-model="form.slot"
-        :data="filteredData"
-      />
-    </div>
-
+    <SelectSlot :specialty="form.specialty" />
     <p class="text-primary my-4 font-bold">
       Additional notes for the appointment
     </p>
@@ -118,13 +73,22 @@ import { required, minLength } from 'vuelidate/lib/validators'
 import Time from '@carbon/icons-vue/es/time/32'
 import SlotList from '@/components/appointments/lists/SlotList'
 import SlotInfoListItem from '@/components/appointments/lists/SlotInfoListItem'
+import SelectSlot from '@/components/appointments/book/SelectSlot'
 
 export default {
   name: 'AppointmentUpdate',
 
-  components: { SlotList, SlotInfoListItem },
+  // eslint-disable-next-line vue/no-unused-components
+  components: { SlotList, SlotInfoListItem, SelectSlot },
 
   mixins: [MultiStep],
+
+  props: {
+    id: {
+      type: String,
+      default: '',
+    },
+  },
 
   data() {
     return {
@@ -176,6 +140,10 @@ export default {
       if (!this.form.date) return []
       return this.availableSlots(this.form.date)
     },
+
+    title() {
+      return this.$route.query.type === 'update' ? 'Update appointment' : 'Rescedule appointment'
+    },
   },
 
   validations: {
@@ -191,9 +159,34 @@ export default {
       addToStoreData: 'appointments/addToCurrentAppointment',
       refresh: 'appointments/refreshCurrentAppointment',
       updateAppointment: 'appointments/updateAppointment',
+      getAppointment: 'appointments/getAppointment',
+      rescheduleAppointment: 'appointments/rescheduleAppointment',
     }),
 
+    submit() {
+      this.$v.$touch()
+
+      if (this.$v.$invalid) {
+        this.$toast.error('Fill all required fields!')
+        return
+      }
+      if (this.$route.query.type === 'update') {
+        this.update()
+      } else {
+        this.reschedule()
+      }
+    },
+
     async update() {
+      
+
+      this.loading = true
+      await this.updateAppointment(this.storeData)
+
+      this.$trigger('billing:details:open')
+      this.loading = false
+    },
+    async reschedule() {
       this.$v.$touch()
 
       if (this.$v.$invalid) {
@@ -205,10 +198,14 @@ export default {
       }
 
       this.loading = true
-      await this.updateAppointment(this.storeData)
+      await this.rescheduleAppointment(this.storeData)
 
       this.$trigger('billing:details:open')
       this.loading = false
+    },
+
+    updateStore() {
+      this.addToStoreData(this.form)
     },
   },
 }

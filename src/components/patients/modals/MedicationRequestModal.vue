@@ -93,6 +93,9 @@
             v-model="form.extra_details.priority"
             title="Priority"
             :options="priorities"
+            track-by="code"
+            label="display"
+            custom-field="code"
             :multiple="false"
           />
           <MultiSelect
@@ -230,7 +233,7 @@ export default {
 
   computed: {
     ...mapState({
-      priorities: (state) => state.global.priorities,
+      priorities: (state) => state.resources.priorities,
       provider: (state) => state.auth.provider,
       encounter: (state) => state.encounters.currentEncounter,
     }),

@@ -217,22 +217,22 @@ const routes = [
             component: () => import(/* webpackChunkName: "registerpatient" */ '../views/client/patients/register/Biodata.vue'),
           },
           {
-            path: '/register-patient/contact-information',
+            path: 'contact-information',
             name: 'ContactInfo',
             component: () => import(/* webpackChunkName: "registerpatient" */ '../views/client/patients/register/ContactInfo.vue'),
           },
           {
-            path: '/register-patient/emergency-contact',
+            path: 'emergency-contact',
             name: 'EmergencyContact',
             component: () => import(/* webpackChunkName: "registerpatient" */ '../views/client/patients/register/EmergencyContact.vue'),
           },
           {
-            path: '/register-patient/social-info',
+            path: 'social-info',
             name: 'SocialInfo',
             component: () => import(/* webpackChunkName: "registerpatient" */ '../views/client/patients/register/SocialInfo.vue'),
           },
           {
-            path: '/register-patient/payment',
+            path: 'payment',
             name: 'Payment',
             component: () => import(/* webpackChunkName: "registerpatient" */ '../views/client/patients/register/Payment.vue'),
           },
@@ -257,6 +257,7 @@ const routes = [
             name: 'AppointmentUpdate',
             component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/AppointmentUpdate.vue'),
             meta: {middleware: [fetchAppointment]},
+            props: true,
           },
           {
             path: '/appointment/clinics-services',

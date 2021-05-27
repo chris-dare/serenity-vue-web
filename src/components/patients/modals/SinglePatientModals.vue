@@ -2,7 +2,6 @@
   <div>
     <AdmitPatientModal />
     <RequestDiagnosticTestModal />
-    <AddMedicationModal />
     <AddNotesModal />
     <MarkAsDeceasedModal />
     <DeceasedDetailsModal />
@@ -10,13 +9,14 @@
     <StartEncounterModal />
     <ServiceRequestModal />
     <MedicationRequestModal />
+    <EncounterReferralModal />
+    <CaptureVitalsModal />
   </div>
 </template>
 
 <script>
 const AdmitPatientModal = () => import('@/components/patients/modals/AdmitPatientModal')
 const RequestDiagnosticTestModal = () => import('@/components/patients/modals/RequestDiagnosticTestModal')
-const AddMedicationModal = () => import('@/components/patients/modals/AddMedicationModal')
 const AddNotesModal = () => import('@/components/patients/modals/AddNotesModal')
 const MarkAsDeceasedModal = () => import('@/components/patients/modals/MarkAsDeceasedModal')
 const DeceasedDetailsModal = () => import('@/components/patients/modals/DeaceasedDetailsModal')
@@ -24,11 +24,13 @@ const EndVisitConfirmationModal = () => import('@/components/patients/modals/End
 const StartEncounterModal = () => import('@/components/patients/encounters/StartEncounterModal')
 const ServiceRequestModal = () => import('@/components/patients/modals/ServiceRequestModal')
 const MedicationRequestModal = () => import('@/components/patients/modals/MedicationRequestModal')
+const EncounterReferralModal = () => import('@/components/patients/encounters/modals/EncounterReferralModal')
+const CaptureVitalsModal = () => import('@/components/vitals/CaptureVitalsModal')
 
 
 
 export default {
   name: 'SinglePatientModals',
-  components: { AdmitPatientModal, MedicationRequestModal, StartEncounterModal, ServiceRequestModal, RequestDiagnosticTestModal, AddMedicationModal, AddNotesModal, MarkAsDeceasedModal, DeceasedDetailsModal, EndVisitConfirmationModal },
+  components: { CaptureVitalsModal, EncounterReferralModal, AdmitPatientModal, MedicationRequestModal, StartEncounterModal, ServiceRequestModal, RequestDiagnosticTestModal, AddNotesModal, MarkAsDeceasedModal, DeceasedDetailsModal, EndVisitConfirmationModal },
 }
 </script>

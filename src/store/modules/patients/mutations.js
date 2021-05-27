@@ -6,6 +6,7 @@ import {
   ADD_PATIENT_DATA,
   SET_PATIENT_DATA,
   SET_MEDICATION_REQUESTS,
+  UPDATE_MEDICATION_REQUEST,
   UPDATE_SERVICE_REQUEST,
   SET_SERVICE_REQUESTS,
   SET_OBSERVATIONS,
@@ -53,6 +54,18 @@ export default {
     state.patientMedications = data
   },
 
+  [UPDATE_MEDICATION_REQUEST](state, request) {
+    const index = state.patientMedications.findIndex(a => a.id === request.id)
+    if (index !== -1) {
+      state.patientMedications = state.patientMedications.map(a => {
+        if (a.id === request.id) return request
+        return a
+      })
+    } else {
+      state.patientMedications.push(request)
+    }
+  },
+
   [SET_DIAGNOSTIC_REPORTS](state, reports) {
     state.patientDiagnosticReports = reports
   },
@@ -72,6 +85,7 @@ export default {
       state.patientServiceRequests.push(request)
     }
   },
+  
 
   [SET_OBSERVATIONS](state, observations) {
     state.patientObservations = observations

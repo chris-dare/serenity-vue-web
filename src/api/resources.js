@@ -27,12 +27,20 @@ export default {
     return http.get(`${this.url}valueset/payment-method`)
   },
 
+  mobileMoneyVendors() {
+    return http.get(`${this.url}valueset/mobile-money-vendor`)
+  },
+
   maritalStatuses() {
     return http.get(`${this.url}valueset/marital-status`)
   },
 
   genders() {
     return http.get(`${this.url}valueset/administrative-gender`)
+  },
+
+  languages() {
+    return http.get(`${this.url}valueset/language-type`)
   },
 
   categories() {

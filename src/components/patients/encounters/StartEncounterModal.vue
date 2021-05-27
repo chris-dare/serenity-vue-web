@@ -30,7 +30,7 @@
           title="Encounter class"
           :multiple="false"
           :options="codes"
-          label="code"
+          label="display"
           placeholder="Select code"
           custom-field="code"
           track-by="code"
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 
 export default {
@@ -83,6 +83,10 @@ export default {
       services: state => state.services.services,
       provider: state => state.auth.provider,
     }),
+
+    ...mapGetters({
+      patientNextAppointment: 'appointments/patientNextAppointment',
+    }),
   },
 
   events: {
@@ -99,6 +103,7 @@ export default {
       form: {
         service_type: { required },
         encounter_class: { required },
+        priority: { required },
       },
     }
   },

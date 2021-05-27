@@ -1,21 +1,32 @@
 <template>
-  <cv-form
-    autocomplete="off"
-    @submit.prevent=""
+  <MultiStepBase
+    next-label="Finish"
+    :loading="loading"
+    :previous="previous"
+    :icon="icon"
+    :query="$route.query"
+    @cancel="cancel"
+    @save="submit"
   >
     <div class="grid grid-cols-2 gap-8">
       <MultiSelect
         v-model="form.payment_options[0].payment_type"
-        :options="options"
+        :options="methods"
         title="Primary method of payment"
         placeholder="Payment Type"
         :multiple="false"
+        label="display"
+        track-by="code"
+        custom-field="code"
         preselect
       />
       <MultiSelect
         v-if="isMoMo"
         v-model="form.payment_options[0].payment_details.payment_provider"
-        :options="networks"
+        :options="vendors"
+        label="display"
+        track-by="code"
+        custom-field="code"
         title="Payment provider"
         placeholder="Payment Type"
         :multiple="false"
@@ -31,66 +42,9 @@
         title="Country"
         placeholder="Country"
       />
-      <!-- <cv-text-input
-        v-model="form.name_of_account"
-        label="Name of Account"
-        placeholder="Name of MoMo Account"
-        type="text"
-        class="inherit-full-input"
-      />
-      <cv-text-input
-        v-model="form.momo_number"
-        label="MoMo number"
-        placeholder="Eg. 054 — — — — —"
-        class="inherit-full-input"
-      />
-      <cv-select
-        v-model="form.secondary_method"
-        label="Secondary method of payment"
-        class="inherit-full-input"
-      >
-        <cv-select-option
-          disabled
-          selected
-          hidden
-        >
-          Select an option
-        </cv-select-option>
-        <cv-select-option
-          v-for="(network, index) in networks"
-          :key="index"
-          :value="network"
-        >
-          {{ network }}
-        </cv-select-option>
-      </cv-select> -->
-    </div>
-    <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center space-x-2">
-        <SeButton
-          variant="outline"
-        >
-          Cancel
-        </SeButton>
-        <SeButton
-          :to="{ name: previous }"
-          variant="secondary"
-        >
-          Go back
-        </SeButton>
-      </div>
-      <div class="flex items-center">
-        <SeButton
-          :icon="icon"
-          :loading="loading"
-          @click="submit"
-        >
-          Finish
-        </SeButton>
-      </div>
     </div>
     <PatientSuccessModal :visible.sync="visible" />
-  </cv-form>
+  </MultiStepBase>
 </template>
 
 <script>
@@ -115,9 +69,6 @@ export default {
         }],
       },
       icon: Checkmark,
-      networks: ['MTN', 'Vodafone', 'AirtelTigo'],
-      options: ['cash' ,'momo' ,'insurance' ,'corporate' ,'card'],
-      religions: ['christianity', 'islam'],
       visible: false,
       parent: 'Patients',
       previous: 'SocialInfo',
@@ -128,10 +79,12 @@ export default {
   computed: {
     ...mapState({
       storeData: (state) => state.patients.currentPatient,
+      vendors: (state) => state.resources.vendors,
+      methods: (state) => state.resources.paymentMethods,
     }),
 
     isMoMo() {
-      return this.form.payment_options[0].payment_type === 'momo'
+      return this.form.payment_options[0].payment_type === 'MOBILE_MONEY'
     },
   },
 
@@ -153,6 +106,7 @@ export default {
   methods: {
     ...mapActions({
       addToStoreData: 'patients/addToCurrentPatient',
+      addToCurrentAppointment: 'appointments/addToCurrentAppointment',
       refresh: 'patients/refreshCurrentPatient',
       createPatient: 'patients/createPatient',
       updatePatient: 'patients/updatePatient',
@@ -175,12 +129,17 @@ export default {
     async save() {
       this.loading = true
       try {
-        await this.createPatient(this.form)
+        const data = await this.createPatient(this.form)
         this.$toast.open({
           message: 'Patient successfully added',
         })
+
+        if (this.$route.query.reroute) {
+          this.rerouteToAppointment(data)
+        }
         this.visible = true
         this.loading = false
+
       } catch (error) {
         this.$toast.open({
           message: error.message || 'Something went wrong!',
@@ -201,7 +160,7 @@ export default {
         this.$toast.open({
           message: 'Patient successfully updated',
         })
-        // this.$router.push({name: 'PatientSummary', params: { id:this.form.id }})
+        this.$router.push({name: 'PatientSummary', params: { id:this.form.id }})
       } catch (error) {
         console.info(error)
         this.$toast.open({
@@ -212,6 +171,12 @@ export default {
 
       this.loading = false
     },
+
+    rerouteToAppointment(patient) {
+      this.addToCurrentAppointment({ patient })
+      this.router.push({ name: 'DateDoctor' })
+    },
+
   },
 }
 </script>

@@ -30,9 +30,12 @@ export default {
     }
   },
 
-  async createEncounter({ commit, rootState }, payload) {
+  // eslint-disable-next-line no-unused-vars
+  async createEncounter({ commit, rootState, rootGetters }, payload) {
     try {
       const provider = rootState.auth.provider
+      // TODO
+      // payload.encounter = rootGetters['appointments/patientNextAppointment'].id
       const encounter = new Encounter(payload).getCreateView()
       const { data } = await EncountersAPI.create(provider.id, encounter)
       commit(UPDATE_ENCOUNTER, data)

@@ -47,8 +47,8 @@
           <p>{{ row.phone }}</p>
           <div class="flex justify-end">
             <CheckmarkFilled
-              class="w-5 h-5 text-serenity-primary"
-              :class="[internalPatient.id === row.id ? 'text-serenity-primary' : 'text-secondary']"
+              class="w-5 h-5"
+              :class="[internalPatient.id === row.id ? 'text-serenity-primary' : 'text-transparent']"
             />
           </div>
         </div>
@@ -108,14 +108,10 @@ export default {
         return this.patient
       },
     },
-
-    filteredDat() {
-      return this.$utils.getFilteredData(this.data, this.search, ['first_name', 'last_name', 'mr_number'])
-    },
   },
 
   created() {
-    this.searchTerms = ['first_name', 'last_name', 'mr_number']
+    this.searchTerms = ['first_name', 'last_name', 'mr_number', 'mobile']
     this.paginate= true
     this.pageLength = 5
     this.pageSizes = [5,10, 15, 20, 25]

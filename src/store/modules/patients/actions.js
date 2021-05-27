@@ -19,14 +19,17 @@ import {
   SET_DIAGNOSTIC_REPORTS,
   SET_OBSERVATIONS,
   UPDATE_OBSERVATION,
+  UPDATE_MEDICATION_REQUEST,
 } from './mutation-types'
 
 export default {
   async initSinglePatientInformation({dispatch}, id) {
     await dispatch('getPatient', id)
+    await dispatch('appointments/getAppointments', { filters: { patient: id, ordering: '-start' } }, { root:true })
     dispatch('getServiceRequests')
     dispatch('getMedicationRequests')
-    dispatch('getObservations')
+    // dispatch('getObservations', {})
+    dispatch('getObservations', { refresh:true, filters: { patient: id }})
     dispatch('getDiagnosticReports')
     dispatch('encounters/getEncounters', id , { root:true })
     dispatch('resources/getEncounterClasses', null, { root:true })
@@ -140,7 +143,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await MedicationAPI.create(provider.id, payload)
-      commit(SET_MEDICATION_REQUESTS, data)
+      commit(UPDATE_MEDICATION_REQUEST, data)
     } catch (error) {
       throw error.data || error
     }
@@ -196,13 +199,13 @@ export default {
   },
 
   //  lab requests
-  async getObservations({ commit, rootState, state }, refresh = true) {
+  async getObservations({ commit, rootState, state }, { refresh = true, filters }) {
     if (!refresh && state.patientObservations.length) {
       return
     }
     try {
       const provider = rootState.auth.provider
-      const { data } = await ObservationsAPI.list(provider.id)
+      const { data } = await ObservationsAPI.list(provider.id, filters)
       commit(SET_OBSERVATIONS, data)
     } catch (error) {
       throw error.data || error

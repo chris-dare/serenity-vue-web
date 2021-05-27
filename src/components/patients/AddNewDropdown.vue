@@ -81,7 +81,8 @@ export default {
           label: 'Capture vitals',
           component: 'HealthCross',
           color: 'bg-tetiary',
-          path: { name: 'Vitals', query: {id: this.$route.params.id} },
+          // path: { name: 'Vitals', query: {id: this.$route.params.id} },
+          value: 'vitals',
           permission: 'vitals.write',
         },
         {
@@ -90,6 +91,7 @@ export default {
           color: 'bg-tetiary',
           slug: 'test',
           permission: null,
+          value: 'diagnostic',
         },
         {
           label: 'Medication',
@@ -109,7 +111,7 @@ export default {
           label: 'Referral',
           component: 'StudySkip',
           color: 'bg-tetiary',
-          path: { name: 'Vitals', query: {id: this.$route.params.id} },
+          slug: 'referral',
           permission: null,
         },
         {
@@ -127,8 +129,20 @@ export default {
       if (option.path) {
         this.$router.push(option.path)
         return
-      } else {
+      }
+
+      switch (option.value) {
+      case 'diagnostic':
+        this.$trigger('service:request:open', 'laboratory-procedure')
+        break
+      
+      case 'vitals':
+        this.$trigger('capture:vitals:open')
+        break
+      
+      default:
         this.$trigger(`profile:${option.slug}:open`)
+        break
       }
       this.visible = false
     },

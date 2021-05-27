@@ -2,6 +2,7 @@
   <MultiStepBase
     :icon="icon"
     next-label="Next: Clinic and service"
+    :query="$route.query"
     @cancel="cancel"
     @save="validateAndReroute"
   >
@@ -102,7 +103,7 @@ export default {
       if (type.value === 'existing') {
         this.selected = type.value
       } else {
-        this.$router.push({ name: 'Biodata'})
+        this.$router.push({ name: 'Biodata', query: { reroute: true } })
       }
       
     },

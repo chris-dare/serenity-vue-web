@@ -94,7 +94,8 @@ export default {
         this.$emit('next', item.step)
         return
       }
-      this.$router.push({ name: item.path })
+      this.$trigger('multistep:save')
+      this.$router.push({ name: item.path, query: { ...this.$route.query }})
     },
   },
 }

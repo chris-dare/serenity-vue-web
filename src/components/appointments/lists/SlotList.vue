@@ -1,46 +1,49 @@
 <template>
   <div class="relative">
-    <div
-      v-if="hasSlotData"
-      class="space-y-2"
-    >
-      <SlotListItem
-        v-model="localValue"
-        :doctor="localValue"
-      />
-
-      <div class="flex justify-end">
-        <SeButton @click="localValue = {}">Change slot</SeButton>
-      </div>
-    </div>
-
     <cv-data-table-skeleton
-      v-else-if="dataLoading"
+      v-if="dataLoading"
       :columns="2"
-      :rows="3"
+      :rows="2"
     />
-    <div v-else-if="noData">
-      <p>No available slots</p>
-    </div>
     <div v-else>
-      <Search v-model="search" />
       <div
-        v-for="(doctor, i) in filteredData"
-        :key="i"
+        v-if="hasSlotData"
+        class="space-y-2"
       >
         <SlotListItem
           v-model="localValue"
-          :doctor="doctor"
+          :doctor="localValue"
+        />
+
+        <div class="flex justify-end">
+          <SeButton @click="localValue = {}">Change slot</SeButton>
+        </div>
+      </div>
+
+    
+      <div v-else-if="noData">
+        <p>No available slots</p>
+      </div>
+      <div v-else>
+        <Search v-model="search" />
+        <div
+          v-for="(doctor, i) in filteredData"
+          :key="i"
+        >
+          <SlotListItem
+            v-model="localValue"
+            :doctor="doctor"
+          />
+        </div>
+        <cv-pagination
+          :number-of-items="normalizedData.length"
+          :page="page" 
+          :backwards-button-disabled="page === 1"
+          :forwards-button-disabled="false"
+          :page-sizes="pagination.pageSizes"
+          @change="actionOnPagination"
         />
       </div>
-      <cv-pagination
-        :number-of-items="normalizedData.length"
-        :page="page" 
-        :backwards-button-disabled="page === 1"
-        :forwards-button-disabled="false"
-        :page-sizes="pagination.pageSizes"
-        @change="actionOnPagination"
-      />
     </div>
   </div>
 </template>

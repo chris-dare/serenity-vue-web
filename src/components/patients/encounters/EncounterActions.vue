@@ -13,40 +13,44 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'EncounterActions',
 
   computed: {
+    ...mapState({
+      currentPatient: state => state.patients.currentPatient,
+    }),
+
     dashboardTypes() {
       return [
         {
           label: 'Review patient',
           description: 'See patient medical record',
           type: 'reference',
-          value: 'records',
+          value: 'route',
           path: 'EncounterReview',
         },
         {
           label: 'Add Diagnosis',
           description: 'Add complaints and notes',
           type: 'add',
-          value: 'add_notes',
+          value: 'route',
           path: 'EncounterDiagnosis',
         },
         {
           label: 'Order Labs',
           description: 'Order patient medical labs',
           type: 'lab',
-          value: 'lab',
+          value: 'route',
           path: 'EncounterLabs',
         },
         {
           label: 'Medication',
           description: 'Prescribe medication and view medication records',
           type: 'medication',
-          value: 'medication',
+          value: 'route',
           path: 'EncounterMedications',
         },
         
@@ -54,21 +58,21 @@ export default {
           label: 'Care Plan',
           description: 'See patient medical record',
           type: 'care',
-          value: 'care',
+          value: 'route',
           path: 'EncounterCarePlan',
         },
         {
           label: 'Follow Up',
           description: 'Book a follow up appointment',
           type: 'followup',
-          value: 'followup',
-          path: 'EncounterFollowUp',
+          value: 'query',
+          path: 'ClinicsServices',
         },
         {
           label: 'Referral',
           description: 'Refer the patient to another doctor',
           type: 'referral',
-          value: 'referral',
+          value: 'route',
           path: 'EncounterReferral',
         },
         {
@@ -84,13 +88,18 @@ export default {
   methods: {
     ...mapActions({
       endEncounter: 'encounters/endEncounter',
+      addToCurrentAppointment: 'appointments/addToCurrentAppointment',
     }),
 
     onCardClick(action) {
-      if (action.path) {
-        return this.$router.push({ name: action.path })
-      }
       switch (action.value) {
+      case 'route':
+        this.$router.push({ name: action.path })
+        break
+      case 'query':
+        this.addToCurrentAppointment({ patient: this.currentPatient, appointmentType: 'FOLLOWUP' })
+        this.$trigger('book:appointment:open', 'followup')
+        break
       case 'close':
         this.end()
         break

@@ -46,9 +46,9 @@ export default {
           slug: 'hospitalization',
         },
         {
-          label: 'Proceedures',
+          label: 'Procedures',
           color: '#24A148',
-          slug: 'proceedures',
+          slug: 'procedures',
         },
         {
           label: 'Labs',

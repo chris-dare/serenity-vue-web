@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-full">
+  <div class="relative h-main">
     <SeForm class="space-y-8">
       <p class="font-semibold">Order Labs/ imaging</p>
 
@@ -39,6 +39,9 @@
           title="Priority"
           :multiple="false"
           :options="priorities"
+          track-by="code"
+          label="display"
+          custom-field="code"
           placeholder="Routine, ASAP, Urgent"
         />
         
@@ -99,7 +102,7 @@
       </div>
     </SeForm>
 
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between items-center absolute w-full right-0 bottom-12">
       <SeButton
         variant="secondary"
         :to="{name: 'EncounterDiagnosis', params: { id: $route.params.id }}"
@@ -164,7 +167,7 @@ export default {
     ...mapState({
       provider: (state) => state.auth.provider,
       location: (state) => state.global.location,
-      priorities: (state) => state.global.priorities,
+      priorities: (state) => state.resources.priorities,
       encounter: (state) => state.encounters.currentEncounter,
     }),
 

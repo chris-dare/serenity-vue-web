@@ -38,9 +38,15 @@ export default {
     next(vm => vm.getReligiousAffliations())
   },
 
+  beforeRouteLeave(to, from, next) {
+    this.refresh()
+    next()
+  },
+
   methods: {
     ...mapActions({
       getReligiousAffliations: 'resources/getReligiousAffliations',
+      refresh: 'patients/refreshCurrentPatient',
     }),
   },
 }

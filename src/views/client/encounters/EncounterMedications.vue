@@ -98,6 +98,12 @@
           type="text"
           class="inherit-full-input"
         />
+        <p
+          v-if="$utils.validateRequiredField($v, 'extra_details')"
+          class="error col-span-3"
+        >
+          Priority is required
+        </p>
         <cv-text-input
           v-model="form.extra_details.code"
           label="Code"
@@ -126,6 +132,7 @@
           class="inherit-full-input col-span-3"
         />
       </div>
+      
 
       <div class="flex justify-end">
         <SeButton
@@ -149,20 +156,16 @@
         </div>
         <div
           v-else
-          class="space-y-3"
+          class="space-y-3 flex-wrap"
         >
-          <div
-            v-for="(diagnosis, index) in currentEncounterMedicationRequests"
+          <Tag
+            v-for="(request, index) in currentEncounterMedicationRequests"
             :key="index"
             class="flex items-center space-x-2"
+            :variant="request.status ? 'success' : 'error'"
           >
-            <router-link
-              class="underline"
-              :to="{ name: 'EncounterReview', params: { ...$route.params } }"
-            >
-              view encounter
-            </router-link>
-          </div>
+            {{ request.name }}
+          </Tag>
         </div>
       </div>
     </SeForm>
@@ -221,6 +224,9 @@ export default {
 
   validations: {
     form: {
+      extra_details: {
+        priority: { required },
+      },
       drugs: {
         required,
         minLength: minLength(1),
@@ -255,6 +261,7 @@ export default {
       provider: (state) => state.auth.provider,
       encounter: (state) => state.encounters.currentEncounter,
       units: (state) => state.global.units,
+      user: (state) => state.auth.user,
     }),
 
     ...mapGetters({
@@ -278,9 +285,6 @@ export default {
       if (this.form.id) {
         this.update()
       } else {
-        this.form.requester_practitioner_role = this.provider.practitionerRoleId
-        this.form.patient = this.$route.params.id
-        this.form.encounter = this.encounter.id
         this.save(reroute)
       }
     },
@@ -289,6 +293,7 @@ export default {
       this.loading = true
 
       try {
+        this.form.requester = this.user.id
         await this.createMedicationRequest(this.formatMedication(this.form))
         this.loading = false
         this.$toast.open({
@@ -296,7 +301,7 @@ export default {
         })
         this.close()
         if (reroute) {
-          this.$router.push({ name: 'PatientSummary' })
+          this.$router.push({ name: 'EncounterCarePlan', params: { id: this.$route.params.id }})
         }
       } catch (error) {
         this.loading = false
@@ -335,6 +340,9 @@ export default {
         newForm.push({
           ...drug,
           ...data.extra_details,
+          // requester_practitioner_role: this.provider.practitionerRoleId,
+          patient: this.$route.params.id,
+          encounter: this.encounter.id,
           medication_request_category: [{ display: data.extra_details.medication_request_category }],
         })
       })

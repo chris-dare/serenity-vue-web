@@ -5,8 +5,9 @@
         <p>Patient Vitals</p>
         <!-- <p class="text-gray-500  ml-3">Updated: Today</p> -->
         <div
+          v-if="hasActiveEncounter"
           class="flex items-center space-x-1 cursor-pointer"
-          @click="$router.push({ name: 'Vitals', query: { id: $route.params.id }})"
+          @click="$trigger('capture:vitals:open')"
         >
           <AddFilled class="w-4 h-4 text-serenity-primary" />
           <p>Add new</p>
@@ -35,9 +36,16 @@
 <script>
 import PatientChartCards from '@/components/patients/charts/PatientChartCards'
 import AddFilled from '@carbon/icons-vue/es/add--filled/32.js'
+import { mapGetters } from 'vuex'
 export default {
   name: 'PatientCharts',
 
   components: { PatientChartCards, AddFilled },
+
+  computed: {
+    ...mapGetters({
+      hasActiveEncounter: 'encounters/hasActiveEncounter',
+    }),
+  },
 }
 </script>

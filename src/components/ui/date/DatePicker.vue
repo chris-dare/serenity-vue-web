@@ -11,6 +11,7 @@
       :config="configs[type]"
       placeholder="Select a date"
       class="bg-white border-b h-10 w-full border-serenity-dark px-4"
+      v-bind="$attrs"
       @on-change="$emit('change', $event)"
     />
     <p
@@ -53,6 +54,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    maxDate: {
+      type: String,
+      default: null,
+    },
   },
 
   data() {
@@ -60,7 +65,11 @@ export default {
       date: null,
       // https://chmln.github.io/flatpickr/options/
       configs: {
-        date: {},
+        date: {
+          dateFormat: 'Y-m-d',
+          minDate: this.disableDatesBeforeToday ? 'today' : null,
+          maxDate: this.maxDate,
+        },
         wrap: {
           wrap: true,
           altFormat: 'M	j, Y',

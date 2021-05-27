@@ -24,7 +24,7 @@
       />
 
       <MultiSelect
-        v-model="localValue.id"
+        v-model="localValue.patient"
         title="Patient"
         :multiple="false"
         :options="patients"

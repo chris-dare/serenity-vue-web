@@ -11,6 +11,11 @@ export function removeDash (value) {
   value = value.toString().toLowerCase()
   return value.split('-').join(' ')
 }
+export function removeUnderscore (value) {
+  if (!value) return ''
+  value = value.toString().toLowerCase()
+  return value.split('_').join(' ')
+}
 
 export function formatDate(value) {
   if (!value) return ''
@@ -26,7 +31,7 @@ function formatMoney(num) {
 //   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
 
-const filters = { toCedis, formatMoney, formatDate, capitalize, removeDash }
+const filters = { toCedis, formatMoney, formatDate, capitalize, removeDash, removeUnderscore }
 
 export default Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

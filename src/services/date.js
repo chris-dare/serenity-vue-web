@@ -5,7 +5,10 @@ import endOfDay from 'date-fns/endOfDay'
 import endOfMonth from 'date-fns/endOfMonth'
 import formatDistance from 'date-fns/formatDistance'
 
-const formatDate = (date, formatString = 'yyyy-MM-dd HH:mm') => format(new Date(date), formatString)
+const formatDate = (date, formatString = 'yyyy-MM-dd HH:mm') => {
+  if (!date) return ''
+  return format(new Date(date), formatString)
+}
 
 const sortDate = (dates) => {
   return dates.sort((a, b) => b.date - a.date)
@@ -28,13 +31,18 @@ const formatQueryParamsDate = (dateString) => {
 
 const queryNow = () => formatQueryParamsDate(new Date())
 
-const sortByDate = (data, field) => {
+const sortByDate = (data, field, order = 'asc') => {
   if (!data.length) return data
 
   return data.sort((a, b) => {
     const dateA = new Date(a[field || 'date'])
     const dateB = new Date(b[field || 'date'])
-    return dateA < dateB ? -1 : dateA > dateB ? 1 : 0
+    if (order === 'asc') {
+      return dateA < dateB ? -1 : dateA > dateB ? 1 : 0
+    } else {
+      return dateA < dateB ? 1 : dateA > dateB ? -1 : 0
+    }
+    
   })
 }
 
