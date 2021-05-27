@@ -144,7 +144,6 @@ export default {
   },
 
   refreshCurrentAppointment({ commit }) {
-    console.log('refresh')
     commit(SET_APPOINTMENT_DATA, {})
   },
 }

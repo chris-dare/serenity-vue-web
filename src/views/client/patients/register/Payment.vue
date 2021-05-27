@@ -130,7 +130,6 @@ export default {
       this.loading = true
       try {
         const data = await this.createPatient(this.form)
-        console.log('patient', data)
         this.$toast.open({
           message: 'Patient successfully added',
         })

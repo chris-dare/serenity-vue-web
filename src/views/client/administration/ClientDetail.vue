@@ -289,7 +289,6 @@ export default {
     },
     loadClient() {
       let id = this.$route.params.id
-      console.log('load', this.$route.params.id)
       this.getClient( id )
         .then(({data}) => {
           this.selectedClient = data.returnedData
