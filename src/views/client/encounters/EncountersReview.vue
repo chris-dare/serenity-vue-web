@@ -1,11 +1,11 @@
 <template>
-  <div class="relative h-full flex flex-col">
+  <div class="relative h-full flex flex-col pb-6">
     <div class="space-y-8 divide-y divide-solid divide-subtle flex-1">
       <p class="font-semibold">Patient Review</p>
       <EncounterDetails />
     </div>
 
-    <div class="flex justify-end mt-12">
+    <div class="flex justify-end">
       <SeButton
         :to="{name: 'EncounterDiagnosis', params: {id: $route.params.id}}"
         :icon="icon"

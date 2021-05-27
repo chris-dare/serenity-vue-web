@@ -135,8 +135,19 @@ const checkForEmpty = (tree) => {
 const error = (err, toast) => {
   console.log('error', err)
   if (err) {
-    const error = err.data ? err.data[0] || err.data.detail || err.data.message : err.error || err.message
-    toast.open({ message: error, type: 'error' })
+    let error = ''
+    if (err.data) {
+      error = err.data.error || err.data[0] || err.data.detail || err.data.message
+    } else {
+      error = err.response.data.error || err.message
+    }
+
+    if (!error) {
+      let field = Object.keys(err.data)[0]
+      error = field ? err.data[field][0] : null
+    }
+
+    toast.open({ message: error || 'Something went wrong', type: 'error' })
   }
   
   throw error
@@ -163,6 +174,12 @@ const getFilteredData = (data, searchTerms, searchFields) => {
   return filteredData
 }
 
+const getFirstData = (data, field = 'display') => {
+  if (!data || !data.length) return '-'
+
+  return data[0][field]
+}
+
 export default {
   install(Vue) {
     Vue.prototype.$utils = {
@@ -176,6 +193,7 @@ export default {
       customNameLabel,
       error: err => error(err, Vue.prototype.$toast),
       getFilteredData,
+      getFirstData,
     }
   },
 }

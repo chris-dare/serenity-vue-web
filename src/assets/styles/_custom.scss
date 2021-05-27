@@ -310,6 +310,10 @@ button:focus {
 
 }
 
+.flatpickr-time{
+  height: 40px !important;
+}
+
 .error{
   @apply text-xs text-red-600 mt-2;
 }
@@ -335,7 +339,7 @@ button:focus {
 }
 .borderless-input{
   input, textarea{
-    @apply border-0
+    @apply border-0;
   }
 }
 

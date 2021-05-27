@@ -19,9 +19,11 @@ export default {
       },
     },
   },
-    
-  beforeDestroy() {
-    this.addToStoreData({ ...this.form , ...this.storeData })
+
+  events: {
+    'multistep:save': function() {
+      this.addToStoreData({ ...this.form , ...this.storeData })
+    },
   },
 
   methods: {
@@ -33,6 +35,8 @@ export default {
     validateAndReroute() {
       this.$v.$touch()
 
+      this.addToStoreData(this.form)
+
       if (this.$v.$invalid) {
         this.$toast.open({
           message: 'Fill all required fields!',
@@ -41,13 +45,13 @@ export default {
         return
       }
 
-      this.addToStoreData(this.form)
+      
 
       if (this.modal) {
         this.$emit('next')
         return
       }
-      this.$router.push({ name: this.next })
+      this.$router.push({ name: this.next, query: { ...this.$route.query } })
     },
 
     reRoute() {
@@ -57,7 +61,7 @@ export default {
         this.$emit('next')
         return
       }
-      this.$router.push({ name: this.next })
+      this.$router.push({ name: this.next, query: { ...this.$route.query } })
     },
   },
 }

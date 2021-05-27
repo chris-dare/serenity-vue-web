@@ -4,6 +4,7 @@
     next-label="Next: Date, Doctor"
     :previous="previous"
     :modal="modal"
+    :query="$route.query"
     @cancel="cancel"
     @save="validateAndReroute"
   >

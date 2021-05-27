@@ -17,4 +17,12 @@ export default () => ({
   examUnitTypes: [],
   socialUnitTypes: [],
   vitalsUnitTypes: [],
+  languages: [],
+  vendors: [],
+  priorities: [
+    {display: 'Routine', code: 'ROUTINE'},
+    {display: 'Urgent', code: 'URGENT'},
+    {display: 'ASAP', code: 'ASAP'},
+    {display: 'STAT', code: 'STAT'},
+  ],
 })

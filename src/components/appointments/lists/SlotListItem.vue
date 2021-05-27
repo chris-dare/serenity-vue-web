@@ -11,8 +11,8 @@
     <p>{{ slot }}</p>
     <div>
       <CheckmarkFilled
-        class="w-5 h-5 text-serenity-primary"
-        :class="[doctor.id === localValue.id ? 'text-serenity-primary' : 'text-secondary']"
+        class="w-5 h-5"
+        :class="[doctor.id === localValue.id ? 'text-serenity-primary' : 'text-transparent']"
       />
     </div>
   </div>
@@ -37,12 +37,13 @@ export default {
     fullName() {
       if (this.doctor.practitioner_name) return this.doctor.practitioner_name
       if (!this.doctor.practitioner) return ''
+      if (this.doctor.practitioner.fullName) return this.doctor.practitioner.fullName
 
       return `${this.doctor.practitioner.title || ''} ${this.doctor.practitioner.first_name || ''} ${this.doctor.practitioner.last_name || ''}`
     },
 
     specialties() {
-      if (!this.doctor.practitioner) return ''
+      if (!this.doctor.practitioner?.practitioner_specialty) return ''
       return this.doctor.practitioner.practitioner_specialty.join(', ')
     },
 

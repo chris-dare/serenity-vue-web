@@ -1,7 +1,13 @@
 <template>
-  <cv-form
-    autocomplete="off"
-    @submit.prevent=""
+  <MultiStepBase
+    next-label="Next: Emergency"
+    :loading="loading"
+    :next="next"
+    :previous="previous"
+    :icon="icon"
+    :query="$route.query"
+    @cancel="cancel"
+    @save="validateAndReroute"
   >
     <div class="grid grid-cols-2 gap-8 mb-8">
       <MsisdnPhoneInput
@@ -17,11 +23,11 @@
       />
     </div>
     <Address
-      v-model="form.address"
+      v-model="form.patient_address[0]"
       :disabled="disabled"
     />
 
-    <div class="flex items-center justify-between mt-12 mb-6">
+    <!-- <div class="flex items-center justify-between mt-12 mb-6">
       <div class="flex items-center space-x-2">
         <SeButton
           variant="outline"
@@ -29,7 +35,7 @@
           Cancel
         </SeButton>
         <SeButton
-          :to="{ name: previous }"
+          :to="{ name: previous, query: { ...$route.query } }"
           variant="secondary"
         >
           Go back
@@ -43,8 +49,8 @@
           Next: Emergency
         </SeButton>
       </div>
-    </div>
-  </cv-form>
+    </div> -->
+  </MultiStepBase>
 </template>
 
 <script>
@@ -61,7 +67,7 @@ export default {
   data() {
     return {
       form: {
-        address: {},
+        patient_address: [{}],
       },
       next: 'EmergencyContact',
       previous: 'Biodata',
@@ -100,20 +106,20 @@ export default {
       refresh: 'patients/refreshCurrentPatient',
     }),
 
-    save() {
-      this.$v.$touch()
+    // save() {
+    //   this.$v.$touch()
 
-      if (this.$v.$invalid || this.disabled) {
-        this.$toast.open({
-          message: 'Fill all required fields!',
-          type: 'error',
-        })
-        return
-      }
+    //   if (this.$v.$invalid || this.disabled) {
+    //     this.$toast.open({
+    //       message: 'Fill all required fields!',
+    //       type: 'error',
+    //     })
+    //     return
+    //   }
 
-      this.addToStoreData(this.form)
-      this.$router.push({ name: this.next })
-    },
+    //   this.addToStoreData(this.form)
+    //   this.$router.push({ name: this.next , query: { ...this.$route.query } })
+    // },
   },
 }
 </script>

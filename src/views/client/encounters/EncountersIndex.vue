@@ -42,6 +42,7 @@
 
     <CaptureVitalsModal />
     <EndVisitConfirmationModal />
+    <BookAppointmentModal />
   </AppStatePage>
 </template>
 
@@ -61,6 +62,7 @@ export default {
     EncounterPatientSummary,
     CaptureVitalsModal: () => import('@/components/vitals/CaptureVitalsModal'),
     EndVisitConfirmationModal: () => import('@/components/patients/modals/EndVisitConfirmationModal'),
+    BookAppointmentModal: () => import('@/components/appointments/book/BookAppointmentModal'),
   },
 
   props: {
@@ -120,6 +122,10 @@ export default {
     })
   },
 
+  // beforeRouteLeave () {
+  //   this.end()
+  // },
+
   methods: {
     ...mapActions({
       initSinglePatientInformation: 'patients/initSinglePatientInformation',
@@ -137,6 +143,7 @@ export default {
             this.$toast.open({
               message: 'Encounter ended successfully',
             })
+            this.$router.push({name: 'Patients'})
             this.loading = false
           } catch (error) {
             // empty

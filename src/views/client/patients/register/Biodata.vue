@@ -1,8 +1,13 @@
 <template>
   <div>
-    <cv-form
-      autocomplete="off"
-      @submit.prevent=""
+    <MultiStepBase
+      next-label="Next: Contact Info"
+      :loading="loading"
+      :next="next"
+      :icon="icon"
+      :query="$route.query"
+      @cancel="cancel"
+      @save="validateAndReroute"
     >
       <!-- title -->
       <div class="space-y-8">
@@ -55,6 +60,7 @@
               custom-field="code"
               preselect
               :multiple="false"
+              :invalid-message="$utils.validateRequiredField($v, 'gender')"
             />
           </div>
           <div>
@@ -64,7 +70,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-between mt-12 mb-6">
+        <!-- <div class="flex items-center justify-between mt-12 mb-6">
           <SeButton
             variant="outline"
             @click="cancel"
@@ -79,9 +85,9 @@
               Next: Contact Info
             </SeButton>
           </div>
-        </div>
+        </div> -->
       </div>
-    </cv-form>
+    </MultiStepBase>
   </div>
 </template>
 
@@ -129,20 +135,20 @@ export default {
       refresh: 'patients/refreshCurrentPatient',
     }),
 
-    save() {
-      this.$v.$touch()
+    // save() {
+    //   this.$v.$touch()
 
-      if (this.$v.$invalid) {
-        this.$toast.open({
-          message: 'Fill all required fields!',
-          type: 'error',
-        })
-        return
-      }
+    //   if (this.$v.$invalid) {
+    //     this.$toast.open({
+    //       message: 'Fill all required fields!',
+    //       type: 'error',
+    //     })
+    //     return
+    //   }
 
-      this.addToStoreData(this.form)
-      this.$router.push({ name: this.next })
-    },
+    //   this.addToStoreData(this.form)
+    //   this.$router.push({ name: this.next, query: { ...this.$route.query }})
+    // },
 
     actionChange() {},
   },

@@ -4,9 +4,11 @@ export default class Appointment {
     this.data = { ...data }
   }
 
-  getCreateView() {
+  getCreateView(appointment) {
     let createData = {
-      appointment: '99f65066-4784-4ba1-be3d-b186634b6024',
+      // appointment: '99f65066-4784-4ba1-be3d-b186634b6024',
+      // service_type: appointment.service.id,
+      appointment: appointment ? appointment.id : '99f65066-4784-4ba1-be3d-b186634b6024',
       start_time: Vue.prototype.$date.queryNow(),
       ...this.data,
     }

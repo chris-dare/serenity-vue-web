@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 
 export default {
@@ -82,6 +82,10 @@ export default {
       codes: state => state.resources.encounterClasses,
       services: state => state.services.services,
       provider: state => state.auth.provider,
+    }),
+
+    ...mapGetters({
+      patientNextAppointment: 'appointments/patientNextAppointment',
     }),
   },
 

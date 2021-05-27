@@ -14,7 +14,6 @@
         :limit="3"
         :max-height="600"
         :hide-selected="true"
-        :options-limit="4"
       />
     </div>
   </div>

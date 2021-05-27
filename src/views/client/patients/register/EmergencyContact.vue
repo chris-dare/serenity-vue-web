@@ -79,7 +79,7 @@
           Cancel
         </SeButton>
         <SeButton
-          :to="{ name: previous }"
+          :to="{ name: previous, query: { ...this.$route.query } }"
           variant="secondary"
         >
           Go back
@@ -204,7 +204,7 @@ export default {
       this.form.contact[0].relationship ='emergency_contact',
 
       this.addToStoreData(this.form)
-      this.$router.push({ name: this.next })
+      this.$router.push({ name: this.next, query: { ...this.$route.query } })
     },
   },
 }

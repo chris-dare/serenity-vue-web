@@ -21,13 +21,17 @@
         placeholder="Religion"
         custom-field="code"
       />
-
-      <cv-text-input
-        v-model="form.preferred_communication"
-        label="Home Language"
+    
+      <MultiSelect
+        v-model="form.preferred_communication[0].language"
+        title="Home Language"
+        :multiple="false"
+        :options="languages"
+        label="display"
+        track_by="code"
         placeholder="Primary language you speak"
-        type="text"
-        class="inherit-full-input"
+        custom-field="code"
+        preselect
       />
       <cv-text-input
         v-model="form.meta.email"
@@ -56,7 +60,7 @@
           Cancel
         </SeButton>
         <SeButton
-          :to="{ name: previous }"
+          :to="{ name: previous, query: { ...this.$route.query } }"
           variant="secondary"
         >
           Go back
@@ -87,6 +91,7 @@ export default {
     return {
       form: {
         meta: {},
+        preferred_communication: [{preffered: true, language: ''}],
       },
       previous: 'EmergencyContact',
       next: 'Payment',
@@ -99,6 +104,7 @@ export default {
       storeData: (state) => state.patients.currentPatient,
       statuses: state => state.resources.maritalStatuses,
       religions: state => state.resources.religiousAffiliations,
+      languages: state => state.resources.languages,
     }),
   },
 
@@ -120,7 +126,7 @@ export default {
       // }
 
       this.addToStoreData(this.form)
-      this.$router.push({ name: this.next })
+      this.$router.push({ name: this.next, query: { ...this.$route.query } })
     },
   },
 }

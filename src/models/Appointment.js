@@ -45,7 +45,15 @@ export default class Appointment {
     updateData.comment = this.data.comment || ''
     updateData.appointmentType = this.data.appointmentType || 'ROUTINE'
     updateData.slot_id = this.data.slot ? this.data.slot.id : null
-    updateData.service_tier = this.data.service_tier ? this.data.service_tier.value : null
+    
+    return updateData
+  }
+
+  getRescheduleView() {
+    let updateData = { }
+    
+    updateData.comment = this.data.comment || ''
+    updateData.slot_id = this.data.slot ? this.data.slot.id : null
     
     return updateData
   }

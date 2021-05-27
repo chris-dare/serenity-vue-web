@@ -11,6 +11,7 @@
       :data="[]"
       :columns="columns"
       :pagination="paginationDetails"
+      :class="{'small-table': small}"
       @pagination="$emit('pagination', $event)"
     >
       <template slot="data">
@@ -62,6 +63,11 @@ export default {
     },
 
     loading: {
+      type: Boolean,
+      default: false,
+    },
+
+    small: {
       type: Boolean,
       default: false,
     },

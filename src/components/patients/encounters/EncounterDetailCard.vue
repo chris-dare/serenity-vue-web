@@ -100,7 +100,6 @@
       />
     </div>
 
-    <EncounterDiagnosisModal />
     <NotesModal
       required
       @save="createNote"
@@ -112,7 +111,6 @@
 <script>
 import EncounterDiagnosis from './EncounterDiagnosis'
 import EncounterNotes from './EncounterNotes'
-import EncounterDiagnosisModal from './EncounterDiagnosisModal'
 import EncounterServiceRequests from './EncounterServiceRequests'
 import EncounterDiagnosticReports from './EncounterDiagnosticReports'
 import { mapState, mapActions, mapGetters } from 'vuex'
@@ -124,7 +122,6 @@ export default {
   components: {
     VitalsDetail: () => import(/* webpackPrefetch: true */ '@/components/vitals/VitalsDetail'),
     EncounterDiagnosis,
-    EncounterDiagnosisModal,
     EncounterNotes,
     EncounterServiceRequests,
     EncounterDiagnosticReports,

@@ -31,6 +31,10 @@ export default {
     return http.patch(`${this.url}${providerId}/appointment/${appointmentId}`, params)
   },
 
+  reschedule(providerId, appointmentId, params) {
+    return http.post(`${this.url}${providerId}/appointment/${appointmentId}/rescheduleappointment`, params)
+  },
+
   delete(providerId,id) {
     return http.delete(`${this.url}${providerId}/appointment/${id}`)
   },

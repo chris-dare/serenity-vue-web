@@ -5,6 +5,7 @@
     :previous="previous"
     :loading="loading"
     :modal="modal"
+    :query="$route.query"
     @cancel="cancel"
     @save="save"
   >
@@ -76,11 +77,17 @@ export default {
       }
       this.addToStoreData(this.form)
 
-      this.loading = true
-      await this.createAppointment(this.storeData)
-      this.$emit('save')
-      this.$trigger('billing:details:open')
-      this.loading = false
+      try {
+        this.loading = true
+        await this.createAppointment(this.storeData)
+        this.$emit('save')
+        this.$trigger('billing:details:open')
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
+
+      
     },
   },
 

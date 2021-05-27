@@ -8,7 +8,7 @@
   >
     <template slot="content">
       <AppRegisterLayout
-        label="Walk in patient visit"
+        :label="label"
         :nav-items="navItems"
         :checked="step"
         modal
@@ -50,6 +50,7 @@ export default {
     return {
       visible: false,
       step: 2,
+      label: '',
     }
   },
 
@@ -60,7 +61,7 @@ export default {
 
     navItems() {
       return[
-        { label: 'Select patient', description: 'Existing or new patient', path: 1, completed: false, step: 1, slug: 'select-patient' },
+        // { label: 'Select patient', description: 'Existing or new patient', path: 1, completed: false, step: 1, slug: 'select-patient' },
         { label: 'Clinics, Services', description: 'Choose service', path: 2, completed: false, step: 2, slug: 'clinic-service' },
         { label: 'Date, Doctor', description: 'Choose your date and doctor', path: 3, completed: false, step: 3, slug: 'date-doctor' },
         //   { label: 'Payment', description: 'How patient makes payment', path: 'AppointmentPayment', completed: false, step: 'payment'},
@@ -83,8 +84,9 @@ export default {
   },
 
   events: {
-    'book:appointment:open': function() {
+    'book:appointment:open': function(data) {
       this.visible = true
+      this.label = data.params[0] === 'followup' ? `Follow up appointment - ${this.currentAppointment.patient.fullName}` : `Walk in patient visit - ${this.currentAppointment.patient.fullName}`
     },
     'book:appointment:edit': function(data) {
       this.visible = true

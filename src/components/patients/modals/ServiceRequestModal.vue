@@ -24,6 +24,9 @@
             v-model="form.priority"
             title="Priority"
             :options="priorities"
+            track-by="code"
+            label="display"
+            custom-field="code"
             :multiple="false"
           />
           <cv-text-input
@@ -121,7 +124,7 @@ export default {
     ...mapState({
       provider: (state) => state.auth.provider,
       location: (state) => state.global.location,
-      priorities: (state) => state.global.priorities,
+      priorities: (state) => state.resources.priorities,
       encounter: (state) => state.encounters.currentEncounter,
     }),
   },

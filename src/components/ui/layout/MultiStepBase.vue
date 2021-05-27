@@ -16,7 +16,7 @@
         </SeButton>
         <SeButton
           v-if="props.previous && !props.modal"
-          :to="{ name: props.previous }"
+          :to="{ name: props.previous, query: { ...props.query } }"
           variant="secondary"
         >
           Go back

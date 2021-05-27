@@ -63,7 +63,10 @@
           >
         </SeButton>
       </div>
-      <FilterDropdown v-model="selectedFilter" />
+      <FilterDropdown
+        v-if="false"
+        v-model="selectedFilter"
+      />
     </div>
 
     <div>

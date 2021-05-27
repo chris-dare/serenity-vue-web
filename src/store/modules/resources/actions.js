@@ -21,6 +21,8 @@ import {
   SET_SYSTEM_EXAM_UNIT_TYPES,
   SET_SOCIAL_HISTORY_UNIT_TYPES,
   SET_VITALS_UNIT_TYPES,
+  SET_LANGUAGES,
+  SET_VENDORS,
 } from './mutation-types'
 
 export default {
@@ -80,6 +82,16 @@ export default {
     commit(SET_SERVICE_TYPES, data.data)
   },
 
+  async getLanguages({ commit, state }) {
+    if (state.languages.length) {
+      return
+    }
+    const { data } = await ResourceAPI.languages().catch((error) => {
+      throw error
+    })
+    commit(SET_LANGUAGES, data)
+  },
+
   async getPaymentMethods({ commit, state }) {
     if (state.paymentMethods.length) {
       return
@@ -88,6 +100,16 @@ export default {
       throw error
     })
     commit(SET_PAYMENT_METHODS, data)
+  },
+
+  async getMobileMoneyVendors({ commit, state }) {
+    if (state.vendors.length) {
+      return
+    }
+    const { data } = await ResourceAPI.mobileMoneyVendors().catch((error) => {
+      throw error
+    })
+    commit(SET_VENDORS, data)
   },
 
   async getEncounterClasses({ commit, state}) {
@@ -171,6 +193,7 @@ export default {
       throw error || error.message
     }
   },
+
   async getVitalsUnitTypes({ commit, state }) {
     if (state.vitalsUnitTypes.length) {
       return

@@ -11,6 +11,7 @@
       :config="configs[type]"
       placeholder="Select a date"
       class="bg-white border-b h-10 w-full border-serenity-dark px-4"
+      v-bind="$attrs"
       @on-change="$emit('change', $event)"
     />
     <p

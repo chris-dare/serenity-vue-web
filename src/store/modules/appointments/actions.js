@@ -44,7 +44,7 @@ export default {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI.nextSlot(provider.id, filters)
 
-      if (data.data && data.data.length) {
+      if (data.data && typeof data.data === 'object') {
         const slot = {
           ...data.data,
           practitioner: rootGetters['practitioners/practitioners'].find(a => a.id === data.data.practitionerid),
@@ -110,6 +110,19 @@ export default {
     }
   },
 
+  async rescheduleAppointment({ commit, rootState }, payload) {
+    try {
+      const appointment = new Appointment(payload).getRescheduleView()
+      const provider = rootState.auth.provider
+      const { data } = await AppointmentsAPI
+        .reschedule(provider.id, payload.id, appointment)
+      commit(UPDATE_APPOINTMENT, data.data)
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
   async deleteAppointment({ commit, rootState }, id) {
     try {
       const provider = rootState.auth.provider
@@ -131,6 +144,7 @@ export default {
   },
 
   refreshCurrentAppointment({ commit }) {
+    console.log('refresh')
     commit(SET_APPOINTMENT_DATA, {})
   },
 }

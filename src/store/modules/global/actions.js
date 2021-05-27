@@ -10,6 +10,8 @@ export default {
     dispatch('resources/getCodes', null, { root:true })
     dispatch('resources/getServiceTypes', null, { root:true })
     dispatch('resources/getGenders', null, { root:true })
+    dispatch('resources/getLanguages', null, { root:true })
+    dispatch('resources/getMobileMoneyVendors', null, { root:true })
   },
 
   initApp({dispatch}) {

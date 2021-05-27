@@ -1,5 +1,6 @@
 import isAfter from 'date-fns/isAfter'
 import parseISO from 'date-fns/parseISO'
+import isEmpty from 'lodash/isEmpty'
 
 export default {
   hasActiveEncounter: (state,getters) => !!getters.onGoingEncounters.length,
@@ -14,8 +15,13 @@ export default {
     return state.encounters.filter(encounter => encounter.status !== 'finished' || (!encounter.end_time && isAfter(Date.now(), parseISO(encounter.start_time))))
   },
 
+  currentEncounterCannotBeFinished: (state, getters) => {
+    if (!state.currentEncounter) return false
+    return isEmpty(getters.currentEncounterDiagnosis) || isEmpty(getters.currentEncounterMedicationRequests) || isEmpty(getters.currentEncounterServiceRequests)
+  },
+
   currentEncounterStatus: state => {
-    if (!state.currentEncounter) return ''
+    if (isEmpty(state.currentEncounter.status)) return ''
     return state.currentEncounter.status.split('-').join(' ')
   },
 
@@ -32,6 +38,11 @@ export default {
   currentEncounterCarePlans: state => {
     if (!state.currentEncounter || !state.currentEncounter.encounter_care_plan) return []
     return state.currentEncounter.encounter_care_plan
+  },
+
+  currentEncounterReferrals: state => {
+    if (!state.currentEncounter || !state.currentEncounter.encounter_referral_request) return []
+    return state.currentEncounter.encounter_referral_request
   },
 
   currentEncounterDiagnosis: state => {
@@ -83,6 +94,35 @@ export default {
     options.forEach(option => {
       const observation = sortedVitals.find(obs => obs.unit === option)
       vitals[option] = observation ? observation.value : null
+    })
+
+    return vitals
+  },
+
+  currentPatientVitals: (state, getters, rootState) => {
+    if (!rootState.patients.patientObservations) return {}
+    const options = rootState.resources.vitalsUnitTypes
+    let vitals = []
+  
+    const sortedVitals = sortByDate(rootState.patients.patientObservations, 'issued')
+    options.forEach(option => {
+      const observations = sortedVitals.filter(obs => obs.unit === option.code).map(obs => {
+        return {
+          group: 'Dataset 1',
+          date: obs.issued,
+          value: obs.value ? obs.value : 0,
+        }
+      })
+
+      vitals.push({
+        per: option.display,
+        title: option.code,
+        data: observations,
+        value: observations.length ? observations[0].value : '-',
+        date: observations.length ? observations[0].issued : null,
+        status: 'Normal',
+        status_color: 'success',
+      })
     })
 
     return vitals

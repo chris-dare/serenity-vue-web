@@ -73,7 +73,7 @@ export default {
     }),
 
     ...mapGetters({
-      currentPatientExamSystems: 'encounters/currentPatientExamSystems',
+      currentPatientExamSystems: 'encounters/currentEncounterExamSystems',
     }),
   },
 

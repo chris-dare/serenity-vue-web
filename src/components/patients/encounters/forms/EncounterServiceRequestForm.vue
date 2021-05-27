@@ -1,123 +1,76 @@
 <template>
-  <div class="relative h-main">
-    <SeForm class="space-y-8">
-      <p class="font-semibold">Order Labs/ imaging</p>
+  <SeForm class="space-y-8">
+    <p class="font-semibold">Order Labs/ imaging</p>
 
 
-      <div class="space-y-4">
-        <MultiSelect
-          v-model="form.service_request_category[0].display"
-          title="Choose lab type"
-          :multiple="false"
-          :options="categories"
-          :track_by="null"
-          placeholder="Search or choose a lab text to be performed"
-          :custom-label="customLabel"
-          :invalid-message="$utils.validateRequiredField($v, 'service_request_category')"
-        />
+    <div class="space-y-4">
+      <MultiSelect
+        v-model="form.service_request_category[0].display"
+        title="Choose lab type"
+        :multiple="false"
+        :options="categories"
+        :track_by="null"
+        placeholder="Search or choose a lab text to be performed"
+        :custom-label="customLabel"
+        :invalid-message="$utils.validateRequiredField($v, 'service_request_category')"
+      />
 
   
-        <cv-text-area
-          v-model="form.order_detail[0].display"
-          label="Order details"
-          placeholder="Details for this order"
-          :rows="4"
-          class="col-span-2"
-          :invalid-message="$utils.validateRequiredField($v, 'order_detail')"
-        />
+      <cv-text-area
+        v-model="form.order_detail[0].display"
+        label="Order details"
+        placeholder="Details for this order"
+        :rows="4"
+        class="col-span-2"
+        :invalid-message="$utils.validateRequiredField($v, 'order_detail')"
+      />
 
-        <cv-text-area
-          v-model="form.patient_instruction"
-          label="Note"
-          placeholder="Leave a note for the lab tecnician"
-          :rows="4"
-          class="col-span-2"
-        />
+      <cv-text-area
+        v-model="form.patient_instruction"
+        label="Note"
+        placeholder="Leave a note for the lab tecnician"
+        :rows="4"
+        class="col-span-2"
+      />
 
-        <MultiSelect
-          v-model="form.priority"
-          title="Priority"
-          :multiple="false"
-          :options="priorities"
-          track-by="code"
-          label="display"
-          custom-field="code"
-          placeholder="Routine, ASAP, Urgent"
-        />
+      <MultiSelect
+        v-model="form.priority"
+        title="Priority"
+        :multiple="false"
+        :options="priorities"
+        track-by="code"
+        label="display"
+        custom-field="code"
+        placeholder="Routine, ASAP, Urgent"
+      />
         
 
-        <div class="grid grid-cols-2 gap-4">
-          <cv-text-input
-            v-model="form.service_request_bodysite[0].display"
-            type="text"
-            label="Bodysite"
-            placeholder="Body site"
-            :invalid-message="$utils.validateRequiredField($v, 'service_request_bodysite')"
-          />
+      <div class="grid grid-cols-2 gap-4">
+        <cv-text-input
+          v-model="form.service_request_bodysite[0].display"
+          type="text"
+          label="Bodysite"
+          placeholder="Body site"
+          :invalid-message="$utils.validateRequiredField($v, 'service_request_bodysite')"
+        />
 
-          <cv-text-input
-            v-model="form.code"
-            type="text"
-            label="Specimen"
-            placeholder="Specimen"
-          />
-        </div>
+        <cv-text-input
+          v-model="form.code"
+          type="text"
+          label="Specimen"
+          placeholder="Specimen"
+        />
       </div>
-
-      <SeButton
-        :loading="loading"
-        :icon="add"
-        @click="submit"
-      >
-        Add Another test
-      </SeButton>
-    
-
-      <div>
-        <p class="mb-2 font-semibold">Previous Labs</p>
-
-        <div
-          v-if="!currentEncounterServiceRequests.length"
-          class="flex items-center my-4"
-        >
-          No labs available
-        </div>
-        <div
-          v-else
-          class="space-y-3"
-        >
-          <div
-            v-for="(diagnosis, index) in currentEncounterServiceRequests"
-            :key="index"
-            class="flex items-center space-x-2"
-          >
-            <router-link
-              class="underline"
-              :to="{ name: 'EncounterReview', params: { ...$route.params } }"
-            >
-              view encounter
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </SeForm>
-
-    <div class="flex justify-between items-center absolute w-full right-0 bottom-12">
-      <SeButton
-        variant="secondary"
-        :to="{name: 'EncounterDiagnosis', params: { id: $route.params.id }}"
-      >
-        Back to diagnosis
-      </SeButton>
-      <SeButton
-        :icon="icon"
-        :loading="loading"
-        @click="submit(true)"
-      >
-        Submit and go to Medications
-      </SeButton>
     </div>
-  </div>
+
+    <SeButton
+      :loading="loading"
+      :icon="add"
+      @click="submit"
+    >
+      Save
+    </SeButton>
+  </SeForm>
 </template>
 
 <script>
@@ -127,7 +80,7 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 
 export default {
-  name: 'EncountersLabs',
+  name: 'EncounterServiceRequestForm',
 
   data() {
     return {

@@ -286,6 +286,7 @@ export default {
       this.visible = false
       this.form = {}
       this.loading = false
+      this.$v.$reset()
     },
 
     customLabel ({ first_name, last_name }) {

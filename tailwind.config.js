@@ -34,6 +34,7 @@ module.exports = {
       },
       height: {
         main: 'calc(100vh - 3rem)',
+        enc: 'calc(100vh - 5rem)',
         avg: 'calc(100vh - 10rem)',
       },
       width: {

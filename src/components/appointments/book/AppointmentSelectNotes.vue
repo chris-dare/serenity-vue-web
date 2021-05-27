@@ -4,6 +4,7 @@
     next-label="Summary"
     :previous="previous"
     :modal="modal"
+    :query="$route.query"
     @cancel="cancel"
     @save="reRoute"
   >

@@ -1,13 +1,19 @@
 <template>
-  <div class="relative h-full">
+  <div class="relative h-main">
     <SeForm class="space-y-8">
       <p class="font-semibold">Care Plans</p>
       <cv-text-area
         v-model="form.description"
         label="Care plan"
         placeholder="Prepare a care plan"
+        :input-message="$utils.validateRequiredField($v, 'description')"
+        :rows="5"
       />
-      <DateRangePicker v-model="form" />
+      <DatePicker
+        v-model="date"
+        type="datetimerange"
+        class="se-input-gray"
+      />
       <div class="flex justify-end">
         <SeButton
           :loading="loading"
@@ -20,44 +26,61 @@
       <div>
         <p class="mb-2 font-semibold">Previous Care plans</p>
 
-        <div
-          v-if="!currentEncounterCarePlans.length"
-          class="flex items-center my-4"
+        <DataTable
+          small
+          :data="currentEncounterCarePlans"
+          :columns="columns"
+          no-data-label="No Referrals"
         >
-          No care plans available
-        </div>
-        <div
-          v-else
-          class="space-y-3"
-        >
-          <div
-            v-for="(diagnosis, index) in currentEncounterCarePlans"
-            :key="index"
-            class="flex items-center space-x-2"
-          >
-            <router-link
-              class="underline"
-              :to="{ name: 'EncounterReview', params: { ...$route.params } }"
-            >
-              view encounter
-            </router-link>
-          </div>
-        </div>
+          <template #default="{row}">
+            <cv-data-table-cell>
+              <div>
+                <p>{{ row.description }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
+                <p>{{ $date.formatDate(row.period_start) }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
+                <p>{{ $date.formatDate(row.period_end) }}</p>
+              </div>
+            </cv-data-table-cell>
+          </template>
+        </DataTable>
       </div>
     </SeForm>
+
+    <div class="flex justify-between items-center absolute w-full right-0 bottom-12">
+      <SeButton
+        variant="secondary"
+        :to="{name: 'EncounterMedications', params: { id: $route.params.id }}"
+      >
+        Back to medications
+      </SeButton>
+    </div>
   </div>
 </template>
 
 <script>
 import { required } from 'vuelidate/lib/validators'
 import { mapActions, mapState, mapGetters } from 'vuex'
+import DateRangeMixin from '@/mixins/date-range'
+
+
 export default {
   name: 'CarePlan',
+
+
+  mixins: [DateRangeMixin],
 
   data() {
     return {
       form: {},
       loading: false,
+      columns: ['Description', 'From', 'To'],
     }
   },
 
@@ -65,7 +88,6 @@ export default {
     ...mapState({
       provider: (state) => state.auth.provider,
       location: (state) => state.global.location,
-      priorities: (state) => state.global.priorities,
       encounter: (state) => state.encounters.currentEncounter,
     }),
 
@@ -102,12 +124,14 @@ export default {
     },
 
     async save(reroute) {
+      let date = this.convertFromDatePickerFormat(this.date)
+
       this.loading = true
 
       const form = {
         description: this.form.description,
-        period_start: this.form.start ? this.form.start : null,
-        period_end: this.form.end ? this.form.end : null,
+        period_start: date.start,
+        period_end: date.end,
       }
       
 
