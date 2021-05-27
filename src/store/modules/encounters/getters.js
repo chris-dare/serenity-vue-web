@@ -7,12 +7,12 @@ export default {
 
   pastEncounters: state => {
     if (!state.encounters) return []
-    return state.encounters.filter(encounter => encounter.end_time && isAfter(Date.now(), parseISO(encounter.end_time)))
+    return state.encounters.filter(encounter => encounter.status === 'finished' || (encounter.end_time && isAfter(Date.now(), parseISO(encounter.end_time))))
   },
 
   onGoingEncounters: state => {
     if (!state.encounters) return []
-    return state.encounters.filter(encounter => encounter.status !== 'finished' && (!encounter.end_time && isAfter(Date.now(), parseISO(encounter.start_time))))
+    return state.encounters.filter(encounter => encounter.status === 'in-progress' || (!encounter.end_time && isAfter(Date.now(), parseISO(encounter.start_time))))
   },
 
   currentEncounterCannotBeFinished: (state) => {
