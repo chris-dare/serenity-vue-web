@@ -21,7 +21,7 @@
             disabled
           />
           <!-- <cv-text-input
-            v-model="form.credit_duration"
+            v-model="form.creditDurationInDays"
             type="number"
             label="Credit duration in days"
             placeholder=""
@@ -38,7 +38,7 @@
             placeholder=""
           />
           <cv-text-input
-            v-model="form.credit_duration"
+            v-model="form.creditDurationInDays"
             type="number"
             label="Credit duration in days"
             placeholder=""
@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 // import { required } from 'vuelidate/lib/validators'
 
 export default {
@@ -124,6 +124,9 @@ export default {
   },
 
   computed:{
+    ...mapState({
+      client: (state) => state.clients.client,
+    }),
     ...mapGetters({
       userName: 'auth/fullName',
     }),
@@ -146,6 +149,7 @@ export default {
     ...mapActions({
       depositClient: 'clients/deposit',
       updateClient: 'clients/update',
+      addToClient: 'clients/addClientAccount',
     }),
 
     submit(){
@@ -170,20 +174,39 @@ export default {
       let payload = {    
         amount: parseFloat(this.form.amount), // required
         accountId: this.form.id, //provider client account(required)
-        creditDurationInDays: this.form.credit_duration, //required
-        creditStartDate: this.form.creditStartDate, //required
+        creditDurationInDays: parseFloat(this.form.creditDurationInDays), //required
+        creditStartDate: new Date(this.form.creditStartDate), //required
         depositType: this.form.state, //either limited-credit-active or limited-debit-activerequired
-        depositedBy: this.userName, //required
+        depositedBy: this.userName,
+        maximum_employees_allowed: parseFloat(this.form.maximum_employees_allowed), //required
       }
       try {
-        await this.depositClient(payload)
-        this.$toast.open({
-          message: 'Client successfully updated',
-        })
-        this.visible = false
-        this.$router.go(-1)
+        let data = await this.depositClient(payload)
+        if (data.successful) {
+          console.log(data)
+          let payload = this.client
+          payload.amount = data.returnedData.amount
+          payload.maximum_employees_allowed = data.returnedData.maximum_employees_allowed
+          payload.creditDurationInDays = data.returnedData.creditDurationInDays
+          this.addToClient(payload)
+          this.$toast.open({
+            message: data.message || 'Client successfully updated',
+          })
+          this.visible = false
+        } else {
+          this.$toast.open({
+            message: data.message || 'Client account update failed',
+            type: 'error',
+          })
+          this.visible = false
+        }
+        // this.$router.go(-1)
         this.loading = false
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
         this.loading = false
       }
     },
@@ -195,7 +218,6 @@ export default {
         this.$toast.open({
           message: 'Client successfully verified',
         })
-        this.$router.go(-1)
         this.visible = false
         this.loading = false
       } catch (error) {
