@@ -30,7 +30,7 @@
           title="Encounter class"
           :multiple="false"
           :options="codes"
-          label="code"
+          label="display"
           placeholder="Select code"
           custom-field="code"
           track-by="code"
@@ -103,6 +103,7 @@ export default {
       form: {
         service_type: { required },
         encounter_class: { required },
+        priority: { required },
       },
     }
   },

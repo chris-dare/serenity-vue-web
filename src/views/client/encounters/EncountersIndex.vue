@@ -122,8 +122,9 @@ export default {
     })
   },
 
-  // beforeRouteLeave () {
+  // beforeRouteLeave (to, from, next) {
   //   this.end()
+  //   next()
   // },
 
   methods: {
@@ -143,7 +144,7 @@ export default {
             this.$toast.open({
               message: 'Encounter ended successfully',
             })
-            this.$router.push({name: 'Patients'})
+            this.$router.push({ name: 'Patients' })
             this.loading = false
           } catch (error) {
             // empty

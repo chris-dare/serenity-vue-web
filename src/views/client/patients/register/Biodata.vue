@@ -41,13 +41,13 @@
               type="text"
               class="inherit-full-input"
             />
-            <cv-date-picker
+            <DatePicker
               v-model="form.birth_date"
               kind="single"
-              class="w-full max-w-full inherit-full-input"
+              class="w-full max-w-full inherit-full-input se-input-gray"
               placeholder="dd/mm/yyyy"
-              date-label="Date of Birth"
-              :cal-options="calOptions"
+              label="Date of Birth"
+              max-date="today"
             />
 
             <MultiSelect
@@ -69,23 +69,6 @@
             <FileUploadButton title="Or upload patient photo" />
           </div>
         </div>
-
-        <!-- <div class="flex items-center justify-between mt-12 mb-6">
-          <SeButton
-            variant="outline"
-            @click="cancel"
-          >
-            Cancel
-          </SeButton>
-          <div class="flex items-center">
-            <SeButton
-              :icon="icon"
-              @click="save"
-            >
-              Next: Contact Info
-            </SeButton>
-          </div>
-        </div> -->
       </div>
     </MultiStepBase>
   </div>
@@ -134,23 +117,6 @@ export default {
       addToStoreData: 'patients/addToCurrentPatient',
       refresh: 'patients/refreshCurrentPatient',
     }),
-
-    // save() {
-    //   this.$v.$touch()
-
-    //   if (this.$v.$invalid) {
-    //     this.$toast.open({
-    //       message: 'Fill all required fields!',
-    //       type: 'error',
-    //     })
-    //     return
-    //   }
-
-    //   this.addToStoreData(this.form)
-    //   this.$router.push({ name: this.next, query: { ...this.$route.query }})
-    // },
-
-    actionChange() {},
   },
 }
 </script>

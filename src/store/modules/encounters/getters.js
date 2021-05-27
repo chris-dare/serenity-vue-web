@@ -12,12 +12,12 @@ export default {
 
   onGoingEncounters: state => {
     if (!state.encounters) return []
-    return state.encounters.filter(encounter => encounter.status !== 'finished' || (!encounter.end_time && isAfter(Date.now(), parseISO(encounter.start_time))))
+    return state.encounters.filter(encounter => encounter.status !== 'finished' && (!encounter.end_time && isAfter(Date.now(), parseISO(encounter.start_time))))
   },
 
-  currentEncounterCannotBeFinished: (state, getters) => {
+  currentEncounterCannotBeFinished: (state) => {
     if (!state.currentEncounter) return false
-    return isEmpty(getters.currentEncounterDiagnosis) || isEmpty(getters.currentEncounterMedicationRequests) || isEmpty(getters.currentEncounterServiceRequests)
+    return !state.currentEncounter.chief_complaint || !state.currentEncounter.history_of_presenting_illness
   },
 
   currentEncounterStatus: state => {
@@ -110,7 +110,7 @@ export default {
         return {
           group: 'Dataset 1',
           date: obs.issued,
-          value: obs.value ? obs.value : 0,
+          value: obs.value ? obs.value : 1,
         }
       })
 
@@ -119,7 +119,7 @@ export default {
         title: option.code,
         data: observations,
         value: observations.length ? observations[0].value : '-',
-        date: observations.length ? observations[0].issued : null,
+        date: observations.length ? observations[0].date : null,
         status: 'Normal',
         status_color: 'success',
       })

@@ -55,16 +55,7 @@
         title="Social History"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
       >
-        <div class="py-6 space-y-4">
-          <div
-            v-for="(item, index) in currentEncounterSocialHistory"
-            :key="index"
-            class=" capitalize grid grid-cols-2"
-          >
-            <div class="text-serenity-primary">{{ index.split("_").join(" ").toLowerCase() }}</div>
-            <div>{{ item || 'N/A' }}</div>
-          </div>
-        </div>
+        <SocialHistoryDetails :history="currentEncounterSocialHistory" />
       </ToggleList>
       <ToggleList
         title="Laboratory Tests"
@@ -125,6 +116,7 @@ export default {
     EncounterNotes,
     EncounterServiceRequests,
     EncounterDiagnosticReports,
+    SocialHistoryDetails: () => import('@/components/patients/details/SocialHistoryDetails'),
     EncounterReviewSystemTable: () => import(/* webpackPrefetch: true */ './EncounterReviewSystemTable'),
   },
 

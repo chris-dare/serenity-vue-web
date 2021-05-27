@@ -31,7 +31,9 @@
       <div class="flex items-center justify-between mb-4">
         <p class=" text-gray-500">Prescriptions</p>
         <div
+          v-if="hasActiveEncounter"
           class="bg-serenity-light-gray w-9 h-9 rounded-full ml-6 flex items-center justify-center"
+          @click="$trigger('profile:medication:request:open')"
         >
           <img
             src="@/assets/img/pills--add 1.svg"
@@ -121,6 +123,7 @@ export default {
   computed: {
     ...mapGetters({
       data: 'patients/patientMedications',
+      hasActiveEncounter: 'encounters/hasActiveEncounter',
     }),
   },
 

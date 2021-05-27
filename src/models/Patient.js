@@ -42,13 +42,13 @@ export default class Patient {
       data.emergency_contact.emergency_contact_address_description = this.getAddressDescription(data.emergency_contact.address)
     }
 
-    data.payment_method = { payment_details: {} }
+    data.payment_method = {payment_details: {}}
 
-    if (!isEmpty(data.patient_payment_methods)) {
-      data.payment_method = { ...data.patient_payment_methods[0] }
+    if (!isEmpty(data.payment_options)) {
+      data.payment_method = { ...data.payment_options[0] }
     }
 
-    data.address_description = this.getAddressDescription(data.patient_address)
+    data.address_description = this.getAddressDescription(data.address)
     
 
     data.religion = isEmpty(data.religious_affiliation) ? '' : data.religious_affiliation[0]
@@ -67,8 +67,10 @@ export default class Patient {
   getCreateView() {
     let data = { ...patient, ...this.data }
 
-    if (isEmpty(data.patient_address)) {
-      delete data.patient_address
+    if (isEmpty(data.address)) {
+      delete data.address
+    } else {
+      data.address = { ...address, ...this.data.address }
     }
 
     if (data.contact) {
@@ -79,11 +81,11 @@ export default class Patient {
       }
     }
 
-    if (data.patient_payment_methods) {
-      if (this.isContactEmpty(data.patient_payment_methods[0])) {
-        delete data.patient_payment_methods
+    if (data.payment_options) {
+      if (this.isContactEmpty(data.payment_options[0])) {
+        delete data.payment_options
       } else {
-        data.patient_payment_methods[0] = { ...patient_payment_methods, ...this.data.patient_payment_methods[0] }
+        data.payment_options[0] = { ...payment_options, ...this.data.payment_options[0] }
       }
     }
 
@@ -111,8 +113,6 @@ export default class Patient {
 
     return this.removeEmpty(data)
   }
-
-  isAddressEmpty() {}
 
   isContactEmpty(contact) {
     return (isEmpty(contact.address) && isEmpty(contact.telecom) && Object.keys(contact).length === 3) 
@@ -159,16 +159,16 @@ export default class Patient {
   }
 }
 
-// const patient_address = {
-//   'city': 'string',
-//   'district': 'string',
-//   'country': 'string',
-//   'postal_code': 'string',
-//   'state': 'string',
-//   'text': 'string',
-//   'type': 'postal',
-//   'use': 'home',
-// }
+const address = {
+  'use': 'home',
+  'type': 'both',
+  'line': '',
+  'state': '',
+  'city': '',
+  'district': '',
+  'postalCode': '', 
+  'country': '',
+}
 
 const contact = {
   'relationship': 'emergency_contact', //required: emergency_contact | next_of_kin
@@ -185,10 +185,14 @@ const contact = {
   },
 }
 
-const patient_payment_methods = {
-  'type': 'CASH',
-  'momo_vendor': 'AIRTEL_GHANA',
-  'msisdn': 'string',
+const payment_options = {
+  'payment_type': 'momo', // options: cash | momo | insurance | corporate | card
+  'payer': 'corporate', // corporate, insurance or user id
+  'payment_details': { // for momo
+    'payment_provider': 'MTN',
+    'country': 'GH',
+    'msisdn': '',
+  },
 }
 
 const patient = {

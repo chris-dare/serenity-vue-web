@@ -1,5 +1,14 @@
 <template>
-  <SeForm>
+  <MultiStepBase
+    next-label="Next: Payment"
+    :loading="loading"
+    :next="next"
+    :previous="previous"
+    :icon="icon"
+    :query="$route.query"
+    @cancel="cancel"
+    @save="reRoute"
+  >
     <div class="grid grid-cols-2 gap-8">
       <MultiSelect
         v-model="form.marital_status"
@@ -23,7 +32,7 @@
       />
     
       <MultiSelect
-        v-model="form.preferred_communication[0].language"
+        v-model="form.preferred_communication"
         title="Home Language"
         :multiple="false"
         :options="languages"
@@ -52,7 +61,7 @@
         label="Office Phone number"
       />
     </div>
-    <div class="flex items-center justify-between mt-12 mb-6">
+    <!-- <div class="flex items-center justify-between mt-12 mb-6">
       <div class="flex items-center space-x-2">
         <SeButton
           variant="outline"
@@ -74,8 +83,8 @@
           Next: Payment
         </SeButton>
       </div>
-    </div>
-  </SeForm>
+    </div> -->
+  </MultiStepBase>
 </template>
 
 <script>
@@ -91,7 +100,6 @@ export default {
     return {
       form: {
         meta: {},
-        preferred_communication: [{preffered: true, language: ''}],
       },
       previous: 'EmergencyContact',
       next: 'Payment',

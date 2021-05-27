@@ -23,33 +23,9 @@
       />
     </div>
     <Address
-      v-model="form.patient_address[0]"
+      v-model="form.address"
       :disabled="disabled"
     />
-
-    <!-- <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center space-x-2">
-        <SeButton
-          variant="outline"
-        >
-          Cancel
-        </SeButton>
-        <SeButton
-          :to="{ name: previous, query: { ...$route.query } }"
-          variant="secondary"
-        >
-          Go back
-        </SeButton>
-      </div>
-      <div class="flex items-center">
-        <SeButton
-          :icon="icon"
-          @click="save"
-        >
-          Next: Emergency
-        </SeButton>
-      </div>
-    </div> -->
   </MultiStepBase>
 </template>
 
@@ -67,7 +43,7 @@ export default {
   data() {
     return {
       form: {
-        patient_address: [{}],
+        address: {},
       },
       next: 'EmergencyContact',
       previous: 'Biodata',
@@ -105,21 +81,6 @@ export default {
       addToStoreData: 'patients/addToCurrentPatient',
       refresh: 'patients/refreshCurrentPatient',
     }),
-
-    // save() {
-    //   this.$v.$touch()
-
-    //   if (this.$v.$invalid || this.disabled) {
-    //     this.$toast.open({
-    //       message: 'Fill all required fields!',
-    //       type: 'error',
-    //     })
-    //     return
-    //   }
-
-    //   this.addToStoreData(this.form)
-    //   this.$router.push({ name: this.next , query: { ...this.$route.query } })
-    // },
   },
 }
 </script>

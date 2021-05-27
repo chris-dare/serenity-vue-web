@@ -1,11 +1,16 @@
 <template>
-  <cv-form
-    autocomplete="off"
-    @submit.prevent=""
+  <MultiStepBase
+    next-label="Finish"
+    :loading="loading"
+    :previous="previous"
+    :icon="icon"
+    :query="$route.query"
+    @cancel="cancel"
+    @save="submit"
   >
     <div class="grid grid-cols-2 gap-8">
       <MultiSelect
-        v-model="form.patient_payment_methods[0].type"
+        v-model="form.payment_options[0].payment_type"
         :options="methods"
         title="Primary method of payment"
         placeholder="Payment Type"
@@ -17,7 +22,7 @@
       />
       <MultiSelect
         v-if="isMoMo"
-        v-model="form.patient_payment_methods[0].momo_vendor"
+        v-model="form.payment_options[0].payment_details.payment_provider"
         :options="vendors"
         label="display"
         track-by="code"
@@ -28,42 +33,18 @@
       />
       <MsisdnPhoneInput
         v-if="isMoMo"
-        v-model="form.patient_payment_methods[0].msisdn"
+        v-model="form.payment_options[0].payment_details.msisdn"
         label="Phone number"
       />
-      <!-- <FormCountrySelect
+      <FormCountrySelect
         v-if="isMoMo"
-        v-model="form.patient_payment_methods[0].payment_details.country"
+        v-model="form.payment_options[0].payment_details.country"
         title="Country"
         placeholder="Country"
-      /> -->
-    </div>
-    <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center space-x-2">
-        <SeButton
-          variant="outline"
-        >
-          Cancel
-        </SeButton>
-        <SeButton
-          :to="{ name: previous }"
-          variant="secondary"
-        >
-          Go back
-        </SeButton>
-      </div>
-      <div class="flex items-center">
-        <SeButton
-          :icon="icon"
-          :loading="loading"
-          @click="submit"
-        >
-          Finish
-        </SeButton>
-      </div>
+      />
     </div>
     <PatientSuccessModal :visible.sync="visible" />
-  </cv-form>
+  </MultiStepBase>
 </template>
 
 <script>
@@ -83,8 +64,8 @@ export default {
   data() {
     return {
       form: {
-        patient_payment_methods: [{
-          type: 'CASH',
+        payment_options: [{
+          payment_details: {},
         }],
       },
       icon: Checkmark,
@@ -103,13 +84,13 @@ export default {
     }),
 
     isMoMo() {
-      return this.form.patient_payment_methods[0].type === 'MOBILE_MONEY'
+      return this.form.payment_options[0].payment_type === 'MOBILE_MONEY'
     },
   },
 
   created() {
-    if(!this.form.patient_payment_methods[0].msisdn){ 
-      this.form.patient_payment_methods[0].msisdn = this.form.mobile
+    if(!this.form.payment_options[0].payment_details.msisdn){ 
+      this.form.payment_options[0].payment_details.msisdn = this.form.mobile
     }
   },
 

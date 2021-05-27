@@ -27,6 +27,7 @@ export default {
     // dispatch('resources/getCodes', null, { root:true })
     // dispatch('resources/getServiceTypes', null, { root:true })
     dispatch('services/getServices', null, { root:true })
+    dispatch('beforeLoginInit')
     // dispatch('resources/getMaritalStatuses', null, { root:true })
     // dispatch('resources/getPaymentMethods', null, { root:true })
     // TODO
