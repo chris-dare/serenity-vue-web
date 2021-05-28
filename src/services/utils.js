@@ -165,7 +165,7 @@ const getFilteredData = (data, searchTerms, searchFields) => {
 
     for (let index = 0; index < searchFields.length; index++) {
       const element = searchFields[index]
-      if (data[element]?.toLowerCase().includes(searchTerms.toLowerCase())) {
+      if (data[element]?.toString().toLowerCase().includes(searchTerms.toLowerCase())) {
         return data
       }
     }
