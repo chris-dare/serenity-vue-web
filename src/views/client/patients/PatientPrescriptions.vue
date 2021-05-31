@@ -48,6 +48,7 @@
         :pagination="pagination"
         :data="filteredData"
         class="transparent-table"
+        :no-data-label="noDataLabel('prescriptions')"
       >
         <template #default="{ row }">
           <cv-data-table-cell>
@@ -96,8 +97,8 @@ export default {
   name: 'PatientPrescriptions',
 
   components: {
-    PrescriptionModal: () => import('@/components/patients/modals/PrescriptionModal'),
-    TreatmentPlanModal: () => import('@/components/patients/modals/TreatmentPlanModal') },
+    PrescriptionModal: () => import(/* webpackPrefetch: true */'@/components/patients/modals/PrescriptionModal'),
+    TreatmentPlanModal: () => import(/* webpackPrefetch: true */'@/components/patients/modals/TreatmentPlanModal') },
 
   mixins: [data],
 
@@ -124,6 +125,7 @@ export default {
     ...mapGetters({
       data: 'patients/patientMedications',
       hasActiveEncounter: 'encounters/hasActiveEncounter',
+      noDataLabel: 'patients/getCurrentPatientNoDataLabel',
     }),
   },
 

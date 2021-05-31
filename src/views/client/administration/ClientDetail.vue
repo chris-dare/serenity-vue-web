@@ -218,7 +218,7 @@ export default {
         { label: 'State', value: this.selectedClient && this.selectedClient.state },
         { label: 'Authorized By', value: this.selectedClient && this.selectedClient.authorizedBy },
         { label: 'Address', value: this.selectedClient && this.selectedClient.company.address },
-        // { label: 'Email', value: this.$faker().lorem.word() },
+        // { label: 'Email', value: this.'aha' },
       ]
     },
     

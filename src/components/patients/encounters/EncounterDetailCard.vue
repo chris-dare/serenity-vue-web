@@ -43,9 +43,15 @@
         <p class="text-gray-500">{{ currentEncounterHistoryComplaint }}</p>
       </ToggleList>
       <ToggleList
-        title="Patient Vitals"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
       >
+        <div slot="title">
+          <p
+            class="text-serenity-primary w-full"
+          >
+            Patient Vitals <span class="text-secondary ml-1 text-xs">- as at {{ $date.formatDate(latestVitalsDate) }}</span>
+          </p>
+        </div>
         <VitalsDetail
           small
           :form="vitals"
@@ -90,12 +96,6 @@
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
       />
     </div>
-
-    <NotesModal
-      required
-      @save="createNote"
-      @update="updateNote"
-    />
   </div>
 </template>
 
@@ -104,7 +104,7 @@ import EncounterDiagnosis from './EncounterDiagnosis'
 import EncounterNotes from './EncounterNotes'
 import EncounterServiceRequests from './EncounterServiceRequests'
 import EncounterDiagnosticReports from './EncounterDiagnosticReports'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import isEmpty from 'lodash/isEmpty'
 
 export default {
@@ -133,6 +133,7 @@ export default {
       vitals: 'encounters/currentEncounterLatestVitals',
       currentEncounterSocialHistory: 'encounters/currentEncounterSocialHistory',
       currentEncounterExamSystems: 'encounters/currentEncounterExamSystems',
+      latestVitalsDate: 'encounters/latestVitalsDate',
     }),
     
     hasNoCurrentEncounter() {
@@ -140,45 +141,6 @@ export default {
     },
   },
 
-  methods: {
-    ...mapActions({
-      createPatientNote: 'encounters/createNote',
-      updatePatientNote: 'encounters/updateNote',
-    }),
-
-    async createNote(notes) {
-      this.loading = true
-      try {
-        const noteForm = { display: notes, encounter_patient_id: this.$route.params.id }
-        await this.createPatientNote(noteForm)
-        this.$toast.open({
-          message: 'Notes created successfully',
-        })
-        this.$trigger('notes:close')
-      } catch (error) {
-        // empty
-      } finally {
-        this.loading = false
-      }
-    },
   
-    async updateNote(data) {
-      this.loading = true
-      try {
-        
-        const noteForm = { ...data, display: data.notes }
-        delete noteForm.notes
-        await this.updatePatientNote(noteForm)
-        this.$toast.open({
-          message: 'Notes created successfully',
-        })
-        this.$trigger('notes:close')
-      } catch (error) {
-        // empty
-      } finally {
-        this.loading = false
-      }
-    },
-  },
 }
 </script>

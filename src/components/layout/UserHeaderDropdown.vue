@@ -21,7 +21,7 @@
           <p class="text-secondary">General Practitioner</p>
         </div>
         <img
-          :src="$faker().image.image()"
+          src="@/assets/img/user 1.svg"
           class="w-12 h-12 rounded-full"
           alt=""
         >

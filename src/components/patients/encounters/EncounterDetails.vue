@@ -1,9 +1,15 @@
 <template>
   <div class="divide-solid divide-y divide-subtle">
     <ToggleList
-      title="Patient Vitals"
       class="pt-4"
     >
+      <div slot="title">
+        <p
+          class="text-serenity-primary w-full"
+        >
+          Patient Vitals <span class="text-secondary ml-1 text-xs">- as at {{ $date.formatDate(latestVitalsDate) }}</span>
+        </p>
+      </div>
       <div class="space-y-4">
         <VitalsDetail
           small
@@ -72,6 +78,54 @@
     >
       <EncounterReviewSystems />
     </ToggleList>
+    <ToggleList
+      title="Notes"
+      class="pt-4"
+    >
+      <div>
+        <cv-text-area
+          v-model="notes.display"
+          :rows="5"
+          placeholder="Additional notes"
+        />
+        <div class="flex justify-end mt-2">
+          <SeButton
+            :loading="loading"
+            @click="createNote"
+          >
+            save
+          </SeButton>
+        </div>
+      </div>
+
+      <div>
+        <p class="mb-2 font-semibold">Notes</p>
+
+        <div
+          v-if="!currentEncounterNotes || !currentEncounterNotes.length"
+          class="flex items-center my-4"
+        >
+          No notes available
+        </div>
+        <div
+          v-else
+          class="space-y-3 space-x-3"
+        >
+          <Tag
+            v-for="(note, index) in currentEncounterNotes"
+            :key="index"
+            class="flex items-center space-x-2"
+            variant="success"
+          >
+            <span>{{ note.display }}</span>
+            <Close
+              class="w-4 cursor-pointer"
+              @click="removeNote(note.id)"
+            />
+          </Tag>
+        </div>
+      </div>
+    </ToggleList>
   </div>
 </template>
 
@@ -93,6 +147,9 @@ export default {
     return {
       form: {},
       family: {},
+      notes: {},
+      open: [false, false, false, false, false, false],
+      loading: false,
     }
   },
 
@@ -101,10 +158,13 @@ export default {
   computed: {
     ...mapState({
       encounter: state => state.encounters.currentEncounter,
+      provider: state => state.auth.provider,
     }),
     ...mapGetters({
       vitals: 'encounters/currentEncounterLatestVitals',
       currentPatientSocialHistory: 'encounters/currentPatientSocialHistory',
+      latestVitalsDate: 'encounters/latestVitalsDate',
+      currentEncounterNotes: 'encounters/currentEncounterNotes',
     }),
   },
 
@@ -132,6 +192,9 @@ export default {
     ...mapActions({
       updateEncounter: 'encounters/updateEncounter',
       createObservation: 'patients/createObservation',
+      createPatientNote: 'encounters/createNote',
+      updatePatientNote: 'encounters/updateNote',
+      deletePatientNote: 'encounters/removeNote',
     }),
 
     async submitAnswer() {
@@ -144,6 +207,59 @@ export default {
 
     async throttledSendHistory() {
       await this.createObservation({ payload: { FAMILY_HISTORY: this.family.FAMILY_HISTORY }, patient: this.$route.params.id })
+    },
+
+    actionChange(ev) {
+      this.open = this.$refs.acc.state.map((item, index) => index === ev.changedIndex)
+      // this.$refs.acc.state = this.$refs.acc.state.map((item, index) => index === ev.changedIndex);
+    },
+
+    async createNote() {
+      this.loading = true
+      try {
+        const noteForm = { display: this.notes.display, patient: this.$route.params.id }
+        // practitioner_role: this.provider.practitionerRoleId }
+        await this.createPatientNote(noteForm)
+        this.$toast.open({
+          message: 'Note created successfully',
+        })
+        this.notes = {}
+      } catch (error) {
+        // empty
+      } finally {
+        this.loading = false
+      }
+    },
+  
+    async updateNote(data) {
+      this.loading = true
+      try {
+        const noteForm = { ...data, display: data.notes }
+        delete noteForm.notes
+        await this.updatePatientNote(noteForm)
+        this.$toast.open({
+          message: 'Note created successfully',
+        })
+        this.$trigger('notes:close')
+      } catch (error) {
+        // empty
+      } finally {
+        this.loading = false
+      }
+    },
+  
+    async removeNote(id) {
+      this.loading = true
+      try {
+        await this.deletePatientNote(id)
+        this.$toast.open({
+          message: 'Note removed successfully',
+        })
+      } catch (error) {
+        // empty
+      } finally {
+        this.loading = false
+      }
     },
   },
 }

@@ -39,11 +39,11 @@
             <div class="flex items-center py-2">
               <img
                 class="w-10 h-10 rounded-full mr-3"
-                :src="$faker().image.image()"
+                src="@/assets/img/user 1.svg"
                 alt=""
               >
               <div>
-                <p>{{ $faker().name.findName() }}</p>
+                <p>{{ 'Chris Dare' }}</p>
                 <p class="text-secondary text-xs">
                   General Practitioner
                 </p>
@@ -55,11 +55,11 @@
             <div class="flex items-center py-2">
               <img
                 class="w-10 h-10 rounded-full mr-3"
-                :src="$faker().image.image()"
+                src="@/assets/img/user 1.svg"
                 alt=""
               >
               <div>
-                <p>{{ $faker().name.findName() }}</p>
+                <p>{{ 'Chris Dare' }}</p>
                 <p class="text-secondary text-xs">
                   General Practitioner
                 </p>

@@ -36,8 +36,9 @@ export default {
       const provider = rootState.auth.provider
       // TODO
       let appointment = rootGetters['appointments/patientNextAppointment']
-      let user = rootState.auth.user
-      const encounter = new Encounter(payload).getCreateView(user,appointment)
+      let user = rootState.auth.provider
+      let location = rootState.global.location
+      const encounter = new Encounter(payload).getCreateView(user,location,appointment)
       const { data } = await EncountersAPI.create(provider.id, encounter)
       commit(UPDATE_ENCOUNTER, data)
       commit(SET_ENCOUNTER, data)
@@ -54,6 +55,7 @@ export default {
       commit(SET_ENCOUNTER, data)
       commit(UPDATE_ENCOUNTER, data)
     } catch ({ response: { data: error } }) {
+      Vue.prototype.$utils.error(error)
       throw error
     }
   },
@@ -85,15 +87,16 @@ export default {
     }
   },
 
-  async createNote({ commit, state, rootState }, payload) {
+  async createNote({ commit, state, rootState, dispatch }, payload) {
     try {
       let encounter = state.currentEncounter
       
       const provider = rootState.auth.provider
-      encounter.encounter_patient_notes.push({...payload, encounter_practitioner_id: provider.id})
+      encounter.encounter_patient_notes.push({ ...payload })
       const { data } = await EncountersAPI.update(provider.id, encounter)
       commit(SET_ENCOUNTER, data)
       commit(UPDATE_ENCOUNTER, data)
+      dispatch('patients/getNotes', rootState.patients.currentPatient.uuid, { root:true })
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
@@ -107,6 +110,21 @@ export default {
         if (a.id === payload.id) return payload
         return a
       })
+  
+      const provider = rootState.auth.provider
+      const { data } = await EncountersAPI.update(provider.id, encounter)
+      commit(SET_ENCOUNTER, data)
+
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
+  async removeNote({ commit, state, rootState }, id) {
+    try {
+      let encounter = state.currentEncounter
+      encounter.encounter_patient_notes = encounter.encounter_patient_notes.filter((es) => es.id !== id)
   
       const provider = rootState.auth.provider
       const { data } = await EncountersAPI.update(provider.id, encounter)

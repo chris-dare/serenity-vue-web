@@ -9,6 +9,7 @@
         ref="table"
         :columns="columns"
         :data="filteredData"
+        :no-data-label="noDataLabel('appointments')"
       >
         <template #default="{ row }">
           <cv-data-table-cell>
@@ -70,6 +71,7 @@ export default {
   computed: {
     ...mapGetters({
       appointments: 'appointments/patientAppointments',
+      noDataLabel: 'patients/getCurrentPatientNoDataLabel',
     }),
 
     data() {

@@ -49,7 +49,7 @@
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p class="">{{ $faker().random.boolean() ? 'Cash' : 'Corporate' }}</p>
+                <p class="">{{ 'Corporate' }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>

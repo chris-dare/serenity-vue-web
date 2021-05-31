@@ -4,6 +4,7 @@
     class="se-no-title-modal"
     :visible="visible"
     size="xs"
+    @modal-hidden="close"
   >
     <template
       slot="content"
@@ -49,16 +50,16 @@
           <div class="flex items-center">
             <img
               class="w-12 h-12 rounded-full mr-3"
-              :src="$faker().image.image()"
+              src="@/assets/img/user 1.svg"
               alt=""
             >
             <div>
               <div>
                 <p class="mt-1 ">
-                  {{ $faker().name.findName() }}
+                  {{ 'Chris Dare' }}
                 </p>
                 <p class="mt-1  text-secondary">
-                  {{ $faker().lorem.word() }}
+                  {{ 'aha' }}
                 </p>
               </div>
             </div>
@@ -67,7 +68,7 @@
         <div class="my-4">
           <p class="text-gray-500 ">Encounter</p>
           <p class="mt-1  text-primary">
-            {{ $faker().lorem.word() }}
+            {{ 'aha' }}
             <router-link
               to="/"
               class="text-serenity-primary font-bold underline ml-2"
@@ -78,23 +79,29 @@
         </div>
       </div>
       <div class="w-full mt-8">
-        <cv-button
-          class="flex items-center justify-center bg-black text-white w-full m-0 p-0"
+        <SeButton
+          variant="secondary"
+          full
+          @click="close"
         >
           Close
-        </cv-button>
+        </SeButton>
       </div>
     </template>
   </cv-modal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
 export default {
   name: 'PrescriptionModal',
 
+  mixins: [modalMixin],
+
   data() {
     return {
-      visible: false,
+      form: {},
+      name: 'prescription',
     }
   },
 
@@ -110,4 +117,3 @@ export default {
 }
 </script>
 
-<style></style>

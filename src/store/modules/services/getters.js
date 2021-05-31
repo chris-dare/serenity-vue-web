@@ -28,4 +28,9 @@ export default {
       return service
     })
   },
+
+  labProceedures: (state, getters) => {
+    if (!getters.normalizedServices) return []
+    return getters.normalizedServices.filter(service => service.healthcare_service_categories[0].text === 'Diagnostic' )
+  }, 
 }

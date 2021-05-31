@@ -25,7 +25,7 @@
         :loading="loading"
         @click="submit"
       >
-        Add Status Localis
+        Add Diagnosis
       </SeButton>
     
 
@@ -75,9 +75,12 @@ import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Add from '@carbon/icons-vue/es/chevron--right/32'
 import { mapActions, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
+import unsavedChanges from '@/mixins/unsaved-changes'
 
 export default {
   name: 'EncountersDiagnosis',
+
+  mixins: [unsavedChanges],
 
   data() {
     return {
@@ -86,6 +89,7 @@ export default {
       form: {},
       loading: false,
       roles: [ 'admission-diagnosis', 'discharge-diagnosis', 'chief-complaint', 'comorbidity-diagnosis', 'pre-op-diagnosis', 'post-op-diagnosis', 'billing' ],
+      propertiesToCompareChanges: ['form'],
     }
   },
 
@@ -109,11 +113,18 @@ export default {
     }),
 
     submit(reroute = false) {
+      if (reroute && this.dataHasNotChanged) {
+        this.$router.push({ name: 'EncounterLabs', params: { id: this.$route.params.id }})
+        return
+      }
+
       this.$v.$touch()
 
       if (this.$v.$invalid) {
         return
       }
+
+      
 
       if (this.form.id) {
         this.update()

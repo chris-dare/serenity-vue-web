@@ -12,7 +12,7 @@
         class="h-20 py-4 px-8"
       >
         <p class="text-white font-bold">{{ form.label }}</p>
-        <p class="text-white text-sm">{{ $date.formatDate($faker().date.recent(), 'MMM dd, yyyy   HH:mma') }}</p>
+        <p class="text-white text-sm">{{ $date.formatDate(Date.now(), 'MMM dd, yyyy   HH:mma') }}</p>
       </div>
 
       <div class="py-4 px-8 space-y-8">
@@ -39,11 +39,11 @@
           <div class="flex items-center py-2">
             <img
               class="w-10 h-10 rounded-full mr-3"
-              :src="$faker().image.image()"
+              src="@/assets/img/user 1.svg"
               alt=""
             >
             <div>
-              <p class="text-secondary">Dr. {{ $faker().name.findName() }}</p>
+              <p class="text-secondary">Dr. {{ 'Chris Dare' }}</p>
               <p class="text-secondary text-xs">
                 General Practitioner
               </p>

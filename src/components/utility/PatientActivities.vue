@@ -8,11 +8,11 @@
       <div class="flex">
         <img
           class="w-9 h-9 rounded-full mr-3"
-          :src="$faker().image.image()"
+          src="@/assets/img/user 1.svg"
         >
         <div class="">
           <span class="text-primary font-semibold">{{
-            $faker().name.findName()
+            'Chris Dare'
           }}</span>
           <span class="text-secondary ml-1">added a new patient record</span>
           <p class="my-2 text-xs text-secondary">10 min ago</p>

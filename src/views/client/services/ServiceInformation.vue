@@ -84,7 +84,7 @@
           v-model="form.healthcare_service_categories[0]"
           :options="categories"
           :multiple="false"
-          placeholder="Select one or more categories"
+          placeholder="Select a category"
           label="text"
           track-by="text"
           title="Select service category"

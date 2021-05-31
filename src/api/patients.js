@@ -32,4 +32,12 @@ export default {
   getMedication(providerId) {
     return http.get(`${this.url}${providerId}/patients`)
   },
+
+  getDiagnosis(providerId, patientId) {
+    return http.get(`${this.url}${providerId}/encounter-patient-diagnosis`, { params: { patient: patientId } })
+  },
+
+  getNotes(providerId, patientId) {
+    return http.get(`${this.url}${providerId}/encounter-patient-notes`, { params: { patient: patientId } })
+  },
 }

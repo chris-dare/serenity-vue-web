@@ -12,6 +12,8 @@ import {
   SET_OBSERVATIONS,
   UPDATE_OBSERVATION,
   SET_DIAGNOSTIC_REPORTS,
+  SET_PATIENT_DIAGNOSIS,
+  SET_PATIENT_NOTES,
 } from './mutation-types'
 
 export default {
@@ -48,6 +50,14 @@ export default {
 
   [SET_PATIENT_DATA](state, data) {
     state.currentPatient = data
+  },
+
+  [SET_PATIENT_DIAGNOSIS](state, data) {
+    state.patientDiagnosis = data
+  },
+
+  [SET_PATIENT_NOTES](state, data) {
+    state.patientNotes = data
   },
 
   [SET_MEDICATION_REQUESTS](state, data) {

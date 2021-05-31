@@ -32,4 +32,9 @@ export default {
     }
     return state.patientObservations.filter(lab => lab.patient === state.currentPatient.id)
   },
+
+  getCurrentPatientNoDataLabel: state => (field = 'data') => {
+    let patient = state.currentPatient.fullName
+    return `You have no ${field} available for this ${patient}`
+  },
 }

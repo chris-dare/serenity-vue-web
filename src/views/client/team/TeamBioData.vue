@@ -19,7 +19,7 @@
           <cv-text-input
             v-model="form.first_name"
             label="First name (required)"
-            placeholder="Patient First Name"
+            placeholder="First Name"
             type="text"
             class="inherit-full-input"
           >
@@ -33,7 +33,7 @@
           <cv-text-input
             v-model="form.last_name"
             label="Last name (required)"
-            placeholder="Patient last or family name"
+            placeholder="Last or family name"
             type="text"
             class="inherit-full-input"
           >
@@ -79,9 +79,9 @@
             /> -->
           </div>
           <div>
-            <p class="text-primary mb-2 text-left">Capture or Upload Patient Photo</p>
+            <p class="text-primary mb-2 text-left">Capture or Upload Photo</p>
             <Webcam @input="(photo) => form.image_url = photo" />
-            <FileUploadButton title="Or upload patient photo" />
+            <FileUploadButton title="Or upload photo" />
           </div>
         </div>
 

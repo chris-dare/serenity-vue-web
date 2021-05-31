@@ -10,24 +10,25 @@
     </div>
     <div class="grid grid-cols-2 gap-2 my-2">
       <EditableCard
-        v-if="false"
         type="comment"
         title="Diagnosis/Issues"
       >
         <div class="py-4">
-          <ToggleList title="Migraines (Jun 28, 2020)">
-            <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
-          </ToggleList>
-          <ToggleList title="Asthma">
-            <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
-          </ToggleList>
-          <ToggleList title="Migraines (Jun 28, 2020)">
-            <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
+          <ToggleList
+            v-for="(diagnosis, index) in patientDiagnosis.slice(0,6)"
+            :key="index"
+          >
+            <p
+              slot="title"
+              class="text-serenity-primary"
+            >
+              {{ diagnosis.condition }} ({{ $date.formatDate(diagnosis.created_at) }})
+            </p>
+            <p>{{ diagnosis.role | removeDash }}</p>
           </ToggleList>
         </div>
       </EditableCard>
       <EditableCard
-        v-if="false"
         type="pills"
         title="Current Medication"
       >
@@ -44,7 +45,6 @@
         </div>
       </EditableCard>
       <EditableCard
-        v-if="false"
         type="comment"
         title="Medical conditions"
       >
@@ -80,7 +80,6 @@
         </div>
       </EditableCard>
       <EditableCard
-        v-if="false"
         type="add"
         title="Allegies"
       >
@@ -107,7 +106,7 @@
 import NewChart from './NewChart'
 import ChartCard from './ChartCard'
 import SocialHistoryDetails from '@/components/patients/details/SocialHistoryDetails'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 
 export default {
@@ -165,6 +164,10 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      patientDiagnosis: state => state.patients.patientDiagnosis,
+    }),
+
     ...mapGetters({
       charts: 'encounters/currentPatientVitals',
       patientMedications: 'patients/patientMedications',

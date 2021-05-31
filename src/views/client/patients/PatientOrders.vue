@@ -33,7 +33,7 @@
         <div
           class="bg-serenity-light-gray w-8 h-8 rounded-full ml-6 flex items-center justify-center cursor-pointer"
         >
-          <Add32 class="w-4 h-4 text-serenity-primary" />
+          <Add class="w-4 h-4 text-serenity-primary" />
         </div>
       </div>
 
@@ -45,29 +45,30 @@
         }"
         :data="[]"
         class="transparent-table"
+        :no-data-label="noDataLabel('orders')"
       >
         <cv-data-table-cell>
-          <p class="">{{ $date.formatDate($faker().date.recent(), 'MMM dd, yyyy') }}</p>
+          <p class="">{{ $date.formatDate(Date.now(), 'MMM dd, yyyy') }}</p>
         </cv-data-table-cell>
         <cv-data-table-cell>
-          <p class="">{{ $faker().finance.amount() | formatMoney | toCedis }}</p>
+          <p class="">{{ 3000 | formatMoney | toCedis }}</p>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p class="">{{ $faker().finance.amount() | formatMoney | toCedis }}</p>
+            <p class="">{{ 3000 | formatMoney | toCedis }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p class="">{{ $faker().finance.amount() | formatMoney | toCedis }}</p>
+            <p class="">{{ 3000 | formatMoney | toCedis }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
-          <p class="">{{ $faker().lorem.word() }}</p>
+          <p class="">{{ 'aha' }}</p>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div class="flex items-center">
-            <div class="bg-success text-white text-xs py-1 px-2 rounded-full">{{ $faker().lorem.word() }}</div>
+            <div class="bg-success text-white text-xs py-1 px-2 rounded-full">{{ 'aha' }}</div>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -92,11 +93,12 @@
 
 <script>
 import OrderDetailsModal from '@/components/patients/modals/OrderDetailsModal'
-import Add32 from '@carbon/icons-vue/es/add/32'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'PatientOrders',
 
-  components: { OrderDetailsModal, Add32 },
+  components: { OrderDetailsModal },
 
   data() {
     return {
@@ -113,6 +115,13 @@ export default {
       visible: false,
       order: {},
     }
+  },
+
+  computed: {
+    ...mapGetters({
+      noDataLabel: 'patients/getCurrentPatientNoDataLabel',
+      hasActiveEncounter: 'encounters/hasActiveEncounter',
+    }),
   },
 
   methods: {
