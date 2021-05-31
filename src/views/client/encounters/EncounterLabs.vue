@@ -314,8 +314,8 @@ export default {
         this.$toast.open({
           message: 'Service Request successfully updated',
         })
-        this.$router.push({ name: 'EncounterLabs' })
         this.close()
+        this.$router.push({ name: 'EncounterLabs' })
         /* eslint-disable-next-line */
       } catch (error) {
       }

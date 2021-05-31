@@ -427,8 +427,8 @@ export default {
         this.$toast.open({
           message: 'Medication successfully updated',
         })
-        this.$router.push({ name: 'EncounterMedications' })
         this.close()
+        this.$router.push({ name: 'EncounterMedications' })
         /* eslint-disable-next-line */
       } catch (error) {
       }
