@@ -4,15 +4,15 @@
       <div class="flex my-2 space-x-6">
         <InfoSubBlock
           label="Blood type"
-          description="AB+"
+          :description="props.patient.blood_type"
         />
         <InfoSubBlock
           label="Weight"
-          :description="`${props.vitals.WEIGHT_KG || 0}kg`"
+          :description="props.vitals.WEIGHT_KG ? `${props.vitals.WEIGHT_KG}kg` : null"
         />
         <InfoSubBlock
           label="Height"
-          :description="`${props.vitals.HEIGHT_CM || 0}cm`"
+          :description="props.vitals.HEIGHT_CM ? `${props.vitals.HEIGHT_CM}cm` : null"
         />
       </div>
       <div class="h-px w-full bg-serenity-light-gray my-5" />

@@ -2,7 +2,7 @@
   <div class="mb-4">
     <div
       class="flex items-center justify-between w-full cursor-pointer"
-      @click="isClosed = !isClosed"
+      @click="toggleClose"
     >
       <div class="flex items-center w-full">
         <CaretUp32
@@ -39,7 +39,7 @@
 <script>
 import CaretUp32 from '@carbon/icons-vue/es/caret--up/32'
 export default {
-  name: '',
+  name: 'ToggleList',
 
   components: { CaretUp32 },
 
@@ -58,7 +58,31 @@ export default {
   data() {
     return {
       isClosed: true,
+      key: Math.random(),
     }
+  },
+
+  watch: {
+    isClosed(val) {
+      if (!val) {
+        this.$trigger('toggle:list:open', { key: this.key })
+      }
+    },
+  },
+
+  methods: {
+    toggleClose() {
+      this.isClosed = !this.isClosed
+      this.$emit('change')
+    },
+  },
+
+  events: {
+    'toggle:list:open': function(_ev, { key }){
+      if (key !== this.key && !this.isClosed) {
+        this.isClosed = true
+      }
+    },
   },
 }
 </script>

@@ -4,16 +4,23 @@ export default class Appointment {
     this.data = { ...data }
   }
 
-  getCreateView(practitioner, appointment) {
+  getCreateView(practitioner, location, appointment) {
     let createData = {
       // appointment: '99f65066-4784-4ba1-be3d-b186634b6024',
       start_time: Vue.prototype.$date.queryNow(),
-      // encounter_participant: [
-      //   {
-      //     type: 'PRIMARY_PERFORMER',
-      //     practitioner: practitioner.id,
-      //   },
-      // ],
+      encounter_participant: [
+        {
+          type: 'PRIMARY_PERFORMER',
+          practitioner_role: practitioner.practitionerRoleId,
+        },
+      ],
+      encounter_location: [
+        // [ planned, active, reserved, completed ]
+        {
+          location: location,
+          status: 'planned',
+        },
+      ],
       ...this.data,
     }
 

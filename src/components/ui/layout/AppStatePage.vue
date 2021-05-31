@@ -11,7 +11,7 @@
         <Back class="text-serenity-primary" />
         <p class="text-serenity-primary">Go back</p>
       </div>
-      <div>Error loading page. Please check your internet connection and try again.</div>
+      <div>{{ error }}</div>
     </div>
     <cv-loading
       :active="loading && !error"
@@ -38,7 +38,7 @@ export default {
       default: false,
     },
     error: {
-      type: Boolean,
+      type: [Boolean, String],
       default: false,
     },
   },

@@ -20,16 +20,16 @@
           <div class="flex items-center">
             <img
               class="w-12 h-12 rounded-full mr-3"
-              :src="$faker().image.image()"
+              src="@/assets/img/user 1.svg"
               alt=""
             >
             <div>
               <div>
                 <p class="mt-1 ">
-                  {{ $faker().name.findName() }}
+                  {{ 'Chris Dare' }}
                 </p>
                 <p class="mt-1  text-secondary">
-                  {{ $faker().lorem.word() }}
+                  {{ 'aha' }}
                 </p>
               </div>
             </div>
@@ -38,7 +38,7 @@
         <div class="my-6">
           <p class="text-gray-500 ">Encounter</p>
           <p class=" text-primary">
-            {{ $faker().lorem.word() }}
+            {{ 'aha' }}
             <router-link
               to="/"
               class="text-serenity-primary font-bold underline ml-2"
@@ -50,7 +50,7 @@
         <div class="my-6">
           <p class="text-gray-500 ">Payment Method</p>
           <p class="text-serenity-primary ">
-            {{ $faker().lorem.word() }}
+            {{ 'aha' }}
           </p>
         </div>
         <OrderReceipts :orders="orders" />
@@ -86,8 +86,8 @@ export default {
       let orders = []
       for (let index = 0; index < 3; index++) {
         orders.push({
-          label: this.$faker().lorem.words(),
-          amount: this.$faker().finance.amount(),
+          label: 'Tada',
+          amount: 200,
         })
       }
       return orders

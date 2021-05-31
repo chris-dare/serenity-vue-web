@@ -13,7 +13,7 @@
 
         <div class="px-4">
           <div
-            class="grid grid-cols-2"
+            class="grid"
           >
             <div
               v-for="(link, index) in links"
@@ -43,6 +43,7 @@
     <CaptureVitalsModal />
     <EndVisitConfirmationModal />
     <BookAppointmentModal />
+    <ActionsModal />
   </AppStatePage>
 </template>
 
@@ -99,7 +100,7 @@ export default {
 
     links() {
       return [
-        { label: 'Basic Info', slug: 'basic-info' },
+        // { label: 'Basic Info', slug: 'basic-info' },
         { label: 'Action', slug: 'action' },
       ]
     },

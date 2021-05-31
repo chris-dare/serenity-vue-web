@@ -15,27 +15,27 @@
         <div class="my-4">
           <p class="text-gray-500 ">Proceedure</p>
           <p class="text-serenity-primary mt-1 ">
-            {{ $faker().lorem.word() }}
+            {{ 'aha' }}
           </p>
         </div>
         <div class="my-4">
           <p class="text-gray-500 ">Dosage</p>
-          <p class=" mt-1 text-primary">{{ $faker().lorem.word() }}</p>
+          <p class=" mt-1 text-primary">{{ 'aha' }}</p>
         </div>
         <div class="grid grid-cols-2 gap-6 my-4">
           <div>
             <p class="text-gray-500 ">Duration</p>
-            <p class=" mt-1 text-primary">{{ $faker().lorem.word() }}</p>
+            <p class=" mt-1 text-primary">{{ 'aha' }}</p>
           </div>
           <div>
             <p class="text-gray-500 ">Start Date</p>
-            <p class=" mt-1 text-primary">{{ $faker().lorem.word() }}</p>
+            <p class=" mt-1 text-primary">{{ 'aha' }}</p>
           </div>
         </div>
         <div class="my-4">
           <p class="text-gray-500 ">Instructions</p>
           <p class="mt-1  text-primary">
-            {{ $faker().lorem.word() }}
+            {{ 'aha' }}
           </p>
         </div>
         <div class="my-4">
@@ -43,16 +43,16 @@
           <div class="flex items-center">
             <img
               class="w-12 h-12 rounded-full mr-3"
-              :src="$faker().image.image()"
+              src="@/assets/img/user 1.svg"
               alt=""
             >
             <div>
               <div>
                 <p class="mt-1 ">
-                  {{ $faker().name.findName() }}
+                  {{ 'Chris Dare' }}
                 </p>
                 <p class="mt-1  text-secondary">
-                  {{ $faker().lorem.word() }}
+                  {{ 'aha' }}
                 </p>
               </div>
             </div>
@@ -61,7 +61,7 @@
         <div class="my-4">
           <p class="text-gray-500 ">Encounter</p>
           <p class="mt-1  text-primary">
-            {{ $faker().lorem.word() }}
+            {{ 'aha' }}
             <router-link
               to="/"
               class="text-serenity-primary font-bold underline ml-2"

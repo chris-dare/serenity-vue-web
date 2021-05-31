@@ -67,7 +67,7 @@
             v-if="index == form.drugs.length - 1"
             @click="addRow"
           >
-            Add New Drug <Add32 class="w-4 h-4 text-white ml-4" />
+            Add New Drug <Add class="w-4 h-4 text-white ml-4" />
           </SeButton>
           <SeButton
             v-else
@@ -87,13 +87,8 @@
 </template>
 
 <script>
-import Add32 from '@carbon/icons-vue/es/add/32'
-import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
-
 export default {
   name: 'AddMedicationModal',
-
-  components: { Add32, ChevronRight },
 
   data() {
     return {

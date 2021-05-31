@@ -32,10 +32,10 @@
         </div>
         <div>
           <div class="text-xs">
-            <span class="text-primary font-semibold mr-1">{{ $faker().name.findName() }}</span>
+            <span class="text-primary font-semibold mr-1">{{ 'Chris Dare' }}</span>
             <span class="text-secondary mr-1">added</span>
             <span class="text-serenity-primary cursor-pointer mr-1">Vitals</span>
-            <span class="text-primary">{{ $faker().name.findName() }}</span>
+            <span class="text-primary">{{ 'Chris Dare' }}</span>
           </div>
           <div class="flex items-center">
             <p class="text-secondary mr-4 text-xs">{{ option.time }}</p>
@@ -68,8 +68,8 @@ export default {
   computed: {
     options() {
       return [
-        { label: this.$faker().name.findName(), component: 'PersonFavorite', color: 'bg-warning', time: '1 hour ago' },
-        { label: this.$faker().name.findName(), component: 'DicomOverlay', color: 'bg-success', time: '1 hour ago' },
+        { label: 'Chris Dare', component: 'PersonFavorite', color: 'bg-warning', time: '1 hour ago' },
+        { label: 'Chris Dare', component: 'DicomOverlay', color: 'bg-success', time: '1 hour ago' },
       ]
     },
   },

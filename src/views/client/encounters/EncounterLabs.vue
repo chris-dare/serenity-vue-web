@@ -6,14 +6,15 @@
 
       <div class="space-y-4">
         <MultiSelect
-          v-model="form.service_request_category[0].display"
+          v-model="form.code"
           title="Choose lab type"
           :multiple="false"
-          :options="categories"
-          :track_by="null"
+          :options="labProceedures"
+          track_by="id"
+          label="healthcare_service_name"
+          custom-field="healthcare_service_name"
           placeholder="Search or choose a lab text to be performed"
-          :custom-label="customLabel"
-          :invalid-message="$utils.validateRequiredField($v, 'service_request_category')"
+          :invalid-message="$utils.validateRequiredField($v, 'code')"
         />
 
   
@@ -39,9 +40,7 @@
           title="Priority"
           :multiple="false"
           :options="priorities"
-          track-by="code"
-          label="display"
-          custom-field="code"
+          :track-by="null"
           placeholder="Routine, ASAP, Urgent"
         />
         
@@ -56,7 +55,7 @@
           />
 
           <cv-text-input
-            v-model="form.code"
+            v-model="form.specimen"
             type="text"
             label="Specimen"
             placeholder="Specimen"
@@ -76,33 +75,47 @@
       <div>
         <p class="mb-2 font-semibold">Previous Labs</p>
 
-        <div
-          v-if="!currentEncounterServiceRequests.length"
-          class="flex items-center my-4"
+        <DataTable
+          small
+          :data="currentEncounterServiceRequests"
+          :columns="columns"
+          no-data-label="No labs"
         >
-          No labs available
-        </div>
-        <div
-          v-else
-          class="space-y-3"
-        >
-          <div
-            v-for="(diagnosis, index) in currentEncounterServiceRequests"
-            :key="index"
-            class="flex items-center space-x-2"
-          >
-            <router-link
-              class="underline"
-              :to="{ name: 'EncounterReview', params: { ...$route.params } }"
-            >
-              view encounter
-            </router-link>
-          </div>
-        </div>
+          <template #default="{row}">
+            <cv-data-table-cell>
+              <p>{{ $date.formatDate(row.authored_on, 'yyyy/MM/dd') }}</p>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <p>{{ row.code }}</p>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <p>{{ row.priority | capitalize }}</p>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <p>{{ $utils.getFirstData(row.order_detail) }}</p>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <p>{{ $utils.getFirstData(row.service_request_bodysite) }}</p>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <p>{{ row.specimen }}</p>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
+                <div
+                  class="underline cursor-pointer"
+                  @click="viewEncounter(row)"
+                >
+                  view encounter
+                </div>
+              </div>
+            </cv-data-table-cell>
+          </template>
+        </DataTable>
       </div>
     </SeForm>
 
-    <div class="flex justify-between items-center absolute w-full right-0 bottom-12">
+    <div class="flex justify-between items-center my-12">
       <SeButton
         variant="secondary"
         :to="{name: 'EncounterDiagnosis', params: { id: $route.params.id }}"
@@ -125,9 +138,12 @@ import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Add from '@carbon/icons-vue/es/chevron--right/32'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
+import unsavedChanges from '@/mixins/unsaved-changes'
 
 export default {
   name: 'EncountersLabs',
+
+  mixins: [unsavedChanges],
 
   data() {
     return {
@@ -136,16 +152,19 @@ export default {
       form: {
         order_detail: [{display: ''}],
         service_request_bodysite: [{display: ''}],
-        service_request_category: [{display: ''}],
+        service_request_category: [{display: 'laboratory-procedure'}],
       },
       categories: [ 'laboratory-procedure', 'imaging', 'counselling', 'education', 'surgical-procedure' ],
       loading: false,
+      propertiesToCompareChanges: ['form'],
+      columns: ['Date', 'Lab type', 'Priority', 'Order detail', 'Bodysite', 'Specimen', ''],
     }
   },
 
   validations: {
     form: {
       service_request_category: { required },
+      code: { required },
       order_detail: {
         required,
         minLength: minLength(1),
@@ -167,12 +186,13 @@ export default {
     ...mapState({
       provider: (state) => state.auth.provider,
       location: (state) => state.global.location,
-      priorities: (state) => state.resources.priorities,
+      priorities: (state) => state.global.priorities,
       encounter: (state) => state.encounters.currentEncounter,
     }),
 
     ...mapGetters({
       currentEncounterServiceRequests: 'encounters/currentEncounterServiceRequests',
+      labProceedures: 'services/labProceedures',
     }),
   },
 
@@ -180,15 +200,23 @@ export default {
     ...mapActions({
       createServiceRequest: 'patients/createServiceRequest',
       updateServiceRequest: 'patients/updateServiceRequest',
+      setCurrentEncounter: 'encounters/setCurrentEncounter',
     }),
 
     submit(reroute= false) {
+      if (reroute && this.dataHasNotChanged) {
+        this.$router.push({ name: 'EncounterMedications', params: { id: this.$route.params.id }})
+        return
+      }
+
       this.$v.$touch()
 
       if (this.$v.$invalid) {
         this.$toast.error('Please fill all required fields')
         return
       }
+
+      
 
       if (this.form.id) {
         this.update()
@@ -212,7 +240,7 @@ export default {
         })
         this.close()
         if (reroute) {
-          this.$router.push({ name: 'EncounterMedications'})
+          this.$router.push({ name: 'EncounterMedications', params: { id: this.$route.params.id } })
         }
       } catch (error) {
         this.loading = false
@@ -243,6 +271,11 @@ export default {
 
     customLabel (value) {
       return value.split('-').join(' ')
+    },
+
+    viewEncounter(lab) {
+      this.setCurrentEncounter(lab.encounter)
+      this.$router.push({ name: 'PatientEncounters', params: { id: this.$route.params.id }})
     },
   },
 }

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import 'carbon-components/css/carbon-components.css'
 import CarbonCharts from '@carbon/charts-vue'
-// import DisableAutocomplete from 'vue-disable-autocomplete'
 
 import { 
   CvButton,
@@ -71,4 +70,3 @@ Vue.component(CvPagination.name, CvPagination)
 Vue.component(CvLoading.name, CvLoading)
 
 Vue.use(CarbonCharts)
-// Vue.use(DisableAutocomplete)

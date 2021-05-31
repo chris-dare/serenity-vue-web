@@ -33,7 +33,7 @@
           placeholder="Leave a note for the lab tecnician"
           :rows="10"
         />
-        <SeButton>Add Test <Add32 class="w-4 h-4 text-white ml-4" /></SeButton>
+        <SeButton>Add Test <Add class="w-4 h-4 text-white ml-4" /></SeButton>
         <div class="flex items-center justify-between">
           <SeButton variant="secondary">Cancel</SeButton>
           <SeButton>Send request<ChevronRight class="w-4 h-4 text-white ml-4" /></SeButton>
@@ -44,12 +44,8 @@
 </template>
 
 <script>
-import Add32 from '@carbon/icons-vue/es/add/32'
-import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 export default {
   name: 'RequestDiagnosticTestModal',
-
-  components: { Add32, ChevronRight },
 
   data() {
     return {

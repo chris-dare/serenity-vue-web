@@ -58,7 +58,7 @@
                 v-for="(item, index) in locations"
                 :key="index"
                 class="text-white font-light"
-                :value="item.location_name"
+                :value="item.id"
               >
                 {{ item.location_name }}
               </cv-select-option>
@@ -147,7 +147,7 @@ export default {
 
   async created() {
     await this.getLocations(false)
-    this.selectedLocation = this.locations.length ? this.locations[0].location_name : ''
+    this.selectedLocation = this.locations.length ? this.locations[0].id : ''
   },
 
   methods: {
