@@ -13,7 +13,7 @@
         <div>
           <p class="text-xs">Practitioner</p>
           <InfoImageBlock
-            :label="form.title"
+            :label="form && form.title"
             label-class="font-semibold"
           />
         </div>
@@ -28,12 +28,17 @@
           />
           <InfoBlock
             label="Time range"
-            :description="form.timeRange"
+            :description="form && form.timeRange"
             class="col-span-2"
           />
           <InfoBlock
             label="Date"
-            :description="form.fullDate"
+            :description="form && form.fullDate"
+          />
+          <InfoBlock
+            label="Service"
+            :description="form.health_service && form.health_service.healthcare_service_name"
+            class="col-span-2"
           />
         </div>
 
@@ -41,7 +46,7 @@
 
         <InfoBlock
           label="Comment"
-          :description="form.unavailable_times"
+          :description="form && form.unavailable_times"
         />
 
         <div class="space-y-4 grid">
@@ -117,10 +122,17 @@ export default {
     async remove() {
       this.loading = true
       try {
-        await this.deleteSchedule({practitionerId: this.form.practitioner_id, scheduleId: this.form.id })
+        await this.deleteSchedule({practitionerId: this.form.practitioner.id, scheduleId: this.form.id })
+        this.$toast.open({
+          message: 'Schedule successfully deleted!',
+        })
         this.loading = false
         this.close()
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
         this.loading = false
       }
     },
