@@ -361,16 +361,37 @@ const routes = [
             meta: { noPadding: true },
           },
           {
+            path: 'diagnosis/:diagnosisId',
+            name: 'EditEncounterDiagnosis',
+            component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncountersDiagnosis.vue'),
+            meta: { noPadding: true },
+            props: true,
+          },
+          {
             path: 'labs',
             name: 'EncounterLabs',
             component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncounterLabs.vue'),
             meta: { noPadding: true },
           },
           {
+            path: 'labs/:labId',
+            name: 'EditEncounterLab',
+            component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncounterLabs.vue'),
+            meta: { noPadding: true },
+            props: true,
+          },
+          {
             path: 'medications',
             name: 'EncounterMedications',
             component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncounterMedications.vue'),
             meta: { noPadding: true },
+          },
+          {
+            path: 'medications/:medicationId',
+            name: 'EditEncounterMedication',
+            component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncounterMedications.vue'),
+            meta: { noPadding: true },
+            props: true,
           },
           {
             path: 'care-plan',

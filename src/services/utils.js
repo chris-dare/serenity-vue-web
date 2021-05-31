@@ -153,6 +153,18 @@ const error = (err, toast) => {
   throw error
 }
 
+// takes a subset of an object given a set of keys to include and exclude
+const objectSubset = (data, includedKeys, excludedKeys = []) => {
+  includedKeys = includedKeys || Object.keys(data)
+  let result = {}
+  includedKeys.forEach(key => {
+    if(!excludedKeys.includes(key)){
+      result[key] = data[key]
+    }
+  })
+  return result
+}
+
 const customNameLabel = ({ first_name, last_name }) => {
   return `${first_name} ${last_name}`
 }
@@ -194,6 +206,7 @@ export default {
       error: err => error(err, Vue.prototype.$toast),
       getFilteredData,
       getFirstData,
+      objectSubset,
     }
   },
 }

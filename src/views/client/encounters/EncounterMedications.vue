@@ -1,7 +1,18 @@
 <template>
   <div class="relative h-full">
     <SeForm class="space-y-8">
-      <p class="font-semibold">Medication</p>
+      <p
+        v-if="mode === 'update'"
+        class="font-semibold"
+      >
+        Edit Medication
+      </p>
+      <p
+        v-else
+        class="font-semibold"
+      >
+        Medication
+      </p>
 
 
       <div
@@ -73,6 +84,7 @@
       </p>
 
       <div
+        v-if="mode === 'create'"
         class="flex items-center space-x-2 text-serenity-primary my-4 cursor-pointer text-sm"
         @click="addDrug"
       >
@@ -140,12 +152,21 @@
           :icon="add"
           @click="submit"
         >
-          Save
+          <template v-if="mode === 'create'">Save</template>
+          <template v-else>Update</template>
+        </SeButton>
+        <SeButton
+          v-if="mode === 'update'"
+          class="ml-2"
+          variant="secondary"
+          @click="cancelUpdate"
+        >
+          Cancel
         </SeButton>
       </div>
     
 
-      <div>
+      <div v-if="mode === 'create'">
         <p class="mb-2 font-semibold">Previous medications</p>
 
         <div
@@ -158,19 +179,37 @@
           v-else
           class="space-y-3 flex-wrap"
         >
-          <Tag
+          <div
             v-for="(request, index) in currentEncounterMedicationRequests"
             :key="index"
             class="flex items-center space-x-2"
-            :variant="request.status ? 'success' : 'error'"
           >
-            {{ request.name }}
-          </Tag>
+            <Tag
+              class="flex items-center mr-2"
+              :variant="request.status ? 'success' : 'error'"
+            >
+              {{ request.medication_detail[0].display }} - 
+              Every {{ request.medication_request_dosage_instruction[0].frequency }}
+              {{ request.medication_request_dosage_instruction[0].frequency_unit }}
+            </Tag>
+            <img
+              src="@/assets/img/edit 1.svg"
+              class="w-4 h-4 cursor-pointer"
+              @click="$router.push({ name: 'EditEncounterMedication', params: { medicationId: request.id } })"
+            >
+            <Trash
+              class="w-5 h-5 cursor-pointer"
+              @click="confirmDelete(request)"
+            />
+          </div>
         </div>
       </div>
     </SeForm>
 
-    <div class="flex justify-between items-center">
+    <div
+      v-if="mode === 'create'"
+      class="mt-8 flex justify-between items-center"
+    >
       <SeButton
         variant="secondary"
         :to="{name: 'EncounterLabs', params: { id: $route.params.id }}"
@@ -185,6 +224,10 @@
         Care plan
       </SeButton>
     </div>
+    <ConfirmDeleteModal
+      :loading="deleteLoading"
+      @delete="removeMedication"
+    />
   </div>
 </template>
 
@@ -196,6 +239,8 @@ import { required, minLength } from 'vuelidate/lib/validators'
 
 export default {
   name: 'EncounterMedications',
+
+  props: ['medicationId'],
 
   data() {
     return {
@@ -215,6 +260,7 @@ export default {
       },
       visible: false,
       loading: false,
+      deleteLoading: false,
       intentOptions: [ 'proposal', 'plan', 'directive', 'order', 'original-order', 'reflex-order', 'filler-order', 'instance-order', 'option' ],
       statuses: [ 'draft', 'active', 'on-hold', 'revoked', 'completed', 'entered-in-error', 'unknown' ],
       therapyTypes: [ 'continuous', 'acute', 'seasonal' ],
@@ -267,12 +313,71 @@ export default {
     ...mapGetters({
       currentEncounterMedicationRequests: 'encounters/currentEncounterMedicationRequests',
     }),
+
+    mode() {
+      return this.medicationId ? 'update' : 'create'
+    },
+  },
+
+  watch: {
+    medicationId() {
+      this.init()
+    },
   },
 
   methods: {
     ...mapActions({
       createMedicationRequest: 'patients/createMedicationRequest',
+      updateMedicationRequest: 'patients/updateMedicationRequest',
+      deleteMedicationRequest: 'patients/deleteMedicationRequest',
     }),
+
+    init() {
+      if(this.mode === 'update'){
+        let medication = this.currentEncounterMedicationRequests.find(el => el.id === this.medicationId)
+        medication = JSON.parse(JSON.stringify(medication))
+        this.form.extra_details = this.$utils.objectSubset(medication, [
+          'medication_request_notes', 'priority',
+          'code', 'date', 'category', 'intended_dispenser',
+        ])
+        this.form.id = medication.id
+        let extra_details = this.form.extra_details
+        extra_details.medication_request_category 
+          = medication.medication_request_category[0].display
+        this.form.drugs = medication.medication_detail.map(drug => {
+          return {
+            medication_detail: [{display: drug.display}],
+            course_of_therapy_type: medication.course_of_therapy_type,
+            medication_request_dosage_instruction: medication.medication_request_dosage_instruction,
+          }
+        })
+      }
+    },
+
+    confirmDelete(medication) {
+      this.$trigger('confirm:delete:open', { data: medication.id, label: 'Are you sure you want to delete this medication?' })
+    },
+
+    async removeMedication(id) {
+      this.deleteLoading = true
+      try {
+        await this.deleteMedicationRequest(id).then(() => {
+          this.$toast.open({
+            message: 'Medication successfully deleted',
+          })
+        })
+        this.deleteLoading = false
+        this.$trigger('confirm:delete:close')
+       
+      /* eslint-disable-next-line */
+      } catch (error) {
+      }
+      this.deleteLoading = false
+    },
+
+    cancelUpdate() {
+      this.$router.go(-1)
+    },
 
     submit(reroute= false) {
       this.$v.$touch()
@@ -281,8 +386,7 @@ export default {
         this.$toast.error('Please fill in the required fields')
         return
       }
-
-      if (this.form.id) {
+      if (this.mode === 'update') {
         this.update()
       } else {
         this.save(reroute)
@@ -309,16 +413,21 @@ export default {
     },
 
     async update() {
+      this.loading = true
       try {
-        await this.updateServiceRequest(this.form)
+        let payload = this.formatMedication(this.form)[0]
+        payload.id = this.form.id
+        await this.updateMedicationRequest(payload)
         this.loading = false
         this.$toast.open({
           message: 'Medication successfully updated',
         })
+        this.$router.push({ name: 'EncounterMedications' })
         this.close()
+        /* eslint-disable-next-line */
       } catch (error) {
-        this.loading = false
       }
+      this.loading = false
     },
 
     addDrug() {

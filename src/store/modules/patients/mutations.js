@@ -12,6 +12,8 @@ import {
   SET_OBSERVATIONS,
   UPDATE_OBSERVATION,
   SET_DIAGNOSTIC_REPORTS,
+  DELETE_SERVICE_REQUEST,
+  DELETE_MEDICATION_REQUEST,
 } from './mutation-types'
 
 export default {
@@ -66,6 +68,11 @@ export default {
     }
   },
 
+  [DELETE_MEDICATION_REQUEST](state, id) {
+    const index = state.patientMedications.findIndex(a => a.id === id)
+    state.patientMedications.splice(index, 1)
+  },
+
   [SET_DIAGNOSTIC_REPORTS](state, reports) {
     state.patientDiagnosticReports = reports
   },
@@ -84,6 +91,11 @@ export default {
     } else {
       state.patientServiceRequests.push(request)
     }
+  },
+
+  [DELETE_SERVICE_REQUEST](state, id) {
+    const index = state.patientServiceRequests.findIndex(a => a.id === id)
+    state.patientServiceRequests.splice(index, 1)
   },
   
 

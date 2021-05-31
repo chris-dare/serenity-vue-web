@@ -184,20 +184,30 @@ export default {
     }
   },
 
-  async updateDiagnosis({ commit, state, rootState }, payload) {
+  async updateDiagnosis({ commit, state, rootState}, payload) {
     try {
       let encounter = state.currentEncounter
-      encounter.encounter_diagnosis = encounter.encounter_diagnosis.map(a => {
-        if (a.id === payload.id) return payload
-        return a
-      })
-  
       const provider = rootState.auth.provider
-      const { data } = await EncountersAPI.update(provider.id, encounter)
-      commit(SET_ENCOUNTER, data)
+      const { data } = await EncountersAPI.updateDiagnosis(provider.id, payload)
+      const diagnostic = encounter.encounter_diagnosis.find(el => el.id == payload.id)
+      diagnostic.role = data.role
+      diagnostic.condition = data.condition
+      commit(SET_ENCOUNTER, encounter)
+    } catch ({ response: { data: error } }) {
+      throw error
+    }
+  },
+  
 
-    } catch (error) {
-      Vue.prototype.$utils.error(error)
+  async deleteDiagnosis({ commit, state, rootState}, id) {
+    try {
+      let encounter = state.currentEncounter
+      const provider = rootState.auth.provider
+      await EncountersAPI.deleteDiagnosis(provider.id, id)
+      const index = encounter.encounter_diagnosis.findIndex(el => el.id == id)
+      encounter.encounter_diagnosis.splice(index, 1)
+      commit(SET_ENCOUNTER, encounter)
+    } catch ({ response: { data: error } }) {
       throw error
     }
   },

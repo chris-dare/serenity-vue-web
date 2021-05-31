@@ -71,6 +71,13 @@ export default {
     },
   },
 
+  // TODO: quick and dirty solution to get initially set values to show in the textbox
+  watch: {
+    localValue(val) {
+      this.asyncFind(val)
+    },
+  },
+
   methods: {
     ...mapActions({
       getDiagnosisCodeOptions: 'resources/getDiagnosisCodeOptions',
