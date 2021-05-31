@@ -149,13 +149,13 @@ export default {
     async filter(val) {
       this.loading = true
       const filters = this.convertFromDatePickerFormat(val || this.filters)
-      await this.getSlots({ service_specialty: this.storeData.specialty.Code, ...filters })
+      await this.getSlots({ healthcareservice: this.storeData.service.id, ...filters })
       this.loading = false
     },
 
     async getNextSlot() {
       this.loading = true
-      await this.getNextAvailableSlot({ service_specialty: this.storeData.specialty.Code })
+      await this.getNextAvailableSlot({  healthcareservice_id: this.storeData.service.id })
       this.loading = false
     },
 

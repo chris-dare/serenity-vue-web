@@ -130,14 +130,14 @@ export default {
       return !this.form.date || !this.form.doctor
     },
     codeNotAvailable() {
-      return !this.specialty?.Code
+      return !this.specialty?.id
     },
     
   },
 
   watch: {
     specialty(val) {
-      if (val && val.Code) {
+      if (val && val.id) {
         this.filter()
       }
     },
@@ -160,13 +160,13 @@ export default {
     async filter(val) {
       this.loading = true
       const filters = this.convertFromDatePickerFormat(val || this.filters)
-      await this.getSlots({ service_specialty: this.specialty.Code, ...filters })
+      await this.getSlots({ healthcareservice: this.specialty.id, ...filters })
       this.loading = false
     },
 
     async getNextSlot() {
       this.loading = true
-      await this.getNextAvailableSlot({ service_specialty: this.specialty.Code })
+      await this.getNextAvailableSlot({ healthcareservice_id: this.specialty.id })
       this.loading = false
     },
 

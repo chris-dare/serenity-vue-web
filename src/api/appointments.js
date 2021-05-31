@@ -32,7 +32,7 @@ export default {
   },
 
   reschedule(providerId, appointmentId, params) {
-    return http.post(`${this.url}${providerId}/appointment/${appointmentId}/rescheduleappointment`, params)
+    return http.post(`${this.url}${providerId}/appointment/${appointmentId}/reschedule`, params)
   },
 
   delete(providerId,id) {
