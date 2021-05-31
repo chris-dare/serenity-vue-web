@@ -54,7 +54,7 @@
       /> -->
     </div>
 
-    <SelectSlot :specialty="form.specialty" />
+    <SelectSlot :specialty="form.service" />
     <p class="text-primary my-4 font-bold">
       Additional notes for the appointment
     </p>
@@ -181,7 +181,11 @@ export default {
       
 
       this.loading = true
-      await this.updateAppointment(this.storeData)
+      await this.updateAppointment(this.storeData).then(() => {
+        this.$toast.open({
+          message: 'Appointment successfully updated!',
+        })
+        this.$router.go(-1)})
 
       this.$trigger('billing:details:open')
       this.loading = false
@@ -198,7 +202,11 @@ export default {
       }
 
       this.loading = true
-      await this.rescheduleAppointment(this.storeData)
+      await this.rescheduleAppointment(this.storeData).then(() => {
+        this.$toast.open({
+          message: 'Appointment successfully rescheduled!',
+        })
+        this.$router.go(-1)})
 
       this.$trigger('billing:details:open')
       this.loading = false

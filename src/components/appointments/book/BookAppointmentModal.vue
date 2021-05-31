@@ -134,7 +134,7 @@ export default {
 
     async filter() {
       const filters = this.convertFromDatePickerFormat(new Date())
-      await this.getSlots({ service_specialty: this.currentAppointment.specialty.Code, ...filters })
+      await this.getSlots({ healthcareservice: this.currentAppointment.service.id, ...filters })
     },
 
     convertFromDatePickerFormat(val) {
