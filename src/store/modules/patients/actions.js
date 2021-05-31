@@ -22,6 +22,8 @@ import {
   UPDATE_MEDICATION_REQUEST,
   SET_PATIENT_DIAGNOSIS,
   SET_PATIENT_NOTES,
+  DELETE_SERVICE_REQUEST,
+  DELETE_MEDICATION_REQUEST,
 } from './mutation-types'
 
 export default {
@@ -153,6 +155,26 @@ export default {
     }
   },
 
+  async updateMedicationRequest({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await MedicationAPI.update(provider.id, payload)
+      commit(UPDATE_MEDICATION_REQUEST, data)
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
+  async deleteMedicationRequest({ commit, rootState }, id) {
+    try {
+      const provider = rootState.auth.provider
+      await MedicationAPI.delete(provider.id, id)
+      commit(DELETE_MEDICATION_REQUEST, id)
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
   //  lab requests
   async getServiceRequests({ commit, rootState, state }, refresh = true) {
     if (!refresh && state.patientServiceRequests.length) {
@@ -221,6 +243,17 @@ export default {
       commit(SET_PATIENT_NOTES, data)
     } catch (error) {
       throw error.data || error
+    }
+  },
+
+  async deleteServiceRequest({ commit, rootState }, id) {
+    try {
+      const provider = rootState.auth.provider
+      await ServiceRequestsAPI.delete(provider.id, id)
+      commit(DELETE_SERVICE_REQUEST, id)
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
     }
   },
 

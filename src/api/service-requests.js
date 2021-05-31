@@ -12,6 +12,8 @@ export default {
   },
 
   create(providerId, params) {
+    // TODO: find out why priority is passed as uppercase
+    params[0].priority = params[0].priority.toLowerCase()
     return http.post(`${this.url}${providerId}/servicerequests`, params)
   },
 

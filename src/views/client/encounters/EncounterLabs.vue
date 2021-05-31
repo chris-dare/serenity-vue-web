@@ -1,7 +1,18 @@
 <template>
   <div class="relative h-main">
     <SeForm class="space-y-8">
-      <p class="font-semibold">Order Labs/ imaging</p>
+      <p
+        v-if="mode === 'update'"
+        class="font-semibold"
+      >
+        Update Lab
+      </p>
+      <p
+        v-else
+        class="font-semibold"
+      >
+        Order Labs/ imaging
+      </p>
 
 
       <div class="space-y-4">
@@ -68,11 +79,12 @@
         :icon="add"
         @click="submit"
       >
-        Add Another test
+        <template v-if="mode === 'create'">Add Another test</template>
+        <template v-else>Update test</template>
       </SeButton>
     
 
-      <div>
+      <div v-if="mode === 'create'">
         <p class="mb-2 font-semibold">Previous Labs</p>
 
         <DataTable
@@ -101,7 +113,16 @@
               <p>{{ row.specimen }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <div>
+              <div class="flex items-center space-x-2">
+                <img
+                  src="@/assets/img/edit 1.svg"
+                  class="w-4 h-4 cursor-pointer"
+                  @click="$router.push({ name: 'EditEncounterLab', params: { labId: lab.id } })"
+                >
+                <Trash
+                  class="w-5 h-5 cursor-pointer"
+                  @click="confirmDeleteLab(lab)"
+                />
                 <div
                   class="underline cursor-pointer"
                   @click="viewEncounter(row)"
@@ -130,6 +151,10 @@
         Submit and go to Medications
       </SeButton>
     </div>
+    <ConfirmDeleteModal
+      :loading="deleteLoading"
+      @delete="removeLab"
+    />
   </div>
 </template>
 
@@ -144,6 +169,7 @@ export default {
   name: 'EncountersLabs',
 
   mixins: [unsavedChanges],
+  props: ['labId'],
 
   data() {
     return {
@@ -158,6 +184,7 @@ export default {
       loading: false,
       propertiesToCompareChanges: ['form'],
       columns: ['Date', 'Lab type', 'Priority', 'Order detail', 'Bodysite', 'Specimen', ''],
+      deleteLoading: false,
     }
   },
 
@@ -194,6 +221,15 @@ export default {
       currentEncounterServiceRequests: 'encounters/currentEncounterServiceRequests',
       labProceedures: 'services/labProceedures',
     }),
+    mode() {
+      return this.labId ? 'update' : 'create'
+    },
+  },
+
+  watch: {
+    labId() {
+      this.init()
+    },
   },
 
   methods: {
@@ -201,7 +237,32 @@ export default {
       createServiceRequest: 'patients/createServiceRequest',
       updateServiceRequest: 'patients/updateServiceRequest',
       setCurrentEncounter: 'encounters/setCurrentEncounter',
+      deleteServiceRequest: 'patients/deleteServiceRequest',
     }),
+
+    init() {
+      if(this.mode === 'update'){
+        let lab = this.currentEncounterServiceRequests.find(el => el.id === this.labId)
+        lab = JSON.parse(JSON.stringify(lab))
+        Object.assign(this.form, lab)
+      }
+    },
+
+    async removeLab(id) {
+      this.deleteLoading = true
+      try {
+        await this.deleteServiceRequest(id).then(() => {
+          this.$toast.open({
+            message: 'Lab successfully deleted',
+          })
+        })
+        this.deleteLoading = false
+        this.$trigger('confirm:delete:close')
+      /* eslint-disable-next-line */
+      } catch (error) {
+      }
+      this.deleteLoading = false
+    },
 
     submit(reroute= false) {
       if (reroute && this.dataHasNotChanged) {
@@ -216,9 +277,7 @@ export default {
         return
       }
 
-      
-
-      if (this.form.id) {
+      if (this.mode === 'update') {
         this.update()
       } else {
         // this.form.requesting_practitioner_role = this.provider.practitionerRoleId
@@ -248,16 +307,23 @@ export default {
     },
 
     async update() {
+      this.loading = true
       try {
         await this.updateServiceRequest(this.form)
         this.loading = false
         this.$toast.open({
           message: 'Service Request successfully updated',
         })
+        this.$router.push({ name: 'EncounterLabs' })
         this.close()
+        /* eslint-disable-next-line */
       } catch (error) {
-        this.loading = false
       }
+      this.loading = false
+    },
+
+    confirmDeleteLab(lab) {
+      this.$trigger('confirm:delete:open', { data: lab.id, label: 'Are you sure you want to delete this lab?' })
     },
 
     close() {

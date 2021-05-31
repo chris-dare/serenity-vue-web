@@ -1,4 +1,5 @@
 import http from '@/http'
+import moment from 'moment'
 
 export default {
   url: 'providers/',
@@ -16,6 +17,10 @@ export default {
   },
 
   update(providerId, params) {
+    // TODO: use right format in form instead
+    if(params.date){
+      params.date = moment(params.date).format('YYYY-MM-DDThh:mm')
+    }
     return http.patch(`${this.url}${providerId}/medicationrequests/${params.id}`, params)
   },
 

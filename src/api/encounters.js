@@ -22,4 +22,12 @@ export default {
   delete(providerId, id) {
     return http.delete(`${this.url}${providerId}/encounter/${id}/`)
   },
+
+  updateDiagnosis(providerId, params) {
+    return http.patch(`${this.url}${providerId}/encounter-patient-diagnosis/${params.id}`, params)
+  },
+
+  deleteDiagnosis(providerId, id) {
+    return http.delete(`${this.url}${providerId}/encounter-patient-diagnosis/${id}`)
+  },
 }
