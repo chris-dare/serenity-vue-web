@@ -6,7 +6,7 @@
       <EncounterReferralForm />
 
       <div>
-        <p class="mb-2 font-semibold">Referrals</p>
+        <p class="mb-2 font-semibold">Previous Referrals</p>
 
         <DataTable
           small

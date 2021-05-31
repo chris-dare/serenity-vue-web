@@ -23,7 +23,7 @@
         class="text-black font-semibold"
         :class="[ small ? 'text-3xl' : 'text-4xl' ]"
       >
-        {{ form[option.prop] || 0 }} <span v-if="option.extra_prop">/{{ form[option.extra_prop] || 0 }}</span> <span class="text-base font-light">{{ option.unit }}</span>
+        {{ form[option.prop] || '-' }} <span v-if="option.extra_prop">/{{ form[option.extra_prop] || '-' }}</span> <span class="text-base font-light">{{ option.unit }}</span>
       </p>
     </div>
   </div>

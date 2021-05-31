@@ -59,13 +59,13 @@
         v-if="index == form.drugs.length - 1"
         @click="addRow"
       >
-        Add New Drug <Add32 class="w-4 h-4 text-white ml-4" />
+        Add New Drug <Add class="w-4 h-4 text-white ml-4" />
       </SeButton>
       <SeButton
         v-else
         @click="removeRow(index)"
       >
-        Remove drug <Add32 class="w-4 h-4 text-white ml-4" />
+        Remove drug <Add class="w-4 h-4 text-white ml-4" />
       </SeButton>
     </div>
     <div class="flex items-center justify-between">

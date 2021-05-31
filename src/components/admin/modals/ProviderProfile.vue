@@ -129,13 +129,7 @@ export default {
     return {
       visible: false,
       loading: false,
-      form: {
-        first_name: this.$faker().name.firstName(),
-        last_name: this.$faker().name.lastName(),
-        email_address: this.$faker().internet.email(),
-        phone_number: '',
-        photo: this.$faker().image.image(),
-      },
+      form: {},
       icon: ChevronRight,
       updateSuccessful: false,
     }

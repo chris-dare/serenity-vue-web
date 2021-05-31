@@ -20,6 +20,8 @@ import {
   SET_OBSERVATIONS,
   UPDATE_OBSERVATION,
   UPDATE_MEDICATION_REQUEST,
+  SET_PATIENT_DIAGNOSIS,
+  SET_PATIENT_NOTES,
 } from './mutation-types'
 
 export default {
@@ -30,6 +32,8 @@ export default {
     dispatch('getMedicationRequests')
     // dispatch('getObservations', {})
     dispatch('getObservations', { refresh:true, filters: { patient: id }})
+    dispatch('getDiagnosis', id)
+    dispatch('getNotes', id)
     dispatch('getDiagnosticReports')
     dispatch('encounters/getEncounters', id , { root:true })
     dispatch('resources/getEncounterClasses', null, { root:true })
@@ -177,9 +181,9 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await ServiceRequestsAPI.create(provider.id, payload)
-      data.forEach(request => {
-        commit(UPDATE_SERVICE_REQUEST, request)
-      })
+      // data.forEach(request => {
+      commit(UPDATE_SERVICE_REQUEST, data)
+      // })
       
     } catch (error) {
       Vue.prototype.$utils.error(error)
@@ -195,6 +199,28 @@ export default {
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
+    }
+  },
+
+  // diagnosis
+  async getDiagnosis({ commit, rootState }, patientId) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await PatientsAPI.getDiagnosis(provider.id, patientId)
+      commit(SET_PATIENT_DIAGNOSIS, data)
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
+  // diagnosis
+  async getNotes({ commit, rootState }, patientId) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await PatientsAPI.getNotes(provider.id, patientId)
+      commit(SET_PATIENT_NOTES, data)
+    } catch (error) {
+      throw error.data || error
     }
   },
 

@@ -22,8 +22,8 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ $date.formatDate($faker().date.recent(), 'yyyy/MM/dd') }}</p>
-            <p class="text-secondary text-xs">{{ $date.formatDate($faker().date.recent(), 'HH:mm a') }}</p>
+            <p>{{ $date.formatDate(Date.now(), 'yyyy/MM/dd') }}</p>
+            <p class="text-secondary text-xs">{{ $date.formatDate(Date.now(), 'HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>

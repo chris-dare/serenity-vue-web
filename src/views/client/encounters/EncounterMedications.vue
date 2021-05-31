@@ -145,7 +145,7 @@
       </div>
     
 
-      <div>
+      <div class="py-8">
         <p class="mb-2 font-semibold">Previous medications</p>
 
         <div
@@ -156,7 +156,7 @@
         </div>
         <div
           v-else
-          class="space-y-3 flex-wrap"
+          class="space-y-3 space-x-3 flex-wrap"
         >
           <Tag
             v-for="(request, index) in currentEncounterMedicationRequests"
@@ -164,7 +164,9 @@
             class="flex items-center space-x-2"
             :variant="request.status ? 'success' : 'error'"
           >
-            {{ request.name }}
+            <span>{{ $utils.getFirstData(request.medication_detail) }}</span>
+            
+            <Close class="w-4" />
           </Tag>
         </div>
       </div>
@@ -193,9 +195,12 @@ import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Add from '@carbon/icons-vue/es/chevron--right/32'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
+import unsavedChanges from '@/mixins/unsaved-changes'
 
 export default {
   name: 'EncounterMedications',
+
+  mixins: [unsavedChanges],
 
   data() {
     return {
@@ -219,6 +224,7 @@ export default {
       statuses: [ 'draft', 'active', 'on-hold', 'revoked', 'completed', 'entered-in-error', 'unknown' ],
       therapyTypes: [ 'continuous', 'acute', 'seasonal' ],
       categories: [ 'inpatient', 'outpatient', 'community', 'discharge' ],
+      propertiesToCompareChanges: ['form'],
     }
   },
 
@@ -275,7 +281,14 @@ export default {
     }),
 
     submit(reroute= false) {
+
+      if (reroute && this.dataHasNotChanged) {
+        this.$router.push({ name: 'EncounterCarePlan', params: { id: this.$route.params.id }})
+        return
+      }
+
       this.$v.$touch()
+
 
       if (this.$v.$invalid) {
         this.$toast.error('Please fill in the required fields')

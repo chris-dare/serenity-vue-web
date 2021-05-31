@@ -880,11 +880,6 @@
   resolved "https://registry.yarnpkg.com/@carbon/colors/-/colors-10.15.0.tgz#1a7f211a9e92b51c838995f5f3ffae002a3fed8b"
   integrity sha512-z6Ur7unTO6XoVVujXnGcvxxDaX1g5ccCqImlb/HtJHtF7WFCQVjpxKKn76XcmI3PRZ2tbc9q+ENpfbS5Ry/NBQ==
 
-"@carbon/colors@^10.16.0":
-  version "10.16.0"
-  resolved "https://registry.yarnpkg.com/@carbon/colors/-/colors-10.16.0.tgz#610a5ba10982c2b339a58eb7a2a4643155013965"
-  integrity sha512-dnvngANGQxX82//cw+jYGHLh4qMOstSr0sTh8Xcr+d2iQKGrb2YID+/ncRfXbldhJmoDORDwOarwfaY4ReXvvg==
-
 "@carbon/icon-helpers@^10.10.0":
   version "10.10.0"
   resolved "https://registry.yarnpkg.com/@carbon/icon-helpers/-/icon-helpers-10.10.0.tgz#be6591539cc32a39965aecce8f871aaed5a3a120"
@@ -908,39 +903,6 @@
   integrity sha512-IaoHlezA/IPjogDwI1PRl5FxxZBbLp+2g++L8V4EieFsrpqVLLjLla9mlu2HrGYdbjf9jNrD/3jbrbnOTTnndQ==
   dependencies:
     "@carbon/icon-helpers" "^10.10.0"
-
-"@carbon/import-once@^10.3.0":
-  version "10.3.0"
-  resolved "https://registry.yarnpkg.com/@carbon/import-once/-/import-once-10.3.0.tgz#58617da4efb6d7a11352d8e6b7209da1d39f364d"
-  integrity sha512-PFk3FhMe3psihYtCg3JsyPHismqglnbUqIpz1DCG5Gn/kt0HdVKhGvHdEq7E305rGoBUCKzMn/4xoY9v9mcmlg==
-
-"@carbon/layout@^10.14.0":
-  version "10.14.0"
-  resolved "https://registry.yarnpkg.com/@carbon/layout/-/layout-10.14.0.tgz#abeb9a01c5ee70fe1e5f8dc3b0d5a6e423cea935"
-  integrity sha512-P9ueDQWpq3pF98iHGsCKL4fR/mP8Xhqe3qhBQfA5zgi7/RPy76lKGZR+SUoGX/QCC72vkA/zhJ4+7/I26LhMhQ==
-
-"@carbon/motion@^10.10.0":
-  version "10.10.0"
-  resolved "https://registry.yarnpkg.com/@carbon/motion/-/motion-10.10.0.tgz#1938ca3c94bb5c8b245fbc7a6e6b2305528cc425"
-  integrity sha512-axTQR9cLhkrqfdVTGRDsH1qV7TrImIximzniYbBSBnn1adI9/uvgCatpbtskBkLliLNdUldQhDV04dAy26q3Hw==
-
-"@carbon/themes@^10.23.0":
-  version "10.23.0"
-  resolved "https://registry.yarnpkg.com/@carbon/themes/-/themes-10.23.0.tgz#8c75f4bfa4a4993b11854320e75c0ed142565846"
-  integrity sha512-cw6p+gtbR0FBwsnDVGvGk80QbGw5Vqszs3D/7JLG8JpfLBaygOI6BWBfohdWrtrRMFYLdxBEz6GUvU+cTAIEnA==
-  dependencies:
-    "@carbon/colors" "^10.16.0"
-    "@carbon/layout" "^10.14.0"
-    "@carbon/type" "^10.17.0"
-    color "^3.1.2"
-
-"@carbon/type@^10.17.0":
-  version "10.17.0"
-  resolved "https://registry.yarnpkg.com/@carbon/type/-/type-10.17.0.tgz#8901768d2dbeb12936c50ea81b9e5025f2346f30"
-  integrity sha512-fxutYwh6wNtcE0usO5d7ogoVLOTEOc34q4Xe1KT8IQVfDlnmdtLsdKvCxZrCk5KiAQZILCmXmyySiLdJfQcRJw==
-  dependencies:
-    "@carbon/import-once" "^10.3.0"
-    "@carbon/layout" "^10.14.0"
 
 "@carbon/utils-position@1.1.1":
   version "1.1.1"
@@ -3116,7 +3078,7 @@ color-string@^1.5.4:
     color-name "^1.0.0"
     simple-swizzle "^0.2.2"
 
-color@^3.0.0, color@^3.1.2, color@^3.1.3:
+color@^3.0.0, color@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/color/-/color-3.1.3.tgz#ca67fb4e7b97d611dcde39eceed422067d91596e"
   integrity sha512-xgXAcTHa2HeFCGLE9Xs/R82hujGtu9Jd9x4NW3T34+OMs7VoPsjwzRczKHvTAHeJwWFwX5j15+MgAppE8ztObQ==
@@ -10851,11 +10813,6 @@ vue-cli-plugin-test-attrs@~0.1.5:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/vue-cli-plugin-test-attrs/-/vue-cli-plugin-test-attrs-0.1.5.tgz#afd0cd676a6d218cfc8fc32fc8b64faf43197c03"
   integrity sha512-SbxNpPOQ3KIBJVr9Ihf3cxbN9RyXu5g747RdadIkBAP5HLFLQrKePKXxBDUK5Z+DPSe6jxPNVPIJiLJbp1A2TQ==
-
-vue-disable-autocomplete@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/vue-disable-autocomplete/-/vue-disable-autocomplete-0.0.4.tgz#6318b515ade128247038121f33a6586c1d0899e8"
-  integrity sha512-NtEMoepVfFScR6f7d37g3tQh3F5VU75ai+5+GHoQ0pt3ftrLUeOWXi0ozQDExTwPFgLK3Yk86NeyokSZMlXvFg==
 
 vue-eslint-parser@^7.0.0:
   version "7.1.1"

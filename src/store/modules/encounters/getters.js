@@ -7,7 +7,7 @@ export default {
 
   pastEncounters: state => {
     if (!state.encounters) return []
-    return state.encounters.filter(encounter => encounter.status === 'finished' || (encounter.end_time && isAfter(Date.now(), parseISO(encounter.end_time))))
+    return sortByDate(state.encounters.filter(encounter => encounter.status === 'finished' || (encounter.end_time && isAfter(Date.now(), parseISO(encounter.end_time)))), 'end_time')
   },
 
   onGoingEncounters: state => {
@@ -100,7 +100,7 @@ export default {
   },
 
   currentPatientVitals: (state, getters, rootState) => {
-    if (!rootState.patients.patientObservations) return {}
+    if (!rootState.patients.patientObservations) return []
     const options = rootState.resources.vitalsUnitTypes
     let vitals = []
   
@@ -126,6 +126,11 @@ export default {
     })
 
     return vitals
+  },
+
+  latestVitalsDate: (state, getters) => {
+    if (!getters.currentPatientVitals.length) return ''
+    return getters.currentPatientVitals.find(v => v.date)?.date
   },
 
   currentPatientSocialHistory: (state, getters, rootState, rootGetters) => {

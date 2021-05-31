@@ -65,7 +65,7 @@ export default {
         await vm.initSinglePatientInformation(vm.id)
         vm.loading = false
       } catch (error) {
-        vm.error = true
+        vm.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
         vm.loading = false
       }
       

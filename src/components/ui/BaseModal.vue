@@ -1,11 +1,16 @@
 <template>
   <cv-modal
-    class="se-no-title-modal"
     close-aria-label="Close"
-    :visible="visible"
-    size="xs"
+    :visible="show"
+    v-bind="$attrs"
+    :size="size"
     @modal-hidden="close"
   >
+    <template slot="title">
+      <slot name="title">
+        <p class="text-lg font-semibold">{{ title }}</p>
+      </slot>
+    </template>
     <template slot="content">
       <slot />
     </template>
@@ -17,48 +22,42 @@ export default {
   name: 'BaseModal',
 
   props: {
-    eventName: {
-      type: String,
-      default: 'location',
+    visible: {
+      type: Boolean,
+      default: false,
     },
-  },
 
-  data() {
-    return {
-      visible: false,
-    }
+    title: {
+      type: String,
+      default: '',
+    },
+
+    size: {
+      type: String,
+      default: 'xs',
+    },
   },
 
   computed: {
-    openEventName() {
-      return `${this.eventName}:add:open`
-    },
-    editEventName() {
-      return `${this.eventName}:edit:open`
-    },
-    closeEventName() {
-      return `${this.eventName}:close`
-    },
-  },
-
-  events: {
-    openEventName: function() {
-      this.visible = true
-    },
-    editEventName: function(data) {
-      this.visible = true
-      this.form = data.params[0]
-    },
-    closeEventName: function() {
-      this.close()
+    show: {
+      set(val) {
+        this.$emit('update:visible', val)
+      },
+      get() {
+        return this.visible
+      },
     },
   },
 
   methods: {
     close() {
-      this.form = {}
-      this.$v.$reset()
-      this.visible = false
+      this.$resetData()
+
+      if (this.$v) {
+        this.$v.$reset()
+      }
+              
+      this.show = false
       this.$emit('close')
     },
   },

@@ -1,5 +1,4 @@
-import cloneDeep from 'lodash/cloneDeep'
-import isEqual from 'lodash/isEqual'
+import { cloneDeep, isEqual } from 'lodash'
 
 let initialData = {}
 
@@ -35,20 +34,20 @@ export default {
       return true
     },
 
+    // eslint-disable-next-line no-unused-vars
     confirmChanges(next) {
-      this.$confirm(this.$t('you_have_unsaved_changes'), 'Warning', {
-        confirmButtonText: this.$t('stay'),
-        cancelButtonText: this.$t('discard'),
-        type: 'warning',
-      })
-        // do we really need this 'then'?
-        .then(() => {
-          return true
-        })
-        .catch(() => {
+      this.$trigger('actions-modal:open', {
+        confirmButtonText: 'stay',
+        cancelButtonText: 'discard',
+        label: 'You have unsaved changes. Do you want to discard them or save them?',
+        callback: async () => {
+          console.log('here')
+        },
+        cancel: async () => {
           this.resetDirtyState()
           next()
-        })
+        },
+      })
     },
 
     resetDirtyState() {

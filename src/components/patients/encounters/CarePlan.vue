@@ -30,7 +30,7 @@
           small
           :data="currentEncounterCarePlans"
           :columns="columns"
-          no-data-label="No Referrals"
+          no-data-label="No Care Plan"
         >
           <template #default="{row}">
             <cv-data-table-cell>

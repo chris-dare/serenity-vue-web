@@ -50,7 +50,7 @@ const routes = [
       {
         path: '/schedules',
         name: 'Schedules',
-        component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Schedules.vue'),
+        component: () => import(/* webpackChunkName: "schedule" */ '../views/client/administration/Schedules.vue'),
       },
       {
         path: '/workspaces',
@@ -167,7 +167,7 @@ const routes = [
       },
       {
         path: '/register-team',
-        component: () => import(/* webpackChunkName: "registerpatient" */ '../views/client/team/RegisterTeam.vue'),
+        component: () => import(/* webpackChunkName: "registeruser" */ '../views/client/team/RegisterTeam.vue'),
         children: [
           {
             path: '',
@@ -389,18 +389,18 @@ const routes = [
       {
         path: '/pharmacy',
         name: 'Pharmacy',
-        component: () => import(/* webpackChunkName: "admin" */ '../views/client/pharmacy/Pharmacy.vue'),
+        component: () => import(/* webpackChunkName: "pharmacy" */ '../views/client/pharmacy/Pharmacy.vue'),
       },
       {
         path: '/pharmacy/patients',
         name: 'Pharmacy:Patients',
-        component: () => import(/* webpackChunkName: "admin" */ '../views/client/pharmacy/Patients.vue'),
+        component: () => import(/* webpackChunkName: "pharmacy" */ '../views/client/pharmacy/Patients.vue'),
       },
       {
         path: '/pharmacy/patients/:id',
         name: 'Pharmacy:Patient',
         props: true,
-        component: () => import(/* webpackChunkName: "admin" */ '../views/client/pharmacy/Patient.vue'),
+        component: () => import(/* webpackChunkName: "pharmacy" */ '../views/client/pharmacy/Patient.vue'),
       },
       {
         path: '/billing/patients',

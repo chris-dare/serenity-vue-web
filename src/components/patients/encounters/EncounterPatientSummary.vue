@@ -20,15 +20,15 @@
     <div class="grid grid-cols-3 gap-4">
       <InfoSubBlock
         label="Blood Type"
-        description="AB+"
+        :description="props.patient.blood_type"
       />
       <InfoSubBlock
         label="Weight"
-        :description="`${props.vitals.WEIGHT_KG || 0}kg`"
+        :description="props.vitals.WEIGHT_KG ? `${props.vitals.WEIGHT_KG}kg` : null"
       />
       <InfoSubBlock
         label="Height"
-        :description="`${props.vitals.HEIGHT_CM || 0}cm`"
+        :description="props.vitals.HEIGHT_CM ? `${props.vitals.HEIGHT_CM}cm` : null"
       />
     </div>
   </div>

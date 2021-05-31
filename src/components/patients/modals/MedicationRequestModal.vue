@@ -135,7 +135,7 @@
             type="text"
             placeholder="Instruction on how to use the drug"
             :rows="2"
-            class="inherit-full-input"
+            class="inherit-full-input col-span-3"
           />
         </div>
         
