@@ -8,7 +8,11 @@
       :label="fullName"
       :description="specialties"
     />
-    <p>{{ slot }}</p>
+    <div class="text-center">
+      <p>{{ slot }}</p>
+      <small class="text-muted">{{ timeZone }}</small>
+    </div>
+
     <div>
       <CheckmarkFilled
         class="w-5 h-5"
@@ -50,6 +54,15 @@ export default {
     slot() {
       return `${this.$date.formatDate(this.doctor.start, 'hh:mm a')} - ${this.$date.formatDate(this.doctor.end, 'hh:mm a')}`
     },
+
+    timeZone(){
+      return `${this.$date.timeZoned(this.doctor.ts) }`
+    },
+    
+  },
+
+  created(){
+    console.log(this.doctor)
   },
 }
 </script>

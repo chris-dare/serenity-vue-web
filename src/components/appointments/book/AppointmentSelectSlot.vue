@@ -161,8 +161,8 @@ export default {
 
     convertFromDatePickerFormat(val) {
       return {
-        start: this.$date.formatQueryParamsDate(val[0]),
-        end: isSameDay(val[0], val[1]) || !val[1] ? this.$date.formatQueryParamsDate(this.$date.endOfDate(val[0])) : this.$date.formatQueryParamsDate(val[1]),
+        start__gte: this.$date.formatQueryParamsDate(val[0]),
+        end__lte: isSameDay(val[0], val[1]) || !val[1] ? this.$date.formatQueryParamsDate(this.$date.endOfDate(val[0])) : this.$date.formatQueryParamsDate(val[1]),
       }
     },
   },
