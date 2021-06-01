@@ -46,10 +46,11 @@ export default {
     try {
       const schedule = new Schedule(payload).getUpdateView()
       const provider = rootState.auth.provider
+      console.log(payload)
       const { data } = await SchedulesAPI
-        .update(provider.id, payload.practitioner_id, payload.id, schedule)
+        .update(provider.id, payload.practitioner.id, payload.id, schedule)
 
-      const normalizedSchedule = new Schedule({ ...data.data, practitioner_id: payload.practitioner_id }).getNormalizedUpdateView()
+      const normalizedSchedule = new Schedule({ ...data.data, practitioner_id: payload.practitioner.id }).getNormalizedUpdateView()
       commit(UPDATE_SCHEDULE, normalizedSchedule)
     } catch (error) {
       Vue.prototype.$utils.error(error)
