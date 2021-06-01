@@ -139,8 +139,8 @@ export default {
 
     convertFromDatePickerFormat(val) {
       return {
-        start: this.$date.formatQueryParamsDate(val),
-        end: this.$date.formatQueryParamsDate(this.$date.endOfDate(val)),
+        start__gte: this.$date.formatQueryParamsDate(val),
+        end__lte: this.$date.formatQueryParamsDate(this.$date.endOfDate(val)),
       }
     },
   },

@@ -20,7 +20,7 @@ export default {
   },
 
   slots: (state, getters, rootState, rootGetters) => {
-    return state.slots && state.slots.map(slot => {
+    return state.slots.map(slot => {
       const practitioner = rootGetters['practitioners/practitioners'].find(a => a.id === slot.practitionerid)
       
       slot.practitioner = practitioner ? practitioner : { practitioner_specialty: []}

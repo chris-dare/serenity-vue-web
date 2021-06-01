@@ -4,6 +4,7 @@ import startOfMonth from 'date-fns/startOfMonth'
 import endOfDay from 'date-fns/endOfDay'
 import endOfMonth from 'date-fns/endOfMonth'
 import formatDistance from 'date-fns/formatDistance'
+import momentTimeZone from 'moment-timezone'
 
 const formatDate = (date, formatString = 'yyyy-MM-dd HH:mm') => {
   if (!date) return ''
@@ -13,6 +14,12 @@ const formatDate = (date, formatString = 'yyyy-MM-dd HH:mm') => {
 const sortDate = (dates) => {
   return dates.sort((a, b) => b.date - a.date)
 }
+
+const timeZoned = (date) => {
+  let userZone = momentTimeZone.tz.guess()
+  return momentTimeZone(date).tz(userZone).format('Z')
+}
+
 const startOfDate = (date = new Date()) => startOfDay(new Date(date))
 const endOfDate = (date = new Date()) => endOfDay(new Date(date))
 const startOfMonthDate = (date = new Date()) => startOfMonth(new Date(date))
@@ -51,6 +58,7 @@ export default {
     Vue.prototype.$date = {
       formatDate,
       sortDate,
+      timeZoned,
       startOfDate,
       endOfDate,
       formatQueryParamsDate,

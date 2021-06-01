@@ -6,7 +6,9 @@
       :label="props.name"
       :description="props.specialty"
     />
-    <p>{{ props.slot }}</p>
+    <div class="text-center">
+      <p>{{ props.slot }}</p>
+    </div>
     <div>
       <SeButton
         v-if="props.specialty"
