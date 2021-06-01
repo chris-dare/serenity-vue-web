@@ -7,22 +7,18 @@ export default {
     }
   },
 
-  // created() {
-  //   this.form = { ...this.form , ...this.storeData }
-  // },
-
   watch: {
     storeData: {
       immediate: true,
       handler(val) {
-        this.form = { ...this.form , ...val }
+        this.form = val.id ? { ...val, ...this.form } : { ...this.form , ...val }
       },
     },
   },
 
   events: {
     'multistep:save': function() {
-      this.addToStoreData({ ...this.form , ...this.storeData })
+      this.addToStoreData(this.storeData.id ? { ...this.storeData, ...this.form } :{ ...this.form , ...this.storeData })
     },
   },
 

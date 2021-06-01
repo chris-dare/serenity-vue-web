@@ -17,6 +17,7 @@
       <EditProfileModal ref="editProfileModal" />
       <AdminProfile />
       <ConfirmActionModal />
+      <ActionsModal />
     </div>
 
     <Offline @detected-condition="handleConnectivityChange" />

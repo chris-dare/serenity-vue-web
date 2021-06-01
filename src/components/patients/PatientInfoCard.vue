@@ -23,7 +23,7 @@
         <img
           src="@/assets/img/edit 1.svg"
           class="w-4 h-4 cursor-pointer"
-          @click="$router.push({ name: 'Biodata', params: { id: patient.id } })"
+          @click="$router.push({ name: 'Biodata', query: { id: patient.id } })"
         >
       </div>
     </div>

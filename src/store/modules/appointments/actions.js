@@ -44,13 +44,16 @@ export default {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI.nextSlot(provider.id, filters)
 
-      if (data.data && typeof data.data === 'object') {
+      if (data.data && data.success) {
         const slot = {
           ...data.data,
           practitioner: rootGetters['practitioners/practitioners'].find(a => a.id === data.data.practitionerid),
         }
         commit(ADD_APPOINTMENT_DATA, { slot })
+        return
       }
+
+      commit(ADD_APPOINTMENT_DATA, { slot: {} })
   
       return
     } catch (error) {

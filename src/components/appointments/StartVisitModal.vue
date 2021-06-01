@@ -5,7 +5,7 @@
     :visible="visible"
     size="sm"
   >
-    <template>
+    <template slot="title">
       <h1>Start patient visit</h1>
     </template>
     <template slot="content">
@@ -29,27 +29,21 @@
           <template #default="{ row }">
             <cv-data-table-cell>
               <div class="flex items-center py-2">
-                <img
-                  class="w-12 h-12 rounded-full mr-3"
-                  :src="row.image"
-                  alt=""
-                >
-                <div>
-                  <p class="">{{ row.name }}</p>
-                  <p class="text-secondary text-xs">
-                    {{ row.gender }}, {{ row.age }} years
-                  </p>
-                </div>
+                <InfoImageBlock
+                  :label="row.name"
+                  :description="row.gender_age_description"
+                  size="base"
+                />
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p class="">{{ row.recent }}</p>
+                <p>{{ row.next_appointment ? $date.formatDate(row.next_appointment) : 'No appointment' }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p class="">{{ 'Corporate' }}</p>
+                <p>{{ 'Cash' }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
@@ -118,10 +112,14 @@ export default {
     }),
 
     save(patient) {
-      this.refreshCurrentAppointment()
-      this.addToCurrentAppointment({ patient })
-      this.visible = false
-      this.$trigger('book:appointment:open')
+      if (patient.next_appointment) {
+        // 
+      } else {
+        this.refreshCurrentAppointment()
+        this.addToCurrentAppointment({ patient })
+        this.visible = false
+        this.$trigger('book:appointment:open')
+      }
     },
   },
 }

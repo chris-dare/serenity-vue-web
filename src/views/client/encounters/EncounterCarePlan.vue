@@ -10,7 +10,7 @@ export default {
   name: 'EncounterCarePlan',
 
   components: {
-    CarePlan: () => import('@/components/patients/encounters/CarePlan'),
+    CarePlan: () => import(/* webpackPrefetch: true */'@/components/patients/encounters/CarePlan'),
   },
 }
 </script>

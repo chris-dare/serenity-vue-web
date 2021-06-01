@@ -47,7 +47,7 @@
               class="w-full max-w-full inherit-full-input se-input-gray"
               placeholder="dd/mm/yyyy"
               label="Date of Birth"
-              max-date="today"
+              :max-date="maxDate"
             />
 
             <MultiSelect
@@ -78,6 +78,7 @@
 import { required } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
 import { mapActions, mapState } from 'vuex'
+import subYears from 'date-fns/subYears'
 
 export default {
   name: 'Biodata',
@@ -110,6 +111,10 @@ export default {
       storeData: (state) => state.patients.currentPatient,
       genders: (state) => state.resources.genders,
     }),
+
+    maxDate() {
+      return subYears(Date.now(), 18)
+    },
   },
 
   methods: {

@@ -21,4 +21,8 @@ export default {
   delete(providerId,id) {
     return http.delete(`${this.url}${providerId}/practitioners/${id}`)
   },
+
+  search( params) {
+    return http.get('users', { params: { ...params } })
+  },
 }

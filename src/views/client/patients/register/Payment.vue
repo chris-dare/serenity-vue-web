@@ -99,7 +99,6 @@ export default {
       first_name: { required },
       last_name: { required },
       gender: { required },
-      mobile: { required },
     },
   },
   
@@ -115,7 +114,7 @@ export default {
     submit() {
       this.$v.$touch()
 
-      if (this.$v.$invalid || this.disabled) {
+      if (this.$v.$invalid) {
         this.$toast.error('Fill all required fields in previous steps!')
         return
       }
@@ -136,8 +135,11 @@ export default {
 
         if (this.$route.query.reroute) {
           this.rerouteToAppointment(data)
+          return
         }
-        this.visible = true
+
+        this.confirmChanges(data.id)
+        // this.visible = true
         this.loading = false
 
       } catch (error) {
@@ -170,6 +172,20 @@ export default {
       }
 
       this.loading = false
+    },
+
+    confirmChanges(id) {
+      this.$trigger('actions-modal:open', {
+        confirmButtonText: 'Go to patient profile',
+        cancelButtonText: 'Return to dashboard',
+        label: 'Patient Profile has been successfully created!',
+        callback: async () => {
+          this.$router.push({ name: 'PatientSummary', params: { id }})
+        },
+        cancel: async () => {
+          this.$router.push({ name: 'Patients'})
+        },
+      })
     },
 
     rerouteToAppointment(patient) {
