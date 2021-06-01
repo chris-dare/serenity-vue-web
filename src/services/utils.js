@@ -4,6 +4,7 @@ const validateRequiredField = ($v, field) => {
   const formattedField = field.charAt(0).toUpperCase() 
     + field.slice(1).replace(/([-_]\w)/g, g => ' '+g[1].toUpperCase())
 
+
   if($field.$error && $field.$dirty){
     if($field.sameAsPassword === false){
       return 'Passwords do not match'
@@ -19,6 +20,10 @@ const validateRequiredField = ($v, field) => {
 
     if($field.email === false){
       return `${formattedField} format is invalid`
+    }
+
+    if($field.isUnique === false && $field.required){
+      return `${formattedField} already exists`
     }
   
     return `${formattedField} is required`

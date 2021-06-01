@@ -18,6 +18,14 @@
       :invalid-message="$utils.validateRequiredField($v, 'line')"
       @input="onChange"
     />
+
+    <FormCountrySelect
+      v-model="form.country"
+      title="Country"
+      placeholder="Select a country"
+      :error-message="$utils.validateRequiredField($v, 'country')"
+      @input="onChange"
+    />
     
     <cv-select
       v-model="form.state"
@@ -41,14 +49,6 @@
         {{ region }}
       </cv-select-option>
     </cv-select>
-
-    <FormCountrySelect
-      v-model="form.country"
-      title="Country"
-      placeholder="Select a country"
-      :error-message="$utils.validateRequiredField($v, 'country')"
-      @input="onChange"
-    />
   </div>
 </template>
 

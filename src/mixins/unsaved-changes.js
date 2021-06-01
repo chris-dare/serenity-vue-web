@@ -10,11 +10,20 @@ export default {
   },
 
   beforeRouteLeave(to, from, next) {
-    if (this.dataHasNotChanged()) {
+    if (this.dataHasNotChanged() || this.mode === 'update') {
       return next()
     }
 
     this.confirmChanges(next)
+  },
+
+  computed: {
+    dataObj() {
+      return this.$data
+    },
+    initData() {
+      return initialData
+    },
   },
 
   created() {

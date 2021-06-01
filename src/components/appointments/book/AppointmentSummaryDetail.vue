@@ -1,7 +1,7 @@
 <template>
   <MultiStepBase
     :icon="icon"
-    next-label="Book Appointment"
+    :next-label="nextLabel"
     :previous="previous"
     :loading="loading"
     :modal="modal"
@@ -54,6 +54,14 @@ export default {
     ...mapState({
       storeData: (state) => state.appointments.currentAppointment,
     }),
+
+    nextLabel() {
+      if (this.modal && !this.$route.path.includes('encounter')) {
+        return 'Start Visit'
+      }
+
+      return 'Book Appointment'
+    },
   },
 
   beforeMount() {},
