@@ -7,7 +7,7 @@
     />
     <div v-else>
       <div
-        v-if="localValue"
+        v-if="hasSlotData"
         class="space-y-2"
       >
         <div v-if="!localValue.id">
@@ -26,7 +26,7 @@
       </div>
 
       <div v-else>
-        <div v-if="noData">
+        <div v-if="filteredData.length === 0">
           <p>No available slots</p>
         </div>
         <div v-else>
@@ -87,7 +87,7 @@ export default {
   },
 
   created() {
-    this.localValue = this.data[0] || this.localValue
+    this.localValue = this.data[0] || {}
     this.searchTerms = ['practitioner_name', 'slot', 'start', 'end']
     this.paginate= true
     this.pageLength = 5
