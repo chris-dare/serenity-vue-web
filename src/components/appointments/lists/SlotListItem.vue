@@ -9,6 +9,7 @@
       :description="specialties"
     />
     <div class="text-center">
+      <small class="text-muted">{{ date }}</small>
       <p>{{ slot }}</p>
       <small class="text-muted">{{ timeZone }}</small>
     </div>
@@ -58,11 +59,16 @@ export default {
     timeZone(){
       return `${this.$date.timeZoned(this.doctor.ts) }`
     },
+
+    date(){
+      return this.$date.formatDate(this.doctor.start, 'EEEE, do MMM yyyy')
+    },
     
   },
 
   created(){
     console.log(this.doctor)
+    // console.log(this.localValue)
   },
 }
 </script>

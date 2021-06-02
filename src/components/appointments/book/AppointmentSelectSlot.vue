@@ -147,16 +147,32 @@ export default {
     }),
 
     async filter(val) {
-      this.loading = true
-      const filters = this.convertFromDatePickerFormat(val || this.filters)
-      await this.getSlots({ healthcareservice: this.storeData.service.id, ...filters })
+      try {
+        this.loading = true
+        const filters = this.convertFromDatePickerFormat(val || this.filters)
+        await this.getSlots({ healthcareservice: this.storeData.service.id, ...filters })
+        this.loading = false
+        
+      } catch (error) {
+        this.loading = false
+        
+      }
       this.loading = false
+
     },
 
     async getNextSlot() {
       this.loading = true
-      await this.getNextAvailableSlot({  healthcareservice_id: this.storeData.service.id })
+      try {
+        await this.getNextAvailableSlot({  healthcareservice_id: this.storeData.service.id })
+        this.loading = false
+        
+      } catch (error) {
+        this.loading = false
+        
+      }
       this.loading = false
+
     },
 
     convertFromDatePickerFormat(val) {
