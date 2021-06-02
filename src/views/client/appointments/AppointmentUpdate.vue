@@ -181,7 +181,7 @@ export default {
       
 
       this.loading = true
-      await this.updateAppointment(this.storeData).then(() => {
+      await this.updateAppointment(this.form).then(() => {
         this.$toast.open({
           message: 'Appointment successfully updated!',
         })
@@ -202,7 +202,7 @@ export default {
       }
 
       this.loading = true
-      await this.rescheduleAppointment(this.storeData).then(() => {
+      await this.rescheduleAppointment(this.form).then(() => {
         this.$toast.open({
           message: 'Appointment successfully rescheduled!',
         })

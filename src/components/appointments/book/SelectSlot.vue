@@ -121,7 +121,6 @@ export default {
     }),
 
     filteredData() {
-      console.log(this.slots)
       if (!this.form.date) return []
       // return this.availableSlots(this.form.date)
       return this.slots
@@ -159,16 +158,28 @@ export default {
     }),
 
     async filter(val) {
-      this.loading = true
-      const filters = this.convertFromDatePickerFormat(val || this.filters)
-      await this.getSlots({ healthcareservice: this.specialty.id, ...filters })
+      try {
+        this.loading = true
+        const filters = this.convertFromDatePickerFormat(val || this.filters)
+        await this.getSlots({ healthcareservice: this.specialty.id, ...filters })
+      } catch (error) {
+        this.loading = false
+      }
       this.loading = false
+
     },
 
     async getNextSlot() {
-      this.loading = true
-      await this.getNextAvailableSlot({ healthcareservice_id: this.specialty.id })
+      try {
+        this.loading = true
+        await this.getNextAvailableSlot({ healthcareservice_id: this.specialty.id })
+        
+      } catch (error) {
+        this.loading = false
+        
+      }
       this.loading = false
+
     },
 
     convertFromDatePickerFormat(val) {
