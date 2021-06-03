@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import PatientsAPI from '@/api/patients'
 import Patient from '@/models/Patient'
 import Observation from '@/models/Observation'
@@ -24,6 +25,7 @@ import {
   SET_PATIENT_NOTES,
   DELETE_SERVICE_REQUEST,
   DELETE_MEDICATION_REQUEST,
+  DELETE_OBSERVATION,
 } from './mutation-types'
 
 export default {
@@ -38,6 +40,7 @@ export default {
     dispatch('getNotes', id)
     dispatch('getDiagnosticReports')
     dispatch('encounters/getEncounters', id , { root:true })
+    dispatch('patientAllergies/getAllergies', id , { root:true })
     dispatch('resources/getEncounterClasses', null, { root:true })
     dispatch('resources/getEncounterStatuses', null, { root:true })
     dispatch('resources/getObservationUnitTypes', null, { root:true })
@@ -306,6 +309,26 @@ export default {
     }
   },
 
+  async createMedicalHistory({ commit, rootState }, { patient, payload }) {
+    try {
+      const provider = rootState.auth.provider
+      const encounter = rootState.encounters.currentEncounter
+      const history = new Observation(payload).getCreateMultipleHistoryView(encounter, patient)
+
+      history.forEach(async his => {
+        const { data } = await ObservationsAPI.create(provider.id, his)
+        console.log('data', data)
+        commit(UPDATE_OBSERVATION, data)
+      })
+      
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
+  
+
   async createSystem({ commit, rootState }, { patient, payload }) {
     try {
       const provider = rootState.auth.provider
@@ -327,6 +350,17 @@ export default {
       const provider = rootState.auth.provider
       const { data } = await ObservationsAPI.update(provider.id, payload)
       commit(UPDATE_OBSERVATION, data)
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
+  async deleteObservation({ commit, rootState }, id) {
+    try {
+      const provider = rootState.auth.provider
+      await ObservationsAPI.delete(provider.id, id)
+      commit(DELETE_OBSERVATION, id)
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error

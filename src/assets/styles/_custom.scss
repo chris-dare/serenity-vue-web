@@ -279,7 +279,7 @@ button:focus {
     @apply rounded-none border-0;
     border-bottom: 1px solid #8d8d8d;
   }
-  .multiselect__tag, .multiselect__option--highlight, .multiselect__option--highlight:after{
+  .multiselect__tag, .multiselect__option--highlight, .multiselect__option--highlight:after,.multiselect__tag-icon:focus, .multiselect__tag-icon:hover{
     @apply bg-serenity-primary;
   }
   .multiselect__tag-icon:after{
@@ -287,7 +287,7 @@ button:focus {
   }
   .multiselect__clear {
   @apply flex items-center justify-center h-10 w-10 cursor-pointer z-10 absolute right-5;
-}
+  }
   
 }
 
