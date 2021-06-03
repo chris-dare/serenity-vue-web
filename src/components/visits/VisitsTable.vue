@@ -10,36 +10,38 @@
       :columns="columns"
       :data="filteredData"
       :loading="loading"
+      no-data-label="You have no visits"
     >
       <template #default="{row}">
         <cv-data-table-cell>
           <div class="py-2">
             <InfoImageBlock
-              :label="row.patient.fullName"
-              :description="row.patient.gender_age_description"
+              :label="concatData(row.patient_detail, ['first_name', 'lastname'])"
+              :description="row.patient_detail.mobile"
             />
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ $date.formatDate(Date.now(), 'yyyy/MM/dd') }}</p>
-            <p class="text-secondary text-xs">{{ $date.formatDate(Date.now(), 'HH:mm a') }}</p>
+            <p>{{ $date.formatDate(row.arrived_at, 'yyyy/MM/dd') }}</p>
+            <p class="text-secondary text-xs">{{ $date.formatDate(row.arrived_at, 'HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ row.service.healthcare_service_name }}</p>
+            <p>{{ row.visit_class | capitalize }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ row.service.categories }}</p>
+            <Tag>{{ row.status }}</Tag>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div class="flex items-center cursor-pointer space-x-6">
-            <div
+            <router-link
               class="flex items-center cursor-pointer space-x-2"
+              :to="{ name: route, params: { id: row.patient }}"
             >
               View
               <div
@@ -50,7 +52,7 @@
                   alt=""
                 >
               </div>
-            </div>
+            </router-link>
           </div>
         </cv-data-table-cell>
       </template>
@@ -60,10 +62,10 @@
 
 <script>
 import DataMixin from '@/mixins/data'
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'AppointmentsTable',
+  name: 'VisitsTable',
 
   mixins: [DataMixin],
 
@@ -71,6 +73,11 @@ export default {
     hideSearch: {
       type: Boolean,
       default: false,
+    },
+
+    route: {
+      type: String,
+      default: 'PatientSummary',
     },
   },
 
@@ -88,19 +95,24 @@ export default {
   },
 
   computed: {
-    ...mapGetters({
-      data: 'appointments/appointments',
+    ...mapState({
+      data: (state) => state.visits.visits,
     }),
   },
 
   beforeMount() {
+    if (this.hideSearch) {
+      this.pageSizes = [5, 10, 15]
+      this.pageLength = 5
+    }
+    this.paginate = true
     this.searchTerms = ['']
-    this.refresh({refresh: false})
+    this.refresh()
   },
 
   methods: {
     ...mapActions({
-      getData: 'appointments/getAppointments',
+      getData: 'visits/getVisits',
     }),
   },
 }

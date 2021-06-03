@@ -23,17 +23,9 @@ export default {
     dispatch('resources/getResources', null, { root:true })
     dispatch('workspaces/getWorkspaces', null, { root:true })
     dispatch('resources/getSpecialties', null, { root:true })
-    // dispatch('resources/getCategories', null, { root:true })
-    // dispatch('resources/getCodes', null, { root:true })
-    // dispatch('resources/getServiceTypes', null, { root:true })
     dispatch('services/getServices', null, { root:true })
+    dispatch('visits/getVisits', null, { root:true })
     dispatch('beforeLoginInit')
-    // dispatch('resources/getMaritalStatuses', null, { root:true })
-    // dispatch('resources/getPaymentMethods', null, { root:true })
-    // TODO
-    // dispatch('resources/getMedicationOptions', null, { root:true })
-    // dispatch('resources/getClinicalOptions', null, { root:true })
-    // dispatch('getCountries')
   },
 
   initAdmin({ dispatch }) {

@@ -1,9 +1,9 @@
 <template>
   <cv-modal
-    class="se-no-title-modal"
     close-aria-label="Close"
     :visible="visible"
     size="sm"
+    @modal-hidden="visible = false"
   >
     <template slot="title">
       <h1>Start patient visit</h1>
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import DataMixin from '@/mixins/data'
 
 export default {
@@ -74,8 +74,13 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      user: state => state.auth.user,
+    }),
+  
     ...mapGetters({
       data: 'patients/patients',
+      getAppointment: 'appointments/getPatientAppointment',
     }),
 
     filteredPatients() {
@@ -109,16 +114,37 @@ export default {
       getData: 'patients/getPatients',
       addToCurrentAppointment: 'appointments/addToCurrentAppointment',
       refreshCurrentAppointment: 'appointments/refreshCurrentAppointment',
+      createVisit: 'visits/createVisit',
     }),
 
     save(patient) {
       if (patient.next_appointment) {
-        // 
+        this.start(patient)
       } else {
         this.refreshCurrentAppointment()
         this.addToCurrentAppointment({ patient })
         this.visible = false
         this.$trigger('book:appointment:open')
+      }
+    },
+
+    async start(patient) {
+      try {
+        this.loading = true
+        await this.createVisit({
+          patient: patient.id,
+          appointment: patient.next_appointment,
+          status: 'Planned',
+          // need appointment handler
+          assigned_to: this.getAppointment(patient.next_appointment),
+          visit_class: 'ambulatory',
+          arrived_at: this.$date.queryNow(),
+        })
+        this.visible = false
+        this.loading = false
+        this.$toast.open({ message: 'The visit has started' })
+      } catch (error) {
+        this.loading = false
       }
     },
   },

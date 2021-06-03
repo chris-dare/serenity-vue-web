@@ -1,9 +1,20 @@
 <template>
   <div
-    class="inline-flex justify-center items-center px-3 py-0.5 text-sm font-semibold"
+    class="inline-flex justify-center items-center px-3 py-0.5 text-sm space-x-1"
     :class="[customClasses, full ? 'w-full h-9 rounded-md' : 'w-auto rounded-full']"
   >
-    <slot />
+    <Checkmark
+      v-if="variant === 'success'"
+      class="text-green-800 w-4"
+    />
+    <div
+      v-else
+      class="w-2 h-2 rounded-full"
+      :class="dotClasses"
+    />
+    <div>
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -16,7 +27,7 @@ export default {
       type: String,
       default: 'primary',
       validator: function(value) {
-        return ['success', 'primary', 'error'].indexOf(value) !== -1
+        return ['success', 'primary', 'error', 'warning'].indexOf(value) !== -1
       },
     },
 
@@ -38,6 +49,28 @@ export default {
     
       if (this.variant == 'error') {
         return 'bg-red-100 text-red-800'
+      }
+      if (this.variant == 'warning') {
+        return 'bg-yellow-100 text-warning'
+      }
+
+      return ''
+    },
+
+    dotClasses() {
+      if (this.variant == 'primary') {
+        return 'bg-blue-800 text-blue-800'
+      }
+
+      if (this.variant == 'success') {
+        return 'bg-green-800 text-green-800'
+      }
+    
+      if (this.variant == 'error') {
+        return 'bg-red-800 text-red-800'
+      }
+      if (this.variant == 'warning') {
+        return 'bg-warning text-warning'
       }
 
       return ''

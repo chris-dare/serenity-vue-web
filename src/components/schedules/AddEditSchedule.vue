@@ -283,9 +283,7 @@ export default {
     },
 
     close() {
-      this.visible = false
-      this.form = {}
-      this.loading = false
+      this.$resetData()
       this.$v.$reset()
     },
 

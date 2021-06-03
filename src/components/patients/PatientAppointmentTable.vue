@@ -37,8 +37,8 @@
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <div>
-              <Tag :variant="row.isPast ? 'error' : 'success'">{{ row.isPast ? 'past' : row.status }}</Tag>
+            <div class="flex items-center">
+              <Tag :variant="row.isPast ? 'error' : 'primary'">{{ row.isPast ? 'past' : row.status }}</Tag>
             </div>
           </cv-data-table-cell>
         </template>

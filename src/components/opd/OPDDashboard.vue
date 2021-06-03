@@ -17,17 +17,18 @@
     <p class="text-serenity-primary my-6 font-semibold">
       Assigned Patients ({{ appointmentsCount }})
     </p>
-    <AppointmentsTable hide-search />
+    <VisitsTable hide-search />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import AppointmentsTable from '@/components/appointments/AppointmentsTable'
+import VisitsTable from '@/components/visits/VisitsTable'
+
 export default {
   name: 'OPDDashboard',
 
-  components: { AppointmentsTable },
+  components: { VisitsTable },
 
   data() {
     return {
@@ -95,6 +96,9 @@ export default {
 
       if (dashboard.value === 'visit') {
         this.$trigger('visit:start:open')
+      }
+      if (dashboard.value === 'search') {
+        this.$router.push({ name: 'Patients'})
       }
 
       if (dashboard.value === 'register') {

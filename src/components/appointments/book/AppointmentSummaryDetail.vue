@@ -55,8 +55,12 @@ export default {
       storeData: (state) => state.appointments.currentAppointment,
     }),
 
+    isStartVisitModal() {
+      return this.modal && !this.$route.path.includes('encounter')
+    },
+
     nextLabel() {
-      if (this.modal && !this.$route.path.includes('encounter')) {
+      if (this.isStartVisitModal) {
         return 'Start Visit'
       }
 
@@ -84,6 +88,11 @@ export default {
         return
       }
       this.addToStoreData(this.form)
+
+      if (this.isStartVisitModal) {
+        this.$emit('save')
+        return
+      }
 
       try {
         this.loading = true

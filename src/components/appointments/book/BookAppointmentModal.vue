@@ -18,7 +18,7 @@
           :is="stepComponent"
           modal
           @next="next"
-          @save="close"
+          @save="save"
         />
       </AppRegisterLayout>
     </template>
@@ -43,6 +43,11 @@ export default {
     appointment: {
       type: Object,
       default: () => {},
+    },
+
+    type: {
+      type: String,
+      default: 'followup',
     },
   },
 
@@ -100,11 +105,41 @@ export default {
   methods: {
     ...mapActions({
       getSlots: 'appointments/getSlots',
+      createVisit: 'visits/createVisit',
     }),
   
     close() {
       this.step = 2
       this.visible = false
+    },
+
+    save() {
+      if (this.type === 'followup') {
+        return this.close()
+      }
+
+      this.start()
+    },
+
+    async start(patient) {
+      try {
+        this.loading = true
+        await this.createVisit({
+          patient: patient.id,
+          // need appointment id
+          appointment: patient.next_appointment,
+          status: 'Planned',
+          // need appointment handler
+          assigned_to: this.getAppointment(patient.next_appointment),
+          visit_class: 'ambulatory',
+          arrived_at: this.$date.queryNow(),
+        })
+        this.visible = false
+        this.loading = false
+        this.$toast.open({ message: 'The visit has started' })
+      } catch (error) {
+        this.loading = false
+      }
     },
 
     async checkForSpecialty() {

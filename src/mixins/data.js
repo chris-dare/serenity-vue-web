@@ -56,5 +56,13 @@ export default {
       this.pageLength = ev.length
       this.page = this.filteredData < ev.length ? 1 : ev.page
     },
+
+    concatData(data, fields) {
+      let fieldData = []
+      fields.forEach(field => {
+        fieldData.push(data[field])
+      })
+      return fieldData.filter(name => name).join(' ')
+    },
   },
 }
