@@ -42,7 +42,7 @@
             <MultiSelect
               v-model="detail.medication_request_dosage_instruction[0].frequency_unit"
               title="Frequency unit"
-              :options="units"
+              :options="frequencies"
               :multiple="false"
               preselect
             />
@@ -305,6 +305,7 @@ export default {
       provider: (state) => state.auth.provider,
       encounter: (state) => state.encounters.currentEncounter,
       units: (state) => state.global.units,
+      frequencies: (state) => state.global.frequencies,
       user: (state) => state.auth.user,
     }),
 

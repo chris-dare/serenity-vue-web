@@ -314,10 +314,20 @@ button:focus {
   height: 40px !important;
 }
 
-.error{
-  @apply text-xs text-red-600 mt-2;
+// make error handling consistent
+.error, .bx--form-requirement{
+  @apply text-xs text-red-600 mt-1;
 }
 
+.bx--text-input--invalid{
+  outline-color: transparent !important;
+}
+
+.bx--text-input__invalid-icon{
+  display: none !important;
+}
+
+// phone number
 .vue-phone-number-input{
   background-color: #f4f4f4;
   .input-tel.is-valid .input-tel__label{

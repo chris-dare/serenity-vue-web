@@ -105,31 +105,62 @@ export default {
   data() {
     return {
       cleared: false,
+      selected: null,
     }
   },
 
   computed: {
-    selected: {
-      get() {
-        let data = {}
-        if (this.customField) {
-          data = this.options.find(option => option[this.customField] === this.value)
-        } else {
-          data = this.value
-        }
-        return data
-      },
-      set(val) {
-        if (val === '') {
-          this.$emit('input', null)
-          return
-        }
-        this.$emit('input', this.customField && val[this.customField] ? val[this.customField] : val)
-      },
-    },
+    // selected: {
+    //   get() {
+    //     let data = {}
+    //     if (this.customField) {
+    //       data = this.options.find(option => option[this.customField] === this.value)
+    //     } else {
+    //       data = this.value
+    //     }
+    //     return data
+    //   },
+    //   set(val) {
+    //     if (val === '' || !val) {
+    //       this.$emit('input', null)
+    //       return
+    //     }
+    //     this.$emit('input', this.customField && val[this.customField] ? val[this.customField] : val)
+    //   },
+    // },
 
     isEmptyData() {
       return isEmpty(this.selected)
+    },
+  },
+
+  watch: {
+    value: {
+      immediate: true,
+      handler(val, oldVal) {
+        if (val !== oldVal) {
+          let data = {}
+          if (this.customField) {
+            data = this.options.find(option => option[this.customField] === this.value)
+          } else {
+            data = this.value
+          }
+          this.selected = data
+        }
+      },
+    },
+
+    selected: {
+      immediate: true,
+      handler(val, oldVal) {
+        if (val !== oldVal) {
+          if (val === '' || !val) {
+            this.$emit('input', null)
+            return
+          }
+          this.$emit('input', this.customField && val[this.customField] ? val[this.customField] : val)
+        }
+      },
     },
   },
 

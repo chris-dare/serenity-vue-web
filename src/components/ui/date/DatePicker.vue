@@ -55,7 +55,7 @@ export default {
       default: false,
     },
     maxDate: {
-      type: String,
+      type: [String, Date],
       default: null,
     },
   },

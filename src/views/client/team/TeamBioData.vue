@@ -108,6 +108,7 @@
 import { required } from 'vuelidate/lib/validators'
 import { mapActions, mapState } from 'vuex'
 import MultiStep from '@/mixins/multistep'
+import subYears from 'date-fns/subYears'
 
 export default {
   name: 'TeamBiodata',
@@ -121,10 +122,6 @@ export default {
         gender: '',
       },
       titles: ['Mr', 'Mrs', 'Miss', 'Hon', 'Dr', 'Prof', 'Master'],
-      calOptions: {
-        'dateFormat': 'm/d/Y',
-        maxDate: Date.now(),
-      },
     }
   },
 
@@ -141,6 +138,13 @@ export default {
       storeData: (state) => state.practitioners.currentUser,
       genders: (state) => state.resources.genders,
     }),
+
+    calOptions() {
+      return {
+        'dateFormat': 'm/d/Y',
+        maxDate: subYears(Date.now(), 18),
+      }
+    },
   },
 
   methods: {

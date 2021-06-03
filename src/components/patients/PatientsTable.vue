@@ -95,7 +95,7 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
-              <p>{{ row.recent }}</p>
+              <p>{{ $date.formatDate(row.last_encounter) }}</p>
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
