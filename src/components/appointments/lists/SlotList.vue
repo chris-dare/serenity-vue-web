@@ -26,11 +26,14 @@
       </div>
 
       <div v-else>
-        <div v-if="filteredData.length === 0">
+        <Search v-model="search" />
+        <div 
+          v-if="filteredData.length === 0"
+          class="pt-5" 
+        >
           <p>No available slots</p>
         </div>
         <div v-else>
-          <Search v-model="search" />
           <div
             v-for="(doctor, i) in filteredData"
             :key="i"
@@ -88,7 +91,7 @@ export default {
 
   created() {
     this.localValue = this.data[0] || {}
-    this.searchTerms = ['practitioner_name', 'slot', 'start', 'end']
+    this.searchTerms = ['practitioner_name', 'slot', 'start', 'end', 'location', 'status']
     this.paginate= true
     this.pageLength = 5
     this.pageSizes = [5,10, 15, 20, 25]
