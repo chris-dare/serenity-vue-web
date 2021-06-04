@@ -18,7 +18,7 @@
             placeholder="Please enter the name of the dependant"
           />
           <div class="grid grid-cols-2 gap-8 my-8">
-            <cv-select
+            <!-- <cv-select
               v-model="form.gender"
               label="Gender"
               class="inherit-full-input"
@@ -26,7 +26,18 @@
             >
               <cv-select-option value="male">Male</cv-select-option>
               <cv-select-option value="female">Female</cv-select-option>
-            </cv-select>
+            </cv-select> -->
+            <MultiSelect
+              v-model="form.gender"
+              :options="genders"
+              title="Gender"
+              placeholder="Male or female"
+              track-by="code"
+              label="display"
+              custom-field="code"
+              preselect
+              :multiple="false"
+            />
             <cv-date-picker
               v-model="form.birth_date"
               kind="single"
@@ -93,6 +104,7 @@ export default {
   computed:{
     ...mapState({
       client: (state) => state.clients.client,
+      genders: (state) => state.resources.genders,
     }),
     ...mapGetters({
       userName: 'auth/fullName',
