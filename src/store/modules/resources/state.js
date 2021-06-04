@@ -25,4 +25,5 @@ export default () => ({
     {display: 'ASAP', code: 'ASAP'},
     {display: 'STAT', code: 'STAT'},
   ],
+  bloodTypes: [ 'A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-' ],
 })

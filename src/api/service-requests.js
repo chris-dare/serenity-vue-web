@@ -3,12 +3,12 @@ import http from '@/http'
 export default {
   url: 'providers/',
   
-  list(providerId) {
-    return http.get(`${this.url}${providerId}/servicerequests`)
+  list(providerId, params = {}) {
+    return http.get(`${this.url}${providerId}/servicerequests`, {params})
   },
 
-  reports(providerId) {
-    return http.get(`${this.url}${providerId}/diagnosticreports`)
+  reports(providerId, params = {}) {
+    return http.get(`${this.url}${providerId}/diagnosticreports`, {params})
   },
 
   create(providerId, params) {

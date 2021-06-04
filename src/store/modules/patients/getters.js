@@ -17,6 +17,7 @@ export default {
       return []
     }
     return state.patientMedications.filter(medication => medication.patient === state.currentPatient.id)
+      .sort((el1, el2) => Date.parse(el2.created_at) - Date.parse(el1.created_at))
   },
 
   patientLabRequests: state => {

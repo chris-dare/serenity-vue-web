@@ -32,7 +32,7 @@ export default {
   async initSinglePatientInformation({dispatch}, id) {
     await dispatch('getPatient', id)
     await dispatch('appointments/getAppointments', { filters: { patient: id, ordering: '-start' } }, { root:true })
-    dispatch('getServiceRequests')
+    dispatch('getServiceRequests', id)
     dispatch('getMedicationRequests')
     // dispatch('getObservations', {})
     dispatch('getObservations', { refresh:true, filters: { patient: id }})
@@ -185,7 +185,8 @@ export default {
     }
     try {
       const provider = rootState.auth.provider
-      const { data } = await ServiceRequestsAPI.list(provider.id)
+      const patient = state.currentPatient
+      const { data } = await ServiceRequestsAPI.list(provider.id, {patient: patient.id})
       commit(SET_SERVICE_REQUESTS, data)
     } catch (error) {
       throw error.data || error
