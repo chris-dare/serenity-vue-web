@@ -63,7 +63,7 @@ export default {
         'Service',
         'Type of Appointment',
         'Date',
-        '',
+        'Status',
       ],
     }
   },
@@ -75,7 +75,7 @@ export default {
     }),
 
     data() {
-      return this.appointments(this.$route.params.id)
+      return this.$date.sortByDate(this.appointments(this.$route.params.id), 'start', 'desc')
     },
   },
 }

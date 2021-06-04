@@ -81,7 +81,7 @@ export default {
       const { data } = await AppointmentsAPI
         .create(provider.id, appointment)
       dispatch('getAppointments', { refresh: true })
-      return data
+      return data.data
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error

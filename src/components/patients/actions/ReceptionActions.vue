@@ -6,7 +6,7 @@
     >
       <SeButton
         v-if="$userCan('vitals.write')"
-        :to="{ name: 'Vitals', query: {id: this.$route.params.id} }"
+        @click="$trigger('capture:vitals:open')"
       >
         Capture vitals <Add class="w-4 h-4 text-white ml-4" />
       </SeButton>
@@ -24,6 +24,7 @@
         Book appointment <Add class="w-4 h-4 text-white ml-4" />
       </SeButton>
       <SeButton
+        v-if="patientHasVisit"
         variant="secondary"
         @click="$trigger('start:encounter:open')"
       >
@@ -50,6 +51,7 @@ export default {
 
     ...mapGetters({
       hasActiveEncounter: 'encounters/hasActiveEncounter',
+      patientHasVisit: 'patients/patientHasVisit',
     }),
   },
 

@@ -37,4 +37,19 @@ export default {
     let patient = state.currentPatient.fullName
     return `You have no ${field} available for this ${patient}`
   },
+
+  patientHasVisit: (state, getters) => {
+    if (!state.currentPatient) return false
+    return !!getters.patientVisit
+  },
+
+  patientVisit: (state, getters, rootState) => {
+    if (!state.currentPatient) return false
+    return rootState.visits.visits.find(visit => visit.patient === state.currentPatient.id)
+  },
+
+  visitId: (state, getters) => {
+    if (!getters.patientVisit) return null
+    return getters.patientVisit.id
+  },
 }

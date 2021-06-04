@@ -12,6 +12,7 @@ export default {
     dispatch('resources/getGenders', null, { root:true })
     dispatch('resources/getLanguages', null, { root:true })
     dispatch('resources/getMobileMoneyVendors', null, { root:true })
+    dispatch('resources/getEncounterStatuses', null, { root:true })
   },
 
   initApp({dispatch}) {
@@ -48,10 +49,12 @@ export default {
   },
 
   setworkspaceType({ commit }, type) {
+    localStorage.setItem('workspace', type)
     commit(SET_GLOBAL_TYPE, type)
   },
 
   setGlobalLocation({ commit }, type) {
+    localStorage.setItem('location', type)
     commit(SET_GLOBAL_LOCATION, type)
   },
 
@@ -59,7 +62,10 @@ export default {
     const workspaces = rootGetters['auth/userWorkspaces']
     const admin = workspaces.find(workspace => workspace.value === 'ADMIN')
     const opd = workspaces.find(workspace => workspace.value === 'OPD')
-    let workspace = !!admin ? admin.value : !!opd ? opd.value : workspaces[0].value
+    let workspace = localStorage.getItem('workspace') ? localStorage.getItem('workspace')
+      : !!admin ? admin.value
+        : !!opd ? opd.value
+          : this.workspaces[0].value
     commit(SET_GLOBAL_TYPE, workspace)
   },
 }

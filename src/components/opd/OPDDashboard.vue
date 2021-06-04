@@ -15,14 +15,14 @@
       />
     </div>
     <p class="text-serenity-primary my-6 font-semibold">
-      Assigned Patients ({{ appointmentsCount }})
+      Patients on a visit ({{ visitCount }})
     </p>
     <VisitsTable hide-search />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import VisitsTable from '@/components/visits/VisitsTable'
 
 export default {
@@ -41,7 +41,10 @@ export default {
   computed: {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
-      appointmentsCount: (state) => state.appointments.appointmentsCount,
+    }),
+
+    ...mapGetters({
+      visitCount: 'visits/visitCount',
     }),
 
     dashboardTypes() {

@@ -1,6 +1,6 @@
 <template>
   <div class="px-6">
-    <div v-if="true">
+    <div v-if="visits.length">
       <Steps :step="due" />
     </div>
     <div
@@ -19,19 +19,23 @@
 </template>
 
 <script>
-import { createPatients } from '@/services/helpers'
 import Steps from './Steps'
+import { mapState } from 'vuex'
+
 export default {
   name: 'Queue',
 
   components: { Steps },
 
   computed: {
+    ...mapState({
+      visits: state => state.visits.visits,
+    }),
     due() {
-      return { title: 'Due', patients: createPatients(3) }
+      return { title: 'Due', patients: this.visits }
     },
     met() {
-      return createPatients(2)
+      return { title: 'Due', patients: this.visits }
     },
   },
 }

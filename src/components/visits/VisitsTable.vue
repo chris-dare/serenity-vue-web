@@ -6,11 +6,28 @@
       placeholder="Search for visit"
     />
 
+    <cv-radio-group>
+      <cv-radio-button
+        v-model="selected"
+        name="group-1"
+        label="All visits" 
+        value="all"
+      />
+      <cv-radio-button
+        v-model="selected"
+        name="group-1"
+        label="My visits" 
+        value="my"
+      />
+    </cv-radio-group>
+
     <DataTable
       :columns="columns"
       :data="filteredData"
       :loading="loading"
       no-data-label="You have no visits"
+      :pagination="pagination"
+      @pagination="actionOnPagination"
     >
       <template #default="{row}">
         <cv-data-table-cell>
@@ -38,21 +55,19 @@
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
-          <div class="flex items-center cursor-pointer space-x-6">
+          <div class="flex items-center cursor-pointer space-x-4">
             <router-link
               class="flex items-center cursor-pointer space-x-2"
               :to="{ name: route, params: { id: row.patient }}"
             >
               View
-              <div
-                class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center"
-              >
-                <img
-                  src="@/assets/img/view 1.svg"
-                  alt=""
-                >
-              </div>
             </router-link>
+            <div
+              class="flex items-center cursor-pointer space-x-2"
+              @click="end(row.id)"
+            >
+              End
+            </div>
           </div>
         </cv-data-table-cell>
       </template>
@@ -85,19 +100,26 @@ export default {
     return {
       columns: [
         'Patient',
-        'MR Number',
+        'Date',
         'Type',
-        'Service',
+        'Status',
         'Action',
       ],
       selectedAppointment: {},
+      selected: 'all',
     }
   },
 
   computed: {
     ...mapState({
-      data: (state) => state.visits.visits,
+      visits: (state) => state.visits.visits,
+      practitionerVisits: (state) => state.visits.practitionerVisits,
+      provider: (state) => state.auth.provider,
     }),
+
+    data() {
+      return this.selected === 'all' ? this.$date.sortByDate(this.visits, 'arrived_at', 'desc') : this.$date.sortByDate(this.practitionerVisits, 'arrived_at', 'desc')
+    },
   },
 
   beforeMount() {
@@ -113,7 +135,27 @@ export default {
   methods: {
     ...mapActions({
       getData: 'visits/getVisits',
+      deleteVisit: 'visits/deleteVisit',
     }),
+
+    async end(id) {
+      this.$trigger('confirm-action-modal:open', {
+        label: 'this visit',
+        type: 'end',
+        callback: async ()=>{
+          try {
+            this.loading = true
+            await this.deleteVisit(id)
+            this.$toast.open({ message: 'The visit has ended' })
+            this.loading = false
+        
+          } catch (error) {
+            this.loading = false
+          }
+        },
+      })
+      
+    },
   },
 }
 </script>

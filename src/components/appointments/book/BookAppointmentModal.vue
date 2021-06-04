@@ -17,6 +17,7 @@
         <component
           :is="stepComponent"
           modal
+          :button-loading="loading"
           @next="next"
           @save="save"
         />
@@ -32,12 +33,14 @@ const AppointmentSummaryDetail = () => import('@/components/appointments/book/Ap
 const AppointmentSelectSlot = () => import('@/components/appointments/book/AppointmentSelectSlot')
 const AppointmentSelectNotes = () => import('@/components/appointments/book/AppointmentSelectNotes')
 const AppointmentSelectClinic = () => import('@/components/appointments/book/AppointmentSelectClinic')
+const AppointmentWalkInSlot = () => import('@/components/appointments/book/AppointmentWalkInSlot')
 import { mapState, mapActions } from 'vuex'
+// import get from 'lodash/get'
 
 export default {
   name: 'BookAppointmentModal',
 
-  components: {  AppointmentSelectClinic, AppointmentSelectPatient, AppointmentSelectNotes, AppointmentSelectSlot, AppointmentSummaryDetail },
+  components: {  AppointmentSelectClinic, AppointmentSelectPatient, AppointmentSelectNotes, AppointmentSelectSlot, AppointmentSummaryDetail, AppointmentWalkInSlot },
 
   props: {
     appointment: {
@@ -56,6 +59,7 @@ export default {
       visible: false,
       step: 2,
       label: '',
+      loading: false,
     }
   },
 
@@ -70,8 +74,8 @@ export default {
         { label: 'Clinics, Services', description: 'Choose service', path: 2, completed: false, step: 2, slug: 'clinic-service' },
         { label: 'Date, Doctor', description: 'Choose your date and doctor', path: 3, completed: false, step: 3, slug: 'date-doctor' },
         //   { label: 'Payment', description: 'How patient makes payment', path: 'AppointmentPayment', completed: false, step: 'payment'},
-        { label: 'Notes', description: 'Any notes to take', path: 4, completed: false, step: 4, slug: 'notes' },
-        { label: 'Summary', description: 'Overview of appointment', path: 5, completed: false, step: 5, slug: 'summary' },
+        // { label: 'Notes', description: 'Any notes to take', path: 4, completed: false, step: 4, slug: 'notes' },
+        // { label: 'Summary', description: 'Overview of appointment', path: 5, completed: false, step: 5, slug: 'summary' },
       ]
     },
 
@@ -79,7 +83,8 @@ export default {
       const map = {
         1: 'AppointmentSelectPatient',
         2: 'AppointmentSelectClinic',
-        3: 'AppointmentSelectSlot',
+        3: this.type === 'visit' ? 'AppointmentWalkInSlot' : 'AppointmentSelectSlot',
+        // 3: 'AppointmentSelectSlot', 
         4: 'AppointmentSelectNotes',
         5: 'AppointmentSummaryDetail',
       }
@@ -113,30 +118,32 @@ export default {
       this.visible = false
     },
 
-    save() {
+    save(appointment) {
       if (this.type === 'followup') {
         return this.close()
       }
 
-      this.start()
+      this.start(appointment)
     },
 
-    async start(patient) {
+    async start(appointment) {
+      console.log('appointment', appointment)
       try {
         this.loading = true
         await this.createVisit({
-          patient: patient.id,
+          patient: appointment.patient.id,
           // need appointment id
-          appointment: patient.next_appointment,
-          status: 'Planned',
+          // appointment: appointment.id,
+          status: 'waitlist',
           // need appointment handler
-          assigned_to: this.getAppointment(patient.next_appointment),
+          assigned_to: appointment.slot.practitioner_role.id,
           visit_class: 'ambulatory',
           arrived_at: this.$date.queryNow(),
         })
+        this.$toast.open({ message: 'The visit has started' })
         this.visible = false
         this.loading = false
-        this.$toast.open({ message: 'The visit has started' })
+        
       } catch (error) {
         this.loading = false
       }

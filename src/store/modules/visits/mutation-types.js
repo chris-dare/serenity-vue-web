@@ -1,4 +1,5 @@
 export const SET_VISITS = 'Set visits'
+export const SET_MY_VISITS = 'Set practitioner visits'
 export const DELETE_VISIT = 'Delete visits'
 export const UPDATE_VISIT = 'Update visits'
 export const ADD_VISIT_DATA = 'Add visit data'

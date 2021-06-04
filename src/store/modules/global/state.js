@@ -5,7 +5,7 @@ export function initialState() {
     countries: [],
     networks: ['MTN', 'Vodafone', 'AirtelTigo'],
     workspaceType: 'OPD',
-    location: '',
+    location: localStorage.getItem('location'),
     workspaces: [
       {label: 'Out Patient', value:'OPD'},
       {label: 'Reception', value:'RECEPT'},

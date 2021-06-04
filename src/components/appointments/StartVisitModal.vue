@@ -38,7 +38,7 @@
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p>{{ row.next_appointment ? $date.formatDate(row.next_appointment) : 'No appointment' }}</p>
+                <p>{{ $utils.hasData(row.next_appointment, 'start') ? $date.formatDate(row.next_appointment.start) : 'No appointment' }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
@@ -59,6 +59,7 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import DataMixin from '@/mixins/data'
+import isToday from 'date-fns/isToday'
 
 export default {
   name: 'StartVisitModal',
@@ -118,7 +119,7 @@ export default {
     }),
 
     save(patient) {
-      if (patient.next_appointment) {
+      if (patient.next_appointment && isToday(new Date(patient.next_appointment.start))) {
         this.start(patient)
       } else {
         this.refreshCurrentAppointment()
@@ -133,10 +134,9 @@ export default {
         this.loading = true
         await this.createVisit({
           patient: patient.id,
-          appointment: patient.next_appointment,
-          status: 'Planned',
-          // need appointment handler
-          assigned_to: this.getAppointment(patient.next_appointment),
+          appointment: patient.next_appointment.id,
+          status: 'planned',
+          assigned_to: patient.next_appointment.practitioner_role,
           visit_class: 'ambulatory',
           arrived_at: this.$date.queryNow(),
         })
