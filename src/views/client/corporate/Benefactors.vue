@@ -39,7 +39,7 @@
               :to="`/clients/dependants/${row.main_branch_id}`"
               class="flex items-center cursor-pointer font-semibold"
             >
-              View client
+              View patient
             </router-link>
           </cv-data-table-cell>
         </template>

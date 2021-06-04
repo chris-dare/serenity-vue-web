@@ -2,12 +2,20 @@
   <div class="w-4/5 mx-auto space-y-4">
     <div class="bg-white py-8 px-4 my-2 flex items-center justify-between">
       <div class="flex">
-        <div class="flex items-center space-x-2 py-2">
-          <Avatar name="Pope Jones" />
+        <div class="flex items-center space-x-4">
+          <ImageBlock
+            url=""
+            alt="Dadson Papa"
+          />
           <div>
-            <p class="font-semibold text-lg">Pope Jones</p>
-            <p class="text-secondary text-sm">Male, 22 years</p>
-            <p class="text-sm">MR No: 230</p>
+            <p>Dadson Papa</p>
+            <p class="text-secondary  capitalize">
+              Male, 22 years
+            </p>
+            <div class="mt-2 flex items-center">
+              <div class="bg-green-700 w-3 h-3 rounded-full mr-2" />
+              <p>MR No: 230</p>
+            </div>
           </div>
         </div>
         <div
