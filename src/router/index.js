@@ -138,6 +138,16 @@ const routes = [
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/ClientDetail.vue'),
       },
       {
+        path: '/clients/patients/:id',
+        name: 'ClientPatients',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/corporate/Benefactors.vue'),
+      },
+      {
+        path: '/clients/dependants/:id',
+        name: 'ClientDependants',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/corporate/CorporatePatient.vue'),
+      },
+      {
         path: '/patient-vitals',
         name: 'Vitals',
         component: () => import(/* webpackChunkName: "client" */ '../views/client/patients/PatientVitals.vue'),
