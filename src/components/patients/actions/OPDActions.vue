@@ -8,7 +8,7 @@
       Patient is deceased - read more
     </SeButton>
     <SeButton
-      v-if="!hasActiveEncounter && !patientIsDeceased"
+      v-if="!hasActiveEncounter && !patientIsDeceased && patientHasVisit"
       variant="secondary"
       @click="$trigger('start:encounter:open')"
     >
@@ -60,6 +60,7 @@ export default {
       hasActiveEncounter: 'encounters/hasActiveEncounter',
       appointments: 'appointments/patientAppointments',
       patientIsDeceased: 'patients/patientIsDeceased',
+      patientHasVisit: 'patients/patientHasVisit',
     }),
 
     hasUpcomingEncounter() {

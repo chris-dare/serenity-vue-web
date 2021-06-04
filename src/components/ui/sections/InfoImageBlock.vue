@@ -16,18 +16,20 @@
       class="flex items-center py-2"
       :class="customClass.space"
     >
-      <img
-        v-if="url"
-        class="rounded-full"
-        :class="customClass.img"
-        :src="url"
-        alt=""
-      >
-      <Avatar
-        v-else
-        :name="name || label"
-        :class="customClass.img"
-      />
+      <div class="w-12">
+        <img
+          v-if="url"
+          class="rounded-full flex-1"
+          :class="customClass.img"
+          :src="url"
+          alt=""
+        >
+        <Avatar
+          v-else
+          :name="name || label"
+          :class="customClass.img"
+        />
+      </div>
       <div>
         <p :class="labelClass">{{ label }}</p>
         <p

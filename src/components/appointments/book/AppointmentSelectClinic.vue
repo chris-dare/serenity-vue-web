@@ -9,7 +9,7 @@
     @save="validateAndReroute"
   >
     <p class="text-primary my-4">
-      Reason for visit
+      {{ modal ? 'Reason for visit' : 'Why are you booking this appointment?' }}
     </p>
     <div class="grid grid-cols-3 gap-4">
       <InfoLinkCard

@@ -26,6 +26,7 @@
         title="Select a Diagnosis"
         :options="roles"
         :multiple="false"
+        :track-by="null"
         placeholder="Choose a lab text to be performed"
         :custom-label="customLabel"
         :error-message="$utils.validateRequiredField($v, 'role')"
@@ -62,33 +63,42 @@
       <div v-if="mode == 'create'">
         <p class="mb-2 font-semibold">Previous Diagnosis</p>
 
-        <div
-          v-if="!currentEncounterDiagnosis.length"
-          class="flex items-center my-4"
+        <DataTable
+          small
+          :data="currentEncounterDiagnosis"
+          :columns="columns"
+          no-data-label="No diagnoses"
         >
-          No diagnosis available
-        </div>
-        <div
-          v-else
-          class="space-y-3"
-        >
-          <div
-            v-for="(diagnosis, index) in currentEncounterDiagnosis"
-            :key="index"
-            class="flex items-center space-x-4"
-          >
-            <p><span class="text-serenity-primary">{{ diagnosis.condition }}</span> - {{ $date.formatDate(diagnosis.created_at) }} - {{ diagnosis.role }}</p>
-            <img
-              src="@/assets/img/edit 1.svg"
-              class="w-4 h-4 cursor-pointer"
-              @click="$router.push({ name: 'EditEncounterDiagnosis', params: { diagnosisId: diagnosis.id } })"
-            >
-            <Trash
-              class="w-5 h-5 cursor-pointer"
-              @click="confirmDelete(diagnosis)"
-            />
-          </div>
-        </div>
+          <template #default="{row}">
+            <cv-data-table-cell>
+              <div>
+                <p>{{ $date.formatDate(row.created_at, 'yyyy/MM/dd') }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
+                <p>{{ row.condition }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
+                <p>{{ row.role | removeDash }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div class="flex items-center space-x-2">
+                <Edit
+                  class="w-4 h-4 cursor-pointer"
+                  @click="$router.push({ name: 'EditEncounterDiagnosis', params: { diagnosisId: row.id } })"
+                />
+                <Trash
+                  class="w-4 h-4 cursor-pointer"
+                  @click="confirmDelete(row)"
+                />
+              </div>
+            </cv-data-table-cell>
+          </template>
+        </DataTable>
       </div>
     </SeForm>
 
@@ -106,7 +116,7 @@
         :icon="icon"
         @click="submit(true)"
       >
-        Submit and Order labs
+        Order labs
       </SeButton>
     </div>
     <ConfirmDeleteModal
@@ -118,7 +128,7 @@
 
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
-import Add from '@carbon/icons-vue/es/chevron--right/32'
+import Add from '@carbon/icons-vue/es/add/32'
 import { mapActions, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import unsavedChanges from '@/mixins/unsaved-changes'
@@ -127,16 +137,26 @@ export default {
   name: 'EncountersDiagnosis',
 
   mixins: [unsavedChanges],
-  props: ['diagnosisId'],
+
+  props: {
+    diagnosisId: {
+      type: String,
+      default: '',
+    },
+  },
 
   data() {
     return {
       icon: ChevronRight,
       add: Add,
-      form: {},
+      form: {
+        condition: '',
+        role: '',
+      },
       loading: false,
       deleteLoading: false,
       roles: [ 'admission-diagnosis', 'discharge-diagnosis', 'chief-complaint', 'comorbidity-diagnosis', 'pre-op-diagnosis', 'post-op-diagnosis', 'billing' ],
+      columns: ['Date', 'Condition', 'Role', ''],
       propertiesToCompareChanges: ['form'],
     }
   },
@@ -221,6 +241,11 @@ export default {
     },
 
     cancelUpdate() {
+      this.form = {
+        condition: '',
+        role: '',
+      }
+      this.$v.$reset()
       this.$router.go(-1)
     },
 
@@ -265,7 +290,8 @@ export default {
 
     reset() {
       this.$v.$reset()
-      this.form = {}
+      Object.assign({}, this.form, {})
+      this.resetDirtyState()
     },
   },
 }

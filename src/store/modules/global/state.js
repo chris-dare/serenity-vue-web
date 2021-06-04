@@ -5,7 +5,7 @@ export function initialState() {
     countries: [],
     networks: ['MTN', 'Vodafone', 'AirtelTigo'],
     workspaceType: 'OPD',
-    location: '',
+    location: localStorage.getItem('location'),
     workspaces: [
       {label: 'Out Patient', value:'OPD'},
       {label: 'Reception', value:'RECEPT'},
@@ -30,6 +30,7 @@ export function initialState() {
       FR: 'French',
     },
     units: ['Hours', 'Days', 'Weeks', 'Months', 'Years'],
+    frequencies: ['Hourly', 'Daily', 'Weekly', 'Monthly', 'Yearly'],
     priorities: [ 'routine', 'urgent', 'asap', 'stat' ],
     // statuses: ['ANNULLED' , 'DIVORCED' , 'INTERLOCUTORY' , 'LEGALLY_SEPARATED' , 'MARRIED' , 'POLYGAMOUS' , 'NEVER_MARRIED' , 'DOMESTIC_PARTNER' , 'UNMARRIED' , 'WIDOWED' , 'UNKNOWN'],
     regions: ['Ahafo Region', 'Ashanti Region', 'Bono Region', 'Bono East Region', 'Central Region', 'Eastern Region', 'Greater Accra Region',  'North East Region',  'Northern Region', 'Oti Region', 'Savannah Region', 'Upper East Region', 'Volta Region', 'Upper West Region', 'Western North Region', 'Western Region'],

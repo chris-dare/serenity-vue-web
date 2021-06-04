@@ -63,7 +63,7 @@ export default {
   name: 'EncounterReferral',
 
   components: {
-    EncounterReferralForm: () => import('@/components/patients/encounters/forms/EncounterReferralForm'),
+    EncounterReferralForm: () => import(/* webpackPrefetch: true */'@/components/patients/encounters/forms/EncounterReferralForm'),
   },
 
   data() {

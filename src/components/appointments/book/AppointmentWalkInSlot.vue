@@ -1,45 +1,45 @@
 <template>
   <MultiStepBase
     :icon="icon"
-    next-label="Next: Notes"
+    next-label="Join a wait queue"
     :previous="previous"
     :modal="modal"
     :query="$route.query"
     @cancel="cancel"
-    @save="validateAndReroute"
+    @save="save"
   >
-    <p class="text-primary my-4 font-bold">
-      What time would the patient want to see the doctor?
+    <p
+      class="text-primary mb-4 font-bold"
+    >
+      Select a doctor for the appointment
     </p>
-    <div class="grid">
-      <DatePicker
-        v-model="filters"
-        type="datetimerange"
-        disable-dates-before-today
-        @change="filter"
-      />
-    </div>
     <div class="flex items-center space-x-4 my-4">
-      <SeButton
+      <!-- <SeButton
         :icon="time"
         @click="getNextSlot"
       >
         Give me the next time slot
-      </SeButton>
-      <SeButton
-        v-if="false"
+      </SeButton> -->
+      <!-- <SeButton
         :icon="time"
         variant="success"
+        :loading="buttonLoading"
+        @click="save"
       >
         Join a wait queue
-      </SeButton>
+      </SeButton> -->
     </div>
-    <p
-      class="text-primary mt-8 my-4 font-bold"
-    >
-      Select a doctor for the appointment
-    </p>
+
     <div
+      class="grid min-h-full"
+    >
+      <PractitionersList
+        v-model="form.slot"
+        :data="practitioners"
+      />
+    </div>
+    
+    <!-- <div
       class="grid min-h-full"
     >
       <SlotList
@@ -47,7 +47,7 @@
         :data="filteredData"
         :data-loading="loading"
       />
-    </div>
+    </div> -->
   </MultiStepBase>
 </template>
 
@@ -55,6 +55,7 @@
 import Time from '@carbon/icons-vue/es/time/32'
 import SlotList from '@/components/appointments/lists/SlotList'
 import SlotListItem from '@/components/appointments/lists/SlotListItem'
+import PractitionersList from '@/components/appointments/lists/PractitionersList'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
@@ -63,15 +64,20 @@ import isSameDay from 'date-fns/isSameDay'
 
 
 export default {
-  name: 'AppointmentSelectSlot',
+  name: 'AppointmentWalkInSlot',
 
   // eslint-disable-next-line vue/no-unused-components
-  components: { SlotList, SlotListItem },
+  components: { SlotList, SlotListItem, PractitionersList },
 
   mixins: [MultiStep],
 
   props: {
     modal: {
+      type: Boolean,
+      default: false,
+    },
+
+    buttonLoading: {
       type: Boolean,
       default: false,
     },
@@ -101,6 +107,7 @@ export default {
       previous: 'ClinicsServices',
       parent: 'Appointments',
       next: 'AppointmentNotes',
+      localValue: {},
     }
   },
 
@@ -113,6 +120,7 @@ export default {
     ...mapGetters({
       availableSlots: 'appointments/availableSlots',
       slots: 'appointments/slots',
+      practitioners: 'practitioners/practitioners',
     }),
 
     filteredData() {
@@ -124,13 +132,11 @@ export default {
     disabled() {
       return !this.form.date || !this.form.doctor
     },
-
-    
   },
 
-  async beforeMount() {
-    await this.filter()
-  },
+  // async beforeMount() {
+  //   await this.filter()
+  // },
 
   validations: {
     form: {
@@ -145,6 +151,10 @@ export default {
       getSlots: 'appointments/getSlots',
       getNextAvailableSlot: 'appointments/getNextAvailableSlot',
     }),
+
+    save() {
+      this.$emit('save', this.form)
+    },
 
     async filter(val) {
       try {
@@ -164,7 +174,7 @@ export default {
     async getNextSlot() {
       this.loading = true
       try {
-        await this.getNextAvailableSlot({  healthcareservice_id: this.storeData.service.id })
+        await this.getNextAvailableSlot({  healthcareservice_id: this.storeData.service.id, is_today: true })
         this.loading = false
         
       } catch (error) {

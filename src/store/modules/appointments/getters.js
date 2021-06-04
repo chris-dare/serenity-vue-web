@@ -20,7 +20,7 @@ export default {
   },
 
   slots: (state, getters, rootState, rootGetters) => {
-    return state.slots && state.slots.map(slot => {
+    return state.slots.map(slot => {
       const practitioner = rootGetters['practitioners/practitioners'].find(a => a.id === slot.practitionerid)
       
       slot.practitioner = practitioner ? practitioner : { practitioner_specialty: []}
@@ -47,6 +47,10 @@ export default {
       slot.slot = `${Vue.prototype.$date.formatDate(slot.start, 'hh:mm a')} - ${Vue.prototype.$date.formatDate(slot.end, 'hh:mm a')}`
       return slot
     })
+  },
+
+  getPatientAppointment: (state, getters) => (appointmentId) => {
+    return getters.appointments.filter(appointment => appointment.id === appointmentId)
   },
 
   patientAppointments: (state, getters) => (id) => {

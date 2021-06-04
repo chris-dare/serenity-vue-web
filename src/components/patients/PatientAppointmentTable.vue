@@ -37,8 +37,8 @@
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <div>
-              <Tag :variant="row.isPast ? 'error' : 'success'">{{ row.isPast ? 'past' : row.status }}</Tag>
+            <div class="flex items-center">
+              <Tag :variant="row.isPast ? 'error' : 'primary'">{{ row.isPast ? 'past' : row.status }}</Tag>
             </div>
           </cv-data-table-cell>
         </template>
@@ -63,7 +63,7 @@ export default {
         'Service',
         'Type of Appointment',
         'Date',
-        '',
+        'Status',
       ],
     }
   },
@@ -75,7 +75,7 @@ export default {
     }),
 
     data() {
-      return this.appointments(this.$route.params.id)
+      return this.$date.sortByDate(this.appointments(this.$route.params.id), 'start', 'desc')
     },
   },
 }

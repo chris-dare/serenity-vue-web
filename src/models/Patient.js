@@ -200,10 +200,10 @@ const patient = {
   'birth_date': null,
   'birth_time': null,
   'preferred_communication': ['en'],
-  'email': '',
+  // 'email': '',
   'first_name': '', // required
   'gender': '', // required: male | female | other | unknown
-  'general_practitioner': '', // practitioner role id
+  // 'general_practitioner': '', // practitioner role id
   'last_name': '',
   'meta': null,
   'mobile': '', // required: msisdn phone number format

@@ -74,14 +74,26 @@
         </div>
       </div>
 
-      <SeButton
-        :loading="loading"
-        :icon="add"
-        @click="submit"
-      >
-        <template v-if="mode === 'create'">Add Another test</template>
-        <template v-else>Update test</template>
-      </SeButton>
+      <div class="flex space-x-2">
+        <SeButton
+          :loading="loading"
+          :icon="add"
+          @click="submit"
+        >
+          <template v-if="mode === 'create'">Add Another test</template>
+          <template v-else>Update test</template>
+        </SeButton>
+        <SeButton
+          v-if="mode === 'update'"
+          class="ml-2"
+          variant="secondary"
+          @click="cancelUpdate"
+        >
+          Cancel
+        </SeButton>
+      </div>
+
+      
     
 
       <div v-if="mode === 'create'">
@@ -114,21 +126,18 @@
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div class="flex items-center space-x-2">
-                <img
-                  src="@/assets/img/edit 1.svg"
+                <Edit
                   class="w-4 h-4 cursor-pointer"
-                  @click="$router.push({ name: 'EditEncounterLab', params: { labId: lab.id } })"
-                >
+                  @click="$router.push({ name: 'EditEncounterLab', params: { labId: row.id } })"
+                />
                 <Trash
-                  class="w-5 h-5 cursor-pointer"
+                  class="w-4 h-4 cursor-pointer"
                   @click="confirmDeleteLab(lab)"
                 />
-                <div
-                  class="underline cursor-pointer"
+                <See
+                  class="w-4 h-4 cursor-pointer"
                   @click="viewEncounter(row)"
-                >
-                  view encounter
-                </div>
+                />
               </div>
             </cv-data-table-cell>
           </template>
@@ -148,7 +157,7 @@
         :loading="loading"
         @click="submit(true)"
       >
-        Submit and go to Medications
+        Go to Medications
       </SeButton>
     </div>
     <ConfirmDeleteModal
@@ -161,6 +170,7 @@
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Add from '@carbon/icons-vue/es/chevron--right/32'
+import See from '@carbon/icons-vue/es/view/32'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 import unsavedChanges from '@/mixins/unsaved-changes'
@@ -168,8 +178,18 @@ import unsavedChanges from '@/mixins/unsaved-changes'
 export default {
   name: 'EncountersLabs',
 
+  components: {
+    See,
+  },
+
   mixins: [unsavedChanges],
-  props: ['labId'],
+
+  props: {
+    labId: {
+      type: String,
+      default: null,
+    },
+  },
 
   data() {
     return {
@@ -272,7 +292,7 @@ export default {
 
       this.$v.$touch()
 
-      if (this.$v.$invalid) {
+      if (this.$v.$invalid && this.mode === 'create') {
         this.$toast.error('Please fill all required fields')
         return
       }
@@ -297,7 +317,7 @@ export default {
         this.$toast.open({
           message: 'Service Request successfully added',
         })
-        this.close()
+        this.reset()
         if (reroute) {
           this.$router.push({ name: 'EncounterMedications', params: { id: this.$route.params.id } })
         }
@@ -314,7 +334,7 @@ export default {
         this.$toast.open({
           message: 'Service Request successfully updated',
         })
-        this.close()
+        this.reset()
         this.$router.push({ name: 'EncounterLabs' })
         /* eslint-disable-next-line */
       } catch (error) {
@@ -326,13 +346,10 @@ export default {
       this.$trigger('confirm:delete:open', { data: lab.id, label: 'Are you sure you want to delete this lab?' })
     },
 
-    close() {
-      this.form = {
-        order_detail: [{display: ''}],
-        service_request_bodysite: [{display: ''}],
-        service_request_category: [{display: ''}],
-      }
+    reset() {
       this.$v.$reset()
+      this.form = {}
+      this.resetDirtyState()
     },
 
     customLabel (value) {
@@ -342,6 +359,12 @@ export default {
     viewEncounter(lab) {
       this.setCurrentEncounter(lab.encounter)
       this.$router.push({ name: 'PatientEncounters', params: { id: this.$route.params.id }})
+    },
+
+    cancelUpdate() {
+      this.form = {}
+      this.$v.$reset()
+      this.$router.go(-1)
     },
   },
 }

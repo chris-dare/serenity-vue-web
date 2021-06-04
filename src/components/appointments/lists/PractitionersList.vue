@@ -11,23 +11,23 @@
         class="space-y-2"
       >
         <div v-if="!localValue.id">
-          <p>No available slots</p>
+          <p>No available doctor</p>
         </div>
         <div v-else>
-          <SlotListItem
+          <PractionersListItem
             v-model="localValue"
             :doctor="localValue"
           />
         </div>
 
         <div class="flex justify-end">
-          <SeButton @click="localValue = {}">Change slot</SeButton>
+          <SeButton @click="localValue = {}">Change doctor</SeButton>
         </div>
       </div>
 
       <div v-else>
         <div v-if="filteredData.length === 0">
-          <p>No available slots</p>
+          <p>No available doctor</p>
         </div>
         <div v-else>
           <Search v-model="search" />
@@ -35,7 +35,7 @@
             v-for="(doctor, i) in filteredData"
             :key="i"
           >
-            <SlotListItem
+            <PractionersListItem
               v-model="localValue"
               :doctor="doctor"
             />
@@ -55,14 +55,14 @@
 </template>
 
 <script>
-import SlotListItem from '@/components/appointments/lists/SlotListItem'
+import PractionersListItem from '@/components/appointments/lists/PractitionersListItem'
 import modelMixin from '@/mixins/model'
 import dataMixin from '@/mixins/data'
 
 export default {
-  name: 'SlotList',
+  name: 'PractitionersList',
 
-  components: {SlotListItem},
+  components: {PractionersListItem},
 
   mixins: [modelMixin, dataMixin],
 

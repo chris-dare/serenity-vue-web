@@ -82,7 +82,7 @@ export default {
         .create(provider.id, patient)
       commit(UPDATE_PATIENT, data.data)
       commit(SET_PATIENT_DATA, {})
-      return data
+      return data.data
     } catch (error) {
       throw error.data || error
     }

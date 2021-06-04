@@ -158,22 +158,34 @@ export default {
     }),
 
     async filter(val) {
-      this.loading = true
-      const filters = this.convertFromDatePickerFormat(val || this.filters)
-      await this.getSlots({ healthcareservice: this.specialty.id, ...filters })
+      try {
+        this.loading = true
+        const filters = this.convertFromDatePickerFormat(val || this.filters)
+        await this.getSlots({ healthcareservice: this.specialty.id, ...filters })
+      } catch (error) {
+        this.loading = false
+      }
       this.loading = false
+
     },
 
     async getNextSlot() {
-      this.loading = true
-      await this.getNextAvailableSlot({ healthcareservice_id: this.specialty.id })
+      try {
+        this.loading = true
+        await this.getNextAvailableSlot({ healthcareservice_id: this.specialty.id })
+        
+      } catch (error) {
+        this.loading = false
+        
+      }
       this.loading = false
+
     },
 
     convertFromDatePickerFormat(val) {
       return {
-        start: this.$date.formatQueryParamsDate(val[0]),
-        end: isSameDay(val[0], val[1]) || !val[1] ? this.$date.formatQueryParamsDate(this.$date.endOfDate(val[0])) : this.$date.formatQueryParamsDate(val[1]),
+        start__gte: this.$date.formatQueryParamsDate(val[0]),
+        end__lte: isSameDay(val[0], val[1]) || !val[1] ? this.$date.formatQueryParamsDate(this.$date.endOfDate(val[0])) : this.$date.formatQueryParamsDate(val[1]),
       }
     },
   },

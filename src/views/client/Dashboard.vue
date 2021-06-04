@@ -7,7 +7,7 @@
     <GetStartedModal :visible.sync="visible" />
     <StartVisitModal />
     <SearchPatientsModal />
-    <BookAppointmentModal />
+    <BookAppointmentModal type="visit" />
   </div>
 </template>
 

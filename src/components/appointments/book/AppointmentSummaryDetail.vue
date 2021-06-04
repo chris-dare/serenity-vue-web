@@ -1,7 +1,7 @@
 <template>
   <MultiStepBase
     :icon="icon"
-    next-label="Book Appointment"
+    :next-label="nextLabel"
     :previous="previous"
     :loading="loading"
     :modal="modal"
@@ -54,6 +54,18 @@ export default {
     ...mapState({
       storeData: (state) => state.appointments.currentAppointment,
     }),
+
+    isStartVisitModal() {
+      return this.modal && !this.$route.path.includes('encounter')
+    },
+
+    nextLabel() {
+      if (this.isStartVisitModal) {
+        return 'Start Visit'
+      }
+
+      return 'Book Appointment'
+    },
   },
 
   beforeMount() {},
@@ -77,11 +89,21 @@ export default {
       }
       this.addToStoreData(this.form)
 
+      if (this.isStartVisitModal) {
+        this.$emit('save', this.form)
+        return
+      }
+
       try {
         this.loading = true
-        await this.createAppointment(this.storeData)
-        this.$emit('save')
-        this.$trigger('billing:details:open')
+        const appointment = await this.createAppointment(this.storeData)
+
+        if (!this.isStartVisitModal) {
+          this.$trigger('billing:details:open')
+        }
+
+        this.$emit('save', appointment)
+        
         this.loading = false
       } catch (error) {
         this.loading = false
