@@ -16,6 +16,7 @@ import {
   SET_PATIENT_NOTES,
   DELETE_SERVICE_REQUEST,
   DELETE_MEDICATION_REQUEST,
+  DELETE_OBSERVATION,
 } from './mutation-types'
 
 export default {
@@ -123,5 +124,9 @@ export default {
     } else {
       state.patientObservations.push(observation)
     }
+  },
+
+  [DELETE_OBSERVATION](state, id) {
+    state.patientObservations = state.patientObservations.filter((es) => es.id !== id)
   },
 }

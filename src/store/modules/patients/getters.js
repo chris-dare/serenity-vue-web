@@ -33,6 +33,21 @@ export default {
     return state.patientObservations.filter(lab => lab.patient === state.currentPatient.id)
   },
 
+  patientPastMedications: (state, getters) => {
+    if (!getters.patientObservations) return []
+    return getters.patientObservations.filter(obs => obs.unit === 'PREVIOUS_MEDICATION')
+  },
+
+  patientPreviousHospitalization: (state, getters) => {
+    if (!getters.patientObservations) return []
+    return getters.patientObservations.filter(obs => obs.unit === 'PREVIOUS_HOSPITALIZATION')
+  },
+
+  patientPreviousIllness: (state, getters) => {
+    if (!getters.patientObservations) return []
+    return getters.patientObservations.filter(obs => obs.unit === 'PREVIOUS_ILLNESS')
+  },
+
   getCurrentPatientNoDataLabel: state => (field = 'data') => {
     let patient = state.currentPatient.fullName
     return `You have no ${field} available for this ${patient}`

@@ -43,6 +43,8 @@
     <CaptureVitalsModal />
     <EndVisitConfirmationModal />
     <BookAppointmentModal />
+    <ActionsModal />
+    <MedicalHistoryModal />
   </AppStatePage>
 </template>
 
@@ -52,7 +54,6 @@ import EncounterBasicInfo from '@/components/patients/encounters/EncounterBasicI
 import EncounterActions from '@/components/patients/encounters/EncounterActions'
 import EncounterPatientSummary from '@/components/patients/encounters/EncounterPatientSummary'
 
-
 export default {
   name: 'EncountersIndex',
 
@@ -60,9 +61,10 @@ export default {
     EncounterBasicInfo,
     EncounterActions,
     EncounterPatientSummary,
-    CaptureVitalsModal: () => import('@/components/vitals/CaptureVitalsModal'),
-    EndVisitConfirmationModal: () => import('@/components/patients/modals/EndVisitConfirmationModal'),
-    BookAppointmentModal: () => import('@/components/appointments/book/BookAppointmentModal'),
+    CaptureVitalsModal: () => import(/* webpackPrefetch: true */'@/components/vitals/CaptureVitalsModal'),
+    EndVisitConfirmationModal: () => import(/* webpackPrefetch: true */'@/components/patients/modals/EndVisitConfirmationModal'),
+    BookAppointmentModal: () => import(/* webpackPrefetch: true */'@/components/appointments/book/BookAppointmentModal'),
+    MedicalHistoryModal: () => import(/* webpackPrefetch: true */'@/components/patients/encounters/modals/MedicalHistoryModal'),
   },
 
   props: {

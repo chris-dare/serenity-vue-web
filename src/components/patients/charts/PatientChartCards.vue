@@ -14,6 +14,12 @@
         title="Diagnosis/Issues"
       >
         <div class="py-4">
+          <p
+            v-if="!patientDiagnosis.length"
+            class="text-sm"
+          >
+            No diagnosis
+          </p>
           <ToggleList
             v-for="(diagnosis, index) in patientDiagnosis.slice(0,6)"
             :key="index"
@@ -49,14 +55,23 @@
         title="Medical conditions"
       >
         <div class="py-4">
-          <ToggleList title="Migraines (Jun 28, 2020)">
-            <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
-          </ToggleList>
-          <ToggleList title="Asthma">
-            <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
-          </ToggleList>
-          <ToggleList title="Migraines (Jun 28, 2020)">
-            <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
+          <p
+            v-if="!patientPreviousIllness.length"
+            class="text-sm"
+          >
+            No past medical conditions
+          </p>
+          <ToggleList
+            v-for="(illness, index) in patientPreviousIllness"
+            :key="index"
+          >
+            <p
+              slot="title"
+              class="text-serenity-primary"
+            >
+              {{ illness.code }})
+            </p>
+            <p>{{ illness.category | capitalize }} - {{ illness.type | capitalize }}</p>
           </ToggleList>
         </div>
       </EditableCard>
@@ -65,6 +80,12 @@
         title="Medications"
       >
         <div class="py-4">
+          <p
+            v-if="!patientMedications.length"
+            class="text-sm"
+          >
+            No medications
+          </p>
           <ToggleList
             v-for="(medication, index) in patientMedications"
             :key="index"
@@ -84,14 +105,23 @@
         title="Allegies"
       >
         <div class="py-4">
-          <ToggleList title="Migraines (Jun 28, 2020)">
-            <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
-          </ToggleList>
-          <ToggleList title="Asthma">
-            <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
-          </ToggleList>
-          <ToggleList title="Migraines (Jun 28, 2020)">
-            <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
+          <p
+            v-if="!patientAllergies.length"
+            class="text-sm"
+          >
+            No allergies
+          </p>
+          <ToggleList
+            v-for="(allergy, index) in patientAllergies"
+            :key="index"
+          >
+            <p
+              slot="title"
+              class="text-serenity-primary"
+            >
+              {{ allergy.code }})
+            </p>
+            <p>{{ allergy.category | capitalize }} - {{ allergy.type | capitalize }}</p>
           </ToggleList>
         </div>
       </EditableCard>
@@ -166,12 +196,14 @@ export default {
   computed: {
     ...mapState({
       patientDiagnosis: state => state.patients.patientDiagnosis,
+      patientAllergies: state => state.patientAllergies.allergies,
     }),
 
     ...mapGetters({
       charts: 'encounters/currentPatientVitals',
       patientMedications: 'patients/patientMedications',
       socialHistory: 'encounters/currentPatientSocialHistory',
+      patientPreviousIllness: 'patients/patientPreviousIllness',
     }),
   },
 }

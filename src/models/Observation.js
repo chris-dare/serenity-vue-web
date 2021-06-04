@@ -54,4 +54,35 @@ export default class Observation {
     
     return createData
   }
+
+  getCreateMultipleHistoryView(encounter, patient, category = 'social-history') {
+    let createData = []
+
+    Object.keys(this.data).forEach(history => {
+      this.data[history].forEach(his => {
+        createData.push({
+          observation_category: [{display: category}],
+          value: his.code,
+          unit: history,
+          status: 'registered',
+          patient: patient,
+          encounter: encounter.id,
+        })
+      })
+      
+    })
+    
+    return createData
+  }
+
+  getAllergiesView(encounter, patient) {
+    let createData = {
+      type: 'ALLERGY',
+      code: this.data.code,
+      patient: patient,
+      encounter: encounter.id,
+    }
+    
+    return createData
+  }
 }
