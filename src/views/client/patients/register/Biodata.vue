@@ -62,6 +62,13 @@
               :multiple="false"
               :invalid-message="$utils.validateRequiredField($v, 'gender')"
             />
+            <MultiSelect
+              v-model="form.blood_type"
+              :options="bloodTypes"
+              title="Blood Type"
+              placeholder=""
+              :multiple="false"
+            />
           </div>
           <div>
             <p class="bx--label">Capture or Upload Patient Photo</p>
@@ -110,6 +117,7 @@ export default {
     ...mapState({
       storeData: (state) => state.patients.currentPatient,
       genders: (state) => state.resources.genders,
+      bloodTypes: (state) => state.resources.bloodTypes,
     }),
 
     maxDate() {

@@ -39,14 +39,17 @@
         title="Current Medication"
       >
         <div class="py-4">
-          <ToggleList title="Migraines (Jun 28, 2020)">
-            <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
-          </ToggleList>
-          <ToggleList title="Asthma">
-            <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
-          </ToggleList>
-          <ToggleList title="Migraines (Jun 28, 2020)">
-            <p class=" text-gray-500">Bronchitis, not specified as acute or chronic, Esophageal, patient not hospitalised. Read more</p>
+          <ToggleList
+            v-for="(medication, index) in patientMedications.slice(0,3)"
+            :key="index"
+          >
+            <p
+              slot="title"
+              class="text-serenity-primary"
+            >
+              {{ $utils.getFirstData(medication.medication_detail) }} ({{ $date.formatDate(medication.created_at) }})
+            </p>
+            <p>{{ $utils.getFirstData(medication.medication_request_dosage_instruction, 'period') }} {{ $utils.getFirstData(medication.medication_request_dosage_instruction, 'period_unit') }}</p>
           </ToggleList>
         </div>
       </EditableCard>

@@ -43,48 +43,50 @@
         :pagination="{
           numberOfItems: 10,
         }"
-        :data="[]"
+        :data="serviceRequests"
         class="transparent-table"
         :no-data-label="noDataLabel('orders')"
       >
-        <cv-data-table-cell>
-          <p class="">{{ $date.formatDate(Date.now(), 'MMM dd, yyyy') }}</p>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <p class="">{{ 3000 | formatMoney | toCedis }}</p>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <div>
+        <template #default="{ row }">
+          <cv-data-table-cell>
+            <p class="">{{ $date.formatDate(row.authored_on, 'MMM dd, yyyy') }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
             <p class="">{{ 3000 | formatMoney | toCedis }}</p>
-          </div>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <div>
-            <p class="">{{ 3000 | formatMoney | toCedis }}</p>
-          </div>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <p class="">{{ 'aha' }}</p>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <div class="flex items-center">
-            <div class="bg-success text-white text-xs py-1 px-2 rounded-full">{{ 'aha' }}</div>
-          </div>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <div
-            class="flex items-center cursor-pointer "
-            @click="showOrder(row)"
-          >
-            View
-            <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
-              <img
-                src="@/assets/img/view 1.svg"
-                alt=""
-              >
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p class="">{{ 3000 | formatMoney | toCedis }}</p>
             </div>
-          </div>
-        </cv-data-table-cell>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p class="">{{ 3000 | formatMoney | toCedis }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p class="">{{ 'aha' }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div class="flex items-center">
+              <div class="bg-success text-white text-xs py-1 px-2 rounded-full">{{ 'aha' }}</div>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div
+              class="flex items-center cursor-pointer "
+              @click="showOrder(row)"
+            >
+              View
+              <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
+                <img
+                  src="@/assets/img/view 1.svg"
+                  alt=""
+                >
+              </div>
+            </div>
+          </cv-data-table-cell>
+        </template>
       </DataTable>
     </div>
     <OrderDetailsModal :visible.sync="visible" />
@@ -119,6 +121,7 @@ export default {
 
   computed: {
     ...mapGetters({
+      serviceRequests: 'patients/patientLabRequests',
       noDataLabel: 'patients/getCurrentPatientNoDataLabel',
       hasActiveEncounter: 'encounters/hasActiveEncounter',
     }),
