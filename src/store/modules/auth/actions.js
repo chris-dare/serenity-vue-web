@@ -29,11 +29,13 @@ export default {
       })
   },
 
-  logout({ commit }) {
+  logout({ commit, dispatch }) {
     return AuthAPI.logout()
       .then(({ data: result }) => {
         commit(SET_TOKEN, null)
         commit(SET_LOGGED_IN, false)
+        dispatch('setworkspaceType', null, { root:true })
+        dispatch('setGlobalLocation', null, { root:true })
         return result
       })
       .catch(result => {

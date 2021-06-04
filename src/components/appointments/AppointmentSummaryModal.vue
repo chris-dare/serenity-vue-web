@@ -25,14 +25,16 @@
           >
             <SeButton
               full
+              @click="start"
             >
               Start Visit
             </SeButton>
             <SeButton
               full
               variant="secondary"
+              @click="reschedule"
             >
-              Rescedule Appointment
+              Reschedule Appointment
             </SeButton>
           </div>
           <SeButton
@@ -64,7 +66,8 @@
 
 <script>
 import AppointmentDetail from '@/components/appointments/AppointmentDetail'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import isToday from 'date-fns/isToday'
 
 export default {
   name: 'AppointmentSummaryModal',
@@ -103,11 +106,16 @@ export default {
     }),
 
     canStartVisit() {
-      return this.workspaceType === 'RECEPT'
+      return isToday(new Date(this.appointment.start))
     },
   },
 
   methods: {
+    ...mapActions({
+      createVisit: 'visits/createVisit',
+      setCurrentAppointment: 'appointments/setCurrentAppointment',
+    }),
+
     close() {
       this.visible = false
     },
@@ -119,6 +127,31 @@ export default {
     cancel() {
       this.$trigger('notes:open')
       this.visible = false
+    },
+
+    reschedule() {
+      this.setCurrentAppointment(this.appointment)
+      this.$router.push({name: 'AppointmentUpdate', params: { id: this.appointment.id }, query: {type: 'reschedule'}})
+    },
+
+    async start() {
+      try {
+        this.loading = true
+        await this.createVisit({
+          patient: this.appointment.patient.id,
+          appointment: this.appointment.id,
+          status: 'planned',
+          // need appointment handler
+          assigned_to: this.appointment.id,
+          visit_class: 'ambulatory',
+          arrived_at: this.$date.queryNow(),
+        })
+        this.visible = false
+        this.loading = false
+        this.$toast.open({ message: 'The visit has started' })
+      } catch (error) {
+        this.loading = false
+      }
     },
   },
 }

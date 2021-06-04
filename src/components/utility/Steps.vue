@@ -26,17 +26,10 @@
         <div class="w-2 h-2 rounded-full bg-serenity-step" />
       </div>
       <div class="flex items-center py-2">
-        <img
-          class="w-8 h-8 rounded-full mr-3"
-          :src="patient.image"
-          alt=""
-        >
-        <div>
-          <p class="text-xs">{{ patient.name }}</p>
-          <p class="text-secondary text-xs">
-            {{ patient.gender }}, {{ patient.age }} years
-          </p>
-        </div>
+        <InfoImageBlock
+          :label="$utils.concatData(patient.patient_detail, ['first_name', 'lastname'])"
+          :description="patient.patient_detail.mobile"
+        />
       </div>
     </div>
   </div>

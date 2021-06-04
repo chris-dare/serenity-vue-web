@@ -15,19 +15,20 @@
       />
     </div>
     <p class="text-serenity-primary my-6 font-semibold">
-      Assigned Patients ({{ appointmentsCount }})
+      Patients on a visit ({{ visitCount }})
     </p>
-    <AppointmentsTable hide-search />
+    <VisitsTable hide-search />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import AppointmentsTable from '@/components/appointments/AppointmentsTable'
+import { mapGetters, mapState } from 'vuex'
+import VisitsTable from '@/components/visits/VisitsTable'
+
 export default {
   name: 'OPDDashboard',
 
-  components: { AppointmentsTable },
+  components: { VisitsTable },
 
   data() {
     return {
@@ -40,7 +41,10 @@ export default {
   computed: {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
-      appointmentsCount: (state) => state.appointments.appointmentsCount,
+    }),
+
+    ...mapGetters({
+      visitCount: 'visits/visitCount',
     }),
 
     dashboardTypes() {
@@ -95,6 +99,9 @@ export default {
 
       if (dashboard.value === 'visit') {
         this.$trigger('visit:start:open')
+      }
+      if (dashboard.value === 'search') {
+        this.$router.push({ name: 'Patients'})
       }
 
       if (dashboard.value === 'register') {

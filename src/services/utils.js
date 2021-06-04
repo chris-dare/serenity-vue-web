@@ -198,6 +198,18 @@ const getFirstData = (data, field = 'display') => {
   return data[0][field]
 }
 
+const hasData = (data, field) => {
+  return !!(data && data[field])
+}
+
+const concatData = (data, fields) => {
+  let fieldData = []
+  fields.forEach(field => {
+    fieldData.push(data[field])
+  })
+  return fieldData.filter(name => name).join(' ')
+}
+
 export default {
   install(Vue) {
     Vue.prototype.$utils = {
@@ -213,6 +225,8 @@ export default {
       getFilteredData,
       getFirstData,
       objectSubset,
+      hasData,
+      concatData,
     }
   },
 }

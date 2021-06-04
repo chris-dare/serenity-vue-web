@@ -147,7 +147,7 @@ export default {
 
   async created() {
     await this.getLocations(false)
-    this.selectedLocation = this.locations.length ? this.locations[0].id : ''
+    this.selectedLocation = localStorage.getItem('location') ? localStorage.getItem('location') : this.locations.length ? this.locations[0].id : ''
   },
 
   methods: {
@@ -170,7 +170,10 @@ export default {
     setDefaultWorkspace() {
       const admin = this.workspaces.find(workspace => workspace.value === 'ADMIN')
       const opd = this.workspaces.find(workspace => workspace.value === 'ADMIN')
-      let workspace = !!admin ? admin.value : !!opd ? opd.value : this.workspaces[0].value
+      let workspace = localStorage.getItem('workspace') ? localStorage.getItem('workspace')
+        : !!admin ? admin.value
+          : !!opd ? opd.value
+            : this.workspaces[0].value
       this.setworkspaceType(workspace)
     },
   },

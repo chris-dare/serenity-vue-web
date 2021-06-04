@@ -15,19 +15,19 @@
       />
     </div>
     <p class="text-serenity-primary my-6 font-semibold">
-      Here are your appointments ({{ appointmentsCount }})
+      Patients on a visit  ({{ visitCount }})
     </p>
-    <AppointmentsTable hide-search />
+    <VisitsTable hide-search />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import AppointmentsTable from '@/components/appointments/AppointmentsTable'
+import { mapState, mapGetters } from 'vuex'
+import VisitsTable from '@/components/visits/VisitsTable'
 export default {
   name: 'DefaultDashboard',
 
-  components: { AppointmentsTable },
+  components: { VisitsTable },
 
   data() {
     return {
@@ -40,7 +40,10 @@ export default {
   computed: {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
-      appointmentsCount: (state) => state.appointments.appointmentsCount,
+    }),
+
+    ...mapGetters({
+      visitCount: 'visits/visitCount',
     }),
 
     dashboardTypes() {

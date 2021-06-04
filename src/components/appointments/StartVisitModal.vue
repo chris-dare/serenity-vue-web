@@ -1,9 +1,9 @@
 <template>
   <cv-modal
-    class="se-no-title-modal"
     close-aria-label="Close"
     :visible="visible"
     size="sm"
+    @modal-hidden="visible = false"
   >
     <template slot="title">
       <h1>Start patient visit</h1>
@@ -38,7 +38,7 @@
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p>{{ row.next_appointment ? $date.formatDate(row.next_appointment) : 'No appointment' }}</p>
+                <p>{{ $utils.hasData(row.next_appointment, 'start') ? $date.formatDate(row.next_appointment.start) : 'No appointment' }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
@@ -57,8 +57,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import DataMixin from '@/mixins/data'
+import isToday from 'date-fns/isToday'
 
 export default {
   name: 'StartVisitModal',
@@ -74,8 +75,13 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      user: state => state.auth.user,
+    }),
+  
     ...mapGetters({
       data: 'patients/patients',
+      getAppointment: 'appointments/getPatientAppointment',
     }),
 
     filteredPatients() {
@@ -109,16 +115,36 @@ export default {
       getData: 'patients/getPatients',
       addToCurrentAppointment: 'appointments/addToCurrentAppointment',
       refreshCurrentAppointment: 'appointments/refreshCurrentAppointment',
+      createVisit: 'visits/createVisit',
     }),
 
     save(patient) {
-      if (patient.next_appointment) {
-        // 
+      if (patient.next_appointment && isToday(new Date(patient.next_appointment.start))) {
+        this.start(patient)
       } else {
         this.refreshCurrentAppointment()
         this.addToCurrentAppointment({ patient })
         this.visible = false
         this.$trigger('book:appointment:open')
+      }
+    },
+
+    async start(patient) {
+      try {
+        this.loading = true
+        await this.createVisit({
+          patient: patient.id,
+          appointment: patient.next_appointment.id,
+          status: 'planned',
+          assigned_to: patient.next_appointment.practitioner_role,
+          visit_class: 'ambulatory',
+          arrived_at: this.$date.queryNow(),
+        })
+        this.visible = false
+        this.loading = false
+        this.$toast.open({ message: 'The visit has started' })
+      } catch (error) {
+        this.loading = false
       }
     },
   },

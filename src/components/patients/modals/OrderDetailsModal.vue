@@ -8,7 +8,7 @@
     <template slot="content">
       <div class="flex items-center justify-between mb-6 w-full">
         <p>Order details</p>
-        <cv-tag
+        <Tag
           label="Fully paid"
           class="bg-success text-white"
           kind="gray"
