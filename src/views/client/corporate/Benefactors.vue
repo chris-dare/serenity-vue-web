@@ -2,21 +2,12 @@
   <div>
     <div class="w-4/5 mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Corporate Clients ({{ filteredData.length }})</p>
-        <router-link
-          :to="{name:'CompanyInformation'}"
-          tag="cv-button"
-          class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
-          kind="primary"
-        >
-          Add new company
-          <Add class="ml-4 w-5 h-5" />
-        </router-link>
+        <p class="text-xl font-bold">Benefactors ({{ filteredData.length }})</p>
       </div>
 
       <Search
         v-model="search"
-        placeholder="Search for Clients"
+        placeholder="Search for patients"
       />
 
       <DataTable
@@ -43,19 +34,9 @@
             <p>{{ row.tin_number }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <p class="lowercase">{{ row.admin_email }}</p>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <cv-tag
-              :disabled="false"
-              :kind="row.state != 'verified' ? 'red' : 'green'"
-              :label="row.state"
-            />
-          </cv-data-table-cell>
-          <cv-data-table-cell>
             <router-link
               tag="div"
-              :to="`/clients/${row.main_branch_id}`"
+              :to="`/clients/dependants/${row.main_branch_id}`"
               class="flex items-center cursor-pointer font-semibold"
             >
               View client
@@ -70,11 +51,11 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import DataMixin from '@/mixins/data'
-import Add from '@carbon/icons-vue/es/add/32'
+// import Add from '@carbon/icons-vue/es/add/32'
 export default {
-  name: 'CorporateClients',
+  name: 'Benefactors',
 
-  components: { Add },
+  // components: { Add },
 
   mixins: [DataMixin],
 
@@ -83,11 +64,9 @@ export default {
       search: '',
       loading: false,
       columns: [
-        'Company name',
-        'TIN Number',
-        'Mobile',
-        'Email',
-        'Status',
+        'Benefactor',
+        'MR Number',
+        'Dependants',
         'Action',
       ],
     }
