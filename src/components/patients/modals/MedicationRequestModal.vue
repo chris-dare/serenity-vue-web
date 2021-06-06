@@ -258,7 +258,7 @@ export default {
         await this.createMedicationRequest(this.formatMedication(this.form))
         this.loading = false
         this.$toast.open({
-          message: 'Service Request successfully added',
+          message: 'Medication Request successfully added',
         })
         this.close()
       } catch (error) {
@@ -272,7 +272,7 @@ export default {
         await this.updateServiceRequest(this.form)
         this.loading = false
         this.$toast.open({
-          message: 'Service Request successfully updated',
+          message: 'Medication Request successfully updated',
         })
         this.close()
       } catch (error) {

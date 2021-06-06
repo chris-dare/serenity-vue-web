@@ -173,7 +173,6 @@ import Add from '@carbon/icons-vue/es/chevron--right/32'
 import See from '@carbon/icons-vue/es/view/32'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
-import unsavedChanges from '@/mixins/unsaved-changes'
 
 export default {
   name: 'EncountersLabs',
@@ -181,8 +180,6 @@ export default {
   components: {
     See,
   },
-
-  mixins: [unsavedChanges],
 
   props: {
     labId: {
@@ -348,8 +345,7 @@ export default {
 
     reset() {
       this.$v.$reset()
-      this.form = {}
-      this.resetDirtyState()
+      this.$resetData()
     },
 
     customLabel (value) {
