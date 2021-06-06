@@ -23,6 +23,7 @@
           track-by="id"
           class="se-input-gray"
           @tag="addTag('PREVIOUS_ILLNESS', $event)"
+          @remove="remove('observation', $event)"
         />
 
         <MultiSelect
@@ -37,12 +38,14 @@
           track-by="id"
           class="se-input-gray"
           @tag="addTag('allergies', $event)"
+          @remove="remove"
         />
 
         <AutoCompleteMedication
           v-model="form.PREVIOUS_MEDICATION"
           title="Medications"
           multiple
+          @remove="remove('observation', $event)"
         />
 
         <MultiSelect
@@ -57,6 +60,7 @@
           track-by="id"
           class="se-input-gray"
           @tag="addTag('PREVIOUS_HOSPITALIZATION', $event)"
+          @remove="remove('observation', $event)"
         />
 
         <div class="flex items-center justify-between space-x-2">
@@ -102,13 +106,15 @@ export default {
         PREVIOUS_HOSPITALIZATION: [],
       },
       loading: false,
+      removedObservations: [],
+      removedAllergies: [],
     }
   },
 
   events: {
     'medical:history:open': function(){
       this.visible = true
-      this.form.allergies = this.allergies
+      this.init()
     },
     'medical:history:close': function(){
       this.close()
@@ -131,9 +137,9 @@ export default {
     },
 
     hasHistory() {
-      return !!this.form.PREVIOUS_ILLNESS.find(allergy => !allergy.id)
-        || !!this.form.PREVIOUS_HOSPITALIZATION.find(allergy => !allergy.id)
-        || !!this.form.PREVIOUS_MEDICATION.find(allergy => !allergy.id)
+      return !!this.form.PREVIOUS_ILLNESS.filter(allergy => !allergy.id)
+        || !!this.form.PREVIOUS_HOSPITALIZATION.filter(allergy => !allergy.id)
+        || !!this.form.PREVIOUS_MEDICATION.filter(allergy => !allergy.id)
     },
 
     newMedications() {
@@ -143,7 +149,11 @@ export default {
         }
       })
       return xorBy(formOne, this.patientPastMedications, 'value')
-        .map(med => med.value)
+        .map(med => {
+          return {
+            code: med.value,
+          }
+        })
     },
   
     newIllness() {
@@ -193,20 +203,41 @@ export default {
   },  
 
   methods: {
-    addTag(field, tag) {
-      let newTag = {
-        code: tag,
-      }
-      this.options[field].push(newTag)
-      this.form[field].push(newTag)
-    },
-    
     ...mapActions({
       createMedicalHistory: 'patients/createMedicalHistory',
       deleteObservation: 'patients/deleteObservation',
       createAllergies: 'patientAllergies/createAllergies',
       deleteAllergy: 'patientAllergies/deleteAllergy',
     }),
+
+    init() {
+      this.form.allergies = this.allergies
+
+      this.form.PREVIOUS_ILLNESS = this.patientPreviousIllness.map(illness => {
+        return {
+          code: illness.value,
+          id: illness.id,
+        }
+      })
+
+      this.form.PREVIOUS_HOSPITALIZATION = this.patientPreviousHospitalization.map(illness => {
+        return {
+          code: illness.value,
+          id: illness.id,
+        }
+      })
+
+      this.form.PREVIOUS_MEDICATION = this.patientPastMedications.map(illness => illness.value)
+    },
+
+    addTag(field, tag) {
+      let newTag = {
+        code: tag,
+        value: tag,
+      }
+      this.options[field].push(newTag)
+      this.form[field].push(newTag)
+    },
 
     async save() {
       try {
@@ -219,36 +250,61 @@ export default {
           let form = { PREVIOUS_ILLNESS: this.newIllness, PREVIOUS_MEDICATION: this.newMedications, PREVIOUS_HOSPITALIZATION: this.newSurgeries }
           await this.createMedicalHistory({ payload: form, patient: this.$route.params.id })
         }
+
+        if (this.removedAllergies.length > 0) {
+          this.removedAllergies.forEach(async allergy => {
+            await this.deleteAllergy(allergy.id)
+          })
+        }
+        if (this.removedObservations.length > 0) {
+          this.removedObservations.forEach(async observation => {
+            await this.deleteObservation(observation.id)
+          })
+        }
         
         this.loading = false
+        this.visible = false
         this.$resetData()
       } catch (error) {
         this.loading = false
       }
     },
 
-    async removeAllergy(tag) {
-      if (tag.type) {
-        await this.deleteAllergy(tag.id)
-      }
-        
-      this.form.allergies = this.form.allergies.filter(allergy => allergy.id !== tag.id)
-      
-    },
-
-    async removeMedicalHistory(field, tag) {
-      if (tag.id) {
-        await this.deleteObservation(tag.id)
+    remove(type = 'allergies', payload) {
+      if (!payload.id) {
         return
       }
-        
-      this.form[field] = this.form[field].filter(his => his.id !== tag.id)
-      
+
+      if (type === 'allergies') {
+        this.removedAllergies.push(payload)
+        return
+      }
+
+      this.removedObservations.push(payload)
     },
 
-    async removeMedication(tag) {
-      await this.deleteObservation(this.patientPastMedications.find(med => med.value === tag).id)
-    },
+    // async removeAllergy(tag) {
+    //   if (tag.type) {
+    //     await this.deleteAllergy(tag.id)
+    //   }
+        
+    //   this.form.allergies = this.form.allergies.filter(allergy => allergy.id !== tag.id)
+      
+    // },
+
+    // async removeMedicalHistory(field, tag) {
+    //   if (tag.id) {
+    //     await this.deleteObservation(tag.id)
+    //     return
+    //   }
+        
+    //   this.form[field] = this.form[field].filter(his => his.id !== tag.id)
+      
+    // },
+
+    // async removeMedication(tag) {
+    //   await this.deleteObservation(this.patientPastMedications.find(med => med.value === tag).id)
+    // },
   },
 }
 </script>

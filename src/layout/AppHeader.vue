@@ -25,14 +25,12 @@
           alt=""
           class="lg:hidden w-5 h-5 mx-4"
         >
-        <div class="flex items-center flex-1 max-w-102 mr-2">
-          <cv-form autocomplete="off">
-            <cv-text-input
-              v-model="search"
-              class="no-label-input h-12 flex-1 text-white"
-              placeholder="Search for patient name or Phone number"
-            />
-          </cv-form>
+        <SeForm class="flex items-center flex-1 max-w-lg mr-2">
+          <cv-text-input
+            v-model="search"
+            class="no-label-input h-12 flex-1 text-white"
+            placeholder="Search for patient name or Phone number"
+          />
           
           <div
             class="bg-serenity-gray h-12 flex items-center justify-center px-4"
@@ -42,7 +40,7 @@
               alt=""
             >
           </div>
-        </div>
+        </SeForm>
         <div class="flex items-center">
           <div class="hidden md:flex items-center">
             <img

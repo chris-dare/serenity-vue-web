@@ -23,7 +23,7 @@
 
       <MultiSelect
         v-model="form.role"
-        title="Select a Diagnosis"
+        title="Type of Diagnosis"
         :options="roles"
         :multiple="false"
         :track-by="null"
