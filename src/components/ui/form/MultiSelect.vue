@@ -17,6 +17,7 @@
         @input="$emit('select', $event)"
         @search-change="$emit('search-change', $event)"
         @tag="$emit('tag', $event)"
+        @remove="$emit('remove', $event)"
       >
         <template
           slot="clear"
@@ -167,6 +168,11 @@ export default {
 
   methods: {
     clear() {
+      if (this.multiple) {
+        this.selected.forEach(element => {
+          this.$emit('remove', element)
+        })
+      }
       this.selected = ''
     },
   },

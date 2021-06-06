@@ -36,7 +36,7 @@ export default {
 
   patientPastMedications: (state, getters) => {
     if (!getters.patientObservations) return []
-    return getters.patientObservations.filter(obs => obs.unit === 'PREVIOUS_MEDICATION')
+    return getters.patientObservations.filter(obs => obs.unit === 'PREVIOUS_MEDICATION' && obs.value)
   },
 
   patientPreviousHospitalization: (state, getters) => {

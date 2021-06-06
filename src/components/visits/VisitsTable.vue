@@ -6,20 +6,20 @@
       placeholder="Search for visit"
     />
 
-    <cv-radio-group>
-      <cv-radio-button
-        v-model="selected"
-        name="group-1"
-        label="All visits" 
-        value="all"
-      />
-      <cv-radio-button
-        v-model="selected"
-        name="group-1"
-        label="My visits" 
-        value="my"
-      />
-    </cv-radio-group>
+    <div class="my-4 flex items-center space-x-2">
+      <SeButton
+        :variant="selected === 'all' ? 'default' : 'white'"
+        @click="selected = 'all'"
+      >
+        All Visits ({{ visits.length }})
+      </SeButton>
+      <SeButton
+        :variant="selected === 'my' ? 'default' : 'white'"
+        @click="selected = 'my'"
+      >
+        My Visits ({{ practitionerVisits.length }})
+      </SeButton>
+    </div>
 
     <DataTable
       :columns="columns"
@@ -36,6 +36,11 @@
               :label="concatData(row.patient_detail, ['first_name', 'lastname'])"
               :description="row.patient_detail.mobile"
             />
+          </div>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div>
+            <p>{{ row.assigned_to_name }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -100,6 +105,7 @@ export default {
     return {
       columns: [
         'Patient',
+        'Assigned to',
         'Date',
         'Type',
         'Status',

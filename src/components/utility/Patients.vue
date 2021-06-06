@@ -24,7 +24,7 @@
           </div>
         </div>
         <router-link :to="{ name: 'PatientSummary', params: { id: patient.id }}">
-          <IconButton>
+          <IconButton small>
             <See class="w-4 h-4" />
           </IconButton>
         </router-link>

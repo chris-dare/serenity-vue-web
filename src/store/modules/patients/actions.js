@@ -154,6 +154,7 @@ export default {
       const { data } = await MedicationAPI.create(provider.id, payload)
       commit(UPDATE_MEDICATION_REQUEST, data)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -164,6 +165,7 @@ export default {
       const { data } = await MedicationAPI.update(provider.id, payload)
       commit(UPDATE_MEDICATION_REQUEST, data)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -174,6 +176,7 @@ export default {
       await MedicationAPI.delete(provider.id, id)
       commit(DELETE_MEDICATION_REQUEST, id)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },

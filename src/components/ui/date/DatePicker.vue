@@ -87,10 +87,14 @@ export default {
         datetime: {
           // wrap: true,
           enableTime: true,
-          dateFormat: 'd-m-Y H:i',
+          // dateFormat: 'Z',
+          dateFormat: 'Y-m-dTH:i:S\\Z', // Displays: 2017-01-22Z
+          altFormat: 'Y-m-d H:i',
+          altInput: true,
           allowInput: true,
           defaultHour: 0,
           defaultMinute: 0,
+          minDate: this.disableDatesBeforeToday ? 'today' : null,
         },
         inline: {
           inline: true,
@@ -116,7 +120,9 @@ export default {
           mode: 'range',
           enableTime: true,
           allowInput: true,
-          dateFormat: 'Y-m-d H:i',
+          dateFormat: 'Y-m-dTH:i:S\\Z', // Displays: 2017-01-22Z
+          altFormat: 'Y-m-d H:i',
+          altInput: true,
           minDate: this.disableDatesBeforeToday ? 'today' : null,
           // defaultDate: Date.now(),
         },

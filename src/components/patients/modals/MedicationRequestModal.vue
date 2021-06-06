@@ -20,11 +20,9 @@
           <p class="text-serenity-green font-semibold mb-4">{{ index+1 }}.</p>
           <div class="grid grid-cols-12 gap-x-4 gap-y-8 items-center">
             <div class="col-span-11 grid grid-cols-3 gap-4 items-center">
-              <cv-text-input
+              <AutoCompleteMedication
                 v-model="detail.medication_detail[0].display"
-                label="Drug"
-                type="text"
-                class="inherit-full-input col-span-2"
+                class="col-span-3"
               />
               <MultiSelect
                 v-model="detail.course_of_therapy_type"
@@ -35,31 +33,33 @@
               <cv-text-input
                 v-model="detail.medication_request_dosage_instruction[0].frequency"
                 label="Frequency"
-                type="text"
-                placeholder="eg twice daily"
+                type="number"
+                placeholder="eg 2 for twice frequency unit"
                 class="inherit-full-input"
+              />
+              <MultiSelect
+                v-model="detail.medication_request_dosage_instruction[0].frequency_unit"
+                title="Frequency unit"
+                :options="frequencies"
+                :multiple="false"
+                preselect
               />
               <cv-text-input
                 v-model="detail.medication_request_dosage_instruction[0].period"
                 label="Period"
-                type="text"
+                type="number"
                 placeholder="eg 4 days"
                 class="inherit-full-input"
               />
-              <cv-text-input
+
+              <MultiSelect
                 v-model="detail.medication_request_dosage_instruction[0].period_unit"
-                label="Period unit"
-                placeholder="eg mml"
-                type="text"
-                class="inherit-full-input"
+                title="Period unit"
+                :options="units"
+                :multiple="false"
+                preselect
               />
-              <cv-text-input
-                v-model="detail.medication_request_dosage_instruction[0].frequency_unit"
-                label="Frequency unit"
-                placeholder="eg 50mml"
-                type="text"
-                class="inherit-full-input"
-              />
+            
               <cv-text-input
                 v-model="detail.medication_request_dosage_instruction[0].strength"
                 label="Strength"
@@ -93,9 +93,7 @@
             v-model="form.extra_details.priority"
             title="Priority"
             :options="priorities"
-            track-by="code"
-            label="display"
-            custom-field="code"
+            :track-by="null"
             :multiple="false"
           />
           <MultiSelect
@@ -104,21 +102,9 @@
             :options="categories"
             :multiple="false"
           />
-          <cv-text-input
-            v-model="form.extra_details.category"
-            label="Category"
-            type="text"
-            class="inherit-full-input"
-          />
-          <cv-text-input
-            v-model="form.extra_details.code"
-            label="Code"
-            type="text"
-            class="inherit-full-input"
-          />
           <DatePicker
             v-model="form.extra_details.date"
-            type="date"
+            type="datetime"
             label="Date"
             class="se-input-gray"
           />
@@ -164,6 +150,7 @@
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import { mapActions, mapState } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
+
 
 export default {
   name: 'MedicationRequestModal',
@@ -233,9 +220,12 @@ export default {
 
   computed: {
     ...mapState({
-      priorities: (state) => state.resources.priorities,
+      priorities: (state) => state.global.priorities,
       provider: (state) => state.auth.provider,
       encounter: (state) => state.encounters.currentEncounter,
+      units: (state) => state.global.units,
+      frequencies: (state) => state.global.frequencies,
+      user: (state) => state.auth.user,
     }),
   },
 
@@ -255,17 +245,16 @@ export default {
       if (this.form.id) {
         this.update()
       } else {
-        this.form.requester_practitioner_role = this.provider.practitionerRoleId
-        this.form.patient = this.$route.params.id
-        // this.form.encounter = this.encounter.id
         this.save()
       }
     },
 
     async save() {
+      
       this.loading = true
-
+      console.log('here')
       try {
+        this.form.requester = this.user.id
         await this.createMedicationRequest(this.formatMedication(this.form))
         this.loading = false
         this.$toast.open({
@@ -274,6 +263,7 @@ export default {
         this.close()
       } catch (error) {
         this.loading = false
+        throw error
       }
     },
 
@@ -287,6 +277,7 @@ export default {
         this.close()
       } catch (error) {
         this.loading = false
+        throw error
       }
     },
 
@@ -309,6 +300,9 @@ export default {
         newForm.push({
           ...drug,
           ...data.extra_details,
+          patient: this.$route.params.id,
+          encounter: this.encounter.id,
+          requester_practitioner_role: this.provider.practitionerRoleId,
           medication_request_category: [{ display: data.extra_details.medication_request_category }],
         })
       })

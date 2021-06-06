@@ -104,36 +104,28 @@
           :options="categories"
           :multiple="false"
         />
-        <cv-text-input
-          v-model="form.extra_details.category"
-          label="Category"
-          type="text"
-          class="inherit-full-input"
+
+        <DatePicker
+          v-model="form.extra_details.date"
+          type="datetime"
+          label="Date"
+          class="se-input-gray"
         />
+        
         <p
           v-if="$utils.validateRequiredField($v, 'extra_details')"
           class="error col-span-3"
         >
           Priority is required
         </p>
-        <cv-text-input
-          v-model="form.extra_details.code"
-          label="Code"
-          type="text"
-          class="inherit-full-input"
-        />
-        <DatePicker
-          v-model="form.extra_details.date"
-          type="date"
-          label="Date"
-          class="se-input-gray"
-        />
+        
+        
         <cv-text-input
           v-model="form.extra_details.intended_dispenser"
           label="Intended dispenser"
           type="text"
           placeholder="Intended dispenser"
-          class="inherit-full-input"
+          class="inherit-full-input col-span-3"
         />
         <cv-text-area
           v-model="form.extra_details.medication_request_notes[0].display"
@@ -168,7 +160,6 @@
 
       <div
         v-if="mode === 'create'"
-        style="max-width: 600px;"
         class="py-8"
       >
         <p class="mb-2 font-semibold">Previous medications</p>
@@ -177,23 +168,35 @@
           small
           :data="currentEncounterMedicationRequests"
           no-data-label="No medication available"
+          :columns="columns"
         >
           <template #default="{row}">
             <cv-data-table-cell>
-              <p>{{ $utils.getFirstData(row.medication_detail) }}</p>
+              <p class="text-serenity-primary ">{{ $utils.getFirstData(row.medication_detail) }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <div class="flex items-center space-x-2 justify-end">
-                <img
-                  src="@/assets/img/edit 1.svg"
+              <p>{{ $utils.getFirstData(row.medication_request_category) }}</p>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
+                <p>{{ $utils.getFirstData(row.medication_request_dosage_instruction, 'period') }} {{ $utils.getFirstData(row.medication_request_dosage_instruction, 'period_unit') }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
+                <p>{{ $utils.getFirstData(row.medication_request_dosage_instruction, 'frequency') }} {{ $utils.getFirstData(row.medication_request_dosage_instruction, 'frequency_unit') }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div class="flex items-center space-x-2">
+                <Edit
                   class="w-4 h-4 cursor-pointer"
                   @click="$router.push({ name: 'EditEncounterMedication', params: { medicationId: row.id } })"
-                >
+                />
                 <Trash
-                  class="w-5 h-5 cursor-pointer"
+                  class="w-4 h-4 cursor-pointer"
                   @click="confirmDelete(row)"
                 />
-                <Close class="w-4" />
               </div>
             </cv-data-table-cell>
           </template>
@@ -237,7 +240,13 @@ export default {
   name: 'EncounterMedications',
 
   mixins: [unsavedChanges],
-  props: ['medicationId'],
+
+  props: {
+    medicationId: {
+      type: String,
+      default: null,
+    },
+  },
 
   data() {
     return {
@@ -263,6 +272,13 @@ export default {
       therapyTypes: [ 'continuous', 'acute', 'seasonal' ],
       categories: [ 'inpatient', 'outpatient', 'community', 'discharge' ],
       propertiesToCompareChanges: ['form'],
+      columns: [
+        'Drug/Proceedure',
+        'Type',
+        'Duration',
+        'Instructions',
+        'Action',
+      ],
     }
   },
 
@@ -379,7 +395,6 @@ export default {
     },
 
     submit(reroute= false) {
-
       if (reroute && this.dataHasNotChanged) {
         this.$router.push({ name: 'EncounterCarePlan', params: { id: this.$route.params.id }})
         return
@@ -432,6 +447,7 @@ export default {
         this.$router.push({ name: 'EncounterMedications' })
         /* eslint-disable-next-line */
       } catch (error) {
+        this.$utils.error(error)
       }
       this.loading = false
     },
@@ -455,7 +471,7 @@ export default {
         newForm.push({
           ...drug,
           ...data.extra_details,
-          // requester_practitioner_role: this.provider.practitionerRoleId,
+          requester_practitioner_role: this.provider.practitionerRoleId,
           patient: this.$route.params.id,
           encounter: this.encounter.id,
           medication_request_category: [{ display: data.extra_details.medication_request_category }],

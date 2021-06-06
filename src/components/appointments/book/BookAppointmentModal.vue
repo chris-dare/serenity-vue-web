@@ -127,7 +127,6 @@ export default {
     },
 
     async start(appointment) {
-      console.log('appointment', appointment)
       try {
         this.loading = true
         await this.createVisit({

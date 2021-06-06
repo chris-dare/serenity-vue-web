@@ -1,6 +1,7 @@
 <template functional>
   <div
-    class="bg-serenity-light-gray w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-serenity-primary"
+    class="bg-serenity-light-gray rounded-full flex items-center justify-center cursor-pointer "
+    :class="[props.small ? 'w-5 h-5' : 'w-8 h-8 text-serenity-primary']"
     @click="listeners['click']"
   >
     <slot />
