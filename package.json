@@ -4,31 +4,47 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --port 8083 --open",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint",
     "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e",
+    "test:e2e": "VUE_CLI_KEEP_TEST_ATTRS=true vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
+  },
+  "resolutions": {
+    "cypress": "^5.6.0"
   },
   "dependencies": {
     "@carbon/charts": "^0.41.10",
     "@carbon/charts-vue": "^0.41.10",
     "@carbon/icons-vue": "^10.22.0",
-    "@carbon/motion": "^10.10.0",
-    "@carbon/themes": "^10.23.0",
     "@carbon/vue": "^2.35.0",
+    "@fullcalendar/daygrid": "^5.5.0",
+    "@fullcalendar/interaction": "^5.5.0",
+    "@fullcalendar/vue": "^5.5.0",
+    "@vue/babel-helper-vue-jsx-merge-props": "^1.2.1",
+    "@vue/babel-preset-jsx": "^1.2.4",
     "autoprefixer": "9",
     "core-js": "^3.6.5",
+    "currency.js": "^2.0.3",
     "d3": "5.x",
     "date-fns": "^2.16.1",
+    "libphonenumber-js": "^1.9.16",
+    "moment-timezone": "^0.5.33",
     "postcss": "7",
     "register-service-worker": "^1.7.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "v-offline": "^1.3.0",
     "vue": "^2.6.11",
+    "vue-event-manager": "^2.1.3",
     "vue-faker": "^3.0.0",
+    "vue-flatpickr-component": "^8",
     "vue-lazyload": "^1.3.3",
+    "vue-multiselect": "^2.1.6",
     "vue-page-transition": "^0.2.2",
+    "vue-phone-number-input": "^1.1.10",
     "vue-router": "^3.2.0",
+    "vue-toast-notification": "^0.6.1",
     "vue-web-cam": "^1.9.0",
+    "vue2-timepicker": "^1.1.6",
     "vuelidate": "^0.7.6",
     "vuex": "^3.4.0",
     "vuex-module-configuration-composer": "^1.0.0",
@@ -36,7 +52,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-e2e-nightwatch": "~4.5.0",
+    "@vue/cli-plugin-e2e-cypress": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-pwa": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
@@ -53,15 +69,16 @@
     "lint-staged": "^9.5.0",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
+    "vue-cli-plugin-test-attrs": "~0.1.5",
     "vue-template-compiler": "^2.6.11"
-  },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
   },
   "postcss": {
     "plugins": {
       "autoprefixer": {}
     }
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "*.{js,jsx,vue}": [

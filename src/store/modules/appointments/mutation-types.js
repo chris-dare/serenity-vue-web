@@ -1,5 +1,7 @@
 export const DELETE_APPOINTMENT = 'Delete appointment'
-export const SET_APPOINTMENT = 'Set appointment'
+export const UPDATE_APPOINTMENT = 'Set appointment'
 export const SET_APPOINTMENTS = 'Set appointments'
+export const SET_SLOTS = 'Set slots'
 export const SET_APPOINTMENTS_COUNT = 'Set appointments count'
 export const ADD_APPOINTMENT_DATA = 'Add appointment data'
+export const SET_APPOINTMENT_DATA = 'Set appointment data'

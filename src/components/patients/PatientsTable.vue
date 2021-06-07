@@ -1,191 +1,200 @@
 <template>
-  <div>
-    <cv-search
-      placeholder="Search for patient, enter name or MR number"
+  <div class="space-y-4">
+    <Search
       v-model="search"
+      placeholder="Search for patient, enter name or MR number"
+    />
+    <div
+      v-if="!modal"
+      class="my-4 flex items-center justify-between"
     >
-    </cv-search>
-    <div class="my-4 flex items-center justify-between">
-      <div>
-        <cv-button
-          kind="primary"
-          size="field"
-          class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
+      <div class="space-x-2 flex items-center">
+        <SeButton
+          :variant="search === '' ? 'primary' : 'white'"
+          @click="search = ''"
         >
           All ({{ patientsCount }})
-        </cv-button>
+        </SeButton>
         <!-- <cv-button
           size="field"
           kind="ghost"
           class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
-          v-if="globalType !== 'Reception'"
+          v-if="workspaceType !== 'Reception'"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
           Delayed ({{ 1 }})
         </cv-button> -->
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+        <SeButton
+          :variant="search === 'in-patient' ? 'primary' : 'white'"
+          @click="search = 'in-patient'"
         >
-          <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
+          <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
           In-patient ({{ 1 }})
-        </cv-button>
+        </SeButton>
         <!-- <cv-button
           size="field"
           kind="ghost"
           class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
-          v-if="globalType !== 'Reception'"
+          v-if="workspaceType !== 'Reception'"
         >
           <div class="w-2 h-2 rounded-full bg-warning mr-2"></div>
           Urgent ({{ 1 }})
         </cv-button> -->
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+        <SeButton
+          :variant="search === 'male' ? 'primary' : 'white'"
+          @click="search = 'male'"
         >
           Male({{ maleCount }})
-          <img src="@/assets/img/gender--male 1.svg" class="ml-2" alt="" />
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+          <img
+            src="@/assets/img/gender--male 1.svg"
+            class="ml-2"
+            alt=""
+          >
+        </SeButton>
+        <SeButton
+          :variant="search === 'female' ? 'primary' : 'white'"
+          @click="search = 'female'"
         >
           Female({{ femaleCount }})
-          <img src="@/assets/img/gender--female 1.svg" class="ml-2" alt="" />
-        </cv-button>
+          <img
+            src="@/assets/img/gender--female 1.svg"
+            class="ml-2"
+            alt=""
+          >
+        </SeButton>
       </div>
-      <cv-button
-        size="field"
-        kind="ghost"
-        class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
-      >
-        Filters
-        <img src="@/assets/img/filter 1.svg" class="ml-2" alt="" />
-      </cv-button>
+      <FilterDropdown
+        v-if="false"
+        v-model="selectedFilter"
+      />
     </div>
 
     <div>
-      <cv-data-table
-        :row-size="rowSize"
-        :sortable="sortable"
-        :columns="columns"
-        :pagination="{
-          numberOfItems: patientsCount,
-        }"
-        @pagination="actionOnPagination"
-        v-model="rowSelects"
-        @row-select-change="actionRowSelectChange"
-        @sort="onSort"
-        :overflow-menu="sampleOverflowMenu"
-        :data="patients"
-        @overflow-menu-click="onOverflowMenuClick"
+      <DataTable
         ref="table"
+        :columns="columns"
+        :pagination="pagination"
+        :data="filteredData"
+        :loading="loading"
+        @pagination="actionOnPagination"
       >
-        <template slot="batch-actions">
-          <cv-button>
-            Delete
-          </cv-button>
-        </template>
-        <template slot="data">
-          <cv-data-table-row
-            v-for="(row, rowIndex) in patients"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
-          >
-            <cv-data-table-cell>
-              <div class="flex items-center py-2">
+        <template #default="{ row }">
+          <cv-data-table-cell>
+            <div class="flex items-center py-2">
+              <InfoImageBlock
+                :label="row.name"
+                :description="row.gender_age_description"
+                size="base"
+              />
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.phone }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ $date.formatDate(row.last_encounter) || 'N/A' }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.mr_number }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <router-link
+              tag="div"
+              :to="{ name: route, params: { id: row.id} }"
+              class="flex items-center cursor-pointer"
+            >
+              View
+              <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
                 <img
-                  class="w-12 h-12 rounded-full mr-3"
-                  :src="row.image"
+                  src="@/assets/img/view 1.svg"
                   alt=""
-                />
-                <div>
-                  <p class="text-sm">{{ row.name }}</p>
-                  <p class="text-secondary text-xs">
-                    {{ row.gender }}, {{ row.age }} years
-                  </p>
-                </div>
+                >
               </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p class="text-sm">{{ row.weight }}kg</p>
-                <p class="text-secondary text-xs">{{ row.height }}cm</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p class="text-sm">{{ row.phone }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p class="text-sm">{{ row.recent }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <router-link tag="div" :to="`/patients/${row.id}`" class="flex items-center cursor-pointer" >
-                View
-                <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
-                <img src="@/assets/img/view 1.svg" alt="">
-                </div>
-              </router-link>
-            </cv-data-table-cell>
-          </cv-data-table-row>
+            </router-link>
+          </cv-data-table-cell>
         </template>
-      </cv-data-table>
+      </DataTable>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
+import DataMixin from '@/mixins/data'
 export default {
+  name: 'PatientsTable',
+
+  mixins: [DataMixin],
+
+  props: {
+    modal: {
+      type: Boolean,
+      default: false,
+    },
+
+    route: {
+      type: String,
+      default: 'PatientSummary',
+    },
+  },
+
   data() {
     return {
       rowSelects: null,
       columns: [
         'Patient',
-        'Weight/Height',
+        // 'Weight/Height',
         'Mobile',
         'Last encounter',
+        'MR No.',
         'Action',
       ],
-      use_batchActions: true,
-      rowSize: '',
-      autoWidth: false,
-      sortable: false,
-      title: 'Table title',
-      actionBarAriaLabel: 'Custom action bar aria label',
-      batchCancelLabel: 'Cancel',
-      zebra: false,
-      search: '',
-      sampleOverflowMenu: [],
+      selectedFilter: '',
     }
   },
+  
   computed: {
     ...mapState({
-      patients: (state) => state.patients.patients,
       patientsCount: (state) => state.patients.patientsCount,
-      globalType: (state) => state.global.globalType,
+      workspaceType: (state) => state.global.workspaceType,
+    }),
+
+    ...mapGetters({
+      data: 'patients/patients',
     }),
 
     maleCount() {
-      return this.patients.filter((p) => p.gender == 'male').length
+      return this.data.filter((p) => p.gender == 'MALE').length
     },
+
     femaleCount() {
-      return this.patients.filter((p) => p.gender == 'female').length
+      return this.data.filter((p) => p.gender == 'FEMALE').length
     },
   },
 
+  beforeMount() {
+    if (this.modal) {
+      this.pageSizes = [5, 10, 15]
+      this.pageLength = 5
+    }
+  },
+
+  mounted() {
+    this.paginate = true
+    this.searchTerms = ['name', 'mr_number', 'mobile', 'gender']
+    this.refresh(false)
+  },
+
   methods: {
-      onOverflowMenuClick() {},
-      onSort() {},
-      actionRowSelectChange() {},
-      actionOnPagination() {},
+    ...mapActions({
+      getData: 'patients/getPatients',
+    }),
   },
 }
 </script>

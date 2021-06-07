@@ -5,36 +5,37 @@
     </p>
     <div class="grid grid-cols-2 gap-6">
       <div class="flex items-end space-x-3">
-        <cv-text-input label="Temperature" v-model="internalForm.temperature">
-        </cv-text-input>
+        <cv-text-input
+          v-model="localValue.temperature"
+          type="text"
+          label="Temperature"
+        />
         <p class="mb-2">°C</p>
       </div>
     </div>
 
     <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center">
-        <cv-button
-          class="border-serenity-primary px-6 mr-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-          kind="tertiary"
+      <div class="flex items-center space-x-2">
+        <SeButton
           @click="$router.push({ name: 'PatientCharts' })"
-          >Cancel</cv-button
         >
-        <cv-button
+          Cancel
+        </SeButton>
+        <SeButton
+          variant="secondary"
           @click="$emit('next', 0)"
-          class="bg-black px-6"
-          kind="primary"
-          >Go back</cv-button
         >
+          Go back
+        </SeButton>
       </div>
       <div class="flex items-center">
-        <cv-button
-          @click="$emit('next', 2)"
+        <SeButton
           :icon="icon"
-          kind="primary"
           :disabled="disabled"
-          class="bg-serenity-primary ml-6"
-          >Next</cv-button
+          @click="$emit('next', 2)"
         >
+          Next
+        </SeButton>
       </div>
     </div>
   </div>
@@ -42,13 +43,17 @@
 
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import ModelMixin from '@/mixins/model'
+
 export default {
-  name: 'WeightHeight',
+  name: 'Temperature',
+
+  mixins: [ModelMixin],
 
   props: {
-    form: {
-      type: Object,
-      default: () => {},
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -56,17 +61,6 @@ export default {
     return {
       icon: ChevronRight,
     }
-  },
-
-  computed: {
-    internalForm: {
-      get() {
-        return this.form
-      },
-      set(value) {
-        this.$emit('update:form', value)
-      },
-    },
   },
 }
 </script>

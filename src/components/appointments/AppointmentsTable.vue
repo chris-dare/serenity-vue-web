@@ -1,122 +1,129 @@
 <template>
-  <div>
-    <cv-search v-if="!hideSearch" placeholder="Search for appointment" v-model="search">
-    </cv-search>
+  <div class="space-y-4">
+    <Search
+      v-if="!hideSearch"
+      v-model="search"
+      placeholder="Search for appointment"
+    />
 
-    <div class="flex justify-end mt-4">
-        <cv-date-picker class="flex-none se-date-picker" kind="range" :cal-options="calOptions" v-model="date">
-      </cv-date-picker>
-    </div>
+    <AppointmentTableFilters
+      v-model="filters"
+      @change="filter"
+    />
 
-    <div v-if="appointments.length">
-      <cv-data-table
-        :row-size="rowSize"
-        :columns="columns"
-        :pagination="{
-          numberOfItems: 5,
-          pageSizes: [5, 10, 15, 20, 25]
-        }"
-        v-model="rowSelects"
-        :data="[]"
-        ref="table"
-      >
-        <template slot="batch-actions">
-          <cv-button>
-            Delete
-          </cv-button>
-        </template>
-        <template slot="data">
-          <cv-data-table-row
-            v-for="(row, rowIndex) in 5"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
+    <DataTable
+      :columns="columns"
+      :pagination="pagination"
+      :data="filteredData"
+      :loading="loading"
+      @pagination="actionOnPagination"
+    >
+      <template #no-data>
+        <div class="bg-white w-full h-auto flex flex-col justify-center items-center py-6">
+          <img
+            src="@/assets/img/calendar--event 1.svg"
+            class="w-12 h-12"
+            alt=""
           >
-            <cv-data-table-cell>
-              <div class="flex items-center py-2">
-                <img
-                  class="w-10 h-10 rounded-full mr-3"
-                  :src="$faker().image.image()"
-                  alt=""
-                />
-                <div>
-                  <p>{{ $faker().name.findName() }}</p>
-                  <p class="text-secondary text-xs">
-                    {{ $faker().random.boolean() ? 'male' : 'female' }}, {{ $utils.createRandom(100) }} years
-                  </p>
-                </div>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ $date.formatDate($faker().date.recent(), 'yyyy/MM/dd') }}</p>
-                <p class="text-secondary text-xs">{{ $date.formatDate($faker().date.recent(), 'HH:mm a') }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>Specialist Appointment</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>Virtual</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ $faker().phone.phoneNumber() }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div
-                class="flex items-center cursor-pointer"
-                @click="visible = !visible"
-              >
-                View
-                <div
-                  class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center"
-                >
-                  <img src="@/assets/img/view 1.svg" alt="" />
-                </div>
-              </div>
-            </cv-data-table-cell>
-          </cv-data-table-row>
-        </template>
-      </cv-data-table>
-    </div>
-    <div v-else>
-        <div class="bg-white w-full h-auto flex flex-col justify-center items-center py-6 my-4">
-            <img src="@/assets/img/calendar--event 1.svg" class="w-12 h-12" alt="">
-            <p class="my-2">Uh oh! You have no appointments.</p>
-            <p class="text-secondary font-light mb-6">You currently have no active or incoming appointments.</p>
-            <router-link :to="{name:'SelectPatient'}" tag="cv-button" class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4" kind="primary">
-              Book an appointment <img class="ml-4 w-5 h-5" src="@/assets/img/add 1.svg" alt="">
-            </router-link>
+          <p class="my-2">Uh oh! You have no appointments.</p>
+          <p class="text-secondary font-light mb-6">You currently have no active or incoming appointments.</p>
         </div>
-    </div>
-    <AppointmentSummaryModal :visible.sync="visible" @print="billingVisible = !billingVisible" />
-    <BillingModal :visible.sync="billingVisible" />
+      </template>
+      <template #default="{row}">
+        <cv-data-table-cell>
+          <div class="py-2">
+            <InfoImageBlock
+              :label="row.patient.fullName"
+              :description="row.patient.gender_age_description"
+            />
+          </div>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div>
+            <p>{{ $date.formatDate(row.start, 'yyyy/MM/dd') }}</p>
+            <p class="text-secondary text-xs">{{ $date.formatDate(row.start, 'HH:mm a') }} - {{ $date.formatDate(row.end, 'HH:mm a') }}</p>
+          </div>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div>
+            <p>{{ row.service.healthcare_service_name }}</p>
+          </div>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div>
+            <p>{{ row.appointmentType | capitalize }}</p>
+          </div>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div>
+            <p>{{ row.patient.phone }}</p>
+          </div>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div class="flex items-center cursor-pointer space-x-6">
+            <AppointmentTableActions
+              @edit="edit(row)"
+              @delete="confirmRemove(row)"
+              @view="view(row)"
+              @reschedule="reschedule(row)"
+            />
+          </div>
+        </cv-data-table-cell>
+      </template>
+    </DataTable>
+
+    <AppointmentSummaryModal
+      :appointment="selectedAppointment"
+      @print="$trigger('billing:details:open')"
+    />
+
+    <BillingDetailsModal
+      :appointment="selectedAppointment"
+    />
+  
+    <NotesModal
+      label="Reason for cancellation"
+      save-label="Cancel Appointment"
+      required
+      @save="cancel"
+    />
+
+    <ConfirmDeleteModal
+      :loading="loading"
+      @delete="remove"
+    />
   </div>
 </template>
 
 <script>
 import AppointmentSummaryModal from '@/components/appointments/AppointmentSummaryModal'
-import BillingModal from '@/components/appointments/BillingModal'
-import { mapState } from 'vuex'
+import AppointmentTableActions from '@/components/appointments/tables/AppointmentTableActions'
+import AppointmentTableFilters from '@/components/appointments/tables/AppointmentTableFilters'
+import BillingDetailsModal from '@/components/appointments/BillingDetailsModal'
+import DataMixin from '@/mixins/data'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'AppointmentsTable',
-  components: {AppointmentSummaryModal, BillingModal},
+
+  components: {AppointmentSummaryModal, BillingDetailsModal, AppointmentTableActions, AppointmentTableFilters},
+
+  mixins: [DataMixin],
+
   props: {
-      hideSearch: {
-          type: Boolean,
-          default: false,
-      },
+    hideSearch: {
+      type: Boolean,
+      default: false,
+    },
   },
+
   data() {
     return {
       rowSelects: null,
-      billingVisible: false,
-      date: null,
+      date: {},
+      filters: {
+        ordering: 'start',
+      },
       columns: [
         'Patient',
         'Date/Time',
@@ -125,34 +132,98 @@ export default {
         'Mobile',
         'Action',
       ],
-      use_batchActions: true,
-      rowSize: '',
-      autoWidth: false,
-      sortable: false,
-      title: 'Table title',
-      actionBarAriaLabel: 'Custom action bar aria label',
-      batchCancelLabel: 'Cancel',
-      zebra: false,
-      search: '',
-      sampleOverflowMenu: [],
-      calOptions: {
-        dateFormat: 'm/d/Y',
-      },
       visible: false,
+      selectedAppointment: {},
     }
   },
 
   computed: {
-    ...mapState({
-        appointments: (state) => state.appointments.appointments,
+    ...mapGetters({
+      data: 'appointments/appointments',
     }),
   },
 
+  beforeMount() {
+    if (this.hideSearch) {
+      this.pageSizes = [5, 10, 15]
+      this.pageLength = 5
+    }
+    this.paginate = true
+    this.searchTerms = ['patient_name', 'healthcare_service_name']
+    this.filter(true)
+  },
+
   methods: {
-    onOverflowMenuClick() {},
-    onSort() {},
-    actionRowSelectChange() {},
-    actionOnPagination() {},
+    ...mapActions({
+      getData: 'appointments/getAppointments',
+      cancelAppointment: 'appointments/cancelAppointment',
+      deleteAppointment: 'appointments/deleteAppointment',
+      setCurrentAppointment: 'appointments/setCurrentAppointment',
+    }),
+
+    async filter(refresh = true) {
+      this.loading = true
+      try {
+        let filters = { ...this.filters }
+
+        if (this.filters.end) {
+          filters.end__lte = this.$date.formatQueryParamsDate(this.filters.end)
+          delete filters.end
+        }
+
+        if (this.filters.start) {
+          filters.start__gte = this.$date.formatQueryParamsDate(this.filters.start)
+          delete filters.start
+        }
+
+        await this.getData({ refresh, filters })
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
+    },
+
+    view(appointment) {
+      this.selectedAppointment = appointment
+      this.$trigger('appointment:summary:open')
+    },
+
+    edit(row) {
+      this.setCurrentAppointment(row)
+      this.$router.push({name: 'AppointmentUpdate', params: { id: row.id }, query: {type: 'update'}})
+    },
+
+    reschedule(row) {
+      this.setCurrentAppointment(row)
+      this.$router.push({name: 'AppointmentUpdate', params: { id: row.id }, query: {type: 'reschedule'}})
+    },
+
+    async cancel(note) {
+      await this.cancelAppointment({appointmentId: 1, payload: { cancelationReason: note } })
+      this.$toast.open({message: 'Appointment successfully cancelled'})
+      this.$trigger('notes:close')
+    },
+
+    confirmRemove(row) {
+      this.$trigger('confirm:delete:open', { data:row.id, label: 'Are you sure you want to delete this appointment?' })
+    },
+
+
+    async remove(rowId) {
+      this.loading = true
+      try {
+        await this.deleteAppointment(rowId).then(() => {
+          this.$toast.open({
+            message: 'Appointment successfully deleted',
+          })
+        })
+        this.loading = false
+        this.$trigger('confirm:delete:close')
+      } catch (error) {
+        this.loading = false
+        throw error
+      }
+    },
   },
 }
 </script>

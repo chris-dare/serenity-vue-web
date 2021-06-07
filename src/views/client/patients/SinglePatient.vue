@@ -1,84 +1,38 @@
 <template>
-  <div class="w-4/5 mx-auto">
-    <div class="bg-white py-8 px-4 my-2 flex items-center justify-between">
-      <div class="flex">
-        <div class="flex items-center">
-          <img
-            class="w-16 h-16 rounded-full mx-4"
-            :src="patient.image"
-            alt=""
-          />
-          <div>
-            <p>{{ patient.name }}</p>
-            <p class="text-secondary text-sm capitalize">
-              {{ patient.gender }}, {{ patient.age }} years
-            </p>
-            <div class="mt-2 flex items-center">
-              <!-- <div class="bg-green-700 w-3 h-3 rounded-full mr-2"></div> -->
-              <p>MR No: 0012456</p>
-            </div>
-          </div>
-        </div>
-        <div
-          class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
-        >
-          <img src="@/assets/img/edit 1.svg" class="w-4 h-4" />
-        </div>
-      </div>
-      <div class="flex">
-        
-        <AddNewDropdown />
-        <cv-button
-          kind="primary"
-          size="field"
-          class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
-          @click="$router.push({ name: 'SelectPatient' })"
-          v-if="!hasEncounter"
-        >
-          Record a new encounter
-          <img src="@/assets/img/add 1.svg" class="ml-2" alt="" />
-        </cv-button>
-        <cv-button
-          kind="primary"
-          size="field"
-          class="px-4 bg-warning hover:bg-warning mr-2 text-black"
-          @click="$router.push({ name: 'SelectPatient' })"
-          v-else
-        >
-          Open ongoing encounter
-          <img src="@/assets/img/add 1.svg" class="ml-2" alt="" />
-        </cv-button>
-      </div>
-    </div>
+  <AppStatePage
+    :loading="loading"
+    :error="error"
+    class="max-w-7xl mx-auto"
+  >
+    <PatientInfoCard>
+      <component :is="actionComponent" />
+    </PatientInfoCard>
 
     <div>
-      <div class="mt-2 bg-white flex">
-        <router-link
-          tag="div"
-          :to="{ name: link.path }"
-          v-for="(link, index) in links"
-          :key="index"
-          class="relative cursor-pointer flex-1 items-center justify-center flex border-b-2 py-4 border-serenity-primary-highlight"
-          >{{ link.label }}
-          <div
-            class="w-4/5 mx-auto h-0.5 absolute bg-serenity-light-gray bottom-0"
-            :class="{ 'bg-serenity-primary-highlight': link.path === $route.name }"
-          ></div>
-        </router-link>
-      </div>
+      <PatientDetailsNav />
+      
       <router-view />
     </div>
-  </div>
+    <SinglePatientModals />
+  </AppStatePage>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import AddNewDropdown from '@/components/patients/AddNewDropdown'
+import { mapActions, mapState } from 'vuex'
+import SinglePatientModals from '@/components/patients/modals/SinglePatientModals'
+import PatientDetailsNav from '@/components/patients/PatientDetailsNav'
+import PatientInfoCard from '@/components/patients/PatientInfoCard'
 
 export default {
   name: 'SinglePatient',
 
-  components: {AddNewDropdown},
+  components: {
+    SinglePatientModals,
+    PatientDetailsNav,
+    PatientInfoCard,
+    ReceptionActions: () => import('@/components/patients/actions/ReceptionActions'),
+    OPDActions: () => import(/* webpackPrefetch: true */ '@/components/patients/actions/OPDActions'),
+  },
 
   props: {
     id: {
@@ -89,68 +43,46 @@ export default {
 
   data() {
     return {
-        hasEncounter: false,
-    //   links: [
-    //     { label: 'Summary', path: 'PatientSummary' },
-    //     { label: 'Chart', path: 'PatientCharts' },
-    //     { label: 'Encounters', path: 'PatientEncounters' },
-    //     { label: 'History', path: 'PatientHistory' },
-    //     { label: 'Prescriptions', path: 'PatientPrescriptions' },
-    //     { label: 'Orders/Billing', path: 'PatientOrders' },
-    //     { label: 'Reports', path: 'PatientReports' },
-    //     { label: 'Notes', path: 'PatientNotes' },
-    //   ],
+      loading: false,
+      error: null,
     }
   },
 
   computed: {
     ...mapState({
-      patients: (state) => state.patients.patients,
-      globalType: (state) => state.global.globalType,
+      workspaceType: (state) => state.global.workspaceType,
     }),
-    links() {
-        let links = [{ label: 'Summary', path: 'PatientSummary' }]
-
-        if (this.globalType === 'Reception') {
-            links.push({ label: 'Chart', path: 'PatientCharts' },{ label: 'Appointments', path: 'PatientAppointments' })
-        } else {
-            links.push(
-        { label: 'Timeline', path: 'PatientTimeline' },
-        { label: 'Chart', path: 'PatientCharts' },
-        { label: 'Appointments', path: 'PatientAppointments' },
-        { label: 'Encounters', path: 'PatientEncounters' },
-        { label: 'Prescriptions', path: 'PatientPrescriptions' },
-        { label: 'Orders/Billing', path: 'PatientOrders' },
-        { label: 'Reports', path: 'PatientReports' },
-        { label: 'Notes', path: 'PatientNotes' })
-        }
-            return links
-
-    },
-    patient() {
-      return this.patients[0]
-    },
-    isSelected() {
-      return (index) => this.initialSelected === index
-    },
-    summaryFields() {
-      return [
-        { label: 'Method', value: this.$faker().lorem.word() },
-        { label: 'Payment Network', value: this.$faker().lorem.word() },
-        { label: 'Phone Number', value: this.$faker().lorem.word() },
-        { label: 'Name on Account', value: this.$faker().lorem.word() },
-        { label: 'Secondary Method', value: this.$faker().lorem.word() },
-      ]
+    actionComponent() {
+      if (this.workspaceType === 'RECEPT') return 'ReceptionActions'
+      return 'OPDActions'
     },
   },
 
-  mounted() {
-    this.getPatients()
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      try {
+        vm.loading = true
+        await vm.initSinglePatientInformation(vm.id)
+        vm.loading = false
+      } catch (error) {
+        vm.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
+        vm.loading = false
+      }
+      
+      
+    })
+  },
+
+  beforeRouteLeave (to, from, next) {
+    next(async vm => {
+      await vm.refresh()
+    })
   },
 
   methods: {
     ...mapActions({
-      getPatients: 'patients/getPatients',
+      initSinglePatientInformation: 'patients/initSinglePatientInformation',
+      refresh: 'patients/refreshCurrentPatient',
     }),
   },
 }

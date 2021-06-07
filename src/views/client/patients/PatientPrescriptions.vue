@@ -1,106 +1,106 @@
 <template>
   <div>
-    <cv-search
-      placeholder="Search for medication or date or condition"
+    <Search
       v-model="search"
-    >
-    </cv-search>
+      placeholder="Search for medication or date or condition"
+    />
     <div class="my-4 flex items-center justify-between">
-      <div>
-        <cv-button
-          kind="primary"
-          size="field"
-          class="px-4 bg-serenity-primary hover:bg-serenity-primary-highlight mr-2"
-        >
-          All ({{ 23 }})
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+      <div class="space-x-2 flex items-center">
+        <SeButton>
+          All ({{ dataCount }})
+        </SeButton>
+        <SeButton
+          v-if="false"
+          variant="white"
           @click="visible = !visible"
         >
-          <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
+          <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
           Medications ({{ 1 }})
-        </cv-button>
-        <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+        </SeButton>
+        <SeButton
+          v-if="false"
+          variant="white"
           @click="treatmentVisible = !treatmentVisible"
         >
-          <div class="w-2 h-2 rounded-full bg-warning mr-2"></div>
+          <div class="w-2 h-2 rounded-full bg-warning mr-2" />
           Treatment plans ({{ 1 }})
-        </cv-button>
+        </SeButton>
       </div>
     </div>
     <div class="bg-white p-3">
       <div class="flex items-center justify-between mb-4">
-        <p class="text-sm text-gray-500">Prescriptions</p>
+        <p class=" text-gray-500">Prescriptions</p>
         <div
+          v-if="hasActiveEncounter"
           class="bg-serenity-light-gray w-9 h-9 rounded-full ml-6 flex items-center justify-center"
+          @click="$trigger('profile:medication:request:open')"
         >
-          <img src="@/assets/img/pills--add 1.svg" class="w-4 h-4" />
+          <img
+            src="@/assets/img/pills--add 1.svg"
+            class="w-4 h-4"
+          >
         </div>
       </div>
 
-      <cv-data-table
-        :columns="columns"
-        :pagination="{
-          numberOfItems: 10,
-        }"
-        v-model="rowSelects"
-        :data="[]"
+      <DataTable
         ref="table"
+        :columns="columns"
+        :pagination="pagination"
+        :data="filteredData"
         class="transparent-table"
-        size="tall"
+        :no-data-label="noDataLabel('prescriptions')"
       >
-        <template slot="data">
-          <cv-data-table-row
-            v-for="(row, rowIndex) in 10"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
-          >
-            <cv-data-table-cell>
-              <p class="text-serenity-primary text-sm">{{ $faker().lorem.word() }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p class="text-sm">{{ $faker().lorem.word() }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p class="text-sm">{{ $faker().lorem.word() }}</p>
+        <template #default="{ row }">
+          <cv-data-table-cell>
+            <p class="text-serenity-primary ">{{ $utils.getFirstData(row.medication_detail) }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ $utils.getFirstData(row.medication_request_category) }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ $utils.getFirstData(row.medication_request_dosage_instruction, 'period') }} {{ $utils.getFirstData(row.medication_request_dosage_instruction, 'period_unit') }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ $utils.getFirstData(row.medication_request_dosage_instruction, 'frequency') }} {{ $utils.getFirstData(row.medication_request_dosage_instruction, 'frequency_unit') }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div
+              class="flex items-center cursor-pointer "
+              @click="showPrescription(row)"
+            >
+              View
+              <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
+                <img
+                  src="@/assets/img/view 1.svg"
+                  alt=""
+                >
               </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p class="text-sm">{{ $faker().lorem.word() }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div @click="showPrescription(row)" class="flex items-center cursor-pointer text-sm" >
-                View
-                <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
-                <img src="@/assets/img/view 1.svg" alt="">
-                </div>
-              </div>
-            </cv-data-table-cell>
-          </cv-data-table-row>
+            </div>
+          </cv-data-table-cell>
         </template>
-      </cv-data-table>
+      </DataTable>
     </div>
-    <PrescriptionModal :visible.sync="visible" />
+    <PrescriptionModal />
     <TreatmentPlanModal :visible.sync="treatmentVisible" />
   </div>
 </template>
 
 <script>
-import PrescriptionModal from '@/components/patients/modals/PrescriptionModal'
-import TreatmentPlanModal from '@/components/patients/modals/TreatmentPlanModal'
+import { mapGetters } from 'vuex'
+import data from '@/mixins/data'
+
 export default {
   name: 'PatientPrescriptions',
 
-  components: { PrescriptionModal, TreatmentPlanModal },
+  components: {
+    PrescriptionModal: () => import(/* webpackPrefetch: true */'@/components/patients/modals/PrescriptionModal'),
+    TreatmentPlanModal: () => import(/* webpackPrefetch: true */'@/components/patients/modals/TreatmentPlanModal') },
+
+  mixins: [data],
 
   data() {
     return {
@@ -119,13 +119,26 @@ export default {
     }
   },
 
+  
+
+  computed: {
+    ...mapGetters({
+      data: 'patients/patientMedications',
+      hasActiveEncounter: 'encounters/hasActiveEncounter',
+      noDataLabel: 'patients/getCurrentPatientNoDataLabel',
+    }),
+  },
+
+  created() {
+    this.paginate
+    this.searchTerms = ['']
+  },
+
   methods: {
-      showPrescription(data) {
-          this.prescription = data
-          this.visible = true
-      },
+    showPrescription(data) {
+      this.prescription = data
+      this.$trigger('prescription:detail:open', data)
+    },
   },
 }
 </script>
-
-<style></style>

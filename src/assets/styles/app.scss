@@ -1,20 +1,49 @@
-@import 'typography';
+@import "typography";
 @import "custom";
 
-$ui-05: #0B6B74;
-$interactive-01: #0B6B74;
+$ui-05: #0b6b74;
+$interactive-01: #0b6b74;
 
-body {
-    font-family: 'Graphik';
-    overflow: hidden;
+body, input {
+  font-family: 'Graphik', 'Open Sans';
+  overflow: hidden;
 }
-p{
-    font-size: 0.875rem !important;
-    line-height: 1.25rem !important;
-    @apply text-primary
+p {
+  line-height: 1.25rem !important;
+  @apply text-primary;
 }
 
-*:focus{
-    outline: none !important;
-    font-family: 'Graphik' !important;
+*:focus {
+  outline: none !important;
+}
+
+button:focus{
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.series::-webkit-scrollbar {
+  width: 5px;
+  @apply bg-tetiary h-5;
+}
+
+.series::-webkit-scrollbar-thumb {
+  background: #0b6b74
+    url("https://res.cloudinary.com/seddiescloudimagecdn/image/upload/v1613933332/Group_229.png")
+    no-repeat;
+  background-size: contain 1rem;
+  @apply bg-center;
+}
+
+.bx--inline-notification__subtitle {
+  color: white;
+}
+
+.v-toast__text{
+  max-width: 600px;
+}
+
+::placeholder, .multiselect__input::placeholder, input::placeholder {
+  font-family: 'Graphik', 'Open Sans' !important;
+  color: #878D96 !important;
 }

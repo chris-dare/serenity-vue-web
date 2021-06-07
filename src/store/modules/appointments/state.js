@@ -2,7 +2,14 @@ export function initialState() {
   return {
     appointments: [],
     appointmentsCount: 0,
-    currentAppointment: {doctor: {}, patient: {}},
+    currentAppointment: {},
+    slots: [],
+    appointmentTypes: [
+      { label: 'Routine', value: 'ROUTINE'},
+      { label: 'Checkup', value: 'CHECKUP'},
+      { label: 'Emergency', value: 'EMERGENCY'},
+      { label: 'Followup', value: 'FOLLOWUP'},
+    ],
   }
 }
 

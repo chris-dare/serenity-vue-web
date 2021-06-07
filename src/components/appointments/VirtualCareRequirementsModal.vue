@@ -11,41 +11,38 @@
         <p class="text-serenity-placeholder text-xs">
           Patient does not have sudden weakness or numbness in the face, arm or
           leg (especially on one side of the body)
-          <br />
-          <br />
+          <br>
+          <br>
           Patient does not have sudden confusion or trouble speaking or
           understanding speech
-          <br /><br />
+          <br><br>
           Patient does not have sudden vision problems in one or both eyes
-          <br /><br />
+          <br><br>
           Patient does not have sudden difficulty walking or dizziness, loss of
           balance or problems with coordination
-          <br /><br />
+          <br><br>
           Patient does not have severe headache with no known cause
-          <br /><br />
+          <br><br>
           Patient does not have chest pain
-          <br /><br />
+          <br><br>
           Patient is not actively bleeding from any part of the body
-          <br /><br />
+          <br><br>
           Patient has not had a seizure within the last 24 hours, or has had but
           is known to have seizure disorder
-          <br /><br />
+          <br><br>
           Patient is not a child with persistent fever (Temperature >38.5 °C)
         </p>
         <div class="flex items-center justify-between mt-2">
-          <cv-button
-            class="border-danger text-danger hover:text-white focus:bg-danger hover:bg-danger px-4"
-            kind="tertiary"
-            size="field"
-            >Patient is not fit</cv-button
+          <SeButton
+            variant="danger-outline"
           >
-          <cv-button
+            Patient is not fit
+          </SeButton>
+          <SeButton
             :icon="icon"
-            kind="primary"
-            size="field"
-            class="bg-serenity-primary"
-            >Patient is fit</cv-button
           >
+            Patient is fit
+          </SeButton>
         </div>
       </div>
     </template>

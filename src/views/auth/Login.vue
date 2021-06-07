@@ -1,50 +1,73 @@
 <template>
   <div class="bg-serenity-auth h-screen w-screen">
     <div class="h-screen overflow-hidden">
-      <div class="flex items-center justify-between px-8 bg-black">
-        <img src="@/assets/img/logo-full.svg" alt="" />
-        <div class="w-12 flex items-center justify-center h-12">
-          <img src="@/assets/img/user 1.svg" class="w-5 h-5" alt="" />
-        </div>
+      <div class="flex items-center justify-between px-8 bg-black h-12">
+        <img
+          src="@/assets/img/logo-full.svg"
+          alt=""
+        >
       </div>
       <div
         class="h-main flex w-full items-center bg-logo bg-logo-size bg-no-repeat bg-right-bottom pl-16"
       >
         <div class="w-1/4">
-          <img src="@/assets/img/nyaho.svg" alt="" />
+          <img
+            src="@/assets/img/nyaho.svg"
+            alt=""
+          >
           <p class="text-white my-4">Welcome !</p>
           <p class="text-white w-60">
             “There is no key to happiness; the door is always open.” - Mother
             Teresa
           </p>
 
+          <div class="text-white">
+            <cv-inline-notification 
+              v-if="showNotification"
+              kind="error"
+              :sub-title="errorMessage"
+              @close="showNotification = false"
+            />
+          </div>
           <div class="mt-8">
             <cv-text-input
+              v-model="form.email"
+              :invalid-message="$utils.validateRequiredField($v, 'email')"
               class="my-4 se-dark-input"
               label="Your email address"
-              v-model="form.email"
-            >
-            </cv-text-input>
+              data-test="email"
+            />
             <cv-text-input
-              label="Your password"
               v-model="form.password"
+              v-nested-keyup:input.enter="login"
+              :invalid-message="$utils.validateRequiredField($v, 'password')"
+              label="Your password"
               type="password"
               class="se-dark-input"
-            >
-            </cv-text-input>
+              data-test="password"
+            />
             <cv-button
+              ref="loginButton"
               kind="primary"
+              class="shake-anim my-6 max-w-full w-full bg-serenity-primary justify-start"
+              data-test="submit"
               @click="login"
-              class="my-6 max-w-full w-full bg-serenity-primary"
             >
-              Sign In
+              <img
+                data-test="loading"
+                :class="{hidden: !saving}"
+                class="h-4 w-4 mr-4"
+                src="@/assets/img/eclipse.svg"
+              >
+              <template>Sign In</template>
             </cv-button>
             <router-link
               tag="div"
               to="/forgot-password"
               class="underline cursor-pointer text-serenity-primary my-4"
-              >Forgot Password?</router-link
             >
+              Forgot Password?
+            </router-link>
           </div>
         </div>
       </div>
@@ -54,20 +77,60 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { required, email } from 'vuelidate/lib/validators'
+
 export default {
   data() {
     return {
-      form: {},
+      form: {
+        email: '',
+        password: '',
+      },
+      showNotification: false,
+      errorMessage: '',
+      saving: false,
     }
+  },
+
+  validations: {
+    form:  {
+      email: {required, email},
+      password: {required},
+    },
+  },
+
+  computed: {
+    dateTime(){
+      var dayOfWeek = 0 //friday
+      var date = new Date()
+      date = new Date(date.getTime ())
+      date.setDate(date.getDate() + (dayOfWeek + 7 - date.getDay()) % 7)
+      return date
+    },
   },
 
   methods: {
     ...mapActions({
       setLoggedIn: 'auth/setLoggedIn',
     }),
-    login() {
-      this.setLoggedIn(true)
-      this.$router.push({ name: 'Dashboard' })
+    async login() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return
+      }
+      this.saving = true
+      try{
+        await this.$store.dispatch('auth/login', this.form)
+        this.$router.push({ name: 'GetStarted' })
+      }catch(error){
+        this.$refs.loginButton.$el.classList.add('shake-anim-active')
+        setTimeout(()=> {
+          this.$refs.loginButton.$el.classList.remove('shake-anim-active')
+        }, 300)
+        this.errorMessage = error.detail || 'Failed to login'
+        this.showNotification = true
+      }
+      this.saving = false
     },
   },
 }

@@ -1,13 +1,16 @@
 <template>
-  <div @click="$emit('click')" class="h-72 border border-subtle border-solid bg-white p-4 cursor-pointer">
+  <div
+    class="h-72 border border-subtle border-solid bg-white p-4 cursor-pointer"
+    @click="$emit('click')"
+  >
     <div class="flex flex-wrap items-center h-3/5">
-      <div class="rounded-lg h-3 w-12 bg-serenity-subtle-border m-1"></div>
-      <div class="rounded-lg h-3 w-4/5 bg-serenity-subtle-border m-1"></div>
-      <div class="rounded-lg h-3 w-5/6 bg-serenity-subtle-border m-1"></div>
-      <div class="rounded-lg h-3 w-5/6 bg-serenity-subtle-border m-1"></div>
-      <div class="rounded-lg h-3 w-4/5 bg-serenity-subtle-border m-1"></div>
-      <div class="rounded-lg h-3 w-5/6 bg-serenity-subtle-border m-1"></div>
-      <div class="rounded-lg h-3 w-5/6 bg-serenity-subtle-border m-1"></div>
+      <div class="rounded-lg h-3 w-12 bg-serenity-subtle-border m-1" />
+      <div class="rounded-lg h-3 w-4/5 bg-serenity-subtle-border m-1" />
+      <div class="rounded-lg h-3 w-5/6 bg-serenity-subtle-border m-1" />
+      <div class="rounded-lg h-3 w-5/6 bg-serenity-subtle-border m-1" />
+      <div class="rounded-lg h-3 w-4/5 bg-serenity-subtle-border m-1" />
+      <div class="rounded-lg h-3 w-5/6 bg-serenity-subtle-border m-1" />
+      <div class="rounded-lg h-3 w-5/6 bg-serenity-subtle-border m-1" />
     </div>
     <div class="my-4">
       <span

@@ -1,105 +1,198 @@
 <template>
-  <div>
+  <MultiStepBase
+    next-label="Finish"
+    :loading="loading"
+    :previous="previous"
+    :icon="icon"
+    :query="$route.query"
+    @cancel="cancel"
+    @save="submit"
+  >
     <div class="grid grid-cols-2 gap-8">
-      <cv-select
-        v-model="form.method_of_payment"
-        label="Primary method of payment"
-        class="inherit-full-input"
-      >
-        <cv-select-option disabled selected hidden
-          >Mobile Money</cv-select-option
-        >
-        <cv-select-option
-          v-for="(network, index) in networks"
-          :key="index"
-          :value="network"
-          >{{ network }}</cv-select-option
-        >
-      </cv-select>
-      <cv-select
-        v-model="form.momo_network"
-        label="MoMo Network"
-        class="inherit-full-input"
-      >
-        <cv-select-option disabled selected hidden
-          >MTN Mobile Money</cv-select-option
-        >
-        <cv-select-option
-          v-for="(network, index) in networks"
-          :key="index"
-          :value="network"
-          >{{ network }}</cv-select-option
-        >
-      </cv-select>
-      <cv-text-input
-        label="Name of Account"
-        v-model="form.name_of_account"
-        placeholder="Name of MoMo Account"
-        class="inherit-full-input"
-      >
-      </cv-text-input>
-      <cv-text-input
-        label="MoMo number"
-        v-model="form.momo_number"
-        placeholder="Eg. 054 — — — — —"
-        class="inherit-full-input"
-      >
-      </cv-text-input>
-      <cv-select
-        v-model="form.secondary_method"
-        label="Secondary method of payment"
-        class="inherit-full-input"
-      >
-        <cv-select-option disabled selected hidden
-          >Select an option</cv-select-option
-        >
-        <cv-select-option
-          v-for="(network, index) in networks"
-          :key="index"
-          :value="network"
-          >{{ network }}</cv-select-option
-        >
-      </cv-select>
-    </div>
-    <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center">
-        <cv-button
-          class="border-serenity-primary mr-6 px-6 text-serenity-primary hover:text-white focus:bg-serenity-primary hover:bg-serenity-primary"
-          kind="tertiary"
-          >Cancel</cv-button
-        >
-        <cv-button @click="$router.push({ name: 'SocialInfo' })" class="bg-black px-6" kind="primary">Go back</cv-button>
-      </div>
-      <div class="flex items-center">
-        <cv-button
-          @click="visible = !visible"
-          :icon="icon"
-          kind="primary"
-          class="bg-serenity-primary ml-6"
-          >Finish</cv-button
-        >
-      </div>
+      <MultiSelect
+        v-model="form.payment_options[0].payment_type"
+        :options="methods"
+        title="Primary method of payment"
+        placeholder="Payment Type"
+        :multiple="false"
+        label="display"
+        track-by="code"
+        custom-field="code"
+        preselect
+      />
+      <MultiSelect
+        v-if="isMoMo"
+        v-model="form.payment_options[0].payment_details.payment_provider"
+        :options="vendors"
+        label="display"
+        track-by="code"
+        custom-field="code"
+        title="Payment provider"
+        placeholder="Payment Type"
+        :multiple="false"
+      />
+      <MsisdnPhoneInput
+        v-if="isMoMo"
+        v-model="form.payment_options[0].payment_details.msisdn"
+        label="Phone number"
+      />
+      <FormCountrySelect
+        v-if="isMoMo"
+        v-model="form.payment_options[0].payment_details.country"
+        title="Country"
+        placeholder="Country"
+      />
     </div>
     <PatientSuccessModal :visible.sync="visible" />
-  </div>
+  </MultiStepBase>
 </template>
 
 <script>
 import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
 import PatientSuccessModal from '@/components/patients/modals/PatientSuccessModal'
+import { mapActions, mapState } from 'vuex'
+import MultiStep from '@/mixins/multistep'
+import { required } from 'vuelidate/lib/validators'
+
 export default {
   name: 'Payment',
 
   components: {PatientSuccessModal},
 
+  mixins: [MultiStep],
+
   data() {
     return {
-      form: {},
+      form: {
+        payment_options: [{
+          payment_details: {},
+        }],
+      },
       icon: Checkmark,
-      networks: ['MTN', 'Vodafone', 'AirtelTigo'],
-      religions: ['christianity', 'islam'],
       visible: false,
+      parent: 'Patients',
+      previous: 'SocialInfo',
+      loading: false,
     }
+  },
+
+  computed: {
+    ...mapState({
+      storeData: (state) => state.patients.currentPatient,
+      vendors: (state) => state.resources.vendors,
+      methods: (state) => state.resources.paymentMethods,
+    }),
+
+    isMoMo() {
+      return this.form.payment_options[0].payment_type === 'MOBILE_MONEY'
+    },
+  },
+
+  created() {
+    if(!this.form.payment_options[0].payment_details.msisdn){ 
+      this.form.payment_options[0].payment_details.msisdn = this.form.mobile
+    }
+  },
+
+  validations: {
+    form: {
+      first_name: { required },
+      last_name: { required },
+      gender: { required },
+    },
+  },
+  
+  methods: {
+    ...mapActions({
+      addToStoreData: 'patients/addToCurrentPatient',
+      addToCurrentAppointment: 'appointments/addToCurrentAppointment',
+      refresh: 'patients/refreshCurrentPatient',
+      createPatient: 'patients/createPatient',
+      updatePatient: 'patients/updatePatient',
+    }),
+
+    submit() {
+      this.$v.$touch()
+
+      if (this.$v.$invalid) {
+        this.$toast.error('Fill all required fields in previous steps!')
+        return
+      }
+      if (this.form.id) {
+        this.update()
+      } else {
+        this.save()
+      }
+    },
+
+    async save() {
+      this.loading = true
+      try {
+        const data = await this.createPatient(this.form)
+        this.$toast.open({
+          message: 'Patient successfully added',
+        })
+
+        if (this.$route.query.reroute) {
+          this.rerouteToAppointment(data)
+          return
+        }
+
+        this.confirmChanges(data.id)
+        // this.visible = true
+        this.loading = false
+
+      } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+        this.loading = false
+        throw error
+      }
+    },
+
+    async update() {
+      this.loading = true
+
+      this.addToStoreData(this.form)
+
+      try {
+        await this.updatePatient(this.form)
+        this.$toast.open({
+          message: 'Patient successfully updated',
+        })
+        this.$router.push({name: 'PatientSummary', params: { id:this.form.id }})
+      } catch (error) {
+        console.info(error)
+        this.$toast.open({
+          message: 'Something went wrong!',
+          type: 'error',
+        })
+      }
+
+      this.loading = false
+    },
+
+    confirmChanges(id) {
+      this.$trigger('actions-modal:open', {
+        confirmButtonText: 'Go to patient profile',
+        cancelButtonText: 'Return to dashboard',
+        label: 'Patient Profile has been successfully created!',
+        callback: async () => {
+          this.$router.push({ name: 'PatientSummary', params: { id }})
+        },
+        cancel: async () => {
+          this.$router.push({ name: 'Patients'})
+        },
+      })
+    },
+
+    rerouteToAppointment(patient) {
+      this.addToCurrentAppointment({ patient })
+      this.router.push({ name: 'DateDoctor' })
+    },
+
   },
 }
 </script>

@@ -1,49 +1,40 @@
 <template>
   <div class="mt-3 grid grid-cols-4 gap-4">
-    <div>
-      <div class="flex items-center my-3">
-        <div class="w-3 h-3 mr-2 rounded-full bg-warning"></div>
-        <p class="text-sm">Current</p>
-      </div>
-      <ListCard is-active="true" class="mt-2">
-        <p class="text-sm text-serenity-primary">
-          Office Visit <span class="text-secondary">(Today, Nov 13, 2020)</span>
-        </p>
-        <p class="text-sm text-secondary mt-1">
-          The patient has been complaining of difficulty in breathing.
-        </p>
-      </ListCard>
-      <div class="flex items-center mt-3">
-        <div class="w-3 h-3 mr-2 rounded-full bg-info"></div>
-        <p class="text-sm">Past(6)</p>
-      </div>
-      <ListCard border="bg-info" class="mt-2">
-        <p class="text-sm text-serenity-primary">
-          Office Visit <span class="text-secondary">(Today, Nov 13, 2020)</span>
-        </p>
-        <p class="text-sm text-secondary mt-1">
-          The patient has been complaining of difficulty in breathing.
-        </p>
-      </ListCard>
+    <div class="h-avg overflow-y-auto">
+      <EncountersList
+        name="current"
+        :encounters="onGoingEncounters"
+        is-active
+      />
+      <EncountersList
+        name="past"
+        :encounters="pastEncounters"
+      />
     </div>
     <div class="col-span-3">
-        <div class="flex justify-between items-center">
-            <p class="text-serenity-placeholder my-3">Encounter Details</p>
-            <div @click="$router.push({name: 'Vitals'})" class="flex items-center space-x-1 cursor-pointer">
-            <AddFilled class="w-4 h-4 text-serenity-primary" />
-            <p>Add new</p>
-            </div>
-        </div>
-        <EncounterDetailCard />
+      <div class="flex justify-between items-center">
+        <p class="text-serenity-placeholder my-3">Encounter Details</p>
+      </div>
+      <EncounterDetailCard />
     </div>
   </div>
 </template>
 
 <script>
 import EncounterDetailCard from '@/components/patients/encounters/EncounterDetailCard'
+import EncountersList from '@/components/patients/encounters/EncountersList'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'PatientEncounters',
 
-  components: {EncounterDetailCard},
+  components: { EncounterDetailCard, EncountersList },
+
+  computed: {
+    ...mapGetters({
+      onGoingEncounters: 'encounters/onGoingEncounters',
+      pastEncounters: 'encounters/pastEncounters',
+    }),
+  },
 }
 </script>

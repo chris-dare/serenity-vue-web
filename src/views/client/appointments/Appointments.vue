@@ -1,16 +1,19 @@
 <template>
-  <div class="w-4/5 mx-auto">
+  <div
+    class="w-4/5 mx-auto"
+  >
     <div>
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Appointments ({{ 23 }})</p>
+        <p class="text-xl font-bold">Appointments ({{ appointmentsCount || 0 }})</p>
         <router-link
+          v-if="$userCan('appointments.write')"
           :to="{ name: 'SelectPatient' }"
           tag="cv-button"
           class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
           kind="primary"
         >
           Add new appointment
-          <img class="ml-4 w-5 h-5" src="@/assets/img/add 1.svg" alt="" />
+          <Add class="ml-4 w-5 h-5 text-white" />
         </router-link>
       </div>
 
@@ -20,21 +23,28 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import AppointmentsTable from '@/components/appointments/AppointmentsTable'
+
 export default {
   name: 'Appointments',
 
   components: { AppointmentsTable },
 
-  mounted() {
-      this.getAppointments()
+  computed: {
+    ...mapState({
+      appointmentsCount: (state) => state.appointments.appointmentsCount,
+    }),
   },
 
   methods: {
-      ...mapActions({
-        getAppointments: 'appointments/getAppointments',
-      }),
+    ...mapActions({
+      refresh: 'appointments/refreshCurrentAppointment',
+    }),
+    createAppointment() {
+      this.refresh()
+      this.$router.push({ name: 'SelectPatient' })
+    },
   },
 }
 </script>

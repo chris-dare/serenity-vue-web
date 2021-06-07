@@ -1,32 +1,47 @@
 <template>
-  <Dropdown :visible.sync="visible" with-shadow>
+  <Dropdown
+    :visible.sync="visible"
+    with-shadow
+  >
     <cv-button
+      slot="label"
       size="field"
       kind="primary"
       class="px-4 bg-black hover:bg-black mr-2"
       @click="visible = !visible"
-      slot="label"
     >
       Add new
-      <img src="@/assets/img/chevron--sort--down 1.svg" class="ml-2" alt="" />
+      <img
+        src="@/assets/img/chevron--sort--down 1.svg"
+        class="ml-2"
+        alt=""
+      >
     </cv-button>
     <div class="w-52 bg-white">
-      <router-link
-        class="flex items-center justify-between p-4 hover:bg-gray-200 cursor-pointer"
+      <div
         v-for="(option, index) in options"
         :key="index"
-        @click="visible = !visible"
-        :to="{name: option.path}"
+        :to="{ name: option.path }"
         tag="div"
+        @click="onClick(option)"
       >
-        <p>{{ option.label }}</p>
         <div
-          class="flex justify-center items-center rounded-full h-4 w-4 mr-3"
-          :class="option.color"
+          v-if="!option.permission || $userCan(option.permission)"
+          class="flex items-center justify-between p-4 hover:bg-gray-200 cursor-pointer"
         >
-          <component :is="option.component" class="w-3 h-3 text-black" />
+          <p :class="{'text-orange text-lg': option.noIcon}">{{ option.label }}</p>
+          <div
+            v-if="!option.noIcon"
+            class="flex justify-center items-center rounded-full h-4 w-4 mr-3"
+            :class="option.color"
+          >
+            <component
+              :is="option.component"
+              class="w-3 h-3 text-black"
+            />
+          </div>
         </div>
-      </router-link>
+      </div>
     </div>
   </Dropdown>
 </template>
@@ -37,52 +52,99 @@ import Microscope from '@carbon/icons-vue/es/microscope/32.js'
 import Medication from '@carbon/icons-vue/es/medication/32.js'
 import DicomOverlay from '@carbon/icons-vue/es/watson-health/dicom--overlay/32'
 import StudySkip from '@carbon/icons-vue/es/watson-health/study--skip/32'
+import Cursor32 from '@carbon/icons-vue/es/watson-health/3D-cursor--alt/32'
 
 export default {
   name: 'AddNewDropdown',
 
-  components: { HealthCross, Microscope, Medication, DicomOverlay, StudySkip },
+  components: { HealthCross, Microscope, Medication, DicomOverlay, StudySkip, Cursor32 },
 
   data() {
     return {
       visible: false,
+      admitModal: false,
     }
   },
 
   computed: {
     options() {
       return [
+        // {
+        //   label: 'Admit Patient',
+        //   component: 'Cursor32',
+        //   color: 'bg-tetiary',
+        //   slug: 'admit',
+        //   permission: null,
+        //   hide: this.workspaceType === 'IPD',
+        // },
         {
-          label: 'Vitals Information',
+          label: 'Capture vitals',
           component: 'HealthCross',
           color: 'bg-tetiary',
-          path: 'Vitals',
+          // path: { name: 'Vitals', query: {id: this.$route.params.id} },
+          value: 'vitals',
+          permission: 'vitals.write',
         },
         {
           label: 'Diagnostic test',
           component: 'Microscope',
           color: 'bg-tetiary',
-          path: 'Vitals',
+          slug: 'test',
+          permission: null,
+          value: 'diagnostic',
         },
         {
           label: 'Medication',
           component: 'Medication',
           color: 'bg-tetiary',
-          path: 'Vitals',
+          slug: 'medication:request',
+          permission: 'medication.orders.write',
         },
         {
           label: 'Note',
           component: 'DicomOverlay',
           color: 'bg-tetiary',
-          path: 'Vitals',
+          slug: 'notes',
+          permission: null,
         },
         {
           label: 'Referral',
           component: 'StudySkip',
           color: 'bg-tetiary',
-          path: 'Vitals',
+          slug: 'referral',
+          permission: null,
+        },
+        {
+          label: 'Mark as deceased',
+          noIcon: true,
+          slug: 'deceased',
+          permission: null,
         },
       ]
+    },
+  },
+
+  methods: {
+    onClick(option) {
+      if (option.path) {
+        this.$router.push(option.path)
+        return
+      }
+
+      switch (option.value) {
+      case 'diagnostic':
+        this.$trigger('service:request:open', 'laboratory-procedure')
+        break
+      
+      case 'vitals':
+        this.$trigger('capture:vitals:open')
+        break
+      
+      default:
+        this.$trigger(`profile:${option.slug}:open`)
+        break
+      }
+      this.visible = false
     },
   },
 }

@@ -1,11 +1,14 @@
-<template>
-  <EditableCard :title="title">
+<template functional>
+  <EditableCard :title="props.title">
     <div>
-      <div class="grid grid-cols-2 gap-6 text-xs my-5 w-full">
-        <div v-for="(field, index) in fields" :key="index">
-            <p class="text-secondary text-xs mb-1">{{field.label}}</p>
-            <p class="text-xs font-bold">{{ field.value || 'N/A' }}</p>
-        </div>
+      <div :class="[`grid grid-cols-${props.cols} gap-6 text-xs my-5 w-full`]">
+        <InfoBlock
+          v-for="(field, index) in props.fields"
+          :key="index"
+          :label="field.label"
+          :description="field.value || '-'"
+          :loading="props.loading"
+        />
       </div>
     </div>
   </EditableCard>
@@ -16,20 +19,22 @@ export default {
   name: 'PatientSummaryCard',
 
   props: {
-    patient: {
-      type: Object,
-      default: () => {},
-    },
     title: {
-        type: String,
-        default: '',
+      type: String,
+      default: '',
     },
     fields: {
-        type: Array,
-        default: () => [],
+      type: Array,
+      default: () => [],
+    },
+    cols: {
+      type: Number,
+      default: 2,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
   },
 }
 </script>
-
-<style></style>

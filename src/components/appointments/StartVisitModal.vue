@@ -1,95 +1,89 @@
 <template>
   <cv-modal
-    class="se-no-title-modal"
     close-aria-label="Close"
-    :visible="modalVisible"
+    :visible="visible"
     size="sm"
+    @modal-hidden="visible = false"
   >
+    <template slot="title">
+      <h1>Start patient visit</h1>
+    </template>
     <template slot="content">
       <div>
-        <p class="my-2 font-semibold">Start patient visit</p>
         <p>Find patient</p>
 
-        <cv-search
-          placeholder="Search for patient, enter name or MR number"
+        <Search
           v-model="search"
+          placeholder="Search for patient, enter name or MR number"
           class="my-4"
-        ></cv-search>
+        />
 
-        <cv-data-table
-          :columns="columns"
-          :data="filteredPatients"
+        <DataTable
           ref="table"
+          :columns="columns"
+          :pagination="pagination"
+          :data="filteredData"
+          :loading="loading"
+          @pagination="actionOnPagination"
         >
-        <template slot="data">
-          
-          <cv-data-table-row
-            v-for="(row, rowIndex) in filteredPatients"
-            :key="`${rowIndex}`"
-            :value="`${rowIndex}`"
-          >
+          <template #default="{ row }">
             <cv-data-table-cell>
               <div class="flex items-center py-2">
-                <img
-                  class="w-12 h-12 rounded-full mr-3"
-                  :src="row.image"
-                  alt=""
+                <InfoImageBlock
+                  :label="row.name"
+                  :description="row.gender_age_description"
+                  size="base"
                 />
-                <div>
-                  <p class="text-sm">{{ row.name }}</p>
-                  <p class="text-secondary text-xs">
-                    {{ row.gender }}, {{ row.age }} years
-                  </p>
-                </div>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p class="text-sm">{{ row.recent }}</p>
+                <p>{{ $utils.hasData(row.next_appointment, 'start') ? $date.formatDate(row.next_appointment.start) : 'No appointment' }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p class="text-sm">{{ $faker().random.boolean() ? 'Cash' : 'Corporate' }}</p>
+                <p>{{ 'Cash' }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <SeButton @click="$router.push(`/patients/${row.id}`)">Start Visit</SeButton>
+              <SeButton @click="save(row)">Start Visit</SeButton>
             </cv-data-table-cell>
-          </cv-data-table-row>
-        </template>
-        </cv-data-table>
-        <div class="w-full h-28 bg-white flex items-center justify-center" v-if="!filteredPatients">
-            No data
-        </div>
+          </template>
+        </DataTable>
       </div>
     </template>
   </cv-modal>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
+import DataMixin from '@/mixins/data'
+import isToday from 'date-fns/isToday'
+
 export default {
   name: 'StartVisitModal',
 
-  props: {
-    visible: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  mixins: [DataMixin],
 
   data() {
     return {
       search: '',
       columns: ['Patient', 'Appointment', 'Payment Type', 'Action'],
+      visible: false,
     }
   },
 
   computed: {
     ...mapState({
-      patients: (state) => state.patients.patients,
+      user: state => state.auth.user,
     }),
+  
+    ...mapGetters({
+      data: 'patients/patients',
+      getAppointment: 'appointments/getPatientAppointment',
+    }),
+
     filteredPatients() {
       return this.patients.filter(
         (data) =>
@@ -97,13 +91,61 @@ export default {
           data.name.toLowerCase().includes(this.search.toLowerCase()),
       )
     },
-    modalVisible: {
-      set(val) {
-        this.$emit('visible:update', val)
-      },
-      get() {
-        return this.visible
-      },
+  },
+
+  events: {
+    'visit:start:open': function(){
+      this.visible = true
+    },
+    'visit:start:close': function(){
+      this.visible = false
+    },
+  },
+
+  beforeMount() {
+    this.pageSizes = [5, 10, 15]
+    this.pageLength = 5
+    this.paginate = true
+    this.searchTerms = ['name', 'mr_number', 'mobile', 'gender']
+    this.refresh(false)
+  },
+
+  methods: {
+    ...mapActions({
+      getData: 'patients/getPatients',
+      addToCurrentAppointment: 'appointments/addToCurrentAppointment',
+      refreshCurrentAppointment: 'appointments/refreshCurrentAppointment',
+      createVisit: 'visits/createVisit',
+    }),
+
+    save(patient) {
+      if (patient.next_appointment && isToday(new Date(patient.next_appointment.start))) {
+        this.start(patient)
+      } else {
+        this.refreshCurrentAppointment()
+        this.addToCurrentAppointment({ patient })
+        this.visible = false
+        this.$trigger('book:appointment:open')
+      }
+    },
+
+    async start(patient) {
+      try {
+        this.loading = true
+        await this.createVisit({
+          patient: patient.id,
+          appointment: patient.next_appointment.id,
+          status: 'planned',
+          assigned_to: patient.next_appointment.practitioner_role,
+          visit_class: 'ambulatory',
+          arrived_at: this.$date.queryNow(),
+        })
+        this.visible = false
+        this.loading = false
+        this.$toast.open({ message: 'The visit has started' })
+      } catch (error) {
+        this.loading = false
+      }
     },
   },
 }

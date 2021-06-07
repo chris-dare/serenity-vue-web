@@ -2,8 +2,9 @@
   <cv-modal
     class="se-no-title-modal"
     close-aria-label="Close"
-    :visible="modalVisible"
+    :visible="visible"
     size="xs"
+    @modal-hidden="close"
   >
     <template slot="content">
       <div>
@@ -15,87 +16,48 @@
             <Edit class="w-3 h-3 text-serenity-primary" />
           </div>
         </div>
-        <div class="border-b border-solid border-subtle py-3">
-          <p class="text-secondary mb-4">Patient</p>
-          <div class="flex items-center">
-            <img
-              class="w-10 h-10 rounded-full mr-3"
-              :src="$faker().image.image()"
-              alt=""
-            />
-            <div>
-              <p class="text-black">{{ $faker().name.findName() }}</p>
-              <p class="text-secondary">
-                {{ $faker().name.gender() }},
-                {{ $utils.createRandom(100) }} years
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="border-b border-solid border-subtle py-3">
-          <p class="text-secondary mb-4">Clinic and Services</p>
-          <div class="flex items-center">
-            <div
-              class="w-10 h-10 flex items-center justify-center rounded-full bg-serenity-primary mr-3"
+        <AppointmentDetail :appointment="appointment" />
+        
+        <div class="flex items-center justify-center flex-col space-y-3 mt-6">
+          <div
+            v-if="canStartVisit"
+            class="w-full space-y-3"
+          >
+            <SeButton
+              full
+              @click="start"
             >
-              <Diagnostic class="w-7 h-7 text-white" />
-            </div>
-            <div>
-              <p class="text-black font-semibold mb-1">Diagnostics</p>
-              <p class="text-secondary mb-1">
-                Service:
-                <span class="text-primary"> SARS-COV 2 Laboratory test</span>
-              </p>
-              <p class="text-secondary">
-                Price:
-                <span class="text-primary">GHS 1.00 (Tier:express)</span>
-              </p>
-            </div>
+              Start Visit
+            </SeButton>
+            <SeButton
+              full
+              variant="secondary"
+              @click="reschedule"
+            >
+              Reschedule Appointment
+            </SeButton>
           </div>
-        </div>
-        <div class="border-b border-solid border-subtle py-3">
-          <p class="text-secondary mb-4">Date and Doctor</p>
-          <div class="flex">
-            <img
-              class="w-10 h-10 rounded-full mr-3"
-              :src="$faker().image.image()"
-              alt=""
-            />
-            <div>
-              <p class="text-black font-semibold mb-1">
-                {{ $faker().name.findName() }}
-              </p>
-              <p class="text-secondary mb-2">
-                General Practitioner
-              </p>
-              <p class="text-secondary">
-                Appointment time:
-                <span class="text-primary">10/12, 10:30am</span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="border-b border-solid border-subtle py-3">
-          <p class="text-secondary mb-2">Appointment notes:</p>
-          <div class="flex items-center">
-            <p>This is a note...</p>
-          </div>
-        </div>
-        <div class="flex items-center justify-center flex-col">
-          <cv-button
-            kind="primary"
-            @click="close"
-            class="my-3 flex items-center justify-center bg-serenity-primary px-12 w-full"
-            >Print Bill</cv-button
+          <SeButton
+            v-else
+            full
+            @click="print"
           >
-          <cv-button
-            class="border-danger flex items-center justify-center mb-3 px-12 text-danger hover:text-white focus:bg-danger hover:bg-danger w-full"
-            kind="tertiary"
-            >Cancel Appointment</cv-button
+            Print Bill
+          </SeButton>
+          <SeButton
+            v-if="!appointment.isCancelled"
+            variant="danger-outline"
+            full
+            @click="cancel"
           >
-          <router-link :to="{ name: 'Patients' }" class="underline text-primary"
-            >Close</router-link
+            Cancel Appointment
+          </SeButton>
+          <router-link
+            :to="{ name: 'Patients' }"
+            class="underline text-primary"
           >
+            Close
+          </router-link>
         </div>
       </div>
     </template>
@@ -103,35 +65,93 @@
 </template>
 
 <script>
-import Diagnostic from '@carbon/icons-vue/es/microscope/32'
-import Edit from '@carbon/icons-vue/es/edit/32'
+import AppointmentDetail from '@/components/appointments/AppointmentDetail'
+import { mapState, mapActions } from 'vuex'
+import isToday from 'date-fns/isToday'
+
 export default {
   name: 'AppointmentSummaryModal',
 
-  components: { Diagnostic, Edit },
+  components: {  AppointmentDetail },
 
   props: {
-    visible: {
-      type: Boolean,
-      default: false,
+    appointment: {
+      type: Object,
+      default: () => {},
+    },
+  },
+
+  data() {
+    return {
+      visible: false,
+    }
+  },
+
+  events: {
+    'appointment:summary:open': function() {
+      this.visible = true
+    },
+    'appointment:summary:edit': function(data) {
+      this.visible = true
+      this.form.notes = data.params[0]
+    },
+    'appointment:summary:close': function() {
+      this.close()
     },
   },
 
   computed: {
-    modalVisible: {
-      set(val) {
-        this.$emit('visible:update', val)
-      },
-      get() {
-        return this.visible
-      },
+    ...mapState({
+      workspaceType: (state) => state.global.workspaceType,
+    }),
+
+    canStartVisit() {
+      return isToday(new Date(this.appointment.start))
     },
   },
 
   methods: {
+    ...mapActions({
+      createVisit: 'visits/createVisit',
+      setCurrentAppointment: 'appointments/setCurrentAppointment',
+    }),
+
     close() {
-      this.$emit('print')
-      this.modalVisible = false
+      this.visible = false
+    },
+    print() {
+      this.$trigger('billing:details:open')
+      this.visible = false
+    },
+
+    cancel() {
+      this.$trigger('notes:open')
+      this.visible = false
+    },
+
+    reschedule() {
+      this.setCurrentAppointment(this.appointment)
+      this.$router.push({name: 'AppointmentUpdate', params: { id: this.appointment.id }, query: {type: 'reschedule'}})
+    },
+
+    async start() {
+      try {
+        this.loading = true
+        await this.createVisit({
+          patient: this.appointment.patient.id,
+          appointment: this.appointment.id,
+          status: 'planned',
+          // need appointment handler
+          assigned_to: this.appointment.id,
+          visit_class: 'ambulatory',
+          arrived_at: this.$date.queryNow(),
+        })
+        this.visible = false
+        this.loading = false
+        this.$toast.open({ message: 'The visit has started' })
+      } catch (error) {
+        this.loading = false
+      }
     },
   },
 }

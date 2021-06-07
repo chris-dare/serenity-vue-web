@@ -1,6 +1,5 @@
 import axios from 'axios'
 import store from '@/store'
-import router from '@/router'
 
 const http = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
@@ -23,45 +22,31 @@ http.interceptors.request.use(
 )
 
 // Refresh JWT if 401 is returned
-http.interceptors.response.use(undefined, (error) => {
+http.interceptors.response.use(undefined, async (error) => {
   const errorResponse = error.response
-  if (
-    errorResponse.status === 401 &&
-    errorResponse.data.error === 'Token expired' &&
-    errorResponse.config &&
-    !errorResponse.config.__isRetryRequest
-  ) {
-    return new Promise((resolve, reject) => {
-      store
-        .dispatch('auth/refresh')
-        .then(({ token }) => {
-          if (!token) {
-            router.push({
-              name: 'AuthLogin',
-              params: {
-                logout: true,
-              },
-            })
-          }
+  if (errorResponse && errorResponse.status === 401 &&
+    errorResponse.data.code === 'token_not_valid') {
+    await store.dispatch('auth/refresh')
 
-          errorResponse.config.__isRetryRequest = true
-          errorResponse.config.headers.Authorization = store.getters['auth/authorizationHeader']
-          resolve(axios(errorResponse.config))
-          return true
-        })
-        .catch((errored) => {
-          router.push({
-            name: 'AuthLogin',
-            params: {
-              logout: true,
-            },
-          })
-          reject(errored)
-        })
-    })
+    errorResponse.config.__isRetryRequest = true
+    errorResponse.config.headers.Authorization =
+            store.getters['auth/authorizationHeader']
+    return Promise.resolve(axios(errorResponse.config))
+
   }
 
   return Promise.reject(errorResponse)
 })
 
+const authHttp = axios.create({
+  baseURL: process.env.VUE_APP_BASE_URL,
+})
+
+authHttp.interceptors.response.use(undefined, (error) => {
+  const errorResponse = error.response
+  return Promise.reject(errorResponse)
+})
+
 export default http
+
+export { authHttp }

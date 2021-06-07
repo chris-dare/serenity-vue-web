@@ -16,37 +16,51 @@
           label="Where are you now?"
           class="se-custom-input mb-8"
         >
-          <cv-select-option disabled selected hidden>Location</cv-select-option>
-          <cv-select-option value="network"
-            >Airport Residential</cv-select-option
+          <cv-select-option
+            disabled
+            selected
+            hidden
           >
+            Location
+          </cv-select-option>
+          <cv-select-option
+            value="network"
+          >
+            Airport Residential
+          </cv-select-option>
         </cv-select>
         <cv-select
           v-model="form.location"
           label="Which clinic would you like to start in?"
           class="se-custom-input mb-8"
         >
-          <cv-select-option disabled selected hidden
-            >Choose an option</cv-select-option
+          <cv-select-option
+            disabled
+            selected
+            hidden
           >
-          <cv-select-option value="network"
-            >Airport Residential</cv-select-option
+            Choose an option
+          </cv-select-option>
+          <cv-select-option
+            value="network"
           >
+            Airport Residential
+          </cv-select-option>
         </cv-select>
         <div class="mb-8">
           <div class="bx--label">Are you on shift now?</div>
           <cv-radio-group vertical>
             <cv-radio-button
+              v-model="form.check"
               name="group-1"
               label="Yes"
               value="yes"
-              v-model="form.check"
             />
             <cv-radio-button
+              v-model="form.check"
               name="group-1"
               label="No"
               value="no"
-              v-model="form.check"
             />
           </cv-radio-group>
         </div>
@@ -54,7 +68,11 @@
           <div class="bx--label">When is your shift ending?</div>
           <DateTimePicker v-model="form.date" />
         </div>
-        <SeButton @click="visible = !visible" full label="Get Started" />
+        <SeButton
+          full
+          label="Get Started"
+          @click="visible = !visible"
+        />
       </div>
     </template>
   </cv-modal>

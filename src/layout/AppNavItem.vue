@@ -1,26 +1,16 @@
-<template>
-  <div>
-    <router-link tag="div" :to="to" class="flex justify-center items-center h-12 hover:bg-serenity-primary-highlight relative" exact-active-class="bg-serenity-primary-highlight">
+<template functional>
+  <div class="w-full">
+    <router-link
+      tag="div"
+      :to="props.to"
+      class="flex items-center h-12 w-full hover:bg-serenity-primary-highlight relative cursor-pointer"
+      exact-active-class="bg-serenity-primary-highlight"
+    >
       <slot />
-      <div v-if="hasNotifications" class="w-2 h-2 rounded-full bg-yellow-400 absolute right-1"></div>
+      <div
+        v-if="props.hasNotifications"
+        class="w-2 h-2 rounded-full bg-yellow-400 absolute right-1"
+      />
     </router-link>
   </div>
 </template>
-
-<script>
-export default {
-    name: 'AppNavItem',
-
-    props: {
-        to: {
-            type: String,
-            default: '/',
-        },
-
-        hasNotifications: {
-            type: Boolean,
-            default: false,
-        },
-    },
-}
-</script>

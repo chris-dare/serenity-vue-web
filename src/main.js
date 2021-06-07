@@ -3,35 +3,47 @@ import App from './App.vue'
 // import './registerServiceWorker'
 import router from './router'
 import store from './store'
-import '@/assets/styles/app.scss'
-import 'carbon-components/css/carbon-components.css'
-import CarbonComponentsVue from '@carbon/vue/src/index'
-import CarbonCharts from '@carbon/charts-vue'
+
 import DatePlugin from '@/services/date'
 import UtilsPlugin from '@/services/utils'
+import CurrencyPlugin from '@/services/currency'
+import PermissionsPlugin from '@/services/roles'
 import Vuelidate from 'vuelidate'
 import VuePageTransition from 'vue-page-transition'
+import HasPermissionDirective from '@/plugins/has-permission'
+import { registerBaseComponents } from '@/services/globals'
 
+// all vue plugins
+import '@/plugins'
+
+// global mixins
+import '@/mixins'
+
+// global directives
+import '@/directives'
 
 import '@/filters'
-import '@/globalComponents'
+import 'vue-multiselect/dist/vue-multiselect.min.css'
 import '@/assets/styles/tailwind.scss'
 import '@carbon/charts/styles.css'
+import '@/assets/styles/app.scss'
 
-Vue.use(CarbonComponentsVue)
+
+Vue.directive('has-permission', HasPermissionDirective)
+
 Vue.use(require('vue-faker'))
-Vue.use(CarbonCharts)
+
 Vue.use(DatePlugin)
 Vue.use(UtilsPlugin)
+Vue.use(CurrencyPlugin)
+Vue.use(PermissionsPlugin)
 Vue.use(Vuelidate)
 Vue.use(VuePageTransition)
-
-
-
+registerBaseComponents(Vue)
 Vue.config.productionTip = false
 
 new Vue({
   router,
   store,
-  render: h => h(App),
+  render: (h) => h(App),
 }).$mount('#app')

@@ -1,46 +1,81 @@
 <template>
   <div class="mt-2 grid grid-cols-2 gap-2">
-    <PatientGeneralInfoCard :patient="patient" />
-    <PatientEmergencyContactCard :patient="patient" />
-    <PatientSocialInfoCard :patient="patient" />
-    <PatientSummaryCard title="Payment Method" :fields="summaryFields" />
+    <PatientGeneralInfoCard
+      :patient="patient"
+      :vitals="vitals"
+    />
+
+    <PatientSummaryCard
+      title="Emergency Contact"
+      :fields="emergencyFields"
+    />
+    <PatientSummaryCard
+      title="Social Information"
+      :fields="socialFields"
+    />
+    
+    <PatientSummaryCard
+      title="Payment Method"
+      :fields="summaryFields"
+    />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import PatientGeneralInfoCard from '@/components/patients/PatientGeneralInfoCard'
-import PatientEmergencyContactCard from '@/components/patients/PatientEmergencyContactCard'
 import PatientSummaryCard from '@/components/patients/PatientSummaryCard'
-import PatientSocialInfoCard from '@/components/patients/PatientSocialInfoCard'
-// import { createPatient } from '@/components/patients'
+
 export default {
   name: 'PatientSummary',
 
   components: {
     PatientGeneralInfoCard,
-    PatientEmergencyContactCard,
     PatientSummaryCard,
-    PatientSocialInfoCard,
   },
 
   computed: {
     ...mapState({
-      patients: (state) => state.patients.patients,
+      patient: (state) => state.patients.currentPatient,
     }),
-    patient() {
-      return this.patients[0]
-    },
+
+    ...mapGetters({
+      vitals: 'encounters/currentEncounterLatestVitals',
+    }),
+
     isSelected() {
       return (index) => this.initialSelected === index
     },
-    summaryFields() {
+  
+    emergencyFields() {
+      if(!this.patient.emergency_contact)return []
       return [
-        { label: 'Method', value: this.$faker().lorem.word() },
-        { label: 'Payment Network', value: this.$faker().lorem.word() },
-        { label: 'Phone Number', value: this.$faker().lorem.word() },
-        { label: 'Name on Account', value: this.$faker().lorem.word() },
-        { label: 'Secondary Method', value: this.$faker().lorem.word() },
+        { label: 'First name', value: this.patient.emergency_contact.first_name },
+        { label: 'Last name', value: this.patient.emergency_contact.last_name },
+        { label: 'Contact', value: this.patient.emergency_contact.telecom?.value },
+        { label: 'Address', value: this.patient.emergency_contact.emergency_contact_address_description },
+      ]
+    },
+
+    socialFields() {
+      if(!this.patient)return []
+      return [
+        { label: 'Marital Status', value: this.patient.marital_status },
+        { label: 'Religion', value: this.patient.religion },
+        { label: 'Language', value: this.patient.language },
+        { label: 'Occupation', value: this.patient.occupation },
+        { label: 'Company/Employer', value: this.patient.employer},
+        { label: 'Office Number', value: this.patient.office_phone_number },
+      ]
+    },
+  
+    summaryFields() {
+      if(!this.patient.payment_method)return []
+      return [
+        { label: 'Method', value: this.patient.payment_method.payment_type },
+        { label: 'Payer', value: this.patient.payment_method.payer },
+        { label: 'Payment Network', value: this.patient.payment_method.payment_details.payment_provider },
+        { label: 'Phone Number', value: this.patient.payment_method.payment_details.msisdn },
       ]
     },
   },

@@ -1,0 +1,5 @@
+export const SET_SCHEDULES = 'Set schedules'
+export const DELETE_SCHEDULE = 'Delete schedules'
+export const UPDATE_SCHEDULE = 'Update schedules'
+export const ADD_SCHEDULE_DATA = 'Add schedule data'
+export const SET_SCHEDULE_DATA = 'Set schedule data'
