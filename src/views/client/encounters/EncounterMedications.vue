@@ -163,44 +163,7 @@
         class="py-8"
       >
         <p class="mb-2 font-semibold">Previous medications</p>
-        <DataTable
-          :auto-width="true"
-          small
-          :data="currentEncounterMedicationRequests"
-          no-data-label="No medication available"
-          :columns="columns"
-        >
-          <template #default="{row}">
-            <cv-data-table-cell>
-              <p class="text-serenity-primary ">{{ $utils.getFirstData(row.medication_detail) }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ $utils.getFirstData(row.medication_request_category) }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ $utils.getFirstData(row.medication_request_dosage_instruction, 'period') }} {{ $utils.getFirstData(row.medication_request_dosage_instruction, 'period_unit') }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ $utils.getFirstData(row.medication_request_dosage_instruction, 'frequency') }} {{ $utils.getFirstData(row.medication_request_dosage_instruction, 'frequency_unit') }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div class="flex items-center space-x-2">
-                <Edit
-                  class="w-4 h-4 cursor-pointer"
-                  @click="$router.push({ name: 'EditEncounterMedication', params: { medicationId: row.id } })"
-                />
-                <Trash
-                  class="w-4 h-4 cursor-pointer"
-                  @click="confirmDelete(row)"
-                />
-              </div>
-            </cv-data-table-cell>
-          </template>
-        </DataTable>
+        <EncounterMedicationTable />
       </div>
     </SeForm>
 
@@ -222,10 +185,6 @@
         Care plan
       </SeButton>
     </div>
-    <ConfirmDeleteModal
-      :loading="deleteLoading"
-      @delete="removeMedication"
-    />
   </div>
 </template>
 
@@ -235,9 +194,12 @@ import Add from '@carbon/icons-vue/es/chevron--right/32'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 import unsavedChanges from '@/mixins/unsaved-changes'
+import EncounterMedicationTable from '@/components/patients/encounters/EncounterMedicationTable'
 
 export default {
   name: 'EncounterMedications',
+
+  components: { EncounterMedicationTable },
 
   mixins: [unsavedChanges],
 
@@ -369,26 +331,9 @@ export default {
       }
     },
 
-    confirmDelete(medication) {
-      this.$trigger('confirm:delete:open', { data: medication.id, label: 'Are you sure you want to delete this medication?' })
-    },
+    
 
-    async removeMedication(id) {
-      this.deleteLoading = true
-      try {
-        await this.deleteMedicationRequest(id).then(() => {
-          this.$toast.open({
-            message: 'Medication successfully deleted',
-          })
-        })
-        this.deleteLoading = false
-        this.$trigger('confirm:delete:close')
-       
-      /* eslint-disable-next-line */
-      } catch (error) {
-      }
-      this.deleteLoading = false
-    },
+    
 
     cancelUpdate() {
       this.$router.go(-1)

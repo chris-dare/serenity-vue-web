@@ -13,6 +13,8 @@ export default {
     dispatch('resources/getLanguages', null, { root:true })
     dispatch('resources/getMobileMoneyVendors', null, { root:true })
     dispatch('resources/getEncounterStatuses', null, { root:true })
+    dispatch('resources/getEncounterClasses', null, { root:true })
+
   },
 
   initApp({dispatch}) {

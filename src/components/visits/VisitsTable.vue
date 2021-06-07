@@ -51,7 +51,7 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ row.visit_class | capitalize }}</p>
+            <p>{{ getEncounterClassDisplayName(row.visit_class) }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -82,7 +82,7 @@
 
 <script>
 import DataMixin from '@/mixins/data'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'VisitsTable',
@@ -121,6 +121,10 @@ export default {
       visits: (state) => state.visits.visits,
       practitionerVisits: (state) => state.visits.practitionerVisits,
       provider: (state) => state.auth.provider,
+    }),
+
+    ...mapGetters({
+      getEncounterClassDisplayName: 'resources/getEncounterClassDisplayName',
     }),
 
     data() {

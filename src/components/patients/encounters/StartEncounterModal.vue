@@ -82,10 +82,12 @@ export default {
       codes: state => state.resources.encounterClasses,
       services: state => state.services.services,
       provider: state => state.auth.provider,
+      user: state => state.auth.user,
     }),
 
     ...mapGetters({
       patientNextAppointment: 'appointments/patientNextAppointment',
+      practitionerRoleId: 'auth/practitionerRoleId',
     }),
   },
 
@@ -123,7 +125,7 @@ export default {
 
       let form = { patient: this.$route.params.id, ...this.form }
       // TODO
-      // form.encounter_participant = [{ practitioner: this.provider.id }]
+      // form.encounter_participant = [{ practitioner: this.practitionerRoleId, type: 'PRIMARY_PERFORMER' }]
 
       try {
         this.loading = true

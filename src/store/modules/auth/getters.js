@@ -24,6 +24,8 @@ export default {
     }): []
   },
 
+  practitionerRoleId: state => get(state.provider, 'practitionerRoleId'),
+
   userRoles: (state, getters) => {
     if (!getters.userPermissions) {
       return []
