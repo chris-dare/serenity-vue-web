@@ -87,7 +87,12 @@ import Checkmark from '@carbon/icons-vue/es/checkmark/32'
 export default {
   name: 'AddPrescriptionForm',
 
-  props: ['step'],
+  props: {
+    step: {
+      type: [String, Number],
+      default: null,
+    },
+  },
 
   data() {
     return {

@@ -62,7 +62,12 @@ import Checkmark from '@carbon/icons-vue/es/checkmark/32'
 export default {
   name: 'PrintBillForm',
 
-  props: ['step'],
+  props: {
+    step: {
+      type: [String, Number],
+      default: null,
+    },
+  },
 
   data() {
     return {

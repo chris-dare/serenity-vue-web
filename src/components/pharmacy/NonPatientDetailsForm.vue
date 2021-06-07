@@ -65,7 +65,18 @@ import Checkmark from '@carbon/icons-vue/es/checkmark/32'
 export default {
   name: 'NonPatientDetailsForm',
 
-  props: ['step', '_form'],
+  props: {
+    step: {
+      type: [String, Number],
+      default: null,
+    },
+
+    // eslint-disable-next-line vue/prop-name-casing
+    _form: {
+      type: Object,
+      default: null,
+    },
+  },
 
   data() {
     return {
