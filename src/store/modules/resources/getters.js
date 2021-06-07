@@ -33,4 +33,8 @@ export default {
   medications: () => {
     return meds[0].split(', ')
   },
+
+  getEncounterClassDisplayName: (state) => (code) => {
+    return state.encounterClasses.find(enc => enc.code === code)?.display
+  },
 }

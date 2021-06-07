@@ -43,7 +43,6 @@
     <CaptureVitalsModal />
     <EndVisitConfirmationModal />
     <BookAppointmentModal />
-    <ActionsModal />
     <MedicalHistoryModal />
   </AppStatePage>
 </template>

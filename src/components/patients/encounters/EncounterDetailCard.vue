@@ -84,7 +84,9 @@
       <ToggleList
         title="Medications / Treatment Plan"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
-      />
+      >
+        <EncounterMedicationTable hide-action />
+      </ToggleList>
       <ToggleList
         title="Notes"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
@@ -118,6 +120,7 @@ export default {
     EncounterDiagnosticReports,
     SocialHistoryDetails: () => import('@/components/patients/details/SocialHistoryDetails'),
     EncounterReviewSystemTable: () => import(/* webpackPrefetch: true */ './EncounterReviewSystemTable'),
+    EncounterMedicationTable: () => import(/* webpackPrefetch: true */ '@/components/patients/encounters/EncounterMedicationTable'),
   },
 
   computed: {

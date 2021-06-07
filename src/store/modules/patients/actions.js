@@ -41,7 +41,6 @@ export default {
     dispatch('getDiagnosticReports')
     dispatch('encounters/getEncounters', id , { root:true })
     dispatch('patientAllergies/getAllergies', id , { root:true })
-    dispatch('resources/getEncounterClasses', null, { root:true })
     dispatch('resources/getEncounterStatuses', null, { root:true })
     dispatch('resources/getObservationUnitTypes', null, { root:true })
     dispatch('resources/getVitalsUnitTypes', null, { root:true })
