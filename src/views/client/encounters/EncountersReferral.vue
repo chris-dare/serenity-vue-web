@@ -3,9 +3,9 @@
     <SeForm class="space-y-8 flex-1">
       <p class="font-semibold">Patient Referral</p>
 
-      <EncounterReferralForm />
+      <EncounterReferralForm :referral="referral" />
 
-      <div>
+      <div v-if="mode == 'create'">
         <p class="mb-2 font-semibold">Previous Referrals</p>
 
         <DataTable
@@ -22,7 +22,12 @@
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <!-- <p>{{ getSinglePractitioner(row.practitioner) }}</p> -->
+                <p>{{ getSinglePractitionerByRole(row.requester).fullName }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
+                <p>{{ row.recipient ? getSinglePractitionerByRole(row.recipient).fullName : row.recipient_extra_detail }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
@@ -38,6 +43,14 @@
             <cv-data-table-cell>
               <div>
                 <p>{{ row.status | capitalize }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
+                <Edit
+                  class="w-4 h-4 cursor-pointer"
+                  @click="$router.push({ name: 'EditEncounterReferral', params: { referralId: row.id } })"
+                />
               </div>
             </cv-data-table-cell>
           </template>
@@ -66,17 +79,51 @@ export default {
     EncounterReferralForm: () => import(/* webpackPrefetch: true */'@/components/patients/encounters/forms/EncounterReferralForm'),
   },
 
+  props: {
+    referralId: {
+      type: [Number, String],
+      default: null,
+    },
+  },
+
   data() {
     return {
-      columns: ['Date', 'Practitioner', 'Priority', 'Referral Type', 'Status'],
+      columns: ['Date', 'Referrer', 'Referee', 'Priority', 'Referral Type', 'Status', ''],
+      referral: null,
     }
   },
+  
 
   computed: {
     ...mapGetters({
-      getSinglePractitioner: 'practitioners/getSinglePractitioner',
+      getSinglePractitionerByRole: 'practitioners/getSinglePractitionerByRole',
       currentEncounterReferrals: 'encounters/currentEncounterReferrals',
     }),
+
+    mode() {
+      return this.referralId ? 'update' : 'create'
+    },
+  },
+
+  watch: {
+    referralId() {
+      this.init()
+    },
+  },
+
+  methods: {
+    init() {
+      if(this.mode === 'update'){
+        let ref = this.currentEncounterReferrals.find(el => el.id === this.referralId)
+        if (ref.recipient) {
+          ref.recipient = this.getSinglePractitionerByRole(ref.recipient)
+        }
+        
+        this.referral = ref
+      } else {
+        this.referral = null
+      }
+    },
   },
 }
 </script>

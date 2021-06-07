@@ -17,6 +17,8 @@ import {
   DELETE_SERVICE_REQUEST,
   DELETE_MEDICATION_REQUEST,
   DELETE_OBSERVATION,
+  SET_REFERRALS,
+  UPDATE_REFERRAL,
 } from './mutation-types'
 
 export default {
@@ -128,5 +130,21 @@ export default {
 
   [DELETE_OBSERVATION](state, id) {
     state.patientObservations = state.patientObservations.filter((es) => es.id !== id)
+  },
+
+  [SET_REFERRALS](state, patientReferrals) {
+    state.patientReferrals = patientReferrals
+  },
+
+  [UPDATE_REFERRAL](state, referral) {
+    const index = state.patientReferrals.findIndex(a => a.id === referral.id)
+    if (index !== -1) {
+      state.patientReferrals = state.patientReferrals.map(a => {
+        if (a.id === referral.id) return referral
+        return a
+      })
+    } else {
+      state.patientReferrals.push(referral)
+    }
   },
 }

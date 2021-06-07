@@ -9,6 +9,8 @@ export function initialState() {
     patientServiceRequests: [],
     patientObservations: [],
     patientDiagnosticReports: [],
+    patientReferrals: [],
+
   }
 }
 

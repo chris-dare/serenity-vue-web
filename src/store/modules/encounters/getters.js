@@ -40,9 +40,9 @@ export default {
     return state.currentEncounter.encounter_care_plan
   },
 
-  currentEncounterReferrals: state => {
-    if (!state.currentEncounter || !state.currentEncounter.encounter_referral_request) return []
-    return state.currentEncounter.encounter_referral_request
+  currentEncounterReferrals: (state, getters, rootState ) => {
+    if (!rootState.patients.patientReferrals || !state.currentEncounter) return []
+    return rootState.patients.patientReferrals.filter(ref => ref.encounter === state.currentEncounter.id)
   },
 
   currentEncounterDiagnosis: state => {

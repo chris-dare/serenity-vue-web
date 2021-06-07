@@ -415,6 +415,13 @@ const routes = [
             component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncountersReferral.vue'),
             meta: { noPadding: true },
           },
+          {
+            path: 'referral/:referralId',
+            name: 'EditEncounterReferral',
+            component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncountersReferral.vue'),
+            meta: { noPadding: true },
+            props: true,
+          },
         ],
       },
       {
