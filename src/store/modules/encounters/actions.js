@@ -170,38 +170,7 @@ export default {
     }
   },
 
-  async createReferral({ commit, state, rootState }, payload) {
-    try {
-      let encounter = state.currentEncounter
-      
-      const provider = rootState.auth.provider
-      encounter.encounter_referral_request.push(payload)
-      const { data } = await EncountersAPI.update(provider.id, encounter)
-      commit(SET_ENCOUNTER, data)
-      commit(UPDATE_ENCOUNTER, data)
-    } catch (error) {
-      Vue.prototype.$utils.error(error)
-      throw error
-    }
-  },
-
-  async updateReferral({ commit, state, rootState }, payload) {
-    try {
-      let encounter = state.currentEncounter
-      encounter.encounter_referral_request = encounter.encounter_referral_request.map(a => {
-        if (a.id === payload.id) return payload
-        return a
-      })
   
-      const provider = rootState.auth.provider
-      const { data } = await EncountersAPI.update(provider.id, encounter)
-      commit(SET_ENCOUNTER, data)
-
-    } catch (error) {
-      Vue.prototype.$utils.error(error)
-      throw error
-    }
-  },
 
   async updateDiagnosis({ commit, state, rootState}, payload) {
     try {

@@ -1,14 +1,33 @@
 <template>
   <SeForm class="space-y-8">
     <MultiSelect
-      v-model="form.practitioner"
+      v-model="type"
+      :options="['internal_doctor', 'external_doctor']"
+      :custom-label="customLabel"
+      title="Type of referee"
+      :multiple="false"
+      :track-by="null"
+      @select="change"
+    />
+    <MultiSelect
+      v-if="type === 'internal_doctor'"
+      v-model="form.recipient"
       :options="practitioners"
       :multiple="false"
       title="Doctor"
       label="fullName"
       track-by="id"
-      custom-field="id"
     />
+
+    <cv-text-input
+      v-else
+      v-model="form.recipient_extra_detail"
+      class="inherit-full-input pt-4"
+      type="text"
+      label="Doctor"
+      placeholder="Type the name of the doctor to be referred to"
+    />
+
     <MultiSelect
       v-model="form.priority"
       :options="priorities"
@@ -54,12 +73,20 @@ import { required } from 'vuelidate/lib/validators'
 export default {
   name: 'EncounterReferralForm',
 
+  props: {
+    referral: {
+      type: Object,
+      default: null,
+    },
+  },
+
   data() {
     return {
       icon: ChevronRight,
       form: {},
       referralTypes: [ 'CONSULTING_ONLY', 'CONSULTING_WITH_ORDERS', 'TRANSFER_OF_CARE' ],
       loading: false,
+      type: 'internal_doctor',
     }
   },
 
@@ -71,6 +98,7 @@ export default {
 
     ...mapGetters({
       practitioners: 'practitioners/practitioners',
+      practitionerRoleId: 'auth/practitionerRoleId',
     }),
   },
 
@@ -81,16 +109,24 @@ export default {
     },
   },
 
+  watch: {
+    referral(val) {
+      this.type = val.recipient ? 'internal_doctor' : 'external_doctor'
+      this.form = { ...val }
+    },
+  },
+
   methods: {
     ...mapActions({
-      createReferral: 'encounters/createReferral',
-      updateReferral: 'encounters/updateReferral',
+      createReferral: 'patients/createReferral',
+      updateReferral: 'patients/updateReferral',
     }),
 
     submit(reroute = false) {
       this.$v.$touch()
 
       if (this.$v.$invalid) {
+        this.$toast.error('Please fill in the required fields')
         return
       }
 
@@ -99,6 +135,7 @@ export default {
       } else {
         this.form.patient = this.$route.params.id
         this.form.encounter = this.encounter.id
+        this.form.requester = this.practitionerRoleId
         this.save(reroute)
       }
       
@@ -108,7 +145,13 @@ export default {
       this.loading = true
 
       try {
-        await this.createReferral(this.form)
+        let form = { ...this.form  }
+
+        if (this.form.recipient) {
+          form.recipient = this.form.recipient.practitioner_role.id
+        }
+
+        await this.createReferral(form)
         this.loading = false
         this.$toast.open({
           message: 'Referral successfully created',
@@ -124,12 +167,19 @@ export default {
 
     async update() {
       try {
-        await this.updateReferral(this.form)
+        let form = { ...this.form  }
+
+        if (this.form.recipient) {
+          form.recipient = this.form.recipient.practitioner_role.id
+        }
+
+        await this.updateReferral(form)
         this.loading = false
         this.$toast.open({
           message: 'Referral successfully updated',
         })
         this.reset()
+        this.$router.push({ name: 'EncounterReferral', params: { ...this.$route.params }})
       } catch (error) {
         this.loading = false
       }
@@ -141,7 +191,17 @@ export default {
 
     reset() {
       this.$v.$reset()
-      this.form = {}
+      this.$resetData()
+    },
+
+    addTag(tag) {
+      this.form.recipient_extra_detail = tag
+      this.form.recipient = tag
+    },
+
+    change() {
+      this.form.recipient = null
+      this.form.recipient_extra_detail = null
     },
   },
 }

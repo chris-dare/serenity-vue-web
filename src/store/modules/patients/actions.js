@@ -26,6 +26,8 @@ import {
   DELETE_SERVICE_REQUEST,
   DELETE_MEDICATION_REQUEST,
   DELETE_OBSERVATION,
+  UPDATE_REFERRAL,
+  SET_REFERRALS,
 } from './mutation-types'
 
 export default {
@@ -40,8 +42,8 @@ export default {
     dispatch('getNotes', id)
     dispatch('getDiagnosticReports')
     dispatch('encounters/getEncounters', id , { root:true })
-    dispatch('patientAllergies/getAllergies', id , { root:true })
     dispatch('resources/getEncounterStatuses', null, { root:true })
+    dispatch('patients/getReferrals', id , { root:true })
     dispatch('resources/getObservationUnitTypes', null, { root:true })
     dispatch('resources/getVitalsUnitTypes', null, { root:true })
     dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
@@ -364,6 +366,45 @@ export default {
       const provider = rootState.auth.provider
       await ObservationsAPI.delete(provider.id, id)
       commit(DELETE_OBSERVATION, id)
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
+
+  async createReferral({ commit, rootState }, payload) {
+    try {
+      
+      const provider = rootState.auth.provider
+      const { data } = await PatientsAPI.createReferral(provider.id, payload)
+      commit(UPDATE_REFERRAL, data)
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
+  async updateReferral({ commit, rootState }, payload) {
+    try {
+  
+      const provider = rootState.auth.provider
+      const { data } = await PatientsAPI.updateReferral(provider.id, payload)
+      commit(UPDATE_REFERRAL, data)
+
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
+  async getReferrals({ commit, rootState }, patient) {
+    try {
+  
+      const provider = rootState.auth.provider
+      const { data } = await PatientsAPI.getReferrals(provider.id, patient)
+      commit(SET_REFERRALS, data)
+
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error

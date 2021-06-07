@@ -40,4 +40,16 @@ export default {
   getNotes(providerId, patientId) {
     return http.get(`${this.url}${providerId}/encounter-patient-notes`, { params: { patient: patientId } })
   },
+
+  getReferrals(providerId, patient) {
+    return http.get(`${this.url}${providerId}/referral-requests`, { params: { patient } })
+  },
+
+  createReferral(providerId, params) {
+    return http.post(`${this.url}${providerId}/referral-requests`, params)
+  },
+
+  updateReferral(providerId, params) {
+    return http.patch(`${this.url}${providerId}/referral-requests/${params.id}`, params)
+  },
 }
