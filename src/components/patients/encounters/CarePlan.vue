@@ -9,11 +9,6 @@
         :input-message="$utils.validateRequiredField($v, 'description')"
         :rows="5"
       />
-      <DatePicker
-        v-model="date"
-        type="datetimerange"
-        class="se-input-gray"
-      />
       <div class="flex justify-end">
         <SeButton
           :loading="loading"
@@ -40,12 +35,10 @@
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p>{{ $date.formatDate(row.period_start) }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ $date.formatDate(row.period_end) }}</p>
+                <Trash
+                  class="w-4 h-4 cursor-pointer"
+                  @click="remove(row.id)"
+                />
               </div>
             </cv-data-table-cell>
           </template>
@@ -68,6 +61,7 @@
 import { required } from 'vuelidate/lib/validators'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import DateRangeMixin from '@/mixins/date-range'
+import TreatmentPlanModalVue from '../modals/TreatmentPlanModal.vue'
 
 
 export default {
@@ -80,7 +74,7 @@ export default {
     return {
       form: {},
       loading: false,
-      columns: ['Description', 'From', 'To'],
+      columns: ['Description', 'Action'],
     }
   },
 
@@ -106,6 +100,7 @@ export default {
     ...mapActions({
       createCarePlan: 'encounters/createCarePlan',
       updateCarePlan: 'encounters/updateCarePlan',
+      deleteCarePlan: 'encounters/deleteCarePlan',
     }),
 
     submit(reroute= false) {
@@ -124,19 +119,11 @@ export default {
     },
 
     async save(reroute) {
-      let date = this.convertFromDatePickerFormat(this.date)
-
-      this.loading = true
-
-      const form = {
-        description: this.form.description,
-        period_start: date.start,
-        period_end: date.end,
-      }
+      this.loading = TreatmentPlanModalVue
       
 
       try {
-        await this.createCarePlan(form)
+        await this.createCarePlan(this.form)
         this.loading = false
         this.$toast.open({
           message: 'Care Plan successfully added',
@@ -164,6 +151,36 @@ export default {
     close() {
       this.form = {}
       this.$v.$reset()
+    },
+
+    remove(id) {
+      this.$trigger('actions-modal:open', {
+        confirmButtonText: 'Delete',
+        type: 'delete',
+        label: 'Are you sure you want to delete this care plan?',
+        callback: async () => {
+          this.removeCarePlan(id)
+        },
+        cancel: async () => {
+          
+        },
+      })
+    },
+
+    async removeCarePlan(id) {
+      this.loading = true
+      try {
+        await this.deleteCarePlan(id).then(() => {
+          this.$toast.open({
+            message: 'Care plan successfully deleted',
+          })
+        })
+        this.loading = false
+       
+      /* eslint-disable-next-line */
+      } catch (error) {
+      }
+      this.loading = false
     },
   },
 }

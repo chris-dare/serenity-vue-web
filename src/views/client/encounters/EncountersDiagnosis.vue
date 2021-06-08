@@ -151,12 +151,12 @@ export default {
       add: Add,
       form: {
         condition: '',
-        role: '',
+        role: 'chief-complaint',
       },
       loading: false,
       deleteLoading: false,
       roles: [ 'admission-diagnosis', 'discharge-diagnosis', 'chief-complaint', 'comorbidity-diagnosis', 'pre-op-diagnosis', 'post-op-diagnosis', 'billing' ],
-      columns: ['Date', 'Condition', 'Role', ''],
+      columns: ['Date', 'Condition', 'Role', 'Action'],
       propertiesToCompareChanges: ['form'],
     }
   },

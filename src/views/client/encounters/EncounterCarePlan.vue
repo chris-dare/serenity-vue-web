@@ -5,12 +5,12 @@
 </template>
 
 <script>
-
+import CarePlan from '@/components/patients/encounters/CarePlan'
 export default {
   name: 'EncounterCarePlan',
 
   components: {
-    CarePlan: () => import(/* webpackPrefetch: true */'@/components/patients/encounters/CarePlan'),
+    CarePlan,
   },
 }
 </script>

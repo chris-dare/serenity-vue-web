@@ -14,7 +14,7 @@
         :limit="3"
         :max-height="600"
         :hide-selected="true"
-        :options-limit="4"
+        :options-limit="10"
         :loading="isLoading"
         :custom-label="nameWithLang"
         custom-field="value"
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import ModelMixin from '@/mixins/model'
 import debounce from 'lodash/debounce'
 
@@ -53,9 +53,6 @@ export default {
     ...mapState({
       clinicalOptions: state => state.resources.clinicalOptions,
     }),
-    ...mapGetters({
-      medications: 'resources/medications',
-    }),
 
     options() {
       let data = []
@@ -76,6 +73,10 @@ export default {
     localValue(val) {
       this.asyncFind(val)
     },
+  },
+
+  mounted() {
+    this.asyncFind('a')
   },
 
   methods: {

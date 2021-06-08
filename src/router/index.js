@@ -410,6 +410,12 @@ const routes = [
             meta: { noPadding: true },
           },
           {
+            path: 'summary',
+            name: 'EncountersSummary',
+            component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncountersSummary.vue'),
+            meta: { noPadding: true },
+          },
+          {
             path: 'referral',
             name: 'EncounterReferral',
             component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncountersReferral.vue'),
@@ -524,6 +530,10 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+  // eslint-disable-next-line no-unused-vars
+  scrollBehavior (to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  },
 })
 
 router.beforeEach((to, from, next) => {

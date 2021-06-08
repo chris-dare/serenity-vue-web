@@ -196,11 +196,13 @@ export default {
         order_detail: [{display: ''}],
         service_request_bodysite: [{display: ''}],
         service_request_category: [{display: 'laboratory-procedure'}],
+        priority: 'routine',
       },
       categories: [ 'laboratory-procedure', 'imaging', 'counselling', 'education', 'surgical-procedure' ],
       loading: false,
       propertiesToCompareChanges: ['form'],
-      columns: ['Date', 'Lab type', 'Priority', 'Order detail', 'Bodysite', 'Specimen', ''],
+      columns: ['Date', 'Lab type', 'Priority', 'Order detail', 'Bodysite', 'Specimen', 'Action'],
+      priorities: [ 'routine', 'urgent', 'asap' ],
       deleteLoading: false,
     }
   },
@@ -230,7 +232,6 @@ export default {
     ...mapState({
       provider: (state) => state.auth.provider,
       location: (state) => state.global.location,
-      priorities: (state) => state.global.priorities,
       encounter: (state) => state.encounters.currentEncounter,
     }),
 
@@ -238,6 +239,7 @@ export default {
       currentEncounterServiceRequests: 'encounters/currentEncounterServiceRequests',
       labProceedures: 'services/labProceedures',
     }),
+
     mode() {
       return this.labId ? 'update' : 'create'
     },

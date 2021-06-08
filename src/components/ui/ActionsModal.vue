@@ -11,7 +11,8 @@
         <p class="text-serenity-primary my-4 text-lg">{{ label }}</p>
         <div class="flex items-center justify-between space-x-4">
           <SeButton
-            variant="secondary"
+            :variant="cancelButtonVariant"
+            class="capitalize"
             @click="handleAction('cancel')"
           >
             {{ cancelButtonText }}
@@ -43,11 +44,12 @@ export default {
       confirmCallback: null,
       cancelButtonText: '',
       cancelCallback: null,
+      cancelButtonVariant: 'secondary',
     }
   },
 
   events: {
-    'actions-modal:open': function(_ev, { confirmButtonText = 'save', cancelButtonText = 'cancel', label, data, callback, cancel, type = 'success' }){
+    'actions-modal:open': function(_ev, { confirmButtonText = 'save', cancelButtonText = 'cancel', label, data, callback, cancel, type = 'success', cancelButtonVariant = 'secondary' }){
       if(this.visible)return
       this.$resetData()
       this.confirmButtonText = confirmButtonText
@@ -58,6 +60,7 @@ export default {
       this.confirmCallback = callback
       this.cancelCallback = cancel
       this.visible = true
+      this.cancelButtonVariant = cancelButtonVariant
     },
   },
 
