@@ -170,6 +170,19 @@ export default {
     }
   },
 
+  async deleteCarePlan({ commit, state, rootState}, id) {
+    try {
+      let encounter = state.currentEncounter
+      encounter.encounter_care_plan = encounter.encounter_care_plan.filter((es) => es.id !== id)
+  
+      const provider = rootState.auth.provider
+      const { data } = await EncountersAPI.update(provider.id, encounter)
+      commit(SET_ENCOUNTER, data)
+    } catch ({ response: { data: error } }) {
+      throw error
+    }
+  },
+
   
 
   async updateDiagnosis({ commit, state, rootState}, payload) {

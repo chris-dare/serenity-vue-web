@@ -14,6 +14,20 @@
         Medication
       </p>
 
+      <div v-if="allergies.length">
+        <p class="text-serenity-primary mb-2">{{ patient.fullName }}'s allergies</p>
+
+        <div class="flex space-x-2">
+          <Tag
+            v-for="(allergy, index) in allergies"
+            :key="index"
+            variant="success"
+          >
+            {{ allergy.code }}
+          </Tag>
+        </div>
+      </div>
+
 
       <div
         v-for="(detail, index) in form.drugs"
@@ -30,6 +44,9 @@
               v-model="detail.course_of_therapy_type"
               title="Course of therapy"
               :options="therapyTypes"
+              custom-field="value"
+              label="label"
+              track-by="value"
               :multiple="false"
             />
             <cv-text-input
@@ -108,7 +125,7 @@
         <DatePicker
           v-model="form.extra_details.date"
           type="datetime"
-          label="Date"
+          label="Date of administration"
           class="se-input-gray"
         />
         
@@ -119,14 +136,6 @@
           Priority is required
         </p>
         
-        
-        <cv-text-input
-          v-model="form.extra_details.intended_dispenser"
-          label="Intended dispenser"
-          type="text"
-          placeholder="Intended dispenser"
-          class="inherit-full-input col-span-3"
-        />
         <cv-text-area
           v-model="form.extra_details.medication_request_notes[0].display"
           label="Medication notes"
@@ -217,6 +226,7 @@ export default {
       form: {
         extra_details: {
           medication_request_notes: [{display: ''}],
+          medication_request_category: this.$isCurrentWorkspace('OPD') ? 'outpatient' : 'inpatient',
         },
         drugs: [
           {
@@ -231,7 +241,11 @@ export default {
       deleteLoading: false,
       intentOptions: [ 'proposal', 'plan', 'directive', 'order', 'original-order', 'reflex-order', 'filler-order', 'instance-order', 'option' ],
       statuses: [ 'draft', 'active', 'on-hold', 'revoked', 'completed', 'entered-in-error', 'unknown' ],
-      therapyTypes: [ 'continuous', 'acute', 'seasonal' ],
+      therapyTypes: [
+        { label: 'continuous (longterm)', value: 'continuous'},
+        { label: 'acute', value: 'acute'},
+        { label: 'seasonal', value: 'seasonal'},
+      ],
       categories: [ 'inpatient', 'outpatient', 'community', 'discharge' ],
       propertiesToCompareChanges: ['form'],
       columns: [
@@ -282,9 +296,11 @@ export default {
       priorities: (state) => state.global.priorities,
       provider: (state) => state.auth.provider,
       encounter: (state) => state.encounters.currentEncounter,
+      patient: (state) => state.patients.currentPatient,
       units: (state) => state.global.units,
       frequencies: (state) => state.global.frequencies,
       user: (state) => state.auth.user,
+      allergies: state => state.patientAllergies.allergies,
     }),
 
     ...mapGetters({
@@ -331,10 +347,6 @@ export default {
       }
     },
 
-    
-
-    
-
     cancelUpdate() {
       this.$router.go(-1)
     },
@@ -346,6 +358,8 @@ export default {
       }
 
       this.$v.$touch()
+
+      this.form.extra_details.intended_dispenser = this.provider.organization_name
 
 
       if (this.$v.$invalid) {

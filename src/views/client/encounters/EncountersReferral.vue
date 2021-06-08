@@ -6,7 +6,7 @@
       <EncounterReferralForm :referral="referral" />
 
       <div v-if="mode == 'create'">
-        <p class="mb-2 font-semibold">Previous Referrals</p>
+        <p class="mb-2 font-semibold">Referrals in this consultation</p>
 
         <DataTable
           small
@@ -38,11 +38,6 @@
             <cv-data-table-cell>
               <div>
                 <p>{{ row.referral_type | removeUnderscore | capitalize }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ row.status | capitalize }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
@@ -88,7 +83,7 @@ export default {
 
   data() {
     return {
-      columns: ['Date', 'Referrer', 'Referee', 'Priority', 'Referral Type', 'Status', ''],
+      columns: ['Date', 'Referrer', 'Referee', 'Priority', 'Referral Type', ''],
       referral: null,
     }
   },

@@ -48,6 +48,7 @@ export default {
       this.$trigger('actions-modal:open', {
         confirmButtonText: 'stay',
         cancelButtonText: 'discard',
+        cancelButtonVariant: 'danger',
         label: 'You have unsaved changes. Do you want to discard them or save them?',
         callback: async () => {
           console.log('here')

@@ -52,7 +52,6 @@ export default {
         { label: '(Calculated) BMI', prop: 'BMI', unit: ''},
         { label: 'Temperature (C)', prop: 'DEGREES_CELCIUS', unit: '°C'},
         { label: 'Pulse', prop: 'PULSE', unit: '/min'},
-        { label: 'SPO2', prop: 'SPO2', unit: ''},
         { label: 'Respiratory rate', prop: 'RESPIRATORY_RATE', unit: '/min'},
         { label: 'Blood Pressure', prop: 'BLOOD_PRESSURE'},
         { label: 'Arterial blood oxygen saturation', prop: 'OXYGEN_SATURATION', unit: '%'},

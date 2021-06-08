@@ -66,11 +66,8 @@
         v-model="family.FAMILY_HISTORY"
         :rows="5"
         placeholder="Family history"
+        @input="throttledSendHistory"
       />
-
-      <div class="flex justify-end mt-2">
-        <SeButton @click="throttledSendHistory">save</SeButton>
-      </div>
     </ToggleList>
     <ToggleList
       title="Review of systems"
@@ -150,6 +147,7 @@ export default {
       notes: {},
       open: [false, false, false, false, false, false],
       loading: false,
+      historySaved: true,
     }
   },
 
@@ -204,8 +202,12 @@ export default {
     throttledSend: debounce(function() {
       this.submitAnswer()
     }, 1500),
+  
+    throttledSendHistory: debounce(function() {
+      this.sendHistory()
+    }, 1500),
 
-    async throttledSendHistory() {
+    async sendHistory() {
       await this.createObservation({ payload: { FAMILY_HISTORY: this.family.FAMILY_HISTORY }, patient: this.$route.params.id })
     },
 
