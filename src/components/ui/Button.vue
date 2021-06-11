@@ -79,7 +79,7 @@ export default {
       validator: function (value) {
         // The value must match one of these strings
         return (
-          ['primary', 'secondary', 'secondary-outline', 'tertiary', 'danger', 'outline', 'ghost', 'white', 'default', 'danger-outline', 'warning', 'success'].indexOf(value) !== -1
+          ['primary', 'secondary', 'secondary-outline', 'tertiary', 'danger', 'outline', 'ghost', 'white', 'default', 'danger-outline', 'warning', 'success', 'gray'].indexOf(value) !== -1
         )
       },
     },
@@ -112,6 +112,10 @@ export default {
 
       if (this.variant  === 'danger-outline') {
         return 'border-danger bg-transparent text-danger hover:text-white focus:bg-danger hover:bg-danger'
+      }
+
+      if (this.variant  === 'gray') {
+        return 'bg-transparent text-white hover:bg-light border-gray-500 bg-gray-500 focus:bg-gray-400 hover:bg-gray-400'
       }
 
       if(this.variant === 'white') {

@@ -470,6 +470,12 @@ const routes = [
         component: () => import(/* webpackChunkName: "diagnostics" */ '../views/client/diagnostic/Patient.vue'),
       },
       {
+        path: '/diagnostics/lab-results/:id',
+        name: 'Diagnostic:Labs',
+        props: true,
+        component: () => import(/* webpackChunkName: "diagnostics" */ '../views/client/diagnostic/LabResults.vue'),
+      },
+      {
         path: '/virtual-care/patients',
         name: 'VirtualCare:Patients',
         props: true,
