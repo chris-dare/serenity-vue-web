@@ -1,6 +1,7 @@
 import ResourceAPI from '@/api/resources'
 import SpecialtiesAPI from '@/api/specialties'
 import ObservationsAPI from '@/api/observations'
+import PharmacyInventoryApi from '@/api/pharmacy_inventory'
 import axios from 'axios'
 
 import {
@@ -23,6 +24,7 @@ import {
   SET_VITALS_UNIT_TYPES,
   SET_LANGUAGES,
   SET_VENDORS,
+  SET_PHARMACY_INVENTORY_OPTIONS,
 } from './mutation-types'
 
 export default {
@@ -202,6 +204,20 @@ export default {
       const { data } = await ObservationsAPI
         .vitalTypes()
       commit(SET_VITALS_UNIT_TYPES, data)
+      return data
+    } catch (error) {
+      throw error || error.message
+    }
+  },
+
+  async getPharmacyInventoryOptions({ commit, state }) {
+    if (state.pharmacyInventory.length) {
+      return
+    }
+    try {
+      const { data } = await PharmacyInventoryApi.list()
+      console.info(data)
+      commit(SET_PHARMACY_INVENTORY_OPTIONS, data)
       return data
     } catch (error) {
       throw error || error.message
