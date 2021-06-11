@@ -6,24 +6,13 @@
       placeholder="Search for patient, enter name or MR number"
     /> -->
     <div class="my-4 flex items-center space-x-2">
-      <SeButton
-        :variant="selected === 'all' ? 'default' : 'white'"
-        @click="selected = 'all'"
+      <cv-button
+        class="border-gray-800 bg-gray-800 text-white focus:bg-gray-700 hover:bg-gray-700 px-6"
+        kind="tertiary"
+        @click="$router.go(-1)"
       >
-        All
-      </SeButton>
-      <SeButton
-        :variant="selected === 'sample' ? 'default' : 'white'"
-        @click="selected = 'sample'"
-      >
-        Awaiting samples
-      </SeButton>
-      <SeButton
-        :variant="selected === 'done' ? 'default' : 'white'"
-        @click="selected = 'done'"
-      >
-        Done
-      </SeButton>
+        Go Back
+      </cv-button>
     </div>
     <DataTable
       ref="table"
@@ -44,21 +33,41 @@
           {{ row.patient_name }}
         </cv-data-table-cell>
         <cv-data-table-cell>
-          <cv-tag
-            :disabled="false"
-            :kind="row.type === 'Done' ? 'green' : row.type === 'Awaiting sample' ? 'red' : 'blue'"
-            :label="row.type"
-          />
+          <div class="flex items-center">
+            <SeButton
+              class="mx-2"
+              variant="secondary"
+              @click="$trigger('rejectlab:add:open')"
+            >
+              Reject
+            </SeButton>
+            <SeButton>
+              Accept
+            </SeButton>
+            <SeButton
+              class="mx-2"
+              variant="gray"
+              @click="$trigger('external:add:open')"
+            >
+              External processing
+            </SeButton>
+          </div>
         </cv-data-table-cell>
       </template>
     </DataTable>
+    <ExternalProcess />
+    <RejectLab />
   </div>
 </template>
 
 <script>
+import ExternalProcess from '@/components/diagnostic/modals/ExternalProcess'
+import RejectLab from '@/components/diagnostic/modals/RejectLab'
 import DataMixin from '@/mixins/data'
 export default {
   name: 'LabsTable',
+
+  components: { ExternalProcess, RejectLab },
 
   mixins: [DataMixin],
 

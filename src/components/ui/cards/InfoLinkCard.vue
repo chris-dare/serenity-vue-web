@@ -47,6 +47,7 @@ import Align from '@carbon/icons-vue/es/align-box--bottom-left/32'
 import Reference from '@carbon/icons-vue/es/watson-health/cross-reference/32'
 import Care from '@carbon/icons-vue/es/airline--passenger-care/32'
 import Followup from '@carbon/icons-vue/es/arrow--down-right/32'
+import Report from '@carbon/icons-vue/es/report/32'
 import Referral from '@carbon/icons-vue/es/airline--manage-gates/32'
 
 export default {
@@ -75,6 +76,7 @@ export default {
     Care,
     Followup,
     Referral,
+    Report,
     Align,
   },
 

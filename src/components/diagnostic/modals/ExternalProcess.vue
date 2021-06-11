@@ -6,8 +6,9 @@
   >
     <template slot="title">
       <div>
-        <h1>Add labs</h1>
-        <p class="text-secondary text-sm">Add a new lab test to performed on patient</p>
+        <h1>Electrolyte panel</h1>
+        <p class="text-secondary text-sm">#433534545</p>
+        <p class="text-secondary text-sm">Dr. Grey Stroop</p>
       </div>
     </template>
     <template slot="content">
@@ -15,31 +16,24 @@
         <cv-select
           v-model="doctor"
           class="se-custom-input"
-          label="Select the doctor"
+          label="Service provider"
         >
           <cv-select-option
             disabled
             hidden
             selected
           >
-            Choose a doctor
+            Select one service provider
           </cv-select-option>
         </cv-select>
-        <cv-select
-          v-model="lab"
-          class="se-custom-input mt-5"
-          label="Select the lab test"
-        >
-          <cv-select-option
-            disabled
-            hidden
-            selected
-          >
-            Choose a lab test
-          </cv-select-option>
-        </cv-select>
+        <cv-date-picker
+          v-model="form.birth_date"
+          kind="single"
+          class="inherit-full-input mt-5"
+          placeholder="dd/mm/yyyy"
+          date-label="Choose a due date"
+        />
       </div>
-
       <div class="flex items-center justify-between mt-12">
         <SeButton
           variant="secondary"
@@ -50,23 +44,24 @@
         <div class="flex items-center">
           <SeButton
             :loading="loading"
-            @click="add"
           >
-            Add new lab
+            Save
+          </SeButton>
+          <SeButton
+            class="mx-3"
+            :loading="loading"
+          >
+            Approve and send >
           </SeButton>
         </div>
-        <Next />
       </div>
     </template>
   </cv-modal>
 </template>
 
 <script>
-import Next from '@/components/diagnostic/modals/RequestedLabs.vue'
 export default {
-  name: 'AddLabResultsModal',
-
-  components: { Next },
+  name: 'ExternalModal',
 
   data() {
     return {
@@ -77,7 +72,7 @@ export default {
   },
 
   events: {
-    'lab:add:open': function() {
+    'external:add:open': function() {
       this.visible = true
     },
   },
@@ -85,10 +80,6 @@ export default {
   methods: {
     close() {
       this.visible = false
-    },
-    add(){
-      this.visible = false
-      this.$trigger('requestedlabs:add:open')
     },
   },
 }
