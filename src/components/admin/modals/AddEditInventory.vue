@@ -122,7 +122,7 @@ export default {
   watch: {
     medication: function (val) {
       if(val !== true){
-        this.form.medication = null
+        this.form.medication = undefined
       }
     },
   },
