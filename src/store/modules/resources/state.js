@@ -19,6 +19,7 @@ export default () => ({
   vitalsUnitTypes: [],
   languages: [],
   vendors: [],
+  pharmacyInventory: [],
   priorities: [
     {display: 'Routine', code: 'ROUTINE'},
     {display: 'Urgent', code: 'URGENT'},
