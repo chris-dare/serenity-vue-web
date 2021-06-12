@@ -14,6 +14,12 @@
         Add diagnosis
       </p>
 
+      <cv-checkbox
+        v-model="form.is_provisional_diagnosis"
+        label="Is this a provisional diagnosis?"
+        value="check-1"
+      />
+
       <AutoCompleteClinicalTables
         v-model="form.condition"
         :error-message="$utils.validateRequiredField($v, 'condition')"

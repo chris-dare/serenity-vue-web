@@ -5,6 +5,8 @@ import isEmpty from 'lodash/isEmpty'
 export default {
   hasActiveEncounter: (state,getters) => !!getters.onGoingEncounters.length,
 
+  hasEncounterBegan: state => state.encounterState > 0, 
+
   pastEncounters: state => {
     if (!state.encounters) return []
     return sortByDate(state.encounters.filter(encounter => encounter.status === 'finished' || (encounter.end_time && isAfter(Date.now(), parseISO(encounter.end_time)))), 'end_time')
@@ -15,9 +17,15 @@ export default {
     return state.encounters.filter(encounter => encounter.status === 'in-progress' || (!encounter.end_time && isAfter(Date.now(), parseISO(encounter.start_time))))
   },
 
-  currentEncounterCannotBeFinished: (state) => {
+  currentEncounterCannotBeFinished: (state, getters) => {
     if (!state.currentEncounter) return false
-    return !state.currentEncounter.chief_complaint || !state.currentEncounter.history_of_presenting_illness
+    return !state.currentEncounter.chief_complaint || !state.currentEncounter.history_of_presenting_illness || isEmpty(getters.currentEncounterVitals)
+  },
+
+  currentEncounterVitals: (state, getters, rootState) => {
+    if (!getters.currentEncounterObservations) return []
+    const options = rootState.resources.vitalsUnitTypes.map(vital => vital.code)
+    return getters.currentEncounterObservations.filter(vital => options.includes(vital.unit))
   },
 
   currentEncounterStatus: state => {

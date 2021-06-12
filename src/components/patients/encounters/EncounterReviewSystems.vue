@@ -1,6 +1,7 @@
 <template>
   <SeForm class="space-y-4">
     <MultiSelect
+      v-if="type !== 'GENERAL'"
       v-model="form.field"
       track-by="code"
       label="display"
@@ -32,7 +33,7 @@
       <p class="mb-2 font-semibold">Reviews</p>
 
       <div
-        v-if="!currentPatientExamSystems.length"
+        v-if="!reviewTypes.length"
         class="flex items-center my-4"
       >
         No review available
@@ -42,7 +43,7 @@
         class="space-y-3"
       >
         <div
-          v-for="(exam, index) in currentPatientExamSystems"
+          v-for="(exam, index) in reviewTypes"
           :key="index"
           class="flex items-center space-x-2"
         >
@@ -60,6 +61,13 @@ import { required } from 'vuelidate/lib/validators'
 export default {
   name: 'EncounterReviewSystems',
 
+  props: {
+    type: {
+      type: String,
+      default: null,
+    },
+  },
+
   data() {
     return {
       form: {},
@@ -75,6 +83,14 @@ export default {
     ...mapGetters({
       currentPatientExamSystems: 'encounters/currentEncounterExamSystems',
     }),
+
+    reviewTypes() {
+      if (this.type === 'GENERAL') {
+        return this.currentPatientExamSystems.filter(ex => ex.field === 'GENERAL')
+      }
+
+      return this.currentPatientExamSystems
+    },
   },
 
   validations: {

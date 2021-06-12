@@ -30,9 +30,23 @@ export function initialState() {
       FR: 'French',
     },
     units: ['Hours', 'Days', 'Weeks', 'Months', 'Years'],
-    frequencies: ['Hourly', 'Daily', 'Weekly', 'Monthly', 'Yearly'],
-    priorities: [ 'routine', 'urgent', 'asap', 'stat' ],
-    // statuses: ['ANNULLED' , 'DIVORCED' , 'INTERLOCUTORY' , 'LEGALLY_SEPARATED' , 'MARRIED' , 'POLYGAMOUS' , 'NEVER_MARRIED' , 'DOMESTIC_PARTNER' , 'UNMARRIED' , 'WIDOWED' , 'UNKNOWN'],
+    frequencies: [
+      'daily',
+      'BID (twice a day)',
+      'TID (three times a day)',
+      'QID (four times a day)',
+      'QHS (every bedtime)',
+      'Q4h (every 4 hours)',
+      'Q4-6h (every 4 to 6 hours)',
+      'QWK (every week)',
+    ],
+    // priorities: [ 'routine', 'urgent', 'asap', 'stat' ],
+    priorities: [
+      {display: 'Urgent (highest)', code: 'urgent'},
+      {display: 'ASAP (medium)', code: 'asap'},
+      {display: 'STAT', code: 'stat'},
+      {display: 'Routine (lowest)', code: 'routine'},
+    ],
     regions: ['Ahafo Region', 'Ashanti Region', 'Bono Region', 'Bono East Region', 'Central Region', 'Eastern Region', 'Greater Accra Region',  'North East Region',  'Northern Region', 'Oti Region', 'Savannah Region', 'Upper East Region', 'Volta Region', 'Upper West Region', 'Western North Region', 'Western Region'],
   }
 }

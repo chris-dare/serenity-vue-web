@@ -31,7 +31,7 @@
         variant="warning"
         :to="{ name: 'EncounterReview', params: { encounter: encounter.id, id: $route.params.id } }"
       >
-        Begin Consultation
+        {{ hasEncounterBegan ? 'Continue Consultation' : 'Begin Consultation' }}
       </SeButton>
     </div>
   </div>
@@ -58,6 +58,7 @@ export default {
 
     ...mapGetters({
       hasActiveEncounter: 'encounters/hasActiveEncounter',
+      hasEncounterBegan: 'encounters/hasEncounterBegan',
       appointments: 'appointments/patientAppointments',
       patientIsDeceased: 'patients/patientIsDeceased',
       patientHasVisit: 'patients/patientHasVisit',
@@ -97,7 +98,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

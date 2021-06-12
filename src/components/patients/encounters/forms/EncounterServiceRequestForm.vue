@@ -33,15 +33,9 @@
         class="col-span-2"
       />
 
-      <MultiSelect
+      <PrioritiesSelect
         v-model="form.priority"
-        title="Priority"
-        :multiple="false"
         :options="priorities"
-        track-by="code"
-        label="display"
-        custom-field="code"
-        placeholder="Routine, ASAP, Urgent"
       />
         
 

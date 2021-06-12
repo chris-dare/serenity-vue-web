@@ -49,19 +49,21 @@
               track-by="value"
               :multiple="false"
             />
-            <cv-text-input
+            <!-- <cv-text-input
               v-model="detail.medication_request_dosage_instruction[0].frequency"
               label="Frequency"
               type="number"
               placeholder="eg 2 for twice frequency unit"
               class="inherit-full-input"
-            />
+            /> -->
             <MultiSelect
-              v-model="detail.medication_request_dosage_instruction[0].frequency_unit"
-              title="Frequency unit"
+              v-model="detail.medication_request_dosage_instruction[0].frequency"
+              title="Frequency"
               :options="frequencies"
               :multiple="false"
               preselect
+              taggable
+              @tag="addTag(index, $event)"
             />
             <cv-text-input
               v-model="detail.medication_request_dosage_instruction[0].period"
@@ -102,18 +104,16 @@
 
       <div
         v-if="mode === 'create'"
-        class="flex items-center space-x-2 text-serenity-primary my-4 cursor-pointer text-sm"
+        class="flex items-center space-x-2 text-serenity-primary my-4 cursor-pointer text-sm w-auto"
         @click="addDrug"
       >
         <AddAlt class="w-5 h-5" />
         <p class="text-serenity-primary">Add new drug</p>
       </div>
       <div class="grid grid-cols-3 gap-4 items-center">
-        <MultiSelect
+        <PrioritiesSelect
           v-model="form.extra_details.priority"
-          title="Priority"
           :options="priorities"
-          :multiple="false"
         />
         <MultiSelect
           v-model="form.extra_details.medication_request_category"
@@ -123,6 +123,7 @@
         />
 
         <DatePicker
+          v-if="!$isCurrentWorkspace('OPD')"
           v-model="form.extra_details.date"
           type="datetime"
           label="Date of administration"
@@ -454,6 +455,10 @@ export default {
         ],
       },
       this.$v.$reset()
+    },
+
+    addTag(index, tag) {
+      this.form.drugs[index].medication_request_dosage_instruction[0].frequency = tag
     },
   },
 }

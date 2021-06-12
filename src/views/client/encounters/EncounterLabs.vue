@@ -46,30 +46,34 @@
           class="col-span-2"
         />
 
-        <MultiSelect
+        <!-- <MultiSelect
           v-model="form.priority"
           title="Priority"
           :multiple="false"
           :options="priorities"
           :track-by="null"
           placeholder="Routine, ASAP, Urgent"
+        /> -->
+
+        <PrioritiesSelect
+          v-model="form.priority"
+          :options="priorities"
         />
         
 
         <div class="grid grid-cols-2 gap-4">
+          <cv-text-input
+            v-model="form.specimen"
+            type="text"
+            label="Specimen"
+            placeholder="Specimen"
+          />
           <cv-text-input
             v-model="form.service_request_bodysite[0].display"
             type="text"
             label="Bodysite"
             placeholder="Body site"
             :invalid-message="$utils.validateRequiredField($v, 'service_request_bodysite')"
-          />
-
-          <cv-text-input
-            v-model="form.specimen"
-            type="text"
-            label="Specimen"
-            placeholder="Specimen"
           />
         </div>
       </div>
@@ -202,7 +206,11 @@ export default {
       loading: false,
       propertiesToCompareChanges: ['form'],
       columns: ['Date', 'Lab type', 'Priority', 'Order detail', 'Bodysite', 'Specimen', 'Action'],
-      priorities: [ 'routine', 'urgent', 'asap' ],
+      priorities: [
+        {display: 'Urgent (highest)', code: 'urgent'},
+        {display: 'ASAP (medium)', code: 'asap'},
+        {display: 'Routine (lowest)', code: 'routine'},
+      ],
       deleteLoading: false,
     }
   },
@@ -360,7 +368,7 @@ export default {
     },
 
     cancelUpdate() {
-      this.form = {}
+      this.$resetData()
       this.$v.$reset()
       this.$router.go(-1)
     },

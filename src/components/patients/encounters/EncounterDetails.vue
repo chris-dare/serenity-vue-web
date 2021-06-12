@@ -27,6 +27,7 @@
     <ToggleList
       title="Chief Complaint"
       class="pt-4"
+      :status="saving"
     >
       <cv-text-area
         v-model="form.chief_complaint"
@@ -38,6 +39,7 @@
     <ToggleList
       title="History of Present illness"
       class="pt-4"
+      :status="saving"
     >
       <cv-text-area
         v-model="form.history_of_presenting_illness"
@@ -61,6 +63,7 @@
     <ToggleList
       title="Family History"
       class="pt-4"
+      :status="saving"
     >
       <cv-text-area
         v-model="family.FAMILY_HISTORY"
@@ -70,7 +73,13 @@
       />
     </ToggleList>
     <ToggleList
-      title="Review of systems"
+      title="General review"
+      class="pt-4"
+    >
+      <EncounterReviewSystems type="GENERAL" />
+    </ToggleList>
+    <ToggleList
+      title="Systemic review"
       class="pt-4"
     >
       <EncounterReviewSystems />
@@ -148,6 +157,7 @@ export default {
       open: [false, false, false, false, false, false],
       loading: false,
       historySaved: true,
+      saving: null,
     }
   },
 
@@ -196,7 +206,14 @@ export default {
     }),
 
     async submitAnswer() {
-      await this.updateEncounter(this.form)
+      this.saving = 'saving'
+      try {
+        await this.updateEncounter(this.form)
+        this.saving = 'saved'
+      } catch (error) {
+        this.saving = 'error'
+      }
+      
     },
 
     throttledSend: debounce(function() {
@@ -208,7 +225,13 @@ export default {
     }, 1500),
 
     async sendHistory() {
-      await this.createObservation({ payload: { FAMILY_HISTORY: this.family.FAMILY_HISTORY }, patient: this.$route.params.id })
+      this.saving = 'saving'
+      try {
+        await this.createObservation({ payload: { FAMILY_HISTORY: this.family.FAMILY_HISTORY }, patient: this.$route.params.id })
+        this.saving = 'saved'
+      } catch (error) {
+        this.saving = 'error'
+      }
     },
 
     actionChange(ev) {
