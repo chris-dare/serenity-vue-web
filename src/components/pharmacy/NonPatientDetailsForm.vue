@@ -75,7 +75,18 @@ import { mapActions, mapState } from 'vuex'
 export default {
   name: 'NonPatientDetailsForm',
 
-  props: ['step', '_form'],
+  props: {
+    step: {
+      type: [Number, String],
+      default: null,
+    },
+
+    // eslint-disable-next-line vue/prop-name-casing
+    _form: {
+      type: [Object, String],
+      default: null,
+    },
+  },
 
   data() {
     return {

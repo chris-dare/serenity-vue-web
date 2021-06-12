@@ -145,7 +145,17 @@ import Add from '@carbon/icons-vue/es/chevron--right/32'
 export default {
   name: 'AddPrescriptionForm',
 
-  props: ['step', 'patient'],
+  props: {
+    step: {
+      type: [Number, String],
+      default: null,
+    },
+
+    patient: {
+      type: [Object, String],
+      default: null,
+    },
+  },
 
   data() {
     return {

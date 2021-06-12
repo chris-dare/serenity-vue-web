@@ -48,10 +48,6 @@ export default {
     }
   },
 
-  mounted() {
-    this.getPharmacyInventoryOptions()
-  },
-
   computed: {
     ...mapState({
       inventory: state => state.resources.pharmacyInventory,
@@ -65,6 +61,10 @@ export default {
         this.options = val
       },
     },
+  },
+
+  mounted() {
+    this.getPharmacyInventoryOptions()
   },
 
   methods: {

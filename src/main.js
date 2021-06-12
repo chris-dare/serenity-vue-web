@@ -8,6 +8,7 @@ import DatePlugin from '@/services/date'
 import UtilsPlugin from '@/services/utils'
 import CurrencyPlugin from '@/services/currency'
 import PermissionsPlugin from '@/services/roles'
+import ScrollPlugin from '@/services/scroll'
 import Vuelidate from 'vuelidate'
 import VuePageTransition from 'vue-page-transition'
 import HasPermissionDirective from '@/plugins/has-permission'
@@ -37,6 +38,7 @@ Vue.use(DatePlugin)
 Vue.use(UtilsPlugin)
 Vue.use(CurrencyPlugin)
 Vue.use(PermissionsPlugin)
+Vue.use(ScrollPlugin)
 Vue.use(Vuelidate)
 Vue.use(VuePageTransition)
 registerBaseComponents(Vue)

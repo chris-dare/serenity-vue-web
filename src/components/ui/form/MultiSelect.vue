@@ -30,6 +30,24 @@
             <Close class="w-4" />
           </div>
         </template>
+        <!-- Pass on all named slots -->
+        <slot
+          v-for="slot in Object.keys($slots)"
+          :slot="slot"
+          :name="slot"
+        />
+
+        <!-- Pass on all scoped slots -->
+        <template
+          v-for="slot in Object.keys($scopedSlots)"
+          :slot="slot"
+          slot-scope="scope"
+        >
+          <slot
+            :name="slot"
+            v-bind="scope"
+          />
+        </template>
       </VueMultiselect>
     </div>
     <p
@@ -157,7 +175,7 @@ export default {
       handler(val, oldVal) {
         if (val !== oldVal) {
           if (val === '' || !val) {
-            this.$emit('input', null)
+            this.$emit('input', this.multiple ? [] : null)
             return
           }
           this.$emit('input', this.customField && val[this.customField] ? val[this.customField] : val)

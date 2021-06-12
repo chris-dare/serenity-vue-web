@@ -76,7 +76,22 @@ import { mapActions } from 'vuex'
 export default {
   name: 'PrescriptionPaymentForm',
 
-  props: ['step', 'medicationRequests', 'patient'],
+  props: {
+    step: {
+      type: [Number, String],
+      default: null,
+    },
+
+    medicationRequests: {
+      type: [Object, String],
+      default: null,
+    },
+
+    patient: {
+      type: [Object, String],
+      default: null,
+    },
+  },
 
   data() {
     return {

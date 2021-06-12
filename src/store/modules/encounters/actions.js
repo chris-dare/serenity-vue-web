@@ -1,7 +1,7 @@
 import EncountersAPI from '@/api/encounters'
 import Vue from 'vue'
 import Encounter from '@/models/Encounter'
-import { SET_ENCOUNTERS, UPDATE_ENCOUNTER, SET_ENCOUNTER  } from './mutation-types'
+import { SET_ENCOUNTERS, UPDATE_ENCOUNTER, SET_ENCOUNTER, SET_ENCOUNTER_STATE } from './mutation-types'
 
 export default {
   async getEncounters({ commit, rootState }, id) {
@@ -68,6 +68,7 @@ export default {
       const { data } = await EncountersAPI.update(provider.id, encounter)
       commit(SET_ENCOUNTER, data)
       commit(UPDATE_ENCOUNTER, data)
+      commit(SET_ENCOUNTER_STATE, 0)
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
@@ -213,5 +214,8 @@ export default {
     }
   },
 
+  setCurrentEncounterState({ commit, state }) {
+    commit(SET_ENCOUNTER_STATE, state.encounterState+1)
+  },
   
 }

@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import NewPatient from '@/components/diagnostic/modals/addPatient.vue'
+import NewPatient from '@/components/diagnostic/modals/AddPatient.vue'
 import AddLabs from '@/components/diagnostic/modals/AddLabResultsModal.vue'
 import LabsTable from './labResults'
 

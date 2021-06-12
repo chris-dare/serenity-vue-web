@@ -1,4 +1,4 @@
-import { SET_ENCOUNTERS, SET_ENCOUNTER, UPDATE_ENCOUNTER, DELETE_ENCOUNTER } from './mutation-types'
+import { SET_ENCOUNTERS, SET_ENCOUNTER, UPDATE_ENCOUNTER, DELETE_ENCOUNTER, SET_ENCOUNTER_STATE } from './mutation-types'
 
 export default {
   [SET_ENCOUNTERS](state, encounters) {
@@ -7,6 +7,10 @@ export default {
 
   [SET_ENCOUNTER](state, encounter) {
     state.currentEncounter = encounter
+  },
+
+  [SET_ENCOUNTER_STATE](state, data) {
+    state.encounterState = data
   },
 
   [UPDATE_ENCOUNTER](state, encounter) {

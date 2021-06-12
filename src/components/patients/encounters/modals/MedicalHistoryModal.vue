@@ -11,19 +11,11 @@
 
     <template slot="content">
       <SeForm class="space-y-8">
-        <MultiSelect
+        <AutoCompleteClinicalTables
           v-model="form.PREVIOUS_ILLNESS"
-          title="Past illness"
-          :options="options.PREVIOUS_ILLNESS"
-          placeholder="Type and press enter"
-          preselect
-          taggable
           multiple
-          label="code"
-          track-by="id"
-          class="se-input-gray"
-          @tag="addTag('PREVIOUS_ILLNESS', $event)"
-          @remove="remove('observation', $event)"
+          title="Past illness"
+          @remove="removeIllness"
         />
 
         <MultiSelect
@@ -38,14 +30,14 @@
           track-by="id"
           class="se-input-gray"
           @tag="addTag('allergies', $event)"
-          @remove="remove"
+          @remove="remove('allergies', $event)"
         />
 
         <AutoCompleteMedication
           v-model="form.PREVIOUS_MEDICATION"
           title="Medications"
           multiple
-          @remove="remove('observation', $event)"
+          @remove="removeMedication"
         />
 
         <MultiSelect
@@ -85,7 +77,7 @@
 <script>
 import modalMixin from '@/mixins/modal'
 import { mapActions, mapState, mapGetters } from 'vuex'
-import xorBy from 'lodash/xorBy'
+// import xorBy from 'lodash/xorBy'
 
 export default {
   name: 'MedicalHistoryModal',
@@ -137,27 +129,29 @@ export default {
     },
 
     hasHistory() {
-      return !!this.form.PREVIOUS_ILLNESS.filter(allergy => !allergy.id)
-        || !!this.form.PREVIOUS_HOSPITALIZATION.filter(allergy => !allergy.id)
-        || !!this.form.PREVIOUS_MEDICATION.filter(allergy => !allergy.id)
+      return !!this.newMedications.length
+        || !!this.newIllness.length
+        || !!this.newSurgeries.length
     },
 
     newMedications() {
-      let formOne = this.form.PREVIOUS_MEDICATION.map(medication => {
-        return {
-          value: medication,
-        }
-      })
-      return xorBy(formOne, this.patientPastMedications, 'value')
+      return this.form.PREVIOUS_MEDICATION
+        .filter(medication => !this.patientPastMedications.map(med => med.value).includes(medication))
         .map(med => {
           return {
-            code: med.value,
+            code: med,
           }
         })
     },
   
     newIllness() {
-      return this.form.PREVIOUS_ILLNESS.filter(med => !med.id)
+      return this.form.PREVIOUS_ILLNESS
+        .filter(medication => !this.patientPreviousIllness.map(med => med.value).includes(medication.value || medication))
+        .map(med => {
+          return {
+            code: med,
+          }
+        })
     },
   
     newSurgeries() {
@@ -167,18 +161,13 @@ export default {
 
   watch: {
     allergies(val) {
-      this.form.allergies = val
+      this.form.allergies = val.slice()
     },
 
     patientPreviousIllness: {
       immediate: true,
       handler(val) {
-        this.form.PREVIOUS_ILLNESS = val.map(illness => {
-          return {
-            code: illness.value,
-            id: illness.id,
-          }
-        })
+        this.form.PREVIOUS_ILLNESS = val.map(illness => illness.value)
       },
     },
   
@@ -211,14 +200,9 @@ export default {
     }),
 
     init() {
-      this.form.allergies = this.allergies
+      this.form.allergies = this.allergies.slice()
 
-      this.form.PREVIOUS_ILLNESS = this.patientPreviousIllness.map(illness => {
-        return {
-          code: illness.value,
-          id: illness.id,
-        }
-      })
+      this.form.PREVIOUS_ILLNESS = this.patientPreviousIllness.map(illness => illness.value)
 
       this.form.PREVIOUS_HOSPITALIZATION = this.patientPreviousHospitalization.map(illness => {
         return {
@@ -256,9 +240,11 @@ export default {
             await this.deleteAllergy(allergy.id)
           })
         }
+
         if (this.removedObservations.length > 0) {
+          console.log('aha')
           this.removedObservations.forEach(async observation => {
-            await this.deleteObservation(observation.id)
+            await this.deleteObservation(observation.id ? observation.id : observation)
           })
         }
         
@@ -268,6 +254,18 @@ export default {
       } catch (error) {
         this.loading = false
       }
+    },
+
+    removeIllness(payload) {
+      let illness = this.patientPreviousIllness.find(ill => ill.value === payload)
+      if (!illness) return
+      this.removedObservations.push(illness)
+    },
+
+    removeMedication(payload) {
+      let medication = this.patientPastMedications.find(med=> med.value === payload)
+      if (!medication) return
+      this.removedObservations.push(medication)
     },
 
     remove(type = 'allergies', payload) {
@@ -282,29 +280,6 @@ export default {
 
       this.removedObservations.push(payload)
     },
-
-    // async removeAllergy(tag) {
-    //   if (tag.type) {
-    //     await this.deleteAllergy(tag.id)
-    //   }
-        
-    //   this.form.allergies = this.form.allergies.filter(allergy => allergy.id !== tag.id)
-      
-    // },
-
-    // async removeMedicalHistory(field, tag) {
-    //   if (tag.id) {
-    //     await this.deleteObservation(tag.id)
-    //     return
-    //   }
-        
-    //   this.form[field] = this.form[field].filter(his => his.id !== tag.id)
-      
-    // },
-
-    // async removeMedication(tag) {
-    //   await this.deleteObservation(this.patientPastMedications.find(med => med.value === tag).id)
-    // },
   },
 }
 </script>

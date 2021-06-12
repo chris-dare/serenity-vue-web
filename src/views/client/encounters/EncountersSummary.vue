@@ -8,7 +8,7 @@
           <div class="flex items-center justify-between mb-2">
             <p class="text-serenity-primary font-bold">Review</p>
             <router-link
-              :to="{ name: 'EncountersReview' }"
+              :to="{ name: 'EncounterReview' }"
               class="text-serenity-primary text-base"
             >
               <Edit class="w-5" />

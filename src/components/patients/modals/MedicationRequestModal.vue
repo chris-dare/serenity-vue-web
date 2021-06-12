@@ -30,19 +30,14 @@
                 :options="therapyTypes"
                 :multiple="false"
               />
-              <cv-text-input
-                v-model="detail.medication_request_dosage_instruction[0].frequency"
-                label="Frequency"
-                type="number"
-                placeholder="eg 2 for twice frequency unit"
-                class="inherit-full-input"
-              />
               <MultiSelect
-                v-model="detail.medication_request_dosage_instruction[0].frequency_unit"
-                title="Frequency unit"
+                v-model="detail.medication_request_dosage_instruction[0].frequency"
+                title="Frequency"
                 :options="frequencies"
                 :multiple="false"
                 preselect
+                taggable
+                @tag="addTag(index, $event)"
               />
               <cv-text-input
                 v-model="detail.medication_request_dosage_instruction[0].period"
@@ -89,12 +84,9 @@
           <p class="text-serenity-primary">Add new drug</p>
         </div>
         <div class="grid grid-cols-3 gap-4 items-center">
-          <MultiSelect
+          <PrioritiesSelect
             v-model="form.extra_details.priority"
-            title="Priority"
             :options="priorities"
-            :track-by="null"
-            :multiple="false"
           />
           <MultiSelect
             v-model="form.extra_details.medication_request_category"
@@ -325,6 +317,10 @@ export default {
       },
       this.$v.$reset()
       this.visible = false
+    },
+
+    addTag(index, tag) {
+      this.form.drugs[index].medication_request_dosage_instruction[0].frequency = tag
     },
   },
 }

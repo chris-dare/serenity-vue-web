@@ -20,14 +20,9 @@
             type="text"
             label="Order detail"
           />
-          <MultiSelect
+          <PrioritiesSelect
             v-model="form.priority"
-            title="Priority"
             :options="priorities"
-            track-by="code"
-            label="display"
-            custom-field="code"
-            :multiple="false"
           />
           <cv-text-input
             v-model="form.service_request_bodysite[0].display"

@@ -45,6 +45,7 @@ export default {
     dispatch('encounters/getEncounters', id , { root:true })
     dispatch('resources/getEncounterStatuses', null, { root:true })
     dispatch('patients/getReferrals', id , { root:true })
+    dispatch('patientAllergies/getAllergies', id , { root:true })
     dispatch('resources/getObservationUnitTypes', null, { root:true })
     dispatch('resources/getVitalsUnitTypes', null, { root:true })
     dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
@@ -154,8 +155,11 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await MedicationAPI.create(provider.id, payload)
-      commit(UPDATE_MEDICATION_REQUEST, data)
-      return data
+
+      data.forEach(element => {
+        commit(UPDATE_MEDICATION_REQUEST, element)
+      })
+      
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error

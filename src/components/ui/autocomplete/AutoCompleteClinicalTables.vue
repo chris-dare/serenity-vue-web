@@ -4,8 +4,7 @@
       <MultiSelect
         v-model="localValue"
         placeholder="Type to search"
-        title="Condition"
-        :options="options"
+        :title="title"
         :multiple="multiple"
         :searchable="true"
         :internal-search="true"
@@ -16,11 +15,23 @@
         :hide-selected="true"
         :options-limit="10"
         :loading="isLoading"
-        :custom-label="nameWithLang"
-        custom-field="value"
-        track-by="value"
+        :options="options.map(type => type.value)"
         @search-change="asyncFind"
-      />
+        @remove="$emit('remove', $event)"
+      >
+        <template
+          slot="singleLabel"
+          slot-scope="props"
+        >
+          <span class="option__title">{{ getStoreFrontName(props) }}</span>
+        </template>
+        <template
+          slot="option"
+          slot-scope="props"
+        >
+          <span class="option__small">{{ getStoreFrontName(props) }}</span>
+        </template>
+      </MultiSelect>
     </div>
   </div>
 </template>
@@ -39,6 +50,10 @@ export default {
     multiple: {
       type: Boolean,
       default: false,
+    },
+    title: {
+      type: String,
+      default: 'Condition',
     },
   },
 
@@ -69,11 +84,11 @@ export default {
   },
 
   // TODO: quick and dirty solution to get initially set values to show in the textbox
-  watch: {
-    localValue(val) {
-      this.asyncFind(val)
-    },
-  },
+  // watch: {
+  //   localValue(val) {
+  //     this.asyncFind(val)
+  //   },
+  // },
 
   mounted() {
     this.asyncFind('a')
@@ -97,6 +112,11 @@ export default {
 
     nameWithLang (data) {
       return `${data.value} — [${data.label}]`
+    },
+
+    getStoreFrontName(props) {
+      let data = this.options.find(i => i.value === props.option)
+      return data ? `${data.value} — [${data.label}]` : ''
     },
   },
 }

@@ -36,7 +36,9 @@
       </div>
 
       <div class="col-span-3 bg-white h-full p-8">
-        <router-view />
+        <vue-page-transition name="fade">
+          <router-view />
+        </vue-page-transition>
       </div>
     </div>
 
@@ -119,6 +121,7 @@ export default {
       vm.loading = true
       await vm.initSinglePatientInformation(vm.id)
       await vm.getEncounter(vm.encounter)
+      vm.setCurrentEncounterState()
       vm.loading = false
     })
   },
@@ -133,6 +136,7 @@ export default {
       initSinglePatientInformation: 'patients/initSinglePatientInformation',
       getEncounter: 'encounters/getEncounter',
       endEncounter: 'encounters/endEncounter',
+      setCurrentEncounterState: 'encounters/setCurrentEncounterState',
     }),
 
 

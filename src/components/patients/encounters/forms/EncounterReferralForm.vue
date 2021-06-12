@@ -28,16 +28,12 @@
       placeholder="Type the name of the doctor to be referred to"
     />
 
-    <MultiSelect
+    <PrioritiesSelect
       v-model="form.priority"
       :options="priorities"
-      track-by="code"
-      label="display"
-      custom-field="code"
-      :multiple="false"
-      title="Priority"
       :error-message="$utils.validateRequiredField($v, 'priority')"
     />
+
     <MultiSelect
       v-model="form.referral_type"
       :options="referralTypes"
@@ -145,7 +141,7 @@ export default {
       this.loading = true
 
       try {
-        let form = { ...this.form  }
+        let form = { ...this.form, status: 'ACTIVE' }
 
         if (this.form.recipient) {
           form.recipient = this.form.recipient.practitioner_role.id
