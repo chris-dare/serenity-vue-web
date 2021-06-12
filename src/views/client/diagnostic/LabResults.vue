@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="space-y-4 my-6">
-      <p class="text-serenity-primary font-semibold">
+      <!-- <p class="text-serenity-primary font-semibold">
         Perform action
       </p>
       <div class="grid grid-cols-5 gap-2 lg:gap-4 my-4">
@@ -51,11 +51,7 @@
           custom-class="bg-white border-0"
           @click="onCardClick(dashboard.value)"
         />
-      </div>
-
-      <p class="text-serenity-primary font-semibold">
-        Requested lab tests
-      </p>
+      </div> -->
 
       <LabsTable />
     </div>
@@ -66,7 +62,7 @@
 </template>
 
 <script>
-import LabsTable from '@/components/diagnostic/LabsTable'
+import LabsTable from '@/components/diagnostic/LabRequests'
 import AddLabResultsModal from '@/components/diagnostic/modals/AddLabResultsModal'
 import ViewLabResultsModal from '@/components/diagnostic/modals/ViewLabResultsModal'
 // import PatientInfoCard from '@/components/patients/PatientInfoCard'
@@ -107,7 +103,7 @@ export default {
         {
           label: 'View Lab results',
           description: 'View previous enteted lab results',
-          type: 'report',
+          type: 'lists',
           value: 'view',
         },
       ]
@@ -123,9 +119,7 @@ export default {
       case 'view':
         this.$trigger('lab:view:open')
         break
-      case 'result':
-        this.$router.push({name: 'Diagnostic:Labs', params: '345345345'})   
-        break
+          
       default:
         break
       }

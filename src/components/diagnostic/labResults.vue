@@ -1,28 +1,29 @@
 <template>
   <div class="space-y-4">
-    <!-- <Search
+    <Search
       v-if="!hideSearch"
       v-model="search"
       placeholder="Search for patient, enter name or MR number"
-    /> -->
+    />
     <div class="my-4 flex items-center space-x-2">
       <SeButton
-        :variant="selected === 'all' ? 'default' : 'white'"
-        @click="selected = 'all'"
+        :variant="selected === 'active' ? 'default' : 'white'"
+        @click="selected = 'active'"
       >
-        All
+        Active ({{ 0 }})
       </SeButton>
       <SeButton
         :variant="selected === 'sample' ? 'default' : 'white'"
         @click="selected = 'sample'"
       >
-        Awaiting samples
+        Sample Requests
       </SeButton>
       <SeButton
-        :variant="selected === 'done' ? 'default' : 'white'"
-        @click="selected = 'done'"
+        v-if="!hideWalk"
+        :variant="selected === 'Walk' ? 'default' : 'white'"
+        @click="selected = 'Walk'"
       >
-        Done
+        Walk-in patients
       </SeButton>
     </div>
     <DataTable
@@ -35,20 +36,28 @@
     >
       <template #default="{ row }">
         <cv-data-table-cell>
-          {{ row.service }}
+          <div class="flex items-center space-x-2 py-2">
+            <Avatar :name="row.patient_name" />
+            <p>{{ row.patient_name }}</p>
+          </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           {{ row.mr_number }}
         </cv-data-table-cell>
         <cv-data-table-cell>
-          {{ row.patient_name }}
+          {{ row.type }}
         </cv-data-table-cell>
         <cv-data-table-cell>
-          <cv-tag
-            :disabled="false"
-            :kind="row.type === 'Done' ? 'green' : row.type === 'Awaiting sample' ? 'red' : 'blue'"
-            :label="row.type"
-          />
+          {{ row.service }}
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <router-link
+            tag="div"
+            :to="`/diagnostics/patients/${row.id}`"
+            class="flex items-center cursor-pointer font-semibold"
+          >
+            View patient
+          </router-link>
         </cv-data-table-cell>
       </template>
     </DataTable>
@@ -77,12 +86,13 @@ export default {
   data() {
     return {
       search: '',
-      selected: 'all',
+      selected: 'active',
       columns: [
-        'Test requested',
-        'Test ID',
-        'Physician',
-        'State',
+        'Patient',
+        'MR Number',
+        'Type',
+        'Service',
+        'Action',
       ],
       data: [
         {
@@ -91,9 +101,9 @@ export default {
           patient_name: 'David Doe',
           mr_number: '00123374',
           provider_name: 'Nyaho Medical Centre',
-          type: 'Awaiting sample',
+          type: 'Facility Visit',
           healthcareService_id: '0561be70-c5c8-4db5-93c9-d034a53c00a5',
-          service: 'Electrolyte panel',
+          service: 'Full Blood Count',
         },
         {
           id: '62356461-67df-4097-b103-919f811a0864',
@@ -101,29 +111,9 @@ export default {
           patient_name: 'Pope Jones',
           mr_number: '00123436',
           provider_name: 'Nyaho Medical Centre',
-          type: 'Done',
+          type: 'Facility Visit',
           healthcareService_id: '0561be70-c5c8-4db5-93c9-d034a53c00a5',
-          service: 'Electrolyte panel',
-        },
-        {
-          id: '62356461-67df-4097-b103-919f811a0864',
-          patient_telephone: '+2335406754445466',
-          patient_name: 'Pope Jones',
-          mr_number: '00123436',
-          provider_name: 'Nyaho Medical Centre',
-          type: 'Awaiting results',
-          healthcareService_id: '0561be70-c5c8-4db5-93c9-d034a53c00a5',
-          service: 'Electrolyte panel',
-        },
-        {
-          id: '62356461-67df-4097-b103-919f811a0864',
-          patient_telephone: '+2335406754445466',
-          patient_name: 'Pope Jones',
-          mr_number: '00123436',
-          provider_name: 'Nyaho Medical Centre',
-          type: 'Done',
-          healthcareService_id: '0561be70-c5c8-4db5-93c9-d034a53c00a5',
-          service: 'Electrolyte panel',
+          service: 'Full Blood Count',
         },
       ],
     }

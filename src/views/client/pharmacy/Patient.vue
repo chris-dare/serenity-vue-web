@@ -1,109 +1,115 @@
 <template>
-  <div class="w-4/5 mx-auto">
-    <div class="bg-white py-8 px-4 my-2 flex items-center justify-between">
-      <div class="flex">
-        <div class="flex items-center space-x-4">
-          <ImageBlock
-            :url="patient.url"
-            :alt="patient.name"
-          />
-          <div>
-            <p>{{ patient.name }}</p>
-            <p class="text-secondary  capitalize">
-              {{ patient.gender_age_description }}
-            </p>
-            <div class="mt-2 flex items-center">
-              <div class="bg-green-700 w-3 h-3 rounded-full mr-2" />
-              <p>MR No: {{ patient.mr_number }}</p>
+  <AppStatePage
+    :loading="loading"
+    :error="error"
+    class="max-w-7xl mx-auto"
+  >
+    <div class="w-4/5 mx-auto">
+      <div class="bg-white py-8 px-4 my-2 flex items-center justify-between">
+        <div class="flex">
+          <div class="flex items-center space-x-4">
+            <ImageBlock
+              :url="patient.url"
+              :alt="patient.name"
+            />
+            <div>
+              <p>{{ patient.name }}</p>
+              <p class="text-secondary  capitalize">
+                {{ patient.gender_age_description }}
+              </p>
+              <div class="mt-2 flex items-center">
+                <div class="bg-green-700 w-3 h-3 rounded-full mr-2" />
+                <p>MR No: {{ patient.mr_number }}</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div
-          class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
-        >
-          <img
-            src="@/assets/img/edit 1.svg"
-            class="w-4 h-4"
+          <div
+            class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
           >
+            <img
+              src="@/assets/img/edit 1.svg"
+              class="w-4 h-4"
+            >
+          </div>
         </div>
+        <div class="flex items-center space-x-4" />
       </div>
-      <div class="flex items-center space-x-4" />
-    </div>
 
-    <div class="flex my-4 mb-8">
-      <InfoLinkCard
-        v-for="(dashboard, index) in availableActions"
-        :key="index"
-        :is-selected="selected === dashboard.value"
-        :details="dashboard"
-        :type="dashboard.type"
-        custom-class="bg-white border-0"
-        @click="change(dashboard)"
-      />
+      <div class="flex my-4 mb-8">
+        <InfoLinkCard
+          v-for="(dashboard, index) in availableActions"
+          :key="index"
+          :is-selected="selected === dashboard.value"
+          :details="dashboard"
+          :type="dashboard.type"
+          custom-class="bg-white border-0"
+          @click="change(dashboard)"
+        />
+      </div>
+      <div class="text-xl font-bold mb-4">
+        Prescribed Medications
+      </div>
+      <div>
+        <DataTable
+          ref="table"
+          :columns="columns"
+          :data="activeMedications"
+          :loading="loading"
+          @pagination="actionOnPagination"
+        >
+          <template #default="{ row }">
+            <cv-data-table-cell>
+              <div>
+                <p>{{ row.medication_detail[0].display }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
+                <p>{{ row.quantity }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
+                <p>{{ row.instruction }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
+                <!-- <p>{{ row.date }}</p> -->
+              </div>
+            </cv-data-table-cell>
+          </template>
+        </DataTable>
+      </div>
+      <div class="flex items-center justify-between mt-4 mb-6">
+        <cv-button
+          class="border-gray-800 bg-gray-800 text-white focus:bg-gray-700 hover:bg-gray-700 px-6"
+          kind="tertiary"
+          @click="$router.back()"
+        >
+          Go Back
+        </cv-button>
+        <cv-button-skeleton
+          v-if="loading"
+        />
+        <cv-button
+          v-else
+          :icon="icon"
+          kind="primary"
+          class="bg-serenity-primary hover:bg-serenity-primary-highlight  ml-6"
+          @click="$trigger('pharmacy:confirm_prescription:open')"
+        >
+          Give drugs
+        </cv-button>
+      </div>
+      <ConfirmPrescriptionModal :prescriptions="activeMedications" />
+      <AddPrescriptionModal />
     </div>
-    <div class="text-xl font-bold mb-4">
-      Prescribed Medications
-    </div>
-    <div>
-      <DataTable
-        ref="table"
-        :columns="columns"
-        :data="prescriptions.data"
-        :loading="loading"
-        @pagination="actionOnPagination"
-      >
-        <template #default="{ row }">
-          <cv-data-table-cell>
-            <div>
-              <p>{{ row.drug }}</p>
-            </div>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <div>
-              <p>{{ row.quantity }}</p>
-            </div>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <div>
-              <p>{{ row.instruction }}</p>
-            </div>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <div>
-              <!-- <p>{{ row.date }}</p> -->
-            </div>
-          </cv-data-table-cell>
-        </template>
-      </DataTable>
-    </div>
-    <div class="flex items-center justify-between mt-4 mb-6">
-      <cv-button
-        class="border-gray-800 bg-gray-800 text-white focus:bg-gray-700 hover:bg-gray-700 px-6"
-        kind="tertiary"
-        @click="$router.back()"
-      >
-        Go Back
-      </cv-button>
-      <cv-button-skeleton
-        v-if="loading"
-      />
-      <cv-button
-        v-else
-        :icon="icon"
-        kind="primary"
-        class="bg-serenity-primary hover:bg-serenity-primary-highlight  ml-6"
-        @click="$trigger('pharmacy:confirm_prescription:open')"
-      >
-        Give drugs
-      </cv-button>
-    </div>
-    <ConfirmPrescriptionModal />
-    <AddPrescriptionModal />
-  </div>
+  </AppStatePage>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import ConfirmPrescriptionModal from '@/components/pharmacy/modals/ConfirmPrescriptionModal'
 import AddPrescriptionModal from '@/components/pharmacy/modals/AddPrescriptionModal'
 
@@ -124,6 +130,8 @@ export default {
 
   data() {
     return {
+      loading: false,
+      error: null,
       hasEncounter: false,
       visible: false,
       admitModal: false,
@@ -152,6 +160,12 @@ export default {
       patient: (state) => state.patients.currentPatient,
       workspaceType: (state) => state.global.workspaceType,
     }),
+    ...mapGetters({
+      patientMedications: 'patients/patientMedications',
+    }),
+    activeMedications() {
+      return this.patientMedications.filter(el => el.status == 'active')
+    },
     availableActions() {
       const types = [
         {
@@ -197,6 +211,21 @@ export default {
     },
   },
 
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      try {
+        vm.loading = true
+        await vm.initSinglePatientInformation(vm.id)
+        vm.loading = false
+      } catch (error) {
+        vm.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
+        vm.loading = false
+      }
+      
+      
+    })
+  },
+
   created() {
     this.findPatient(this.id)
   },
@@ -204,6 +233,7 @@ export default {
   methods: {
     ...mapActions({
       findPatient: 'patients/findPatient',
+      initSinglePatientInformation: 'patients/initSinglePatientInformation',
     }),
     change(dashboard){
       if (dashboard.value === 'new') {

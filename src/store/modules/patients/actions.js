@@ -32,6 +32,7 @@ import {
 
 export default {
   async initSinglePatientInformation({dispatch}, id) {
+    console.info('init single patient', id)
     await dispatch('getPatient', id)
     await dispatch('appointments/getAppointments', { filters: { patient: id, ordering: '-start' } }, { root:true })
     dispatch('getServiceRequests', id)
@@ -415,4 +416,16 @@ export default {
       throw error
     }
   },
+
+  async dispenseDrugs({ commit, rootState }, {medicationRequests}) {
+    try {
+      const provider = rootState.auth.provider
+      await MedicationAPI.dispense(provider.id, medicationRequests)
+      // commit(UPDATE_OBSERVATION, data)
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
 }

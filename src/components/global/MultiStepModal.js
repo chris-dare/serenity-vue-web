@@ -8,6 +8,7 @@ export default {
       visible: false,
       form: {},
       steps: [],
+      step: 1,
     }
   },
   /*eslint-disable */
@@ -42,7 +43,7 @@ export default {
         this.$emit('input', this.value + 1)
         setTimeout(()=> {
           const slot = this.slots()[this.value]
-          Object.assign(slot.componentInstance.$data.form, form)
+          // Object.assign(slot.componentInstance.$data.form, form)
           slot.componentInstance.$forceUpdate(); 
         }, 100)
       }

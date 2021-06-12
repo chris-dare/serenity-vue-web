@@ -9,11 +9,24 @@
     <template slot="content">
       <div class="space-y-8">
         <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'Add new' }} inventory</p>
-        <cv-text-input
-          v-model="form.name"
-          type="text"
-          label="Item name"
-          placeholder="eg Plasters"
+        <div class="flex items-center space-x-4 my-4">
+          <cv-text-input
+            v-model="form.name"
+            type="text"
+            class="w-80"
+            label="Item name"
+            placeholder="eg Plasters"
+          />
+          <cv-checkbox
+            v-model="medication"
+            :value="!medication"
+            label="Medication"
+          />
+        </div>
+        <AutoCompleteMedication
+          v-model="form.medication"
+          :disabled="!medication"
+          class="col-span-3"
         />
         <div class="grid grid-cols-2 gap-8">
           <cv-text-input
@@ -81,6 +94,7 @@ export default {
         sub_group: 'Medication',
         category: 'medical-stock',
       },
+      medication: false,
       loading: false,
       visible: false,
       type: 'add',
@@ -102,6 +116,14 @@ export default {
       this.visible = true
       this.form = data.params[0]
       this.type = 'update'
+    },
+  },
+
+  watch: {
+    medication: function (val) {
+      if(val !== true){
+        this.form.medication = null
+      }
     },
   },
 

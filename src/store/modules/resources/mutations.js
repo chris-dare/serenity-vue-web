@@ -20,6 +20,7 @@ import {
   SET_VITALS_UNIT_TYPES,
   SET_LANGUAGES,
   SET_VENDORS,
+  SET_PHARMACY_INVENTORY_OPTIONS,
 } from './mutation-types'
 
 export default {
@@ -115,5 +116,9 @@ export default {
   },
   [SET_VENDORS](state, vendors) {
     state.vendors = vendors
+  },
+
+  [SET_PHARMACY_INVENTORY_OPTIONS](state, inventory) {
+    state.pharmacyInventory = inventory
   },
 }
