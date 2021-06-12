@@ -32,7 +32,6 @@ import {
 
 export default {
   async initSinglePatientInformation({dispatch}, id) {
-    console.info('init single patient', id)
     await dispatch('getPatient', id)
     await dispatch('appointments/getAppointments', { filters: { patient: id, ordering: '-start' } }, { root:true })
     dispatch('getServiceRequests', id)

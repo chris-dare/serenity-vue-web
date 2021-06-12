@@ -33,6 +33,8 @@
           @cancel="cancel"
         />
         <PrintBillForm
+          :medication-requests="medicationRequests"
+          :patient="patient"
           :_form="form"
           @next="next"
           @prev="prev"

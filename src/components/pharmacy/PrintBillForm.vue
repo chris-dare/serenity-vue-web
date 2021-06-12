@@ -28,41 +28,40 @@
     </div>
     <div>
       <div
-        v-for="drug in prescriptions.data"
+        v-for="drug in medicationRequests"
         :key="drug.drug"
         class="border-b border-solid border-gray-200 py-2"
       >
         <div class="flex justify-between font-bold mb-1">
-          <div>{{ drug.drug }}</div>
-          <div>GHS 5.00</div>
+          <div>{{ drug.medication_detail[0].display }}</div>
+          <div>{{ drug.medication.selling_price | formatMoney | toCedis }}</div>
         </div>
         <div>{{ drug.quantity }}</div>
       </div>
     </div>
     <div class="flex justify-end items-center">
       <div class="font-light mr-1">Total</div>
-      <div class="text-lg font-bold">GHS20.00</div>
+      <div class="text-lg font-bold">{{ totalAmount | formatMoney | toCedis }}</div>
     </div>
     <div class="flex items-center justify-between">
       <SeButton
         variant="secondary"
         @click="$emit('cancel')"
       >
-        Cancel
+        Close
       </SeButton>
-      <SeButton @click="submit">Print Bill<ChevronRight class="w-4 h-4 text-white ml-4" /></SeButton>
+      <SeButton @click="$emit('cancel')">Print Bill<ChevronRight class="w-4 h-4 text-white ml-4" /></SeButton>
     </div>
   </div>
 </template>
 
 <script>
-import { required, email } from 'vuelidate/lib/validators'
 import Checkmark from '@carbon/icons-vue/es/checkmark/32'
 
 export default {
   name: 'PrintBillForm',
 
-  props: ['step'],
+  props: ['step', 'medicationRequests'],
 
   data() {
     return {
@@ -96,14 +95,13 @@ export default {
     }
   },
 
-  validations: {
-    form:  {
-      first_name: {required},
-      last_name: {required},
-      gender: {required},
-      birth_date: {required},
-      email: {required, email},
-      mobile: {required},
+  computed: {
+    totalAmount() {
+      let total = 0
+      this.medicationRequests.forEach(el => {
+        total += parseFloat(el.medication.selling_price)
+      })
+      return total
     },
   },
 

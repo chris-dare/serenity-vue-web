@@ -1,148 +1,139 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="visible = false"
-  >
-    <template slot="content">
-      <div class="space-y-4">
-        <p class="text-lg font-semibold">Medication</p>
-        <div
-          v-for="(detail, index) in form.drugs"
-          :key="index"
-        >
-          <p class="text-serenity-green font-semibold mb-4">{{ index+1 }}.</p>
-          <div class="grid grid-cols-12 gap-x-4 gap-y-8 items-center">
-            <div class="col-span-11 grid grid-cols-3 gap-4 items-center">
-              <AutoCompleteMedication
-                v-model="detail.medication_detail[0].display"
-                class="col-span-3"
-              />
-              <AutoCompletePharmacyInventory
-                v-model="detail.inventory"
-                class="col-span-3"
-              />
-              <MultiSelect
-                v-model="detail.course_of_therapy_type"
-                title="Course of therapy"
-                :options="therapyTypes"
-                custom-field="value"
-                label="label"
-                track-by="value"
-                :multiple="false"
-              />
-              <cv-text-input
-                v-model="detail.medication_request_dosage_instruction[0].frequency"
-                label="Frequency"
-                type="number"
-                placeholder="eg 2 for twice frequency unit"
-                class="inherit-full-input"
-              />
-              <MultiSelect
-                v-model="detail.medication_request_dosage_instruction[0].frequency_unit"
-                title="Frequency unit"
-                :options="frequencies"
-                :multiple="false"
-                preselect
-              />
-              <cv-text-input
-                v-model="detail.medication_request_dosage_instruction[0].period"
-                label="Period"
-                type="number"
-                placeholder="eg 4 days"
-                class="inherit-full-input"
-              />
-
-              <MultiSelect
-                v-model="detail.medication_request_dosage_instruction[0].period_unit"
-                title="Period unit"
-                :options="units"
-                :multiple="false"
-                preselect
-              />
-              
-              <cv-text-input
-                v-model="detail.medication_request_dosage_instruction[0].strength"
-                label="Strength"
-                type="text"
-                class="inherit-full-input"
-              />
-            </div>
-        
-            <Trash
-              class="w-5 h-5 cursor-pointer"
-              @click="removeDrug(index)"
-            />
-          </div>
-        </div>
-        <p
-          v-if="$utils.validateRequiredField($v, 'drugs')"
-          class="error col-span-2"
-        >
-          All fields are required for drugs
-        </p>
-        <div
-          v-if="mode === 'create'"
-          class="flex items-center space-x-2 text-serenity-primary my-4 cursor-pointer text-sm"
-          @click="addDrug"
-        >
-          <AddAlt class="w-5 h-5" />
-          <p class="text-serenity-primary">Add new drug</p>
-        </div>
-
-        <div class="grid grid-cols-3 gap-4 items-center">
-          <MultiSelect
-            v-model="form.extra_details.priority"
-            title="Priority"
-            :options="priorities"
-            :multiple="false"
+  <div class="space-y-4">
+    <p class="text-lg font-semibold">Medication</p>
+    <div
+      v-for="(detail, index) in form.drugs"
+      :key="index"
+    >
+      <p class="text-serenity-green font-semibold mb-4">{{ index+1 }}.</p>
+      <div class="grid grid-cols-12 gap-x-4 gap-y-8 items-center">
+        <div class="col-span-11 grid grid-cols-3 gap-4 items-center">
+          <AutoCompleteMedication
+            v-model="detail.medication_detail[0].display"
+            class="col-span-3"
+          />
+          <AutoCompletePharmacyInventory
+            v-model="detail.inventory"
+            :medication-request="detail"
+            class="col-span-3"
           />
           <MultiSelect
-            v-model="form.extra_details.medication_request_category"
-            title="Medication request category"
-            :options="categories"
+            v-model="detail.course_of_therapy_type"
+            title="Course of therapy"
+            :options="therapyTypes"
+            custom-field="value"
+            label="label"
+            track-by="value"
             :multiple="false"
           />
+          <cv-text-input
+            v-model="detail.medication_request_dosage_instruction[0].frequency"
+            label="Frequency"
+            type="number"
+            placeholder="eg 2 for twice frequency unit"
+            class="inherit-full-input"
+          />
+          <MultiSelect
+            v-model="detail.medication_request_dosage_instruction[0].frequency_unit"
+            title="Frequency unit"
+            :options="frequencies"
+            :multiple="false"
+            preselect
+          />
+          <cv-text-input
+            v-model="detail.medication_request_dosage_instruction[0].period"
+            label="Period"
+            type="number"
+            placeholder="eg 4 days"
+            class="inherit-full-input"
+          />
 
-          <DatePicker
-            v-model="form.extra_details.date"
-            type="datetime"
-            label="Date of administration"
-            class="se-input-gray"
+          <MultiSelect
+            v-model="detail.medication_request_dosage_instruction[0].period_unit"
+            title="Period unit"
+            :options="units"
+            :multiple="false"
+            preselect
           />
           
-          <p
-            v-if="$utils.validateRequiredField($v, 'extra_details')"
-            class="error col-span-3"
-          >
-            Priority is required
-          </p>
-          
-          <cv-text-area
-            v-model="form.extra_details.medication_request_notes[0].display"
-            label="Medication notes"
+          <cv-text-input
+            v-model="detail.medication_request_dosage_instruction[0].strength"
+            label="Strength"
             type="text"
-            placeholder="Instruction on how to use the drug"
-            :rows="3"
-            class="inherit-full-input col-span-3"
+            class="inherit-full-input"
           />
         </div>
-
-        <div class="flex items-center justify-between">
-          <SeButton variant="secondary">Go back</SeButton>
-          <SeButton
-            :loading="loading"
-            :icon="add"
-            @click="submit"
-          >
-            Submit
-          </SeButton>
-        </div>
+    
+        <Trash
+          class="w-5 h-5 cursor-pointer"
+          @click="removeDrug(index)"
+        />
       </div>
-    </template>
-  </cv-modal>
+    </div>
+    <p
+      v-if="$utils.validateRequiredField($v, 'drugs')"
+      class="error col-span-2"
+    >
+      All fields are required for drugs
+    </p>
+    <div
+      v-if="mode === 'create'"
+      class="flex items-center space-x-2 text-serenity-primary my-4 cursor-pointer text-sm"
+      @click="addDrug"
+    >
+      <AddAlt class="w-5 h-5" />
+      <p class="text-serenity-primary">Add new drug</p>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4 items-center">
+      <MultiSelect
+        v-model="form.extra_details.priority"
+        title="Priority"
+        :options="priorities"
+        :multiple="false"
+      />
+      <MultiSelect
+        v-model="form.extra_details.medication_request_category"
+        title="Medication request category"
+        :options="categories"
+        :multiple="false"
+      />
+
+      <DatePicker
+        v-model="form.extra_details.date"
+        type="datetime"
+        label="Date of administration"
+        class="se-input-gray"
+      />
+      
+      <p
+        v-if="$utils.validateRequiredField($v, 'extra_details')"
+        class="error col-span-3"
+      >
+        Priority is required
+      </p>
+      
+      <cv-text-area
+        v-model="form.extra_details.medication_request_notes[0].display"
+        label="Medication notes"
+        type="text"
+        placeholder="Instruction on how to use the drug"
+        :rows="3"
+        class="inherit-full-input col-span-3"
+      />
+    </div>
+
+    <div class="flex items-center justify-between">
+      <SeButton variant="secondary">Go back</SeButton>
+      <SeButton
+        :loading="loading"
+        :icon="add"
+        @click="submit"
+      >
+        Submit
+      </SeButton>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -207,6 +198,7 @@ export default {
         minLength: minLength(1),
         $each: {
           course_of_therapy_type: { required },
+          inventory: { required },
           medication_detail: {
             required,
             minLength: minLength(1),
@@ -286,7 +278,6 @@ export default {
 
 
       if (this.$v.$invalid) {
-        console.info('submit 2')
         this.$toast.error('Please fill in the required fields')
         return
       }
@@ -294,21 +285,16 @@ export default {
     },
 
     async save() {
-      console.info('submit 3')
       this.loading = true
 
       try {
         this.form.requester = this.user.id
-        console.info('submit 4')
         let medicationRequests = await this.createMedicationRequest(this.formatMedication(this.form))
         for(let i = 0; i < this.form.drugs.length; i++){
           medicationRequests[i].medication = this.form.drugs[i].inventory
         }
-        await this.dispenseDrugs({medicationRequests})
+        this.$emit('success', medicationRequests)
         this.loading = false
-        this.$toast.open({
-          message: 'Medication successfully dispensed',
-        })
         this.close()
       } catch (error) {
         this.loading = false

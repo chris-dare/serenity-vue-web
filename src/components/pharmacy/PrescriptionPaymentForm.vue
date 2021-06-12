@@ -63,7 +63,12 @@
         >
           Cancel Bill
         </SeButton>
-        <SeButton @click="submit">Receive Payment<ChevronRight class="w-4 h-4 text-white ml-4" /></SeButton>
+        <SeButton
+          :loading="loading"
+          @click="submit"
+        >
+          Receive Payment<ChevronRight class="w-4 h-4 text-white ml-4" />
+        </SeButton>
       </div>
     </div>
   </div>
@@ -83,6 +88,7 @@ export default {
       form: {
       },
       visible: false,
+      loading: false,
       icons: {
         Checkmark,
       },
@@ -141,14 +147,14 @@ export default {
       try {
         const medicationRequests = this.medicationRequests
         await this.dispenseDrugs({medicationRequests})
-        this.loading = false
         this.$toast.open({
           message: 'Medication successfully dispensed',
         })
+        this.$store.dispatch('patients/getMedicationRequests')
+        this.$emit('success')
         
       } catch (error) {
         this.loading = false
-        throw(error)
       }
     },
 
