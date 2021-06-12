@@ -115,12 +115,6 @@ export default {
       selectedFilter: '',
     }
   },
-  
-  watch: {
-    search(search) {
-      this.searchPatients(this.$store, search)
-    },
-  },
 
   computed: {
     ...mapState({
@@ -138,6 +132,12 @@ export default {
 
     femaleCount() {
       return this.data.filter((p) => p.gender == 'FEMALE').length
+    },
+  },
+
+  watch: {
+    search(search) {
+      this.searchPatients(this.$store, search)
     },
   },
 
