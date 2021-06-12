@@ -95,6 +95,7 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import DataMixin from '@/mixins/data'
+import debounce from 'lodash/debounce'
 export default {
   name: 'PatientsTable',
 
@@ -115,6 +116,12 @@ export default {
     }
   },
   
+  watch: {
+    search(search) {
+      this.searchPatients(this.$store, search)
+    },
+  },
+
   computed: {
     ...mapState({
       patientsCount: (state) => state.patients.patientsCount,
@@ -144,6 +151,9 @@ export default {
     ...mapActions({
       getData: 'patients/getPatients',
     }),
+    searchPatients: debounce((store, search)=> {
+      store.dispatch('patients/searchPatients', {search})
+    }, 300, false),
   },
 }
 </script>

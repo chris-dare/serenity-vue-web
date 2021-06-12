@@ -66,6 +66,17 @@ export default {
     }
   },
 
+  async searchPatients({ commit, rootState }, params = {}) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await PatientsAPI.list(provider.id, params)
+      commit(SET_PATIENTS, data)
+      commit(SET_PATIENTS_COUNT, data.length)
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
   async getPatient({ commit, rootState }, id) {
     try {
       const provider = rootState.auth.provider
