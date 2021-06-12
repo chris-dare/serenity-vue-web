@@ -32,93 +32,39 @@
             >
           </div>
         </div>
-        <div class="flex items-center space-x-4" />
+        <div class="flex items-center space-x-4">
+          <SeButton
+            @click="$trigger('pharmacy:patient_prescription:open', 'create')"
+          >
+            <Medication class="w-4 h-4 mr-2" />
+            New Prescription
+          </SeButton>
+        </div>
       </div>
 
-      <div class="flex my-4 mb-8">
-        <InfoLinkCard
-          v-for="(dashboard, index) in availableActions"
-          :key="index"
-          :is-selected="selected === dashboard.value"
-          :details="dashboard"
-          :type="dashboard.type"
-          custom-class="bg-white border-0"
-          @click="change(dashboard)"
-        />
-      </div>
-      <div class="text-xl font-bold mb-4">
-        Prescribed Medications
-      </div>
-      <div>
-        <DataTable
-          ref="table"
-          :columns="columns"
-          :data="activeMedications"
-          :loading="loading"
-          @pagination="actionOnPagination"
-        >
-          <template #default="{ row }">
-            <cv-data-table-cell>
-              <div>
-                <p>{{ row.medication_detail[0].display }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ row.quantity }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ row.instruction }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <!-- <p>{{ row.date }}</p> -->
-              </div>
-            </cv-data-table-cell>
-          </template>
-        </DataTable>
-      </div>
-      <div class="flex items-center justify-between mt-4 mb-6">
-        <cv-button
-          class="border-gray-800 bg-gray-800 text-white focus:bg-gray-700 hover:bg-gray-700 px-6"
-          kind="tertiary"
-          @click="$router.back()"
-        >
-          Go Back
-        </cv-button>
-        <cv-button-skeleton
-          v-if="loading"
-        />
-        <cv-button
-          v-else
-          :icon="icon"
-          kind="primary"
-          class="bg-serenity-primary hover:bg-serenity-primary-highlight  ml-6"
-          @click="$trigger('pharmacy:confirm_prescription:open')"
-        >
-          Give drugs
-        </cv-button>
-      </div>
-      <ConfirmPrescriptionModal :prescriptions="activeMedications" />
-      <AddPrescriptionModal />
+      <PatientDetailsNav
+        class="mb-8"
+        :links="links"
+      />
+      <router-view />
+      <PatientPrescriptionModal :medication-requests="activeMedications" />
     </div>
   </AppStatePage>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import ConfirmPrescriptionModal from '@/components/pharmacy/modals/ConfirmPrescriptionModal'
-import AddPrescriptionModal from '@/components/pharmacy/modals/AddPrescriptionModal'
+import PatientDetailsNav from '@/components/patients/PatientDetailsNav'
+import Medication from '@carbon/icons-vue/es/medication/32'
+import PatientPrescriptionModal from '@/components/pharmacy/modals/PatientPrescriptionModal'
 
 export default {
   name: 'Patient',
 
   components: { 
-    ConfirmPrescriptionModal,
-    AddPrescriptionModal,
+    PatientDetailsNav,
+    Medication,
+    PatientPrescriptionModal,
   },
 
   props: {
@@ -152,6 +98,11 @@ export default {
         'Instruction',
         'Refill',
       ],
+      links: [
+        { label: 'Prescriptions', path: 'Pharmacy:PatientPrescriptions' },
+        { label: 'Summary', path: 'Pharmacy:PatientSummary' },
+        { label: 'Chart', path: 'Pharmacy:PatientChart' },
+      ],
     }
   },
 
@@ -165,45 +116,6 @@ export default {
     }),
     activeMedications() {
       return this.patientMedications.filter(el => el.status == 'active')
-    },
-    availableActions() {
-      const types = [
-        {
-          label: 'View Prescription',
-          description: 'See all prescribed drugs',
-          type: 'medication',
-          value: 'search',
-        },
-        {
-          label: 'New prescription',
-          description: 'See all prescribed drugs',
-          type: 'medication',
-          value: 'new',
-        },
-      ]
-
-      return types
-    },
-    links() {
-      let links = [
-        { label: 'Summary', path: 'PatientSummary' },
-      ]
-
-      if (this.workspaceType === 'Reception') {
-        links.push({ label: 'Chart', path: 'PatientCharts' },{ label: 'Appointments', path: 'PatientAppointments' })
-      } else {
-        links.push(
-          { label: 'Timeline', path: 'PatientTimeline' },
-          { label: 'Chart', path: 'PatientCharts' },
-          { label: 'Appointments', path: 'PatientAppointments' },
-          { label: 'Encounters', path: 'PatientEncounters' },
-          { label: 'Prescriptions', path: 'PatientPrescriptions' },
-          { label: 'Orders/Billing', path: 'PatientOrders' },
-          { label: 'Reports', path: 'PatientReports' },
-          { label: 'Notes', path: 'PatientNotes' })
-      }
-      return links
-
     },
 
     isSelected() {
@@ -233,12 +145,23 @@ export default {
   methods: {
     ...mapActions({
       findPatient: 'patients/findPatient',
-      initSinglePatientInformation: 'patients/initSinglePatientInformation',
     }),
-    change(dashboard){
-      if (dashboard.value === 'new') {
-        this.$trigger('pharmacy:add_prescription:open')
-      }
+    async initSinglePatientInformation(id) {
+      await this.$store.dispatch('patients/getPatient', id)
+      this.$store.dispatch('appointments/getAppointments', { filters: { patient: id, ordering: '-start' } }, { root:true })
+      this.$store.dispatch('patients/getServiceRequests', id)
+      await this.$store.dispatch('patients/getMedicationRequests')
+      this.$store.dispatch('patients/getObservations', { refresh:true, filters: { patient: id }})
+      this.$store.dispatch('patients/getDiagnosis', id)
+      this.$store.dispatch('patients/getNotes', id)
+      this.$store.dispatch('patients/getDiagnosticReports')
+      this.$store.dispatch('encounters/getEncounters', id , { root:true })
+      this.$store.dispatch('resources/getEncounterStatuses', null, { root:true })
+      this.$store.dispatch('patients/getReferrals', id , { root:true })
+      this.$store.dispatch('resources/getObservationUnitTypes', null, { root:true })
+      this.$store.dispatch('resources/getVitalsUnitTypes', null, { root:true })
+      this.$store.dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
+      this.$store.dispatch('resources/getSystemExamUnitTypes', null, { root:true })
     },
   },
 }

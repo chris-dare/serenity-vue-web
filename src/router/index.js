@@ -445,6 +445,23 @@ const routes = [
         name: 'Pharmacy:Patient',
         props: true,
         component: () => import(/* webpackChunkName: "pharmacy" */ '../views/client/pharmacy/Patient.vue'),
+        children: [
+          {
+            path: 'summary',
+            name: 'Pharmacy:PatientSummary',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientSummary.vue'),
+          },
+          {
+            path: 'chart',
+            name: 'Pharmacy:PatientChart',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientCharts.vue'),
+          },
+          {
+            path: '',
+            name: 'Pharmacy:PatientPrescriptions',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/pharmacy/patient/Prescriptions.vue'),
+          },
+        ],
       },
       {
         path: '/billing/patients',

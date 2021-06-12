@@ -3,7 +3,7 @@
     class="mt-2 bg-white flex"
   >
     <router-link
-      v-for="(link, index) in links"
+      v-for="(link, index) in computedLinks"
       :key="index"
       tag="div"
       :to="{ name: link.path }"
@@ -23,14 +23,21 @@ import { mapState } from 'vuex'
 export default {
   name: 'PatientDetailsNav',
 
+  props: {
+    links: {
+      type: Array,
+      default: () => [],
+    },
+  },
+
   computed: {
     ...mapState({
       patient: (state) => state.patients.currentPatient,
       workspaceType: (state) => state.global.workspaceType,
     }),
 
-    links() {
-
+    computedLinks() {
+      if(this.links.length > 0)return this.links
       let links = [
         { label: 'Summary', path: 'PatientSummary' },
       ]

@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
 import ModelMixin from '@/mixins/model'
+import PharmacyInventoryApi from '@/api/pharmacy_inventory'
 
 export default {
   name: 'AutoCompletePharmacyInventory',
@@ -40,6 +40,10 @@ export default {
       type: String,
       default: 'Drug',
     },
+    medicationRequest: {
+      type: Object,
+      default: () => null,
+    },
   },
 
   data() {
@@ -48,17 +52,12 @@ export default {
     }
   },
 
-  computed: {
-    ...mapState({
-      inventory: state => state.resources.pharmacyInventory,
-    }),
-  },
-
   watch: {
-    inventory: {
+    medicationRequest: {
       immediate: true,
       handler(val) {
-        this.options = val
+        console.info(val)
+        this.fetchInventory(val)
       },
     },
   },
@@ -68,9 +67,17 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      getPharmacyInventoryOptions: 'resources/getPharmacyInventoryOptions',
-    }),
+    async fetchInventory(medicationRequest) {
+      if(medicationRequest == null){
+        this.options = []
+        return
+      }
+      //eslint-disable-next-line
+      const drugName = medicationRequest.medication_detail[0].display
+      const { data } = await PharmacyInventoryApi.list()
+      // const { data } = await PharmacyInventoryApi.list({search: drugName})
+      this.options = data
+    },
   },
 }
 </script>
