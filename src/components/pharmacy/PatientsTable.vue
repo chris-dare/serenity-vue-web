@@ -74,7 +74,7 @@
           <cv-data-table-cell>
             <router-link
               tag="div"
-              :to="{name: 'Pharmacy:Patient', params: {id: row.id}}"
+              :to="{name: 'Pharmacy:PatientPrescriptions', params: {id: row.id}}"
               class="flex items-center cursor-pointer"
             >
               View
