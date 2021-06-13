@@ -1,68 +1,17 @@
 <template>
   <div class="space-y-4">
     <Search
-      v-model="search"
+      v-model="filter"
       placeholder="Search for patient, enter name or MR number"
     />
     <div
       v-if="!modal"
       class="my-4 flex items-center justify-between"
     >
-      <div class="space-x-2 flex items-center">
-        <SeButton
-          :variant="search === '' ? 'primary' : 'white'"
-          @click="search = ''"
-        >
-          All ({{ patientsCount }})
-        </SeButton>
-        <!-- <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
-          v-if="workspaceType !== 'Reception'"
-        >
-          <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
-          Delayed ({{ 1 }})
-        </cv-button> -->
-        <SeButton
-          :variant="search === 'in-patient' ? 'primary' : 'white'"
-          @click="search = 'in-patient'"
-        >
-          <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
-          In-patient ({{ 1 }})
-        </SeButton>
-        <!-- <cv-button
-          size="field"
-          kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
-          v-if="workspaceType !== 'Reception'"
-        >
-          <div class="w-2 h-2 rounded-full bg-warning mr-2"></div>
-          Urgent ({{ 1 }})
-        </cv-button> -->
-        <SeButton
-          :variant="search === 'male' ? 'primary' : 'white'"
-          @click="search = 'male'"
-        >
-          Male({{ maleCount }})
-          <img
-            src="@/assets/img/gender--male 1.svg"
-            class="ml-2"
-            alt=""
-          >
-        </SeButton>
-        <SeButton
-          :variant="search === 'female' ? 'primary' : 'white'"
-          @click="search = 'female'"
-        >
-          Female({{ femaleCount }})
-          <img
-            src="@/assets/img/gender--female 1.svg"
-            class="ml-2"
-            alt=""
-          >
-        </SeButton>
-      </div>
+      <FilterGroup
+        v-model="search"
+        :filters="filters"
+      />
       <FilterDropdown
         v-if="false"
         v-model="selectedFilter"
@@ -127,6 +76,7 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import DataMixin from '@/mixins/data'
+import debounce from 'lodash/debounce'
 export default {
   name: 'PatientsTable',
 
@@ -142,6 +92,11 @@ export default {
       type: String,
       default: 'PatientSummary',
     },
+
+    filters: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   data() {
@@ -149,13 +104,14 @@ export default {
       rowSelects: null,
       columns: [
         'Patient',
-        // 'Weight/Height',
         'Mobile',
         'Last encounter',
         'MR No.',
         'Action',
       ],
       selectedFilter: '',
+      filter: '',
+      searchTerms: ['gender'],
     }
   },
   
@@ -178,6 +134,12 @@ export default {
     },
   },
 
+  watch: {
+    filter(search) {
+      this.searchPatients(search)
+    },
+  },
+
   beforeMount() {
     if (this.modal) {
       this.pageSizes = [5, 10, 15]
@@ -187,14 +149,19 @@ export default {
 
   mounted() {
     this.paginate = true
-    this.searchTerms = ['name', 'mr_number', 'mobile', 'gender']
+    // this.searchTerms = ['name', 'mr_number', 'mobile', 'gender']
     this.refresh(false)
   },
 
   methods: {
     ...mapActions({
       getData: 'patients/getPatients',
+      searchPatientsStore: 'patients/searchPatients',
     }),
+
+    searchPatients: debounce(function(search) {
+      this.searchPatientsStore({ search })
+    }, 300, false),
   },
 }
 </script>

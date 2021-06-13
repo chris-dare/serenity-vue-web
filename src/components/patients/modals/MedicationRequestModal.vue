@@ -244,7 +244,6 @@ export default {
     async save() {
       
       this.loading = true
-      console.log('here')
       try {
         this.form.requester = this.user.id
         await this.createMedicationRequest(this.formatMedication(this.form))

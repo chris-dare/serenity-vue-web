@@ -56,7 +56,6 @@ export default {
     medicationRequest: {
       immediate: true,
       handler(val) {
-        console.info(val)
         this.fetchInventory(val)
       },
     },

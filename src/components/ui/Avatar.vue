@@ -23,6 +23,9 @@ export default {
 
   methods: {
     getInitials (string) {
+      if (!string) {
+        return ''
+      }
       var names = string.split(' '),
         initials = names[0].substring(0, 1).toUpperCase()
             

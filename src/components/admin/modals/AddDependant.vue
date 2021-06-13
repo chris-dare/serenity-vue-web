@@ -162,7 +162,6 @@ export default {
       try {
         let data = await this.depositClient(payload)
         if (data.successful) {
-          console.log(data)
           let payload = this.client
           payload.amount = data.returnedData.amount
           payload.maximum_employees_allowed = data.returnedData.maximum_employees_allowed

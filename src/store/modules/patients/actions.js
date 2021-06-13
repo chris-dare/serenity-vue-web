@@ -71,7 +71,6 @@ export default {
       const provider = rootState.auth.provider
       const { data } = await PatientsAPI.list(provider.id, params)
       commit(SET_PATIENTS, data)
-      commit(SET_PATIENTS_COUNT, data.length)
     } catch (error) {
       throw error.data || error
     }
@@ -338,7 +337,6 @@ export default {
 
       history.forEach(async his => {
         const { data } = await ObservationsAPI.create(provider.id, his)
-        console.log('data', data)
         commit(UPDATE_OBSERVATION, data)
       })
       

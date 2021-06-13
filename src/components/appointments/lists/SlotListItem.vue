@@ -67,8 +67,7 @@ export default {
   },
 
   created(){
-    console.log(this.doctor)
-    // console.log(this.localValue)
+    
   },
 }
 </script>
