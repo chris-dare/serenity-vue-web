@@ -15,7 +15,7 @@ export default {
 
   computed: {
     normalizedData() {
-      return this.$utils.getFilteredData(this.data, this.search, this.searchTerms)
+      return this.searchTerms ? this.$utils.getFilteredData(this.data, this.search, this.searchTerms) : this.data
     },
 
     filteredData() {

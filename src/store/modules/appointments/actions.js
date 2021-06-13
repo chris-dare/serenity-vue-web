@@ -32,7 +32,6 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI.slots(provider.id, filters)
-      console.log(data)
       commit(SET_SLOTS, data)
     } catch (error) {
       Vue.prototype.$utils.error(error)

@@ -7,6 +7,10 @@ export default {
     })
   },
 
+  maleCount: state => state.patients.filter((p) => p.gender == 'MALE').length,
+
+  femaleCount: state => state.patients.filter((p) => p.gender == 'FEMALE').length,
+
   patientIsDeceased: state => {
     if (!state.currentPatient) return false
     return state.currentPatient.is_deceased

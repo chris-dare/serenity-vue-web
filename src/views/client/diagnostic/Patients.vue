@@ -11,11 +11,12 @@
 
 <script>
 import { mapState } from 'vuex'
-import LabsTable from '@/components/diagnostic/labResults'
+import LabsTable from '@/components/diagnostic/LabResults'
+
 export default {
   name: 'DiagnosticPatients',
 
-  components: {  LabsTable },
+  components: { LabsTable },
 
   data() {
     return {

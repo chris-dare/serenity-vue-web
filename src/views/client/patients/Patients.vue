@@ -11,14 +11,16 @@
         </SeButton>
       </div>
 
-      <PatientsTable />
+      <PatientsTable :filters="filters" />
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import PatientsTable from '@/components/patients/PatientsTable'
+import Male from '@carbon/icons-vue/es/gender--male/16'
+import Female from '@carbon/icons-vue/es/gender--female/16'
 export default {
   name: 'Patients',
 
@@ -28,6 +30,20 @@ export default {
     ...mapState({
       patientsCount: (state) => state.patients.patientsCount,
     }),
+
+    ...mapGetters({
+      maleCount: 'patients/maleCount',
+      femaleCount: 'patients/femaleCount',
+    }),
+
+    filters() {
+      return [
+        { display: `All (${ this.patientsCount })`, code: '' },
+        { display: `In-patient (${ 0 })`, code: 'in-patient' },
+        { display: `Male (${ this.maleCount })`, code: 'male', icon: Male },
+        { display: `Female (${ this.femaleCount })`, code: 'female', icon: Female },
+      ]
+    },
   },
 
   methods: {

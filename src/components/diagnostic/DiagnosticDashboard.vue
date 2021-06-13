@@ -21,20 +21,20 @@
       hide-search 
       hide-walk
     />
-    <NewPatient />
+    <AddPatient />
     <AddLabs />
   </div>
 </template>
 
 <script>
-import NewPatient from '@/components/diagnostic/modals/AddPatient.vue'
 import AddLabs from '@/components/diagnostic/modals/AddLabResultsModal.vue'
-import LabsTable from './labResults'
+import LabsTable from '@/components/diagnostic/LabResults'
+import AddPatient from '@/components/diagnostic/modals/AddPatient'
 
 export default {
   name: 'DiagnosticDashboard',
 
-  components: { LabsTable, NewPatient, AddLabs },
+  components: { LabsTable, AddPatient, AddLabs },
 
   data() {
     return {

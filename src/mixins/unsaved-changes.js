@@ -51,7 +51,6 @@ export default {
         cancelButtonVariant: 'danger',
         label: 'You have unsaved changes. Do you want to discard them or save them?',
         callback: async () => {
-          console.log('here')
         },
         cancel: async () => {
           this.resetDirtyState()

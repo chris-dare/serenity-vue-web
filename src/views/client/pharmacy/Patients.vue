@@ -5,14 +5,18 @@
         <p class="text-xl font-bold">Find patient</p>
       </div>
 
-      <PatientsTable />
+      <PatientsTable
+        :filters="filters"
+        route="Pharmacy:PatientPrescriptions"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import PatientsTable from '@/components/pharmacy/PatientsTable'
+import { mapState } from 'vuex'
+import PatientsTable from '@/components/patients/PatientsTable'
+
 export default {
   name: 'Patients',
 
@@ -22,16 +26,12 @@ export default {
     ...mapState({
       patientsCount: (state) => state.patients.patientsCount,
     }),
-  },
 
-  methods: {
-    ...mapActions({
-      refreshCurrentPatient: 'patients/refreshCurrentPatient',
-    }),
-
-    goTo() {
-      this.refreshCurrentPatient()
-      this.$router.push({ name: 'Biodata' })
+    filters() {
+      return [
+        { display: `All (${ this.patientsCount })`, code: '' },
+        { display: 'Active (0)', code: 'active' },
+      ]
     },
   },
 }

@@ -242,7 +242,6 @@ export default {
         }
 
         if (this.removedObservations.length > 0) {
-          console.log('aha')
           this.removedObservations.forEach(async observation => {
             await this.deleteObservation(observation.id ? observation.id : observation)
           })
