@@ -11,7 +11,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import LabsTable from '@/components/diagnostic/LabResults'
+import LabsTable from '@/components/diagnostic/labResults'
 
 export default {
   name: 'DiagnosticPatients',

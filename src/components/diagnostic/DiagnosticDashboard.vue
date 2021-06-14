@@ -28,8 +28,8 @@
 
 <script>
 import AddLabs from '@/components/diagnostic/modals/AddLabResultsModal.vue'
-import LabsTable from '@/components/diagnostic/LabResults'
-import AddPatient from '@/components/diagnostic/modals/AddPatient'
+import LabsTable from '@/components/diagnostic/labResults'
+import AddPatient from '@/components/diagnostic/modals/addPatient'
 
 export default {
   name: 'DiagnosticDashboard',
