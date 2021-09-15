@@ -1,5 +1,5 @@
 <template>
-  <div class="w-4/5 mx-auto">
+  <div class="max-w-7xl mx-auto">
     <UserDetailsHeader />
     <p class="text-serenity-primary my-6 font-semibold">
       What would you like to do?
@@ -28,7 +28,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'Dashboard',
 
-  components: { 
+  components: {
     GetStartedModal,
     NonPatientPrescriptionModal,
   },
@@ -78,7 +78,7 @@ export default {
       if (dashboard.value === 'nonpatient') {
         this.$trigger('pharmacy:nonpatient_prescription:open')
       }
-      
+
     },
   },
 }

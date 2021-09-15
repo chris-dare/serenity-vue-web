@@ -40,7 +40,7 @@
       </p>
       <p class="text-serenity-primary px-4 py-2 cursor-pointer">Support</p>
       <div
-        class="flex items-center h-12 bg-serenity-placeholder px-4 text-white cursor-pointer"
+        class="flex items-center h-12 bg-placeholder px-4 text-white cursor-pointer"
         @click="submit"
       >
         Logout

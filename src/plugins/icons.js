@@ -1,16 +1,16 @@
 import Vue from 'vue'
 
-const ChevronRight = () => import('@carbon/icons-vue/es/chevron--right/32')
-const CloudUpload = () => import('@carbon/icons-vue/es/cloud--upload/32')
-const Add = () => import('@carbon/icons-vue/es/add/32')
-const AddFilled = () => import('@carbon/icons-vue/es/add--filled/32')
-const Edit = () => import('@carbon/icons-vue/es/edit/32')
-const AddAlt = () => import('@carbon/icons-vue/es/add--alt/32.js')
-const Trash = () => import('@carbon/icons-vue/es/trash-can/32.js')
-const Close = () => import('@carbon/icons-vue/es/close/32.js')
-const CheckmarkFilled = () => import('@carbon/icons-vue/es/checkmark--filled/32.js')
-const Diagnostic = () => import('@carbon/icons-vue/es/microscope/32.js')
-const Checkmark = () => import('@carbon/icons-vue/es/checkmark/32.js')
+import ChevronRight from '@carbon/icons-vue/es/chevron--right/16'
+import CloudUpload from '@carbon/icons-vue/es/cloud--upload/16'
+import Add from '@carbon/icons-vue/es/add/16'
+import AddFilled from '@carbon/icons-vue/es/add--filled/16'
+import Edit from '@carbon/icons-vue/es/edit/16'
+import AddAlt from '@carbon/icons-vue/es/add--alt/16.js'
+import Trash from '@carbon/icons-vue/es/trash-can/16.js'
+import Close from '@carbon/icons-vue/es/close/16.js'
+import CheckmarkFilled from '@carbon/icons-vue/es/checkmark--filled/16.js'
+import Diagnostic from '@carbon/icons-vue/es/microscope/16.js'
+import Checkmark from '@carbon/icons-vue/es/checkmark/16.js'
 
 Vue.component('ChevronRight', ChevronRight)
 Vue.component('Add', Add)

@@ -54,6 +54,9 @@ $primary: #0b6b74;
     }
   }
 }
+.bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled) .bx--tabs__nav-link, .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled) .bx--tabs__nav-link:focus, .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled) .bx--tabs__nav-link:active{
+  border-bottom-color: $primary;
+}
 
 .white-tabs {
   ul {
@@ -127,7 +130,7 @@ $primary: #0b6b74;
   input,
   .bx--date-picker__input, .bx--time-picker, .bx--select-input {
     width: 100% !important;
-    
+
     @apply text-left max-w-full min-w-0;
   }
 
@@ -288,7 +291,7 @@ button:focus {
   .multiselect__clear {
   @apply flex items-center justify-center h-10 w-10 cursor-pointer z-10 absolute right-5;
   }
-  
+
 }
 
 .multiselect-white{
@@ -316,14 +319,15 @@ button:focus {
 
 // make error handling consistent
 .error, .bx--form-requirement{
-  @apply text-xs text-red-600 mt-1;
+  color: rgb(220, 38, 38) !important;
+  @apply text-xs mt-1;
 }
 
-.bx--text-input--invalid{
+.bx--text-input--invalid, .bx--text-area--invalid{
   outline-color: transparent !important;
 }
 
-.bx--text-input__invalid-icon{
+.bx--text-input__invalid-icon, .bx--text-area__invalid-icon{
   display: none !important;
 }
 
@@ -347,6 +351,20 @@ button:focus {
     background-color: #f4f4f4 !important;
   }
 }
+
+.se-input-white{
+  input, textarea{
+    background-color: white !important;
+  }
+}
+
+.se-input-disabled{
+  input, textarea{
+    background-color: rgba(229, 231, 235, var(--tw-bg-opacity)) !important;
+    @apply bg-gray-200 cursor-not-allowed
+  }
+}
+
 .borderless-input{
   input, textarea{
     @apply border-0;
@@ -354,6 +372,9 @@ button:focus {
 }
 
 // tables
+.bx--data-table tbody th{
+  padding-left: unset;
+}
 .small-table{
   .bx--table-header-label{
     @apply text-xs font-medium uppercase tracking-wide
@@ -366,4 +387,14 @@ button:focus {
   td p {
     @apply text-sm
   }
+}
+
+.bx--tooltip__trigger{
+  svg {
+    fill: white !important;
+  }
+}
+
+.bx--tooltip__trigger:not(.bx--btn--icon-only){
+  font-size: inherit;
 }

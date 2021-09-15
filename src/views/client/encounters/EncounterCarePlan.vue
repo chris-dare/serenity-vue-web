@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CarePlan />
+    <CarePlan v-bind="$attrs" />
   </div>
 </template>
 

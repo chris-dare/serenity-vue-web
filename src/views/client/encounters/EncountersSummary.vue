@@ -35,7 +35,7 @@
               <Edit class="w-5" />
             </router-link>
           </div>
-          
+
           <div>
             <p
               v-if="!diagnosis.length"
@@ -64,7 +64,7 @@
               <Edit class="w-5" />
             </router-link>
           </div>
-          
+
           <div>
             <p
               v-if="!labs.length"
@@ -92,7 +92,7 @@
               <Edit class="w-5" />
             </router-link>
           </div>
-          
+
           <div>
             <p
               v-if="!medications.length"
@@ -124,7 +124,7 @@
               <Edit class="w-5" />
             </router-link>
           </div>
-          
+
           <div>
             <p
               v-if="!carePlans.length"
@@ -154,7 +154,7 @@
               <Edit class="w-5" />
             </router-link>
           </div>
-          
+
           <div>
             <p
               v-if="!referrals.length"
@@ -168,14 +168,14 @@
               class="space-y-1"
             >
               <p class="text-sm text-secondary">Patient referred to</p>
-              <p class="text-sm">{{ referral.recipient ? getSinglePractitionerByRole(referral.recipient).fullName : referral.recipient_extra_detail }}</p>
+              <p class="text-sm">{{ referral.recipient ? referral.recipient_detail.name : referral.recipient_extra_detail }}</p>
             </div>
           </div>
         </div>
       </div>
-    
 
-      <div class="flex items-center justify-end space-x-2 mt-6">
+
+      <div class="flex flex-wrap items-center justify-end space-x-2 mt-6">
         <SeButton
           :to="{ name: 'EncounterCarePlan' }"
           variant="secondary"
@@ -200,6 +200,13 @@
         >
           Close Encounter
         </SeButton>
+        <SeButton
+          :icon="icon"
+          :loading="loading"
+          @click="endVisit"
+        >
+          End Visit
+        </SeButton>
       </div>
     </div>
   </div>
@@ -215,6 +222,7 @@ export default {
   data() {
     return {
       icon: ChevronRight,
+      loading: false,
     }
   },
 
@@ -231,6 +239,7 @@ export default {
       carePlans: 'encounters/currentEncounterCarePlans',
       referrals: 'encounters/currentEncounterReferrals',
       getSinglePractitionerByRole: 'practitioners/getSinglePractitionerByRole',
+      visitId: 'visits/visitId',
     }),
   },
 
@@ -238,6 +247,7 @@ export default {
     ...mapActions({
       endEncounter: 'encounters/endEncounter',
       addToCurrentAppointment: 'appointments/addToCurrentAppointment',
+      deleteVisit: 'visits/deleteVisit',
     }),
 
     followup() {
@@ -260,6 +270,31 @@ export default {
             // empty
             throw error || error.message
           }
+        },
+      })
+    },
+
+    async endVisit() {
+      this.$trigger('actions-modal:open', {
+        confirmButtonText: 'End',
+        type: 'delete',
+        confirmButtonVariant: 'danger',
+        label: 'Are you sure you want to end this visit?',
+        callback: async () => {
+          try {
+            this.loading = true
+            await this.endEncounter()
+            await this.deleteVisit(this.visitId)
+            this.$toast.open({ message: 'The visit has ended' })
+            this.$router.push({ name: 'PatientSummary', params: { id: this.$route.params.id }})
+            this.loading = false
+
+          } catch (error) {
+            this.loading = false
+          }
+        },
+        cancel: async () => {
+
         },
       })
     },

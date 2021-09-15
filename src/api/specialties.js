@@ -2,9 +2,13 @@ import http from '@/http'
 
 export default {
   url: 'providers/',
-  
-  list(providerId) {
-    return http.get(`${this.url}${providerId}/practitioner-specialties`)
+  // OLD API for specialties
+  // list(providerId) {
+  //   return http.get(`${this.url}${providerId}/practitioner-specialties`)
+  // },
+
+  list() {
+    return http.get(`${this.url}valueset/practitioner-specialty-type`)
   },
 
   create(providerId, params) {

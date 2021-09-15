@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-4/5 mx-auto space-y-4">
+    <div class="max-w-7xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Patients ({{ patientsCount }})</p>
         <SeButton
@@ -39,9 +39,9 @@ export default {
     filters() {
       return [
         { display: `All (${ this.patientsCount })`, code: '' },
-        { display: `In-patient (${ 0 })`, code: 'in-patient' },
-        { display: `Male (${ this.maleCount })`, code: 'male', icon: Male },
-        { display: `Female (${ this.femaleCount })`, code: 'female', icon: Female },
+        { display: 'In-patient', code: 'in-patient' },
+        { display: 'Male', code: 'male', icon: Male },
+        { display: 'Female', code: 'female', icon: Female },
       ]
     },
   },

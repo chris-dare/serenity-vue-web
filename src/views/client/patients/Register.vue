@@ -10,6 +10,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+
 export default {
   data() {
     return {
@@ -35,7 +36,10 @@ export default {
   },
 
   beforeRouteEnter (to, from, next) {
-    next(vm => vm.getReligiousAffliations())
+    next(async vm => {
+      await vm.getPatient(to.query.id)
+      vm.getReligiousAffliations()
+    })
   },
 
   beforeRouteLeave(to, from, next) {
@@ -46,6 +50,7 @@ export default {
   methods: {
     ...mapActions({
       getReligiousAffliations: 'resources/getReligiousAffliations',
+      getPatient: 'patients/getPatient',
       refresh: 'patients/refreshCurrentPatient',
     }),
   },

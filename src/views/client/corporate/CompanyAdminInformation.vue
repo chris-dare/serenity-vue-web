@@ -4,38 +4,37 @@
       <!-- title -->
       <div>
         <div class="grid grid-cols-2 gap-8 my-8">
-          <cv-text-input
+          <FormInput
             v-model="form.admin_first_name"
-            label="First name (required)"
+            required
+            label="First name"
             type="text"
             placeholder="Admin First Name"
             class="inherit-full-input"
             :invalid-message="$utils.validateRequiredField($v, 'admin_first_name')"
           />
-          <cv-text-input
+          <FormInput
             v-model="form.admin_last_name"
-            label="Last name (required)"
+            required
+            label="Last name"
             placeholder="Admin last or family name"
             type="text"
             class="inherit-full-input"
             :invalid-message="$utils.validateRequiredField($v, 'admin_last_name')"
           />
-          <!-- <PhoneInput
-            v-model="form.admin_phoneno"
-            label="Phone number (required)"
-            placeholder="eg 0349990390"
-            @input="$v.$touch()"
-          /> -->
+
           <MsisdnPhoneInput
             v-model="form.admin_phoneno"
-            label="Phone number (required)"
+            label="Phone number"
             :error-message="$utils.validateRequiredField($v, 'admin_phoneno')"
+            required
           />
-          <cv-text-input
+          <FormInput
             v-model="form.admin_email"
             label="Email"
             placeholder="Email"
             class="inherit-full-input"
+            required
           />
         </div>
 
@@ -79,6 +78,7 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { required, email } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import MultiStep from '@/mixins/multistep'
+import { emailFormatter } from '@/services/custom-validators'
 
 export default {
   name: 'CompanyAdminInformation',
@@ -114,7 +114,7 @@ export default {
       admin_first_name: { required },
       admin_last_name: { required },
       admin_phoneno: { required },
-      admin_email: { email },
+      admin_email: { email: (val) => email(emailFormatter(val)) },
     },
   },
 
@@ -141,7 +141,6 @@ export default {
     },
     async save(){
       this.loading = true
-      console.info(JSON.parse(JSON.stringify(this.storeData)))
       let payload = {
         company_name : this.form.company_name,
         tin_number: this.form.tin_number,

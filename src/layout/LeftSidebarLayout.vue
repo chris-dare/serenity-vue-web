@@ -85,6 +85,7 @@ export default {
   watch: {
     $route() {
       this.$scrollTop('topDiv')
+      this.isOpen = false
     },
   },
 

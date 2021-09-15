@@ -1,62 +1,39 @@
 <template>
-  <div>
+  <div class="space-y-4">
     <Search
       v-model="search"
       placeholder="Search for medication or date or condition"
     />
-    <div class="my-4 flex items-center space-x-2">
-      <SeButton
-        variant="primary"
-        size="field"
-      >
-        All ({{ 4 }})
-      </SeButton>
-      <SeButton
-        size="field"
-        variant="white"
-      >
-        Lab Reports ({{ 1 }})
-      </SeButton>
-      <SeButton
-        size="field"
-        variant="white"
-      >
-        X-ray ({{ 1 }})
-      </SeButton>
-      <SeButton
-        size="field"
-        variant="white"
-      >
-        CT Scans ({{ 1 }})
-      </SeButton>
-      <SeButton
-        size="field"
-        variant="white"
-      >
-        MRI Scans ({{ 1 }})
-      </SeButton>
-      <SeButton
-        size="field"
-        variant="white"
-      >
-        Surgery Reports ({{ 0 }})
-      </SeButton>
-      <SeButton
-        size="field"
-        variant="white"
-      >
-        Discharge Reports ({{ 0 }})
-      </SeButton>
-    </div>
+    <FilterGroup
+      v-model="search"
+      :filters="filters"
+    />
     <div class="grid grid-cols-5 gap-4">
-      <ReportCard
-        v-for="(item, index) in 3"
+      <p
+        v-if="!dataCount"
+        class="col-span-5 text-center py-6 bg-white"
+      >
+        {{ noDataLabel('reports') }}
+      </p>
+      <div
+        v-for="(report, index) in filteredData"
         :key="index"
-        @click="visible = !visible"
-      />
-      <XrayCard />
+      >
+        <ReportCard
+          v-if="report.category === 'laboratory'"
+          :report="report"
+          :date="$date.formatDate(report.effective_date_time, 'dd MMM, yyyy')"
+          @click="$trigger('lab:result:open', report.id)"
+        />
+        <XrayCard
+          v-else
+          :report="report"
+          :date="$date.formatDate(report.effective_date_time, 'dd MMM, yyyy')"
+          @click="$trigger('lab:result:open', report.id)"
+        />
+      </div>
     </div>
-    <LabTestModal :visible.sync="visible" />
+    <LabTestModal />
   </div>
 </template>
 
@@ -64,16 +41,53 @@
 import ReportCard from '@/components/patients/reports/ReportCard'
 import XrayCard from '@/components/patients/reports/XrayCard'
 import LabTestModal from '@/components/patients/reports/LabTestModal'
+import dataMixin from '@/mixins/data'
+import { mapActions, mapGetters, mapState } from 'vuex'
+
 export default {
   name: 'PatientReports',
 
   components: { ReportCard, XrayCard, LabTestModal },
 
+  mixins: [dataMixin],
+
   data() {
     return {
       search: '',
-      visible: false,
+      searchTerms: ['category'],
     }
+  },
+
+  computed: {
+    ...mapState({
+      data: state => state.diagnostic.diagnosticReports,
+    }),
+
+    ...mapGetters({
+      noDataLabel: 'patients/getCurrentPatientNoDataLabel',
+    }),
+
+    filters() {
+      return [
+        { display: `All (${ this.dataCount })`, code: '' },
+        { display: `Lab Reports (${ this.dataCount })`, code: 'laboratory' },
+        { display: `X-ray (${ 0 })`, code: 'x-ray' },
+        { display: `CT Scans (${ 0 })`, code: 'ct-scans' },
+        { display: `MRI Scans (${ 0 })`, code: 'mri-scans' },
+        { display: `Surgery Reports (${ 0 })`, code: 'surgery' },
+        { display: `Discharge Reports (${ 0 })`, code: 'discharge' },
+      ]
+    },
+  },
+
+  created() {
+    this.refresh({ patient: this.$route.params.id })
+  },
+
+  methods: {
+    ...mapActions({
+      getData: 'diagnostic/getDiagnosticReports',
+    }),
   },
 }
 </script>

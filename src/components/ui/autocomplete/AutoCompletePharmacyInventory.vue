@@ -16,6 +16,7 @@
         :max-height="600"
         :hide-selected="true"
         v-bind="$attrs"
+        @search-change="(val) => fetchInventory(val, true)"
         @remove="$emit('remove', $event)"
       />
     </div>
@@ -24,7 +25,7 @@
 
 <script>
 import ModelMixin from '@/mixins/model'
-import PharmacyInventoryApi from '@/api/pharmacy_inventory'
+import PharmacyInventoryApi from '@/api/pharmacy-inventory'
 
 export default {
   name: 'AutoCompletePharmacyInventory',
@@ -49,6 +50,7 @@ export default {
   data() {
     return {
       options: [],
+      defaultOptionsFound: false,
     }
   },
 
@@ -56,26 +58,27 @@ export default {
     medicationRequest: {
       immediate: true,
       handler(val) {
-        this.fetchInventory(val)
+        this.fetchInventory(val, false)
       },
     },
+    localValue(val) {
+      if(!this.defaultOptionsFound){
+        this.fetchInventory(val, true)
+      }
+    },
   },
-
-  mounted() {
-    this.getPharmacyInventoryOptions()
-  },
-
+  
   methods: {
-    async fetchInventory(medicationRequest) {
-      if(medicationRequest == null){
+    async fetchInventory(drugName, userInitiated) {
+      if(!drugName || drugName == ''){
         this.options = []
         return
       }
-      //eslint-disable-next-line
-      const drugName = medicationRequest.medication_detail[0].display
-      const { data } = await PharmacyInventoryApi.list()
-      // const { data } = await PharmacyInventoryApi.list({search: drugName})
+      const { data } = await PharmacyInventoryApi.list({search: drugName})
       this.options = data
+      if(userInitiated == false){
+        this.defaultOptionsFound = false
+      }
     },
   },
 }

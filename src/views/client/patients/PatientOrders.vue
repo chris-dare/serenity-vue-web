@@ -1,137 +1,148 @@
 <template>
-  <div>
+  <div class="space-y-4">
     <Search
-      v-model="search"
-      placeholder="Search for medication or date or condition"
+      v-model="filter"
+      placeholder="Search for orders"
     />
-    <div class="my-4 flex items-center justify-between">
-      <div class="space-x-2 flex items-center">
-        <SeButton>
-          All ({{ 23 }})
-        </SeButton>
-        <SeButton
-          variant="white"
-          @click="visible = !visible"
-        >
-          Paid ({{ 1 }})
-        </SeButton>
-        <SeButton
-          variant="white"
-        >
-          Unpaid ({{ 1 }})
-        </SeButton>
-        <SeButton
-          variant="white"
-        >
-          Cancelled ({{ 1 }})
-        </SeButton>
-      </div>
-    </div>
+    <FilterGroup
+      v-model="search"
+      :filters="filters"
+    />
     <div class="bg-white p-3">
       <div class="flex items-center justify-between mb-4">
-        <p class=" text-gray-500">Bills/Orders</p>
+        <p class=" text-gray-500">Orders</p>
         <div
+          v-if="hasActiveEncounter"
           class="bg-serenity-light-gray w-8 h-8 rounded-full ml-6 flex items-center justify-center cursor-pointer"
         >
-          <Add class="w-4 h-4 text-serenity-primary" />
+          <Add
+            class="w-4 h-4 text-serenity-primary"
+            @click="$trigger('service:request:open', 'laboratory-procedure')"
+          />
         </div>
       </div>
 
       <DataTable
         ref="table"
         :columns="columns"
-        :pagination="{
-          numberOfItems: 10,
-        }"
-        :data="serviceRequests"
+        :pagination="pagination"
+        :data="filteredData"
         class="transparent-table"
         :no-data-label="noDataLabel('orders')"
+        :loading="loading"
       >
         <template #default="{ row }">
           <cv-data-table-cell>
-            <p class="">{{ $date.formatDate(row.authored_on, 'MMM dd, yyyy') }}</p>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <p class="">{{ 3000 | formatMoney | toCedis }}</p>
+            <p>{{ $date.formatDate(row.authored_on, 'MMM dd, yyyy') }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
-              <p class="">{{ 3000 | formatMoney | toCedis }}</p>
+              <p>{{ row.practitioner_detail ? row.practitioner_detail.name : concatData(row.patient_detail, ['first_name', 'lastname']) }}</p>
             </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.code }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
-              <p class="">{{ 3000 | formatMoney | toCedis }}</p>
+              <p>{{ $utils.getFirstData(row.order_detail) }}</p>
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <p class="">{{ 'aha' }}</p>
+            <p class="capitalize">{{ $utils.getFirstData(row.service_request_category) | removeDash }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div class="flex items-center">
-              <div class="bg-success text-white text-xs py-1 px-2 rounded-full">{{ 'aha' }}</div>
-            </div>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <div
-              class="flex items-center cursor-pointer "
-              @click="showOrder(row)"
-            >
-              View
-              <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
-                <img
-                  src="@/assets/img/view 1.svg"
-                  alt=""
-                >
-              </div>
+              <Tag>{{ row.status }}</Tag>
             </div>
           </cv-data-table-cell>
         </template>
       </DataTable>
     </div>
-    <OrderDetailsModal :visible.sync="visible" />
   </div>
 </template>
 
 <script>
-import OrderDetailsModal from '@/components/patients/modals/OrderDetailsModal'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
+import DataMixin from '@/mixins/data'
+import debounce from 'lodash/debounce'
 
 export default {
   name: 'PatientOrders',
 
-  components: { OrderDetailsModal },
+  mixins: [DataMixin],
+
+  props: {
+    id: {
+      type: String,
+      default: null,
+    },
+  },
 
   data() {
     return {
       search: '',
       columns: [
         'Date',
-        'Total Amount',
-        'Amount Paid',
-        'Balance',
-        'Method',
+        'Requester',
+        'Code',
+        'Order detail',
+        'Category',
         'Status',
-        'Action',
       ],
-      visible: false,
       order: {},
+      searchTerms: ['code', 'priority', 'specimen', 'status'],
+      filter:'',
     }
   },
 
   computed: {
+    ...mapState({
+      data: state => state.patients.patientServiceRequests,
+    }),
+
     ...mapGetters({
-      serviceRequests: 'patients/patientLabRequests',
       noDataLabel: 'patients/getCurrentPatientNoDataLabel',
       hasActiveEncounter: 'encounters/hasActiveEncounter',
     }),
+
+    filters() {
+      return [
+        { display: `All (${ this.dataCount })`, code: '' },
+        { display: 'Active', code: 'active' },
+        { display: 'Draft', code: 'draft' },
+        { display: 'Completed', code: 'completed' },
+        { display: 'Rejected', code: 'rejected' },
+      ]
+    },
+  },
+
+  watch: {
+    filter(search) {
+      this.searchServiceRequests(search)
+    },
+  },
+
+  created() {
+    this.refresh({ patient: this.id })
   },
 
   methods: {
+    ...mapActions({
+      getData: 'patients/getPatientServiceRequests',
+    }),
+  
     showOrder(data) {
       this.order = data
       this.visible = true
     },
+
+    searchServiceRequests: debounce(function(search) {
+      if (!search) {
+        search = null
+      }
+      this.getData({ patient: this.id, search })
+    }, 300, false),
   },
 }
 </script>

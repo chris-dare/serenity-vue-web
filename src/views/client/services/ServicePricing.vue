@@ -1,68 +1,90 @@
 <template>
   <div class="space-y-8">
-    <!-- <cv-select
-      v-model="type"
-      label="Select the type of service"
-      class="inherit-full-input"
-      placeholder="Yes or No"
-    >
-      <cv-select-option value="single">Single</cv-select-option>
-      <cv-select-option value="tiered">Tiered(multiple sub services)</cv-select-option>
-    </cv-select> -->
-
-    <cv-select
+    <MultiSelect
       v-model="code"
-      label="Select service code"
-      class="inherit-full-input"
+      title="Select service code"
       placeholder="Select code"
       :invalid-message="$v.code.$error && $v.code.$dirty ? 'Service code is required' : ''"
-    >
-      <cv-select-option
-        v-for="(item, index) in codes"
-        :key="index"
-        :value="item.code"
-      >
-        {{ item.display_text }}
-      </cv-select-option>
-    </cv-select>
-    <!-- single -->
+      :options="codes"
+      label="display_text"
+      track-by="code"
+      custom-field="code"
+      :multiple="false"
+      required
+    />
     <p>Service Pricing Tiers</p>
     <div>
-      <!-- <cv-number-input
-        v-if="type === 'single'"
-        v-model="form.price_tiers[0].cost"
-        label="Enter service price"
-        placeholder="eg 50"
-      /> -->
-
       <div>
         <div
           v-for="(tier, index) in form.price_tiers"
           :key="index"
-          class="grid grid-cols-11 gap-4 mb-8 items-end"
         >
-          <cv-text-input
-            v-model="tier.name"
-            label="Service Tier"
-            placeholder="Service tier name"
-            type="text"
-            class="col-span-4"
-          />
-          <cv-number-input
-            v-model="tier.cost"
-            label="Price"
-            placeholder="Service tier price"
-            class="col-span-4"
-          />
-          <CurrencySelect
-            v-model="tier.currency"
-            class="col-span-2"
-          />
-          <div class="flex items-end pb-3 justify-center">
-            <Trash
-              class="w-5 h-5 cursor-pointer"
-              @click="removeFromTiers(index)"
-            />
+          <p>{{ index +1 }}.</p>
+          <div class="grid grid-cols-11 gap-4 mb-8 items-center">
+            <div class="grid grid-cols-5 gap-4 col-span-10 items-end">
+              <FormInput
+                v-model="tier.display"
+                required
+                label="Service Tier"
+                placeholder="Service tier name"
+                type="text"
+                class="col-span-2"
+              />
+              <FormInput
+                v-model="tier.charge"
+                label="Price"
+                placeholder="Service tier price"
+                class="col-span-2"
+                type="number"
+                required
+              />
+              <CurrencySelect
+                v-model="tier.currency"
+                class="col-span-1"
+                required
+              />
+              <FormInput
+                v-model="tier.description"
+                label="Description"
+                placeholder=""
+                :rows="2"
+                class="col-span-3"
+              />
+              <PrioritiesSelect
+                v-model="tier.priority"
+                class="col-span-2"
+              />
+              <FormInput
+                v-if="isDiagnostic"
+                v-model="tier.turnaround_time_value"
+                label="Turnaround time"
+                placeholder="Price tier turnaround time"
+                type="number"
+                class="col-span-2"
+                :invalid-message="$utils.validateRequiredField($v, 'turnaround_time_value')"
+                :required="isDiagnostic"
+              />
+              <MultiSelect
+                v-if="isDiagnostic"
+                v-model="tier.turnaround_time_unit"
+                :options="genericPeriodUnitTypes"
+                :multiple="false"
+                placeholder="Price tier turnaround time unit"
+                label="display"
+                track-by="code"
+                custom-field="code"
+                title="Turnaround time unit"
+                class="col-span-3"
+                :error-message="$utils.validateRequiredField($v, 'turnaround_time_unit')"
+                :required="isDiagnostic"
+              />
+            </div>
+            <div class="flex items-center pb-3 justify-center">
+              <Trash
+                class="w-5 h-5 cursor-pointer"
+                @click="removeFromTiers(index)"
+              />
+            </div>
           </div>
         </div>
 
@@ -112,7 +134,7 @@
 
 <script>
 // eslint-disable-next-line no-unused-vars
-import { required, minLength, minValue } from 'vuelidate/lib/validators'
+import { required, minLength, requiredIf } from 'vuelidate/lib/validators'
 import { mapActions, mapState } from 'vuex'
 import isEmpty from 'lodash/isEmpty'
 import MultiStep from '@/mixins/multistep'
@@ -130,19 +152,25 @@ export default {
       form: {
         price_tiers: [
           {
-            name: 'Free',
-            cost: 0,
+            display: 'Free',
+            charge: 0,
             currency: 'GHS',
+            description: 'Express service for service name',
+            priority: 'routine',
           },
           {
-            name: 'Standard',
-            cost: 50,
+            display: 'Standard',
+            charge: 50,
             currency: 'GHS',
+            description: 'Express service for service name',
+            priority: 'routine',
           },
           {
-            name: 'Express',
-            cost: 100,
+            display: 'Express',
+            charge: 100,
             currency: 'GHS',
+            description: 'Express service for service name',
+            priority: 'urgent',
           },
         ],
       },
@@ -153,7 +181,12 @@ export default {
     ...mapState({
       storeData: (state) => state.services.currentService,
       codes: (state) => state.resources.codes,
+      genericPeriodUnitTypes: (state) => state.resources.serviceGenericPeriodUnits,
     }),
+
+    isDiagnostic() {
+      return this.form.healthcare_service_categories[0]?.code === 'Diagnostic'
+    },
   },
 
   created() {
@@ -183,7 +216,7 @@ export default {
       this.form = {
         ...this.form,
         healthcare_service_service_provision_code: code.code,
-        healthcare_service_service_provision_display_text: code.display_text,
+        // healthcare_service_service_provision_display_text: code.display_text,
       }
 
       this.addToStoreData(this.form)
@@ -191,7 +224,7 @@ export default {
     },
 
     addTier() {
-      this.form.price_tiers.push({ name: '', cost: 0, currency: 'GHS'})
+      this.form.price_tiers.push({ display: '', charge: 0, currency: 'GHS'})
     },
 
     removeFromTiers(priceIndex) {
@@ -210,15 +243,25 @@ export default {
         required,
         minLength: minLength(1),
         $each: {
-          name: {
+          display: {
             required,
           },
           currency: {
             required,
           },
-          cost: {
+          charge: {
             required,
             // minValue: minValue(1),
+          },
+          turnaround_time_value: {
+            required: requiredIf(function () {
+              return this.isDiagnostic
+            }),
+          },
+          turnaround_time_unit: {
+            required: requiredIf(function () {
+              return this.isDiagnostic
+            }),
           },
         },
       },

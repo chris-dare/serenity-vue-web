@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="w-4/5 mx-auto space-y-4">
+    <div class="max-w-7xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Find patient</p>
+        <p class="text-xl font-bold">Patients</p>
       </div>
 
       <PatientsTable
@@ -30,7 +30,7 @@ export default {
     filters() {
       return [
         { display: `All (${ this.patientsCount })`, code: '' },
-        { display: 'Active (0)', code: 'active' },
+        { display: 'Active', code: 'active' },
       ]
     },
   },

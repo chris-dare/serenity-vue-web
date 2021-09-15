@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-4/5 mx-auto space-y-4">
+    <div class="max-w-7xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Services ({{ dataCount }})</p>
         <div class="flex items-center space-x-2">
@@ -58,18 +58,40 @@
         </template>
         <template #expand="{row}">
           <div class="px-8">
-            <div class="grid grid-cols-4 gap-8 border-b border-solid border-subtle py-2 mb-4">
+            <div class="grid grid-cols-5 gap-6 border-b border-solid border-subtle py-2 mb-4">
               <p class="text-secondary">Service Tier</p>
               <p class="text-secondary">Tier Price</p>
+              <p class="text-secondary">Description</p>
+              <p class="text-secondary">Priority</p>
+              <p
+                v-if="row.service_class === 'Diagnostic'"
+                class="text-secondary"
+              >
+                Turnaround
+              </p>
             </div>
             <div
               v-for="(tier, index) in row.price_tiers"
               :key="index"
-              class="grid grid-cols-4 gap-8 py-2"
+              class="grid grid-cols-5 gap-6 py-2"
             >
-              <p class="capitalize">{{ tier.name }}</p>
-              <p>{{ tier.cost | formatMoney | toCedis }}</p>
+              <p class="capitalize">{{ tier.display }}</p>
+              <p>{{ tier.currency }}{{ $currency(tier.charge) }}</p>
+              <p class="capitalize">{{ tier.description }}</p>
+              <p class="capitalize">{{ tier.priority }}</p>
+              <p
+                v-if="row.service_class === 'Diagnostic'"
+                class="capitalize"
+              >
+                {{ tier.turnaround_time_value }} {{ tier.turnaround_time_unit }}
+              </p>
             </div>
+            <p
+              v-if="!row.price_tiers.length"
+              class="text-center text-sm text-secondary"
+            >
+              There are no price tiers for this service
+            </p>
           </div>
         </template>
       </DataTable>

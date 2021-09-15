@@ -21,15 +21,22 @@
     >
       <p
         class="underline cursor-pointer"
+        @click="endVisit"
+      >
+        End Visit
+      </p>
+      <p
+        class="underline cursor-pointer"
         @click="end"
       >
-        End Encounter
+        End Consultation
       </p>
       <AddNewDropdown />
 
       <SeButton
         variant="warning"
-        :to="{ name: 'EncounterReview', params: { encounter: encounter.id, id: $route.params.id } }"
+        :loading="loading"
+        @click="goToWizard"
       >
         {{ hasEncounterBegan ? 'Continue Consultation' : 'Begin Consultation' }}
       </SeButton>
@@ -41,15 +48,22 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 import timerMixin from '@/mixins/timer'
 import isSameDay from 'date-fns/isSameDay'
+import AddNewDropdown from '@/components/patients/AddNewDropdown'
 
 export default {
   name: 'OPDActions',
 
   components: {
-    AddNewDropdown: () => import('@/components/patients/AddNewDropdown'),
+    AddNewDropdown,
   },
-  
+
   mixins: [timerMixin],
+
+  data() {
+    return {
+      loading: false,
+    }
+  },
 
   computed: {
     ...mapState({
@@ -62,6 +76,7 @@ export default {
       appointments: 'appointments/patientAppointments',
       patientIsDeceased: 'patients/patientIsDeceased',
       patientHasVisit: 'patients/patientHasVisit',
+      visitId: 'patients/visitId',
     }),
 
     hasUpcomingEncounter() {
@@ -75,6 +90,8 @@ export default {
   methods: {
     ...mapActions({
       endEncounter: 'encounters/endEncounter',
+      updateEncounter: 'encounters/updateEncounter',
+      deleteVisit: 'visits/deleteVisit',
     }),
 
 
@@ -94,6 +111,38 @@ export default {
           }
         },
       })
+    },
+
+    async endVisit() {
+      this.$trigger('actions-modal:open', {
+        confirmButtonText: 'End',
+        type: 'delete',
+        confirmButtonVariant: 'danger',
+        label: 'Are you sure you want to end this visit?',
+        callback: async () => {
+          try {
+            this.loading = true
+            await this.endEncounter()
+            await this.deleteVisit(this.visitId)
+            this.$toast.open({ message: 'The visit has ended' })
+            this.loading = false
+
+          } catch (error) {
+            this.loading = false
+          }
+        },
+        cancel: async () => {
+
+        },
+      })
+
+    },
+
+    async goToWizard() {
+      this.loading = true
+      await this.updateEncounter({ id: this.encounter.id,status: 'in-progress' })
+      this.$router.push({ name: 'EncounterReview', params: { encounter: this.encounter.id, id: this.$route.params.id } })
+      this.loading = false
     },
   },
 }

@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'RegisterService',
 
@@ -31,6 +32,40 @@ export default {
         this.checked = val.name
       },
     },
+  },
+
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      try {
+        vm.getCurrencies()
+
+        if (!to.query.id) return
+        vm.loading = true
+        await vm.getService(to.query.id)
+        vm.loading = false
+      } catch (error) {
+        vm.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
+        vm.loading = false
+      }
+    })
+  },
+
+  created() {
+    this.getDiagnosticLabProceedures()
+    this.getServiceRequestSectionTypes()
+    this.getServiceRequestCategoryTypes()
+    this.getGenericPeriodUnitTypes()
+  },
+
+  methods: {
+    ...mapActions({
+      getService: 'services/getService',
+      getCurrencies: 'resources/getCurrencies',
+      getDiagnosticLabProceedures: 'resources/getDiagnosticLabProceedures',
+      getServiceRequestSectionTypes: 'resources/getServiceRequestSectionTypes',
+      getServiceRequestCategoryTypes: 'resources/getServiceRequestCategoryTypes',
+      getGenericPeriodUnitTypes: 'resources/getGenericPeriodUnitTypes',
+    }),
   },
 }
 </script>

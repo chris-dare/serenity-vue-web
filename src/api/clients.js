@@ -2,14 +2,12 @@ import http from '@/http'
 
 export default {
   url: 'providers/',
-  
+
   list() {
     return http.get(`${this.url}clients/`)
   },
 
-  getClientBy({
-    companyId = '',
-  } = {}) {
+  getClientBy(companyId = '') {
     return http.get(`${this.url}corporates/onboard/${companyId}/`)
   },
 
@@ -17,14 +15,11 @@ export default {
     id = '',
     providerId = '',
   } = {}){
-    return http.get(`${this.url}${providerId}/client-accounts?companyId=${id}`)
+    return http.get(`${this.url}${providerId}/client-accounts/filter?companyId=${id}`)
   },
 
-  getClientBills({
-    id = '',
-    providerId = '',
-  } = {}){
-    return http.get(`${this.url}${providerId}/corporates/${id}/bills`)
+  getClientBills(providerId, clientId, params){
+    return http.get(`${this.url}${providerId}/corporates/${clientId}/bills`, { params })
   },
 
 
@@ -36,8 +31,12 @@ export default {
     return http.post(`${this.url}client-accounts/deposit`, params)
   },
 
+  providerAccount(providerId, params) {
+    return http.post(`${this.url}${providerId}/client-accounts`, params)
+  },
+
   update(params) {
-    return http.patch(`${this.url}corporates/onboard/${params.main_branch_id}/`, params)
+    return http.patch(`corporates/onboard/${params.main_branch_id}`, params)
   },
 
   delete(providerId,id) {

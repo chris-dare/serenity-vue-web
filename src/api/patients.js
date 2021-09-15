@@ -2,9 +2,9 @@ import http from '@/http'
 
 export default {
   url: 'providers/',
-  
+
   list(providerId, params = {}) {
-    return http.get(`${this.url}${providerId}/patients`, {params})
+    return http.get(`${this.url}${providerId}/patients`, { params })
   },
 
   get(providerId, patientId) {
@@ -51,5 +51,9 @@ export default {
 
   updateReferral(providerId, params) {
     return http.patch(`${this.url}${providerId}/referral-requests/${params.id}`, params)
+  },
+
+  deleteReferral(providerId, id) {
+    return http.delete(`${this.url}${providerId}/referral-requests/${id}`)
   },
 }

@@ -15,6 +15,7 @@
           v-model="form.PREVIOUS_ILLNESS"
           multiple
           title="Past illness"
+          :close-on-select="false"
           @remove="removeIllness"
         />
 
@@ -143,7 +144,7 @@ export default {
           }
         })
     },
-  
+
     newIllness() {
       return this.form.PREVIOUS_ILLNESS
         .filter(medication => !this.patientPreviousIllness.map(med => med.value).includes(medication.value || medication))
@@ -153,7 +154,7 @@ export default {
           }
         })
     },
-  
+
     newSurgeries() {
       return this.form.PREVIOUS_HOSPITALIZATION.filter(med => !med.id)
     },
@@ -170,7 +171,7 @@ export default {
         this.form.PREVIOUS_ILLNESS = val.map(illness => illness.value)
       },
     },
-  
+
     patientPreviousHospitalization: {
       immediate: true,
       handler(val) {
@@ -182,14 +183,14 @@ export default {
         })
       },
     },
-  
+
     patientPastMedications: {
       immediate: true,
       handler(val) {
         this.form.PREVIOUS_MEDICATION = val.map(illness => illness.value)
       },
     },
-  },  
+  },
 
   methods: {
     ...mapActions({
@@ -246,7 +247,7 @@ export default {
             await this.deleteObservation(observation.id ? observation.id : observation)
           })
         }
-        
+
         this.loading = false
         this.visible = false
         this.$resetData()

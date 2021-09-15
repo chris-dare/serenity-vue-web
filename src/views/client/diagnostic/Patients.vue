@@ -1,33 +1,38 @@
 <template>
   <div>
-    <div class="w-4/5 mx-auto space-y-4">
+    <div class="max-w-7xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Find Patient</p>
+        <p class="text-xl font-bold">Patients</p>
       </div>
-      <LabsTable />
+      <PatientsTable
+        route="Diagnostic:Patient"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import LabsTable from '@/components/diagnostic/labResults'
+import PatientsTable from '@/components/diagnostic/PatientsTable'
 
 export default {
   name: 'DiagnosticPatients',
 
-  components: { LabsTable },
-
-  data() {
-    return {
-      selected: 'active',
-    }
-  },
+  components: { PatientsTable },
 
   computed: {
     ...mapState({
       patientsCount: (state) => state.patients.patientsCount,
     }),
+
+    filters() {
+      return [
+        { display: `All (${ this.patientsCount })`, code: '' },
+        { display: 'Active', code: 'active' },
+        { display: 'Sample Request', code: 'sample' },
+        { display: 'Walk-in patients', code: 'walk-in' },
+      ]
+    },
   },
 }
 </script>]

@@ -3,7 +3,7 @@
     v-model="localValue"
     title="Priority"
     :multiple="false"
-    :options="options"
+    :options="internalOptions"
     :track-by="null"
     placeholder="Routine, ASAP, Urgent"
     custom-field="code"
@@ -30,6 +30,7 @@
 
 <script>
 import modelMixin from '@/mixins/model'
+import { mapState } from 'vuex'
 
 export default {
   name: 'PrioritiesSelect',
@@ -39,7 +40,17 @@ export default {
   props: {
     options: {
       type: Array,
-      default: () => [],
+      default: null,
+    },
+  },
+
+  computed: {
+    ...mapState({
+      priorities: (state) => state.global.priorities,
+    }),
+
+    internalOptions() {
+      return this.options || this.priorities
     },
   },
 

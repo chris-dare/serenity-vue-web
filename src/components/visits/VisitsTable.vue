@@ -1,33 +1,22 @@
 <template>
   <div class="space-y-4">
     <Search
-      v-if="!hideSearch"
-      v-model="search"
+      v-model="filter"
       placeholder="Search for visit"
     />
 
-    <div class="my-4 flex items-center space-x-2">
-      <SeButton
-        :variant="selected === 'all' ? 'default' : 'white'"
-        @click="selected = 'all'"
-      >
-        All Visits ({{ visits.length }})
-      </SeButton>
-      <SeButton
-        :variant="selected === 'my' ? 'default' : 'white'"
-        @click="selected = 'my'"
-      >
-        My Visits ({{ practitionerVisits.length }})
-      </SeButton>
-    </div>
+    <FilterGroup
+      v-model="selected"
+      :filters="filters"
+    />
 
     <DataTable
       :columns="columns"
-      :data="filteredData"
+      :data="normalizedData"
       :loading="loading"
       no-data-label="You have no visits"
       :pagination="pagination"
-      @pagination="actionOnPagination"
+      @pagination="storePagination"
     >
       <template #default="{row}">
         <cv-data-table-cell>
@@ -45,7 +34,7 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ $date.formatDate(row.arrived_at, 'yyyy/MM/dd') }}</p>
+            <p>{{ $date.formatDate(row.arrived_at, 'dd MMM, yyyy') }}</p>
             <p class="text-secondary text-xs">{{ $date.formatDate(row.arrived_at, 'HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
@@ -61,31 +50,31 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div class="flex items-center cursor-pointer space-x-4">
-            <router-link
-              class="flex items-center cursor-pointer space-x-2"
-              :to="{ name: route, params: { id: row.patient }}"
-            >
-              View
-            </router-link>
-            <div
-              class="flex items-center cursor-pointer space-x-2"
-              @click="end(row.id)"
-            >
-              End
-            </div>
+            <TableActions
+              :actions="tableActions(row)"
+              @end="end(row.id)"
+              @vitals="$trigger('reception:capture:vitals:open', { patient: row.patient, visit: row.id })"
+              @view="view(row)"
+            />
           </div>
         </cv-data-table-cell>
       </template>
     </DataTable>
+
+    <CaptureVitalsModal />
   </div>
 </template>
 
 <script>
 import DataMixin from '@/mixins/data'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
+import CaptureVitalsModal from '@/components/vitals/CaptureVitalsModal'
+import debounce from 'lodash/debounce'
 
 export default {
   name: 'VisitsTable',
+
+  components: {CaptureVitalsModal},
 
   mixins: [DataMixin],
 
@@ -113,22 +102,40 @@ export default {
       ],
       selectedAppointment: {},
       selected: 'all',
+      searchTerms: ['status'],
+      filter: '',
     }
   },
 
   computed: {
     ...mapState({
       visits: (state) => state.visits.visits,
+      visitsTotal: (state) => state.visits.visitsTotal,
       practitionerVisits: (state) => state.visits.practitionerVisits,
+      practitionerVisitsTotal: (state) => state.visits.practitionerVisitsTotal,
       provider: (state) => state.auth.provider,
-    }),
-
-    ...mapGetters({
-      getEncounterClassDisplayName: 'resources/getEncounterClassDisplayName',
+      encounterClasses: (state) => state.resources.encounterClasses,
     }),
 
     data() {
       return this.selected === 'all' ? this.$date.sortByDate(this.visits, 'arrived_at', 'desc') : this.$date.sortByDate(this.practitionerVisits, 'arrived_at', 'desc')
+    },
+
+    total() {
+      return this.selected === 'all' ? this.visitsTotal : this.practitionerVisitsTotal
+    },
+
+    filters() {
+      return [
+        { display: `All Visits (${ this.visits.length })`, code: 'all' },
+        { display: ` My Visits (${ this.practitionerVisits.length })`, code: 'my' },
+      ]
+    },
+  },
+
+  watch: {
+    filter(search) {
+      this.searchVisits(search)
     },
   },
 
@@ -138,7 +145,6 @@ export default {
       this.pageLength = 5
     }
     this.paginate = true
-    this.searchTerms = ['']
     this.refresh()
   },
 
@@ -146,25 +152,66 @@ export default {
     ...mapActions({
       getData: 'visits/getVisits',
       deleteVisit: 'visits/deleteVisit',
+      setCurrentVisit: 'visits/setCurrentVisit',
+      getAllVisits: 'visits/getAllVisits',
+      getMyVisits: 'visits/getMyVisits',
     }),
 
+    searchVisits: debounce(function(search) {
+      this.getData({ search })
+    }, 300, false),
+
+    tableActions(row) {
+      return [
+        { label: 'view', event: 'view', show: true },
+        { label: 'end', event: 'end', show: row.status !== 'finished' },
+        { label: 'capture vitals', event: 'vitals', show: row.status !== 'finished' && this.$userCan('vitals.write') },
+      ]
+    },
+
+    getEncounterClassDisplayName(code) {
+      return this.encounterClasses.find(enc => enc.code === code)?.display
+    },
+
+    view(row) {
+      this.setCurrentVisit(row)
+      this.$router.push({name: this.route, params: { id: row.patient }})
+    },
+
+    async storePagination(ev) {
+      this.pageStart = ev.start
+      this.pageLength = ev.length
+      this.page = ev.page
+
+      this.loading = true
+
+      if (this.selected === 'all') {
+        await this.getAllVisits({ page: this.page, page_size: ev.length })
+        this.loading = false
+        return
+      }
+
+      await this.getMyVisits({ page: this.page, page_size: ev.length })
+      this.loading = false
+    },
+
     async end(id) {
-      this.$trigger('confirm-action-modal:open', {
-        label: 'this visit',
-        type: 'end',
-        callback: async ()=>{
+      this.$trigger('actions-modal:open', {
+        confirmButtonText: 'End',
+        type: 'delete',
+        confirmButtonVariant: 'danger',
+        label: 'Are you sure you want to end this visit?',
+        callback: async () => {
           try {
             this.loading = true
             await this.deleteVisit(id)
             this.$toast.open({ message: 'The visit has ended' })
             this.loading = false
-        
           } catch (error) {
             this.loading = false
           }
         },
       })
-      
     },
   },
 }

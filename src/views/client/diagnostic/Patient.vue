@@ -1,42 +1,13 @@
 <template>
-  <div class="w-4/5 mx-auto">
-    <div class="bg-white py-8 px-4 my-2 flex items-center justify-between">
-      <div class="flex">
-        <div class="flex items-center space-x-4">
-          <ImageBlock
-            url=""
-            alt="Dadson Papa"
-          />
-          <div>
-            <p class="text-lg font-bold">Dadson Papa</p>
-            <p class="text-secondary  capitalize">
-              Male, 22 years
-            </p>
-            <div class="mt-2 flex items-center">
-              <div class="bg-green-700 w-3 h-3 rounded-full mr-2" />
-              <p>MR No: 230</p>
-            </div>
-          </div>
-        </div>
-        <div
-          class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
-        >
-          <img
-            src="@/assets/img/edit 1.svg"
-            class="w-4 h-4 cursor-pointer"
-          >
-        </div>
-      </div>
-      <div class="flex items-center text-right space-x-2">
-        <div>
-          <p class="text-lg font-bold">Men ward</p>
-          <p class="text-secondary ">
-            Room 2, bed No 05
-          </p>
-        </div>
-        <!-- <DiagnoticActions /> -->
-      </div>
+  <AppStatePage
+    :loading="loading"
+    :error="error"
+    class="max-w-7xl mx-auto"
+  >
+    <div class="space-y-2">
+      <PatientInfoCard class="mb-0 border-b border-solid border-tetiary" />
     </div>
+
     <div class="space-y-4 my-6">
       <p class="text-serenity-primary font-semibold">
         Perform action
@@ -60,30 +31,44 @@
       <LabsTable />
     </div>
 
-    <AddLabResultsModal />
-    <ViewLabResultsModal />
-  </div>
+    <AddLabModal />
+  </AppStatePage>
 </template>
 
 <script>
+import PatientInfoCard from '@/components/patients/PatientInfoCard'
 import LabsTable from '@/components/diagnostic/LabsTable'
-import AddLabResultsModal from '@/components/diagnostic/modals/AddLabResultsModal'
-import ViewLabResultsModal from '@/components/diagnostic/modals/ViewLabResultsModal'
-// import PatientInfoCard from '@/components/patients/PatientInfoCard'
+import AddLabModal from '@/components/diagnostic/modals/AddLabModal'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'Patient',
+  name: 'DiagnosticPatient',
 
-    
-  components: { LabsTable, AddLabResultsModal, ViewLabResultsModal },
+
+  components: { PatientInfoCard, LabsTable, AddLabModal },
+
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
 
   data() {
     return {
+      loading: false,
       selected: '',
+      form: {},
     }
   },
 
   computed: {
+    ...mapGetters({
+      noDataLabel: 'patients/getCurrentPatientNoDataLabel',
+    }),
+    ...mapState({
+      patient: (state) => state.patients.currentPatient,
+    }),
     dashboardTypes() {
       return [
         {
@@ -91,40 +76,57 @@ export default {
           description: 'Create a new lab test for patient',
           type: 'add',
           value: 'add',
-        },
-        {
-          label: 'Enter Lab Results',
-          description: 'Enter results for the tests taken',
-          type: 'edit',
-          value: 'result',
-        },
-        {
-          label: 'Sample Requests',
-          description: 'Accept or decline sample requests',
-          type: 'lab',
-          value: 'sample',
+          hide: !this.$userCan('diagnostic.requests.write'),
         },
         {
           label: 'View Lab results',
           description: 'View previous enteted lab results',
           type: 'report',
-          value: 'view',
+          value: 'result',
+          hide: !this.$userCan('diagnostic.reports.read'),
         },
       ]
     },
   },
 
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      try {
+        vm.loading = true
+        await vm.getPatient(vm.id)
+        vm.loading = false
+      } catch (error) {
+        vm.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
+        vm.loading = false
+      }
+    })
+  },
+
+  beforeRouteLeave (to, from, next) {
+    next(async vm => {
+      await vm.refresh()
+    })
+  },
+
+
   methods: {
+    ...mapActions({
+      getPatient: 'patients/getPatient',
+      addToStoreData: 'appointments/addToCurrentAppointment',
+      refresh: 'patients/refreshCurrentPatient',
+    }),
     onCardClick(action) {
+      this.form.patient = this.patient
+      this.addToStoreData(this.form)
       switch (action) {
       case 'add':
-        this.$trigger('lab:add:open')
+        this.$trigger('new-lab:add:open')
         break
-      case 'view':
-        this.$trigger('lab:view:open')
+      case 'sample':
+        this.$router.push({name: 'Diagnostic:Labs', params: { id: this.id}})
         break
       case 'result':
-        this.$router.push({name: 'Diagnostic:Labs', params: '345345345'})   
+        this.$router.push({name: 'Diagnostic:Labs', params: { id: this.id}})
         break
       default:
         break

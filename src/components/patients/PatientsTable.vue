@@ -23,9 +23,9 @@
         ref="table"
         :columns="columns"
         :pagination="pagination"
-        :data="filteredData"
+        :data="normalizedData"
         :loading="loading"
-        @pagination="actionOnPagination"
+        @pagination="storePagination"
       >
         <template #default="{ row }">
           <cv-data-table-cell>
@@ -53,10 +53,9 @@
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <router-link
-              tag="div"
-              :to="{ name: route, params: { id: row.id} }"
+            <div
               class="flex items-center cursor-pointer"
+              @click="viewPatient({...row})"
             >
               View
               <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
@@ -65,7 +64,7 @@
                   alt=""
                 >
               </div>
-            </router-link>
+            </div>
           </cv-data-table-cell>
         </template>
       </DataTable>
@@ -77,6 +76,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import DataMixin from '@/mixins/data'
 import debounce from 'lodash/debounce'
+
 export default {
   name: 'PatientsTable',
 
@@ -114,24 +114,17 @@ export default {
       searchTerms: ['gender'],
     }
   },
-  
+
   computed: {
     ...mapState({
-      patientsCount: (state) => state.patients.patientsCount,
+      total: (state) => state.patients.patientsCount,
+      meta: (state) => state.patients.patientsMeta,
       workspaceType: (state) => state.global.workspaceType,
     }),
 
     ...mapGetters({
       data: 'patients/patients',
     }),
-
-    maleCount() {
-      return this.data.filter((p) => p.gender == 'MALE').length
-    },
-
-    femaleCount() {
-      return this.data.filter((p) => p.gender == 'FEMALE').length
-    },
   },
 
   watch: {
@@ -148,20 +141,24 @@ export default {
   },
 
   mounted() {
-    this.paginate = true
-    // this.searchTerms = ['name', 'mr_number', 'mobile', 'gender']
-    this.refresh(false)
+    this.refresh({ page: this.page, page_size: this.pageLength })
   },
 
   methods: {
     ...mapActions({
       getData: 'patients/getPatients',
       searchPatientsStore: 'patients/searchPatients',
+      addToStoreData: 'patients/addToCurrentPatient',
     }),
 
     searchPatients: debounce(function(search) {
-      this.searchPatientsStore({ search })
+      this.searchPatientsStore({ search, page: this.page, page_size: this.pageLength })
     }, 300, false),
+
+    viewPatient(row){
+      this.addToStoreData({...row})
+      this.$router.push({ name: this.route, params: { id: row.id} })
+    },
   },
 }
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div
-    class="w-full h-40 max-w-56 px-4 py-6 mr-4 cursor-pointer"
+    v-if="!details.hide"
+    class="w-full max-w-56 px-4 py-6 mr-4 cursor-pointer"
     :class="[customClass, isSelected ? 'bg-serenity-primary': '']"
     @click="$emit('click')"
   >
@@ -38,6 +39,7 @@ import Cash from '@carbon/icons-vue/es/money/32'
 import Momo from '@carbon/icons-vue/es/wallet/32'
 import Card from '@carbon/icons-vue/es/purchase/32'
 import Insurance from '@carbon/icons-vue/es/keep-dry/32'
+import Phone from '@carbon/icons-vue/es/phone/16'
 import Destination from '@carbon/icons-vue/es/purchase/32'
 import User from '@carbon/icons-vue/es/user/32'
 import Security from '@carbon/icons-vue/es/security/32'
@@ -45,10 +47,12 @@ import Lab from '@carbon/icons-vue/es/chemistry/32'
 import Medication from '@carbon/icons-vue/es/medication/32'
 import Align from '@carbon/icons-vue/es/align-box--bottom-left/32'
 import Reference from '@carbon/icons-vue/es/watson-health/cross-reference/32'
+import List from '@carbon/icons-vue/es/list/32'
 import Care from '@carbon/icons-vue/es/airline--passenger-care/32'
 import Followup from '@carbon/icons-vue/es/arrow--down-right/32'
 import Report from '@carbon/icons-vue/es/report/32'
 import Referral from '@carbon/icons-vue/es/airline--manage-gates/32'
+import Baggage from '@carbon/icons-vue/es/shopping--bag/32'
 
 export default {
   name: 'InfoLinkCard',
@@ -73,11 +77,14 @@ export default {
     Lab,
     Medication,
     Reference,
+    List,
     Care,
     Followup,
     Referral,
     Report,
     Align,
+    Phone,
+    Baggage,
   },
 
   props: {

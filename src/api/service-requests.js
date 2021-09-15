@@ -2,9 +2,9 @@ import http from '@/http'
 
 export default {
   url: 'providers/',
-  
+
   list(providerId, params = {}) {
-    return http.get(`${this.url}${providerId}/servicerequests`, {params})
+    return http.get(`${this.url}${providerId}/servicerequests`, { params })
   },
 
   reports(providerId, params = {}) {
@@ -27,5 +27,21 @@ export default {
 
   delete(providerId,id) {
     return http.delete(`${this.url}${providerId}/servicerequests/${id}`)
+  },
+
+  getServiceRequestProceedures() {
+    return http.get('providers/valueset/diagnostic-order-type')
+  },
+
+  getServiceRequestSectionTypes() {
+    return http.get('/providers/valueset/diagnostic-service-section-type')
+  },
+
+  getServiceRequestCategoryTypes() {
+    return http.get('/providers/valueset/service-request-category-type')
+  },
+
+  getGenericPeriodUnitTypes() {
+    return http.get('/providers/valueset/generic-period-unit-type')
   },
 }

@@ -9,22 +9,17 @@
     <template slot="content">
       <div class="space-y-8">
         <p class="text-lg font-semibold">{{ type === 'update' ? 'Edit' : 'Duplicate' }} Role</p>
-        <cv-text-input
+        <FormInput
           v-model="form.name"
           type="text"
           label="Name of role"
           placeholder="eg Account"
-        >
-          <template
-            v-if="$v.form.name.$error"
-            slot="invalid-message"
-          >
-            Name is required
-          </template>
-        </cv-text-input>
+          :invalid-message="$utils.validateRequiredField($v, 'name')"
+          required
+        />
         <div class="space-y-2">
           <p class="bx--label">Workspace access</p>
-         
+
           <div class="grid grid-cols-3">
             <cv-checkbox
               v-for="(workspace, index) in workspaces"
@@ -245,7 +240,7 @@ export default {
         throw error
       })
 
-      
+
       this.$toast.open({
         message: 'Role successfully duplicated',
       })

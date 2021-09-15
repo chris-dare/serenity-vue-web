@@ -1,7 +1,8 @@
 import ResourceAPI from '@/api/resources'
 import SpecialtiesAPI from '@/api/specialties'
 import ObservationsAPI from '@/api/observations'
-import PharmacyInventoryApi from '@/api/pharmacy_inventory'
+import PharmacyInventoryApi from '@/api/pharmacy-inventory'
+import ServiceRequestAPI from '@/api/service-requests'
 import axios from 'axios'
 
 import {
@@ -24,7 +25,14 @@ import {
   SET_VITALS_UNIT_TYPES,
   SET_LANGUAGES,
   SET_VENDORS,
+  SET_CURRENCIES,
   SET_PHARMACY_INVENTORY_OPTIONS,
+  SET_ENCOUNTER_PRIORITIES,
+  SET_OBSERVATION_CATEGORIES,
+  SET_DIAGNOSTIC_LAB_PROCEEDURES,
+  SET_SERVICE_GENERIC_PERIOD_UNIT_TYPES,
+  SET_SERVICE_REQUEST_CATEGORY_TYPES,
+  SET_SERVICE_REQUEST_SECTION_TYPES,
 } from './mutation-types'
 
 export default {
@@ -36,12 +44,11 @@ export default {
     commit(SET_RESOURCES, data.data)
   },
 
-  async getSpecialties({ commit, rootState }) {
-    const provider = rootState.auth.provider
-    const { data } = await SpecialtiesAPI.list(provider.id).catch((error) => {
+  async getSpecialties({ commit }) {
+    const { data } = await SpecialtiesAPI.list().catch((error) => {
       throw error
     })
-    commit(SET_SPECIALTIES, data.data)
+    commit(SET_SPECIALTIES, data)
   },
 
   async getCategories({ commit, state }) {
@@ -51,7 +58,21 @@ export default {
     const { data } = await ResourceAPI.categories().catch((error) => {
       throw error
     })
-    commit(SET_CATEGORIES, data.data)
+    commit(SET_CATEGORIES, data)
+  },
+
+  async getEncounterPriorities({ commit, state }) {
+    if (state.encounterPriorities.length) {
+      return
+    }
+
+    // eslint-disable-next-line no-useless-catch
+    try {
+      const { data } = await ResourceAPI.encounterPriorities()
+      commit(SET_ENCOUNTER_PRIORITIES, data)
+    } catch (error) {
+      throw error
+    }
   },
 
   async getCodes({ commit, state }) {
@@ -81,7 +102,17 @@ export default {
     const { data } = await ResourceAPI.types().catch((error) => {
       throw error
     })
-    commit(SET_SERVICE_TYPES, data.data)
+    commit(SET_SERVICE_TYPES, data)
+  },
+
+  async getObservationCategory({ commit, state }) {
+    if (state.observationCategories.length) {
+      return
+    }
+    const { data } = await ResourceAPI.observationCategories().catch((error) => {
+      throw error
+    })
+    commit(SET_OBSERVATION_CATEGORIES, data)
   },
 
   async getLanguages({ commit, state }) {
@@ -92,6 +123,16 @@ export default {
       throw error
     })
     commit(SET_LANGUAGES, data)
+  },
+
+  async getCurrencies({ commit, state }) {
+    if (state.currencies.length) {
+      return
+    }
+    const { data } = await ResourceAPI.currencies().catch((error) => {
+      throw error
+    })
+    commit(SET_CURRENCIES, data)
   },
 
   async getPaymentMethods({ commit, state }) {
@@ -216,8 +257,59 @@ export default {
     }
     try {
       const { data } = await PharmacyInventoryApi.list()
-      console.info(data)
       commit(SET_PHARMACY_INVENTORY_OPTIONS, data)
+      return data
+    } catch (error) {
+      throw error || error.message
+    }
+  },
+
+  async getDiagnosticLabProceedures({ commit, state }) {
+    if (state.diagnosticLabProceedures.length) {
+      return
+    }
+    try {
+      const { data } = await ServiceRequestAPI.getServiceRequestProceedures()
+      commit(SET_DIAGNOSTIC_LAB_PROCEEDURES, data)
+      return data
+    } catch (error) {
+      throw error || error.message
+    }
+  },
+
+  async getServiceRequestSectionTypes({ commit, state }) {
+    if (state.serviceRequestSectionTypes.length) {
+      return
+    }
+    try {
+      const { data } = await ServiceRequestAPI.getServiceRequestSectionTypes()
+      commit(SET_SERVICE_REQUEST_SECTION_TYPES, data)
+      return data
+    } catch (error) {
+      throw error || error.message
+    }
+  },
+
+  async getServiceRequestCategoryTypes({ commit, state }) {
+    if (state.serviceRequestCategoryTypes.length) {
+      return
+    }
+    try {
+      const { data } = await ServiceRequestAPI.getServiceRequestCategoryTypes()
+      commit(SET_SERVICE_REQUEST_CATEGORY_TYPES, data)
+      return data
+    } catch (error) {
+      throw error || error.message
+    }
+  },
+
+  async getGenericPeriodUnitTypes({ commit, state }) {
+    if (state.serviceGenericPeriodUnits.length) {
+      return
+    }
+    try {
+      const { data } = await ServiceRequestAPI.getGenericPeriodUnitTypes()
+      commit(SET_SERVICE_GENERIC_PERIOD_UNIT_TYPES, data)
       return data
     } catch (error) {
       throw error || error.message
@@ -235,7 +327,7 @@ export default {
   },
 
   getDiagnosisCodeOptions({ commit }, search) {
-    axios.get(`https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search?sf=code,name&&terms=${search}`)
+    axios.get(`https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search?maxList=&&sf=code,name&authenticity_token=&terms=${search}`)
       .then((response) => {
         commit(SET_CLINICAL_OPTIONS, response.data[3])
         return response

@@ -18,7 +18,7 @@
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white  text-serenity-placeholder"
+          class="px-4 bg-white hover:bg-white  text-placeholder"
         >
           Filters
           <img

@@ -34,7 +34,6 @@ export default {
       return currentSlot
     },
     close() {
-      console.info('close')
       this.visible = false
     },
     
@@ -53,7 +52,6 @@ export default {
         this.$emit('input', this.value - 1)
         setTimeout(()=> {
           const slot = this.slots()[this.value]
-          console.info(slot, form)
           slot.componentInstance.form = Object.assign(slot.componentInstance.form, form)
           slot.componentInstance.$forceUpdate(); 
         }, 100)

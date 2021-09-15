@@ -6,7 +6,7 @@
       :rows="5"
     />
     <cv-data-table
-      v-else-if="!loading && !noData"
+      v-show="!loading && !noData"
       ref="table"
       :data="[]"
       :columns="columns"

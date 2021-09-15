@@ -1,5 +1,5 @@
 <template>
-  <div class="w-4/5 mx-auto">
+  <div class="max-w-7xl mx-auto">
     <UserDetailsHeader />
     <p class="text-serenity-primary my-6 font-semibold">
       What would you like to do?
@@ -31,26 +31,6 @@ export default {
   data() {
     return {
       selected: 'search',
-      dashboardTypes: [
-        {
-          label: 'Provider Profile',
-          description: 'Information about this company',
-          type: 'home',
-          value: 'profile',
-        },
-        {
-          label: 'Admin Profile',
-          description: 'A quick overview of you',
-          type: 'user',
-          value: 'admin',
-        },
-        {
-          label: 'Security',
-          description: 'Protect your account',
-          type: 'security',
-          value: 'security',
-        },
-      ],
     }
   },
 
@@ -58,6 +38,33 @@ export default {
     ...mapState({
       workspaceType: state => state.global.workspaceType,
     }),
+
+    dashboardTypes() {
+      let types = [{
+        label: 'Provider Profile',
+        description: 'Information about this company',
+        type: 'home',
+        value: 'profile',
+      }]
+
+      if (this.$isCurrentWorkspace('ADMIN')) {
+        types.push({
+          label: 'Admin Profile',
+          description: 'A quick overview of you',
+          type: 'user',
+          value: 'admin',
+        })
+      }
+
+      types.push({
+        label: 'Security',
+        description: 'Protect your account',
+        type: 'security',
+        value: 'security',
+      })
+
+      return types
+    },
   },
 
   mounted() {
@@ -78,7 +85,7 @@ export default {
       if (dashboard.value === 'security') {
         this.$trigger('profile:security')
       }
-      
+
     },
   },
 }

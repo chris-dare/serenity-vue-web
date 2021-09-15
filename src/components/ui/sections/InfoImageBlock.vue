@@ -16,7 +16,7 @@
       class="flex items-center py-2"
       :class="customClass.space"
     >
-      <div class="w-12">
+      <div :class="customClass.img">
         <img
           v-if="url"
           class="rounded-full flex-1"
@@ -32,12 +32,14 @@
       </div>
       <div>
         <p :class="labelClass">{{ label }}</p>
-        <p
-          :class="[customClass.description, descriptionClass]"
-          class="text-secondary capitalize"
-        >
-          {{ description }}
-        </p>
+        <slot>
+          <p
+            :class="[customClass.description, descriptionClass]"
+            class="text-secondary capitalize"
+          >
+            {{ description }}
+          </p>
+        </slot>
       </div>
     </div>
   </div>
@@ -93,9 +95,9 @@ export default {
     customClass() {
       if (this.size === 'large') {
         return {
-          img: 'w-16 h-16',
+          img: 'w-16 h-16 text-lg',
           description: 'text-base',
-          space: 'space-x-4',
+          space: 'space-x-2',
         }
       }
 

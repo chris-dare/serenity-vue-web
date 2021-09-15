@@ -70,7 +70,7 @@ export default {
           label: 'Book COVID-19 test',
           description: 'Schedule a patient for COVID test',
           type: 'book',
-          value: 'book',
+          value: 'schedule',
         },
       ]
 
@@ -83,9 +83,6 @@ export default {
       this.selected = dashboard.value
 
       switch (dashboard.value) {
-      case 'visit':
-        this.$trigger('visit:start:open')
-        break
       case 'register':
         this.$router.push({ name: 'Biodata'})
         break

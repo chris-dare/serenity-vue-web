@@ -14,35 +14,20 @@
       title="Clinical Role"
       placeholder="Select a clinical role"
       :error-message="$utils.validateRequiredField($v, 'practitioner_role')"
+      required
     />
 
     <MultiSelect
       v-model="form.practitioner_specialty"
       multiple
       :options="specialties"
-      label="Display"
-      track-by="Code"
+      label="display"
+      track-by="code"
       title="Specialty"
       placeholder="Select one or more specialties"
       :error-message="$utils.validateRequiredField($v, 'practitioner_specialty')"
+      required
     />
-    <!-- <cv-text-input
-      v-model="form.code"
-      label="Medical Practice Code"
-      placeholder="Medical Practice Code"
-      class="inherit-full-input my-8"
-    /> -->
-
-    <!-- <p class="text-primary mt-8 mb-4 text-left">Workspace access</p>
-    <div class="grid grid-cols-3">
-      <cv-checkbox
-        v-for="(workspace, index) in workspaces"
-        :key="index"
-        v-model="form.workspaces"
-        :value="workspace.id"
-        :label="workspace.workspace_name"
-      />
-    </div> -->
 
     <div class="flex items-center justify-between mt-12 mb-6">
       <div class="flex items-center space-x-2">
@@ -90,7 +75,7 @@ export default {
       form: {
         practitioner_specialty: [],
         practitioner_role: '',
-        team_member_type: '',
+        team_member_type: 'clinical_staff',
       },
       titles: [{label:'Clinical Staff', value: 'clinical_staff'}, {label:'Non-Clinical Staff', value: 'non_clinical_staff'}],
       loading: false,
@@ -156,10 +141,7 @@ export default {
         this.reset()
         this.$router.push({name: 'Team'})
       } catch (error) {
-        this.$toast.open({
-          message: 'Something went wrong!',
-          type: 'error',
-        })
+        console.log('error', error)
       }
 
       this.loading = false
@@ -176,12 +158,9 @@ export default {
           message: 'Team member successfully updated',
         })
         this.reset()
-        this.$router.push({name: 'TeamDetail', params: { id:this.form.id }})
+        this.$router.push({name: 'TeamDetail', params: { id: this.form.id }})
       } catch (error) {
-        this.$toast.open({
-          message: 'Something went wrong!',
-          type: 'error',
-        })
+        console.log('error', error)
       }
 
       this.loading = false

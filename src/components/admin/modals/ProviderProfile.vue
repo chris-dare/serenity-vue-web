@@ -26,9 +26,9 @@
                   title="Or upload patient photo"
                 >
                   <template slot="button">
-                    <div 
+                    <div
                       class="cv-button bg-serenity-primary bx--btn bx--btn--primary"
-                      kind="primary" 
+                      kind="primary"
                     >
                       Change Profile Picture
                       <Camera class="w-4 h-4 text-white bx--btn__icon" />
@@ -38,54 +38,23 @@
               </div>
             </div>
             <div class="grid grid-cols-2 gap-8 my-8">
-              <cv-text-input
+              <FormInput
                 v-model="form.organization_name"
-                label="Provider name (required)"
+                label="Provider name"
                 placeholder="Provider Name"
                 :invalid-message="$utils.validateRequiredField($v, 'organization_name')"
                 class="inherit-full-input"
+                required
               />
-              <!-- <cv-text-input
-                v-model="form.email"
-                label="Email"
-                placeholder="Email"
-                class="inherit-full-input"
-              /> -->
+
               <PhoneInput
                 v-model="form.organization_telecom"
                 label="Contact Number"
                 :error-message="$utils.validateRequiredField($v, 'organization_telecom')"
+                required
                 @input="$v.$touch()"
               />
-              <!-- <cv-select
-                v-model="form.organization_type"
-                label="Provider type (required)"
-                class="inherit-full-input"
-                placeholder="Provider type (required)"
-              >
-                <cv-select-option
-                  disabled
-                  selected
-                  hidden
-                >
-                  Provider type (required)
-                </cv-select-option>
-                <cv-select-option
-                  v-for="type in organizationTypes"
-                  :key="type.value"
-                  :value="type.value"
-                >
-                  {{ type.name }}
-                </cv-select-option>
-              </cv-select> -->
             </div>
-            <!-- <cv-text-input
-              v-model="form.address"
-              label="Full provider address (required)"
-              placeholder="Enter residential address"
-              type="text"
-              class="inherit-full-input mb-8"
-            /> -->
             <div class="flex items-center justify-between mt-4 mb-6">
               <cv-button
                 class="border-gray-800 bg-gray-800 text-white focus:bg-gray-700 hover:bg-gray-700 px-6"

@@ -4,67 +4,42 @@
     :error="error"
     class="max-w-7xl mx-auto"
   >
-    <div class="w-4/5 mx-auto">
-      <div class="bg-white py-8 px-4 my-2 flex items-center justify-between">
-        <div class="flex">
-          <div class="flex items-center space-x-4">
-            <ImageBlock
-              :url="patient.url"
-              :alt="patient.name"
-            />
-            <div>
-              <p>{{ patient.name }}</p>
-              <p class="text-secondary  capitalize">
-                {{ patient.gender_age_description }}
-              </p>
-              <div class="mt-2 flex items-center">
-                <div class="bg-green-700 w-3 h-3 rounded-full mr-2" />
-                <p>MR No: {{ patient.mr_number }}</p>
-              </div>
-            </div>
-          </div>
-          <div
-            class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
-          >
-            <img
-              src="@/assets/img/edit 1.svg"
-              class="w-4 h-4"
-            >
-          </div>
-        </div>
-        <div class="flex items-center space-x-4">
-          <SeButton
-            @click="$trigger('pharmacy:patient_prescription:open', 'create')"
-          >
-            <Medication class="w-4 h-4 mr-2" />
-            New Prescription
-          </SeButton>
-        </div>
-      </div>
+    <div class="space-y-2">
+      <PatientInfoCard :editable="false">
+        <SeButton
+          @click="newPrescription"
+        >
+          <Medication class="w-4 h-4 mr-2" />
+          New Prescription
+        </SeButton>
+      </PatientInfoCard>
 
-      <PatientDetailsNav
-        class="mb-8"
+      <DetailPageNav
         :links="links"
       />
       <router-view />
-      <PatientPrescriptionModal :medication-requests="activeMedications" />
+      <!-- <PatientPrescriptionModal :medication-requests="activeMedications" /> -->
     </div>
   </AppStatePage>
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
-import PatientDetailsNav from '@/components/patients/PatientDetailsNav'
+/* eslint-disable */
+import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
+import DetailPageNav from '@/components/patients/DetailPageNav'
 import Medication from '@carbon/icons-vue/es/medication/32'
 import PatientPrescriptionModal from '@/components/pharmacy/modals/PatientPrescriptionModal'
+import EncounterPrescriptionsApi from '@/api/encounter-prescriptions.js'
+import PatientInfoCard from '@/components/patients/PatientInfoCard'
 
 export default {
   name: 'Patient',
 
-  components: { 
-    PatientDetailsNav,
+  components: {
+    DetailPageNav,
     Medication,
     PatientPrescriptionModal,
+    PatientInfoCard
   },
 
   props: {
@@ -99,9 +74,8 @@ export default {
         'Refill',
       ],
       links: [
-        { label: 'Prescriptions', path: 'Pharmacy:PatientPrescriptions' },
         { label: 'Summary', path: 'Pharmacy:PatientSummary' },
-        { label: 'Chart', path: 'Pharmacy:PatientChart' },
+        { label: 'Prescriptions', path: 'Pharmacy:PatientPrescriptions' },
       ],
     }
   },
@@ -110,6 +84,7 @@ export default {
     ...mapState({
       patient: (state) => state.patients.currentPatient,
       workspaceType: (state) => state.global.workspaceType,
+      provider: (state) => state.auth.provider,
     }),
     ...mapGetters({
       patientMedications: 'patients/patientMedications',
@@ -130,11 +105,10 @@ export default {
         await vm.initSinglePatientInformation(vm.id)
         vm.loading = false
       } catch (error) {
-        vm.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
+        // vm.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
         vm.loading = false
+        throw(error)
       }
-      
-      
     })
   },
 
@@ -142,26 +116,39 @@ export default {
     this.findPatient(this.id)
   },
 
+  beforeRouteLeave (from,to,next) {
+    this.refresh()
+    next()
+  },
+
   methods: {
     ...mapActions({
       findPatient: 'patients/findPatient',
+      refresh: 'patients/refreshCurrentPatient',
+    }),
+    ...mapMutations({
+      setCheckoutPatient: 'checkout/Set existing patient',
     }),
     async initSinglePatientInformation(id) {
       await this.$store.dispatch('patients/getPatient', id)
       this.$store.dispatch('appointments/getAppointments', { filters: { patient: id, ordering: '-start' } }, { root:true })
       this.$store.dispatch('patients/getServiceRequests', id)
-      await this.$store.dispatch('patients/getMedicationRequests')
+      await this.$store.dispatch('patients/getMedicationRequests', { patient: id })
       this.$store.dispatch('patients/getObservations', { refresh:true, filters: { patient: id }})
       this.$store.dispatch('patients/getDiagnosis', id)
       this.$store.dispatch('patients/getNotes', id)
-      this.$store.dispatch('patients/getDiagnosticReports')
-      this.$store.dispatch('encounters/getEncounters', id , { root:true })
+      this.$store.dispatch('diagnostic/getDiagnosticReports')
+      this.$store.dispatch('encounters/getEncounters', {patient: id } , { root:true })
       this.$store.dispatch('resources/getEncounterStatuses', null, { root:true })
       this.$store.dispatch('patients/getReferrals', id , { root:true })
       this.$store.dispatch('resources/getObservationUnitTypes', null, { root:true })
       this.$store.dispatch('resources/getVitalsUnitTypes', null, { root:true })
       this.$store.dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
       this.$store.dispatch('resources/getSystemExamUnitTypes', null, { root:true })
+    },
+    newPrescription() {
+      this.setCheckoutPatient(this.patient)
+      this.$router.push({ name: 'Pharmacy:PatientNew'})
     },
   },
 }

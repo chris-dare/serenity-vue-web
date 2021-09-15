@@ -1,11 +1,11 @@
 <template>
   <div
-    class="mx-auto w-4/5 space-y-4"
+    class="mx-auto max-w-7xl space-y-4"
   >
     <div class="flex items-center justify-between">
       <p class="text-xl font-bold">Team members ({{ users.length }})</p>
 
-      
+
 
       <div
         v-if="$userCan('practioners.write')"

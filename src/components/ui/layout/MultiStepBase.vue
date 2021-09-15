@@ -1,42 +1,77 @@
-<template functional>
+<template>
   <cv-form
     autocomplete="off"
     @submit.prevent
   >
     <slot />
-
-    <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center space-x-2">
-        <SeButton
-          v-if="!props.modal"
-          variant="outline"
-          @click="listeners['cancel']"
-        >
-          Cancel
-        </SeButton>
-        <SeButton
-          v-if="props.previous && !props.modal"
-          :to="{ name: props.previous, query: { ...props.query } }"
-          variant="secondary"
-        >
-          Go back
-        </SeButton>
+    <slot name="actions">
+      <div class="flex items-center justify-between mt-12 mb-6">
+        <div class="flex items-center space-x-2">
+          <SeButton
+            v-if="!modal"
+            variant="outline"
+            @click="$emit('cancel')"
+          >
+            Cancel
+          </SeButton>
+          <SeButton
+            v-if="previous && !modal"
+            :to="{ name: previous, query: { ...query } }"
+            variant="secondary"
+          >
+            Go back
+          </SeButton>
+          <SeButton
+            v-else
+            variant="secondary"
+            @click="$emit('back')"
+          >
+            Go back
+          </SeButton>
+        </div>
+        <div class="flex items-center">
+          <SeButton
+            :icon="icon"
+            :loading="loading"
+            @click="$emit('save')"
+          >
+            {{ nextLabel }}
+          </SeButton>
+        </div>
       </div>
-      <div class="flex items-center">
-        <SeButton
-          :icon="props.icon"
-          :loading="props.loading"
-          @click="listeners['save']"
-        >
-          {{ props.nextLabel }}
-        </SeButton>
-      </div>
-    </div>
+    </slot>
   </cv-form>
 </template>
 
 <script>
 export default {
   name: 'MultiStepBase',
+
+  props: {
+    modal: {
+      type: Boolean,
+      default: false,
+    },
+    previous: {
+      type: String,
+      default: null,
+    },
+    query: {
+      type: Object,
+      default: () => {},
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    nextLabel: {
+      type: String,
+      default: null,
+    },
+    icon: {
+      type: [Object, String],
+      default: null,
+    },
+  },
 }
 </script>

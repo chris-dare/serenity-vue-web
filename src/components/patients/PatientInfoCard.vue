@@ -4,10 +4,10 @@
       <div class="flex items-center space-x-4">
         <ImageBlock
           :url="patient.url"
-          :alt="patient.name"
+          :alt="patient.name || patient.fullName"
         />
         <div>
-          <p>{{ patient.name }}</p>
+          <p>{{ patient.name || patient.fullName }}</p>
           <p class="text-secondary  capitalize">
             {{ patient.gender_age_description }}
           </p>
@@ -18,6 +18,7 @@
         </div>
       </div>
       <div
+        v-if="$userCan('patient.write') && editable"
         class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
       >
         <img
@@ -36,6 +37,13 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'PatientInfoCard',
+
+  props: {
+    editable: {
+      type: Boolean,
+      default: true,
+    },
+  },
 
   computed: {
     ...mapState({

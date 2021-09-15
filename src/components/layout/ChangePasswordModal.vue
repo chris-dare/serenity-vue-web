@@ -16,35 +16,31 @@
         </div>
         <div>
           <div class="grid grid-cols-2 gap-8 my-8">
-            <cv-text-input
+            <FormInput
               v-model="form.password"
               label="Current Password"
               type="password"
               class="inherit-full-input"
-            >
-              <template
-                v-if="$v.form.password.$error"
-                slot="invalid-message"
-              >
-                {{ $utils.validateRequiredField($v, 'password') }}
-              </template>
-            </cv-text-input>
-            <div />
-            <cv-text-input
+              :invalid-message="$utils.validateRequiredField($v, 'password')"
+              required
+            />
+            <FormInput
               v-model="form.new_password"
               label="New Password"
               type="password"
               placeholder="At least 8 characters"
               :invalid-message="$utils.validateRequiredField($v, 'new_password')"
               class="inherit-full-input"
+              required
             />
-            <cv-text-input
+            <FormInput
               v-model="form.confirm_password"
               label="Confirm Password"
               type="password"
               placeholder="At least 8 characters"
               :invalid-message="$utils.validateRequiredField($v, 'confirm_password')"
               class="inherit-full-input"
+              required
             />
           </div>
           <div class="flex justify-end">
@@ -114,11 +110,11 @@ export default {
     ...mapActions({
       changePassword: 'auth/changePassword',
     }),
-  
+
     open(){
       this.modalVisible = true
     },
-  
+
     close() {
       this.modalVisible = false
       this.form = {

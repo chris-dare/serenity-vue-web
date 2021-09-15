@@ -9,13 +9,13 @@ export default {
     }
   },
 
-  beforeRouteLeave(to, from, next) {
-    if (this.dataHasNotChanged() || this.mode === 'update') {
-      return next()
-    }
+  // beforeRouteLeave(to, from, next) {
+  //   if (this.dataHasNotChanged() || this.mode === 'update') {
+  //     return next()
+  //   }
 
-    this.confirmChanges(next)
-  },
+  //   this.confirmChanges(next)
+  // },
 
   computed: {
     dataObj() {

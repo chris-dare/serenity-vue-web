@@ -1,43 +1,38 @@
 <template>
-  <cv-select
-    v-model="selected"
-    label="Currency"
-    class="inherit-full-input"
-  >
-    <cv-select-option
-      v-for="(currency, index) in currencies"
-      :key="index"
-      :value="currency.code"
-    >
-      {{ currency.symbol }}
-    </cv-select-option>
-  </cv-select>
+  <MultiSelect
+    v-model="localValue"
+    :options="currencies"
+    track-by="code"
+    label="display"
+    custom-field="code"
+    title="Currency"
+    preselect
+    v-bind="$attrs"
+  />
 </template>
 
 <script>
-import { mapState} from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import modelMixin from '@/mixins/model'
 export default {
   name: 'CurrencySelect',
 
-  props: {
-    value: {
-      type: [Array, Object, String],
-      default: () => [],
-    },
-  },
+  mixins: [modelMixin],
 
   computed: {
     ...mapState({
-      currencies: (state) => state.global.currencies,
+      currencies: (state) => state.resources.currencies,
     }),
-    selected: {
-      get() {
-        return this.value
-      },
-      set(val) {
-        this.$emit('input', val)
-      },
-    },
+  },
+
+  created(){
+    this.getCurrencies()
+  },
+
+  methods: {
+    ...mapActions({
+      getCurrencies: 'resources/getCurrencies',
+    }),
   },
 }
 </script>

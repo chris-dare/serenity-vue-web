@@ -7,7 +7,7 @@
     @modal-hidden="visible = false"
   >
     <template slot="content">
-      <div class="space-y-2 divide-y divide-black divide-solid">
+      <SeForm class="space-y-2 divide-y divide-secondary divide-solid">
         <p class="text-md font-semibold">New deposit</p>
         <div>
           <div class="flex items-center py-5">
@@ -24,35 +24,23 @@
               <p class="text-secondary text-xs"> Account type </p>
             </div>
             <div class="text-right">
-              <p class="text-md">{{ $date.formatDate(form.creditStartDate, 'yyyy/MM/dd') }}</p>
+              <p class="text-md">{{ $date.formatDate(form.creditStartDate, 'dd MMM, yyyy') }}</p>
               <p class="text-secondary text-xs"> Date </p>
             </div>
           </div>
         </div>
         <div class="py-4">
-          <cv-select
+          <MultiSelect
             v-model="form.paymentMethod"
-            class="se-custom-input"
-            label="Mode of payment"
-          >
-            <cv-select-option
-              disabled
-              hidden
-              :selected="!form.paymentMethod"
-            >
-              Please select a mode of payment
-            </cv-select-option>
-            <cv-select-option
-              value="cash"
-            >
-              Cash
-            </cv-select-option>
-            <!-- <cv-select-option
-                  value="corporate"
-                >
-                  Corporate
-                </cv-select-option> -->
-          </cv-select>
+            placeholder="Please select a mode of payment"
+            custom-field="display"
+            track-by="code"
+            label="display"
+            title="Mode of payment"
+            :options="options"
+            preselect
+          />
+
           <div class="py-4">
             <cv-text-input
               v-model="form.amount"
@@ -62,36 +50,28 @@
               placeholder="0.00"
             />
             <div v-if="form.paymentMethod === 'corporate'">
-              <cv-select
+              <MultiSelect
                 v-model="form.corporate"
-                class="se-custom-input pt-3"
-                label="Select the corporate body"
-              >
-                <cv-select-option
-                  disabled
-                  hidden
-                  selected
-                >
-                  Choose a corporate body to bill to
-                </cv-select-option>
-              </cv-select>
+                placeholder="Choose a corporate body to bill"
+                title="Select the corporate body"
+              />
               <cv-toast-notification
                 v-if="true"
-                caption="paymeny would be billed to the corporate account"
-                sub-title="paymeny would be billed to the corporate account"
+                caption="payment would be billed to the corporate account"
+                sub-title="payment would be billed to the corporate account"
               />
             </div>
-            <cv-text-input
+            <!-- <cv-text-input
               v-else
               v-model="form.depositor"
               class="inherit-full-input pt-4"
               type="text"
               label="Name of Depositor"
               placeholder="Please enter the name of the depositor"
-            />
+            /> -->
           </div>
         </div>
-      </div>
+      </SeForm>
       <div class="flex justify-between items-center">
         <p 
           class="text-center" 
@@ -126,7 +106,11 @@ export default {
       vertical: true,
       form: {
         paymentMethod: 'cash',
+        company: {},
       },
+      options: [
+        {display: 'Cash', code: 'cash'},
+      ],
     }
   },
 
@@ -160,15 +144,6 @@ export default {
     }),
 
     submit(){
-      // this.$v.$touch()
-      // if (this.$v.$invalid) {
-      //   this.$toast.open({
-      //     message: 'Please these fields are required!',
-      //     type: 'error',
-      //   })
-      //   return
-      // }
-
       if (this.type === 'update') {
         this.update()
       } else {
@@ -178,12 +153,13 @@ export default {
 
     async save() {
       this.loading = true
-      let payload = {    
+      let payload = {
         amount: parseFloat(this.form.amount), // required
         accountId: this.form.id, //provider client account(required)
         creditDurationInDays: parseFloat(this.form.creditDurationInDays), //required
         creditStartDate: new Date(this.form.creditStartDate), //required
         depositType: this.form.state, //either limited-credit-active or limited-debit-activerequired
+        companyId: this.form.company.main_branch_id,
         depositedBy: this.userName,
         maximum_employees_allowed: parseFloat(this.form.maximum_employees_allowed), //required
       }

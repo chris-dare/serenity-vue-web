@@ -6,84 +6,68 @@
     size="xs"
   >
     <template slot="content">
-      <div>
-        <p class="mb-1 font-bold text-xl mt-4">Welcome, Dr. Grey Strep.</p>
+      <SeForm>
+        <p class="mb-1 font-bold text-xl mt-4">Welcome, {{ fullName }}</p>
         <p class="mb-6">
           Please setup your location and department to get started
         </p>
-        <cv-select
-          v-model="form.location"
-          label="Where are you now?"
-          class="se-custom-input mb-8"
-        >
-          <cv-select-option
-            disabled
-            selected
-            hidden
-          >
-            Location
-          </cv-select-option>
-          <cv-select-option
-            value="network"
-          >
-            Airport Residential
-          </cv-select-option>
-        </cv-select>
-        <cv-select
-          v-model="form.location"
-          label="Which clinic would you like to start in?"
-          class="se-custom-input mb-8"
-        >
-          <cv-select-option
-            disabled
-            selected
-            hidden
-          >
-            Choose an option
-          </cv-select-option>
-          <cv-select-option
-            value="network"
-          >
-            Airport Residential
-          </cv-select-option>
-        </cv-select>
-        <div class="mb-8">
-          <div class="bx--label">Are you on shift now?</div>
-          <cv-radio-group vertical>
-            <cv-radio-button
-              v-model="form.check"
-              name="group-1"
-              label="Yes"
-              value="yes"
+        <div class="space-y-8">
+          <MultiSelect
+            v-model="form.location"
+            :options="locations"
+            track_by="id"
+            label="location_name"
+            custom-field="id"
+            title="Where are you now?"
+          />
+          <MultiSelect
+            v-model="form.starting_location"
+            :options="locations"
+            track_by="id"
+            label="location_name"
+            custom-field="id"
+            title="Which clinic would you like to start in?"
+          />
+          <div>
+            <div class="bx--label">Are you on shift now?</div>
+            <cv-radio-group vertical>
+              <cv-radio-button
+                v-model="form.check"
+                name="group-1"
+                label="Yes"
+                value="yes"
+              />
+              <cv-radio-button
+                v-model="form.check"
+                name="group-1"
+                label="No"
+                value="no"
+              />
+            </cv-radio-group>
+          </div>
+          <div>
+            <DatePicker
+              v-model="form.date"
+              type="datetime"
+              label="When is your shift ending?"
             />
-            <cv-radio-button
-              v-model="form.check"
-              name="group-1"
-              label="No"
-              value="no"
-            />
-          </cv-radio-group>
+          </div>
+          <SeButton
+            full
+            label="Get Started"
+            @click="visible = !visible"
+          />
         </div>
-        <div class="mb-8">
-          <div class="bx--label">When is your shift ending?</div>
-          <DateTimePicker v-model="form.date" />
-        </div>
-        <SeButton
-          full
-          label="Get Started"
-          @click="visible = !visible"
-        />
-      </div>
+      </SeForm>
     </template>
   </cv-modal>
 </template>
 
 <script>
-// import Diagnostic from '@carbon/icons-vue/es/microscope/32'
+import { mapGetters, mapState } from 'vuex'
+
 export default {
   name: 'GetStartedModal',
-
-  //   components: {Diagnostic},
 
   props: {
     visible: {
@@ -99,6 +83,12 @@ export default {
   },
 
   computed: {
+    ...mapGetters({
+      fullName: 'auth/fullName',
+    }),
+    ...mapState({
+      locations: (state) => state.locations.locations,
+    }),
     modalVisible: {
       set(val) {
         this.$emit('visible:update', val)

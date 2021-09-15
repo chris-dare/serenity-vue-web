@@ -16,7 +16,7 @@
       class="flex h-20"
     >
       <div class="w-12 text-xs text-gray-500 flex items-center text-right">
-        {{ patient.time }}
+        {{ $date.formatDate(patient.time) }}
       </div>
       <div class="w-8 flex items-center justify-center relative">
         <div
@@ -25,10 +25,13 @@
         />
         <div class="w-2 h-2 rounded-full bg-serenity-step" />
       </div>
-      <div class="flex items-center py-2">
+      <div
+        class="flex items-center py-2 cursor-pointer"
+        @click="$router.push({name: currentWorkspacePatientPage, params: { id: patient.id }})"
+      >
         <InfoImageBlock
-          :label="$utils.concatData(patient.patient_detail, ['first_name', 'lastname'])"
-          :description="patient.patient_detail.mobile"
+          :label="patient.fullName"
+          :description="patient.mobile"
         />
       </div>
     </div>
@@ -36,6 +39,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'Steps',
 
@@ -45,7 +49,11 @@ export default {
       default: () => {},
     },
   },
+
+  computed: {
+    ...mapGetters({
+      currentWorkspacePatientPage: 'global/currentWorkspacePatientPage',
+    }),
+  },
 }
 </script>
-
-<style></style>

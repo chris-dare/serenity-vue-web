@@ -28,6 +28,7 @@
         :error-message="$utils.validateRequiredField($v, 'appointmentType')"
         preselect
         custom-field="value"
+        required
       />
 
       <MultiSelect
@@ -35,8 +36,8 @@
         title="Choose a specialty"
         :multiple="false"
         :options="specialties"
-        label="Display"
-        track-by="Code"
+        label="display"
+        track-by="code"
         placeholder="Specialties"
         preselect
         @change="updateStore"
@@ -124,8 +125,8 @@ export default {
       if (!this.form.service || !this.form.service.price_tiers) return []
       return this.form.service.price_tiers.map(tier => {
         return {
-          label: `${tier.name} - ${tier.currency} ${tier.cost}`,
-          value: tier.name,
+          label: `${tier.display} - ${tier.currency} ${tier.charge}`,
+          value: tier.id,
         }
       })
     },
@@ -178,7 +179,7 @@ export default {
     },
 
     async update() {
-      
+
 
       this.loading = true
       await this.updateAppointment(this.form).then(() => {

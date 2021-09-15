@@ -7,19 +7,23 @@
     @modal-hidden="close"
   >
     <template slot="content">
-      <div class="space-y-8 left-button">
+      <SeForm class="space-y-8 left-button">
         <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'New' }} workspace</p>
-        <cv-text-input
+        <FormInput
           v-model="form.workspace_name"
           label="Name"
           type="text"
           placeholder="eg Out patient"
           :invalid-message="$utils.validateRequiredField($v, 'workspace_name')"
+          required
         />
 
         <div>
           <div class="flex flex-col items-start space-y-6">
-            <p class="bx--label">Workspace features access</p>
+            <FormLabel
+              :required="true"
+              label="Workspace features access"
+            />
             <cv-radio-button
               v-for="workspaceType in workspaceTypes"
               :key="workspaceType.value"
@@ -35,7 +39,7 @@
             </p>
           </div>
         </div>
-        
+
 
         <div class="flex items-center justify-between">
           <SeButton
@@ -51,7 +55,7 @@
             {{ form.id ? 'Save changes' : 'Create new workspace' }}
           </SeButton>
         </div>
-      </div>
+      </SeForm>
     </template>
   </cv-modal>
 </template>
@@ -122,7 +126,7 @@ export default {
         this.save()
       }
     },
-    
+
     async save() {
       this.loading = true
       const data = await this.createWorkspace(this.form).catch((error) => {
@@ -161,7 +165,7 @@ export default {
       }
 
       this.loading = false
-      
+
     },
     close() {
       this.visible = false

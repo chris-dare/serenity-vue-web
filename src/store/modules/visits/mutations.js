@@ -1,11 +1,20 @@
-import { SET_VISITS, UPDATE_VISIT, DELETE_VISIT, ADD_VISIT_DATA, SET_VISIT_DATA, SET_MY_VISITS } from './mutation-types'
+import { SET_VISITS, UPDATE_VISIT, DELETE_VISIT, ADD_VISIT_DATA, SET_VISIT_DATA, SET_MY_VISITS, SET_VISITS_TOTAL, SET_MY_VISITS_TOTAL } from './mutation-types'
 
 export default {
   [SET_VISITS](state, visits) {
     state.visits = visits
   },
+
+  [SET_VISITS_TOTAL](state, total) {
+    state.visitsTotal = total
+  },
+
   [SET_MY_VISITS](state, visits) {
     state.practitionerVisits = visits
+  },
+
+  [SET_MY_VISITS_TOTAL](state, total) {
+    state.practitionerVisitsTotal = total
   },
 
   [UPDATE_VISIT](state, visit) {

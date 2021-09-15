@@ -22,7 +22,7 @@
           </p>
 
           <div class="text-white">
-            <cv-inline-notification 
+            <cv-inline-notification
               v-if="showNotification"
               kind="error"
               :sub-title="errorMessage"
@@ -30,16 +30,18 @@
             />
           </div>
           <div class="mt-8">
-            <cv-text-input
+            <FormInput
               v-model="form.email"
+              required
               :invalid-message="$utils.validateRequiredField($v, 'email')"
               class="my-4 se-dark-input"
               label="Your email address"
               data-test="email"
             />
-            <cv-text-input
+            <FormInput
               v-model="form.password"
               v-nested-keyup:input.enter="login"
+              required
               :invalid-message="$utils.validateRequiredField($v, 'password')"
               label="Your password"
               type="password"
@@ -78,6 +80,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { required, email } from 'vuelidate/lib/validators'
+import { emailFormatter } from '@/services/custom-validators'
 
 export default {
   data() {
@@ -94,7 +97,7 @@ export default {
 
   validations: {
     form:  {
-      email: {required, email},
+      email: {required, email: (val) => email(emailFormatter(val))},
       password: {required},
     },
   },
@@ -121,7 +124,8 @@ export default {
       this.saving = true
       try{
         await this.$store.dispatch('auth/login', this.form)
-        this.$router.push({ name: 'GetStarted' })
+
+        this.$router.push(sessionStorage.getItem('redirectUrl') ? sessionStorage.getItem('redirectUrl') : { name: this.$isCurrentWorkspace('ADMIN') ? 'GetStarted' : 'Dashboard' })
       }catch(error){
         this.$refs.loginButton.$el.classList.add('shake-anim-active')
         setTimeout(()=> {

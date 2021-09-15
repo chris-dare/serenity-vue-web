@@ -3,8 +3,8 @@ import http from '@/http'
 export default {
   url: 'providers/',
 
-  list(providerId, patient) {
-    return http.get(`${this.url}${providerId}/encounter`, { params: { patient } })
+  list(providerId, params) {
+    return http.get(`${this.url}${providerId}/encounter`, { params })
   },
 
   get(providerId, encounterId) {

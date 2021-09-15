@@ -12,16 +12,18 @@
     <div class="grid grid-cols-2 gap-8 mb-8">
       <MsisdnPhoneInput
         v-model="form.mobile"
-        label="Phone number (required)"
+        label="Phone number"
         :error-message="$utils.validateRequiredField($v, 'mobile')"
+        required
         @input="$v.$touch()"
       />
-      <cv-text-input
+      <FormInput
         v-model="form.email"
         label="Email address"
         placeholder="Email address"
         class="inherit-full-input"
         :invalid-message="$utils.validateRequiredField($v, 'email')"
+        required
         @input="$v.$touch()"
       />
     </div>
@@ -38,6 +40,7 @@ import { mapActions, mapState } from 'vuex'
 import MultiStep from '@/mixins/multistep'
 import isEmpty from 'lodash/isEmpty'
 import UsersAPI from '@/api/users'
+import { emailFormatter } from '@/services/custom-validators'
 
 export default {
   name: 'ContactInfo',
@@ -60,7 +63,7 @@ export default {
     let data = {
       form: {
         email: {
-          email,
+          email: (val) => email(emailFormatter(val)),
           required,
           async isUnique(value) {
             if (value === '' || !this.$v.form.email.email || this.storeData.id) return true
@@ -96,7 +99,6 @@ export default {
   computed: {
     ...mapState({
       storeData: (state) => state.patients.currentPatient,
-      regions: (state) => state.global.regions,
     }),
 
     addressHasValue() {
@@ -125,7 +127,7 @@ export default {
         })
         return
       }
-      
+
       this.$router.push({ name: this.next, query: { ...this.$route.query } })
     },
   },

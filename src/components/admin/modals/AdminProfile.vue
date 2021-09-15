@@ -27,9 +27,9 @@
                   title="Or upload patient photo"
                 >
                   <template slot="button">
-                    <div 
+                    <div
                       class="cv-button bg-serenity-primary bx--btn bx--btn--primary"
-                      kind="primary" 
+                      kind="primary"
                     >
                       Change Profile Picture
                       <Camera class="w-4 h-4 text-white bx--btn__icon" />
@@ -39,62 +39,66 @@
               </div>
             </div>
             <div class="grid grid-cols-2 gap-8 my-8">
-              <cv-text-input
+              <FormInput
                 v-model="form.first_name"
                 :invalid-message="$utils.validateRequiredField($v, 'first_name')"
-                label="First Name (required)"
+                label="First Name"
                 placeholder="Enter First name"
                 type="text"
                 class="inherit-full-input"
+                required
               />
-              <cv-text-input
+              <FormInput
                 v-model="form.last_name"
                 :invalid-message="$utils.validateRequiredField($v, 'last_name')"
-                label="Last Name (required)"
+                label="Last Name"
                 type="text"
                 placeholder="Enter Last name"
                 class="inherit-full-input"
+                required
               />
-              <cv-select
+              <MultiSelect
                 v-model="form.gender"
-                :invalid-message="$utils.validateRequiredField($v, 'gender')"
-                label="Gender (required)"
-                class="inherit-full-input"
+                title="Gender"
                 placeholder="Male or female"
-              >
-                <cv-select-option value="male">Male</cv-select-option>
-                <cv-select-option value="female">Female</cv-select-option>
-              </cv-select>
-              <cv-date-picker
+                :error-message="$utils.validateRequiredField($v, 'gender')"
+                :options="['male', 'female']"
+                required
+              />
+              <DatePicker
                 v-model="form.birth_date"
                 :invalid-message="$utils.validateRequiredField($v, 'birth_date')"
                 kind="single"
-                class="inherit-full-input"
+                class="inherit-full-input se-input-gray"
                 placeholder="dd/mm/yyyy"
-                date-label="Date of birth"
+                label="Date of birth"
+                required
               />
               <PhoneInput
                 v-model="form.mobile"
                 :error-message="$utils.validateRequiredField($v, 'mobile')"
-                label="Phone number (required)"
+                label="Phone number"
                 placeholder="eg 0349990390"
+                required
                 @input="$v.$touch()"
               />
-              <cv-text-input
+              <FormInput
                 v-model="form.email"
                 :invalid-message="$utils.validateRequiredField($v, 'email')"
-                label="Email address (required)"
+                label="Email address"
                 type="email"
                 placeholder="Email address"
                 class="inherit-full-input"
+                required
               />
             </div>
-            <cv-text-input
+            <FormInput
               v-model="form.address"
-              label="Full user address (required)"
+              label="Full user address"
               type="text"
               placeholder="Residential address"
               class="inherit-full-input"
+              required
             />
             <div class="my-8">
               <p class="text-primary mb-2 text-left text-xs">Upload Signature</p>
@@ -133,7 +137,7 @@
               </cv-button>
             </div>
           </div>
-        </div>>
+        </div>
       </div>
     </template>
   </cv-modal>
@@ -144,6 +148,7 @@ import { mapState, mapActions } from 'vuex'
 import { required, email } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Camera from '@carbon/icons-vue/es/camera/32'
+import { emailFormatter } from '@/services/custom-validators'
 
 export default {
   name: 'AdminProfile',
@@ -182,7 +187,7 @@ export default {
       last_name: {required},
       gender: {required},
       birth_date: {required},
-      email: {required, email},
+      email: {required, email: (val) => email(emailFormatter(val))},
       mobile: {required},
     },
   },

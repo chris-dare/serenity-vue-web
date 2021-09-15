@@ -1,0 +1,67 @@
+import {mapActions} from 'vuex'
+export default {
+  data() {
+    return {
+      settled: false,
+    }
+  },
+
+  watch: {
+    bill: {
+      deep: true,
+      immediate: true,
+      handler(val) {
+        this.settled = !!val?.status === 'billable'
+      },
+    },
+  },
+
+  methods: {
+    ...mapActions({
+      payForInvoice: 'billing/payForInvoice',
+      exportBill: 'billing/exportBill',
+    }),
+
+    async pay() {
+      this.loading = true
+      try {
+        await this.payForInvoice({
+          patientId: this.bill.patientid,
+          invoiceId: this.bill.invoice_id || this.bill.uuid,
+          params: this.getPaymentParams(this.form),
+        })
+        this.$toast.open('Bill successfully settled')
+        this.settled = true
+        this.close()
+      } catch (error) {
+        this.loading = false
+        this.settled = false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    getPaymentParams(details) {
+      if (details.transaction_type === 'cash') {
+        return {
+          amount: details.amount,
+          currency: details.currency,
+          transaction_type: this.$global.CASH_TYPE,
+        }
+      }
+
+      return { transaction_type: details.transaction_type, account_id: details.account_id }
+    },
+
+    async print() {
+      try {
+        this.loading = true
+        await this.exportBill(this.bill.invoice_id || this.bill.uuid)
+
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
+    },
+  },
+}

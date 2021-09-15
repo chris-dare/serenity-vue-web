@@ -9,23 +9,24 @@
       id="queue"
       label="Queue"
     >
-      <Queue />
+      <UtilityQueue />
     </cv-tab>
     <cv-tab
       id="patients"
       label="Patients"
     >
-      <Patients />
+      <UtilityPatients />
     </cv-tab>
   </cv-tabs>
 </template>
 
 <script>
-import Queue from './Queue'
-import Patients from './Patients'
+import UtilityQueue from './UtilityQueue'
+import UtilityPatients from './UtilityPatients'
+
 export default {
   name: 'UtilityBar',
 
-  components: { Queue, Patients },
+  components: { UtilityQueue, UtilityPatients },
 }
 </script>

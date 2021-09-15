@@ -18,8 +18,7 @@
       <div>
         <slot>
           <p
-            :class="descriptionColor"
-            class="capitalize"
+            :class="descriptionClass"
           >
             {{ description }}
           </p>
@@ -44,9 +43,9 @@ export default {
       default: '',
     },
 
-    descriptionColor: {
+    descriptionClass: {
       type: String,
-      default: 'text-primary',
+      default: 'text-primary capitalize',
     },
 
     loading: {

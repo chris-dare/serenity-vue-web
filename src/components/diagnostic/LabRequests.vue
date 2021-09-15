@@ -1,10 +1,5 @@
 <template>
   <div class="space-y-4">
-    <!-- <Search
-      v-if="!hideSearch"
-      v-model="search"
-      placeholder="Search for patient, enter name or MR number"
-    /> -->
     <div class="my-4 flex items-center space-x-2">
       <cv-button
         class="border-gray-800 bg-gray-800 text-white focus:bg-gray-700 hover:bg-gray-700 px-6"
@@ -24,50 +19,43 @@
     >
       <template #default="{ row }">
         <cv-data-table-cell>
-          {{ row.service }}
+          {{ row.code }}
         </cv-data-table-cell>
         <cv-data-table-cell>
-          {{ row.mr_number }}
+          {{ row.patient_detail.first_name + ' ' + row.patient_detail.lastname || '' }}
         </cv-data-table-cell>
         <cv-data-table-cell>
-          {{ row.patient_name }}
+          {{ row.status || '' }}
         </cv-data-table-cell>
         <cv-data-table-cell>
-          <div class="flex items-center">
-            <SeButton
-              class="mx-2"
-              variant="secondary"
-              @click="$trigger('rejectlab:add:open')"
-            >
-              Reject
-            </SeButton>
-            <SeButton>
-              Accept
-            </SeButton>
-            <SeButton
-              class="mx-2"
-              variant="gray"
-              @click="$trigger('external:add:open')"
-            >
-              External processing
-            </SeButton>
+          <div
+            class="flex items-center cursor-pointer"
+            :disabled="!$userCan('diagnostic.reports.read')"
+            @click="$trigger('diagnostic-report:open', { ...row })"
+          >
+            View
+            <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
+              <img
+                src="@/assets/img/view 1.svg"
+                alt=""
+              >
+            </div>
           </div>
         </cv-data-table-cell>
       </template>
     </DataTable>
-    <ExternalProcess />
-    <RejectLab />
+    <DiagnosticReport />
   </div>
 </template>
 
 <script>
-import ExternalProcess from '@/components/diagnostic/modals/ExternalProcess'
-import RejectLab from '@/components/diagnostic/modals/RejectLab'
+import { mapActions, mapState } from 'vuex'
+import DiagnosticReport from '@/components/diagnostic/modals/DiagnosticReportModal'
 import DataMixin from '@/mixins/data'
 export default {
-  name: 'LabsTable',
+  name: 'LabsRequest',
 
-  components: { ExternalProcess, RejectLab },
+  components: { DiagnosticReport },
 
   mixins: [DataMixin],
 
@@ -87,60 +75,50 @@ export default {
     return {
       search: '',
       selected: 'all',
+      loading: false,
       columns: [
-        'Test requested',
-        'Test ID',
-        'Physician',
-        'State',
-      ],
-      data: [
-        {
-          id: '62356461-67df-4097-b103-919f811a0864',
-          patient_telephone: '+2335406754445466',
-          patient_name: 'David Doe',
-          mr_number: '00123374',
-          provider_name: 'Nyaho Medical Centre',
-          type: 'Awaiting sample',
-          healthcareService_id: '0561be70-c5c8-4db5-93c9-d034a53c00a5',
-          service: 'Electrolyte panel',
-        },
-        {
-          id: '62356461-67df-4097-b103-919f811a0864',
-          patient_telephone: '+2335406754445466',
-          patient_name: 'Pope Jones',
-          mr_number: '00123436',
-          provider_name: 'Nyaho Medical Centre',
-          type: 'Done',
-          healthcareService_id: '0561be70-c5c8-4db5-93c9-d034a53c00a5',
-          service: 'Electrolyte panel',
-        },
-        {
-          id: '62356461-67df-4097-b103-919f811a0864',
-          patient_telephone: '+2335406754445466',
-          patient_name: 'Pope Jones',
-          mr_number: '00123436',
-          provider_name: 'Nyaho Medical Centre',
-          type: 'Awaiting results',
-          healthcareService_id: '0561be70-c5c8-4db5-93c9-d034a53c00a5',
-          service: 'Electrolyte panel',
-        },
-        {
-          id: '62356461-67df-4097-b103-919f811a0864',
-          patient_telephone: '+2335406754445466',
-          patient_name: 'Pope Jones',
-          mr_number: '00123436',
-          provider_name: 'Nyaho Medical Centre',
-          type: 'Done',
-          healthcareService_id: '0561be70-c5c8-4db5-93c9-d034a53c00a5',
-          service: 'Electrolyte panel',
-        },
+        'Report ID',
+        'Patient',
+        'Status',
+        'Action',
       ],
     }
   },
 
+  computed: {
+    ...mapState({
+      data: (state) => state.diagnostic.diagnosticReports,
+    }),
+    filters() {
+      return [
+        { display: `All (${ this.dataCount })`, code: '' },
+        { display: 'Partial', code: 'partial' },
+        { display: 'Registered', code: 'registered' },
+        { display: 'Final', code: 'final' },
+      ]
+    },
+  },
+
   mounted() {
     this.paginate = true
-    this.searchTerms = ['patient_name', 'mr_number', 'service']
+    this.searchTerms = ['code', 'specimen', 'status']
+  },
+
+  created(){
+    this.init()
+  },
+
+  methods: {
+    ...mapActions({
+      getData: 'diagnostic/getPatientReports',
+      refresh: 'patients/refreshCurrentPatient',
+    }),
+
+    init() {
+      this.loading = true
+      let id = { patient: this.$route.params.id}
+      this.getData(id).finally(() => this.loading = false )
+    },
   },
 
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-4/5 mx-auto">
+  <div class="max-w-7xl mx-auto">
     <UserDetailsHeader />
     <p class="text-serenity-primary my-6 font-semibold">Overview</p>
     <div class="grid grid-cols-4 gap-2 lg:gap-4 my-4">
@@ -56,7 +56,7 @@ export default {
       workspacesCount: (state) => state.workspaces.workspacesCount,
       locationsCount: (state) => state.locations.locationsCount,
     }),
-  
+
     dashboardTypes() {
       const types = [
         // {

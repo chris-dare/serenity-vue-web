@@ -8,7 +8,10 @@
   >
     <template #default="{row}">
       <cv-data-table-cell>
-        <p class="text-serenity-primary ">{{ $utils.getFirstData(row.medication_detail) }}</p>
+        <p>{{ $date.formatDate(row.created_at) }}</p>
+      </cv-data-table-cell>
+      <cv-data-table-cell>
+        <p class="text-serenity-primary ">{{ $utils.getFirstData(row.medication_detail) }} {{ $utils.getFirstData(row.medication_request_dosage_instruction, 'strength') }}</p>
       </cv-data-table-cell>
       <cv-data-table-cell>
         <p>{{ $utils.getFirstData(row.medication_request_category) }}</p>
@@ -64,10 +67,11 @@ export default {
 
     columns() {
       let columns = [
+        'Date',
         'Drug/Proceedure',
         'Type',
         'Duration',
-        'Instructions',
+        'Frequency',
       ]
       if (!this.hideAction) {
         columns.push('Action')
@@ -85,12 +89,13 @@ export default {
       this.$trigger('actions-modal:open', {
         confirmButtonText: 'Delete',
         type: 'delete',
+        confirmButtonVariant: 'danger',
         label: 'Are you sure you want to delete this medication?',
         callback: async () => {
           this.removeMedication(id)
         },
         cancel: async () => {
-          
+
         },
       })
     },
@@ -98,14 +103,12 @@ export default {
     async removeMedication(id) {
       this.loading = true
       try {
-        await this.deleteMedicationRequest(id).then(() => {
-          this.$toast.open({
-            message: 'Medication successfully deleted',
-          })
+        await this.deleteMedicationRequest(id)
+        this.$toast.open({
+          message: 'Medication successfully deleted',
         })
         this.loading = false
-        // this.$trigger('confirm:delete:close')
-       
+
       /* eslint-disable-next-line */
       } catch (error) {
       }

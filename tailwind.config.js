@@ -8,7 +8,6 @@ module.exports = {
         serenity: {
           primary: '#0B6B74',
           gray: '#21272A',
-          placeholder: '#4D5358',
           step: 'rgb(234,235,236)',
           'light-gray': '#F4F4F4',
           'subtle-border': 'rgba(135, 141, 150, 0.2)',
@@ -23,6 +22,7 @@ module.exports = {
         primary: '#21272A',
         secondary: '#878D96',
         tetiary: '#f4f4f4',
+        placeholder: '#4D5358',
         table: '#eceeee',
         dark: '#121619',
         orange: '#F2994A',
@@ -60,6 +60,9 @@ module.exports = {
       }),
       minWidth: {
         32: '8rem',
+      },
+      transformOrigin: {
+        0: '0',
       },
     },
   },

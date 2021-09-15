@@ -14,6 +14,7 @@
           />
           <AutoCompletePharmacyInventory
             v-model="detail.inventory"
+            :medication-request="detail"
             class="col-span-3"
           />
           <MultiSelect
@@ -25,19 +26,21 @@
             track-by="value"
             :multiple="false"
           />
-          <cv-text-input
+          <!-- <cv-text-input
             v-model="detail.medication_request_dosage_instruction[0].frequency"
             label="Frequency"
             type="number"
             placeholder="eg 2 for twice frequency unit"
             class="inherit-full-input"
-          />
+          /> -->
           <MultiSelect
-            v-model="detail.medication_request_dosage_instruction[0].frequency_unit"
-            title="Frequency unit"
+            v-model="detail.medication_request_dosage_instruction[0].frequency"
+            title="Frequency"
             :options="frequencies"
             :multiple="false"
             preselect
+            taggable
+            @tag="addTag(index, $event)"
           />
           <cv-text-input
             v-model="detail.medication_request_dosage_instruction[0].period"
@@ -59,6 +62,19 @@
             v-model="detail.medication_request_dosage_instruction[0].strength"
             label="Strength"
             type="text"
+            class="inherit-full-input"
+          />
+          <DatePicker
+            v-model="detail.next_refill"
+            type="datetime"
+            label="Next refill"
+            class="se-input-gray"
+          />
+          <cv-text-input
+            v-model="detail.quantity"
+            label="Quantity"
+            type="number"
+            placeholder="Quantity"
             class="inherit-full-input"
           />
         </div>
@@ -85,11 +101,9 @@
     </div>
 
     <div class="grid grid-cols-3 gap-4 items-center">
-      <MultiSelect
+      <PrioritiesSelect
         v-model="form.extra_details.priority"
-        title="Priority"
         :options="priorities"
-        :multiple="false"
       />
       <MultiSelect
         v-model="form.extra_details.medication_request_category"
@@ -99,6 +113,7 @@
       />
 
       <DatePicker
+        v-if="!$isCurrentWorkspace('OPD')"
         v-model="form.extra_details.date"
         type="datetime"
         label="Date of administration"
@@ -126,7 +141,7 @@
       <SeButton variant="secondary">Go back</SeButton>
       <SeButton
         :loading="loading"
-        :icon="add"
+        :icon="icons.Add"
         @click="submit"
       >
         Checkout
@@ -159,6 +174,7 @@ export default {
 
   data() {
     return {
+      loading: false,
       // eslint-disable-next-line
       // form: {"extra_details":{"medication_request_notes":[{"display":"Test"}],"medication_request_category":"outpatient","priority":"stat","date":"2021-06-10T00:00:00Z","intended_dispenser":"New Hospital"},"drugs":[{"medication_detail":[{"display":"Hyoscine hydrobromide (Kwells and Joy-Rides)"}],"course_of_therapy_type":"acute","medication_request_dosage_instruction":[{"frequency":"1","frequency_unit":"Hourly","period_unit":"Hours","period":"1"}]}],"requester":1},
       form: {
@@ -180,27 +196,13 @@ export default {
         ChevronRight,
         Add,
       },
-      prescriptions: {
-        data: [
-          {
-            drug: 'Hydrocodone 5MG / 500MG tabs',
-            duration: '7 days',
-            dosage: '2 times daily',
-            quantity: 24,
-            instruction: 'Take 1 tablet orally every 4 to 5 hours as needed for pain',
-            refill: new Date(),
-          },
-          {
-            drug: 'Efpac 5MG / 500MG tabs',
-            duration: '7 days',
-            dosage: '2 times daily',
-            quantity: 24,
-            instruction: 'Take 1 tablet orally every 4 to 5 hours as needed for pain',
-            refill: new Date(),
-          },
-        ],
-        state: null,
-      },
+      therapyTypes: [
+        { label: 'continuous (longterm)', value: 'continuous'},
+        { label: 'acute', value: 'acute'},
+        { label: 'seasonal', value: 'seasonal'},
+      ],
+      categories: [ 'inpatient', 'outpatient', 'community', 'discharge' ],
+      mode: 'create',
     }
   },
 
@@ -231,7 +233,7 @@ export default {
               display: { required },
             },
           },
-          inventory: required,
+          inventory: {required},
           medication_request_dosage_instruction: {
             required,
             minLength: minLength(1),
@@ -252,20 +254,29 @@ export default {
     ...mapActions({
       createMedicationRequest: 'patients/createMedicationRequest',
     }),
+    addDrug() {
+      this.form.drugs.push({
+        medication_detail: [{display: ''}],
+        course_of_therapy_type: '',
+        medication_request_dosage_instruction: [{frequency: ''}],
+      })
+    },
+
+    removeDrug(index) {
+      this.form.drugs.splice(index, 1)
+    },
     submit() {
       if (this.dataHasNotChanged) {
         this.close()
         return
       }
 
-      console.info('submit')
       this.$v.$touch()
 
       this.form.extra_details.intended_dispenser = this.provider.organization_name
 
 
       if (this.$v.$invalid) {
-        console.info('submit 2')
         this.$toast.error('Please fill in the required fields')
         return
       }
@@ -278,11 +289,13 @@ export default {
       try {
         this.form.requester = this.user.id
         const payload = this.formatMedication(this.form)
-        console.info('pay ', this.form.drugs)
         let medicationRequests = await this.createMedicationRequest(payload)
         for(let i = 0; i < this.form.drugs.length; i++){
           medicationRequests[i].medication = this.form.drugs[i].inventory
         }
+        this.$toast.open({
+          message: 'Medication successfully added',
+        })
         this.$emit('success', medicationRequests)
         this.loading = false
       } catch (error) {
@@ -302,6 +315,11 @@ export default {
           patient: this.patient.id,
           medication_request_category: [{ display: data.extra_details.medication_request_category }],
         })
+      })
+      newForm.forEach(drug => {
+        if(drug.next_refill){
+          drug.next_refill = this.$date.formatDate(drug.next_refill, 'yyyy-MM-dd')
+        }
       })
 
       return newForm

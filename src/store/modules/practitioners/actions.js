@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import UsersAPI from '@/api/users'
 import User from '@/models/User'
+import Vue from 'vue'
 import { SET_USERS, DELETE_USER, UPDATE_USER, ADD_USER_DATA, SET_CURRENT_USER } from './mutation-types'
 
 export default {
@@ -29,6 +30,7 @@ export default {
       commit(UPDATE_USER, data.data)
       return data
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error || error.message
     }
   },
@@ -55,6 +57,7 @@ export default {
         .update(provider.id, practitioner)
       commit(UPDATE_USER, data.data)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error || error.message
     }
   },

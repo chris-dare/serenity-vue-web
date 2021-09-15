@@ -1,90 +1,93 @@
 <template>
   <div>
-    <div class="text-xl font-bold mb-4">
-      Prescribed Medications
-    </div>
-    <div class="space-x-2 flex items-center mb-2">
-      <SeButton
-        :variant="filteredStatus === '' ? 'primary' : 'white'"
-        @click="filteredStatus = ''"
-      >
-        All ({{ prescriptionCount }})
-      </SeButton>
-      <SeButton
-        :variant="filteredStatus === 'active' ? 'primary' : 'white'"
-        @click="filteredStatus = 'active'"
-      >
-        <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
-        Active ({{ activeMedicationCount }})
-      </SeButton>
-      <SeButton
-        :variant="filteredStatus === 'completed' ? 'primary' : 'white'"
-        @click="filteredStatus = 'completed'"
-      >
-        <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
-        Complete ({{ completeMedicationCount }})
-      </SeButton>
-    </div>
-    <div>
-      <DataTable
-        ref="table"
-        :columns="columns"
-        :data="filteredMedications"
-        :loading="loading"
-      >
-        <template #default="{ row }">
-          <cv-data-table-cell>
-            <div>
-              <p>{{ row.medication_detail[0].display }}</p>
+    <div class="flex bg-white p-2 mb-8">
+      <div class="w-1/4 border-r border-serenity-subtle-border border-solid pt-4 px-6">
+        <div class="bx--tabs__nav-item--selected mb-2"><div class="bx--tabs__nav-link border-none">Allergies</div></div>
+        <div>
+          <p
+            v-if="!patientAllergies.length"
+            class="text-sm py-8 text-gray-400"
+          >
+            No allergies
+          </p>
+          <span
+            v-for="(allergy, index) in patientAllergies"
+            :key="index"
+            class="inline-block px-2 bg-gray-200 mr-2 mb-1 rounded-full"
+          >
+            {{ allergy.code }}
+          </span>
+        </div>
+      </div>
+      <div class="w-2/4 px-6  border-r border-serenity-subtle-border border-solid">
+        <cv-tabs
+          class="se-tabs"
+          :container="false"
+          aria-label="navigation tab label"
+        >
+          <cv-tab
+            id="tab-1"
+            label="Final Diagnosis"
+          >
+            <div class="py-3 font-bold text-gray-500">
+              <div
+                v-for="diag in finalDiagnosis"
+                :key="diag.id"
+                class="py-1"
+              >
+                {{ diag.condition }}
+              </div>
             </div>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <div>
-              <p>{{ row.quantity }}</p>
+          </cv-tab>
+          <cv-tab
+            id="tab-2"
+            label="Provisional Diagnosis"
+          >
+            <div class="py-3 font-bold text-gray-500">
+              <div
+                v-for="diag in provisionalDiagnosis"
+                :key="diag.id"
+                class="py-1"
+              >
+                {{ diag.condition }}
+              </div>
             </div>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <div>
-              <p>{{ row.medication_request_notes[0].display }}</p>
-            </div>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <div>
-              <p>{{ row.next_refill }}</p>
-            </div>
-          </cv-data-table-cell>
-        </template>
-      </DataTable>
+          </cv-tab>
+        </cv-tabs>
+      </div>
+      <div class="w-1/4 pt-4 px-6">
+        <div class="bx--tabs__nav-item--selected"><div class="bx--tabs__nav-link border-none">Payment methods</div></div>
+        <div />
+        <div
+          class="py-4 font-bold text-gray-500"
+        >
+          <div
+            v-if="corporateAccounts && corporateAccounts.length > 0"
+            class="mb-1"
+          >
+            Corporate account ({{ corporateAccountNames }})
+          </div>
+          <div v-if="userAccounts && corporateAccounts.length > 0">User account</div>
+        </div>
+      </div>
     </div>
-    <div class="flex items-center justify-between mt-4 mb-6">
-      <cv-button
-        class="border-gray-800 bg-gray-800 text-white focus:bg-gray-700 hover:bg-gray-700 px-6"
-        kind="tertiary"
-        @click="$router.back()"
-      >
-        Go Back
-      </cv-button>
-      <cv-button-skeleton
-        v-if="loading"
-      />
-      <cv-button
-        v-else
-        kind="primary"
-        class="bg-serenity-primary hover:bg-serenity-primary-highlight  ml-6"
-        @click="$trigger('pharmacy:patient_prescription:open')"
-      >
-        Give drugs
-      </cv-button>
-    </div>
+    <ConfirmPrescriptionModal
+      mode="prescription"
+      :prescriptions="activeMedications"
+    />
   </div>
 </template>
 
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
+import ConfirmPrescriptionModal from '@/components/pharmacy/modals/ConfirmPrescriptionModal'
 
 export default {
   name: 'Prescriptions',
+  components: {
+    ConfirmPrescriptionModal,
+  },
   data() {
     return {
       filteredStatus: 'active',
@@ -95,52 +98,64 @@ export default {
         'Instruction',
         'Refill',
       ],
-
+      prescriptions: {
+        loading: false,
+        data: [],
+      },
     }
   },
   computed: {
     ...mapState({
       patient: (state) => state.patients.currentPatient,
+      patientAllergies: state => state.patientAllergies.allergies,
       workspaceType: (state) => state.global.workspaceType,
     }),
     ...mapGetters({
       patientMedications: 'patients/patientMedications',
+      currentEncounterDiagnosis: 'encounters/currentEncounterDiagnosis',
+      userAccounts: 'billing/userAccounts',
+      corporateAccounts: 'billing/corporateAccounts',
     }),
-    filteredMedications() {
-      if(this.filteredStatus == '')return this.patientMedications
-      return this.patientMedications.filter(el => el.status == this.filteredStatus)
+    corporateAccountNames(){
+      return this.corporateAccounts.map(el => el.description).join(', ')
     },
-    activeMedicationCount() {
-      return this.patientMedications.filter(el => el.status == 'active').length
+    userAccountNames(){
+      return this.userAccounts.map(el => el.description).join(', ')
     },
-    completeMedicationCount() {
-      return this.patientMedications.filter(el => el.status == 'completed').length
+    provisionalDiagnosis() {
+      return this.currentEncounterDiagnosis.filter(el => {
+        return el.status === 'PROVISIONAL'
+      })
+    },
+    finalDiagnosis() {
+      return this.currentEncounterDiagnosis.filter(el => {
+        return el.status !== 'PROVISIONAL'
+      })
     },
     availableActions() {
       const types = [
         {
-          label: 'View Prescription',
-          description: 'See all prescribed drugs',
-          type: 'medication',
-          value: 'search',
-        },
-        {
-          label: 'New prescription',
-          description: 'See all prescribed drugs',
-          type: 'medication',
+          label: 'New Prescription',
+          description: 'Create a new prescription',
+          type: 'add',
           value: 'new',
         },
       ]
 
       return types
     },
-    prescriptionCount() {
-      return this.patientMedications.length
+    activeMedications() {
+      return this.patientMedications.filter(el => el.status == 'active')
     },
 
     isSelected() {
       return (index) => this.initialSelected === index
     },
+  },
+  methods: {
+    ...mapActions({
+      getPatientAccounts: 'billing/getPatientAccounts',
+    }),
   },
 }
 </script>

@@ -28,7 +28,7 @@
     </div>
     <DataTable
       ref="table"
-      :data="filteredData"
+      :data="filteredData || []"
       :columns="columns"
       :pagination="pagination"
       :loading="loading"
@@ -55,6 +55,7 @@
             tag="div"
             :to="`/diagnostics/patients/${row.id}`"
             class="flex items-center cursor-pointer font-semibold"
+            :disabled="!$userCan('diagnostic.requests.read')"
           >
             View patient
           </router-link>
@@ -67,7 +68,7 @@
 <script>
 import DataMixin from '@/mixins/data'
 export default {
-  name: 'LabsTable',
+  name: 'LabsResults',
 
   mixins: [DataMixin],
 

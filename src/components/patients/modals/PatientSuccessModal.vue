@@ -17,12 +17,12 @@
         <cv-button
           kind="primary"
           class="my-6 flex items-center justify-center bg-serenity-primary px-12"
-          @click="$router.push({ name: 'Patients'})"
+          @click="$router.push({ name: 'Patients' })"
         >
           Go to patient profile
         </cv-button>
         <router-link
-          :to="{name: 'Patients'}"
+          :to="{ name: 'Dashboard' }"
           class="underline text-primary"
         >
           Return to dashboard

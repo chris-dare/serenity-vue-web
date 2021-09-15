@@ -18,7 +18,7 @@ export default {
       checked: '',
     }
   },
-  
+
   computed: {
     title() {
       return this.isUpdate ? 'Update Appointment' : this.isReschedule ? 'Reschedule Appointment' : 'New Appointment'
@@ -64,7 +64,7 @@ export default {
   },
 
   beforeMount() {
-    this.getPatients(false)
+    this.getPatients({ page: 1, page_size: 5 })
   },
 
   beforeRouteLeave(to, from, next) {
@@ -76,7 +76,7 @@ export default {
     ...mapActions({
       getPatients: 'patients/getPatients',
       refresh: 'appointments/refreshCurrentAppointment',
-    }),  
+    }),
   },
 }
 </script>

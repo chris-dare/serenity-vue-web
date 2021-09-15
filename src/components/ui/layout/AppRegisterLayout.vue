@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-5xl mx-auto">
+  <SeForm class="max-w-5xl mx-auto">
     <p class="text-primary text-xl font-semibold">{{ label }}</p>
     <div class="grid grid-cols-4 my-6 gap-6">
       <div>
@@ -40,7 +40,7 @@
         <slot />
       </div>
     </div>
-  </div>
+  </SeForm>
 </template>
 
 <script>
@@ -61,6 +61,7 @@ export default {
       type: String,
       default: '',
     },
+
     checked: {
       type: [Number, String],
       default: '',
@@ -71,7 +72,7 @@ export default {
       default: false,
     },
   },
-  
+
   // data() {
   //   return {
   //     checked: '',

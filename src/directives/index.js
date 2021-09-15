@@ -10,7 +10,6 @@ Vue.directive('nested-keyup', {
     case 'enter':
       keycode = 13
     }
-    console.info(binding)
     const elements = el.querySelectorAll(binding.arg)
     elements.forEach(function(element) {
       element.addEventListener('keyup', (ev) => {

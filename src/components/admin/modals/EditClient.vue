@@ -20,28 +20,24 @@
             placeholder=""
             disabled
           />
-          <!-- <cv-text-input
-            v-model="form.creditDurationInDays"
-            type="number"
-            label="Credit duration in days"
-            placeholder=""
-          /> -->
         </div>
         <div
           v-else
           class="grid grid-cols-2 gap-8"
         >
-          <cv-text-input
+          <cv-number-input
             v-model="form.maximum_employees_allowed"
             type="number"
             label="Maximum employees allowed"
             placeholder=""
+            class="se-input-gray"
           />
-          <cv-text-input
+          <cv-number-input
             v-model="form.creditDurationInDays"
             type="number"
             label="Credit duration in days"
             placeholder=""
+            class="se-input-gray"
           />
         </div>
         <div
@@ -71,19 +67,19 @@
         </div>
         <div 
           v-else 
-          class="grid grid-cols-2 gap-8"
+          class="grid grid-cols-1 gap-8"
         >
-          <cv-text-input
+          <!-- <cv-text-input
             v-model="form.amount"
             type="number"
             label="Amount"
             placeholder=""
-          />
-          <cv-date-picker
+            class="se-input-gray"
+          /> -->
+          <DatePicker
             v-model="form.creditStartDate"
-            kind="single"
-            date-label="Credit start date"
-            class="inherit-full-input"
+            label="Credit start date"
+            class="se-input-gray"
           />
         </div>
         <div class="flex justify-between items-center">
@@ -98,7 +94,7 @@
             :loading="loading"
             @click="submit"
           >
-            {{ type === 'update' ? 'Update client account' : 'Edit client' }}
+            {{ type === 'update' ? 'Update client account' : 'Edit client account' }}
           </SeButton>
         </div>
       </div>
@@ -108,7 +104,6 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-// import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'AddEditClient',
@@ -149,18 +144,12 @@ export default {
     ...mapActions({
       depositClient: 'clients/deposit',
       updateClient: 'clients/update',
+      providerClient: 'clients/providerAccount',
       addToClient: 'clients/addClientAccount',
+      getClientAccount: 'clients/getClientAccount',
     }),
 
     submit(){
-      // this.$v.$touch()
-      // if (this.$v.$invalid) {
-      //   this.$toast.open({
-      //     message: 'Please these fields are required!',
-      //     type: 'error',
-      //   })
-      //   return
-      // }
 
       if (this.type === 'update') {
         this.update()
@@ -171,42 +160,78 @@ export default {
 
     async save() {
       this.loading = true
-      let payload = {    
-        amount: parseFloat(this.form.amount), // required
+
+      const id = this.$route.params.id
+      let payload = {
+        amount: 0, // required
         accountId: this.form.id, //provider client account(required)
         creditDurationInDays: parseFloat(this.form.creditDurationInDays), //required
         creditStartDate: new Date(this.form.creditStartDate), //required
         depositType: this.form.state, //either limited-credit-active or limited-debit-activerequired
-        depositedBy: this.userName,
-        maximum_employees_allowed: parseFloat(this.form.maximum_employees_allowed), //required
+        companyId: this.form.company.main_branch_id,
+        authorizedBy: this.userName,
+        maximum_employees_allowed: this.form.maximum_employees_allowed, //required
       }
-      try {
-        let data = await this.depositClient(payload)
-        if (data.successful) {
-          let payload = this.client
-          payload.amount = data.returnedData.amount
-          payload.maximum_employees_allowed = data.returnedData.maximum_employees_allowed
-          payload.creditDurationInDays = data.returnedData.creditDurationInDays
-          this.addToClient(payload)
+      if(this.form.id){
+        try {
+          let data = await this.depositClient(payload)
+          if (data.successful) {
+            let payload = this.client
+            payload.amount = data.returnedData.amount
+            payload.maximum_employees_allowed = data.returnedData.maximum_employees_allowed
+            payload.creditDurationInDays = data.returnedData.creditDurationInDays
+            this.getClientAccount(id)
+            this.addToClient(payload)
+            this.$toast.open({
+              message: data.message || 'Client successfully updated',
+            })
+            this.visible = false
+          } else {
+            this.$toast.open({
+              message: data.message || 'Client account update failed',
+              type: 'error',
+            })
+            this.visible = false
+          }
+          // this.$router.go(-1)
+          this.loading = false
+        } catch (error) {
           this.$toast.open({
-            message: data.message || 'Client successfully updated',
-          })
-          this.visible = false
-        } else {
-          this.$toast.open({
-            message: data.message || 'Client account update failed',
+            message: error.message || 'Something went wrong!',
             type: 'error',
           })
-          this.visible = false
+          this.loading = false
         }
-        // this.$router.go(-1)
-        this.loading = false
-      } catch (error) {
-        this.$toast.open({
-          message: error.message || 'Something went wrong!',
-          type: 'error',
-        })
-        this.loading = false
+      } else {
+        try {
+          let data = await this.providerClient(payload)
+          if (data.successful) {
+            let payload = this.client
+            payload.amount = data.returnedData.amount
+            payload.maximum_employees_allowed = data.returnedData.maximum_employees_allowed
+            payload.creditDurationInDays = data.returnedData.creditDurationInDays
+            this.getClientAccount(id)
+            this.addToClient(payload)
+            this.$toast.open({
+              message: data.message || 'Client successfully updated',
+            })
+            this.visible = false
+          } else {
+            this.$toast.open({
+              message: data.message || 'Client account update failed',
+              type: 'error',
+            })
+            this.visible = false
+          }
+          // this.$router.go(-1)
+          this.loading = false
+        } catch (error) {
+          this.$toast.open({
+            message: error.message || 'Something went wrong!',
+            type: 'error',
+          })
+          this.loading = false
+        }
       }
     },
 

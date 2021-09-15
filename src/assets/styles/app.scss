@@ -8,9 +8,14 @@ body, input {
   font-family: 'Graphik', 'Open Sans';
   overflow: hidden;
 }
-p {
+td, p {
   line-height: 1.25rem !important;
-  @apply text-primary;
+  color: #21272A !important;
+  @apply text-base;
+}
+
+td p, td{
+  font-size: 1rem !important;
 }
 
 *:focus {

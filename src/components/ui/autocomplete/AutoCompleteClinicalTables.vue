@@ -7,15 +7,14 @@
         :title="title"
         :multiple="multiple"
         :searchable="true"
-        :internal-search="true"
-        :clear-on-select="false"
-        :close-on-select="false"
+        :internal-search="false"
         :limit="3"
         :max-height="600"
         :hide-selected="true"
-        :options-limit="10"
         :loading="isLoading"
         :options="options.map(type => type.value)"
+        clear-on-select
+        v-bind="$attrs"
         @search-change="asyncFind"
         @remove="$emit('remove', $event)"
       >
@@ -102,7 +101,7 @@ export default {
     async asyncFind (query) {
       this.isLoading = true
       await this.getDiagnosisCodeOptions(query)
-      
+
       this.isLoading = false
     },
 

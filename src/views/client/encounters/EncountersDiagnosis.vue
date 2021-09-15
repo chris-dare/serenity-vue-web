@@ -25,6 +25,8 @@
         :error-message="$utils.validateRequiredField($v, 'condition')"
         title="Select or type diagnosis"
         placeholder="Write the patients medical complaint"
+        close-on-select
+        required
       />
 
       <MultiSelect
@@ -36,6 +38,15 @@
         placeholder="Choose a lab text to be performed"
         :custom-label="customLabel"
         :error-message="$utils.validateRequiredField($v, 'role')"
+        required
+      />
+
+      <FormInput
+        v-model="form.note"
+        placeholder="Write additional information for this appointment here"
+        :rows="5"
+        label="Notes"
+        type="textarea"
       />
 
       <div class="flex">
@@ -64,7 +75,7 @@
           Cancel
         </SeButton>
       </div>
-    
+
 
       <div v-if="mode == 'create'">
         <p class="mb-2 font-semibold">Previous Diagnosis</p>
@@ -78,7 +89,7 @@
           <template #default="{row}">
             <cv-data-table-cell>
               <div>
-                <p>{{ $date.formatDate(row.created_at, 'yyyy/MM/dd') }}</p>
+                <p>{{ $date.formatDate(row.created_at, 'dd MMM, yyyy') }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
@@ -219,7 +230,7 @@ export default {
         })
         this.deleteLoading = false
         this.$trigger('confirm:delete:close')
-       
+
       /* eslint-disable-next-line */
       } catch (error) {
       }
@@ -244,7 +255,7 @@ export default {
       } else {
         this.save(reroute)
       }
-      
+
     },
 
     cancelUpdate() {

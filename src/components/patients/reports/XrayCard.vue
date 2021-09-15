@@ -1,5 +1,8 @@
-<template>
-  <div class="h-72 border border-subtle border-solid bg-white p-4 cursor-pointer">
+<template functional>
+  <div
+    class="h-72 border border-subtle border-solid bg-white p-4 cursor-pointer"
+    @click="listeners['click']"
+  >
     <div class="flex flex-wrap items-center h-3/5">
       <img
         class="w-full h-full"
@@ -15,11 +18,7 @@
       </span>
     </div>
     <div>
-      <p>X-ray Femor Mar 13 2020.pdf</p>
+      <p>{{ props.report.code }} — {{ props.date }}</p>
     </div>
   </div>
 </template>
-
-<script>
-export default {}
-</script>

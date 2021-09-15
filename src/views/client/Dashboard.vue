@@ -1,34 +1,33 @@
 <template>
-  <div class="w-4/5 mx-auto">
+  <div class="max-w-7xl mx-auto">
     <UserDetailsHeader />
 
     <component :is="workspaceComponent" />
-    
+
     <GetStartedModal :visible.sync="visible" />
-    <StartVisitModal />
     <SearchPatientsModal />
-    <BookAppointmentModal type="visit" />
+    <BookVisitModal />
   </div>
 </template>
 
 <script>
 
 import GetStartedModal from '@/components/dashboard/GetStartedModal'
-import StartVisitModal from '@/components/appointments/StartVisitModal'
 
 const DiagnosticDashboard = () => import('@/components/diagnostic/DiagnosticDashboard')
 const OPDDashboard = () => import('@/components/opd/OPDDashboard')
 const PharmacyDashboard = () => import('@/components/pharmacy/PharmacyDashboard')
 const ReceptionDashboard = () => import('@/components/reception/ReceptionDashboard')
+const BillingDashboard = () => import('@/components/billing/BillingDashboard')
 const VirtualCareDashboard = () => import('@/components/virtual-care/VirtualCareDashboard')
-const BookAppointmentModal = () => import('@/components/appointments/book/BookAppointmentModal')
+const BookVisitModal = () => import('@/components/visits/BookVisitModal')
 
 import { mapState } from 'vuex'
 
 export default {
   name: 'Dashboard',
 
-  components: { GetStartedModal, StartVisitModal, DiagnosticDashboard, OPDDashboard, PharmacyDashboard, BookAppointmentModal, ReceptionDashboard, VirtualCareDashboard },
+  components: { GetStartedModal, BillingDashboard, DiagnosticDashboard, OPDDashboard, PharmacyDashboard, ReceptionDashboard, VirtualCareDashboard, BookVisitModal },
 
   data() {
     return {
@@ -47,7 +46,7 @@ export default {
       if (this.workspaceType === 'DIAG') {
         return 'DiagnosticDashboard'
       }
-  
+
       if (this.workspaceType === 'OPD') {
         return 'OPDDashboard'
       }
@@ -57,9 +56,13 @@ export default {
       if (this.workspaceType === 'RECEPT') {
         return 'ReceptionDashboard'
       }
-      
+
       if (this.workspaceType === 'VIRT') {
         return 'VirtualCareDashboard'
+      }
+
+      if (this.workspaceType === 'BILL') {
+        return 'BillingDashboard'
       }
 
       return 'DefaultDashboard'
@@ -72,6 +75,6 @@ export default {
     // }
   },
 
-  
+
 }
 </script>

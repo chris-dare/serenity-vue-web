@@ -28,125 +28,11 @@
         </div>
       </div>
 
-
-      <div
-        v-for="(detail, index) in form.drugs"
-        :key="index"
-      >
-        <p class="text-serenity-green font-semibold mb-4">{{ index+1 }}.</p>
-        <div class="grid grid-cols-12 gap-x-4 gap-y-8 items-center">
-          <div class="col-span-11 grid grid-cols-3 gap-4 items-center">
-            <AutoCompleteMedication
-              v-model="detail.medication_detail[0].display"
-              class="col-span-3"
-            />
-            <MultiSelect
-              v-model="detail.course_of_therapy_type"
-              title="Course of therapy"
-              :options="therapyTypes"
-              custom-field="value"
-              label="label"
-              track-by="value"
-              :multiple="false"
-            />
-            <!-- <cv-text-input
-              v-model="detail.medication_request_dosage_instruction[0].frequency"
-              label="Frequency"
-              type="number"
-              placeholder="eg 2 for twice frequency unit"
-              class="inherit-full-input"
-            /> -->
-            <MultiSelect
-              v-model="detail.medication_request_dosage_instruction[0].frequency"
-              title="Frequency"
-              :options="frequencies"
-              :multiple="false"
-              preselect
-              taggable
-              @tag="addTag(index, $event)"
-            />
-            <cv-text-input
-              v-model="detail.medication_request_dosage_instruction[0].period"
-              label="Period"
-              type="number"
-              placeholder="eg 4 days"
-              class="inherit-full-input"
-            />
-
-            <MultiSelect
-              v-model="detail.medication_request_dosage_instruction[0].period_unit"
-              title="Period unit"
-              :options="units"
-              :multiple="false"
-              preselect
-            />
-            
-            <cv-text-input
-              v-model="detail.medication_request_dosage_instruction[0].strength"
-              label="Strength"
-              type="text"
-              class="inherit-full-input"
-            />
-          </div>
-      
-          <Trash
-            class="w-5 h-5 cursor-pointer"
-            @click="removeDrug(index)"
-          />
-        </div>
-      </div>
-      <p
-        v-if="$utils.validateRequiredField($v, 'drugs')"
-        class="error col-span-2"
-      >
-        All fields are required for drugs
-      </p>
-
-      <div
-        v-if="mode === 'create'"
-        class="flex items-center space-x-2 text-serenity-primary my-4 cursor-pointer text-sm w-auto"
-        @click="addDrug"
-      >
-        <AddAlt class="w-5 h-5" />
-        <p class="text-serenity-primary">Add new drug</p>
-      </div>
-      <div class="grid grid-cols-3 gap-4 items-center">
-        <PrioritiesSelect
-          v-model="form.extra_details.priority"
-          :options="priorities"
-        />
-        <MultiSelect
-          v-model="form.extra_details.medication_request_category"
-          title="Medication request category"
-          :options="categories"
-          :multiple="false"
-        />
-
-        <DatePicker
-          v-if="!$isCurrentWorkspace('OPD')"
-          v-model="form.extra_details.date"
-          type="datetime"
-          label="Date of administration"
-          class="se-input-gray"
-        />
-        
-        <p
-          v-if="$utils.validateRequiredField($v, 'extra_details')"
-          class="error col-span-3"
-        >
-          Priority is required
-        </p>
-        
-        <cv-text-area
-          v-model="form.extra_details.medication_request_notes[0].display"
-          label="Medication notes"
-          type="text"
-          placeholder="Instruction on how to use the drug"
-          :rows="3"
-          class="inherit-full-input col-span-3"
-        />
-      </div>
-      
+      <MedicationRequestForm
+        v-model="form"
+        :v="$v"
+        :mode="mode"
+      />
 
       <div class="flex justify-end">
         <SeButton
@@ -166,7 +52,7 @@
           Cancel
         </SeButton>
       </div>
-    
+
 
       <div
         v-if="mode === 'create'"
@@ -205,11 +91,13 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 import unsavedChanges from '@/mixins/unsaved-changes'
 import EncounterMedicationTable from '@/components/patients/encounters/EncounterMedicationTable'
+import MedicationRequestForm from '@/components/forms/MedicationRequestForm'
+import isEmpty from 'lodash/isEmpty'
 
 export default {
   name: 'EncounterMedications',
 
-  components: { EncounterMedicationTable },
+  components: { EncounterMedicationTable, MedicationRequestForm },
 
   mixins: [unsavedChanges],
 
@@ -239,23 +127,10 @@ export default {
       },
       visible: false,
       loading: false,
-      deleteLoading: false,
       intentOptions: [ 'proposal', 'plan', 'directive', 'order', 'original-order', 'reflex-order', 'filler-order', 'instance-order', 'option' ],
       statuses: [ 'draft', 'active', 'on-hold', 'revoked', 'completed', 'entered-in-error', 'unknown' ],
-      therapyTypes: [
-        { label: 'continuous (longterm)', value: 'continuous'},
-        { label: 'acute', value: 'acute'},
-        { label: 'seasonal', value: 'seasonal'},
-      ],
-      categories: [ 'inpatient', 'outpatient', 'community', 'discharge' ],
       propertiesToCompareChanges: ['form'],
-      columns: [
-        'Drug/Proceedure',
-        'Type',
-        'Duration',
-        'Instructions',
-        'Action',
-      ],
+      // dataHasNotChanged: true,
     }
   },
 
@@ -285,21 +160,18 @@ export default {
               period_unit: { required },
             },
           },
-          
+
         },
       },
-      
+
     },
   },
 
   computed: {
     ...mapState({
-      priorities: (state) => state.global.priorities,
       provider: (state) => state.auth.provider,
       encounter: (state) => state.encounters.currentEncounter,
       patient: (state) => state.patients.currentPatient,
-      units: (state) => state.global.units,
-      frequencies: (state) => state.global.frequencies,
       user: (state) => state.auth.user,
       allergies: state => state.patientAllergies.allergies,
     }),
@@ -314,9 +186,29 @@ export default {
   },
 
   watch: {
-    medicationId() {
-      this.init()
+
+    medicationId: {
+      immediate: true,
+      handler() {
+        this.init()
+      },
     },
+    currentEncounterMedicationRequests: {
+      immediate: true,
+      handler() {
+        this.init()
+      },
+    },
+
+    // form: {
+    //   // immediate: true,
+    //   deep: true,
+    //   handler(val, oldVal) {
+    //     if (val !== oldVal) {
+    //       this.dataHasNotChanged = false
+    //     }
+    //   },
+    // },
   },
 
   methods: {
@@ -327,33 +219,37 @@ export default {
     }),
 
     init() {
-      if(this.mode === 'update'){
+      if (this.mode === 'update') {
         let medication = this.currentEncounterMedicationRequests.find(el => el.id === this.medicationId)
-        medication = JSON.parse(JSON.stringify(medication))
-        this.form.extra_details = this.$utils.objectSubset(medication, [
-          'medication_request_notes', 'priority',
-          'code', 'date', 'category', 'intended_dispenser',
-        ])
-        this.form.id = medication.id
-        let extra_details = this.form.extra_details
-        extra_details.medication_request_category 
+
+        if (!medication) return {}
+
+        this.form.extra_details = (({ medication_request_notes, priority, code, date, category, intended_dispenser }) =>
+          ({ medication_request_notes, priority, code, date, category, intended_dispenser }))(medication)
+
+        this.form.extra_details.medication_request_category
           = medication.medication_request_category[0].display
+
         this.form.drugs = medication.medication_detail.map(drug => {
           return {
-            medication_detail: [{display: drug.display}],
+            medication_detail: [{ display: drug.display }],
             course_of_therapy_type: medication.course_of_therapy_type,
             medication_request_dosage_instruction: medication.medication_request_dosage_instruction,
+            next_refill: medication.next_refill,
+            quantity: medication.quantity,
           }
         })
       }
     },
 
     cancelUpdate() {
-      this.$router.go(-1)
+      this.$v.$reset()
+      this.reset()
+      this.$router.push({ name: 'EncounterMedications', params: { medicationId: null }})
     },
 
     submit(reroute= false) {
-      if (reroute && this.dataHasNotChanged) {
+      if (reroute && this.dataHasNotChanged()) {
         this.$router.push({ name: 'EncounterCarePlan', params: { id: this.$route.params.id }})
         return
       }
@@ -397,7 +293,7 @@ export default {
       this.loading = true
       try {
         let payload = this.formatMedication(this.form)[0]
-        payload.id = this.form.id
+        payload.id = this.medicationId
         await this.updateMedicationRequest(payload)
         this.loading = false
         this.$toast.open({
@@ -410,18 +306,6 @@ export default {
         this.$utils.error(error)
       }
       this.loading = false
-    },
-
-    addDrug() {
-      this.form.drugs.push({
-        medication_detail: [{display: ''}],
-        course_of_therapy_type: '',
-        medication_request_dosage_instruction: [{frequency: ''}],
-      })
-    },
-
-    removeDrug(index) {
-      this.form.drugs.splice(index, 1)
     },
 
     formatMedication(data) {
@@ -437,14 +321,26 @@ export default {
           medication_request_category: [{ display: data.extra_details.medication_request_category }],
         })
       })
+      newForm.forEach(drug => {
+        if (isEmpty(drug.next_refill)) {
+          return delete drug.next_refill
+        }
+        drug.next_refill = this.$date.formatDate(drug.next_refill, 'yyyy-MM-dd')
+      })
 
       return newForm
     },
 
     close() {
+      this.reset()
+      this.$v.$reset()
+    },
+
+    reset() {
       this.form = {
         extra_details: {
           medication_request_notes: [{display: ''}],
+          medication_request_category: this.$isCurrentWorkspace('OPD') ? 'outpatient' : 'inpatient',
         },
         drugs: [
           {
@@ -453,12 +349,7 @@ export default {
             medication_request_dosage_instruction: [{frequency: ''}],
           },
         ],
-      },
-      this.$v.$reset()
-    },
-
-    addTag(index, tag) {
-      this.form.drugs[index].medication_request_dosage_instruction[0].frequency = tag
+      }
     },
   },
 }

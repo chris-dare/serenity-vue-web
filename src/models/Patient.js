@@ -1,7 +1,6 @@
+/* eslint-disable no-unused-vars */
 import isEmpty from 'lodash/isEmpty'
 import differenceInYears from 'date-fns/differenceInYears'
-// import parseISO from 'date-fns/parseISO'
-// import format from 'date-fns/format'
 
 export default class Patient {
   constructor(data) {
@@ -14,7 +13,6 @@ export default class Patient {
       age: this.data.birth_date ? differenceInYears(Date.now(), new Date(`${this.data.birth_date}`)) : null,
       phone: this.data.user?.mobile || '-',
       email: this.data.user?.email || '-',
-      // recent: format(parseISO(this.data.modified_at), 'MMM dd, yyyy'),
     }
 
     data.age_years = data.age ? `${data.age} years` : null
@@ -26,7 +24,7 @@ export default class Patient {
       data.fullName = `${data.user.name_prefix || ''} ${data.user.first_name || ''} ${data.user.last_name || ''}`
       data.name = `${data.user.first_name || ''} ${data.user.last_name || ''}`
     }else{
-      data.fullName = `${data.name_prefix || ''} ${data.first_name || ''} ${data.last_name || ''}`
+      data.fullName = `${data.name_prefix || ''} ${data.first_name || ''} ${data.last_name || data.lastname || ''}`
     }
 
     if (data.gender) {
@@ -39,67 +37,57 @@ export default class Patient {
 
     data.emergency_contact = { address: {}, telecom: {}}
 
-    if (data.contact && data.contact.length) {
-      data.emergency_contact = { ...data.contact.find(contact => contact.relationship === 'emergency_contact')  }
+    if (data.patient_related_person && data.patient_related_person.length) {
+      data.emergency_contact = { ...data.patient_related_person.find(contact => contact.relationship === 'EMERGENCY_CONTACT')  }
       data.emergency_contact.emergency_contact_address_description = this.getAddressDescription(data.emergency_contact.address)
+
+      data.patient_related_person[0].preferred_communication = data.patient_related_person[0].related_person_communication[0]?.language
+
+    } else {
+      data.patient_related_person = [{}]
     }
 
-    data.payment_method = {payment_details: {}}
+    if (isEmpty(data.patient_top_up_payment_methods)) {
+      data.patient_top_up_payment_methods = [{}]
+    }
 
-    if (!isEmpty(data.payment_options)) {
-      data.payment_method = { ...data.payment_options[0] }
+    data.payment_method = {}
+
+    if (!isEmpty(data.payment_methods)) {
+      data.payment_method = data.payment_methods.patient_user.length ? { ...data.payment_methods.patient_user[0] } : {}
+    }
+
+    if (!isEmpty(data.patient_communication)) {
+      data.language = data.patient_communication[0].language
     }
 
     data.address_description = this.getAddressDescription(data.address)
-    
 
-    data.religion = isEmpty(data.religious_affiliation) ? '' : data.religious_affiliation[0]
-
-    return data
-  }
-
-  getSingleView() {
-    let data = {
-      ...this.data,
-    }
+    data.religious_affiliation = isEmpty(data.religious_affiliation) ? '' : data.religious_affiliation[0]
 
     return data
   }
 
   getCreateView() {
-    let data = { ...patient, ...this.data }
+    let data = { ...this.data }
 
-    if (isEmpty(data.address)) {
-      delete data.address
-    } else {
-      data.address = { ...address, ...this.data.address }
+    if (data.email) {
+      data.email = data?.email?.toLowerCase()
     }
 
-    if (data.contact) {
-      if (this.isContactEmpty(data.contact[0])) {
-        delete data.contact
-      } else {
-        data.contact[0] = { ...contact, ...this.data.contact[0] }
-      }
-    }
-
-    if (data.payment_options) {
-      if (this.isContactEmpty(data.payment_options[0])) {
-        delete data.payment_options
-      } else {
-        data.payment_options[0] = { ...payment_options, ...this.data.payment_options[0] }
-      }
-    }
-
-    if (data.mobile) {
-      data.mobile = this.convertToMsisdn(data.mobile)
-    }
-
-    // if (data.marital_status) {
-    //   data.marital_status = data.marital_status.value
-    // }
     if (data.religious_affiliation) {
       data.religious_affiliation = [data.religious_affiliation]
+    }
+
+    if (data.address) {
+      data.address = [{...data.address, use: 'home', type: 'both'}]
+    }
+
+    if (data.patient_communication) {
+      data.patient_communication = [{
+        language: data.patient_communication,
+        preferred: true,
+      }]
     }
 
     return this.removeEmpty(data)
@@ -107,17 +95,29 @@ export default class Patient {
 
   getUpdateView() {
     let data = { ...this.data }
-    
-    data.mobile = this.convertToMsisdn(data.mobile)
-    if (data.religious_affiliation) {
-      data.religious_affiliation = [data.religious_affiliation]
+
+    data.religious_affiliation = data.religious_affiliation ? [data.religious_affiliation] : []
+
+    if (data.address) {
+      data.address = [data.address]
     }
 
-    return this.removeEmpty(data)
+    if (typeof data.patient_communication === 'string') {
+      data.patient_communication = [{
+        language: data.patient_communication,
+        preferred: true,
+      }]
+    }
+
+    this.removeEmpty(data)
+
+    data.religious_affiliation = data.religious_affiliation || []
+
+    return data
   }
 
   isContactEmpty(contact) {
-    return (isEmpty(contact.address) && isEmpty(contact.telecom) && Object.keys(contact).length === 3) 
+    return (isEmpty(contact.address) && isEmpty(contact.telecom) && Object.keys(contact).length === 3)
   }
 
   convertToMsisdn(number) {
@@ -159,56 +159,4 @@ export default class Patient {
       })
     return tree
   }
-}
-
-const address = {
-  'use': 'home',
-  'type': 'both',
-  'line': '',
-  'state': '',
-  'city': '',
-  'district': '',
-  'postalCode': '', 
-  'country': '',
-}
-
-const contact = {
-  'relationship': 'emergency_contact', //required: emergency_contact | next_of_kin
-  'first_name': '', //required
-  'last_name': '', // required
-  'other_names': '', // optional
-  'telecom': { //required 
-    'system': '', // default for patient onboarding
-    'value': '', //required: phone number
-    'use': '', // home (default) | mobile -> purpose of this contact point
-  },
-  'address': { // required
-    'line': '',
-  },
-}
-
-const payment_options = {
-  'payment_type': 'momo', // options: cash | momo | insurance | corporate | card
-  'payer': 'corporate', // corporate, insurance or user id
-  'payment_details': { // for momo
-    'payment_provider': 'MTN',
-    'country': 'GH',
-    'msisdn': '',
-  },
-}
-
-const patient = {
-  'mr_number': null,
-  'birth_date': null,
-  'birth_time': null,
-  'preferred_communication': ['en'],
-  // 'email': '',
-  'first_name': '', // required
-  'gender': '', // required: male | female | other | unknown
-  // 'general_practitioner': '', // practitioner role id
-  'last_name': '',
-  'meta': null,
-  'mobile': '', // required: msisdn phone number format
-  'name_prefix': 'Prof',
-  'religious_affiliation': null, // will provider an endpoint to retrieve list
 }

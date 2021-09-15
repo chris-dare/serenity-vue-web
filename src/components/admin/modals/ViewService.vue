@@ -16,7 +16,7 @@
         />
 
         <!-- tiers -->
-        <div>
+        <div v-if="form.price_tiers.length">
           <div class="grid grid-cols-2 gap-8 border-b border-solid border-subtle py-2">
             <p class="text-secondary">Service Tier</p>
             <p class="text-secondary">Tier Price</p>
@@ -26,8 +26,8 @@
             :key="index"
             class="grid grid-cols-2 gap-8 py-2"
           >
-            <p class="capitalize">{{ tier.name }}</p>
-            <p>{{ tier.cost | formatMoney | toCedis }}</p>
+            <p class="capitalize">{{ tier.display }}</p>
+            <p>{{ tier.currency }}{{ $currency(tier.charge) }}</p>
           </div>
         </div>
 
@@ -41,8 +41,7 @@
             label="Is service virtual?"
             :description="form.virtual"
           />
-          
-          
+
           <InfoBlock
             label="Is appointment required for this service?"
             :description="form.required"
@@ -52,7 +51,7 @@
             label="Slot duration"
             :description="`${form.duration} mins`"
           />
-          
+
           <InfoBlock
             label="Service categories"
             :description="form.categories"
@@ -114,7 +113,9 @@ export default {
 
   data() {
     return {
-      form: {},
+      form: {
+        price_tiers: [],
+      },
       visible: false,
       loading: false,
     }
@@ -142,7 +143,7 @@ export default {
 
     async edit() {
       await this.getService(this.form.id)
-      this.$router.push({ name: 'ServiceInformation'})
+      this.$router.push({ name: 'ServiceInformation', query: {id: this.form.id}})
     },
   },
 }

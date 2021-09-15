@@ -21,7 +21,7 @@ export default {
     const index = state.clients.findIndex(a => a.id === client.id)
     if (index !== -1) {
       state.clients = state.clients.map(a => {
-        if (a.id === client.id) return client
+        if (a.main_branch_id === client.id) return client
         return a
       })
     } else {

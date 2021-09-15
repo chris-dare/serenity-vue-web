@@ -16,58 +16,39 @@
         </div>
 
         <div class="grid grid-cols-2 gap-8 mt-8 mb-12">
-          <cv-text-input
+          <FormInput
             v-model="form.first_name"
-            label="First name (required)"
+            label="First name"
             placeholder="First Name"
             type="text"
             class="inherit-full-input"
-          >
-            <template
-              v-if="$v.form.first_name.$error"
-              slot="invalid-message"
-            >
-              First name is required
-            </template>
-          </cv-text-input>
-          <cv-text-input
+            :invalid-message="$utils.validateRequiredField($v, 'first_name')"
+            required
+          />
+          <FormInput
             v-model="form.last_name"
-            label="Last name (required)"
+            label="Last name"
             placeholder="Last or family name"
             type="text"
             class="inherit-full-input"
-          >
-            <template
-              v-if="$v.form.last_name.$error"
-              slot="invalid-message"
-            >
-              Last name is required
-            </template>
-          </cv-text-input>
+            :invalid-message="$utils.validateRequiredField($v, 'last_name')"
+            required
+          />
           <div>
-            <cv-date-picker
+            <DatePicker
               v-model="form.date_of_birth"
               kind="single"
-              class="my-8 w-full max-w-full inherit-full-input"
+              class="w-full max-w-full inherit-full-input se-input-gray"
               placeholder="dd/mm/yyyy"
-              date-label="Date of Birth"
-              :cal-options="calOptions"
+              label="Date of Birth"
+              :max-date="maxDate"
+              required
             />
-            <cv-select
-              v-model="form.gender"
-              label="Gender (required)"
-              class="inherit-full-input my-8"
-              placeholder="Male or female"
-              :invalid-message="$utils.validateRequiredField($v, 'gender')"
-            >
-              <cv-select-option value="male">Male</cv-select-option>
-              <cv-select-option value="female">Female</cv-select-option>
-            </cv-select>
 
-            <!-- <MultiSelect
+            <MultiSelect
               v-model="form.gender"
               :options="genders"
-              title="Gender (required)"
+              title="Gender"
               placeholder="Male or female"
               track-by="code"
               label="display"
@@ -76,7 +57,8 @@
               preselect
               :multiple="false"
               :error-message="$utils.validateRequiredField($v, 'gender')"
-            /> -->
+              required
+            />
           </div>
           <div>
             <p class="text-primary mb-2 text-left">Capture or Upload Photo</p>
@@ -138,6 +120,9 @@ export default {
       storeData: (state) => state.practitioners.currentUser,
       genders: (state) => state.resources.genders,
     }),
+    maxDate() {
+      return subYears(Date.now(), 18)
+    },
 
     calOptions() {
       return {

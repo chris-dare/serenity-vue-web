@@ -2,6 +2,7 @@
   <div
     class="inline-flex justify-center items-center px-3 py-1 text-sm space-x-1"
     :class="[customClasses, full ? 'w-full h-9 rounded-md' : 'w-auto rounded-full']"
+    @click="$emit('click')"
   >
     <div v-if="showIcon">
       <Checkmark
@@ -15,7 +16,9 @@
       />
     </div>
     <div>
-      <slot />
+      <slot>
+        {{ label }}
+      </slot>
     </div>
   </div>
 </template>
@@ -41,6 +44,11 @@ export default {
     showIcon: {
       type: Boolean,
       default: false,
+    },
+
+    label: {
+      type: String,
+      default: null,
     },
   },
 

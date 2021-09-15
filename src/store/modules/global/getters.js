@@ -40,4 +40,20 @@ export default {
   navItems: (state) => {
     return Workspaces.data[state.workspaceType]
   },
+
+  currentWorkspacePatientPage: (state) => {
+    if (state.workspaceType === 'BILL') {
+      return 'Billing:Patient'
+    }
+
+    if (state.workspaceType === 'PHARM') {
+      return 'Pharmacy:PatientSummary'
+    }
+
+    if (state.workspaceType === 'DIAG') {
+      return 'Diagnostic:Patient'
+    }
+
+    return 'PatientSummary'
+  },
 }

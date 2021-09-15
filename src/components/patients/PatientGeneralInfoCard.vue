@@ -23,7 +23,7 @@
         />
         <InfoBlock
           label="Phone Number"
-          :description="props.patient.user.mobile|| '-'"
+          :description="props.patient.user ? props.patient.user.mobile : '-'"
         />
         <InfoBlock
           label="Address"
@@ -31,7 +31,7 @@
         />
         <InfoBlock
           label="Email"
-          :description="props.patient.user.email|| '-'"
+          :description="props.patient.user ? props.patient.user.email : '-'"
         />
       </div>
     </div>

@@ -15,30 +15,25 @@
       />
     </div>
     <p class="text-serenity-primary font-semibold mt-5">
-      Active Lab Requests ({{ 0 }})
+      Recent Orders
     </p>
-    <LabsTable 
-      hide-search 
-      hide-walk
-    />
-    <AddPatient />
-    <AddLabs />
+    <LabsTable />
+    <Next />
   </div>
 </template>
 
 <script>
-import AddLabs from '@/components/diagnostic/modals/AddLabResultsModal.vue'
-import LabsTable from '@/components/diagnostic/labResults'
-import AddPatient from '@/components/diagnostic/modals/addPatient'
+import LabsTable from '@/components/diagnostic/LabsOrders'
+import Next from '@/components/diagnostic/modals/RequestedLabs.vue'
 
 export default {
   name: 'DiagnosticDashboard',
 
-  components: { LabsTable, AddPatient, AddLabs },
+  components: { LabsTable, Next },
 
   data() {
     return {
-      selected: 'search',
+      selected: '',
     }
   },
 
@@ -50,18 +45,14 @@ export default {
           description: 'Quickly search for a patient by name',
           type: 'search',
           value: 'search',
+          hide: !this.$userCan('patient.write'),
         },
         {
-          label: 'Enter Lab Results',
-          description: 'Enter results for the tests taken',
-          type: 'edit',
-          value: 'edit',
-        },
-        {
-          label: 'Add a patient',
-          description: 'Add a new patient from referral and walk-ins',
+          label: 'New Diagnostic Request',
+          description: 'Add a new diagnostic request',
           type: 'add',
           value: 'add',
+          hide: !this.$userCan('diagnostic.requests.write'),
         },
       ]
     },
@@ -75,15 +66,12 @@ export default {
         this.$router.push({ name: 'Diagnostic:Patients'})
         break
       case 'edit':
-        this.$trigger('lab:add:open')
-        // this.$router.push({ name: 'Biodata'})
+        this.$trigger('new-lab:add:open')
         break
       case 'add':
-        // this.$router.push({ name: 'Biodata'})
-        this.$trigger('labpatient:add:open')
-        // this.$router.push({ name: 'SelectPatient'})
+        this.$router.push({ name: 'DiagnosticSelectPatient'})
         break
-      
+
       default:
         break
       }

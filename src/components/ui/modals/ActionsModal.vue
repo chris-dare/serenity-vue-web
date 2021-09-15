@@ -18,7 +18,8 @@
             {{ cancelButtonText }}
           </SeButton>
           <SeButton
-            :variant="type == 'delete' ? 'danger' : 'default'"
+            :variant="confirmButtonVariant"
+            :loading="loading"
             @click="handleAction('confirm')"
           >
             <span class="capitalize">{{ confirmButtonText }}</span>
@@ -45,11 +46,13 @@ export default {
       cancelButtonText: '',
       cancelCallback: null,
       cancelButtonVariant: 'secondary',
+      confirmButtonVariant: 'default',
+      loading: false,
     }
   },
 
   events: {
-    'actions-modal:open': function(_ev, { confirmButtonText = 'save', cancelButtonText = 'cancel', label, data, callback, cancel, type = 'success', cancelButtonVariant = 'secondary' }){
+    'actions-modal:open': function(_ev, { confirmButtonText = 'save', cancelButtonText = 'cancel', label, data, callback, cancel, type = 'success', cancelButtonVariant = 'secondary', confirmButtonVariant = 'default' }){
       if(this.visible)return
       this.$resetData()
       this.confirmButtonText = confirmButtonText
@@ -61,6 +64,7 @@ export default {
       this.cancelCallback = cancel
       this.visible = true
       this.cancelButtonVariant = cancelButtonVariant
+      this.confirmButtonVariant = confirmButtonVariant
     },
   },
 
@@ -74,7 +78,9 @@ export default {
     async confirm() {
       if(this.confirmCallback){
         try {
+          this.loading = true
           await this.confirmCallback(this.data)
+          this.loading = false
         } catch {
           //empty
         }finally{

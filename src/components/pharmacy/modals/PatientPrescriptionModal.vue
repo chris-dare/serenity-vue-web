@@ -17,8 +17,9 @@
           @cancel="cancel"
           @success="onPrescriptionsConfirmed"
         />
-        <AddPrescriptionModal
+        <AddPrescriptionForm
           v-else
+          :patient="patient"
           @success="onPrescriptionsConfirmed"
         />
         <PrescriptionPaymentForm
@@ -50,7 +51,7 @@ import PrescriptionPaymentForm from '@/components/pharmacy/PrescriptionPaymentFo
 import PrintBillForm from '@/components/pharmacy/PrintBillForm'
 import MultiStepModal from '@/components/global/MultiStepModal'
 // import Patient from '@/models/Patient'
-import AddPrescriptionModal from '@/components/pharmacy/modals/AddPrescriptionModal'
+import AddPrescriptionForm from '@/components/pharmacy/AddPrescriptionForm'
 import ConfirmPrescriptionModal from '@/components/pharmacy/modals/ConfirmPrescriptionModal'
 
 export default {
@@ -60,7 +61,7 @@ export default {
     PrescriptionPaymentForm,
     ConfirmPrescriptionModal,
     MultiStepModal,
-    AddPrescriptionModal,
+    AddPrescriptionForm,
     PrintBillForm,
   },
 
@@ -108,7 +109,7 @@ export default {
   },
 
   events: {
-    'pharmacy:patient_prescription:open': function(mode = 'confirm'){
+    'pharmacy:patient_prescription:open': function(event, mode = 'confirm'){
       this.step = 0
       this.visible = true
       this.mode = mode

@@ -3,9 +3,9 @@ import moment from 'moment'
 
 export default {
   url: 'providers/',
-  
-  list(providerId) {
-    return http.get(`${this.url}${providerId}/medicationrequests`)
+
+  list(providerId, params) {
+    return http.get(`${this.url}${providerId}/medicationrequests`, { params })
   },
 
   get(providerId, patientId) {
@@ -44,6 +44,6 @@ export default {
         status: 'completed',
       }
     })
-    return http.post(`${this.url}${providerId}/medicationdispenses`, payload)
+    return http.post(`${this.url}${providerId}/medication-dispenses`, payload)
   },
 }

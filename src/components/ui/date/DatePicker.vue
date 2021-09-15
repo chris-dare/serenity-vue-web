@@ -2,14 +2,18 @@
   <div>
     <div
       v-if="label"
-      class="bx--label"
+      class="bx--label space-x-1"
     >
+      <span
+        v-if="required"
+        class="error"
+      >*</span>
       {{ label }}
     </div>
     <flat-pickr
       v-model="localValue"
       :config="configs[type]"
-      placeholder="Select a date"
+      :placeholder="placeholder"
       class="bg-white border-b h-10 w-full border-serenity-dark px-4"
       v-bind="$attrs"
       @on-change="$emit('change', $event)"
@@ -27,8 +31,9 @@
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import modelMixin from '@/mixins/model'
-  
-export default {   
+import { startOfMonth, endOfMonth } from 'date-fns'
+
+export default {
   name: 'DatePicker',
 
   components: {
@@ -58,6 +63,22 @@ export default {
       type: [String, Date],
       default: null,
     },
+    placeholder: {
+      type: String,
+      default: 'Select a date',
+    },
+    minDate: {
+      type: [String, Date],
+      default: null,
+    },
+    format: {
+      type: String,
+      default: null,
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -66,9 +87,11 @@ export default {
       // https://chmln.github.io/flatpickr/options/
       configs: {
         date: {
-          dateFormat: 'Y-m-d',
-          minDate: this.disableDatesBeforeToday ? 'today' : null,
+          dateFormat: this.format || 'Y-m-d',
+          minDate: this.disableDatesBeforeToday ? 'today' : this.minDate ? this.minDate : null,
           maxDate: this.maxDate,
+          altFormat: 'Y-m-d',
+          altInput: true,
         },
         wrap: {
           wrap: true,
@@ -83,6 +106,9 @@ export default {
           enableSeconds: true,
           noCalendar: true,
           allowInput: true,
+          dateFormat: 'H:i:S\\Z',
+          altFormat: 'h:i K',
+          altInput: true,
         },
         datetime: {
           // wrap: true,
@@ -126,8 +152,28 @@ export default {
           minDate: this.disableDatesBeforeToday ? 'today' : null,
           // defaultDate: Date.now(),
         },
-      }, 
+        custom: {
+          mode: 'range',
+          // dateFormat: 'Y-m-d',
+          minDate: this.disableDatesBeforeToday ? 'today' : null,
+          dateFormat: 'Y-m-dTH:i:S\\Z', // Displays: 2017-01-22Z
+          altFormat: 'Y-m-d',
+          altInput: true,
+          defaultDate: [startOfMonth(Date.now()), endOfMonth(Date.now())],
+        },
+      },
     }
+  },
+
+  methods: {
+    onChange (selectedDates, dateStr, instance) {
+      if (!this.type === 'custom') {
+        this.$emit('change', dateStr)
+        return
+      }
+      console.log(selectedDates, dateStr, instance)
+      instance.element.value = dateStr.replace('to', ':#;')
+    },
   },
 }
 </script>

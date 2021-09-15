@@ -24,6 +24,7 @@
           :custom-label="customLabel"
           :error-message="$utils.validateRequiredField($v, 'practitioner')"
           :disabled="!!form.id"
+          required
         />
 
         <div class="grid grid-cols-2 gap-4">
@@ -46,6 +47,7 @@
             track-by="id"
             placeholder="Select service"
             :error-message="$utils.validateRequiredField($v, 'health_service')"
+            required
           />
         </div>
 
@@ -83,15 +85,11 @@
         </div>
 
         <div class="grid grid-cols-2 gap-x-4 gap-y-8">
-          <Timepicker
-            v-model="form.start_time"
-            label="Specify a start time"
-            :error-message="$utils.validateRequiredField($v, 'start_time')"
-          />
-          <Timepicker
-            v-model="form.end_time"
-            label="End time"
-            :error-message="$utils.validateRequiredField($v, 'end_time')"
+          <TimeRangePicker
+            v-model="form"
+            :v="$v"
+            class="col-span-2"
+            required
           />
           <div>
             <div class="bx--label">Does the schedule repeat?</div>
@@ -214,7 +212,8 @@ export default {
       practitioner: { required },
       health_service: { required },
       start_time: { required },
-      days: { required, minLength: minLength(1)  },
+      days: { required, minLength: minLength(1) },
+      // TODO validation to check if the end time is smaller than the start time
       end_time: { required },
     },
   },
@@ -267,7 +266,7 @@ export default {
         //   type: 'error',
         // })
         this.loading = false
-      } 
+      }
     },
 
     async update() {
@@ -279,7 +278,7 @@ export default {
         this.close()
       } catch (error) {
         this.loading = false
-      } 
+      }
     },
 
     close() {

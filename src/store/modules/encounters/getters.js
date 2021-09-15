@@ -3,9 +3,10 @@ import parseISO from 'date-fns/parseISO'
 import isEmpty from 'lodash/isEmpty'
 
 export default {
-  hasActiveEncounter: (state,getters) => !!getters.onGoingEncounters.length,
+  // hasActiveEncounter: (state,getters) => !!getters.onGoingEncounters.length,
+  hasActiveEncounter: (state,getters) => getters.currentEncounterStatus === 'planned' || getters.currentEncounterStatus === 'in progress',
 
-  hasEncounterBegan: state => state.encounterState > 0, 
+  hasEncounterBegan: state => state.encounterState > 0 || state.currentEncounter?.status === 'in-progress',
 
   pastEncounters: state => {
     if (!state.encounters) return []
@@ -20,6 +21,11 @@ export default {
   currentEncounterCannotBeFinished: (state, getters) => {
     if (!state.currentEncounter) return false
     return !state.currentEncounter.chief_complaint || !state.currentEncounter.history_of_presenting_illness || isEmpty(getters.currentEncounterVitals)
+  },
+
+  currentEncounterPractitioner: (state) => {
+    if (!state.currentEncounter) return {}
+    return state.currentEncounter?.encounter_participant[0]?.practitioner_detail || {}
   },
 
   currentEncounterVitals: (state, getters, rootState) => {
@@ -78,9 +84,14 @@ export default {
     return rootState.patients.patientServiceRequests.filter(service => service.encounter === state.currentEncounter.id)
   },
 
+  currentPatientServiceRequests: (state, getters, rootState) => {
+    if (!state.currentEncounter) return []
+    return rootState.patients.patientServiceRequests
+  },
+
   currentEncounterDiagnosticReports: (state, getters, rootState) => {
     if (!state.currentEncounter) return []
-    return rootState.patients.patientDiagnosticReports.filter(report => report.encounter === state.currentEncounter.id)
+    return rootState.diagnostic.diagnosticReports.filter(report => report.encounter === state.currentEncounter.id)
   },
 
   currentEncounterMedicationRequests: (state, getters, rootState) => {
@@ -97,7 +108,7 @@ export default {
     if (!getters.currentEncounterObservations) return {}
     const options = rootState.resources.vitalsUnitTypes.map(vital => vital.code)
     let vitals = {}
-  
+
     const sortedVitals = sortByDate(getters.currentEncounterObservations, 'issued')
     options.forEach(option => {
       const observation = sortedVitals.find(obs => obs.unit === option)
@@ -111,14 +122,15 @@ export default {
     if (!rootState.patients.patientObservations) return []
     const options = rootState.resources.vitalsUnitTypes
     let vitals = []
-  
-    const sortedVitals = sortByDate(rootState.patients.patientObservations, 'issued')
+
+    const sortedVitals = sortByDate(rootState.patients.patientObservations, 'issued', 'asc')
     options.forEach(option => {
       const observations = sortedVitals.filter(obs => obs.unit === option.code).map(obs => {
         return {
           group: 'Dataset 1',
-          date: obs.issued,
-          value: obs.value ? obs.value : 1,
+          date: getters.getLatestVitalsDate(obs.unit),
+          value: obs.value ? obs.value.split('/')[0] : 1,
+          value2: option.code === 'BLOOD_PRESSURE' && obs.value.split('/').length > 1 ? obs.value.split('/')[1] : null,
         }
       })
 
@@ -136,6 +148,15 @@ export default {
     return vitals
   },
 
+  sortedObservations: (state, getters, rootState) => {
+    if (!rootState.patients.patientObservations.length) return []
+    return sortByDate(rootState.patients.patientObservations, 'issued', 'desc')
+  },
+
+  getLatestVitalsDate: (state, getters) => (unit) => {
+    return getters.sortedObservations.find(v => unit === v.unit)?.issued
+  },
+
   latestVitalsDate: (state, getters) => {
     if (!getters.currentPatientVitals.length) return ''
     return getters.currentPatientVitals.find(v => v.date)?.date
@@ -149,7 +170,7 @@ export default {
     let vitals = {}
 
     const sortedObservations = sortByDate(observations, 'issued')
-  
+
     history.forEach(option => {
       const observation = sortedObservations.find(obs => obs.unit === option)
       vitals[option] = observation ? observation.value : ''
@@ -168,7 +189,7 @@ export default {
     let vitals = {}
 
     const sortedObservations = sortByDate(currentEncounterObservations, 'issued')
-  
+
     history.forEach(option => {
       const observation = sortedObservations.find(obs => obs.unit === option)
       vitals[option] = observation ? observation.value : ''
@@ -181,24 +202,28 @@ export default {
     const observations = rootGetters['patients/patientObservations']
     if (!observations) return {}
 
-    return observations.filter(obs => obs.observation_category[0].display === 'exam' && obs.value)
+    return observations.filter(obs => obs.observation_category[0]?.display === 'exam' && obs.value)
   },
 
   currentEncounterExamSystems: (state, getters, rootState, rootGetters) => {
     const observations = rootGetters['patients/patientObservations']
     if (!observations) return {}
 
-    return observations.filter(obs => obs.observation_category[0].display === 'exam' && obs.value && obs.encounter === state.currentEncounter.id)
+    return observations.filter(obs => obs.observation_category[0]?.display === 'exam' && obs.value && obs.encounter === state.currentEncounter.id)
   },
 }
 
 
-const sortByDate = (data, field) => {
+const sortByDate = (data, field, order = 'desc') => {
   if (!data.length) return data
 
   return data.sort((a, b) => {
     const dateA = new Date(a[field || 'date'])
     const dateB = new Date(b[field || 'date'])
-    return dateA < dateB ? 1 : dateA > dateB ? -1 : 0
+    if (order === 'desc') {
+      return dateA < dateB ? 1 : dateA > dateB ? -1 : 0
+    } else {
+      return dateA < dateB ? -1 : dateA > dateB ? 1 : 0
+    }
   })
 }

@@ -3,28 +3,30 @@
     <p class="text-lg font-semibold">Customer Information</p>
     <div>
       <div class="grid grid-cols-2 gap-8 my-8">
-        <cv-text-input
+        <FormInput
           v-model="form.first_name"
           :invalid-message="$utils.validateRequiredField($v, 'first_name')"
-          label="First Name (required)"
+          label="First Name"
           placeholder="Enter First name"
           type="text"
           class="inherit-full-input"
+          required
         />
-        <cv-text-input
+        <FormInput
           v-model="form.last_name"
           :invalid-message="$utils.validateRequiredField($v, 'last_name')"
-          label="Last Name (required)"
+          label="Last Name"
           type="text"
           placeholder="Enter Last name"
           class="inherit-full-input"
+          required
         />
-        <cv-date-picker
+        <DatePicker
           v-model="form.birth_date"
           kind="single"
           class="inherit-full-input"
           placeholder="dd/mm/yyyy"
-          date-label="Date of birth"
+          label="Date of birth"
         />
         <MultiSelect
           v-model="form.gender"
@@ -37,29 +39,36 @@
           preselect
           :multiple="false"
         />
-        <PhoneInput
+        <MsisdnPhoneInput
           v-model="form.mobile"
-          label="Phone number (required)"
+          label="Phone number"
           :error-message="$utils.validateRequiredField($v, 'mobile')"
+          required
           @input="$v.$touch()"
         />
-        <cv-text-input
+        <FormInput
           v-model="form.email"
           :invalid-message="$utils.validateRequiredField($v, 'email')"
-          label="Email address (required)"
+          label="Email address"
           type="email"
           placeholder="Email address"
           class="inherit-full-input"
+          required
         />
       </div>
       <div class="flex items-center justify-between">
         <SeButton
           variant="secondary"
-          @click="$emit('prev', form)"
+          @click="$emit('cancel')"
         >
           Go back
         </SeButton>
-        <SeButton @click="submit">Next<ChevronRight class="w-4 h-4 text-white ml-4" /></SeButton>
+        <SeButton
+          :loading="loading"
+          @click="submit"
+        >
+          Next<ChevronRight class="w-4 h-4 text-white ml-4" />
+        </SeButton>
       </div>
     </div>
     <div />
@@ -68,6 +77,7 @@
 
 <script>
 import { required, email } from 'vuelidate/lib/validators'
+import { emailFormatter } from '@/services/custom-validators'
 import Checkmark from '@carbon/icons-vue/es/checkmark/32'
 import UsersAPI from '@/api/users'
 import { mapActions, mapState } from 'vuex'
@@ -142,11 +152,10 @@ export default {
         first_name: {required},
         last_name: {required},
         email: {
-          email,
+          email: (val) => email(emailFormatter(val)),
           required,
           async isUnique(value) {
             if (value === '' || !this.$v.form.email.email) return true
-            console.info('validate e ', value)
             const { data } = await UsersAPI.search({ email: value }).catch(() => false)
 
             if (data && data.length) {
@@ -160,7 +169,6 @@ export default {
           required,
           async isUnique(value) {
             if (value === '' || value.length < 10) return true
-            console.info('validate m', value)
             const { data } = await UsersAPI.search({ mobile: value }).catch(() => false)
 
             if (data.length) {
@@ -191,14 +199,14 @@ export default {
     },
 
     async save() {
-      console.info('confirm 1', this.createPatient)
       this.loading = true
       let payload = Object.assign({}, this.form)
       payload.birth_date = new Date(payload.birth_date)
       try {
-        console.info('confirm 2')
         const patient = await this.createPatient(payload)
-
+        this.$toast.open({
+          message: 'Patient successfully added',
+        })
         this.$emit('success', patient)
 
       } catch (error) {

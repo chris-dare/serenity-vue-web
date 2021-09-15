@@ -11,60 +11,64 @@
   >
     <div class="grid grid-cols-2 gap-8">
       <cv-text-input
-        v-model="form.contact[0].first_name"
+        v-model="form.patient_related_person[0].first_name"
         label="First Name"
         placeholder="First Name"
         type="text"
         class="inherit-full-input"
       />
       <cv-text-input
-        v-model="form.contact[0].last_name"
+        v-model="form.patient_related_person[0].last_name"
         label="Last Name"
         type="text"
         placeholder="Last Name"
         class="inherit-full-input"
       />
       <cv-text-input
-        v-model="form.contact[0].other_names"
+        v-model="form.patient_related_person[0].other_names"
         label="Other Names"
         type="text"
         placeholder="Other Names"
         class="inherit-full-input"
       />
       <cv-text-input
-        v-model="form.contact[0].address.line"
+        v-model="form.patient_related_person[0].line_address"
         label="Home/Residential address"
         placeholder="Home or residential address"
         type="text"
         class="inherit-full-input"
       />
-      <MultiSelect
-        v-model="form.contact[0].telecom.system"
-        :options="systemOptions"
-        title="Type of contact"
-        :multiple="false"
-      />
-      <MultiSelect
-        v-model="form.contact[0].telecom.use"
-        :options="['home', 'mobile']"
-        title="Use"
-        :multiple="false"
-      />
       <cv-text-input
-        v-if="form.contact[0].telecom.system === 'email'"
-        v-model="form.contact[0].telecom.value"
+        v-model="form.patient_related_person[0].email"
         label="Email"
         placeholder="Email"
-        class="inherit-full-input col-span-2"
+        class="inherit-full-input"
       />
       <MsisdnPhoneInput
-        v-else
-        v-model="form.contact[0].telecom.value"
+        v-model="form.patient_related_person[0].mobile"
         label="Phone number"
+      />
+      <cv-text-input
+        v-model="form.patient_related_person[0].place_of_work"
+        label="Place of work"
+        placeholder="Place of work"
+        type="text"
+        class="inherit-full-input"
+      />
+
+      <MultiSelect
+        v-model="form.patient_related_person[0].preferred_communication"
+        title="Home Language"
+        :multiple="false"
+        :options="languages"
+        label="display"
+        track_by="code"
+        placeholder="Primary language you speak"
+        custom-field="code"
       />
     </div>
     <p
-      v-if="$utils.validateRequiredField($v, 'contact')"
+      v-if="$utils.validateRequiredField($v, 'patient_related_person')"
       class="error col-span-2"
     >
       All fields are required when any field is filled
@@ -75,7 +79,8 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import MultiStep from '@/mixins/multistep'
-import { requiredIf } from 'vuelidate/lib/validators'
+import { requiredIf, email } from 'vuelidate/lib/validators'
+import { emailFormatter } from '@/services/custom-validators'
 
 export default {
   name: 'EmergencyContact',
@@ -85,39 +90,36 @@ export default {
   data() {
     return {
       form: {
-        contact: [{
-          telecom: {},
-          address: {},
-        }],
+        patient_related_person: [{}],
       },
       parent: 'Patients',
       previous: 'ContactInfo',
       next: 'SocialInfo',
-      systemOptions: ['phone', 'email'],
     }
   },
 
   computed: {
     ...mapState({
       storeData: (state) => state.patients.currentPatient,
+      languages: state => state.resources.languages,
     }),
 
     hasFirstName() {
-      return !!this.form.contact[0].first_name
+      return !!this.form.patient_related_person[0].first_name
     },
     hasLastName() {
-      return !!this.form.contact[0].last_name
+      return !!this.form.patient_related_person[0].last_name
     },
 
     empty() {
-      return this.$utils.checkForEmpty({ ...this.form.contact[0] })
+      return this.$utils.checkForEmpty({ ...this.form.patient_related_person[0] })
     },
   },
 
   validations() {
     return {
       form: {
-        contact: {
+        patient_related_person: {
           $each: {
             first_name: {
               required: requiredIf(() => {
@@ -129,29 +131,16 @@ export default {
                 return !this.empty
               }),
             },
-            telecom: {
-              system: {
-                required: requiredIf(() => {
-                  return !this.empty
-                }),
-              },
-              value: {
-                required: requiredIf(() => {
-                  return !this.empty
-                }),
-              },
-              use: {
-                required: requiredIf(() => {
-                  return !this.empty
-                }),
-              },
+            mobile: {
+              required: requiredIf(() => {
+                return !this.empty
+              }),
             },
-            address: {
-              line: {
-                required: requiredIf(() => {
-                  return !this.empty
-                }),
-              },
+            email: {email: (val) => email(emailFormatter(val))},
+            line_address: {
+              required: requiredIf(() => {
+                return !this.empty
+              }),
             },
           },
         },
@@ -176,7 +165,20 @@ export default {
         return
       }
 
-      this.form.contact[0].relationship ='emergency_contact',
+      if (!this.empty) {
+        this.form.patient_related_person[0].relationship = 'EMERGENCY_CONTACT'
+      }
+
+      if (this.form.patient_related_person[0].preferred_communication) {
+        this.form.patient_related_person[0].related_person_communication =  [
+          {
+            'language': this.form.patient_related_person[0].preferred_communication,
+            'preferred': true,
+          },
+        ],
+        delete this.form.patient_related_person[0].preferred_communication
+      }
+
 
       this.addToStoreData(this.form)
       this.$router.push({ name: this.next, query: { ...this.$route.query } })

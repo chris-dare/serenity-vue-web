@@ -1,4 +1,4 @@
-import { SET_BILLING, UPDATE_BILLING, DELETE_BILLING } from './mutation-types'
+import { SET_BILLING, UPDATE_BILLING, DELETE_BILLING, SET_ACCOUNTS } from './mutation-types'
 
 export default {
   [SET_BILLING](state, billing) {
@@ -22,5 +22,9 @@ export default {
     if (index !== -1) {
       state.billing.splice(index, 1)
     }
+  },
+
+  [SET_ACCOUNTS](state, data) {
+    state.patientAccounts = data
   },
 }

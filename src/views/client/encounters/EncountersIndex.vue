@@ -119,24 +119,15 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(async vm => {
       vm.loading = true
-      await vm.initSinglePatientInformation(vm.id)
-      await vm.getEncounter(vm.encounter)
-      vm.setCurrentEncounterState()
+      await vm.initSinglePatientEncounterInformation({ patient: vm.id, encounter: vm.encounter })
       vm.loading = false
     })
   },
 
-  // beforeRouteLeave (to, from, next) {
-  //   this.end()
-  //   next()
-  // },
-
   methods: {
     ...mapActions({
-      initSinglePatientInformation: 'patients/initSinglePatientInformation',
-      getEncounter: 'encounters/getEncounter',
+      initSinglePatientEncounterInformation: 'encounters/initSinglePatientEncounterInformation',
       endEncounter: 'encounters/endEncounter',
-      setCurrentEncounterState: 'encounters/setCurrentEncounterState',
     }),
 
 

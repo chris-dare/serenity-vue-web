@@ -39,7 +39,7 @@
       >
         <div class="flex justify-between font-bold mb-1">
           <div>{{ drug.medication_detail[0].display }}</div>
-          <div>{{ drug.medication.selling_price | formatMoney | toCedis }}</div>
+          <div>{{ (parseFloat(drug.medication.selling_price) * parseFloat(drug.quantity) || 1) | formatMoney | toCedis }}</div>
         </div>
         <div>{{ drug.quantity }}</div>
       </div>
@@ -76,6 +76,7 @@
 
 <script>
 import { required, email } from 'vuelidate/lib/validators'
+import { emailFormatter } from '@/services/custom-validators'
 import Checkmark from '@carbon/icons-vue/es/checkmark/32'
 import { mapActions } from 'vuex'
 export default {
@@ -88,8 +89,8 @@ export default {
     },
 
     medicationRequests: {
-      type: [Object, String],
-      default: null,
+      type: [Array],
+      default: () => [],
     },
 
     patient: {
@@ -107,27 +108,6 @@ export default {
       icons: {
         Checkmark,
       },
-      prescriptions: {
-        data: [
-          {
-            drug: 'Hydrocodone 5MG / 500MG tabs',
-            duration: '7 days',
-            dosage: '2 times daily',
-            quantity: 24,
-            instruction: 'Take 1 tablet orally every 4 to 5 hours as needed for pain',
-            refill: new Date(),
-          },
-          {
-            drug: 'Efpac 5MG / 500MG tabs',
-            duration: '7 days',
-            dosage: '2 times daily',
-            quantity: 24,
-            instruction: 'Take 1 tablet orally every 4 to 5 hours as needed for pain',
-            refill: new Date(),
-          },
-        ],
-        state: null,
-      },
     }
   },
 
@@ -135,7 +115,7 @@ export default {
     totalAmount() {
       let total = 0
       this.medicationRequests.forEach(el => {
-        total += parseFloat(el.medication.selling_price)
+        total += parseFloat(el.medication.selling_price) * parseFloat(el.quantity || 1)
       })
       return total
     },
@@ -147,7 +127,7 @@ export default {
       last_name: {required},
       gender: {required},
       birth_date: {required},
-      email: {required, email},
+      email: {required, email: (val) => email(emailFormatter(val))},
       mobile: {required},
     },
   },
@@ -167,7 +147,7 @@ export default {
         })
         this.$store.dispatch('patients/getMedicationRequests')
         this.$emit('success')
-        
+
       } catch (error) {
         this.loading = false
       }
