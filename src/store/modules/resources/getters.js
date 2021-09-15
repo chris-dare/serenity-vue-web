@@ -22,10 +22,8 @@ export default {
           return split[split.length -1]
         })),
       }
-      
       return resources.push(resourceObject)
     })
-
 
     return resources
   },

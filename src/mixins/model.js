@@ -10,7 +10,7 @@ export default {
       localValue: '',
     }
   },
-    
+
   watch: {
     value: {
       immediate: true,
@@ -18,11 +18,15 @@ export default {
         this.localValue = newVal
       },
     },
-    
-    localValue(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$emit('input', newVal)
-      }
+
+    localValue: {
+      immediate: true,
+      deep: true,
+      handler(newVal, oldVal) {
+        if (newVal !== oldVal) {
+          this.$emit('input', newVal)
+        }
+      },
     },
   },
 }

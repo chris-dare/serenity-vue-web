@@ -32,7 +32,7 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
-              <p>{{ $date.formatDate(row.start, 'yyyy/MM/dd') }}</p>
+              <p>{{ $date.formatDate(row.start, 'dd MMM, yyyy') }}</p>
               <p class="text-secondary text-xs">{{ $date.formatDate(row.start, 'HH:mm a') }} - {{ $date.formatDate(row.end, 'HH:mm a') }}</p>
             </div>
           </cv-data-table-cell>

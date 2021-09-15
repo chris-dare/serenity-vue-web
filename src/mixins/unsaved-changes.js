@@ -9,13 +9,13 @@ export default {
     }
   },
 
-  beforeRouteLeave(to, from, next) {
-    if (this.dataHasNotChanged() || this.mode === 'update') {
-      return next()
-    }
+  // beforeRouteLeave(to, from, next) {
+  //   if (this.dataHasNotChanged() || this.mode === 'update') {
+  //     return next()
+  //   }
 
-    this.confirmChanges(next)
-  },
+  //   this.confirmChanges(next)
+  // },
 
   computed: {
     dataObj() {
@@ -48,9 +48,9 @@ export default {
       this.$trigger('actions-modal:open', {
         confirmButtonText: 'stay',
         cancelButtonText: 'discard',
+        cancelButtonVariant: 'danger',
         label: 'You have unsaved changes. Do you want to discard them or save them?',
         callback: async () => {
-          console.log('here')
         },
         cancel: async () => {
           this.resetDirtyState()

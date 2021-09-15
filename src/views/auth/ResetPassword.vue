@@ -21,16 +21,18 @@
           </p>
 
           <div class="mt-8">
-            <cv-text-input
+            <FormInput
               v-model="form.password"
+              required
               :invalid-message="$utils.validateRequiredField($v, 'password')"
               label="Enter new password"
               type="password"
               class="se-dark-input my-4"
             />
-            <cv-text-input
+            <FormInput
               v-model="form.confirm_password"
               v-nested-keyup:input.enter="reset"
+              required
               :invalid-message="$utils.validateRequiredField($v, 'confirm_password')"
               label="Repeat new password"
               type="password"

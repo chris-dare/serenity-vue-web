@@ -9,8 +9,8 @@
     </PatientInfoCard>
 
     <div>
-      <PatientDetailsNav />
-      
+      <DetailPageNav />
+
       <router-view />
     </div>
     <SinglePatientModals />
@@ -20,7 +20,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import SinglePatientModals from '@/components/patients/modals/SinglePatientModals'
-import PatientDetailsNav from '@/components/patients/PatientDetailsNav'
+import DetailPageNav from '@/components/patients/DetailPageNav'
 import PatientInfoCard from '@/components/patients/PatientInfoCard'
 
 export default {
@@ -28,7 +28,7 @@ export default {
 
   components: {
     SinglePatientModals,
-    PatientDetailsNav,
+    DetailPageNav,
     PatientInfoCard,
     ReceptionActions: () => import('@/components/patients/actions/ReceptionActions'),
     OPDActions: () => import(/* webpackPrefetch: true */ '@/components/patients/actions/OPDActions'),
@@ -58,25 +58,28 @@ export default {
     },
   },
 
-  beforeRouteEnter (to, from, next) {
-    next(async vm => {
-      try {
-        vm.loading = true
-        await vm.initSinglePatientInformation(vm.id)
-        vm.loading = false
-      } catch (error) {
-        vm.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
-        vm.loading = false
-      }
-      
-      
-    })
+  watch: {
+    $route: {
+      immediate: true,
+      async handler(route, oldRoute) {
+        if (route.params.id === oldRoute?.params?.id) {
+          return
+        }
+        try {
+          this.loading = true
+          await this.initSinglePatientInformation(this.id)
+          this.loading = false
+        } catch (error) {
+          this.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
+          this.loading = false
+        }
+      },
+    },
   },
 
-  beforeRouteLeave (to, from, next) {
-    next(async vm => {
-      await vm.refresh()
-    })
+  beforeRouteLeave (from, to, next) {
+    this.refresh()
+    next()
   },
 
   methods: {

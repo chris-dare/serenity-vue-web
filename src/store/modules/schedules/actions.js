@@ -46,7 +46,6 @@ export default {
     try {
       const schedule = new Schedule(payload).getUpdateView()
       const provider = rootState.auth.provider
-      console.log(payload)
       const { data } = await SchedulesAPI
         .update(provider.id, payload.practitioner.id, payload.id, schedule)
 

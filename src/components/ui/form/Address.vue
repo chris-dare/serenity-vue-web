@@ -6,7 +6,6 @@
       type="text"
       placeholder="Ghana post code"
       class="inherit-full-input"
-      :invalid-message="$utils.validateRequiredField($v, 'postal_code')"
       @input="onChange"
     />
     <cv-text-input
@@ -26,29 +25,14 @@
       :error-message="$utils.validateRequiredField($v, 'country')"
       @input="onChange"
     />
-    
-    <cv-select
+
+    <MultiSelect
       v-model="form.state"
-      label="Region"
-      class="inherit-full-input"
-      :invalid-message="$utils.validateRequiredField($v, 'state')"
-      @input="onChange"
-    >
-      <cv-select-option
-        disabled
-        selected
-        hidden
-      >
-        Region
-      </cv-select-option>
-      <cv-select-option
-        v-for="(region, index) in regions"
-        :key="index"
-        :value="region"
-      >
-        {{ region }}
-      </cv-select-option>
-    </cv-select>
+      :options="regions"
+      :error-message="$utils.validateRequiredField($v, 'state')"
+      title="Region / State"
+      placeholder="Region / State"
+    />
   </div>
 </template>
 
@@ -71,19 +55,12 @@ export default {
     },
   },
 
-  data() {
-    return {
-      useOptions: ['home', 'work', 'temp', 'old', 'billing'],
-      typeOptions: ['postal', 'physical', 'both'],
-    }
-  },
-
   validations() {
     return {
       form: {
         state: {
           required: requiredIf(() => {
-            return this.addressHasValue
+            return this.addressHasValue && !isEmpty(this.regions)
           }),
         },
         line: {
@@ -96,19 +73,19 @@ export default {
             return this.addressHasValue
           }),
         },
-        postal_code: {
-          required: requiredIf(() => {
-            return this.addressHasValue
-          }),
-        },
       },
     }
   },
 
   computed: {
     ...mapState({
-      regions: (state) => state.global.regions,
+      countries: state => state.global.countries,
     }),
+
+    regions() {
+      if (!this.form.country) return []
+      return this.countries.find(country => country.code === this.form.country).subdivisions
+    },
 
     addressHasValue() {
       return !isEmpty(this.form)

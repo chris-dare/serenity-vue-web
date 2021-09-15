@@ -1,13 +1,34 @@
 import EncountersAPI from '@/api/encounters'
 import Vue from 'vue'
 import Encounter from '@/models/Encounter'
-import { SET_ENCOUNTERS, UPDATE_ENCOUNTER, SET_ENCOUNTER  } from './mutation-types'
+import { SET_ENCOUNTERS, UPDATE_ENCOUNTER, SET_ENCOUNTER, SET_ENCOUNTER_STATE } from './mutation-types'
 
 export default {
-  async getEncounters({ commit, rootState }, id) {
+  async initSinglePatientEncounterInformation({dispatch}, {encounter, patient }) {
+    await dispatch('getEncounter', encounter)
+    dispatch('visits/getPatientCurrentVisits', {patient, status: 'arrived'}, { root:true })
+    await dispatch('patients/getPatient', patient, { root:true })
+    dispatch('setCurrentEncounterState')
+    dispatch('patients/getServiceRequests', patient, { root:true })
+    dispatch('patients/getMedicationRequests', { patient }, { root:true })
+    dispatch('patients/getObservations', { refresh: true, filters: { patient }}, { root:true })
+    dispatch('patients/getDiagnosis', patient, { root:true })
+    dispatch('patients/getNotes', patient, { root:true })
+    dispatch('diagnostic/getDiagnosticReports', patient , { root:true })
+    dispatch('resources/getEncounterStatuses', null, { root:true })
+    dispatch('patients/getReferrals', patient , { root:true })
+    dispatch('patientAllergies/getAllergies', patient , { root:true })
+    dispatch('resources/getObservationUnitTypes', null, { root:true })
+    dispatch('resources/getVitalsUnitTypes', null, { root:true })
+    dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
+    dispatch('resources/getSystemExamUnitTypes', null, { root:true })
+    dispatch('resources/getEncounterPriorities', null, { root:true })
+  },
+
+  async getEncounters({ commit, rootState }, params) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await EncountersAPI.list(provider.id, id)
+      const { data } = await EncountersAPI.list(provider.id, params)
       commit(SET_ENCOUNTERS, data)
       commit(SET_ENCOUNTER, data.find(encounter => encounter.status === 'in-progress') || data[0])
     } catch ({ response: { data: error } }) {
@@ -39,8 +60,8 @@ export default {
       let visit = rootGetters['patients/visitId']
       let user = rootState.auth.provider
       let location = rootState.global.location
-      const encounter = new Encounter(payload).getCreateView(user,location,appointment)
-      const { data } = await EncountersAPI.create(provider.id, { ... encounter, visit })
+      const encounter = new Encounter(payload).getCreateView(user,location, appointment )
+      const { data } = await EncountersAPI.create(provider.id, { ... encounter, visit, service_provider: provider.id })
       commit(UPDATE_ENCOUNTER, data)
       commit(SET_ENCOUNTER, data)
     } catch (error) {
@@ -68,6 +89,7 @@ export default {
       const { data } = await EncountersAPI.update(provider.id, encounter)
       commit(SET_ENCOUNTER, data)
       commit(UPDATE_ENCOUNTER, data)
+      commit(SET_ENCOUNTER_STATE, 0)
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
@@ -91,7 +113,7 @@ export default {
   async createNote({ commit, state, rootState, dispatch }, payload) {
     try {
       let encounter = state.currentEncounter
-      
+
       const provider = rootState.auth.provider
       encounter.encounter_patient_notes.push({ ...payload })
       const { data } = await EncountersAPI.update(provider.id, encounter)
@@ -111,7 +133,7 @@ export default {
         if (a.id === payload.id) return payload
         return a
       })
-  
+
       const provider = rootState.auth.provider
       const { data } = await EncountersAPI.update(provider.id, encounter)
       commit(SET_ENCOUNTER, data)
@@ -126,7 +148,7 @@ export default {
     try {
       let encounter = state.currentEncounter
       encounter.encounter_patient_notes = encounter.encounter_patient_notes.filter((es) => es.id !== id)
-  
+
       const provider = rootState.auth.provider
       const { data } = await EncountersAPI.update(provider.id, encounter)
       commit(SET_ENCOUNTER, data)
@@ -140,7 +162,7 @@ export default {
   async createCarePlan({ commit, state, rootState }, payload) {
     try {
       let encounter = state.currentEncounter
-      
+
       const provider = rootState.auth.provider
       encounter.encounter_care_plan.push(payload)
       const { data } = await EncountersAPI.update(provider.id, encounter)
@@ -159,7 +181,7 @@ export default {
         if (a.id === payload.id) return payload
         return a
       })
-  
+
       const provider = rootState.auth.provider
       const { data } = await EncountersAPI.update(provider.id, encounter)
       commit(SET_ENCOUNTER, data)
@@ -170,7 +192,20 @@ export default {
     }
   },
 
-  
+  async deleteCarePlan({ commit, state, rootState}, id) {
+    try {
+      let encounter = state.currentEncounter
+      encounter.encounter_care_plan = encounter.encounter_care_plan.filter((es) => es.id !== id)
+
+      const provider = rootState.auth.provider
+      const { data } = await EncountersAPI.update(provider.id, encounter)
+      commit(SET_ENCOUNTER, data)
+    } catch ({ response: { data: error } }) {
+      throw error
+    }
+  },
+
+
 
   async updateDiagnosis({ commit, state, rootState}, payload) {
     try {
@@ -185,7 +220,7 @@ export default {
       throw error
     }
   },
-  
+
 
   async deleteDiagnosis({ commit, state, rootState}, id) {
     try {
@@ -200,5 +235,8 @@ export default {
     }
   },
 
-  
+  setCurrentEncounterState({ commit, state }) {
+    commit(SET_ENCOUNTER_STATE, state.encounterState+1)
+  },
+
 }

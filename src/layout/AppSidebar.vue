@@ -1,7 +1,7 @@
 <template>
   <cv-side-nav
     id="side-nav"
-    class="bg-serenity-primary max-w-xl transition-all duration-50"
+    class="bg-serenity-primary max-w-xl transition-all duration-50 overflow-visible"
     :class="[open ? 'w-56' : 'w-12']"
   >
     <div
@@ -16,6 +16,7 @@
       </p>
       <AppNavItem
         :to="{ name: item.to }"
+        :label="item.label"
       >
         <div class="flex items-center space-x-3 pl-4 text-white transition-all duration-50">
           <component
@@ -30,27 +31,29 @@
 </template>
 
 <script>
-import Template from '@carbon/icons-vue/es/template/32'
-import Cross from '@carbon/icons-vue/es/health-cross/32'
-import Reference from '@carbon/icons-vue/es/watson-health/cross-reference/32'
-import Events from '@carbon/icons-vue/es/events/32'
-import Settings from '@carbon/icons-vue/es/settings/32'
-import Baggage from '@carbon/icons-vue/es/shopping--bag/32'
-import Schedule from '@carbon/icons-vue/es/event--schedule/32'
-import Notification from '@carbon/icons-vue/es/notification/32'
-import Medication from '@carbon/icons-vue/es/medication/32'
-import Help from '@carbon/icons-vue/es/help/32'
-import Star from '@carbon/icons-vue/es/star/32'
-import Wallet from '@carbon/icons-vue/es/wallet/32'
-import Align from '@carbon/icons-vue/es/align-box--bottom-left/32'
-import Folder from '@carbon/icons-vue/es/folder/32'
-import Security from '@carbon/icons-vue/es/security/32'
-import Categories from '@carbon/icons-vue/es/categories/32'
-import Medical from '@carbon/icons-vue/es/image--medical/32'
-import Insights from '@carbon/icons-vue/es/activity/32'
-import Money from '@carbon/icons-vue/es/money/32'
-import Report from '@carbon/icons-vue/es/report/32'
+import Template from '@carbon/icons-vue/es/template/16'
+import Cross from '@carbon/icons-vue/es/health-cross/16'
+import Reference from '@carbon/icons-vue/es/watson-health/cross-reference/16'
+import List from '@carbon/icons-vue/es/list/16'
+import Events from '@carbon/icons-vue/es/events/16'
+import Settings from '@carbon/icons-vue/es/settings/16'
+import Baggage from '@carbon/icons-vue/es/shopping--bag/16'
+import Schedule from '@carbon/icons-vue/es/event--schedule/16'
+import Notification from '@carbon/icons-vue/es/notification/16'
+import Medication from '@carbon/icons-vue/es/medication/16'
+import Help from '@carbon/icons-vue/es/help/16'
+import Star from '@carbon/icons-vue/es/star/16'
+import Wallet from '@carbon/icons-vue/es/wallet/16'
+import Align from '@carbon/icons-vue/es/align-box--bottom-left/16'
+import Folder from '@carbon/icons-vue/es/folder/16'
+import Security from '@carbon/icons-vue/es/security/16'
+import Categories from '@carbon/icons-vue/es/categories/16'
+import Medical from '@carbon/icons-vue/es/image--medical/16'
+import Insights from '@carbon/icons-vue/es/activity/16'
+import Money from '@carbon/icons-vue/es/money/16'
+import Report from '@carbon/icons-vue/es/report/16'
 import AppNavItem from '@/layout/AppNavItem'
+import resize from '@/mixins/resize'
 import { mapGetters, mapState } from 'vuex'
 
 export default {
@@ -58,8 +61,10 @@ export default {
 
   components: {
     AppNavItem, Security, Categories, Template, Cross, Reference, Events, Settings, Baggage, Notification, Help, Schedule, Star, Wallet, Align, Folder,
-    Medication, Money, Report, Insights, Medical,
+    Medication, Money, Report, Insights, Medical, List,
   },
+
+  mixins: [resize],
 
   data() {
     return {
@@ -75,6 +80,10 @@ export default {
     ...mapGetters({
       navItems: 'global/navItems',
     }),
+  },
+
+  created() {
+    // this.open = this.isTablet
   },
 
   events: {

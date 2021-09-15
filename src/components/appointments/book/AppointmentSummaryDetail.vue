@@ -103,13 +103,14 @@ export default {
         }
 
         this.$emit('save', appointment)
-        
+        this.$toast.open('Appointment successfully saved')
+
         this.loading = false
       } catch (error) {
         this.loading = false
       }
 
-      
+
     },
   },
 

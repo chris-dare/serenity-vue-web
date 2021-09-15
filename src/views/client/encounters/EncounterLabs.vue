@@ -14,73 +14,18 @@
         Order Labs/ imaging
       </p>
 
+      <ServiceRequestForm
+        v-model="form"
+        :v="$v"
+      />
 
-      <div class="space-y-4">
-        <MultiSelect
-          v-model="form.code"
-          title="Choose lab type"
-          :multiple="false"
-          :options="labProceedures"
-          track_by="id"
-          label="healthcare_service_name"
-          custom-field="healthcare_service_name"
-          placeholder="Search or choose a lab text to be performed"
-          :invalid-message="$utils.validateRequiredField($v, 'code')"
-        />
-
-  
-        <cv-text-area
-          v-model="form.order_detail[0].display"
-          label="Order details"
-          placeholder="Details for this order"
-          :rows="4"
-          class="col-span-2"
-          :invalid-message="$utils.validateRequiredField($v, 'order_detail')"
-        />
-
-        <cv-text-area
-          v-model="form.patient_instruction"
-          label="Note"
-          placeholder="Leave a note for the lab tecnician"
-          :rows="4"
-          class="col-span-2"
-        />
-
-        <MultiSelect
-          v-model="form.priority"
-          title="Priority"
-          :multiple="false"
-          :options="priorities"
-          :track-by="null"
-          placeholder="Routine, ASAP, Urgent"
-        />
-        
-
-        <div class="grid grid-cols-2 gap-4">
-          <cv-text-input
-            v-model="form.service_request_bodysite[0].display"
-            type="text"
-            label="Bodysite"
-            placeholder="Body site"
-            :invalid-message="$utils.validateRequiredField($v, 'service_request_bodysite')"
-          />
-
-          <cv-text-input
-            v-model="form.specimen"
-            type="text"
-            label="Specimen"
-            placeholder="Specimen"
-          />
-        </div>
-      </div>
-
-      <div class="flex space-x-2">
+      <div class="flex justify-end space-x-2">
         <SeButton
           :loading="loading"
           :icon="add"
           @click="submit"
         >
-          <template v-if="mode === 'create'">Add Another test</template>
+          <template v-if="mode === 'create'">Create test</template>
           <template v-else>Update test</template>
         </SeButton>
         <SeButton
@@ -93,50 +38,49 @@
         </SeButton>
       </div>
 
-      
-    
+      <div
+        v-if="mode === 'create'"
+        class="space-y-2"
+      >
+        <p class="font-semibold">Labs</p>
 
-      <div v-if="mode === 'create'">
-        <p class="mb-2 font-semibold">Previous Labs</p>
+        <FilterGroup
+          v-model="selectedFilter"
+          :filters="filters"
+        />
 
         <DataTable
           small
-          :data="currentEncounterServiceRequests"
+          :data="labs"
           :columns="columns"
           no-data-label="No labs"
         >
           <template #default="{row}">
             <cv-data-table-cell>
-              <p>{{ $date.formatDate(row.authored_on, 'yyyy/MM/dd') }}</p>
+              <p>{{ $date.formatDate(row.authored_on, 'dd MMM, yyyy') }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p>{{ row.code }}</p>
+              <p>{{ row.display }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <p>{{ row.priority | capitalize }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p>{{ $utils.getFirstData(row.order_detail) }}</p>
+              <p>{{ row.purpose || '-' }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
-              <p>{{ $utils.getFirstData(row.service_request_bodysite) }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ row.specimen }}</p>
+              <p>{{ row.note || '-' }}</p>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div class="flex items-center space-x-2">
                 <Edit
+                  v-if="row.encounter === $route.params.encounter"
                   class="w-4 h-4 cursor-pointer"
                   @click="$router.push({ name: 'EditEncounterLab', params: { labId: row.id } })"
                 />
                 <Trash
                   class="w-4 h-4 cursor-pointer"
-                  @click="confirmDeleteLab(lab)"
-                />
-                <See
-                  class="w-4 h-4 cursor-pointer"
-                  @click="viewEncounter(row)"
+                  @click="confirmDeleteLab(row)"
                 />
               </div>
             </cv-data-table-cell>
@@ -170,16 +114,19 @@
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Add from '@carbon/icons-vue/es/chevron--right/32'
-import See from '@carbon/icons-vue/es/view/32'
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { required, minLength } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
+import ServiceRequestForm from '@/components/forms/ServiceRequestForm'
+import unsavedChanges from '@/mixins/unsaved-changes'
 
 export default {
   name: 'EncountersLabs',
 
   components: {
-    See,
+    ServiceRequestForm,
   },
+
+  mixins: [unsavedChanges],
 
   props: {
     labId: {
@@ -193,36 +140,26 @@ export default {
       icon: ChevronRight,
       add: Add,
       form: {
-        order_detail: [{display: ''}],
-        service_request_bodysite: [{display: ''}],
-        service_request_category: [{display: 'laboratory-procedure'}],
+        priority: 'routine',
+        intent: 'plan',
       },
+      selectedFilter: 'current',
       categories: [ 'laboratory-procedure', 'imaging', 'counselling', 'education', 'surgical-procedure' ],
       loading: false,
       propertiesToCompareChanges: ['form'],
-      columns: ['Date', 'Lab type', 'Priority', 'Order detail', 'Bodysite', 'Specimen', ''],
+      columns: ['Date', 'Lab test', 'Priority', 'Purpose', 'Note', 'Action'],
+      priorities: [
+        {display: 'Urgent (highest)', code: 'urgent'},
+        {display: 'ASAP (medium)', code: 'asap'},
+        {display: 'Routine (lowest)', code: 'routine'},
+      ],
       deleteLoading: false,
     }
   },
 
   validations: {
     form: {
-      service_request_category: { required },
       code: { required },
-      order_detail: {
-        required,
-        minLength: minLength(1),
-        $each: {
-          display: { required },
-        },
-      },
-      service_request_bodysite: {
-        required,
-        minLength: minLength(1),
-        $each: {
-          display: { required },
-        },
-      },
     },
   },
 
@@ -230,22 +167,53 @@ export default {
     ...mapState({
       provider: (state) => state.auth.provider,
       location: (state) => state.global.location,
-      priorities: (state) => state.global.priorities,
       encounter: (state) => state.encounters.currentEncounter,
     }),
 
     ...mapGetters({
+      currentPatientServiceRequests: 'encounters/currentPatientServiceRequests',
       currentEncounterServiceRequests: 'encounters/currentEncounterServiceRequests',
       labProceedures: 'services/labProceedures',
+      visitId : 'visits/visitId',
     }),
+
+    labs() {
+      if (this.selectedFilter === 'all') {
+        return this.currentPatientServiceRequests
+      }
+
+      if (this.selectedFilter === 'previous') {
+        return this.currentPatientServiceRequests.filter(request => request.encounter !== this.$route.params.encounter)
+      }
+
+      return this.currentEncounterServiceRequests
+    },
+
     mode() {
       return this.labId ? 'update' : 'create'
+    },
+
+    filters() {
+      return [
+        { display: 'All labs', code: 'all' },
+        { display: 'Current encounter labs', code: 'current' },
+        { display: 'Previous labs', code: 'previous' },
+      ]
     },
   },
 
   watch: {
-    labId() {
-      this.init()
+    labId: {
+      immediate: true,
+      handler() {
+        this.init()
+      },
+    },
+    currentEncounterServiceRequests: {
+      immediate: true,
+      handler() {
+        this.init()
+      },
     },
   },
 
@@ -260,7 +228,6 @@ export default {
     init() {
       if(this.mode === 'update'){
         let lab = this.currentEncounterServiceRequests.find(el => el.id === this.labId)
-        lab = JSON.parse(JSON.stringify(lab))
         Object.assign(this.form, lab)
       }
     },
@@ -282,7 +249,7 @@ export default {
     },
 
     submit(reroute= false) {
-      if (reroute && this.dataHasNotChanged) {
+      if (reroute && this.dataHasNotChanged()) {
         this.$router.push({ name: 'EncounterMedications', params: { id: this.$route.params.id }})
         return
       }
@@ -297,10 +264,11 @@ export default {
       if (this.mode === 'update') {
         this.update()
       } else {
-        // this.form.requesting_practitioner_role = this.provider.practitionerRoleId
+        this.form.requesting_practitioner_role = this.provider.practitionerRoleId
         this.form.patient = this.$route.params.id
         this.form.location = this.location.id
         this.form.encounter = this.encounter.id
+        this.form.visit_id = this.visitId
         this.save(reroute)
       }
     },
@@ -309,6 +277,7 @@ export default {
       this.loading = true
 
       try {
+        this.form.status = this.$isCurrentWorkspace('IPD') ? 'active' : 'draft'
         await this.createServiceRequest([this.form])
         this.loading = false
         this.$toast.open({
@@ -358,7 +327,7 @@ export default {
     },
 
     cancelUpdate() {
-      this.form = {}
+      this.$resetData()
       this.$v.$reset()
       this.$router.go(-1)
     },

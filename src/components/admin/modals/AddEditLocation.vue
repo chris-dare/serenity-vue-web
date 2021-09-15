@@ -12,12 +12,13 @@
         class="space-y-8"
       >
         <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'New' }} location</p>
-        <cv-text-input
+        <FormInput
           v-model="form.location_name"
           type="text"
           label="Location name"
           placeholder="eg Valley Heights"
           :invalid-message="$utils.validateRequiredField($v, 'location_name')"
+          required
         />
 
         <FormCountrySelect
@@ -26,37 +27,41 @@
           placeholder="Select a country"
         />
 
-        <cv-text-input
+        <FormInput
           v-model="form.city"
           type="text"
           label="City"
           placeholder="eg Accra"
           :invalid-message="$utils.validateRequiredField($v, 'city')"
+          required
         />
 
-        <cv-text-input
+        <FormInput
           v-model="form.street_address"
           type="text"
           label="Location Address"
           placeholder="eg No Bana Street"
           :invalid-message="$utils.validateRequiredField($v, 'street_address')"
+          required
         />
 
-        <cv-text-input
+        <FormInput
           v-model="form.postal_code"
           label="Postal Code"
           type="text"
           placeholder="eg 00233"
           :invalid-message="$utils.validateRequiredField($v, 'postal_code')"
+          required
         />
 
         <MsisdnPhoneInput
           v-model="form.location_contact_number"
           label="Location contact number"
           :error-message="$utils.validateRequiredField($v, 'location_contact_number')"
+          required
           @input="$v.form.location_contact_number.$touch()"
         />
-        
+
         <SeButton
           :loading="loading"
           full

@@ -17,7 +17,7 @@
         <!-- <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+          class="px-4 bg-white hover:bg-white mr-2 text-placeholder"
           v-if="workspaceType !== 'Reception'"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2"></div>
@@ -26,7 +26,7 @@
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+          class="px-4 bg-white hover:bg-white mr-2 text-placeholder"
           @click="search = 'in-patient'"
         >
           <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
@@ -74,7 +74,7 @@
           <cv-data-table-cell>
             <router-link
               tag="div"
-              :to="{name: 'Pharmacy:Patient', params: {id: row.id}}"
+              :to="{name: 'Pharmacy:PatientSummary', params: {id: row.id}}"
               class="flex items-center cursor-pointer"
             >
               View

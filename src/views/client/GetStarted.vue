@@ -1,5 +1,5 @@
 <template>
-  <div class="w-4/5 mx-auto space-y-6">
+  <div class="max-w-7xl mx-auto space-y-6">
     <UserDetailsHeader />
     <img src="@/assets/img/started.svg">
     <div>

@@ -12,11 +12,11 @@
       <div
         v-for="(item, index) in data"
         :key="index"
-        
+
         @click="$emit(item)"
       >
         <div
-          v-if="$userCan(item === 'delete' ? 'pppointments.delete' : 'appointments.write')"
+          v-if="$userCan(item === 'delete' ? 'appointments.delete' : 'appointments.write')"
           class="h-12 flex items-center px-6 hover:bg-gray-50 capitalize"
         >
           {{ item }}

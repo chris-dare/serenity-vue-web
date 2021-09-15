@@ -1,18 +1,34 @@
 <template>
   <div>
+    <div class="my-4">
+      <p class="text-lg font-bold pt-3"> Current Patient </p>
+      <div class="flex items-center py-2">
+        <div class="w-1/3">
+          <p class="text-secondary text-xs">Name</p>
+          <p>{{ internalPatient.fullName || '-' }}</p>
+        </div>
+        <div class="w-1/3">
+          <p class="text-secondary text-xs"> Phone Number</p>
+          <p>{{ internalPatient.phone || '-' }}</p>
+        </div>
+        <div class="w-1/3">
+          <p class="text-secondary text-xs"> Bio Info </p>
+          <p>{{ internalPatient.gender_age_description || '-' }}</p>
+        </div>
+      </div>
+    </div>
     <p class="text-primary mb-4">Select your patient below</p>
     <Search
       v-model="search"
       placeholder="Search for patient, enter name or MR number"
       class="mb-4"
     />
-
     <cv-data-table-skeleton
       v-if="dataLoading"
       :columns="2"
       :rows="3"
     />
-    
+
     <!-- header -->
     <div v-else>
       <div
@@ -29,14 +45,14 @@
       </div>
       <!-- body -->
       <div
-      
+
         class="divide-y divide-dark divide-opacity-10 divide-solid"
       >
         <div
-          v-for="(row, rowIndex) in filteredData"
+          v-for="(row, rowIndex) in normalizedData"
           :key="`${rowIndex}`"
           :class="[`grid-cols-${columns.length + 1}`, internalPatient.id === row.id ? 'bg-gray-100' : 'bg-white']"
-          class="grid gap-4 items-center hover:bg-gray-100 p-4 cursor-pointer"
+          class="grid grid-cols-3 gap-4 items-center hover:bg-gray-100 p-4 cursor-pointer"
           @click="internalPatient = row"
         >
           <InfoImageBlock
@@ -53,12 +69,12 @@
           </div>
         </div>
         <cv-pagination
-          :number-of-items="normalizedData.length"
-          :page="page" 
+          :number-of-items="dataCount"
+          :page="page"
           :backwards-button-disabled="page === 1"
           :forwards-button-disabled="false"
           :page-sizes="pagination.pageSizes"
-          @change="actionOnPagination"
+          @change="storePagination"
         />
       </div>
     </div>
@@ -66,8 +82,11 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
+import debounce from 'lodash/debounce'
 import data from '@/mixins/data'
+import isEmpty from 'lodash/isEmpty'
+
 export default {
   name: 'SelectPatientTable',
 
@@ -86,16 +105,25 @@ export default {
       type: Boolean,
       default: false,
     },
+    hideSelectedPatient: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data () {
     return {
       selected: false,
+      searchTerms: null,
     }
   },
-  
+
 
   computed: {
+    ...mapState({
+      total: (state) => state.patients.patientsCount,
+      meta: (state) => state.patients.patientsMeta,
+    }),
     ...mapGetters({
       data: 'patients/patients',
     }),
@@ -108,17 +136,42 @@ export default {
         return this.patient
       },
     },
+
+    patientSelected() {
+      return this.internalPatient && !isEmpty(this.internalPatient)
+    },
+  },
+
+
+  watch: {
+    search(val) {
+      this.searchPatients(val)
+    },
   },
 
   created() {
-    this.searchTerms = ['first_name', 'last_name', 'mr_number', 'mobile']
-    this.paginate= true
     this.pageLength = 5
-    this.pageSizes = [5,10, 15, 20, 25]
-
-    if (this.patient.first_name) {
+    this.pageSizes = [5, 10, 15, 20, 25]
+    if (!this.hideSelectedPatient && this.patient.first_name) {
       this.search = this.patient.first_name
     }
+  },
+
+
+  mounted() {
+    this.paginate = true
+    this.pageLength = 5
+  },
+
+  methods: {
+    ...mapActions({
+      getData: 'patients/getPatients',
+      searchPatientsStore: 'patients/searchPatients',
+    }),
+
+    searchPatients: debounce(function(search) {
+      this.searchPatientsStore({ search, page: 1, page_size: 5 })
+    }, 300, false),
   },
 }
 </script>

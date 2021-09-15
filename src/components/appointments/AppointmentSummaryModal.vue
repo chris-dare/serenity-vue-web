@@ -103,6 +103,7 @@ export default {
   computed: {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
+      provider: (state) => state.auth.provider,
     }),
 
     canStartVisit() {
@@ -145,6 +146,7 @@ export default {
           assigned_to: this.appointment.id,
           visit_class: 'ambulatory',
           arrived_at: this.$date.queryNow(),
+          service_provider: this.provider.id,
         })
         this.visible = false
         this.loading = false

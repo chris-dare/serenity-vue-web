@@ -5,10 +5,13 @@
   >
     <input
       id="file"
+      ref="input"
       type="file"
       name="file"
+      :value="value"
       class="inputfile hidden"
-      accept="image/*"
+      accept="image/*,.pdf"
+      v-on="inputListeners"
     >
     <label
       class="w-full"
@@ -43,6 +46,23 @@ export default {
     customClass: {
       type: String,
       default: 'h-12 border-t border-solid border-serenity-subtle-border',
+    },
+
+    value: {
+      type: String,
+      default: null,
+    },
+  },
+
+  computed: {
+    // Bind listeners at the component level to the embedded input element and
+    // add our own input listener to service the v-model. See:
+    // https://vuejs.org/v2/guide/components-custom-events.html#Customizing-Component-v-model
+    inputListeners() {
+      return {
+        ...this.$listeners,
+        input: event => this.$emit('input', event.target.value),
+      }
     },
   },
 }

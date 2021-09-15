@@ -27,6 +27,7 @@
     <ToggleList
       title="Chief Complaint"
       class="pt-4"
+      :status="saving"
     >
       <cv-text-area
         v-model="form.chief_complaint"
@@ -38,6 +39,7 @@
     <ToggleList
       title="History of Present illness"
       class="pt-4"
+      :status="saving"
     >
       <cv-text-area
         v-model="form.history_of_presenting_illness"
@@ -61,19 +63,23 @@
     <ToggleList
       title="Family History"
       class="pt-4"
+      :status="saving"
     >
       <cv-text-area
         v-model="family.FAMILY_HISTORY"
         :rows="5"
         placeholder="Family history"
+        @input="throttledSendHistory"
       />
-
-      <div class="flex justify-end mt-2">
-        <SeButton @click="throttledSendHistory">save</SeButton>
-      </div>
     </ToggleList>
     <ToggleList
-      title="Review of systems"
+      title="General review"
+      class="pt-4"
+    >
+      <EncounterReviewSystems type="GENERAL" />
+    </ToggleList>
+    <ToggleList
+      title="Systemic review"
       class="pt-4"
     >
       <EncounterReviewSystems />
@@ -114,14 +120,15 @@
           <Tag
             v-for="(note, index) in currentEncounterNotes"
             :key="index"
-            class="flex items-center space-x-2"
             variant="success"
           >
-            <span>{{ note.display }}</span>
-            <Close
-              class="w-4 cursor-pointer"
-              @click="removeNote(note.id)"
-            />
+            <div class="flex items-center space-x-2">
+              <span>{{ note.display }}</span>
+              <Close
+                class="w-4 cursor-pointer"
+                @click="removeNote(note.id)"
+              />
+            </div>
           </Tag>
         </div>
       </div>
@@ -150,6 +157,8 @@ export default {
       notes: {},
       open: [false, false, false, false, false, false],
       loading: false,
+      historySaved: true,
+      saving: null,
     }
   },
 
@@ -198,27 +207,44 @@ export default {
     }),
 
     async submitAnswer() {
-      await this.updateEncounter(this.form)
+      this.saving = 'saving'
+      try {
+        await this.updateEncounter(this.form)
+        this.saving = 'saved'
+      } catch (error) {
+        this.saving = 'error'
+      }
+
     },
 
     throttledSend: debounce(function() {
       this.submitAnswer()
     }, 1500),
 
-    async throttledSendHistory() {
-      await this.createObservation({ payload: { FAMILY_HISTORY: this.family.FAMILY_HISTORY }, patient: this.$route.params.id })
+    throttledSendHistory: debounce(function() {
+      this.sendHistory()
+    }, 1500),
+
+    async sendHistory() {
+      this.saving = 'saving'
+      try {
+        await this.createObservation({ payload: { FAMILY_HISTORY: this.family.FAMILY_HISTORY }, patient: this.$route.params.id })
+        this.saving = 'saved'
+      } catch (error) {
+        this.saving = 'error'
+      }
     },
 
     actionChange(ev) {
       this.open = this.$refs.acc.state.map((item, index) => index === ev.changedIndex)
-      // this.$refs.acc.state = this.$refs.acc.state.map((item, index) => index === ev.changedIndex);
     },
 
     async createNote() {
       this.loading = true
       try {
         const noteForm = { display: this.notes.display, patient: this.$route.params.id }
-        // practitioner_role: this.provider.practitionerRoleId }
+        // TODO: follow up with the notes and practitioner role issue
+        // practitioner_role: this.$providerId
         await this.createPatientNote(noteForm)
         this.$toast.open({
           message: 'Note created successfully',
@@ -230,7 +256,7 @@ export default {
         this.loading = false
       }
     },
-  
+
     async updateNote(data) {
       this.loading = true
       try {
@@ -238,7 +264,7 @@ export default {
         delete noteForm.notes
         await this.updatePatientNote(noteForm)
         this.$toast.open({
-          message: 'Note created successfully',
+          message: 'Note updated successfully',
         })
         this.$trigger('notes:close')
       } catch (error) {
@@ -247,7 +273,7 @@ export default {
         this.loading = false
       }
     },
-  
+
     async removeNote(id) {
       this.loading = true
       try {

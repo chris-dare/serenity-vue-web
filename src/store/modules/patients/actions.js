@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import PatientsAPI from '@/api/patients'
 import Patient from '@/models/Patient'
 import Observation from '@/models/Observation'
@@ -17,7 +16,6 @@ import {
   SET_MEDICATION_REQUESTS,
   UPDATE_SERVICE_REQUEST,
   SET_SERVICE_REQUESTS,
-  SET_DIAGNOSTIC_REPORTS,
   SET_OBSERVATIONS,
   UPDATE_OBSERVATION,
   UPDATE_MEDICATION_REQUEST,
@@ -27,50 +25,69 @@ import {
   DELETE_MEDICATION_REQUEST,
   DELETE_OBSERVATION,
   UPDATE_REFERRAL,
+  DELETE_REFERRAL,
   SET_REFERRALS,
+  SET_PATIENTS_META,
 } from './mutation-types'
 
 export default {
   async initSinglePatientInformation({dispatch}, id) {
     await dispatch('getPatient', id)
-    await dispatch('appointments/getAppointments', { filters: { patient: id, ordering: '-start' } }, { root:true })
-    dispatch('getServiceRequests', id)
-    dispatch('getMedicationRequests')
-    // dispatch('getObservations', {})
+    dispatch('appointments/getAppointments', { filters: { patient: id, ordering: '-start' } }, { root:true })
     dispatch('getObservations', { refresh:true, filters: { patient: id }})
     dispatch('getDiagnosis', id)
     dispatch('getNotes', id)
-    dispatch('getDiagnosticReports')
-    dispatch('encounters/getEncounters', id , { root:true })
+    dispatch('encounters/getEncounters', {patient: id } , { root:true })
     dispatch('resources/getEncounterStatuses', null, { root:true })
     dispatch('patients/getReferrals', id , { root:true })
+    dispatch('patientAllergies/getAllergies', id , { root:true })
     dispatch('resources/getObservationUnitTypes', null, { root:true })
     dispatch('resources/getVitalsUnitTypes', null, { root:true })
     dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
     dispatch('resources/getSystemExamUnitTypes', null, { root:true })
-
+    dispatch('resources/getEncounterPriorities', null, { root:true })
+    dispatch('visits/getPatientCurrentVisits', { patient: id, status: 'arrived' }, { root:true })
   },
 
-  async getPatients({ commit, rootState, state }, refresh = true) {
-    if (!refresh && state.patients.length) {
-      return
-    }
+  async initBillingPatientInformation({ dispatch, state }, id) {
+    await dispatch('getPatient', id)
+
+    let patient = state.currentPatient
+    if(!patient.user?.id) return
+    dispatch('dependents/getDependents', patient.user.id, { root:true })
+    dispatch('billing/getPatientAccounts', { id }, { root:true })
+  },
+
+  async getPatients({ commit, rootState }, params = { page: 1, page_size: 10 }) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await PatientsAPI.list(provider.id)
-      commit(SET_PATIENTS, data)
-      commit(SET_PATIENTS_COUNT, data.length)
+      const { data } = await PatientsAPI.list(provider.id, params)
+      commit(SET_PATIENTS, data.results)
+      commit(SET_PATIENTS_COUNT, data.meta.total)
+      commit(SET_PATIENTS_META, data.meta)
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
+  async searchPatients({ commit, rootState }, params = {}) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await PatientsAPI.list(provider.id, params)
+      commit(SET_PATIENTS, data.results)
     } catch (error) {
       throw error.data || error
     }
   },
 
   async getPatient({ commit, rootState }, id) {
+    if (!id) return
     try {
       const provider = rootState.auth.provider
       const { data } = await PatientsAPI.get(provider.id, id)
       commit(SET_PATIENT_DATA, new Patient(data.data).getNormalizedView())
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -85,6 +102,7 @@ export default {
       commit(SET_PATIENT_DATA, {})
       return data.data
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -98,6 +116,7 @@ export default {
         .update(provider.id,patient)
       commit(UPDATE_PATIENT, data.data)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -109,6 +128,7 @@ export default {
         .delete(provider.id, id)
       commit(DELETE_PATIENT, id)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -131,18 +151,15 @@ export default {
     if (patient) {
       const pat = new Patient(patient).getNormalizedView()
       commit(SET_PATIENT_DATA, pat)
-    }else{
+    } else {
       await dispatch('getPatient', id)
     }
   },
 
-  async getMedicationRequests({ commit, rootState, state}, refresh = false) {
-    if (!refresh && state.patientMedications.length) {
-      return
-    }
+  async getMedicationRequests({ commit, rootState }, params = {}) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await MedicationAPI.list(provider.id)
+      const { data } = await MedicationAPI.list(provider.id, params)
       commit(SET_MEDICATION_REQUESTS, data)
     } catch (error) {
       throw error.data || error
@@ -153,7 +170,12 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await MedicationAPI.create(provider.id, payload)
-      commit(UPDATE_MEDICATION_REQUEST, data)
+
+      data.forEach(element => {
+        commit(UPDATE_MEDICATION_REQUEST, element)
+      })
+
+      return data
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
@@ -197,11 +219,11 @@ export default {
     }
   },
 
-  async getDiagnosticReports({ commit, rootState }) {
+  async getPatientServiceRequests({ commit, rootState }, params) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await ServiceRequestsAPI.reports(provider.id)
-      commit(SET_DIAGNOSTIC_REPORTS, data)
+      const { data } = await ServiceRequestsAPI.list(provider.id, params)
+      commit(SET_SERVICE_REQUESTS, data)
     } catch (error) {
       throw error.data || error
     }
@@ -211,13 +233,12 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await ServiceRequestsAPI.create(provider.id, payload)
-      // data.forEach(request => {
-      commit(UPDATE_SERVICE_REQUEST, data)
-      // })
-      
+      data.forEach(service => {
+        commit(UPDATE_SERVICE_REQUEST, service)
+      })
+      return data
     } catch (error) {
-      Vue.prototype.$utils.error(error)
-      throw error
+      throw error.data || error
     }
   },
 
@@ -227,8 +248,7 @@ export default {
       const { data } = await ServiceRequestsAPI.update(provider.id, payload)
       commit(UPDATE_SERVICE_REQUEST, data)
     } catch (error) {
-      Vue.prototype.$utils.error(error)
-      throw error
+      throw error.data || error
     }
   },
 
@@ -285,11 +305,11 @@ export default {
       const encounter = rootState.encounters.currentEncounter
       const vitals = new Observation(payload).getCreateVitalsView(encounter, patient)
 
-      vitals.forEach(async vital => {
-        const { data } = await ObservationsAPI.create(provider.id, vital)
-        commit(UPDATE_OBSERVATION, data)
+      const { data } = await ObservationsAPI.create(provider.id, vitals)
+
+      data.forEach(async observation => {
+        commit(UPDATE_OBSERVATION, observation)
       })
-      
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
@@ -300,17 +320,28 @@ export default {
     try {
       const provider = rootState.auth.provider
       const encounter = rootState.encounters.currentEncounter
-      const vitals = new Observation(payload).getCreateMultipleObservationView(encounter, patient)
+      const observations = new Observation(payload).getCreateMultipleObservationView(encounter, patient)
 
-      
-      vitals.forEach(async vital => {
-        const { data } = await ObservationsAPI.create(provider.id, vital)
+      observations.forEach(async observation => {
+        const { data } = await ObservationsAPI.create(provider.id, observation)
         commit(UPDATE_OBSERVATION, data)
       })
-      
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
+    }
+  },
+
+  async createDiagnosticObservation({ commit, rootState }, payload ) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ObservationsAPI.create(provider.id, payload)
+      commit(UPDATE_OBSERVATION, data)
+
+      return data
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 
@@ -322,28 +353,22 @@ export default {
 
       history.forEach(async his => {
         const { data } = await ObservationsAPI.create(provider.id, his)
-        console.log('data', data)
         commit(UPDATE_OBSERVATION, data)
       })
-      
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
     }
   },
 
-  
-
   async createSystem({ commit, rootState }, { patient, payload }) {
     try {
       const provider = rootState.auth.provider
       const encounter = rootState.encounters.currentEncounter
-      const system = new Observation(payload).getCreateObservationView(encounter, patient, payload.field, payload.value, 'exam')
+      const system = new Observation(payload).getCreateObservationView(encounter, patient, payload.unit, payload.value, 'exam')
 
-      
       const { data } = await ObservationsAPI.create(provider.id, system)
       commit(UPDATE_OBSERVATION, data)
-      
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
@@ -375,7 +400,6 @@ export default {
 
   async createReferral({ commit, rootState }, payload) {
     try {
-      
       const provider = rootState.auth.provider
       const { data } = await PatientsAPI.createReferral(provider.id, payload)
       commit(UPDATE_REFERRAL, data)
@@ -387,7 +411,6 @@ export default {
 
   async updateReferral({ commit, rootState }, payload) {
     try {
-  
       const provider = rootState.auth.provider
       const { data } = await PatientsAPI.updateReferral(provider.id, payload)
       commit(UPDATE_REFERRAL, data)
@@ -398,9 +421,20 @@ export default {
     }
   },
 
+  async deleteReferral({ commit, rootState }, id) {
+    try {
+      const provider = rootState.auth.provider
+      await PatientsAPI.deleteReferral(provider.id, id)
+      commit(DELETE_REFERRAL, id)
+
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
   async getReferrals({ commit, rootState }, patient) {
     try {
-  
       const provider = rootState.auth.provider
       const { data } = await PatientsAPI.getReferrals(provider.id, patient)
       commit(SET_REFERRALS, data)
@@ -410,4 +444,15 @@ export default {
       throw error
     }
   },
+
+  async dispenseDrugs({ rootState }, {medicationRequests}) {
+    try {
+      const provider = rootState.auth.provider
+      await MedicationAPI.dispense(provider.id, medicationRequests)
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
 }

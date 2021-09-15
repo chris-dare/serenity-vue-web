@@ -24,7 +24,7 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ $date.formatDate(row.issued_date, 'yyyy/MM/dd HH:mm a') }}</p>
+            <p>{{ $date.formatDate(row.issued_date, 'dd MMM, yyyy HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>

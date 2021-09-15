@@ -9,12 +9,14 @@
     <template slot="content">
       <div class="space-y-4">
         <p class="text-lg font-semibold">Add notes</p>
-        <cv-text-area
+        <FormInput
           v-model="form.notes"
           :label="label"
           :placeholder="placeholder"
           :rows="5"
           :invalid-message="$utils.validateRequiredField($v, 'notes')"
+          :required="required"
+          type="textarea"
         />
 
         <div cl>
@@ -118,8 +120,8 @@ export default {
       } else {
         this.$emit('save', this.form.notes)
       }
-      
-      
+
+
     },
   },
 }

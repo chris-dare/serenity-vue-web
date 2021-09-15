@@ -6,9 +6,7 @@ export default {
   },
   methods: {
     next(form) {
-      console.info(Object.assign({}, this.form))
       this.form = Object.assign(this.form, form)
-      console.info(Object.assign({}, this.form))
       this.$refs.steps.next(this.form)
     },
     prev(form) {

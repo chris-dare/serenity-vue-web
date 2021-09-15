@@ -39,13 +39,21 @@
           placeholder="Notes on physical activity"
         />
       </div>
-      <MultiSelect
-        v-model="form.EATING_HABITS"
-        title="Eating habits"
-        :multiple="false"
-        :options="['unspecified', 'low', 'moderate', 'high']"
-        :track-by="null"
-      />
+      <div class="space-y-2">
+        <MultiSelect
+          v-model="form.EATING_HABITS"
+          title="Eating habits"
+          :multiple="false"
+          :options="['unspecified', 'low', 'moderate', 'high']"
+          :track-by="null"
+        />
+        <cv-text-area
+          v-model="form.EATING_HABITS_NOTES"
+          :rows="5"
+          placeholder="Notes on eating habits"
+        />
+      </div>
+
       <MultiSelect
         v-model="form.VEGAN_STATUS"
         title="Vegetarian/Vegan"
@@ -114,6 +122,7 @@ export default {
       try {
         this.loading = true
         await this.createObservation({ payload: this.form, patient: this.$route.params.id })
+        this.$toast.open('Social history saved')
         this.loading = false
       } catch (error) {
         this.loading = false

@@ -32,7 +32,17 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI.slots(provider.id, filters)
-      console.log(data)
+      commit(SET_SLOTS, data)
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
+  async getAvailableDoctors({ commit, rootState }, filters) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await AppointmentsAPI.doctors(provider.id, filters)
       commit(SET_SLOTS, data)
     } catch (error) {
       Vue.prototype.$utils.error(error)
@@ -51,12 +61,12 @@ export default {
           practitioner: rootGetters['practitioners/practitioners'].find(a => a.id === data.data.practitionerid),
         }
         commit(ADD_APPOINTMENT_DATA, { slot })
-        return
+        return slot
       }
 
       commit(ADD_APPOINTMENT_DATA, { slot: {} })
   
-      return
+      return null
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error

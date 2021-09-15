@@ -20,20 +20,16 @@
     </p>
 
     <LabsTable />
-    <AddLabResultsModal />
-    <ViewLabResultsModal />
   </div>
 </template>
 
 <script>
 import LabsTable from '@/components/diagnostic/LabsTable'
-import AddLabResultsModal from '@/components/diagnostic/modals/AddLabResultsModal'
-import ViewLabResultsModal from '@/components/diagnostic/modals/ViewLabResultsModal'
 
 export default {
   name: 'DiagnosticPatientActions',
 
-  components: { LabsTable, AddLabResultsModal, ViewLabResultsModal },
+  components: { LabsTable },
 
   data() {
     return {
@@ -49,12 +45,14 @@ export default {
           description: 'Enter results for the tests taken',
           type: 'search',
           value: 'add',
+          hide: !this.$userCan('diagnostic.requests.write'),
         },
         {
           label: 'View Lab results',
           description: 'View previous enteted lab results',
           type: 'lab',
           value: 'view',
+          hide: !this.$userCan('diagnostic.reports.read'),
         },
       ]
     },
@@ -64,7 +62,7 @@ export default {
     onCardClick(action) {
       switch (action) {
       case 'add':
-        this.$trigger('lab:add:open')
+        this.$trigger('new-lab:add:open')
         break
       case 'view':
         this.$trigger('lab:view:open')

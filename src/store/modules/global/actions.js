@@ -7,6 +7,7 @@ export default {
     dispatch('resources/getMaritalStatuses', null, { root:true })
     dispatch('resources/getPaymentMethods', null, { root:true })
     dispatch('resources/getCategories', null, { root:true })
+    dispatch('resources/getObservationCategory', null, { root:true })
     dispatch('resources/getCodes', null, { root:true })
     dispatch('resources/getServiceTypes', null, { root:true })
     dispatch('resources/getGenders', null, { root:true })
@@ -20,14 +21,15 @@ export default {
   initApp({dispatch}) {
     dispatch('setDefaultWorkpace')
     dispatch('appointments/getAppointments', {refresh: true}, { root:true })
-    dispatch('patients/getPatients', null, { root:true })
+    dispatch('patients/getPatients', { page: 1, page_size: 5 }, { root:true })
+    // this.getPatients({ page: 1, page_size: 5 })
     dispatch('practitioners/getUsers', null, { root:true })
     dispatch('roles/getRoles', null, { root:true })
     dispatch('resources/getResources', null, { root:true })
     dispatch('workspaces/getWorkspaces', null, { root:true })
     dispatch('resources/getSpecialties', null, { root:true })
     dispatch('services/getServices', null, { root:true })
-    dispatch('visits/getVisits', null, { root:true })
+    // dispatch('visits/getVisits', null, { root:true })
     dispatch('beforeLoginInit')
   },
 

@@ -1,7 +1,9 @@
 // import values from 'lodash/values'
-const validateRequiredField = ($v, field) => {
-  const $field = $v.form[field]
-  const formattedField = field.charAt(0).toUpperCase() 
+const validateRequiredField = ($v, field, parent = 'form') => {
+  if(!$v[parent])return ''
+  const $field = $v[parent][field]
+  if(!$field) return ''
+  const formattedField = field.charAt(0).toUpperCase()
     + field.slice(1).replace(/([-_]\w)/g, g => ' '+g[1].toUpperCase())
 
 
@@ -18,6 +20,14 @@ const validateRequiredField = ($v, field) => {
       return `${formattedField} should not be less than ${$field.$params.minLength.min} characters`
     }
 
+    if($field.minValue === false){
+      return `${formattedField} should not be less than ${$field.$params.minValue.min}`
+    }
+
+    if($field.maxValue === false){
+      return `${formattedField} should not be less than ${$field.$params.maxValue.min}`
+    }
+
     if($field.email === false){
       return `${formattedField} format is invalid`
     }
@@ -25,7 +35,11 @@ const validateRequiredField = ($v, field) => {
     if($field.isUnique === false && $field.required){
       return `${formattedField} already exists`
     }
-  
+
+    if($field.bpvalidator === false){
+      return `A valid ${formattedField.toLowerCase()} is required`
+    }
+
     return `${formattedField} is required`
   }
   return ''
@@ -154,7 +168,7 @@ const error = (err, toast) => {
 
     toast.open({ message: error || 'Something went wrong', type: 'error' })
   }
-  
+
   throw error
 }
 
@@ -171,18 +185,19 @@ const objectSubset = (data, includedKeys, excludedKeys = []) => {
 }
 
 const customNameLabel = ({ first_name, last_name }) => {
+  if (!first_name && !last_name) return ''
   return `${first_name} ${last_name}`
 }
 
 const getFilteredData = (data, searchTerms, searchFields) => {
-  let filteredData = data.filter(data => {
-    if (!searchTerms) {
-      return data
-    }
+  if (!searchTerms) {
+    return data
+  }
 
+  let filteredData = data.filter(data => {
     for (let index = 0; index < searchFields.length; index++) {
       const element = searchFields[index]
-      const field = data[element].toString()
+      const field = data[element]?.toString()
       if (field?.toLowerCase().includes(searchTerms.toLowerCase())) {
         return data
       }
@@ -195,7 +210,16 @@ const getFilteredData = (data, searchTerms, searchFields) => {
 const getFirstData = (data, field = 'display') => {
   if (!data || !data.length) return '-'
 
-  return data[0][field]
+  return data[0][field] || ''
+}
+
+const downloadPDF = (pdf) => {
+  var link = document.createElement('a')
+  link.setAttribute('href', pdf)
+  link.target = '_blank'
+  link.setAttribute('download', 'report.pdf')
+  document.body.appendChild(link)
+  link.click()
 }
 
 const hasData = (data, field) => {
@@ -203,11 +227,12 @@ const hasData = (data, field) => {
 }
 
 const concatData = (data, fields) => {
-  let fieldData = []
-  fields.forEach(field => {
-    fieldData.push(data[field])
-  })
-  return fieldData.filter(name => name).join(' ')
+  if (!data) return ''
+  return fields.map(field => data[field]).filter(name => name).join(' ')
+}
+
+const getTotalValue = (data, field = 'balance') => {
+  return data.reduce((acc, el) => {return acc + el[field]}, 0)
 }
 
 export default {
@@ -224,9 +249,11 @@ export default {
       error: err => error(err, Vue.prototype.$toast),
       getFilteredData,
       getFirstData,
+      downloadPDF,
       objectSubset,
       hasData,
       concatData,
+      getTotalValue,
     }
   },
 }

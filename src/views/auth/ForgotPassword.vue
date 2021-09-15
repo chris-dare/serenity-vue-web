@@ -21,20 +21,15 @@
           </p>
 
           <div class="mt-8">
-            <cv-text-input
+            <FormInput
               v-model="form.email"
               v-nested-keyup:input.enter="reset"
               class="my-4"
               label="Email"
               placeholder="Enter your email"
-            >
-              <template
-                v-if="$v.form.email.$error"
-                slot="invalid-message"
-              >
-                Email is required
-              </template>
-            </cv-text-input>
+              required
+              :invalid-message="$utils.validateRequiredField($v, 'email')"
+            />
             <cv-button
               kind="primary"
               class="my-3 max-w-full w-full bg-serenity-primary justify-start"
@@ -63,7 +58,9 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { required } from 'vuelidate/lib/validators'
+import { required, email } from 'vuelidate/lib/validators'
+import { emailFormatter } from '@/services/custom-validators'
+
 export default {
   data() {
     return {
@@ -103,7 +100,7 @@ export default {
   },
   validations: {
     form: {
-      email: { required },
+      email: { required, email: (val) => email(emailFormatter(val)) },
     },
   },
 }

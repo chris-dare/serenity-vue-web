@@ -5,7 +5,7 @@
         v-model="localValue"
         placeholder="Type to search"
         :title="title"
-        :options="medications"
+        :options="options"
         :multiple="multiple"
         :searchable="true"
         :internal-search="true"
@@ -15,7 +15,9 @@
         :max-height="600"
         :hide-selected="true"
         v-bind="$attrs"
+        taggable
         @remove="$emit('remove', $event)"
+        @tag="addTag"
       />
     </div>
   </div>
@@ -41,10 +43,37 @@ export default {
     },
   },
 
+  data() {
+    return {
+      options: [],
+    }
+  },
+
   computed: {
     ...mapGetters({
       medications: 'resources/medications',
     }),
+  },
+
+  watch: {
+    medications: {
+      immediate: true,
+      handler(val) {
+        this.options = val
+      },
+    },
+  },
+
+  methods: {
+    addTag(tag) {
+      this.options.push(tag)
+      if (this.multiple) {
+        this.localValue.push(tag)
+      } else {
+        this.localValue = tag
+      }
+      
+    },
   },
 }
 </script>

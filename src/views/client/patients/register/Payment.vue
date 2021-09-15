@@ -10,7 +10,7 @@
   >
     <div class="grid grid-cols-2 gap-8">
       <MultiSelect
-        v-model="form.payment_options[0].payment_type"
+        v-model="form.patient_top_up_payment_methods[0].type"
         :options="methods"
         title="Primary method of payment"
         placeholder="Payment Type"
@@ -22,7 +22,7 @@
       />
       <MultiSelect
         v-if="isMoMo"
-        v-model="form.payment_options[0].payment_details.payment_provider"
+        v-model="form.patient_top_up_payment_methods[0].momo_vendor"
         :options="vendors"
         label="display"
         track-by="code"
@@ -33,14 +33,8 @@
       />
       <MsisdnPhoneInput
         v-if="isMoMo"
-        v-model="form.payment_options[0].payment_details.msisdn"
+        v-model="form.patient_top_up_payment_methods[0].msisdn"
         label="Phone number"
-      />
-      <FormCountrySelect
-        v-if="isMoMo"
-        v-model="form.payment_options[0].payment_details.country"
-        title="Country"
-        placeholder="Country"
       />
     </div>
     <PatientSuccessModal :visible.sync="visible" />
@@ -52,7 +46,8 @@ import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
 import PatientSuccessModal from '@/components/patients/modals/PatientSuccessModal'
 import { mapActions, mapState } from 'vuex'
 import MultiStep from '@/mixins/multistep'
-import { required } from 'vuelidate/lib/validators'
+import { required, email } from 'vuelidate/lib/validators'
+import { emailFormatter } from '@/services/custom-validators'
 
 export default {
   name: 'Payment',
@@ -64,9 +59,7 @@ export default {
   data() {
     return {
       form: {
-        payment_options: [{
-          payment_details: {},
-        }],
+        patient_top_up_payment_methods: [{}],
       },
       icon: Checkmark,
       visible: false,
@@ -84,14 +77,8 @@ export default {
     }),
 
     isMoMo() {
-      return this.form.payment_options[0].payment_type === 'MOBILE_MONEY'
+      return this.form.patient_top_up_payment_methods[0].type === 'mobile-money'
     },
-  },
-
-  created() {
-    if(!this.form.payment_options[0].payment_details.msisdn){ 
-      this.form.payment_options[0].payment_details.msisdn = this.form.mobile
-    }
   },
 
   validations: {
@@ -99,9 +86,12 @@ export default {
       first_name: { required },
       last_name: { required },
       gender: { required },
+      birth_date: { required },
+      mobile: { required },
+      email: { required, email: (val) => email(emailFormatter(val)) },
     },
   },
-  
+
   methods: {
     ...mapActions({
       addToStoreData: 'patients/addToCurrentPatient',
@@ -164,7 +154,6 @@ export default {
         })
         this.$router.push({name: 'PatientSummary', params: { id:this.form.id }})
       } catch (error) {
-        console.info(error)
         this.$toast.open({
           message: 'Something went wrong!',
           type: 'error',

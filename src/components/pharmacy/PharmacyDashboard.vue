@@ -11,11 +11,16 @@
         @click="change(dashboard)"
       />
     </div>
+    <p class="text-serenity-primary my-6 font-semibold">
+      Medication Requests
+    </p>
+    <PrescriptionsTable route="Pharmacy:PatientSummary" />
     <NonPatientPrescriptionModal />
   </div>
 </template>
 
 <script>
+import PrescriptionsTable from '@/components/pharmacy/PrescriptionsTable.vue'
 import NonPatientPrescriptionModal from '@/components/pharmacy/modals/NonPatientPrescriptionModal'
 import { mapState } from 'vuex'
 
@@ -24,6 +29,7 @@ export default {
 
   components: { 
     NonPatientPrescriptionModal,
+    PrescriptionsTable,
   },
 
   data() {
@@ -38,6 +44,7 @@ export default {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
       appointmentsCount: (state) => state.appointments.appointmentsCount,
+      provider: (state) => state.auth.provider,
     }),
 
     availableActions() {
@@ -49,10 +56,10 @@ export default {
           value: 'search',
         },
         {
-          label: 'Non Patient',
-          description: 'Dispense drugs to non-hospital patients',
-          type: 'search',
-          value: 'nonpatient',
+          label: 'New Prescription',
+          description: 'Create a new prescription',
+          type: 'add',
+          value: 'new',
         },
       ]
 
@@ -65,13 +72,12 @@ export default {
       this.selected = dashboard.value
 
       if (dashboard.value === 'search') {
-        this.$router.push({ name: 'Pharmacy:Patients'})
+        this.$router.push({ name: 'Pharmacy:Patients' })
       }
 
-      if (dashboard.value === 'nonpatient') {
-        this.$trigger('pharmacy:nonpatient_prescription:open')
+      if (dashboard.value === 'new') {
+        this.$router.push({ name: 'Pharmacy:New'})
       }
-      
     },
   },
 }

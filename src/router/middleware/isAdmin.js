@@ -7,7 +7,6 @@ export default function isAdmin ({ next, store }) {
   if (!hasAdminWorkspace) {
     return next({name: 'Dashboard'})
   }
-  
+
   return next()
-  
 }

@@ -17,6 +17,24 @@
               >
                 {{ title }}
               </p>
+              <p
+                v-if="!isClosed && isSaving"
+                class="text-secondary text-sm italic"
+              >
+                Saving...
+              </p>
+              <p
+                v-if="!isClosed && isSaved"
+                class="text-secondary text-sm italic"
+              >
+                Saved
+              </p>
+              <p
+                v-if="!isClosed && hasError"
+                class="text-red-500 text-sm italic"
+              >
+                Error
+              </p>
               <AddFilled
                 v-if="hasCreate"
                 class="w-5 h-5 text-serenity-primary"
@@ -53,6 +71,11 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    status: {
+      type: String,
+      default: null,
+    },
   },
 
   data() {
@@ -60,6 +83,19 @@ export default {
       isClosed: true,
       key: Math.random(),
     }
+  },
+
+  computed: {
+    isSaving() {
+      return this.status === 'saving'
+    },
+
+    isSaved() {
+      return this.status === 'saved'
+    },
+    hasError() {
+      return this.status === 'error'
+    },
   },
 
   watch: {

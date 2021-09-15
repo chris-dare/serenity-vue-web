@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-4/5 mx-auto"
+    class="max-w-7xl mx-auto"
   >
     <div>
       <div class="flex items-center justify-between">

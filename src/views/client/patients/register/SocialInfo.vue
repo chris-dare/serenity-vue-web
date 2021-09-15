@@ -30,9 +30,9 @@
         placeholder="Religion"
         custom-field="code"
       />
-    
+
       <MultiSelect
-        v-model="form.preferred_communication"
+        v-model="form.patient_communication"
         title="Home Language"
         :multiple="false"
         :options="languages"
@@ -43,47 +43,20 @@
         preselect
       />
       <cv-text-input
-        v-model="form.meta.email"
+        v-model="form.occupation"
         label="Occupation"
         type="text"
         placeholder="Occupation"
         class="inherit-full-input"
       />
       <cv-text-input
-        v-model="form.meta.company"
+        v-model="form.employer"
         label="Company/Employer"
         placeholder="Where do you work?"
         type="text"
         class="inherit-full-input"
       />
-      <MsisdnPhoneInput
-        v-model="form.meta.office_phone_number"
-        label="Office Phone number"
-      />
     </div>
-    <!-- <div class="flex items-center justify-between mt-12 mb-6">
-      <div class="flex items-center space-x-2">
-        <SeButton
-          variant="outline"
-        >
-          Cancel
-        </SeButton>
-        <SeButton
-          :to="{ name: previous, query: { ...this.$route.query } }"
-          variant="secondary"
-        >
-          Go back
-        </SeButton>
-      </div>
-      <div class="flex items-center">
-        <SeButton
-          :icon="icon"
-          @click="save"
-        >
-          Next: Payment
-        </SeButton>
-      </div>
-    </div> -->
   </MultiStepBase>
 </template>
 
@@ -98,9 +71,7 @@ export default {
 
   data() {
     return {
-      form: {
-        meta: {},
-      },
+      form: {},
       previous: 'EmergencyContact',
       next: 'Payment',
       parent: 'Patients',
@@ -121,21 +92,6 @@ export default {
       addToStoreData: 'patients/addToCurrentPatient',
       refresh: 'patients/refreshCurrentPatient',
     }),
-
-    save() {
-      // this.$v.$touch()
-
-      // if (this.$v.$invalid) {
-      //   this.$toast.open({
-      //     message: 'Fill all required fields!',
-      //     type: 'error',
-      //   })
-      //   return
-      // }
-
-      this.addToStoreData(this.form)
-      this.$router.push({ name: this.next, query: { ...this.$route.query } })
-    },
   },
 }
 </script>

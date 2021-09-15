@@ -1,31 +1,20 @@
 <template>
   <div>
-    <cv-form @submit.prevent="">
+    <SeForm>
       <!-- title -->
       <div>
         <div class="grid grid-cols-2 gap-8 my-8">
-          <cv-text-input
+          <FormInput
             v-model="form.company_name"
-            label="Company name (required)"
+            label="Company name"
+            required
             placeholder="Company Name"
             type="text"
             class="inherit-full-input"
             :invalid-message="$utils.validateRequiredField($v, 'company_name')"
           />
-          <!-- <cv-text-input
-            v-model="form.email"
-            type="email"
-            label="Email (required)"
-            placeholder="Email address"
-            class="inherit-full-input"
-            :error-message="$utils.validateRequiredField($v, 'email')"
-          /> -->
-          <!-- <MsisdnPhoneInput
-            v-model="form.phone_number"
-            label="Phone number (required)"
-            :error-message="$utils.validateRequiredField($v, 'phone_number')"
-          /> -->
-          <cv-text-input
+
+          <FormInput
             v-model="form.tin_number"
             label="TIN"
             placeholder="TIN"
@@ -33,11 +22,11 @@
           />
         </div>
 
-        <cv-text-area
+        <FormInput
           v-model="form.address"
+          type="textarea"
           placeholder="Location address"
-          label="Full provider address (required)"
-          type="text"
+          label="Full provider address"
           class="w-full"
         />
 
@@ -58,7 +47,7 @@
           </div>
         </div>
       </div>
-    </cv-form>
+    </SeForm>
   </div>
 </template>
 
@@ -86,7 +75,7 @@ export default {
   },
 
   created() {
-    this.form = this.storeData 
+    this.form = this.storeData
   },
 
   validations: {

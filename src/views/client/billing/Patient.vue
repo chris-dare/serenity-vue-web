@@ -1,113 +1,44 @@
 <template>
-  <div
-    class="w-4/5 mx-auto space-y-4"
+  <AppStatePage
+    :loading="loading"
+    :error="error"
+    class="max-w-7xl mx-auto"
   >
-    <div class="bg-white py-8 px-4 my-2 flex items-center justify-between">
-      <div class="flex">
-        <div class="flex items-center space-x-4">
-          <ImageBlock
-            :url="patient.url"
-            :alt="patient.name"
-          />
-          <div>
-            <p>{{ patient.name }}</p>
-            <p class="text-secondary  capitalize">
-              {{ patient.gender_age_description }}
-            </p>
-            <div class="mt-2 flex items-center">
-              <div class="bg-green-700 w-3 h-3 rounded-full mr-2" />
-              <p>MR No: {{ patient.mr_number }}</p>
+    <div class="space-y-2">
+      <div>
+        <PatientInfoCard class="mb-0 border-b border-solid border-tetiary">
+          <div class="space-y-1">
+            <p class="text-right text-xl font-semibold">{{ $currency(patientAccountBalance).format() }}</p>
+            <p class="text-right text-secondary text-sm">Account balance</p>
+            <div class="space-x-2 flex items-center">
+              <SeButton @click="$trigger('billing:topup:open:two', patient)">Load Account</SeButton>
             </div>
           </div>
-        </div>
-        <!-- <div
-          class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
-        >
-          <img
-            src="@/assets/img/edit 1.svg"
-            class="w-4 h-4"
-            @click="$router.push({name: 'Biodata', params: {id: patient.id}})"
-          >
-        </div> -->
-      </div>
-    </div>
+        </PatientInfoCard>
 
-    
-    <InfoLinkCard
-      :is-selected="false"
-      :details="dashboard"
-      :type="dashboard.type"
-      custom-class="bg-white border-0"
-      @click="$trigger('active:billing:open')"
-    />
-
-    <div class="bg-white p-3">
-      <div class="flex items-center justify-between mb-4">
-        <p class=" text-gray-500">Bills/Orders</p>
-        <div
-          class="bg-serenity-light-gray w-8 h-8 rounded-full ml-6 flex items-center justify-center cursor-pointer"
-          @click="$trigger('transactions:details:open')"
-        >
-          <Add class="w-4 h-4 text-serenity-primary" />
-        </div>
+        <Dependents v-if="patient.user" />
       </div>
-      <DataTable
-        ref="table"
-        :columns="columns"
-        :data="[]"
-        :loading="loading"
-      >
-        <template #default="{ row }">
-          <cv-data-table-cell>
-            <p>{{ row.created_at }}</p>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <p>{{ $currency(Math.round(Math.random())).format() }}</p>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <p>{{ $currency(Math.round(Math.random())).format() }}</p>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <p>{{ $currency(Math.round(Math.random())).format() }}</p>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <p>{{ row.paymentMethod }}</p>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <p class="camelcase"><Tag>{{ row.status }}</Tag></p>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <router-link
-              tag="div"
-              :to="`/patients/${row.id}`"
-              class="flex items-center cursor-pointer"
-            >
-              View
-              <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
-                <img
-                  src="@/assets/img/view 1.svg"
-                  alt=""
-                >
-              </div>
-            </router-link>
-          </cv-data-table-cell>
-        </template>
-      </DataTable>
+
+      <DetailPageNav
+        :links="links"
+      />
+      <router-view />
     </div>
-    <ActiveBillingModal />
-    <TransactionDetailsModal />
-  </div>
+    <BillingTopUpModal />
+  </AppStatePage>
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
-import ActiveBillingModal from '@/components/billing/ActiveBillingModal'
-import TransactionDetailsModal from '@/components/billing/TransactionDetailsModal'
+import PatientInfoCard from '@/components/patients/PatientInfoCard'
+import Dependents from '@/components/dependents/Dependents'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import DetailPageNav from '@/components/patients/DetailPageNav'
+import BillingTopUpModal from '@/components/billing/topup/BillingTopUpModal'
 
 export default {
-  name: 'SinglePatient',
+  name: 'BillingPatient',
 
-  components: { ActiveBillingModal, TransactionDetailsModal },
+  components: { PatientInfoCard, Dependents, DetailPageNav, BillingTopUpModal },
 
   props: {
     id: {
@@ -119,40 +50,61 @@ export default {
   data() {
     return {
       loading: false,
-      dashboard: {
-        label: 'Active bill',
-        description: 'Add more items to an active bill',
-        type: 'align',
-        value: 'add_notes',
-      },
-      columns: ['Date', 'Total Amount', 'Amount Paid', 'Balance', 'Method', 'Status', 'Action'],
+      error: null,
+      columns: [
+        'Benefactor name',
+        'MR Number',
+        'Date',
+        'Amount',
+      ],
+      links: [
+        { label: 'Summary', path: 'Billing:Patient' },
+        { label: 'Payment History', path: 'Billing:PatientBills' },
+        { label: 'Account History', path: 'Billing:PatientAccountHistory' },
+      ],
     }
   },
 
   computed: {
     ...mapState({
       patient: (state) => state.patients.currentPatient,
-      workspaceType: (state) => state.global.workspaceType,
     }),
-
     ...mapGetters({
-      data: 'patients/patients',
+      noDataLabel: 'patients/getCurrentPatientNoDataLabel',
+      patientAccountBalance: 'patients/patientAccountBalance',
     }),
+  },
 
-    isSelected() {
-      return (index) => this.initialSelected === index
+  watch: {
+    $route: {
+      immediate: true,
+      async handler(route, oldRoute) {
+        if (route.params.id === oldRoute?.params?.id) {
+          return
+        }
+        try {
+          this.loading = true
+          await this.initBillingPatientInformation(this.id)
+          this.loading = false
+        } catch (error) {
+          this.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
+          this.loading = false
+        }
+      },
     },
   },
 
-  beforeRouteEnter (to, from, next) {
-    next(vm => vm.getPatient(vm.id))
+  beforeRouteLeave (from,to,next) {
+    this.refresh()
+    next()
   },
 
   methods: {
     ...mapActions({
-      getPatient: 'patients/getPatient',
-      getData: 'patients/getPatient',
+      initBillingPatientInformation: 'patients/initBillingPatientInformation',
+      refresh: 'patients/refreshCurrentPatient',
     }),
   },
+
 }
 </script>

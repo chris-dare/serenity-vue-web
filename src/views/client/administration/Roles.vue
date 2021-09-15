@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto w-4/5 space-y-4">
+  <div class="mx-auto max-w-7xl space-y-4">
     <div class="flex items-center justify-between">
       <p class="text-xl font-bold">Roles ({{ roles.length }})</p>
     </div>
@@ -25,7 +25,7 @@
               <p>{{ row.name }}</p>
             </div>
           </cv-data-table-cell>
-            
+
           <cv-data-table-cell>
             <div class="flex items-center space-x-6">
               <p
@@ -105,7 +105,7 @@ export default {
       await this.getRoles()
       this.loading = false
     },
-  
+
     async remove(rowId) {
       this.loading = true
       await this.deleteRole(rowId).then(()=>{
@@ -121,7 +121,7 @@ export default {
           this.loading = false
           throw error
         })
-      
+
       this.loading = false
       this.$trigger('confirm:delete:close')
     },

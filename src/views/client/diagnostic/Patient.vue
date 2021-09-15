@@ -1,8 +1,13 @@
 <template>
-  <div>
-    <PatientInfoCard>
-      <DiagnoticActions />
-    </PatientInfoCard>
+  <AppStatePage
+    :loading="loading"
+    :error="error"
+    class="max-w-7xl mx-auto"
+  >
+    <div class="space-y-2">
+      <PatientInfoCard class="mb-0 border-b border-solid border-tetiary" />
+    </div>
+
     <div class="space-y-4 my-6">
       <p class="text-serenity-primary font-semibold">
         Perform action
@@ -20,64 +25,109 @@
       </div>
 
       <p class="text-serenity-primary font-semibold">
-        Active Labs (0)
+        Requested lab tests
       </p>
 
       <LabsTable />
     </div>
 
-    <AddLabResultsModal />
-    <ViewLabResultsModal />
-  </div>
+    <AddLabModal />
+  </AppStatePage>
 </template>
 
 <script>
-import LabsTable from '@/components/diagnostic/LabsTable'
-import AddLabResultsModal from '@/components/diagnostic/modals/AddLabResultsModal'
-import ViewLabResultsModal from '@/components/diagnostic/modals/ViewLabResultsModal'
 import PatientInfoCard from '@/components/patients/PatientInfoCard'
+import LabsTable from '@/components/diagnostic/LabsTable'
+import AddLabModal from '@/components/diagnostic/modals/AddLabModal'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'Patient',
+  name: 'DiagnosticPatient',
 
-    
-  components: { LabsTable, AddLabResultsModal, ViewLabResultsModal, PatientInfoCard, DiagnoticActions: () => import(/* webpackPrefetch: true */ '@/components/patients/actions/DiagnoticActions') },
+
+  components: { PatientInfoCard, LabsTable, AddLabModal },
+
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
 
   data() {
     return {
+      loading: false,
       selected: '',
+      form: {},
     }
   },
 
   computed: {
+    ...mapGetters({
+      noDataLabel: 'patients/getCurrentPatientNoDataLabel',
+    }),
+    ...mapState({
+      patient: (state) => state.patients.currentPatient,
+    }),
     dashboardTypes() {
       return [
         {
-          label: 'Enter Lab Results',
-          description: 'Enter results for the tests taken',
-          type: 'search',
+          label: 'Add Labs',
+          description: 'Create a new lab test for patient',
+          type: 'add',
           value: 'add',
+          hide: !this.$userCan('diagnostic.requests.write'),
         },
         {
           label: 'View Lab results',
           description: 'View previous enteted lab results',
-          type: 'lab',
-          value: 'view',
+          type: 'report',
+          value: 'result',
+          hide: !this.$userCan('diagnostic.reports.read'),
         },
       ]
     },
   },
 
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      try {
+        vm.loading = true
+        await vm.getPatient(vm.id)
+        vm.loading = false
+      } catch (error) {
+        vm.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
+        vm.loading = false
+      }
+    })
+  },
+
+  beforeRouteLeave (to, from, next) {
+    next(async vm => {
+      await vm.refresh()
+    })
+  },
+
+
   methods: {
+    ...mapActions({
+      getPatient: 'patients/getPatient',
+      addToStoreData: 'appointments/addToCurrentAppointment',
+      refresh: 'patients/refreshCurrentPatient',
+    }),
     onCardClick(action) {
+      this.form.patient = this.patient
+      this.addToStoreData(this.form)
       switch (action) {
       case 'add':
-        this.$trigger('lab:add:open')
+        this.$trigger('new-lab:add:open')
         break
-      case 'view':
-        this.$trigger('lab:view:open')
+      case 'sample':
+        this.$router.push({name: 'Diagnostic:Labs', params: { id: this.id}})
         break
-          
+      case 'result':
+        this.$router.push({name: 'Diagnostic:Labs', params: { id: this.id}})
+        break
       default:
         break
       }

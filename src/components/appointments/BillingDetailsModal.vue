@@ -71,7 +71,7 @@
               </div>
               <div class="flex items-center space-x-1">
                 <p class="text-secondary text-xs">Appointment time:</p>
-                <p class="text-xs">{{ $date.formatDate(appointment.slot.start, 'dd MMM') }}, {{ appointment.slot.slot }}</p>
+                <p class="text-xs">{{ $date.formatDate(appointment.slot.start, 'dd MMM') }}, {{ $date.formatDate(appointment.slot.start, 'hh:ss a') }} - {{ $date.formatDate(appointment.slot.end, 'hh:ss a') }}</p>
               </div>
             </div>
           </div>
@@ -89,11 +89,11 @@
           >
             Return to appointments
           </div>
-          <SeButton
+          <!-- <SeButton
             @click="$emit('print')"
           >
             Print Bill
-          </SeButton>
+          </SeButton> -->
         </div>
       </div>
     </template>
@@ -121,7 +121,7 @@ export default {
   computed: {
     practitioner() {
       if (this.appointment.practitioner) return this.appointment.practitioner
-      return this.appointment.slot.practitioner
+      return this.appointment.slot.practitioner || { fullName: this.appointment.slot.practitioner_name }
     },
   },
 

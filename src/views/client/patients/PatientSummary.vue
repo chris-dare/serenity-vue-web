@@ -13,7 +13,7 @@
       title="Social Information"
       :fields="socialFields"
     />
-    
+
     <PatientSummaryCard
       title="Payment Method"
       :fields="summaryFields"
@@ -46,14 +46,15 @@ export default {
     isSelected() {
       return (index) => this.initialSelected === index
     },
-  
+
     emergencyFields() {
       if(!this.patient.emergency_contact)return []
       return [
         { label: 'First name', value: this.patient.emergency_contact.first_name },
         { label: 'Last name', value: this.patient.emergency_contact.last_name },
-        { label: 'Contact', value: this.patient.emergency_contact.telecom?.value },
-        { label: 'Address', value: this.patient.emergency_contact.emergency_contact_address_description },
+        { label: 'Mobile', value: this.patient.emergency_contact.mobile },
+        { label: 'Email', value: this.patient.emergency_contact.email },
+        { label: 'Address', value: this.patient.emergency_contact.line_address },
       ]
     },
 
@@ -61,21 +62,20 @@ export default {
       if(!this.patient)return []
       return [
         { label: 'Marital Status', value: this.patient.marital_status },
-        { label: 'Religion', value: this.patient.religion },
+        { label: 'Religion', value: this.patient.religious_affiliation },
         { label: 'Language', value: this.patient.language },
         { label: 'Occupation', value: this.patient.occupation },
         { label: 'Company/Employer', value: this.patient.employer},
-        { label: 'Office Number', value: this.patient.office_phone_number },
       ]
     },
-  
+
     summaryFields() {
       if(!this.patient.payment_method)return []
       return [
-        { label: 'Method', value: this.patient.payment_method.payment_type },
-        { label: 'Payer', value: this.patient.payment_method.payer },
-        { label: 'Payment Network', value: this.patient.payment_method.payment_details.payment_provider },
-        { label: 'Phone Number', value: this.patient.payment_method.payment_details.msisdn },
+        { label: 'Description', value: this.patient.payment_method.description },
+        { label: 'Balance', value: this.$currency(this.patient.payment_method.balance, this.patient.payment_method.currency).format() },
+        { label: 'Limit', value: this.$currency(this.patient.payment_method.limit, this.patient.payment_method.currency).format() },
+        { label: 'Status', value: this.patient.payment_method.status },
       ]
     },
   },

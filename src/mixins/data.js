@@ -15,7 +15,7 @@ export default {
 
   computed: {
     normalizedData() {
-      return this.$utils.getFilteredData(this.data, this.search, this.searchTerms)
+      return this.searchTerms ? this.$utils.getFilteredData(this.data, this.search, this.searchTerms) : this.data
     },
 
     filteredData() {
@@ -23,7 +23,7 @@ export default {
     },
 
     dataCount() {
-      return this.data.length || 0
+      return this.total || this.data.length || 0
     },
 
     noData() {
@@ -34,13 +34,13 @@ export default {
       return { itemsPerPage: this.pageLength, numberOfItems: this.dataCount, pageSizes: this.pageSizes  }
     },
   },
-    
-  // created() {
-  //   this.refresh()
-  // },
-    
+
+  created() {
+    this.pageLength = 10
+  },
+
   methods: {
-    async refresh(refreshData) {
+    async refresh(refreshData = false) {
       this.loading = true
 
       try {
@@ -55,6 +55,13 @@ export default {
       this.pageStart = ev.start
       this.pageLength = ev.length
       this.page = this.filteredData < ev.length ? 1 : ev.page
+    },
+
+    storePagination(ev) {
+      this.pageStart = ev.start
+      this.pageLength = ev.length
+      this.page = ev.page
+      this.refresh({ page: this.page, page_size: ev.length })
     },
 
     concatData(data, fields) {

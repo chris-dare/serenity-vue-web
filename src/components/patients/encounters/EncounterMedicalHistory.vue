@@ -20,7 +20,7 @@
         </li>
       </div>
       <div class="space-y-2">
-        <p class="font-semibold">Allegies</p>
+        <p class="font-semibold">Allergies</p>
 
         <p
           v-if="!allergies.length"

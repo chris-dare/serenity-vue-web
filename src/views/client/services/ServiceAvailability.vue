@@ -5,44 +5,66 @@
       <p class="bx--label">Day</p>
       <div class="grid grid-cols-7 items-center">
         <cv-checkbox
-          v-for="(day, index) in ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']"
+          v-for="(day, index) in ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']"
           :key="index"
           v-model="form.healthcare_service_available_times[0].daysOfWeek"
           :value="day"
           :label="day"
           class="capitalize"
+          name="serviceDays"
         />
       </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-      <Timepicker
+    <div class="grid grid-cols-8 gap-x-4 gap-y-2 items-end">
+      <DatePicker
         v-model="form.healthcare_service_available_times[0].availableStartTime"
+        type="time"
         label="Specify a start time"
+        class="col-span-3 se-input-gray"
       />
-      <Timepicker
+      <DatePicker
         v-model="form.healthcare_service_available_times[0].availableEndTime"
+        type="time"
         label="End time"
+        class="col-span-3 se-input-gray"
+      />
+      <cv-checkbox
+        v-model="form.healthcare_service_available_times[0].is_all_day"
+        :value="true"
+        label="Is all day"
+        class="capitalize col-span-2 pb-3"
       />
       <p
         v-if="$utils.validateRequiredField($v, 'healthcare_service_available_times')"
-        class="text-red-600 text-xs my-3 col-span-2"
+        class="text-red-600 text-xs my-3 col-span-7"
       >
         Select values for day, start time and end time
       </p>
     </div>
 
     <p class="bx--label col-span-2 uppercase">Service unavailable days</p>
-    
+
     <div
       v-for="(times, index) in form.healthcare_service_not_available_times"
       :key="index"
       class="grid grid-cols-11 gap-x-4 gap-y-8 items-center"
     >
-      <div class="col-span-10">
-        <DateRangePicker
-          v-model="times.during"
-          class="col-span-2 mb-8"
+      <div class="col-span-10 grid grid-cols-2 gap-x-4 gap-y-8">
+        <DatePicker
+          v-model="times.start_date"
+          class="se-input-gray"
+          label="Start Date"
+          placeholder="Select a start date"
+          format="Z"
+        />
+        <DatePicker
+          v-model="times.end_date"
+          :min-date="times.start_date"
+          class="se-input-gray"
+          label="End date"
+          placeholder="Select an end date"
+          format="Z"
         />
         <cv-text-area
           v-model="times.description"
@@ -52,7 +74,7 @@
           class="col-span-2"
         />
       </div>
-      
+
       <Trash
         class="w-5 h-5 cursor-pointer"
         @click="removeFromUnavailableDates(index)"
@@ -118,21 +140,19 @@ export default {
       form: {
         healthcare_service_not_available_times: [{
           description: '',
-          during: {
-            start: '',
-            end: '',
-          },
+          start_date: null,
+          end_date: null,
         }],
         healthcare_service_available_times: [
           {
-            daysOfWeek: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+            daysOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
             availableStartTime: '08:00:00',
             availableEndTime: '20:00:00',
           },
         ],
       },
       loading: false,
-      
+      priorities: [],
     }
   },
 
@@ -145,6 +165,12 @@ export default {
   created() {
     if (isEmpty(this.storeData)) {
       this.$router.push({name: 'ServiceInformation'})
+    }
+
+    if (isEmpty(this.form.healthcare_service_available_times)) {
+      this.form.healthcare_service_available_times = [{
+        daysOfWeek: [],
+      }]
     }
   },
 
@@ -165,7 +191,7 @@ export default {
         $each: {
           description: {
             required: requiredIf(function (nestedModel) {
-              return !!nestedModel.during.start
+              return !!nestedModel.start_date
             }),
           },
         },
@@ -188,6 +214,8 @@ export default {
         return
       }
 
+      this.addToStoreData(this.form)
+
       if (this.form.id) {
         this.update()
       } else {
@@ -196,15 +224,10 @@ export default {
     },
 
     async save() {
-    
       this.loading = true
-      this.form.healthcare_service_available_times.map(time => {
-        time.availableStartTime = this.convertToTimeZone(time.availableStartTime)
-        time.availableEndTime = this.convertToTimeZone(time.availableEndTime)
-        return time
-      })
+
       try {
-        await this.createService(this.form)
+        await this.createService(this.formattedForm())
         this.$toast.open({
           message: 'Service successfully added',
         })
@@ -223,17 +246,8 @@ export default {
     async update() {
       this.loading = true
 
-      this.form.healthcare_service_available_times.map(time => {
-        time.availableStartTime = this.convertToTimeZone(time.availableStartTime)
-        time.availableEndTime = this.convertToTimeZone(time.availableEndTime)
-        return time
-      })
-      
-
-      this.addToStoreData(this.form)
-
       try {
-        await this.updateService(this.form)
+        await this.updateService(this.formattedForm())
         this.$toast.open({
           message: 'Service successfully updated',
         })
@@ -257,10 +271,8 @@ export default {
     addUnavailability() {
       this.form.healthcare_service_not_available_times.push({
         description: '',
-        during: {
-          start: '',
-          end: '',
-        },
+        start_date: '',
+        end_date: '',
       })
     },
 
@@ -270,6 +282,20 @@ export default {
 
     convertToTimeZone(time) {
       return `${time}Z`
+    },
+
+    formattedForm() {
+      let newForm = { ...this.form }
+
+      newForm.healthcare_service_not_available_times = newForm.healthcare_service_not_available_times.filter(time => time.description)
+
+      newForm.healthcare_service_specialties = newForm.healthcare_service_specialties.map(service => {
+        return {
+          code: service.code,
+        }
+      })
+
+      return newForm
     },
   },
 }

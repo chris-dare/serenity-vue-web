@@ -8,7 +8,7 @@
     <template slot="content">
       <div>
         <p class="my-2 font-semibold">Virtual Care Requirements</p>
-        <p class="text-serenity-placeholder text-xs">
+        <p class="text-placeholder text-xs">
           Patient does not have sudden weakness or numbness in the face, arm or
           leg (especially on one side of the body)
           <br>

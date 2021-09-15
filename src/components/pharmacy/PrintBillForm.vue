@@ -6,15 +6,11 @@
         src="@/assets/img/qr.png"
         alt=""
       >
-      <div class="text-lg">
-        Miss Eleanor Pena
-      </div>
+      <div class="text-lg">Miss Eleanor Pena</div>
       <div class="text-sm font-light">Female, 23 years</div>
     </div>
     <div class="border-t border-solid border-b border-gray-300 py-4">
-      <div class="text-lg font-bold mb-4">
-        Payment Transaction
-      </div>
+      <div class="text-lg font-bold mb-4">Payment Transaction</div>
       <div class="grid grid-cols-3 gap-2 mb-2">
         <div>0023223022</div>
         <div>0553009106</div>
@@ -28,51 +24,57 @@
     </div>
     <div>
       <div
-        v-for="drug in prescriptions.data"
+        v-for="drug in medicationRequests"
         :key="drug.drug"
         class="border-b border-solid border-gray-200 py-2"
       >
         <div class="flex justify-between font-bold mb-1">
-          <div>{{ drug.drug }}</div>
-          <div>GHS 5.00</div>
+          <div>{{ drug.medication_detail[0].display }}</div>
+          <div>{{ drug.medication.selling_price | formatMoney | toCedis }}</div>
         </div>
         <div>{{ drug.quantity }}</div>
       </div>
     </div>
     <div class="flex justify-end items-center">
       <div class="font-light mr-1">Total</div>
-      <div class="text-lg font-bold">GHS20.00</div>
+      <div class="text-lg font-bold">
+        {{ totalAmount | formatMoney | toCedis }}
+      </div>
     </div>
     <div class="flex items-center justify-between">
       <SeButton
         variant="secondary"
         @click="$emit('cancel')"
       >
-        Cancel
+        Close
       </SeButton>
-      <SeButton @click="submit">Print Bill<ChevronRight class="w-4 h-4 text-white ml-4" /></SeButton>
+      <SeButton
+        @click="$emit('cancel')"
+      >
+        Print Bill<ChevronRight
+          class="w-4 h-4 text-white ml-4"
+        />
+      </SeButton>
     </div>
   </div>
 </template>
 
 <script>
-import { required, email } from 'vuelidate/lib/validators'
 import Checkmark from '@carbon/icons-vue/es/checkmark/32'
 
 export default {
   name: 'PrintBillForm',
 
   props: {
-    step: {
-      type: [String, Number],
-      default: null,
+    medicationRequests: {
+      type: Array,
+      default: () => [],
     },
   },
 
   data() {
     return {
-      form: {
-      },
+      form: {},
       visible: false,
       icons: {
         Checkmark,
@@ -84,7 +86,8 @@ export default {
             duration: '7 days',
             dosage: '2 times daily',
             quantity: 24,
-            instruction: 'Take 1 tablet orally every 4 to 5 hours as needed for pain',
+            instruction:
+              'Take 1 tablet orally every 4 to 5 hours as needed for pain',
             refill: new Date(),
           },
           {
@@ -92,7 +95,8 @@ export default {
             duration: '7 days',
             dosage: '2 times daily',
             quantity: 24,
-            instruction: 'Take 1 tablet orally every 4 to 5 hours as needed for pain',
+            instruction:
+              'Take 1 tablet orally every 4 to 5 hours as needed for pain',
             refill: new Date(),
           },
         ],
@@ -101,14 +105,13 @@ export default {
     }
   },
 
-  validations: {
-    form:  {
-      first_name: {required},
-      last_name: {required},
-      gender: {required},
-      birth_date: {required},
-      email: {required, email},
-      mobile: {required},
+  computed: {
+    totalAmount() {
+      let total = 0
+      this.medicationRequests.forEach((el) => {
+        total += parseFloat(el.medication.selling_price)
+      })
+      return total
     },
   },
 

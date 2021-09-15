@@ -2,7 +2,7 @@ import http from '@/http'
 
 export default {
   url: 'providers/',
-  
+
   list(providerId) {
     return http.get(`${this.url}${providerId}/admin/resources`)
   },
@@ -17,6 +17,9 @@ export default {
 
   encounterStatus() {
     return http.get(`${this.url}valueset/encounter-status`)
+  },
+  encounterPriorities() {
+    return http.get(`${this.url}valueset/act-priority-type`)
   },
 
   religiousAffiliations() {
@@ -44,7 +47,11 @@ export default {
   },
 
   categories() {
-    return http.get('FHIR/healthcare-service-categories')
+    return http.get('/providers/valueset/healthcare-service-category-type')
+  },
+
+  observationCategories() {
+    return http.get('/providers/valueset/observation-category-unit-type')
   },
 
   codes() {
@@ -52,6 +59,10 @@ export default {
   },
 
   types() {
-    return http.get('FHIR/healthcare-service-types')
+    return http.get('providers/valueset/service-type')
+  },
+
+  currencies() {
+    return http.get('/providers/valueset/currency-type')
   },
 }

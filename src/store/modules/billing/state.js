@@ -1,4 +1,4 @@
 export default () => ({
   billing: [],
-  currentBilling: {},
+  patientAccounts: [],
 })

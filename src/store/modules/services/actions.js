@@ -40,7 +40,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await ServicesAPI
-        .update(provider.id,payload)
+        .update(provider.id, payload)
       commit(UPDATE_SERVICE, data.data)
     } catch (error) {
       throw error.data || error

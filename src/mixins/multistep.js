@@ -11,24 +11,28 @@ export default {
     storeData: {
       immediate: true,
       handler(val) {
-        this.form = val.id ? { ...val, ...this.form } : { ...this.form , ...val }
+        this.form = val.id ? { ...this.form , ...val } : { ...val, ...this.form }
       },
     },
   },
 
   events: {
     'multistep:save': function() {
-      this.addToStoreData(this.storeData.id ? { ...this.storeData, ...this.form } :{ ...this.form , ...this.storeData })
+      this.addToStoreData(this.storeData.id ? { ...this.storeData, ...this.form } : { ...this.form , ...this.storeData })
     },
   },
 
   methods: {
     cancel() {
       this.refresh()
+      if (this.modal) {
+        this.$emit('stop')
+        return
+      }
       this.$router.push({name: this.parent})
     },
 
-    validateAndReroute() {
+    validateAndReroute(reroute = true) {
       this.$v.$touch()
 
       this.addToStoreData(this.form)
@@ -41,13 +45,21 @@ export default {
         return
       }
 
-      
-
       if (this.modal) {
         this.$emit('next')
         return
       }
-      this.$router.push({ name: this.next, query: { ...this.$route.query } })
+      if(reroute){
+        this.$router.push({ name: this.next, query: { ...this.$route.query } })
+      }
+    },
+
+    goBack(){
+      this.$emit('back')
+    },
+
+    nextRoute(){
+      this.$router.push({ path: this.next, query: { ...this.$route.query } })
     },
 
     reRoute() {

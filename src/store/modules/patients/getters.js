@@ -7,16 +7,27 @@ export default {
     })
   },
 
+  maleCount: state => state.patients.filter((p) => p.gender == 'MALE').length,
+
+  femaleCount: state => state.patients.filter((p) => p.gender == 'FEMALE').length,
+
   patientIsDeceased: state => {
     if (!state.currentPatient) return false
     return state.currentPatient.is_deceased
+  },
+
+  patientAccountBalance: state => {
+    if (!state.currentPatient) return false
+    const reducer = (accumulator, currentValue) => accumulator.balance + currentValue.balance
+
+    return state.currentPatient.payment_methods?.patient_user.reduce(reducer, 0)
   },
 
   patientMedications: state => {
     if (!state.currentPatient) {
       return []
     }
-    return state.patientMedications.filter(medication => medication.patient === state.currentPatient.id)
+    return state.patientMedications
       .sort((el1, el2) => Date.parse(el2.created_at) - Date.parse(el1.created_at))
   },
 
@@ -51,7 +62,7 @@ export default {
 
   getCurrentPatientNoDataLabel: state => (field = 'data') => {
     let patient = state.currentPatient.fullName
-    return `You have no ${field} available for this ${patient}`
+    return `You have no ${field} available for ${patient}`
   },
 
   patientHasVisit: (state, getters) => {
@@ -61,7 +72,7 @@ export default {
 
   patientVisit: (state, getters, rootState) => {
     if (!state.currentPatient) return false
-    return rootState.visits.visits.find(visit => visit.patient === state.currentPatient.id)
+    return rootState.visits.visits.find(visit => visit.patient === state.currentPatient.id && visit.status !== 'finished')
   },
 
   visitId: (state, getters) => {

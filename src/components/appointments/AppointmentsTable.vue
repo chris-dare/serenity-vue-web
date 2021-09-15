@@ -40,8 +40,8 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ $date.formatDate(row.start, 'yyyy/MM/dd') }}</p>
-            <p class="text-secondary text-xs">{{ $date.formatDate(row.start, 'HH:mm a') }} - {{ $date.formatDate(row.end, 'HH:mm a') }}</p>
+            <p>{{ $date.formatDate(row.slot.start, 'dd MMM, yyyy') }}</p>
+            <p class="text-secondary text-xs">{{ $date.formatDate(row.slot.start, 'HH:mm a') }} - {{ $date.formatDate(row.slot.end, 'HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -80,7 +80,7 @@
     <BillingDetailsModal
       :appointment="selectedAppointment"
     />
-  
+
     <NotesModal
       label="Reason for cancellation"
       save-label="Cancel Appointment"

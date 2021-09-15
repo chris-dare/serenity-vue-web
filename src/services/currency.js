@@ -1,6 +1,6 @@
 import currency from 'currency.js'
 
-const cedi = value => currency(value, { symbol: 'GHc', decimal: '.', separator: ',' })
+const cedi = (value, symbol = 'GHS') => currency(value, { symbol, decimal: '.', separator: ',' })
 
 export default {
   install(Vue) {

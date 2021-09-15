@@ -7,124 +7,16 @@
     @modal-hidden="visible = false"
   >
     <template slot="content">
-      <cv-form
-        autocomplete="off"
+      <SeForm
         class="space-y-8"
-        @submit.prevent
       >
         <p class="text-lg font-semibold">Medication</p>
-        <div
-          v-for="(detail, index) in form.drugs"
-          :key="index"
-        >
-          <p class="text-serenity-green font-semibold mb-4">{{ index+1 }}.</p>
-          <div class="grid grid-cols-12 gap-x-4 gap-y-8 items-center">
-            <div class="col-span-11 grid grid-cols-3 gap-4 items-center">
-              <AutoCompleteMedication
-                v-model="detail.medication_detail[0].display"
-                class="col-span-3"
-              />
-              <MultiSelect
-                v-model="detail.course_of_therapy_type"
-                title="Course of therapy"
-                :options="therapyTypes"
-                :multiple="false"
-              />
-              <cv-text-input
-                v-model="detail.medication_request_dosage_instruction[0].frequency"
-                label="Frequency"
-                type="number"
-                placeholder="eg 2 for twice frequency unit"
-                class="inherit-full-input"
-              />
-              <MultiSelect
-                v-model="detail.medication_request_dosage_instruction[0].frequency_unit"
-                title="Frequency unit"
-                :options="frequencies"
-                :multiple="false"
-                preselect
-              />
-              <cv-text-input
-                v-model="detail.medication_request_dosage_instruction[0].period"
-                label="Period"
-                type="number"
-                placeholder="eg 4 days"
-                class="inherit-full-input"
-              />
 
-              <MultiSelect
-                v-model="detail.medication_request_dosage_instruction[0].period_unit"
-                title="Period unit"
-                :options="units"
-                :multiple="false"
-                preselect
-              />
-            
-              <cv-text-input
-                v-model="detail.medication_request_dosage_instruction[0].strength"
-                label="Strength"
-                type="text"
-                class="inherit-full-input"
-              />
-            </div>
-      
-            <Trash
-              class="w-5 h-5 cursor-pointer"
-              @click="removeDrug(index)"
-            />
-          </div>
-        </div>
-        <p
-          v-if="$utils.validateRequiredField($v, 'drugs')"
-          class="error col-span-2"
-        >
-          All fields are required for drugs
-        </p>
+        <MedicationRequestForm
+          v-model="form"
+          :v="$v"
+        />
 
-        <div
-          class="flex items-center space-x-2 text-serenity-primary my-4 cursor-pointer text-sm"
-          @click="addDrug"
-        >
-          <AddAlt class="w-5 h-5" />
-          <p class="text-serenity-primary">Add new drug</p>
-        </div>
-        <div class="grid grid-cols-3 gap-4 items-center">
-          <MultiSelect
-            v-model="form.extra_details.priority"
-            title="Priority"
-            :options="priorities"
-            :track-by="null"
-            :multiple="false"
-          />
-          <MultiSelect
-            v-model="form.extra_details.medication_request_category"
-            title="Medication request category"
-            :options="categories"
-            :multiple="false"
-          />
-          <DatePicker
-            v-model="form.extra_details.date"
-            type="datetime"
-            label="Date"
-            class="se-input-gray"
-          />
-          <cv-text-input
-            v-model="form.extra_details.intended_dispenser"
-            label="Intended dispenser"
-            type="text"
-            placeholder="Intended dispenser"
-            class="inherit-full-input"
-          />
-          <cv-text-area
-            v-model="form.extra_details.medication_notes[0].display"
-            label="Medication notes"
-            type="text"
-            placeholder="Instruction on how to use the drug"
-            :rows="2"
-            class="inherit-full-input col-span-3"
-          />
-        </div>
-        
 
         <div class="flex items-center justify-between">
           <SeButton
@@ -141,7 +33,7 @@
             Submit
           </SeButton>
         </div>
-      </cv-form>
+      </SeForm>
     </template>
   </cv-modal>
 </template>
@@ -150,16 +42,21 @@
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import { mapActions, mapState } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
+import MedicationRequestForm from '@/components/forms/MedicationRequestForm'
+import isEmpty from 'lodash/isEmpty'
 
 
 export default {
   name: 'MedicationRequestModal',
 
+  components: { MedicationRequestForm },
+
   data() {
     return {
       form: {
         extra_details: {
-          medication_notes: [{display: ''}],
+          medication_request_notes: [{display: ''}],
+          medication_request_category: this.$isCurrentWorkspace('OPD') ? 'outpatient' : 'inpatient',
         },
         drugs: [
           {
@@ -211,10 +108,10 @@ export default {
               period_unit: { required },
             },
           },
-          
+
         },
       },
-      
+
     },
   },
 
@@ -250,9 +147,8 @@ export default {
     },
 
     async save() {
-      
+
       this.loading = true
-      console.log('here')
       try {
         this.form.requester = this.user.id
         await this.createMedicationRequest(this.formatMedication(this.form))
@@ -300,11 +196,17 @@ export default {
         newForm.push({
           ...drug,
           ...data.extra_details,
+          requester_practitioner_role: this.provider.practitionerRoleId,
           patient: this.$route.params.id,
           encounter: this.encounter.id,
-          requester_practitioner_role: this.provider.practitionerRoleId,
           medication_request_category: [{ display: data.extra_details.medication_request_category }],
         })
+      })
+      newForm.forEach(drug => {
+        if (isEmpty(drug.next_refill)) {
+          return delete drug.next_refill
+        }
+        drug.next_refill = this.$date.formatDate(drug.next_refill, 'yyyy-MM-dd')
       })
 
       return newForm
@@ -325,6 +227,10 @@ export default {
       },
       this.$v.$reset()
       this.visible = false
+    },
+
+    addTag(index, tag) {
+      this.form.drugs[index].medication_request_dosage_instruction[0].frequency = tag
     },
   },
 }

@@ -1,19 +1,24 @@
 <template>
   <div
-    class="inline-flex justify-center items-center px-3 py-0.5 text-sm space-x-1"
+    class="inline-flex justify-center items-center px-3 py-1 text-sm space-x-1"
     :class="[customClasses, full ? 'w-full h-9 rounded-md' : 'w-auto rounded-full']"
+    @click="$emit('click')"
   >
-    <Checkmark
-      v-if="variant === 'success'"
-      class="text-green-800 w-4"
-    />
-    <div
-      v-else
-      class="w-2 h-2 rounded-full"
-      :class="dotClasses"
-    />
+    <div v-if="showIcon">
+      <Checkmark
+        v-if="variant === 'success'"
+        class="text-green-800 w-4"
+      />
+      <div
+        v-else
+        class="w-2 h-2 rounded-full"
+        :class="dotClasses"
+      />
+    </div>
     <div>
-      <slot />
+      <slot>
+        {{ label }}
+      </slot>
     </div>
   </div>
 </template>
@@ -34,6 +39,16 @@ export default {
     full: {
       type: Boolean,
       default: false,
+    },
+
+    showIcon: {
+      type: Boolean,
+      default: false,
+    },
+
+    label: {
+      type: String,
+      default: null,
     },
   },
 

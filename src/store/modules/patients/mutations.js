@@ -11,7 +11,6 @@ import {
   SET_SERVICE_REQUESTS,
   SET_OBSERVATIONS,
   UPDATE_OBSERVATION,
-  SET_DIAGNOSTIC_REPORTS,
   SET_PATIENT_DIAGNOSIS,
   SET_PATIENT_NOTES,
   DELETE_SERVICE_REQUEST,
@@ -19,6 +18,8 @@ import {
   DELETE_OBSERVATION,
   SET_REFERRALS,
   UPDATE_REFERRAL,
+  DELETE_REFERRAL,
+  SET_PATIENTS_META,
 } from './mutation-types'
 
 export default {
@@ -28,6 +29,9 @@ export default {
 
   [SET_PATIENTS_COUNT](state, count) {
     state.patientsCount = count
+  },
+  [SET_PATIENTS_META](state, data) {
+    state.patientsMeta = data
   },
 
   [UPDATE_PATIENT](state, patient) {
@@ -42,7 +46,7 @@ export default {
     }
   },
 
-  
+
 
   [DELETE_PATIENT](state, patientId) {
     state.patients = state.patients.filter((es) => es.id !== patientId)
@@ -86,12 +90,8 @@ export default {
     state.patientMedications.splice(index, 1)
   },
 
-  [SET_DIAGNOSTIC_REPORTS](state, reports) {
-    state.patientDiagnosticReports = reports
-  },
-
   [SET_SERVICE_REQUESTS](state, requests) {
-    state.patientServiceRequests = requests
+    state.patientServiceRequests = requests.reverse()
   },
 
   [UPDATE_SERVICE_REQUEST](state, request) {
@@ -110,7 +110,7 @@ export default {
     const index = state.patientServiceRequests.findIndex(a => a.id === id)
     state.patientServiceRequests.splice(index, 1)
   },
-  
+
 
   [SET_OBSERVATIONS](state, observations) {
     state.patientObservations = observations
@@ -146,5 +146,9 @@ export default {
     } else {
       state.patientReferrals.push(referral)
     }
+  },
+
+  [DELETE_REFERRAL](state, id) {
+    state.patientReferrals = state.patientReferrals.filter((es) => es.id !== id)
   },
 }

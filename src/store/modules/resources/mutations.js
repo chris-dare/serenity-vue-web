@@ -20,6 +20,14 @@ import {
   SET_VITALS_UNIT_TYPES,
   SET_LANGUAGES,
   SET_VENDORS,
+  SET_PHARMACY_INVENTORY_OPTIONS,
+  SET_CURRENCIES,
+  SET_ENCOUNTER_PRIORITIES,
+  SET_OBSERVATION_CATEGORIES,
+  SET_DIAGNOSTIC_LAB_PROCEEDURES,
+  SET_SERVICE_GENERIC_PERIOD_UNIT_TYPES,
+  SET_SERVICE_REQUEST_CATEGORY_TYPES,
+  SET_SERVICE_REQUEST_SECTION_TYPES,
 } from './mutation-types'
 
 export default {
@@ -46,6 +54,22 @@ export default {
     }
   },
 
+  [SET_DIAGNOSTIC_LAB_PROCEEDURES](state, diagnosticLabProceedures) {
+    state.diagnosticLabProceedures = diagnosticLabProceedures
+  },
+
+  [SET_SERVICE_GENERIC_PERIOD_UNIT_TYPES](state, serviceGenericPeriodUnits) {
+    state.serviceGenericPeriodUnits = serviceGenericPeriodUnits
+  },
+
+  [SET_SERVICE_REQUEST_CATEGORY_TYPES](state, serviceRequestCategoryTypes) {
+    state.serviceRequestCategoryTypes = serviceRequestCategoryTypes
+  },
+
+  [SET_SERVICE_REQUEST_SECTION_TYPES](state, serviceRequestSectionTypes) {
+    state.serviceRequestSectionTypes = serviceRequestSectionTypes
+  },
+
   [SET_SPECIALTIES](state, specialties) {
     state.specialties = specialties
   },
@@ -68,6 +92,10 @@ export default {
 
   [SET_ENCOUNTER_CLASSES](state, classes) {
     state.encounterClasses = classes
+  },
+
+  [SET_OBSERVATION_CATEGORIES](state, categories) {
+    state.observationCategories = categories
   },
 
   [SET_MARITAL_STATUSES](state, classes) {
@@ -115,5 +143,17 @@ export default {
   },
   [SET_VENDORS](state, vendors) {
     state.vendors = vendors
+  },
+
+  [SET_PHARMACY_INVENTORY_OPTIONS](state, inventory) {
+    state.pharmacyInventory = inventory
+  },
+
+  [SET_CURRENCIES](state, currencies) {
+    state.currencies = currencies
+  },
+
+  [SET_ENCOUNTER_PRIORITIES](state, encounterPriorities) {
+    state.encounterPriorities = encounterPriorities
   },
 }

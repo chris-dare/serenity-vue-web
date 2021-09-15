@@ -16,25 +16,27 @@
         />
 
         <div class="grid grid-cols-2 gap-8 my-8">
-          <cv-text-input
+          <FormInput
             v-model="form.first_name"
-            label="First name (required)"
+            required
+            label="First name"
             placeholder="Patient First Name"
             :invalid-message="$utils.validateRequiredField($v, 'first_name')"
             type="text"
             class="inherit-full-input"
           />
 
-          <cv-text-input
+          <FormInput
             v-model="form.last_name"
-            label="Last name (required)"
+            required
+            label="Last name"
             placeholder="Patient last or family name"
             :invalid-message="$utils.validateRequiredField($v, 'last_name')"
             type="text"
             class="inherit-full-input"
           />
           <div class="space-y-8">
-            <cv-text-input
+            <FormInput
               v-model="form.other_names"
               label="Other names"
               placeholder="Any other name"
@@ -47,14 +49,16 @@
               class="w-full max-w-full inherit-full-input se-input-gray"
               placeholder="dd/mm/yyyy"
               label="Date of Birth"
-              :max-date="maxDate"
+              :error-message="$utils.validateRequiredField($v, 'birth_date')"
+              required
             />
 
             <MultiSelect
               v-model="form.gender"
               :options="genders"
-              title="Gender (required)"
+              title="Gender"
               placeholder="Male or female"
+              required
               track-by="code"
               label="display"
               custom-field="code"
@@ -110,6 +114,7 @@ export default {
       first_name: { required },
       last_name: { required },
       gender: { required },
+      birth_date: { required },
     },
   },
 

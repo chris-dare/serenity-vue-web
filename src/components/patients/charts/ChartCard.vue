@@ -1,5 +1,10 @@
 <template>
-  <div class="bg-white">
+  <div
+    ref="chart"
+    class="bg-white"
+    @mouseenter="show = true"
+    @mouseleave="show = false"
+  >
     <div class="p-3 px-4">
       <p class="capitalize mb-2">
         {{ chart.title | removeUnderscore }} <span class="text-gray-500">({{ chart.data.length }})</span>
@@ -28,17 +33,68 @@
       </div>
     </div>
     <div>
-      <ccv-area-chart
-        class="chart"
+      <la-cartesian
+        :width="width"
+        :height="150"
         :data="chart.data"
-        :options="options"
-      />
+        :padding="[20, 0, 0, 0]"
+        autoresize
+      >
+        <la-area
+          animated
+          prop="value"
+          color="#0C7882"
+          fill-color="#cee4e6"
+          curve
+          :width="3"
+          continued
+          dot
+        />
+        <la-area
+          v-if="includesSecondValue"
+          animated
+          prop="value2"
+          color="#0C7882"
+          fill-color="#cee4e6"
+          curve
+          :width="3"
+          continued
+          dot
+        />
+        <la-tooltip
+          v-if="show"
+          ref="tooltip"
+        >
+          <div
+            slot-scope="props"
+            class="tooltip"
+          >
+            <div>
+              <div class="flex items-center justify-between">
+                <span>Time</span>
+                <span>{{ chart.data[props.index] ? $date.formatDate(chart.data[props.index].date) : '' }}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span>Value</span>
+                <span>{{ chart.data[props.index] ? chart.data[props.index].value : '' }}</span>
+              </div>
+            </div>
+          </div>
+        </la-tooltip>
+      </la-cartesian>
     </div>
   </div>
 </template>
 
 <script>
+import { Cartesian, Area, Tooltip } from 'laue'
+
 export default {
+  components: {
+    LaCartesian: Cartesian,
+    LaArea: Area,
+    LaTooltip: Tooltip,
+  },
   props: {
     chart: {
       type: Object,
@@ -47,69 +103,28 @@ export default {
   },
   data() {
     return {
-      data: [
-        {
-          group: 'Dataset 1',
-          date: '2019-01-01T00:00:00.000Z',
-          value: 0,
-        },
-        {
-          group: 'Dataset 1',
-          date: '2019-01-06T00:00:00.000Z',
-          value: 300,
-        },
-        {
-          group: 'Dataset 1',
-          date: '2019-01-08T00:00:00.000Z',
-          value: 400,
-        },
-        {
-          group: 'Dataset 1',
-          date: '2019-01-15T00:00:00.000Z',
-          value: 100,
-        },
-      ],
+      show: false,
     }
   },
 
   computed: {
-    options() {
-      return {
-        axes: {
-          bottom: {
-            mapsTo: 'date',
-            scaleType: 'time',
-            visible: false,
-            margins: 0,
-          },
-          left: {
-            mapsTo: 'value',
-            scaleType: 'linear',
-            visible: false,
-          },
-        },
-        grid: {
-          x: { enabled: false },
-          y: { enabled: false },
-        },
-        legend: {
-          enabled: false,
-        },
-        curve: 'curveNatural',
-        height: '8rem',
-        getStrokeColor: function () {
-          return '#0B6B74'
-        },
-        getFillColor: function () {
-          return '#cee4e6'
-        },
-        color: {
-          scale: {
-            'Dataset 1': '#0B6B74',
-          },
-        },
-      }
+    width() {
+      return this.$refs.chart ? this.$refs.chart.clientWidth : 200
+    },
+
+    includesSecondValue() {
+      return !!this.chart.data.find(v => v.value2)
     },
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.tooltip {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 4px;
+  color: white;
+  width: 200px;
+  padding: 0.5em;
+}
+</style>

@@ -15,29 +15,27 @@
       :options="practitioners"
       :multiple="false"
       title="Doctor"
-      label="fullName"
       track-by="id"
+      custom-field="id"
+      :custom-label="doctorCustomLabel"
     />
 
     <cv-text-input
       v-else
       v-model="form.recipient_extra_detail"
-      class="inherit-full-input pt-4"
+      class="inherit-full-input"
       type="text"
       label="Doctor"
       placeholder="Type the name of the doctor to be referred to"
     />
 
-    <MultiSelect
+    <PrioritiesSelect
       v-model="form.priority"
       :options="priorities"
-      track-by="code"
-      label="display"
-      custom-field="code"
-      :multiple="false"
-      title="Priority"
       :error-message="$utils.validateRequiredField($v, 'priority')"
+      required
     />
+
     <MultiSelect
       v-model="form.referral_type"
       :options="referralTypes"
@@ -45,12 +43,14 @@
       title="Referral Type"
       :custom-label="customLabel"
       :error-message="$utils.validateRequiredField($v, 'referral_type')"
+      required
     />
 
-    <cv-text-area
+    <FormInput
       v-model="form.reason"
       :rows="5"
       label="Reason"
+      type="textarea"
     />
 
     <div class="flex justify-end mt-12">
@@ -97,7 +97,7 @@ export default {
     }),
 
     ...mapGetters({
-      practitioners: 'practitioners/practitioners',
+      practitioners: 'practitioners/practitionersWithoutCurrentUser',
       practitionerRoleId: 'auth/practitionerRoleId',
     }),
   },
@@ -138,18 +138,14 @@ export default {
         this.form.requester = this.practitionerRoleId
         this.save(reroute)
       }
-      
+
     },
 
     async save(reroute) {
       this.loading = true
 
       try {
-        let form = { ...this.form  }
-
-        if (this.form.recipient) {
-          form.recipient = this.form.recipient.practitioner_role.id
-        }
+        let form = { ...this.form, status: 'ACTIVE' }
 
         await this.createReferral(form)
         this.loading = false
@@ -169,10 +165,6 @@ export default {
       try {
         let form = { ...this.form  }
 
-        if (this.form.recipient) {
-          form.recipient = this.form.recipient.practitioner_role.id
-        }
-
         await this.updateReferral(form)
         this.loading = false
         this.$toast.open({
@@ -187,6 +179,9 @@ export default {
 
     customLabel (value) {
       return value.split('_').join(' ').toLowerCase()
+    },
+    doctorCustomLabel (value) {
+      return `${value.fullName} (${value.specialties ? value.specialties.split('_').join(' ') : ''})`
     },
 
     reset() {

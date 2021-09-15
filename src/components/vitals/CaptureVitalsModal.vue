@@ -16,6 +16,10 @@
           v-model="form[vital.code]"
           :suffix-text="vital.display"
           :label="vital.label"
+          :disabled="vital.disabled"
+          :placeholder="vital.placeholder"
+          :invalid-message="$utils.validateRequiredField($v, vital.code)"
+          @input="setBMI(vital.code)"
         />
       </div>
       <div class="space-y-4 mt-8">
@@ -39,7 +43,10 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
+import debounce from 'lodash/debounce'
+import { required } from 'vuelidate/lib/validators'
+const bpvalidator = (value) => !!value?.includes('/')
 
 export default {
   name: 'CaptureVitalsModal',
@@ -49,12 +56,20 @@ export default {
       form: {},
       visible: false,
       loading: false,
+      patient: null,
     }
   },
 
   events: {
     'capture:vitals:open': function(){
       this.visible = true
+      this.patient = this.$route.params.id
+    },
+    'reception:capture:vitals:open': async function(data){
+      this.getEncounters({patient: data.params[0].patient, visit: data.params[0].visit, status: 'planned' })
+      await this.getVitalsUnitTypes()
+      this.visible = true
+      this.patient = data.params[0].patient
     },
     'capture:vitals:close': function(){
       this.close()
@@ -66,26 +81,22 @@ export default {
       vitalsOptions: state => state.resources.vitalsUnitTypes,
     }),
 
-    ...mapGetters({
-      currentEncounterLatestVitals: 'encounters/currentEncounterLatestVitals',
-    }),
-
     units() {
       return this.vitalsOptions.map(option => {
         option.label = option.code === 'DEGREES_CELCIUS' ? 'temperature' : option.code.split('_').join(' ').toLowerCase()
+        option.disabled = option.code === 'BMI'
+        option.type = option.code === 'BMI' ? 'number' : 'text'
+        option.placeholder = option.code === 'BLOOD_PRESSURE' ? '80/120' : ''
         return option
       })
     },
   },
 
-  watch: {
-    currentEncounterLatestVitals: {
-      immediate: true,
-      handler(val, oldVal) {
-        
-        if (val !== oldVal) {
-          this.form = { ...val }
-        }
+  validations: {
+    form: {
+      BLOOD_PRESSURE: {
+        required,
+        bpvalidator,
       },
     },
   },
@@ -93,17 +104,28 @@ export default {
   methods: {
     ...mapActions({
       createVitals: 'patients/createVitals',
+      getVitalsUnitTypes: 'resources/getVitalsUnitTypes',
+      getEncounters: 'encounters/getEncounters',
     }),
+
     close() {
       this.form = {}
       this.visible = false
     },
 
     async save() {
+      this.$v.$touch()
 
+      if (this.$v.$invalid) {
+        this.$toast.open({
+          message: 'Please these fields are required!',
+          type: 'error',
+        })
+        return
+      }
       try {
         this.loading = true
-        await this.createVitals({ payload: this.form, patient: this.$route.params.id })
+        await this.createVitals({ payload: this.form, patient: this.patient })
         this.$toast.open({ message: 'Vitals saved' })
         this.loading = false
         this.close()
@@ -111,6 +133,18 @@ export default {
         this.loading = false
       }
     },
+
+    setBMI: debounce(function(code) {
+      if (!this.form.WEIGHT_KG || !this.form.HEIGHT_CM) return this.form.BMI
+      if (code !== 'WEIGHT_KG' && code !== 'HEIGHT_CM') return this.form.BMI
+
+      let weight = parseInt(this.form.WEIGHT_KG)
+      let height = parseInt(this.form.HEIGHT_CM)
+
+      let bmi = (weight/(Math.pow(height, 2))) * 10000
+
+      this.form.BMI = bmi.toFixed(2)
+    }, 300, false),
   },
 }
 </script>

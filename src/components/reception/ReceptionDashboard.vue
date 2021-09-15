@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import VisitsTable from '@/components/visits/VisitsTable'
 export default {
   name: 'ReceptionDashboard',
@@ -76,7 +76,7 @@ export default {
           label: 'Book COVID-19 test',
           description: 'Schedule a patient for COVID test',
           type: 'book',
-          value: 'book',
+          value: 'schedule',
         },
       ]
 
@@ -84,13 +84,20 @@ export default {
     },
   },
 
+  created() {
+    this.getCurrencies()
+  },
+
   methods: {
+    ...mapActions({
+      getCurrencies: 'resources/getCurrencies',
+    }),
     change(dashboard) {
       this.selected = dashboard.value
 
       switch (dashboard.value) {
       case 'visit':
-        this.$trigger('visit:start:open')
+        this.$trigger('start:visit:open')
         break
       case 'register':
         this.$router.push({ name: 'Biodata'})

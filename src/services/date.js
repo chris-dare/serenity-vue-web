@@ -4,9 +4,10 @@ import startOfMonth from 'date-fns/startOfMonth'
 import endOfDay from 'date-fns/endOfDay'
 import endOfMonth from 'date-fns/endOfMonth'
 import formatDistance from 'date-fns/formatDistance'
+import differenceInYears from 'date-fns/differenceInYears'
 import momentTimeZone from 'moment-timezone'
 
-const formatDate = (date, formatString = 'yyyy-MM-dd HH:mm') => {
+const formatDate = (date, formatString = 'dd MMM, yyyy hh:mm a') => {
   if (!date) return ''
   return format(new Date(date), formatString)
 }
@@ -38,6 +39,8 @@ const formatQueryParamsDate = (dateString) => {
 
 const queryNow = () => formatQueryParamsDate(new Date())
 
+const userNow = () => formatDate(new Date(), 'yyyy-MM-dd\'T\'HH:mm:ssxxx')
+
 const sortByDate = (data, field, order = 'asc') => {
   if (!data.length) return data
 
@@ -49,8 +52,13 @@ const sortByDate = (data, field, order = 'asc') => {
     } else {
       return dateA < dateB ? 1 : dateA > dateB ? -1 : 0
     }
-    
+
   })
+}
+
+const getAge = (date) => {
+  if (!date) return ''
+  return `${differenceInYears(Date.now(), new Date(date))} years`
 }
 
 export default {
@@ -67,6 +75,8 @@ export default {
       queryNow,
       distanceInWords,
       sortByDate,
+      getAge,
+      userNow,
     }
   },
 }

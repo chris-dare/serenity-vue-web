@@ -10,15 +10,15 @@ export default class User {
     return {
       ...this.data,
       fullName: `${this.data.title || ''} ${this.data.first_name || ''} ${this.data.last_name || ''}`,
-      specialties: this.data.practitioner_specialty.join(', '),
-      role: this.data.practitioner_role.name,
+      specialties: this.data.practitioner_specialty?.join(', '),
+      role: this.data.practitioner_role?.name,
     }
   }
-
+  // TODO: rework this
   getEditView() {
-    const practitioner_specialty = this.data.practitioner_specialty.map(sp => sp.Display)
-    let editData = renameKeys({ ...this.data, practitioner_specialty}, 
-      { date_of_birth : 'birth_date', phone_number : 'mobile' })
+    const practitioner_specialty = this.data.practitioner_specialty.map(sp => sp.code)
+    let editData = renameKeys({ ...this.data, practitioner_specialty},
+      { date_of_birth : 'birth_date', phone_number : 'mobile', practitioner_type: 'team_member_type' })
     return editData
   }
 
@@ -28,7 +28,7 @@ export default class User {
     let practitioner_specialty = []
 
     if (checkArrayType(this.data.practitioner_specialty) === 'string') {
-      practitioner_specialty = specialties.filter(specialty => this.data.practitioner_specialty.includes(specialty.Display))
+      practitioner_specialty = specialties.filter(specialty => this.data.practitioner_specialty.includes(specialty.code))
     } else {
       practitioner_specialty = this.data.practitioner_specialty
     }
@@ -39,12 +39,12 @@ export default class User {
   }
 
   getCreateView() {
-    const practitioner_specialty = this.data.practitioner_specialty.map(sp => sp.Display)
+    const practitioner_specialty = this.data.practitioner_specialty.map(sp => sp.code)
     let createData = { ...user, ...this.data, practitioner_specialty }
-    createData.practitioner_specialty.map(sp => sp.Display)
+    createData.practitioner_specialty.map(sp => sp.code)
     return createData
   }
-  
+
 }
 
 const renameKeys = (obj, keysMap) => {
@@ -65,15 +65,16 @@ const checkArrayType = (obj) => {
 
 
 
+// eslint-disable-next-line no-unused-vars
 const user = {
-  'title': '',
-  'team_member_type': '',
-  'email': '',
-  'date_of_birth': '',
-  'phone_number': '',
-  'country_code': '',
-  'qualification': [],
-  'gender': '',
-  'postal_address':'',
-  'home_address':'',
+  // 'title': '',
+  'team_member_type': 'clinical_staff',
+  // 'email': '',
+  // 'date_of_birth': '',
+  // 'phone_number': '',
+  'country_code': '+233',
+  // 'qualification': [],
+  // 'gender': '',
+  // 'postal_address':'',
+  // 'home_address':'',
 }

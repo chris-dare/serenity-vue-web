@@ -1,6 +1,6 @@
 <template>
   <div v-if="hasNoCurrentEncounter">
-    There's no current encounter
+    There is no current encounter
   </div>
   <div
     v-else
@@ -10,7 +10,7 @@
       <div>
         <p class="text-secondary">Doctor in charge</p>
         <InfoImageBlock
-          :label="fullName"
+          :label="currentEncounterPractitioner.name"
           description="General practitioner"
         />
       </div>
@@ -34,12 +34,24 @@
         title="Presenting Complaint"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
       >
+        <p
+          v-if="!currentEncounterPresentingComplaint"
+          class="text-sm text-center my-4"
+        >
+          No history of presenting illness
+        </p>
         <p class="text-gray-500">{{ currentEncounterPresentingComplaint }}</p>
       </ToggleList>
       <ToggleList
         title="History of Presenting Complaint"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
       >
+        <p
+          v-if="!currentEncounterHistoryComplaint"
+          class="text-sm text-center my-4"
+        >
+          No chief complaint
+        </p>
         <p class="text-gray-500">{{ currentEncounterHistoryComplaint }}</p>
       </ToggleList>
       <ToggleList
@@ -137,13 +149,14 @@ export default {
       currentEncounterSocialHistory: 'encounters/currentEncounterSocialHistory',
       currentEncounterExamSystems: 'encounters/currentEncounterExamSystems',
       latestVitalsDate: 'encounters/latestVitalsDate',
+      currentEncounterPractitioner: 'encounters/currentEncounterPractitioner',
     }),
-    
+
     hasNoCurrentEncounter() {
       return !!isEmpty(this.currentEncounter)
     },
   },
 
-  
+
 }
 </script>

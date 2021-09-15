@@ -2,25 +2,73 @@ import http from '@/http'
 
 export default {
   url: 'providers/',
-  
-  list(providerId) {
-    return http.get(`${this.url}${providerId}/bills/filter`)
+
+  list(providerId, params) {
+    return http.get(`${this.url}${providerId}/finance/charge-items`, { params })
   },
 
-  // filter(providerId, params) {
-  //   return http.get(`${this.url}${providerId}/bills/filter?created_on_after=${params.created_on_after}&created_on=${params.created_on}&patient_mobile=${params.patient_mobile}&payerid=${params.payerid}&status=${params.status}`)
-  // },
+  invoices(providerId, params) {
+    return http.get(`${this.url}${providerId}/finance/invoices`, { params })
+  },
 
   filter(providerId, params) {
-    return http.get(`${this.url}${providerId}/bills/filter`, { params })
+    return http.get(`${this.url}${providerId}/finance/charge-items`, { params })
+  },
+
+  patientBills(providerId, patientId) {
+    return http.get(`${this.url}${providerId}/patients/${patientId}/finance/charge-items`)
+  },
+
+  patientAccounts(providerId, patientId, params) {
+    return http.get(`${this.url}${providerId}/patients/${patientId}/payment-options`, { params })
   },
 
   create(providerId, params) {
     return http.post(`${this.url}${providerId}/bills`, params)
   },
 
-  duplicate(providerId, params) {
-    return http.post(`${this.url}${providerId}/bills/${params.id}`, params)
+  transactions(providerId, corporateId, params) {
+    return http.get(`${this.url}${providerId}/corporates/${corporateId}/transactions`, { params })
+  },
+
+  getCreditTotal(providerId, corporateId) {
+    return http.get(`${this.url}${providerId}/corporates/${corporateId}/bills/total`)
+  },
+
+  export(providerId, billId) {
+    return http.get(`${this.url}${providerId}/invoice/${billId}`)
+  },
+
+  topup(providerId, patientId, walletId, params) {
+    return http.post(`${this.url}${providerId}/patients/${patientId}/wallets/${walletId}/deposit`, params)
+  },
+
+  userPay(providerId, patientId, chargeItemId, params) {
+    return http.post(`providers/${providerId}/patients/${patientId}/charges/${chargeItemId}/pay`, params)
+  },
+
+  servicePay(providerId, params) {
+    return http.post(`providers/${providerId}/pay/servicerequests`, params)
+  },
+
+  invoicePay(providerId, invoiceId, params) {
+    return http.post(`providers/${providerId}/finance/invoices/${invoiceId}/pay`, params)
+  },
+
+  corporatePay(patientId, chargeItemId, params) {
+    return http.post(`finance/patients/${patientId}/charges/${chargeItemId}/pay`, params)
+  },
+
+  corporateSettle(providerId, corporateId, billId, params) {
+    return http.post(`${this.url}${providerId}/corporates/${corporateId}/bills/${billId}`, params)
+  },
+
+  pendingBillsTotal(providerId, corporateId) {
+    return http.get(`providers/${providerId}/corporates/${corporateId}/bills/total`)
+  },
+
+  getAccountHistory(providerId, patientId, walletId, params) {
+    return http.get(`providers/${providerId}/patients/${patientId}/wallets/${walletId}/history`, { params })
   },
 
   update(providerId, params) {
@@ -30,4 +78,18 @@ export default {
   delete(providerId,id) {
     return http.delete(`${this.url}${providerId}/bills/${id}`)
   },
+
+  print(providerId,id) {
+
+    return http({
+      method: 'get',
+      url: `${this.url}${providerId}/finance/invoices/${id}/print`,
+      responseType: 'blob',
+    }).then((response) =>
+    {
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      window.printJS(url)
+    })
+  },
+
 }

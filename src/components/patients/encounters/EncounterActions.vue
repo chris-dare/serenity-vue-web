@@ -77,9 +77,11 @@ export default {
         },
         {
           label: 'Close Encounter',
-          description: 'End the encounter with patientx',
+          description: 'End the encounter with patient',
           type: 'close',
-          value: 'close',
+          value: 'route',
+          path: 'EncountersSummary',
+          // value: 'close',
         },
       ]
     },

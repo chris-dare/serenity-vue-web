@@ -2,59 +2,27 @@
   <cv-modal
     class="se-no-title-modal"
     close-aria-label="Close"
-    :visible="modalVisible"
+    :visible="visible"
     size="xs"
+    @modal-hidden="close"
   >
     <template slot="content">
-      <div class="flex items-center justify-between mb-6 w-full">
+      <div class="flex items-center justify-between mb-6 pr-6 w-full">
         <p>Order details</p>
         <Tag
-          label="Fully paid"
-          class="bg-success text-white"
-          kind="gray"
-        />
+          show-icon
+          :variant="getStatusVariant(bill.status)"
+          class="cursor-pointer"
+        >
+          {{ bill.status }}
+        </Tag>
       </div>
-      <div>
-        <div class="mb-6">
-          <p class="text-gray-500  mb-2">Prescribed by</p>
-          <div class="flex items-center">
-            <img
-              class="w-12 h-12 rounded-full mr-3"
-              src="@/assets/img/user 1.svg"
-              alt=""
-            >
-            <div>
-              <div>
-                <p class="mt-1 ">
-                  {{ 'Chris Dare' }}
-                </p>
-                <p class="mt-1  text-secondary">
-                  {{ 'aha' }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="my-6">
-          <p class="text-gray-500 ">Encounter</p>
-          <p class=" text-primary">
-            {{ 'aha' }}
-            <router-link
-              to="/"
-              class="text-serenity-primary font-bold underline ml-2"
-            >
-              View encounter
-            </router-link>
-          </p>
-        </div>
-        <div class="my-6">
-          <p class="text-gray-500 ">Payment Method</p>
-          <p class="text-serenity-primary ">
-            {{ 'aha' }}
-          </p>
-        </div>
-        <OrderReceipts :orders="orders" />
-      </div>
+
+      <PaymentDetail
+        :details="bill"
+        label="Payment Transaction"
+        :amount="bill.charge"
+      />
       <div class="w-full mt-8">
         <SeButton
           variant="secondary"
@@ -68,20 +36,40 @@
 </template>
 
 <script>
-import OrderReceipts from '@/components/patients/OrderReceipts'
+import PaymentDetail from '@/components/payment/PaymentDetail'
+import {mapGetters} from 'vuex'
+import modalMixin from '@/mixins/modal'
 export default {
-  name: 'PrescriptionModal',
+  name: 'OrderDetailsModal',
 
-  components: { OrderReceipts },
+  components: { PaymentDetail },
 
-  props: {
-    visible: {
-      type: Boolean,
-      default: false,
+  mixins: [modalMixin],
+
+  data() {
+    return {
+      bill: {
+        patient: {},
+      },
+    }
+  },
+
+  events: {
+    'order:details:open': function(data){
+      this.visible = true
+      this.bill = data.params[0]
+      this.bill.patient = {
+        mobile: this.bill.patient_mobile,
+        fullName: this.bill.patient_name,
+      }
     },
   },
 
   computed: {
+    ...mapGetters({
+      getStatusVariant: 'billing/getStatusVariant',
+    }),
+
     orders() {
       let orders = []
       for (let index = 0; index < 3; index++) {
@@ -92,16 +80,6 @@ export default {
       }
       return orders
     },
-    modalVisible: {
-      set(val) {
-        this.$emit('visible:update', val)
-      },
-      get() {
-        return this.visible
-      },
-    },
   },
 }
 </script>
-
-<style></style>

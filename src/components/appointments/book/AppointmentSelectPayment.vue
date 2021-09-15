@@ -122,22 +122,16 @@ export default {
       icon: ChevronRight,
       paymentTypes: [
         {
-          label: 'Cash',
-          description: 'Cash patients made to clinic billing',
-          type: 'cash',
-          value: 'cash',
+          label: 'User Account',
+          description: 'Select associated user account',
+          type: 'user',
+          value: 'user',
         },
         {
-          label: 'Mobile Money',
-          description: 'Send mobile money via prefered network',
+          label: 'Corporate Account',
+          description: 'Select associated corporate account',
           type: 'momo',
-          value: 'momo',
-        },
-        {
-          label: 'Credit Card',
-          description: 'Support for VISA or Mastercard payment',
-          type: 'card',
-          value: 'card',
+          value: 'coporate',
         },
         {
           label: 'Insurance',
@@ -157,7 +151,6 @@ export default {
   methods: {
     ...mapActions({
       addToCurrentAppointment: 'appointments/addToCurrentAppointment',
-      getDoctors: 'doctors/getDoctors',
     }),
 
     save() {

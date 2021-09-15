@@ -1,13 +1,19 @@
 <template>
   <div>
-    <div class="bx--label">{{ title }}</div>
+    <div class="bx--label space-x-1">
+      <span
+        v-if="required"
+        class="error"
+      >*</span>
+      {{ title }}
+    </div>
     <div class="flex item-center group relative">
       <VueMultiselect
         v-model="selected"
         :options="options"
         :multiple="multiple"
         :close-on-select="!multiple"
-        :preserve-search="true"
+        :preserve-search="preserveSearch"
         :placeholder="placeholder"
         :preselect-first="preselect"
         :show-labels="false"
@@ -29,6 +35,24 @@
           >
             <Close class="w-4" />
           </div>
+        </template>
+        <!-- Pass on all named slots -->
+        <slot
+          v-for="slot in Object.keys($slots)"
+          :slot="slot"
+          :name="slot"
+        />
+
+        <!-- Pass on all scoped slots -->
+        <template
+          v-for="slot in Object.keys($scopedSlots)"
+          :slot="slot"
+          slot-scope="scope"
+        >
+          <slot
+            :name="slot"
+            v-bind="scope"
+          />
         </template>
       </VueMultiselect>
     </div>
@@ -56,7 +80,7 @@ export default {
     },
 
     value: {
-      type: [Array, Object, String],
+      type: [Array, Object, String, Number],
       default: () => [],
     },
 
@@ -90,6 +114,11 @@ export default {
       default: false,
     },
 
+    preserveSearch: {
+      type: Boolean,
+      default: true,
+    },
+
     customLabel: {
       type: Function,
       default (option, label) {
@@ -102,6 +131,11 @@ export default {
       type:String,
       default: null,
     },
+
+    required: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -112,25 +146,6 @@ export default {
   },
 
   computed: {
-    // selected: {
-    //   get() {
-    //     let data = {}
-    //     if (this.customField) {
-    //       data = this.options.find(option => option[this.customField] === this.value)
-    //     } else {
-    //       data = this.value
-    //     }
-    //     return data
-    //   },
-    //   set(val) {
-    //     if (val === '' || !val) {
-    //       this.$emit('input', null)
-    //       return
-    //     }
-    //     this.$emit('input', this.customField && val[this.customField] ? val[this.customField] : val)
-    //   },
-    // },
-
     isEmptyData() {
       return isEmpty(this.selected)
     },
@@ -157,7 +172,7 @@ export default {
       handler(val, oldVal) {
         if (val !== oldVal) {
           if (val === '' || !val) {
-            this.$emit('input', null)
+            this.$emit('input', this.multiple ? [] : null)
             return
           }
           this.$emit('input', this.customField && val[this.customField] ? val[this.customField] : val)

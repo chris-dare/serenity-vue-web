@@ -33,14 +33,13 @@ const AppointmentSummaryDetail = () => import('@/components/appointments/book/Ap
 const AppointmentSelectSlot = () => import('@/components/appointments/book/AppointmentSelectSlot')
 const AppointmentSelectNotes = () => import('@/components/appointments/book/AppointmentSelectNotes')
 const AppointmentSelectClinic = () => import('@/components/appointments/book/AppointmentSelectClinic')
-const AppointmentWalkInSlot = () => import('@/components/appointments/book/AppointmentWalkInSlot')
 import { mapState, mapActions } from 'vuex'
 // import get from 'lodash/get'
 
 export default {
   name: 'BookAppointmentModal',
 
-  components: {  AppointmentSelectClinic, AppointmentSelectPatient, AppointmentSelectNotes, AppointmentSelectSlot, AppointmentSummaryDetail, AppointmentWalkInSlot },
+  components: {  AppointmentSelectClinic, AppointmentSelectPatient, AppointmentSelectNotes, AppointmentSelectSlot, AppointmentSummaryDetail },
 
   props: {
     appointment: {
@@ -83,8 +82,7 @@ export default {
       const map = {
         1: 'AppointmentSelectPatient',
         2: 'AppointmentSelectClinic',
-        3: this.type === 'visit' ? 'AppointmentWalkInSlot' : 'AppointmentSelectSlot',
-        // 3: 'AppointmentSelectSlot', 
+        3: 'AppointmentSelectSlot',
         4: 'AppointmentSelectNotes',
         5: 'AppointmentSummaryDetail',
       }

@@ -34,7 +34,7 @@
     </EditableCard>
     <EditableCard
       type="add"
-      title="Allegies"
+      title="Allergies"
     >
       <div class="py-4">
         <ToggleList title="Migraines (Jun 28, 2020)">

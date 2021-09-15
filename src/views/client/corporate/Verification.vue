@@ -3,7 +3,7 @@
     <cv-form @submit.prevent="">
       <!-- title -->
       <div class=" gap-8 my-8">
-        <cv-text-input
+        <FormInput
           v-model="form.company_name"
           type="text"
           label="Company name"
@@ -75,6 +75,7 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { required, email } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import MultiStep from '@/mixins/multistep'
+import { emailFormatter } from '@/services/custom-validators'
 
 export default {
   name: 'Verification',
@@ -110,7 +111,7 @@ export default {
       admin_first_name: { required },
       admin_last_name: { required },
       admin_phoneno: { required },
-      admin_email: { email },
+      admin_email: { email: (val) => email(emailFormatter(val)) },
     },
   },
 
@@ -137,7 +138,6 @@ export default {
     },
     async save(){
       this.loading = true
-      console.info(JSON.parse(JSON.stringify(this.storeData)))
       let payload = {
         company_name : this.form.company_name,
         tin_number: this.form.tin_number,
@@ -167,7 +167,6 @@ export default {
     },
     async update(){
       this.loading = true
-      console.info(JSON.parse(JSON.stringify(this.storeData)))
       try {
         await this.updateClient(this.form)
         this.$toast.open({

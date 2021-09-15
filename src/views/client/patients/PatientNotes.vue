@@ -16,7 +16,7 @@
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+          class="px-4 bg-white hover:bg-white mr-2 text-placeholder"
           @click="visible = !visible"
         >
           Doctor’s Notes ({{ 0 }})
@@ -24,7 +24,7 @@
         <cv-button
           size="field"
           kind="ghost"
-          class="px-4 bg-white hover:bg-white mr-2 text-serenity-placeholder"
+          class="px-4 bg-white hover:bg-white mr-2 text-placeholder"
         >
           Nurse’s Notes ({{ 0 }})
         </cv-button>

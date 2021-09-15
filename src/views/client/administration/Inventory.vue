@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-4/5 mx-auto space-y-4">
+    <div class="max-w-7xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Inventory ({{ dataCount }})</p>
         <div class="flex items-center space-x-2">
@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      
+
 
       <Search
         v-model="search"
@@ -47,12 +47,12 @@
             <p>{{ row.selling_price }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <p>{{ row.in_hand_quantity }}</p>
+            <p>{{ row.initial_quantity }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <p>{{ row.expiry_date }}</p>
           </cv-data-table-cell>
-            
+
           <cv-data-table-cell>
             <div class="flex items-center space-x-6">
               <p

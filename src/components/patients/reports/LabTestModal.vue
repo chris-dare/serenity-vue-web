@@ -2,168 +2,283 @@
   <cv-modal
     class="se-no-title-modal"
     close-aria-label="Close"
-    :visible="modalVisible"
+    :visible="visible"
     size="sm"
+    @modal-hidden="close"
   >
     <template slot="content">
       <div class="flex items-center justify-between mb-6 w-full">
         <p>Laboratory Test Result</p>
       </div>
-      <div>
-        <div class="grid grid-cols-2 gap-8 border-b border-solid border-subtle pb-6">
-          <div>
-            <p class="text-secondary mb-1">Test requested</p>
-            <p class="text-serenity-primary">
-              Full Blood Count, Fasting Blood Sugar
-            </p>
+      <div
+        v-if="!loading"
+        class="space-y-6"
+      >
+        <div>
+          <div class="flex items-center">
+            <div>
+              <p>{{ $utils.concatData(report.patient_detail, ['first_name', 'lastname']) }}</p>
+              <p class="text-secondary text-xs">
+                {{ report.patient_detail ? report.patient_detail.gender : '-' }}
+              </p>
+            </div>
           </div>
+        </div>
+        <div class="grid grid-cols-2 gap-8 border-b border-solid border-subtle pb-6">
+          <InfoBlock
+            label="Test requested"
+            :description="$utils.concatData(report.service_request_detail, ['code'])"
+            description-class="text-serenity-primary"
+          />
+          <InfoBlock
+            label="Category"
+            :description="report.category || '-'"
+          />
           <div>
             <p class="text-secondary mb-1">Encounter</p>
             <p>
-              Nov. 10, 2020
+              {{ $date.formatDate( report.diagnostic_report_conclusion_code[0] ? report.diagnostic_report_conclusion_code[0].created_at : '') }}
               <span
+                v-if="!diagnostic"
                 class="text-serenity-primary ml-1 underline"
               >View encounter</span>
             </p>
           </div>
-          <div>
-            <p class="text-secondary mb-1">Date requested</p>
-            <p>Nov. 10, 2020</p>
-          </div>
-          <div>
-            <p class="text-secondary mb-1">Date Completed</p>
-            <p>Nov. 10, 2020</p>
-          </div>
-          <div>
-            <p class="mb-1 text-secondary">Prescribed by</p>
-            <div class="flex items-center py-2">
-              <img
-                class="w-10 h-10 rounded-full mr-3"
-                src="@/assets/img/user 1.svg"
-                alt=""
-              >
-              <div>
-                <p>{{ 'Chris Dare' }}</p>
-                <p class="text-secondary text-xs">
-                  General Practitioner
-                </p>
-              </div>
-            </div>
-          </div>
-          <div>
-            <p class="mb-1 text-secondary">Performed by</p>
-            <div class="flex items-center py-2">
-              <img
-                class="w-10 h-10 rounded-full mr-3"
-                src="@/assets/img/user 1.svg"
-                alt=""
-              >
-              <div>
-                <p>{{ 'Chris Dare' }}</p>
-                <p class="text-secondary text-xs">
-                  General Practitioner
-                </p>
-              </div>
-            </div>
-          </div>
+          <InfoBlock
+            label="Date requested"
+            :description="$date.formatDate($utils.concatData(report.service_request_detail, ['authored_on']))"
+          />
+          <InfoBlock
+            label="Date Completed"
+            :description="$date.formatDate( report.approved_date_time) || '-'"
+          />
+          <InfoBlock
+            label="Specimen"
+            :description="report.specimen_type || '-'"
+          />
+          <InfoBlock
+            label="Conclusion"
+            :description="report.specimen_type || '-'"
+          />
         </div>
-        <div class="grid grid-cols-2 gap-6 mt-6">
-          <div class="grid grid-cols-2 gap-2">
-            <p class="text-secondary">Fasting blood sugar:</p>
-            <p>85 mg/dl</p>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <p class="text-secondary">85 mg/dl</p>
-            <div class="flex items-center">
-              <div class="w-2 h-2 bg-success rounded-full mr-2" />
-              <p>Normal</p>
+        <div
+          v-if="report.diagnostic_report_results.length"
+          class="grid grid-cols-4 gap-1 mt-6"
+        >
+          <p>Investigation</p>
+          <p>Result</p>
+          <p class="whitespace-nowrap">Reference range (low - high)</p>
+          <p class="text-right">Intepretation</p>
+        </div>
+        <div>
+          <div
+            v-for="(list, index) in report.diagnostic_report_results"
+            :key="index"
+            class="grid grid-cols-4 gap-1 mt-6"
+          >
+            <div class="text-left">
+              <p class="text-secondary capitalize">{{ list.code | removeDash }}</p>
             </div>
-          </div>
-          <p class="col-span-2 text-secondary">Full blood count</p>
-          <div class="grid grid-cols-2 gap-2">
-            <p class="text-secondary">Red blood cells:</p>
-            <p>5.12 cells/mcl</p>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <p class="text-secondary">4.32—5.72</p>
-            <div class="flex items-center">
-              <div class="w-2 h-2 bg-success rounded-full mr-2" />
-              <p>Normal</p>
+            <div class="flex items-center justify-begin">
+              <p>{{ list.value || '-' }}</p>
+              <p class="text-secondary ml-2"> {{ list.unit || '' }}</p>
             </div>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <p class="text-secondary">Hemoglobin:</p>
-            <p>127 grams/L</p>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <p class="text-secondary">135—175</p>
-            <div class="flex items-center">
-              <div class="w-2 h-2 bg-warning rounded-full mr-2" />
-              <p>Low</p>
+            <div class="text-left">
+              <p>{{ $utils.getFirstData(list.observation_reference_range, 'low') + '-' + $utils.getFirstData(list.observation_reference_range, 'high') }}</p>
             </div>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <p class="text-secondary">Hematocrit:</p>
-            <p>5.12 cells/mcl</p>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <p class="text-secondary">4.32—5.72</p>
-            <div class="flex items-center">
-              <div class="w-2 h-2 bg-success rounded-full mr-2" />
-              <p>Normal</p>
-            </div>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <p class="text-secondary">White blood cells:</p>
-            <p>5.12 cells/mcl</p>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <p class="text-secondary">4.32—5.72</p>
-            <div class="flex items-center">
-              <div class="w-2 h-2 bg-success rounded-full mr-2" />
-              <p>Normal</p>
-            </div>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <p class="text-secondary">Platelet count:</p>
-            <p>5.12 cells/mcl</p>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <p class="text-secondary">4.32—5.72</p>
-            <div class="flex items-center">
-              <div class="w-2 h-2 bg-success rounded-full mr-2" />
-              <p>Normal</p>
+            <div
+              v-if="list.observation_interpretation"
+              class="flex items-center justify-end"
+            >
+              <div
+                class="w-2 h-2 rounded-full mr-2"
+                :class="list.observation_interpretation === 'Normal' ? 'bg-success' : list.observation_interpretation === 'Low' ? 'bg-blue' : 'bg-danger'"
+              />
+              <p>{{ list.observation_interpretation || '-' }}</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="w-full mt-8 flex items-center">
-        <SeButton variant="white">Close</SeButton>
-        <SeButton variant="secondary">Repeat this test</SeButton>
+      <div
+        v-else
+        class="space-y-6"
+      >
+        <h3>Loading...</h3>
+      </div>
+      <div class="w-full mt-8 flex items-center justify-end space-x-2">
+        <SeButton
+          variant="white"
+          @click="close"
+        >
+          Close
+        </SeButton>
+        <SeButton
+          v-if="!approved && !review"
+          variant="warning"
+          class="mx-3"
+          :loading="reviewLoading"
+          @click="updateResult('submit-for-review')"
+        >
+          Submit for review
+        </SeButton>
+        <div
+          v-if="diagnostic"
+          class="flex items-center"
+        >
+          <div
+            v-if="!approved && !cancelled"
+            class="flex items-center"
+          >
+            <SeButton
+              class="mx-3"
+              variant="danger"
+              :loading="rejectLoading"
+              @click="updateResult('reject')"
+            >
+              Reject Results
+            </SeButton>
+            <SeButton
+              class="mx-3"
+              :loading="approveLoading"
+              @click="updateResult('approve')"
+            >
+              Approve Results
+            </SeButton>
+          </div>
+          <SeButton
+            v-if="approved"
+            class="mx-3"
+            :loading="loading"
+            @click="download(report.diagnostic_report_media)"
+          >
+            Download Document
+          </SeButton>
+        </div>
+        <SeButton
+          v-else
+          variant="secondary"
+        >
+          Repeat this test
+        </SeButton>
       </div>
     </template>
   </cv-modal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
+import DiagnosticAPI from '@/api/diagnostic'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'LabTestModal',
 
-  props: {
-    visible: {
-      type: Boolean,
-      default: false,
-    },
+  mixins: [modalMixin],
+
+  data() {
+    return {
+      report: {},
+      approveLoading: false,
+      rejectLoading: false,
+      approval: '',
+      reviewLoading: false,
+      loading: false,
+      diagnostic: false,
+      visible: false,
+    }
   },
 
   computed: {
-    modalVisible: {
-      set(val) {
-        this.$emit('visible:update', val)
-      },
-      get() {
-        return this.visible
-      },
+    ...mapState({
+      provider: state => state.auth.provider,
+    }),
+    approved() {
+      return this.approval === 'final'
+    },
+    cancelled(){
+      return this.approval === 'cancelled'
+    },
+    review() {
+      return this.approval === 'preliminary'
+    },
+  },
+
+  events: {
+    'lab:result:open': async function({params}){
+      this.loading = true
+      this.visible = true
+      const { data } = await DiagnosticAPI.get(this.provider.id, params[0])
+      this.report = data
+      this.loading = false
+    },
+    'diagnostic-report:open': async function({params}){
+      this.loading = true
+      const { data } = await DiagnosticAPI.get(this.provider.id, params[0])
+      this.report = data
+      this.visible = true
+      this.approval = this.report.status
+      this.diagnostic = true
+      this.loading = false
+    },
+  },
+
+  methods: {
+    ...mapActions({
+      updateDiagnosticReport: 'diagnostic/updateDiagnosticReport',
+      getData: 'diagnostic/getDiagnosticReports',
+      updateResultStatus: 'diagnostic/updateResultStatus',
+    }),
+    close() {
+      this.visible = false
+    },
+    async updateResult(status){
+      if(status === 'approve'){
+        this.approveLoading = true
+      } else if(status === 'reject') {
+        this.rejectLoading = true
+      } else {
+        this.reviewLoading = true
+      }
+      let payload = {
+        id: this.report.id,
+        payload: {
+          action: status,
+        },
+      }
+      try {
+        const { data, message } = await this.updateResultStatus(payload)
+
+        this.report = data
+        this.approval = data.status
+
+        this.$toast.open({
+          message: message,
+        })
+        this.getData()
+        this.approveLoading = false
+        this.reviewLoading = false
+        this.rejectLoading = false
+      } catch (error) {
+        this.rejectLoading = false
+        this.approveLoading = false
+        this.reviewLoading = false
+        this.$toast.open({
+          message: 'Operation failed. Contact Serenity team',
+          type: 'error',
+        })
+      }
+    },
+    download(pdf){
+      const file = this.$utils.getFirstData(pdf, 'file')
+      if(file){
+        this.loading = true
+        this.$utils.downloadPDF(file)
+        this.loading = false
+      } else {
+        this.$toast.open({
+          message: 'Download failed!',
+          type: 'error',
+        })
+      }
     },
   },
 }

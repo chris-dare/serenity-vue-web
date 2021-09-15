@@ -33,6 +33,7 @@
         :error-message="$utils.validateRequiredField($v, 'appointmentType')"
         preselect
         custom-field="value"
+        required
       />
       <MultiSelect
         v-model="form.service"
@@ -44,20 +45,25 @@
         placeholder="Select service"
         :error-message="$utils.validateRequiredField($v, 'service')"
         preselect
+        required
+        @select="clear"
       />
 
       <MultiSelect
+        ref="specialty"
         v-model="form.specialty"
         title="Choose a specialty"
         :multiple="false"
         :options="specialties"
-        label="Display"
-        track-by="Code"
+        label="display"
+        track-by="code"
         placeholder="Specialties"
         :error-message="$utils.validateRequiredField($v, 'specialty')"
+        required
       />
 
       <MultiSelect
+        ref="serviceTier"
         v-model="form.service_tier"
         title="Choose a service tier"
         :multiple="false"
@@ -67,6 +73,7 @@
         placeholder="Service tiers"
         :error-message="$utils.validateRequiredField($v, 'service_tier')"
         preselect
+        required
       />
     </div>
     <div v-if="selected === 'virtual-care'">
@@ -150,13 +157,13 @@ export default {
         return [
           {
             label: 'In patient',
-            description: 'for General and spceial pratices',
+            description: 'for General and special practices',
             type: 'inpatient',
             value: 'in-patient',
           },
           {
             label: 'Out patient',
-            description: 'for General and spceial pratices',
+            description: 'for General and special practices',
             type: 'outpatient',
             value: 'out-patient',
           },
@@ -172,19 +179,19 @@ export default {
       return [
         {
           label: 'In patient',
-          description: 'for General and spceial pratices',
+          description: 'for General and special practices',
           type: 'inpatient',
           value: 'in-patient',
         },
         {
           label: 'Out patient',
-          description: 'for General and spceial pratices',
+          description: 'for General and special practices',
           type: 'outpatient',
           value: 'out-patient',
         },
         {
           label: 'Virtual care',
-          description: 'for General and spceial pratices',
+          description: 'for General and special practices',
           type: 'virtualcare',
           value: 'virtual-care',
         },
@@ -207,8 +214,8 @@ export default {
       if (!this.form.service || !this.form.service.price_tiers) return []
       return this.form.service.price_tiers.map(tier => {
         return {
-          label: `${tier.name} - ${tier.currency} ${tier.cost}`,
-          value: tier.name,
+          label: `${tier.display} - ${tier.currency} ${tier.charge}`,
+          value: tier.id,
         }
       })
     },
@@ -234,6 +241,11 @@ export default {
       addToStoreData: 'appointments/addToCurrentAppointment',
       refresh: 'appointments/refreshCurrentAppointment',
     }),
+
+    clear() {
+      this.$refs.specialty.clear()
+      this.$refs.serviceTier.clear()
+    },
   },
 }
 </script>

@@ -19,7 +19,7 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ $date.formatDate(row.effective_date_time, 'yyyy/MM/dd HH:mm a') }}</p>
+            <p>{{ $date.formatDate(row.effective_date_time, 'dd MMM, yyyy HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
       </template>

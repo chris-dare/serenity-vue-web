@@ -76,12 +76,8 @@ export default {
     variant: {
       type: String,
       default: 'primary',
-      validator: function (value) {
-        // The value must match one of these strings
-        return (
-          ['primary', 'secondary', 'secondary-outline', 'tertiary', 'danger', 'outline', 'ghost', 'white', 'default', 'danger-outline', 'warning', 'success'].indexOf(value) !== -1
-        )
-      },
+      validator: value =>
+        ['primary', 'secondary', 'secondary-outline', 'tertiary', 'danger', 'outline', 'ghost', 'white', 'default', 'danger-outline', 'warning', 'success', 'gray'].indexOf(value) !== -1,
     },
   },
 
@@ -97,7 +93,7 @@ export default {
       if (this.variant  === 'warning') {
         return 'bg-warning hover:bg-warning text-black'
       }
-  
+
       if (this.variant  === 'success') {
         return 'bg-success hover:bg-success text-white'
       }
@@ -114,8 +110,12 @@ export default {
         return 'border-danger bg-transparent text-danger hover:text-white focus:bg-danger hover:bg-danger'
       }
 
+      if (this.variant  === 'gray') {
+        return 'bg-transparent text-white hover:bg-light border-gray-500 bg-gray-500 focus:bg-gray-400 hover:bg-gray-400'
+      }
+
       if(this.variant === 'white') {
-        return 'bg-white hover:bg-white text-serenity-placeholder'
+        return 'bg-white hover:bg-white text-placeholder shadow-sm'
       }
 
       return 'bg-serenity-primary hover:bg-serenity-primary-highlight'

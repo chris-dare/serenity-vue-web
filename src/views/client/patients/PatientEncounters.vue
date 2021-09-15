@@ -13,7 +13,7 @@
     </div>
     <div class="col-span-3">
       <div class="flex justify-between items-center">
-        <p class="text-serenity-placeholder my-3">Encounter Details</p>
+        <p class="text-placeholder my-3">Encounter Details</p>
       </div>
       <EncounterDetailCard />
     </div>

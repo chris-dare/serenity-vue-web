@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import 'carbon-components/css/carbon-components.css'
-import CarbonCharts from '@carbon/charts-vue'
 
-import { 
+import {
   CvButton,
   CvDataTable,
   CvSearch,
@@ -13,9 +12,7 @@ import {
   CvDataTableCell,
   CvTextArea,
   CvTextInput,
-  CvTag,
   CvDatePicker,
-  CvTimePicker, 
   CvTab,
   CvTabs,
   CvHeader,
@@ -34,6 +31,7 @@ import {
   CvDataTableSkeleton,
   CvPagination,
   CvLoading,
+  CvTooltip,
 } from '@carbon/vue/src/index'
 
 Vue.component(CvButton.name, CvButton)
@@ -46,9 +44,7 @@ Vue.component(CvDataTableRow.name, CvDataTableRow)
 Vue.component(CvDataTableCell.name, CvDataTableCell)
 Vue.component(CvTextArea.name, CvTextArea)
 Vue.component(CvTextInput.name, CvTextInput)
-Vue.component(CvTag.name, CvTag)
 Vue.component(CvDatePicker.name, CvDatePicker)
-Vue.component(CvTimePicker.name, CvTimePicker)
 Vue.component(CvTab.name, CvTab)
 Vue.component(CvTabs.name, CvTabs)
 Vue.component(CvHeaderName.name, CvHeaderName)
@@ -68,5 +64,4 @@ Vue.component(CvNumberInput.name, CvNumberInput)
 Vue.component(CvDataTableSkeleton.name, CvDataTableSkeleton)
 Vue.component(CvPagination.name, CvPagination)
 Vue.component(CvLoading.name, CvLoading)
-
-Vue.use(CarbonCharts)
+Vue.component(CvTooltip.name, CvTooltip)

@@ -55,18 +55,6 @@ export default {
           type: 'search',
           value: 'search',
         },
-      ]
-
-      if (this.workspaceType === 'RECEPT') {
-        types.push({
-          label: 'Start patient visit',
-          description: 'Start visit for walk-in or appointments',
-          type: 'destination',
-          value: 'visit',
-        })
-      }
-
-      types.push(
         {
           label: 'Book appointment',
           description: 'Help a patient schedule an appointment',
@@ -83,9 +71,9 @@ export default {
           label: 'Book COVID-19 test',
           description: 'Schedule a patient for COVID test',
           type: 'book',
-          value: 'book',
+          value: 'schedule',
         },
-      )
+      ]
 
       
 
@@ -97,9 +85,6 @@ export default {
     change(dashboard) {
       this.selected = dashboard.value
 
-      if (dashboard.value === 'visit') {
-        this.$trigger('visit:start:open')
-      }
       if (dashboard.value === 'search') {
         this.$router.push({ name: 'Patients'})
       }

@@ -8,8 +8,11 @@ export function initialState() {
     patientNotes: [],
     patientServiceRequests: [],
     patientObservations: [],
-    patientDiagnosticReports: [],
     patientReferrals: [],
+    patientsMeta: {
+      page: 1,
+      page_size: 10,
+    },
 
   }
 }

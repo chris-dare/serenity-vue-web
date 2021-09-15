@@ -17,12 +17,12 @@ export default {
   async getClientBy({ commit, rootState}, payload) {
     const provider = rootState.auth.provider
     const { data } = await ClientAPI
-      .getClientBy({id: provider.id, companyId: payload})
+      .getClientBy(payload)
       .catch(({data: error}) => {
         throw error
       })
 
-    commit(SET_CURRENT_CLIENT, data.returnedData)
+    commit(SET_CURRENT_CLIENT, { company: data.returnedData })
     return data
   },
 
@@ -41,7 +41,7 @@ export default {
   async getClientBills({ commit, rootState }, payload) {
     const provider = rootState.auth.provider
     const { data } = await ClientAPI
-      .getClientBills({ providerId: provider.id, id: payload })
+      .getClientBills(provider.id, payload)
       .catch(({data: error}) => {
         throw error
       })
@@ -53,7 +53,7 @@ export default {
   async create({ commit, rootState}, payload) {
     const provider = rootState.auth.provider
     const { data } = await ClientAPI
-      .create(provider.id,payload)
+      .create(provider.id, payload)
       .catch(({data: error}) => {
         throw error
       })
@@ -66,6 +66,17 @@ export default {
   async deposit({ commit }, payload) {
     const { data } = await ClientAPI
       .deposit(payload)
+      .catch(({data: error}) => {
+        throw error
+      })
+
+    return data
+  },
+
+  async providerAccount({ commit, rootState}, payload) {
+    const provider = rootState.auth.provider
+    const { data } = await ClientAPI
+      .providerAccount(provider.id, payload)
       .catch(({data: error}) => {
         throw error
       })

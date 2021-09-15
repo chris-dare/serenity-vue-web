@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-4/5 mx-auto space-y-4">
+    <div class="max-w-7xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Patients ({{ patientsCount }})</p>
         <SeButton
@@ -11,14 +11,16 @@
         </SeButton>
       </div>
 
-      <PatientsTable />
+      <PatientsTable :filters="filters" />
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import PatientsTable from '@/components/patients/PatientsTable'
+import Male from '@carbon/icons-vue/es/gender--male/16'
+import Female from '@carbon/icons-vue/es/gender--female/16'
 export default {
   name: 'Patients',
 
@@ -28,6 +30,20 @@ export default {
     ...mapState({
       patientsCount: (state) => state.patients.patientsCount,
     }),
+
+    ...mapGetters({
+      maleCount: 'patients/maleCount',
+      femaleCount: 'patients/femaleCount',
+    }),
+
+    filters() {
+      return [
+        { display: `All (${ this.patientsCount })`, code: '' },
+        { display: 'In-patient', code: 'in-patient' },
+        { display: 'Male', code: 'male', icon: Male },
+        { display: 'Female', code: 'female', icon: Female },
+      ]
+    },
   },
 
   methods: {

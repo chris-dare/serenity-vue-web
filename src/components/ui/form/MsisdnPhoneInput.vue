@@ -1,6 +1,12 @@
 <template>
   <cv-form autocomplete="off">
-    <p class="bx--label text-primary leading-none">{{ label }}</p>
+    <p class="bx--label text-primary leading-none space-x-1">
+      <span
+        v-if="required"
+        class="error"
+      >*</span>
+      <span>{{ label }}</span>
+    </p>
     <VuePhoneNumberInput
       ref="phoneInput"
       v-model="localValue"
@@ -31,15 +37,20 @@ export default {
       type: String,
       default:'',
     },
-  
+
     errorMessage: {
       type: String,
       default:'',
     },
-  
+
     label: {
       type: String,
       default: '',
+    },
+
+    required: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -77,7 +88,7 @@ export default {
         const phoneNumber = parsePhoneNumber(val, 'GH')
         this.selectedDialCode = `+${phoneNumber.countryCallingCode}`
 
-        
+
         this.code = phoneNumber.country
       }
     },

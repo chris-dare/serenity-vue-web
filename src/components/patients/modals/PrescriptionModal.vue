@@ -45,36 +45,28 @@
           </div>
         </div>
         
-        <div class="my-6">
+        <div
+          v-if="form.practitioner_detail"
+          class="my-6"
+        >
           <p class="text-gray-500  mb-2">Prescribed by</p>
           <div class="flex items-center">
-            <img
-              class="w-12 h-12 rounded-full mr-3"
-              src="@/assets/img/user 1.svg"
-              alt=""
-            >
-            <div>
-              <div>
-                <p class="mt-1 ">
-                  {{ 'Chris Dare' }}
-                </p>
-                <p class="mt-1  text-secondary">
-                  {{ 'aha' }}
-                </p>
-              </div>
-            </div>
+            <InfoImageBlock :label="form.practitioner_detail.name" />
           </div>
         </div>
-        <div class="my-4">
+        <div
+          v-if="form.encounter"
+          class="my-4"
+        >
           <p class="text-gray-500 ">Encounter</p>
           <p class="mt-1  text-primary">
-            {{ 'aha' }}
-            <router-link
-              to="/"
+            <span
+              
               class="text-serenity-primary font-bold underline ml-2"
+              @click="goToEncounter"
             >
               View encounter
-            </router-link>
+            </span>
           </p>
         </div>
       </div>
@@ -93,6 +85,7 @@
 
 <script>
 import modalMixin from '@/mixins/modal'
+import { mapActions } from 'vuex'
 export default {
   name: 'PrescriptionModal',
 
@@ -112,6 +105,17 @@ export default {
     },
     'prescription:detail:close': function(){
       this.visible = false
+    },
+  },
+
+  methods: {
+    ...mapActions({
+      setCurrentEncounter: 'encounters/setCurrentEncounter',
+    }),
+
+    goToEncounter() {
+      this.setCurrentEncounter(this.form.encounter)
+      this.$router.push({ name: 'PatientEncounters', params: { id: this.$route.params.id }})
     },
   },
 }

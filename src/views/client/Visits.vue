@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-4/5 mx-auto">
+    <div class="max-w-7xl mx-auto">
       <div class="flex items-center justify-between ">
         <p class="text-xl font-bold">Visits</p>
       </div>

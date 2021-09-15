@@ -90,11 +90,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "opd" */ '../views/client/Reports.vue'),
       },
       {
-        path: '/orders',
-        name: 'Orders',
-        component: () => import(/* webpackChunkName: "opd" */ '../views/client/Orders.vue'),
-      },
-      {
         path: '/insights',
         name: 'Insights',
         component: () => import(/* webpackChunkName: "opd" */ '../views/client/Insights.vue'),
@@ -130,22 +125,35 @@ const routes = [
       {
         path: '/clients',
         name: 'CorporateClients',
-        component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/CorporateClients.vue'),
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/corporate/CorporateClients.vue'),
       },
       {
         path: '/clients/:id',
-        name: 'ClientDetail',
-        component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/ClientDetail.vue'),
+        component: () => import(/* webpackChunkName: "corporate" */ '../views/client/corporate/ClientDetail.vue'),
+        children: [
+          {
+            path: 'summary',
+            name: 'ClientSummary',
+            component: () => import(/* webpackChunkName: "corporate" */ '../views/client/corporate/ClientSummary.vue'),
+          },
+          {
+            path: 'bills',
+            name: 'ClientBills',
+            component: () => import(/* webpackChunkName: "corporate" */ '../views/client/corporate/ClientBills.vue'),
+            props: true,
+          },
+          {
+            path: 'transactions',
+            name: 'ClientTransactions',
+            component: () => import(/* webpackChunkName: "corporate" */ '../views/client/corporate/ClientTransactions.vue'),
+            props: true,
+          },
+        ],
       },
       {
-        path: '/clients/patients/:id',
-        name: 'ClientPatients',
-        component: () => import(/* webpackChunkName: "admin" */ '../views/client/corporate/Benefactors.vue'),
-      },
-      {
-        path: '/clients/dependants/:id',
-        name: 'ClientDependants',
-        component: () => import(/* webpackChunkName: "admin" */ '../views/client/corporate/CorporatePatient.vue'),
+        path: '/clients/:id/employees',
+        name: 'ClientEmployees',
+        component: () => import(/* webpackChunkName: "corporate" */ '../views/client/corporate/ClientEmployees.vue'),
       },
       {
         path: '/patient-vitals',
@@ -154,7 +162,6 @@ const routes = [
       },
       {
         path: '/register-client',
-        name: 'RegisterProvider',
         props: true,
         component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/corporate/RegisterClient.vue'),
         children: [
@@ -297,6 +304,33 @@ const routes = [
         ],
       },
       {
+        path: '/diagnostic',
+        name: 'Diagnostic',
+        component: () => import(/* webpackChunkName: "diagnostic" */ '../views/client/diagnostic/NewDiagnostic.vue'),
+        children: [
+          {
+            path: '',
+            name: 'DiagnosticSelectPatient',
+            component: () => import(/* webpackChunkName: "diagnostic" */ '../views/client/diagnostic/SelectPatient.vue'),
+          },
+          {
+            path: '/diagnostic/service',
+            name: 'DiagnosticService',
+            component: () => import(/* webpackChunkName: "diagnostic" */ '../views/client/diagnostic/DiagnosticService.vue'),
+          },
+          {
+            path: '/diagnostic/payment',
+            name: 'DiagnosticPayment',
+            component: () => import(/* webpackChunkName: "diagnostic" */ '../views/client/diagnostic/DiagnosticPayment.vue'),
+          },
+          {
+            path: '/diagnostic/summary',
+            name: 'DiagnosticSummary',
+            component: () => import(/* webpackChunkName: "diagnostic" */ '../views/client/diagnostic/DiagnosticSummary.vue'),
+          },
+        ],
+      },
+      {
         path: '/patients/:id',
         component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/SinglePatient.vue'),
         props: true,
@@ -330,6 +364,12 @@ const routes = [
             path: '/patients/:id/orders',
             name: 'PatientOrders',
             component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientOrders.vue'),
+            props: true,
+          },
+          {
+            path: '/patients/:id/bills',
+            name: 'PatientBills',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientBills.vue'),
           },
           {
             path: '/patients/:id/prescriptions',
@@ -410,6 +450,19 @@ const routes = [
             meta: { noPadding: true },
           },
           {
+            path: 'care-plan/:planId',
+            name: 'EditEncounterCarePlan',
+            component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncounterCarePlan.vue'),
+            meta: { noPadding: true },
+            props: true,
+          },
+          {
+            path: 'summary',
+            name: 'EncountersSummary',
+            component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncountersSummary.vue'),
+            meta: { noPadding: true },
+          },
+          {
             path: 'referral',
             name: 'EncounterReferral',
             component: () => import(/* webpackChunkName: "encounter" */ '../views/client/encounters/EncountersReferral.vue'),
@@ -436,9 +489,49 @@ const routes = [
       },
       {
         path: '/pharmacy/patients/:id',
-        name: 'Pharmacy:Patient',
         props: true,
         component: () => import(/* webpackChunkName: "pharmacy" */ '../views/client/pharmacy/Patient.vue'),
+        children: [
+          {
+            path: 'summary',
+            name: 'Pharmacy:PatientSummary',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientSummary.vue'),
+          },
+          {
+            path: 'chart',
+            name: 'Pharmacy:PatientChart',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientCharts.vue'),
+          },
+          {
+            path: '',
+            name: 'Pharmacy:PatientPrescriptions',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/pharmacy/patient/Prescriptions.vue'),
+          },
+        ],
+      },
+      {
+        path: '/pharmacy/dispense',
+        name: 'Pharmacy:Dispense',
+        component: () => import(/* webpackChunkName: "pharmacy" */ '../views/client/pharmacy/Dispense.vue'),
+      },
+      {
+        path: '/pharmacy/new',
+        name: 'Pharmacy:New',
+        component: () => import(/* webpackChunkName: "pharmacy" */ '../views/client/pharmacy/NewPrescription.vue'),
+      },
+      {
+        path: '/pharmacy/new/patient',
+        name: 'Pharmacy:PatientNew',
+        component: () => import(/* webpackChunkName: "pharmacy" */ '../views/client/pharmacy/NewPrescription.vue'),
+      },
+      // {
+      //   path: '/pharmacy/dispense',
+      //   name: 'Pharmacy:Dispense',
+      // }
+      {
+        path: '/invoices',
+        name: 'Invoices',
+        component: () => import(/* webpackChunkName: "billing" */ '../views/client/billing/Invoices.vue'),
       },
       {
         path: '/billing/patients',
@@ -447,9 +540,25 @@ const routes = [
       },
       {
         path: '/billing/patients/:id',
-        name: 'Billing:Patient',
         props: true,
         component: () => import(/* webpackChunkName: "billing" */ '../views/client/billing/Patient.vue'),
+        children: [
+          {
+            path: 'summary',
+            name: 'Billing:Patient',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientSummary.vue'),
+          },
+          {
+            path: 'bills',
+            name: 'Billing:PatientBills',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientBills.vue'),
+          },
+          {
+            path: 'account-history',
+            name: 'Billing:PatientAccountHistory',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/billing/PatientAccountHistory.vue'),
+          },
+        ],
       },
       {
         path: '/diagnostics/patients',
@@ -458,10 +567,28 @@ const routes = [
         component: () => import(/* webpackChunkName: "diagnostics" */ '../views/client/diagnostic/Patients.vue'),
       },
       {
+        path: '/diagnostics/reports',
+        name: 'Diagnostic:Reports',
+        props: true,
+        component: () => import(/* webpackChunkName: "diagnostics" */ '../views/client/diagnostic/Reports.vue'),
+      },
+      {
+        path: '/diagnostic-orders',
+        name: 'Orders',
+        props: true,
+        component: () => import(/* webpackChunkName: "diagnostics" */ '../views/client/Orders.vue'),
+      },
+      {
         path: '/diagnostics/patients/:id',
         name: 'Diagnostic:Patient',
         props: true,
         component: () => import(/* webpackChunkName: "diagnostics" */ '../views/client/diagnostic/Patient.vue'),
+      },
+      {
+        path: '/diagnostics/patient-lab/:id',
+        name: 'Diagnostic:Labs',
+        props: true,
+        component: () => import(/* webpackChunkName: "diagnostics" */ '../views/client/diagnostic/LabResults.vue'),
       },
       {
         path: '/virtual-care/patients',
@@ -495,6 +622,29 @@ const routes = [
           },
         ],
       },
+
+      {
+        path: '/checkout',
+        props: true,
+        component: () => import(/* webpackChunkName: "checkout" */ '../views/client/checkout/CheckoutIndex.vue'),
+        children: [
+          {
+            path: '',
+            name: 'CheckoutSelectPatient',
+            component: () => import(/* webpackChunkName: "checkout" */ '../views/client/checkout/CheckoutSelectPatient.vue'),
+          },
+          {
+            path: 'payment-options',
+            name: 'CheckoutPaymentOptions',
+            component: () => import(/* webpackChunkName: "checkout" */ '../views/client/checkout/CheckoutPaymentOptions.vue'),
+          },
+          {
+            path: 'receipts',
+            name: 'CheckoutReceipts',
+            component: () => import(/* webpackChunkName: "checkout" */ '../views/client/checkout/CheckoutReceipts.vue'),
+          },
+        ],
+      },
     ],
   },
   {
@@ -524,6 +674,10 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+  // eslint-disable-next-line no-unused-vars
+  scrollBehavior (to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  },
 })
 
 router.beforeEach((to, from, next) => {

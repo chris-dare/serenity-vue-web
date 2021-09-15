@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <SeForm>
     <cv-header class="relative bg-black flex">
       <div
         class="w-12 h-12 bg-serenity-gray flex justify-center items-center cursor-pointer"
@@ -18,12 +18,12 @@
         <img
           src="@/assets/img/logo-full.svg"
           alt=""
-          class="hidden lg:block"
+          class="hidden xl:block"
         >
         <img
           src="@/assets/img/logo.svg"
           alt=""
-          class="lg:hidden w-5 h-5 mx-4"
+          class="xl:hidden w-5 h-5 mx-4"
         >
         <SeForm class="flex items-center flex-1 max-w-lg mr-2">
           <cv-text-input
@@ -31,7 +31,7 @@
             class="no-label-input h-12 flex-1 text-white"
             placeholder="Search for patient name or Phone number"
           />
-          
+
           <div
             class="bg-serenity-gray h-12 flex items-center justify-center px-4"
           >
@@ -85,7 +85,7 @@
         </div>
       </div>
     </cv-header>
-  </div>
+  </SeForm>
 </template>
 
 <script>
@@ -93,6 +93,7 @@ import UserHeaderDropdown from '@/components/layout/UserHeaderDropdown'
 import NotificationDetailsDropdown from '@/components/layout/NotificationDetailsDropdown'
 import Close32 from '@carbon/icons-vue/es/close/32'
 import Menu32 from '@carbon/icons-vue/es/menu/32'
+import resize from '@/mixins/resize'
 import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
@@ -105,17 +106,18 @@ export default {
     Menu32,
   },
 
+  mixins: [resize],
+
   data() {
     return {
       search: '',
-      open: '',
+      open: false,
     }
   },
 
   computed: {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
-      // workspaces: (state) => state.global.workspaces,
       locations: (state) => state.locations.locations,
       location: (state) => state.global.location,
     }),
@@ -123,7 +125,7 @@ export default {
     ...mapGetters({
       workspaces: 'auth/userWorkspaces',
     }),
-  
+
     selected: {
       get() {
         return this.workspaceType
@@ -143,9 +145,8 @@ export default {
     },
   },
 
-  async created() {
-    await this.getLocations(false)
-    this.selectedLocation = localStorage.getItem('location') ? localStorage.getItem('location') : this.locations.length ? this.locations[0].id : ''
+  created() {
+    this.init()
   },
 
   methods: {
@@ -154,6 +155,13 @@ export default {
       setGlobalLocation: 'global/setGlobalLocation',
       getLocations: 'locations/getLocations',
     }),
+
+    async init() {
+      // this.open = this.isTablet
+      await this.getLocations(false)
+
+      this.selectedLocation = localStorage.getItem('location') ? localStorage.getItem('location') : this.locations.length ? this.locations[0].id : ''
+    },
 
     actionChange(value) {
       this.setworkspaceType(value)

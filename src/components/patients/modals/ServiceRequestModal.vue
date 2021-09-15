@@ -12,40 +12,12 @@
         class="space-y-8"
         @submit.prevent
       >
-        <p class="my-2 font-semibold">{{ form.id ? 'Edit' : 'New' }} {{ form.service_request_category[0].display | removeDash }}</p>
+        <p class="my-2 font-semibold">{{ form.id ? 'Edit' : 'New' }} Service Request</p>
 
-        <div class="grid grid-cols-2 gap-4">
-          <cv-text-input
-            v-model="form.order_detail[0].display"
-            type="text"
-            label="Order detail"
-          />
-          <MultiSelect
-            v-model="form.priority"
-            title="Priority"
-            :options="priorities"
-            track-by="code"
-            label="display"
-            custom-field="code"
-            :multiple="false"
-          />
-          <cv-text-input
-            v-model="form.service_request_bodysite[0].display"
-            type="text"
-            label="Bodysite"
-          />
-          <cv-text-input
-            v-model="form.code"
-            type="text"
-            label="Code"
-          />
-          <cv-text-area
-            v-model="form.patient_instruction"
-            label="Patient Instruction"
-            :rows="5"
-            class="col-span-2"
-          />
-        </div>
+        <ServiceRequestForm
+          v-model="form"
+          :v="$v"
+        />
 
         <div class="flex items-center justify-between">
           <SeButton
@@ -58,7 +30,7 @@
             :loading="loading"
             @click="submit"
           >
-            {{ form.id ? 'Update' : 'Create' }} {{ form.service_request_category[0].display | removeDash }}
+            {{ form.id ? 'Update' : 'Create' }} Service Request
           </SeButton>
         </div>
       </cv-form>
@@ -67,29 +39,32 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
-import { required, minLength } from 'vuelidate/lib/validators'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
+import ServiceRequestForm from '@/components/forms/ServiceRequestForm'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'ServiceRequestModal',
 
+  components: {ServiceRequestForm},
+
+  mixins: [modalMixin],
+
   data() {
     return {
       form: {
-        order_detail: [{display: ''}],
-        service_request_bodysite: [{display: ''}],
-        service_request_category: [{display: ''}],
+        priority: 'routine',
+        intent: 'plan',
       },
-      visible: false,
       loading: false,
       categories: [ 'laboratory-procedure', 'imaging', 'counselling', 'education', 'surgical-procedure' ],
     }
   },
 
   events: {
-    'service:request:open': function(data){
+    'service:request:open': function(){
       this.visible = true
-      this.form.service_request_category = [{display: data.params[0]}]
     },
     'service:request:edit': function(data){
       this.visible = true
@@ -102,21 +77,7 @@ export default {
 
   validations: {
     form: {
-      service_request_category: { required },
-      order_detail: {
-        required,
-        minLength: minLength(1),
-        $each: {
-          display: { required },
-        },
-      },
-      service_request_bodysite: {
-        required,
-        minLength: minLength(1),
-        $each: {
-          display: { required },
-        },
-      },
+      code: { required },
     },
   },
 
@@ -126,6 +87,10 @@ export default {
       location: (state) => state.global.location,
       priorities: (state) => state.resources.priorities,
       encounter: (state) => state.encounters.currentEncounter,
+    }),
+
+    ...mapGetters({
+      visitId : 'visits/visitId',
     }),
   },
 
@@ -147,8 +112,11 @@ export default {
       } else {
         this.form.requesting_practitioner_role = this.provider.practitionerRoleId
         this.form.patient = this.$route.params.id
-        this.form.location = this.location.id
+        this.form.requested_location = this.location.id
+        this.form.visit_id = this.visitId
         this.form.encounter = this.encounter.id
+        this.form.status = this.$isCurrentWorkspace('IPD') ? 'active' : 'draft'
+
         this.save()
       }
     },
@@ -179,16 +147,6 @@ export default {
       } catch (error) {
         this.loading = false
       }
-    },
-
-    close() {
-      this.form = {
-        order_detail: [{display: ''}],
-        service_request_bodysite: [{display: ''}],
-        service_request_category: [{display: ''}],
-      }
-      this.$v.$reset()
-      this.visible = false
     },
 
     customLabel (value) {

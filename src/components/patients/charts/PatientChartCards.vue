@@ -72,7 +72,7 @@
               slot="title"
               class="text-serenity-primary"
             >
-              {{ illness.code }})
+              {{ illness.value }}
             </p>
             <p>{{ illness.category | capitalize }} - {{ illness.type | capitalize }}</p>
           </ToggleList>
@@ -90,22 +90,29 @@
             No medications
           </p>
           <ToggleList
-            v-for="(medication, index) in patientMedications"
+            v-for="(medication, index) in patientMedications.slice(0,10)"
             :key="index"
           >
             <p
               slot="title"
               class="text-serenity-primary"
             >
-              {{ $utils.getFirstData(medication.medication_detail) }} ({{ $date.formatDate(medication.created_at) }})
+              {{ $utils.getFirstData(medication.medication_detail) }} ({{ $date.formatDate(medication.created_at) }}
             </p>
             <p>{{ $utils.getFirstData(medication.medication_request_dosage_instruction, 'period') }} {{ $utils.getFirstData(medication.medication_request_dosage_instruction, 'period_unit') }}</p>
           </ToggleList>
+
+          <router-link
+            v-if="patientMedications.length"
+            :to="{ name: 'PatientPrescriptions' }"
+          >
+            View more
+          </router-link>
         </div>
       </EditableCard>
       <EditableCard
         type="add"
-        title="Allegies"
+        title="Allergies"
       >
         <div class="py-4">
           <p
@@ -122,7 +129,7 @@
               slot="title"
               class="text-serenity-primary"
             >
-              {{ allergy.code }})
+              {{ allergy.code }}
             </p>
             <p>{{ allergy.category | capitalize }} - {{ allergy.type | capitalize }}</p>
           </ToggleList>
@@ -146,55 +153,6 @@ export default {
   name: 'PatientChartCards',
 
   components: { NewChart, ChartCard, SocialHistoryDetails },
-
-  data() {
-    return {
-      // charts: [
-      //   {
-      //     title: 'Blood pressure',
-      //     value: '125/85',
-      //     per: 'Monthly',
-      //     status: 'Normal',
-      //     status_color: 'success',
-      //   },
-      //   {
-      //     title: 'Heart rate',
-      //     value: '84',
-      //     per: 'per min',
-      //     status: 'Normal',
-      //     status_color: 'success',
-      //   },
-      //   {
-      //     title: 'Oxygen sat',
-      //     value: '85%',
-      //     per: '',
-      //     status: 'Below Normal',
-      //     status_color: 'fail',
-      //   },
-      //   {
-      //     title: 'Temperature',
-      //     value: '36',
-      //     per: 'C',
-      //     status: 'Normal',
-      //     status_color: 'success',
-      //   },
-      //   {
-      //     title: 'BMI status',
-      //     value: '25.4',
-      //     per: '',
-      //     status: 'Overweight',
-      //     status_color: 'fail',
-      //   },
-      //   {
-      //     title: 'Respiration',
-      //     value: '22',
-      //     per: 'per min',
-      //     status: 'Normal',
-      //     status_color: 'success',
-      //   },
-      // ],
-    }
-  },
 
   computed: {
     ...mapState({

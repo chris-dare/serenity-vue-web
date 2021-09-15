@@ -12,12 +12,12 @@
         <InfoBlock
           label="Cause of death"
           :description="patient.cause_of_death"
-          description-color="text-serenity-primary"
+          description-class="text-serenity-primary capitalize"
         />
         <div class="grid grid-cols-2 gap-4">
           <InfoBlock
             label="Date of death"
-            :description="$date.formatDate(patient.deceased_date_time, 'yyyy-MM-dd')"
+            :description="$date.formatDate(patient.deceased_date_time, 'dd MMM, yyyy ')"
           />
           <InfoBlock
             label="Time of death"
