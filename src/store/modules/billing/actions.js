@@ -98,6 +98,21 @@ export default {
     }
   },
 
+  async payForMultipleChargeItems({ commit, rootState }, params) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await BillingAPI.multipleCharges(provider.id, params)
+      data.data.forEach(element => {
+        commit(UPDATE_BILLING, element)
+      })
+      
+      return data
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
+    }
+  },
+
   async payForService({ commit, rootState }, { patientId, chargeItemId, params }) {
     try {
       const provider = rootState.auth.provider

@@ -137,7 +137,7 @@ export default {
 
   computed: {
     ...mapState({
-      currentEncounter: state => state.encounters.currentEncounter,
+      currentEncounter: state => state.encounters.currentPatientEncounter,
     }),
     ...mapGetters({
       fullName: 'auth/fullName',

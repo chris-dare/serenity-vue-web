@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-4">
+  <SeForm class="space-y-4">
     <p class="text-sm">What is the preferred payment method?</p>
     <div class="grid grid-cols-3 gap-4">
       <InfoLinkCard
@@ -19,7 +19,7 @@
       :selected="localValue.transaction_type"
       v-bind="$attrs"
     />
-  </div>
+  </SeForm>
 </template>
 
 <script>
@@ -58,7 +58,7 @@ export default {
           label: 'Corporate Account',
           description: 'Select associated corporate account',
           type: 'momo',
-          value: 'corporate-account',
+          value: this.$global.CORPORATE_ACCOUNT_TYPE,
         },
         {
           label: 'Cash',

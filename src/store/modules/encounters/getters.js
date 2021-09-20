@@ -6,7 +6,7 @@ export default {
   // hasActiveEncounter: (state,getters) => !!getters.onGoingEncounters.length,
   hasActiveEncounter: (state,getters) => getters.currentEncounterStatus === 'planned' || getters.currentEncounterStatus === 'in progress',
 
-  hasEncounterBegan: state => state.encounterState > 0 || state.currentEncounter?.status === 'in-progress',
+  hasEncounterBegan: (state,getters) => getters.currentEncounterStatus === 'in progress',
 
   pastEncounters: state => {
     if (!state.encounters) return []
@@ -35,7 +35,7 @@ export default {
   },
 
   currentEncounterStatus: state => {
-    if (isEmpty(state.currentEncounter.status)) return ''
+    if (isEmpty(state.currentEncounter?.status)) return ''
     return state.currentEncounter.status.split('-').join(' ')
   },
 

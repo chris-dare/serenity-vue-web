@@ -16,7 +16,7 @@
         :key="index"
         :encounter="encounter"
         :is-current-encounter="encounter.id === currentEncounter.id"
-        @click.native="setCurrentEncounter(encounter.id)"
+        @click.native="setPatientCurrentEncounter(encounter)"
       />
     </div>
   </div>
@@ -50,7 +50,7 @@ export default {
 
   computed: {
     ...mapState({
-      currentEncounter: state => state.encounters.currentEncounter,
+      currentEncounter: state => state.encounters.currentPatientEncounter,
     }),
     noEncounters() {
       return this.encounters.length === 0
@@ -59,7 +59,7 @@ export default {
 
   methods: {
     ...mapActions({
-      setCurrentEncounter: 'encounters/setCurrentEncounter',
+      setPatientCurrentEncounter: 'encounters/setPatientCurrentEncounter',
     }),
   },
 }

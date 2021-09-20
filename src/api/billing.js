@@ -55,6 +55,10 @@ export default {
     return http.post(`providers/${providerId}/finance/invoices/${invoiceId}/pay`, params)
   },
 
+  multipleCharges(providerId, params) {
+    return http.post(`providers/${providerId}/finance/receive-payment`, params)
+  },
+
   corporatePay(patientId, chargeItemId, params) {
     return http.post(`finance/patients/${patientId}/charges/${chargeItemId}/pay`, params)
   },

@@ -90,7 +90,7 @@ export default {
   methods: {
     ...mapActions({
       endEncounter: 'encounters/endEncounter',
-      updateEncounter: 'encounters/updateEncounter',
+      startEncounter: 'encounters/startEncounter',
       deleteVisit: 'visits/deleteVisit',
     }),
 
@@ -139,10 +139,22 @@ export default {
     },
 
     async goToWizard() {
-      this.loading = true
-      await this.updateEncounter({ id: this.encounter.id,status: 'in-progress' })
-      this.$router.push({ name: 'EncounterReview', params: { encounter: this.encounter.id, id: this.$route.params.id } })
-      this.loading = false
+      if (this.encounter.status === 'in-progress') {
+        this.$router.push({ name: 'EncounterReview', params: { encounter: this.encounter.id, id: this.$route.params.id } })
+        return
+      }
+
+      try {
+        this.loading = true
+        await this.startEncounter(this.encounter.id)
+        this.$router.push({ name: 'EncounterReview', params: { encounter: this.encounter.id, id: this.$route.params.id } })
+        this.loading = false
+      } catch (error) {
+        console.log('er', error.data)
+      } finally {
+        this.loading = false
+      }
+      
     },
   },
 }

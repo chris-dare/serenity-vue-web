@@ -37,7 +37,9 @@ export default {
     dispatch('getObservations', { refresh:true, filters: { patient: id }})
     dispatch('getDiagnosis', id)
     dispatch('getNotes', id)
-    dispatch('encounters/getEncounters', {patient: id } , { root:true })
+    await dispatch('visits/getPatientCurrentVisits', { patient: id, status: 'arrived' }, { root:true })
+    await dispatch('encounters/getEncounters', { patient: id } , { root:true })
+    dispatch('encounters/getVisitEncounter', { patient: id } , { root:true })
     dispatch('resources/getEncounterStatuses', null, { root:true })
     dispatch('patients/getReferrals', id , { root:true })
     dispatch('patientAllergies/getAllergies', id , { root:true })
@@ -46,7 +48,7 @@ export default {
     dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
     dispatch('resources/getSystemExamUnitTypes', null, { root:true })
     dispatch('resources/getEncounterPriorities', null, { root:true })
-    dispatch('visits/getPatientCurrentVisits', { patient: id, status: 'arrived' }, { root:true })
+    
   },
 
   async initBillingPatientInformation({ dispatch, state }, id) {

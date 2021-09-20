@@ -169,7 +169,7 @@ const error = (err, toast) => {
     toast.open({ message: error || 'Something went wrong', type: 'error' })
   }
 
-  throw error
+  throw err
 }
 
 // takes a subset of an object given a set of keys to include and exclude
