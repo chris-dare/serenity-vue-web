@@ -24,6 +24,7 @@
       <ModeOfPayment
         v-model="form"
         :v="$v"
+        :total="selectedCharge"
       />
     </div>
   </MultiStepBase>
@@ -95,14 +96,21 @@ export default {
       labProceedures: 'services/labProceedures',
     }),
 
-    priceTier() {
+    selectedPriceTier() {
       if (!this.storeData.code || !this.labProceedures.length) return 'Select Service'
       let service = this.labProceedures.find(service => service.id === this.storeData.code.id)
       if (!service) return 'Select Service'
-      let price = service.price_tiers.filter(
+      return service?.price_tiers.find(
         (result) => this.storeData.price_tier === result.id,
-      )
-      return `${this.$currency(price[0].charge, price[0].currency).format()} - ${price[0].description}`
+      ) || {}
+    },
+
+    selectedCharge() {
+      return this.selectedPriceTier.charge || 0
+    },
+
+    priceTier() {
+      return `${this.$currency(this.selectedPriceTier.charge, this.selectedPriceTier.currency).format()} - ${this.selectedPriceTier.description}`
     },
   },
 
@@ -110,7 +118,7 @@ export default {
     if(this.form.transaction_type === 'cash'){
       return {
         form: {
-          amount: { required, minValue: minValue(this.cartTotal) },
+          amount: { required, minValue: minValue(this.selectedCharge) },
         },
       }
     }

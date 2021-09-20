@@ -6,7 +6,7 @@
       title="Corporate accounts"
       track-by="id"
       :custom-label="customLabel"
-      custom-field="id"
+      custom-field="uuid"
       preselect
       :multiple="false"
       :error-message="$utils.validateRequiredField(v, 'account_id')"

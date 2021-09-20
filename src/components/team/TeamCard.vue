@@ -15,7 +15,7 @@
     />
     
     <div class="space-y-1 flex items-center flex-col justify-center">
-      <p class="font-semibold">{{ user.title }} {{ user.first_name }} {{ user.last_name }}</p>
+      <p class="font-semibold capitalize">{{ user.title }} {{ user.first_name }} {{ user.last_name }}</p>
       <p class="text-sm text-primary">{{ roleName }}</p>
       <p class="text-sm text-secondary">{{ user.email }}</p>
     </div>

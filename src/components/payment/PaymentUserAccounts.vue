@@ -38,6 +38,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    total: {
+      type: [String, Number],
+      default: null,
+    },
   },
 
   computed: {
@@ -50,8 +54,8 @@ export default {
     },
 
     isInsufficient() {
-      if (!this.localValue.amount) return false
-      return parseFloat(this.balance) < parseFloat(this.localValue.amount)
+      if (!this.total) return false
+      return parseFloat(this.balance) < parseFloat(this.total)
     },
   },
 

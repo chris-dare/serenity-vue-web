@@ -19,6 +19,10 @@ export default {
     return http.patch(`${this.url}${providerId}/encounter/${params.id}`, params)
   },
 
+  start(providerId, encounterId) {
+    return http.post(`${this.url}${providerId}/encounter/${encounterId}/start`)
+  },
+
   delete(providerId, id) {
     return http.delete(`${this.url}${providerId}/encounter/${id}/`)
   },

@@ -56,10 +56,6 @@ export default {
     },
   },
 
-  beforeMount() {
-    this.getPatients(false)
-  },
-
   beforeRouteLeave(to, from, next) {
     this.refresh()
     next()
@@ -67,7 +63,6 @@ export default {
 
   methods: {
     ...mapActions({
-      getPatients: 'patients/getPatients',
       refresh: 'Diagnostic Requests/refreshCurrentDiagnostic Request',
     }),  
   },

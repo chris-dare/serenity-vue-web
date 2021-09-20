@@ -11,7 +11,7 @@ export default {
       deep: true,
       immediate: true,
       handler(val) {
-        this.settled = !!val?.status === 'billable'
+        this.settled = val?.status === 'billed'
       },
     },
   },
@@ -19,6 +19,7 @@ export default {
   methods: {
     ...mapActions({
       payForInvoice: 'billing/payForInvoice',
+      payForMultipleChargeItems: 'billing/payForMultipleChargeItems',
       exportBill: 'billing/exportBill',
     }),
 
@@ -29,6 +30,25 @@ export default {
           patientId: this.bill.patientid,
           invoiceId: this.bill.invoice_id || this.bill.uuid,
           params: this.getPaymentParams(this.form),
+        })
+        this.$toast.open('Bill successfully settled')
+        this.settled = true
+        this.close()
+      } catch (error) {
+        this.loading = false
+        this.settled = false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async payChargeItems(bills) {
+      this.loading = true
+      try {
+        await this.payForMultipleChargeItems({
+          patient: this.bill.patientid,
+          charge_items: bills.map(b => b.id),
+          payment_info: this.getPaymentParams(this.form),
         })
         this.$toast.open('Bill successfully settled')
         this.settled = true

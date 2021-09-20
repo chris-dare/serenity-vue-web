@@ -1,6 +1,7 @@
 export default () => ({
   encounters: [],
   currentEncounter: {},
+  currentPatientEncounter: {},
   encounterState: 0,
   encounterCodes: [
     {label: 'ambulatory', value: 'AMB'},
