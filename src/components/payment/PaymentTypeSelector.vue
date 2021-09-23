@@ -4,9 +4,10 @@
       v-if="selected === $global.USER_ACCOUNT_TYPE"
       v-model="localValue"
       :v="v"
+      v-bind="$attrs"
     />
     <PaymentCorporateAccounts
-      v-else-if="selected === 'corporate-account'"
+      v-else-if="selected === $global.CORPORATE_ACCOUNT_TYPE"
       v-model="localValue"
       :v="v"
     />

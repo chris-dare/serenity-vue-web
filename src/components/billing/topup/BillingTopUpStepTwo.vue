@@ -61,7 +61,7 @@
       <div class="flex justify-between items-center">
         <p class="font-bold">
           Pending bills
-          <span v-if="showCheck">(Click on pending bills to pay for it)</span>
+          <span v-if="showCheck">(Click on pending bills to pay for them)</span>
         </p>
 
         <div>

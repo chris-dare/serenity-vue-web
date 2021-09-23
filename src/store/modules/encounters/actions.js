@@ -1,7 +1,7 @@
 import EncountersAPI from '@/api/encounters'
 import Vue from 'vue'
 import Encounter from '@/models/Encounter'
-import { SET_ENCOUNTERS, UPDATE_ENCOUNTER, SET_ENCOUNTER, SET_ENCOUNTER_STATE } from './mutation-types'
+import { SET_ENCOUNTERS, UPDATE_ENCOUNTER, SET_ENCOUNTER, SET_ENCOUNTER_STATE, SET_PATIENT_CURRENT_ENCOUNTER } from './mutation-types'
 
 export default {
   async initSinglePatientEncounterInformation({dispatch}, {encounter, patient }) {
@@ -36,8 +36,24 @@ export default {
     }
   },
 
+  async getVisitEncounter({ commit, rootState, rootGetters }, params) {
+    try {
+      const provider = rootState.auth.provider
+      params.visit = rootGetters['visits/visitId']
+      const { data } = await EncountersAPI.list(provider.id, params)
+      commit(SET_ENCOUNTER, data.find(encounter => encounter.status === 'in-progress') || data[0])
+      commit(SET_PATIENT_CURRENT_ENCOUNTER, data.find(encounter => encounter.status === 'in-progress') || data[0])
+    } catch ({ response: { data: error } }) {
+      throw error
+    }
+  },
+
   setCurrentEncounter({commit, state}, id) {
     commit(SET_ENCOUNTER, state.encounters.find(encounter => encounter.id === id))
+  },
+
+  setPatientCurrentEncounter({commit}, encounter) {
+    commit(SET_PATIENT_CURRENT_ENCOUNTER, encounter)
   },
 
   async getEncounter({ commit, rootState }, id) {
@@ -57,7 +73,7 @@ export default {
       const provider = rootState.auth.provider
       // TODO
       let appointment = rootGetters['appointments/patientNextAppointment']
-      let visit = rootGetters['patients/visitId']
+      let visit = rootGetters['visits/visitId']
       let user = rootState.auth.provider
       let location = rootState.global.location
       const encounter = new Encounter(payload).getCreateView(user,location, appointment )
@@ -77,6 +93,18 @@ export default {
       commit(SET_ENCOUNTER, data)
       commit(UPDATE_ENCOUNTER, data)
     } catch ({ response: { data: error } }) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
+  async startEncounter({ commit, rootState }, encounterId) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await EncountersAPI.start(provider.id, encounterId)
+      commit(SET_ENCOUNTER, data.data)
+      commit(UPDATE_ENCOUNTER, data.data)
+    } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
     }

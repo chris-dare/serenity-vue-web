@@ -22,7 +22,6 @@ export default {
     dispatch('setDefaultWorkpace')
     dispatch('appointments/getAppointments', {refresh: true}, { root:true })
     dispatch('patients/getPatients', { page: 1, page_size: 5 }, { root:true })
-    // this.getPatients({ page: 1, page_size: 5 })
     dispatch('practitioners/getUsers', null, { root:true })
     dispatch('roles/getRoles', null, { root:true })
     dispatch('resources/getResources', null, { root:true })
