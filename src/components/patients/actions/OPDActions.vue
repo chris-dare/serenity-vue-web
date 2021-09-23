@@ -76,7 +76,7 @@ export default {
       appointments: 'appointments/patientAppointments',
       patientIsDeceased: 'patients/patientIsDeceased',
       patientHasVisit: 'patients/patientHasVisit',
-      visitId: 'patients/visitId',
+      visitId: 'visits/visitId',
     }),
 
     hasUpcomingEncounter() {

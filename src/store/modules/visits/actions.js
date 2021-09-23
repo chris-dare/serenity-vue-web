@@ -97,6 +97,7 @@ export default {
       const { data } = await VisitsAPI
         .delete(provider.id, id)
       commit(UPDATE_VISIT, data)
+      commit(SET_VISIT_DATA, {})
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
