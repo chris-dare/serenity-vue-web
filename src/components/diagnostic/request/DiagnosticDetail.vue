@@ -32,7 +32,6 @@
       <p v-else>No patient selected</p>
     </div>
     <div
-
       class="py-6"
     >
       <p class="text-secondary mb-4">Diagnostic Service</p>
@@ -86,24 +85,19 @@
         </div>
       </div>
     </div>
-    <div class="flex items-center justify-between my-8">
-      <div class="flex items-center">
-        <cv-button
-          class="bg-black px-6"
-          kind="primary"
-          @click="goBack"
-        >
-          Go back
-        </cv-button>
-      </div>
-      <div class="flex items-center">
-        <SeButton
-          :loading="loading"
-          @click="save"
-        >
-          Done
-        </SeButton>
-      </div>
+    <div class="flex items-center justify-between py-6">
+      <SeButton
+        variant="secondary"
+        @click="goBack"
+      >
+        Go back
+      </SeButton>
+      <SeButton
+        :loading="loading"
+        @click="save"
+      >
+        Done
+      </SeButton>
     </div>
   </div>
 </template>

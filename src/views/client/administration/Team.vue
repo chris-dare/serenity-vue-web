@@ -31,29 +31,12 @@
         v-model="search"
         placeholder="Search for user"
       />
-      <div class="my-4 flex items-center space-x-2">
-        <SeButton>
-          All ({{ users.length }})
-        </SeButton>
-        <SeButton
-          variant="white"
-        >
-          <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
-          Reception ({{ 0 }})
-        </SeButton>
-        <SeButton
-          variant="white"
-        >
-          <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
-          In Patient ({{ 0 }})
-        </SeButton>
-        <SeButton
-          variant="white"
-        >
-          <div class="w-2 h-2 rounded-full bg-green-700 mr-2" />
-          Out Patient ({{ 0 }})
-        </SeButton>
-      </div>
+
+      <FilterGroup
+        v-model="search"
+        :filters="filters"
+        class="my-3"
+      />
     </div>
 
     <div class="grid grid-cols-4 gap-4">
@@ -65,7 +48,7 @@
       />
     </div>
     <p
-      v-if="!users.length"
+      v-if="!filteredUsers.length"
       class="text-center w-full py-6"
     >
       No team members to show
@@ -92,8 +75,18 @@ export default {
     ...mapState({
       users: (state) => state.practitioners.users,
     }),
+
     filteredUsers() {
       return this.users.filter(data => !this.search || data.first_name.toLowerCase().includes(this.search.toLowerCase()) || data.last_name.toLowerCase().includes(this.search.toLowerCase()))
+    },
+
+    filters() {
+      return [
+        { display: `All (${this.users.length })`, code: '' },
+        { display: 'Reception', code: 'reception' },
+        { display: 'In patient', code: 'in-patient' },
+        { display: 'Out patient', code: 'out-patient' },
+      ]
     },
   },
 

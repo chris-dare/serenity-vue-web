@@ -210,15 +210,11 @@ export default {
     },
 
     async payForPendingBills() {
-      for (const bill of this.form.selectedBills) {
-        await this.payForInvoice(
-          {
-            patientId: bill.patientid,
-            invoiceId: bill.invoice_id,
-            params: this.getPaymentParams({...this.form.payment, transaction_type: this.$global.USER_ACCOUNT_TYPE, amount: bill.charge, account_id: this.userAccounts[0].uuid}),
-          },
-        )
-      }
+      await this.payForMultipleChargeItems({
+        patient: this.bill.patientid,
+        charge_items: this.form.selectedBills.map(b => b.id),
+        payment_info: this.getPaymentParams({ ...this.form.payment, transaction_type: this.$global.USER_ACCOUNT_TYPE, account_id: this.userAccounts[0].uuid }),
+      })
 
       this.loading = false
       this.$toast.success('Payment received successfully')

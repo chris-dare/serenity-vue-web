@@ -28,7 +28,7 @@
       />
     </div>
     <Address
-      v-model="form.address"
+      v-model="form.patient_address"
       :disabled="disabled"
     />
   </MultiStepBase>
@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       form: {
-        address: {},
+        patient_address: {},
       },
       next: 'EmergencyContact',
       previous: 'Biodata',

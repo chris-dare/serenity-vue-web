@@ -61,9 +61,11 @@ export default class Patient {
       data.language = data.patient_communication[0].language
     }
 
-    data.address_description = this.getAddressDescription(data.address)
+    data.address_description = this.getAddressDescription(data.patient_address)
 
     data.religious_affiliation = isEmpty(data.religious_affiliation) ? '' : data.religious_affiliation[0]
+
+    data.patient_address = data.patient_address || {}
 
     return data
   }
@@ -79,9 +81,9 @@ export default class Patient {
       data.religious_affiliation = [data.religious_affiliation]
     }
 
-    if (data.address) {
-      data.address = [{...data.address, use: 'home', type: 'both'}]
-    }
+    // if (data.address) {
+    //   data.address = [{...data.address, use: 'home', type: 'both'}]
+    // }
 
     if (data.patient_communication) {
       data.patient_communication = [{
@@ -98,9 +100,9 @@ export default class Patient {
 
     data.religious_affiliation = data.religious_affiliation ? [data.religious_affiliation] : []
 
-    if (data.address) {
-      data.address = [data.address]
-    }
+    // if (data.address) {
+    //   data.address = [data.address]
+    // }
 
     if (typeof data.patient_communication === 'string') {
       data.patient_communication = [{
