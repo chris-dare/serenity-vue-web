@@ -21,9 +21,10 @@
             :details="bill"
             label="Payment Transaction"
             hide-total
+            :show-cart="false"
           />
           <ModeOfPayment
-            v-if="!settled"
+            v-if="canMakePayment"
             v-model="form"
             :v="$v"
             show-cash-options
@@ -49,7 +50,7 @@
                 Print
               </SeButton>
               <SeButton
-                v-else
+                v-if="canMakePayment"
                 :loading="loading"
                 @click="submit"
               >
@@ -94,6 +95,7 @@ export default {
       },
       isExportLoading: false,
       loading: false,
+      type: '',
     }
   },
 
@@ -107,6 +109,7 @@ export default {
       }
       this.getPatientAccounts({ id: this.bill.patientid })
       this.form.transaction_type = this.$global.USER_ACCOUNT_TYPE
+      this.type = this.bill.line_items ? 'invoice' : 'charge'
     },
     'billing:detail:close': function(){
       this.close()
@@ -117,7 +120,8 @@ export default {
     if(this.form.transaction_type === 'cash'){
       return {
         form: {
-          amount: { minValue: minValue(this.bill.charge) },
+          amount: { required, minValue: minValue(this.bill.charge) },
+          currency: { required },
         },
       }
     } else {
@@ -133,6 +137,10 @@ export default {
     ...mapGetters({
       userAccounts: 'billing/userAccounts',
     }),
+
+    canMakePayment() {
+      return !this.settled && this.bill.charge
+    },
   },
 
   methods: {
@@ -164,11 +172,13 @@ export default {
       this.$v.$touch()
 
       if (this.$v.$invalid) {
-        this.$toast.error(this.form.transaction_type === 'cash' ? 'Please enter a valid amount' : 'Please select an account')
+        this.$toast.error(this.getValidationMessages(this.$v.form))
         return
       }
 
-      this.payChargeItems([this.bill])
+      const bills = this.type === 'invoice' ? this.bill.line_items : [this.bill]
+
+      this.payChargeItems(bills)
     },
   },
 }

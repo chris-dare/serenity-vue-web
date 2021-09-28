@@ -73,7 +73,7 @@ export default {
       const provider = rootState.auth.provider
       // TODO
       let appointment = rootGetters['appointments/patientNextAppointment']
-      let visit = rootGetters['patients/visitId']
+      let visit = rootGetters['visits/visitId']
       let user = rootState.auth.provider
       let location = rootState.global.location
       const encounter = new Encounter(payload).getCreateView(user,location, appointment )
