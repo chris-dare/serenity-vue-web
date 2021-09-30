@@ -144,7 +144,8 @@ export default {
     if(this.form.transaction_type === 'cash'){
       return {
         form: {
-          amount: { minValue: minValue(this.bill.charge) },
+          amount: { required, minValue: minValue(this.bill.charge) },
+          currency: { required },
         },
       }
     }
@@ -174,11 +175,12 @@ export default {
       this.$v.$touch()
 
       if (this.$v.$invalid) {
-        this.$toast.error(this.form.transaction_type === 'cash' ? 'Please enter a valid amount' : 'Please select an account')
+        this.$toast.error(this.getValidationMessages(this.$v.form))
         return
       }
+      const bills = this.type === 'invoice' ? this.bill.line_items : [this.bill]
 
-      this.payChargeItems([this.bill])
+      this.payChargeItems(bills)
     },
   },
 }

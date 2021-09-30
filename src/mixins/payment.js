@@ -83,5 +83,19 @@ export default {
         this.loading = false
       }
     },
+
+    getValidationMessages(v) {
+      if (v.amount?.$invalid) {
+        return 'Please enter a valid amount'
+      }
+      if (v.currency?.$invalid) {
+        return 'Please select a currency'
+      }
+      if (v.account_id?.$invalid) {
+        return 'Please select an account'
+      }
+
+      return 'Please fill in all valid fields'
+    },
   },
 }
