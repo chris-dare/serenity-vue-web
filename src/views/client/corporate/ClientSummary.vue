@@ -46,12 +46,13 @@ export default {
   computed: {
     ...mapState({
       client: (state) => state.clients.client,
+      clientAccount: (state) => state.clients.clientAccount,
     }),
 
     companyFields() {
       return [
-        { label: 'State', value: this.client.state },
-        { label: 'Authorized By', value: this.client.authorizedBy },
+        { label: 'State', value: this.clientAccount.status },
+        { label: 'Authorized By', value: this.client.company.authorizedBy },
         { label: 'Address', value: this.client.company.address },
       ]
     },
