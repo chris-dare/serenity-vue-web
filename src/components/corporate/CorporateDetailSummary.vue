@@ -13,7 +13,7 @@
         </div>
       </div>
       <div
-        v-if="props.client.company.state === 'verified'"
+        v-if="props.clientAccount.status === 'ACTIVE'"
         class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
         @click="listeners['edit']"
       >
@@ -25,7 +25,7 @@
     </div>
     <div class="flex items-center space-x-2">
       <SeButton
-        v-if="props.client.company.state === 'verified'"
+        v-if="props.clientAccount.status === 'ACTIVE' || !props.clientAccount.status === 'SUSPENDED'"
         class="mx-2"
         @click="listeners['update']"
       >
@@ -36,6 +36,20 @@
         @click="listeners['verify']"
       >
         Verify Client
+      </SeButton>
+      <SeButton
+        v-if="props.clientAccount.status === 'ACTIVE'"
+        class="mx-2 bg-serenity-gray"
+        @click="listeners['verify']"
+      >
+        Suspend Account
+      </SeButton>
+      <SeButton
+        v-if="props.clientAccount.status === 'SUSPENDED'"
+        class="mx-2 bg-serenity-gray"
+        @click="listeners['verify']"
+      >
+        Close Account
       </SeButton>
     </div>
   </div>

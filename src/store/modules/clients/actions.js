@@ -84,6 +84,15 @@ export default {
     return data
   },
 
+  async clientAccountUpdate({ commit, rootState}, payload) {
+    const provider = rootState.auth.provider
+    const { data } = await ClientAPI.clientAccountUpdate(provider.id, payload).catch(({data: error}) => {
+      throw error
+    })
+
+    return data
+  },
+
   addToCurrentUser({ commit }, data) {
     commit(UPDATE_FORM, data)
   },

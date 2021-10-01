@@ -92,7 +92,7 @@ export default {
 
       switch (client.action) {
       case 'client':
-        this.$trigger('deposit:add:open', { ...this.client })
+        this.$trigger('deposit:add:open', { ...this.client, ...this.clientAccount })
         break
       case 'benefactor':
         this.$router.push({ name: 'ClientEmployees', params: { id: this.client.company.main_branch_id }})

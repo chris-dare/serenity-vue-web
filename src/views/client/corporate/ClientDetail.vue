@@ -5,13 +5,12 @@
     class="max-w-7xl mx-auto"
   >
     <div class="space-y-4">
-      {{ clientAccount }}
       <CorporateDetailSummary
         :client="client"
         :client-account="clientAccount"
         @edit="editClient"
         @update="$trigger('client:add:open', {...client } )"
-        @verify="$trigger('client:edit:open', { ...client.company })"
+        @verify="$trigger('client:edit:open', { ...client, ...clientAccount })"
         @suspend="suspend"
       />
 

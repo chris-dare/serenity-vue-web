@@ -35,6 +35,10 @@ export default {
     return http.post(`${this.url}${providerId}/client-accounts`, params)
   },
 
+  clientAccountUpdate(providerId, params) {
+    return http.post(`${this.url}${providerId}/client-accounts/${params.id}/actions`, { action: params.action})
+  },
+
   update(params) {
     return http.patch(`corporates/onboard/${params.main_branch_id}`, params)
   },
