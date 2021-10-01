@@ -44,7 +44,6 @@
     </template>
   </cv-modal>
 </template>
-<Checkmark32 />
 <script>
 import Checkmark from '@carbon/icons-vue/es/checkmark/32'
 import MultiStepModall from '@/mixins/multistep_modal'

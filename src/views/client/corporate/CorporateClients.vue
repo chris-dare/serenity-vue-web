@@ -41,12 +41,6 @@
             <p class="lowercase">{{ row.admin_email }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <Tag
-              :variant="row.state != 'verified' ? 'error' : 'success'"
-              :label="row.state"
-            />
-          </cv-data-table-cell>
-          <cv-data-table-cell>
             <router-link
               tag="div"
               :to="{ name: 'ClientSummary', params: { id: row.main_branch_id } }"
@@ -81,7 +75,6 @@ export default {
         'TIN Number',
         'Mobile',
         'Email',
-        'Status',
         'Action',
       ],
     }

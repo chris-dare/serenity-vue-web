@@ -115,7 +115,8 @@ export default {
             duration: '7 days',
             dosage: '2 times daily',
             quantity: 24,
-            instruction: 'Take 1 tablet orally every 4 to 5 hours as needed for pain',
+            instruction:
+              'Take 1 tablet orally every 4 to 5 hours as needed for pain',
             refill: new Date(),
           },
           {
@@ -123,7 +124,8 @@ export default {
             duration: '7 days',
             dosage: '2 times daily',
             quantity: 24,
-            instruction: 'Take 1 tablet orally every 4 to 5 hours as needed for pain',
+            instruction:
+              'Take 1 tablet orally every 4 to 5 hours as needed for pain',
             refill: new Date(),
           },
         ],
@@ -132,7 +134,7 @@ export default {
     }
   },
 
-  computed:{
+  computed: {
     ...mapState({
       // client: (state) => state.clients.client,
       genders: (state) => state.resources.genders,
@@ -149,14 +151,16 @@ export default {
   validations() {
     let data = {
       form: {
-        first_name: {required},
-        last_name: {required},
+        first_name: { required },
+        last_name: { required },
         email: {
           email: (val) => email(emailFormatter(val)),
           required,
           async isUnique(value) {
             if (value === '' || !this.$v.form.email.email) return true
-            const { data } = await UsersAPI.search({ email: value }).catch(() => false)
+            const { data } = await UsersAPI.search({ email: value }).catch(
+              () => false,
+            )
 
             if (data && data.length) {
               return false
@@ -169,7 +173,9 @@ export default {
           required,
           async isUnique(value) {
             if (value === '' || value.length < 10) return true
-            const { data } = await UsersAPI.search({ mobile: value }).catch(() => false)
+            const { data } = await UsersAPI.search({ mobile: value }).catch(
+              () => false,
+            )
 
             if (data.length) {
               return false
@@ -208,17 +214,15 @@ export default {
           message: 'Patient successfully added',
         })
         this.$emit('success', patient)
-
       } catch (error) {
         this.$toast.open({
           message: error.message || 'Something went wrong!',
           type: 'error',
         })
         this.loading = false
-        throw(error)
+        throw error
       }
     },
   },
-
 }
 </script>

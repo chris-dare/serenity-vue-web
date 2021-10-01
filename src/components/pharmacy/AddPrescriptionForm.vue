@@ -5,7 +5,7 @@
       v-for="(detail, index) in form.drugs"
       :key="index"
     >
-      <p class="text-serenity-green font-semibold mb-4">{{ index+1 }}.</p>
+      <p class="text-serenity-green font-semibold mb-4">{{ index + 1 }}.</p>
       <div class="grid grid-cols-12 gap-x-4 gap-y-8 items-center">
         <div class="col-span-11 grid grid-cols-3 gap-4 items-center">
           <AutoCompleteMedication
@@ -51,13 +51,15 @@
           />
 
           <MultiSelect
-            v-model="detail.medication_request_dosage_instruction[0].period_unit"
+            v-model="
+              detail.medication_request_dosage_instruction[0].period_unit
+            "
             title="Period unit"
             :options="units"
             :multiple="false"
             preselect
           />
-          
+
           <cv-text-input
             v-model="detail.medication_request_dosage_instruction[0].strength"
             label="Strength"
@@ -78,7 +80,7 @@
             class="inherit-full-input"
           />
         </div>
-    
+
         <Trash
           class="w-5 h-5 cursor-pointer"
           @click="removeDrug(index)"
@@ -93,7 +95,15 @@
     </p>
     <div
       v-if="mode === 'create'"
-      class="flex items-center space-x-2 text-serenity-primary my-4 cursor-pointer text-sm"
+      class="
+        flex
+        items-center
+        space-x-2
+        text-serenity-primary
+        my-4
+        cursor-pointer
+        text-sm
+      "
       @click="addDrug"
     >
       <AddAlt class="w-5 h-5" />
@@ -119,14 +129,14 @@
         label="Date of administration"
         class="se-input-gray"
       />
-      
+
       <p
         v-if="$utils.validateRequiredField($v, 'extra_details')"
         class="error col-span-3"
       >
         Priority is required
       </p>
-      
+
       <cv-text-area
         v-model="form.extra_details.medication_request_notes[0].display"
         label="Medication notes"
@@ -179,14 +189,16 @@ export default {
       // form: {"extra_details":{"medication_request_notes":[{"display":"Test"}],"medication_request_category":"outpatient","priority":"stat","date":"2021-06-10T00:00:00Z","intended_dispenser":"New Hospital"},"drugs":[{"medication_detail":[{"display":"Hyoscine hydrobromide (Kwells and Joy-Rides)"}],"course_of_therapy_type":"acute","medication_request_dosage_instruction":[{"frequency":"1","frequency_unit":"Hourly","period_unit":"Hours","period":"1"}]}],"requester":1},
       form: {
         extra_details: {
-          medication_request_notes: [{display: ''}],
-          medication_request_category: this.$isCurrentWorkspace('OPD') ? 'outpatient' : 'inpatient',
+          medication_request_notes: [{ display: '' }],
+          medication_request_category: this.$isCurrentWorkspace('OPD')
+            ? 'outpatient'
+            : 'inpatient',
         },
         drugs: [
           {
-            medication_detail: [{display: ''}],
+            medication_detail: [{ display: '' }],
             course_of_therapy_type: '',
-            medication_request_dosage_instruction: [{frequency: ''}],
+            medication_request_dosage_instruction: [{ frequency: '' }],
           },
         ],
       },
@@ -197,11 +209,11 @@ export default {
         Add,
       },
       therapyTypes: [
-        { label: 'continuous (longterm)', value: 'continuous'},
-        { label: 'acute', value: 'acute'},
-        { label: 'seasonal', value: 'seasonal'},
+        { label: 'continuous (longterm)', value: 'continuous' },
+        { label: 'acute', value: 'acute' },
+        { label: 'seasonal', value: 'seasonal' },
       ],
-      categories: [ 'inpatient', 'outpatient', 'community', 'discharge' ],
+      categories: ['inpatient', 'outpatient', 'community', 'discharge'],
       mode: 'create',
     }
   },
@@ -233,7 +245,7 @@ export default {
               display: { required },
             },
           },
-          inventory: {required},
+          inventory: { required },
           medication_request_dosage_instruction: {
             required,
             minLength: minLength(1),
@@ -243,10 +255,8 @@ export default {
               period_unit: { required },
             },
           },
-          
         },
       },
-      
     },
   },
 
@@ -256,9 +266,9 @@ export default {
     }),
     addDrug() {
       this.form.drugs.push({
-        medication_detail: [{display: ''}],
+        medication_detail: [{ display: '' }],
         course_of_therapy_type: '',
-        medication_request_dosage_instruction: [{frequency: ''}],
+        medication_request_dosage_instruction: [{ frequency: '' }],
       })
     },
 
@@ -273,8 +283,8 @@ export default {
 
       this.$v.$touch()
 
-      this.form.extra_details.intended_dispenser = this.provider.organization_name
-
+      this.form.extra_details.intended_dispenser =
+        this.provider.organization_name
 
       if (this.$v.$invalid) {
         this.$toast.error('Please fill in the required fields')
@@ -290,7 +300,7 @@ export default {
         this.form.requester = this.user.id
         const payload = this.formatMedication(this.form)
         let medicationRequests = await this.createMedicationRequest(payload)
-        for(let i = 0; i < this.form.drugs.length; i++){
+        for (let i = 0; i < this.form.drugs.length; i++) {
           medicationRequests[i].medication = this.form.drugs[i].inventory
         }
         this.$toast.open({
@@ -300,25 +310,30 @@ export default {
         this.loading = false
       } catch (error) {
         this.loading = false
-        throw(error)
+        throw error
       }
     },
 
     formatMedication(data) {
       let newForm = []
 
-      data.drugs.forEach(drug => {
+      data.drugs.forEach((drug) => {
         newForm.push({
           ...drug,
           ...data.extra_details,
           requester_practitioner_role: this.provider.practitionerRoleId,
           patient: this.patient.id,
-          medication_request_category: [{ display: data.extra_details.medication_request_category }],
+          medication_request_category: [
+            { display: data.extra_details.medication_request_category },
+          ],
         })
       })
-      newForm.forEach(drug => {
-        if(drug.next_refill){
-          drug.next_refill = this.$date.formatDate(drug.next_refill, 'yyyy-MM-dd')
+      newForm.forEach((drug) => {
+        if (drug.next_refill) {
+          drug.next_refill = this.$date.formatDate(
+            drug.next_refill,
+            'yyyy-MM-dd',
+          )
         }
       })
 

@@ -8,13 +8,13 @@
   >
     <template slot="content">
       <div class="space-y-8">
-        <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'Update' }} client account</p>
+        <p class="text-lg font-semibold">{{ type !== 'update' ? 'Edit' : 'Update' }} client account</p>
         <div
           v-if="type === 'update'"
           class="grid grid-cols-1 gap-8"
         >
           <cv-text-input
-            v-model="form.company_name"
+            v-model="form.company.company_name"
             type="text"
             label="Company name"
             placeholder=""
@@ -46,22 +46,22 @@
         >
           <cv-radio-group>
             <cv-radio-button
-              v-model="form.state"
-              name="Verified"
-              label="Verified"
-              value="verified"
+              v-model="form.status"
+              name="VERIFY"
+              label="VERIFY"
+              value="VERIFY"
             />
             <cv-radio-button
-              v-model="form.state"
-              name="Unverified"
-              label="Unverfied"
-              value="unverified"
+              v-model="form.status"
+              name="SUSPEND"
+              label="SUSPEND"
+              value="SUSPEND"
             />
             <cv-radio-button
-              v-model="form.state"
-              name="Suspended"
-              label="Suspended"
-              value="suspended"
+              v-model="form.status"
+              name="CLOSE"
+              label="CLOSE"
+              value="CLOSE"
             />
           </cv-radio-group>
         </div>
@@ -134,9 +134,10 @@ export default {
       this.type = 'add'
     },
     'client:edit:open': function(data){
+      this.type = 'update'
       this.visible = true
       this.form = data.params[0]
-      this.type = 'update'
+      console.log(this.form)
     },
   },
 
@@ -147,12 +148,13 @@ export default {
       providerClient: 'clients/providerAccount',
       addToClient: 'clients/addClientAccount',
       getClientAccount: 'clients/getClientAccount',
+      clientAccountUpdate: 'clients/clientAccountUpdate',
     }),
 
     submit(){
 
       if (this.type === 'update') {
-        this.update()
+        this.updateStatus()
       } else {
         this.save()
       }
@@ -245,6 +247,40 @@ export default {
         this.visible = false
         this.loading = false
       } catch (error) {
+        this.loading = false
+      }
+    },
+
+    async updateStatus() {
+      const id = this.$route.params.id
+      this.loading = true
+      try {
+        let data = await this.clientAccountUpdate({
+          id: this.form.uuid,
+          action: this.form.status,
+        })
+        if (data.success) {
+          let payload = this.client
+          payload.status = data.status
+          this.getClientAccount(id)
+          this.addToClient(payload)
+          this.$toast.open({
+            message: data.message || 'Client successfully updated',
+          })
+          this.visible = false
+        } else {
+          this.$toast.open({
+            message: data.message || 'Client account update failed',
+            type: 'error',
+          })
+          this.visible = false
+        }
+        this.loading = false
+      } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
         this.loading = false
       }
     },

@@ -6,15 +6,11 @@
         src="@/assets/img/qr.png"
         alt=""
       >
-      <div class="text-lg">
-        Miss Eleanor Pena
-      </div>
+      <div class="text-lg">Miss Eleanor Pena</div>
       <div class="text-sm font-light">Female, 23 years</div>
     </div>
     <div class="border-t border-solid border-b border-gray-300 py-4">
-      <div class="text-lg font-bold mb-4">
-        Payment Transaction
-      </div>
+      <div class="text-lg font-bold mb-4">Payment Transaction</div>
       <div class="grid grid-cols-3 gap-2 mb-2">
         <div>0023223022</div>
         <div>0553009106</div>
@@ -41,7 +37,9 @@
     </div>
     <div class="flex justify-end items-center">
       <div class="font-light mr-1">Total</div>
-      <div class="text-lg font-bold">{{ totalAmount | formatMoney | toCedis }}</div>
+      <div class="text-lg font-bold">
+        {{ totalAmount | formatMoney | toCedis }}
+      </div>
     </div>
     <div class="flex items-center justify-between">
       <SeButton
@@ -50,7 +48,13 @@
       >
         Close
       </SeButton>
-      <SeButton @click="$emit('cancel')">Print Bill<ChevronRight class="w-4 h-4 text-white ml-4" /></SeButton>
+      <SeButton
+        @click="$emit('cancel')"
+      >
+        Print Bill<ChevronRight
+          class="w-4 h-4 text-white ml-4"
+        />
+      </SeButton>
     </div>
   </div>
 </template>
@@ -70,8 +74,7 @@ export default {
 
   data() {
     return {
-      form: {
-      },
+      form: {},
       visible: false,
       icons: {
         Checkmark,
@@ -83,7 +86,8 @@ export default {
             duration: '7 days',
             dosage: '2 times daily',
             quantity: 24,
-            instruction: 'Take 1 tablet orally every 4 to 5 hours as needed for pain',
+            instruction:
+              'Take 1 tablet orally every 4 to 5 hours as needed for pain',
             refill: new Date(),
           },
           {
@@ -91,7 +95,8 @@ export default {
             duration: '7 days',
             dosage: '2 times daily',
             quantity: 24,
-            instruction: 'Take 1 tablet orally every 4 to 5 hours as needed for pain',
+            instruction:
+              'Take 1 tablet orally every 4 to 5 hours as needed for pain',
             refill: new Date(),
           },
         ],
@@ -103,7 +108,7 @@ export default {
   computed: {
     totalAmount() {
       let total = 0
-      this.medicationRequests.forEach(el => {
+      this.medicationRequests.forEach((el) => {
         total += parseFloat(el.medication.selling_price)
       })
       return total

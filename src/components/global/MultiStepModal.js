@@ -1,7 +1,16 @@
 export default {
   name: 'MultiStepModal',
 
-  props: ['value', 'parent'],
+  props: {
+    value: {
+      type: [String, Number, Object],
+      default: null,
+    },
+    parent: {
+      type: [String, Number, Object],
+      default: null,
+    },
+  },
 
   data() {
     return {

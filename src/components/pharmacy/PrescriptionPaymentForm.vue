@@ -15,9 +15,7 @@
       <div class="text-sm font-light">{{ patient.gender_age_description }}</div>
     </div>
     <div class="border-t border-solid border-b border-gray-300 py-4">
-      <div class="text-lg font-bold mb-4">
-        Payment Transaction
-      </div>
+      <div class="text-lg font-bold mb-4">Payment Transaction</div>
       <div class="grid grid-cols-4 gap-2 font-light font-bold">
         <div>Transaction ID</div>
         <div>Payment Type</div>
@@ -39,14 +37,23 @@
       >
         <div class="flex justify-between font-bold mb-1">
           <div>{{ drug.medication_detail[0].display }}</div>
-          <div>{{ (parseFloat(drug.medication.selling_price) * parseFloat(drug.quantity) || 1) | formatMoney | toCedis }}</div>
+          <div>
+            {{
+              (parseFloat(drug.medication.selling_price) *
+                parseFloat(drug.quantity) || 1)
+                | formatMoney
+                | toCedis
+            }}
+          </div>
         </div>
         <div>{{ drug.quantity }}</div>
       </div>
     </div>
     <div class="flex justify-end items-center">
       <div class="font-light mr-1">Total</div>
-      <div class="text-lg font-bold">{{ totalAmount | formatMoney | toCedis }}</div>
+      <div class="text-lg font-bold">
+        {{ totalAmount | formatMoney | toCedis }}
+      </div>
     </div>
     <div class="flex items-center justify-between">
       <SeButton
@@ -101,8 +108,7 @@ export default {
 
   data() {
     return {
-      form: {
-      },
+      form: {},
       visible: false,
       loading: false,
       icons: {
@@ -114,21 +120,23 @@ export default {
   computed: {
     totalAmount() {
       let total = 0
-      this.medicationRequests.forEach(el => {
-        total += parseFloat(el.medication.selling_price) * parseFloat(el.quantity || 1)
+      this.medicationRequests.forEach((el) => {
+        total +=
+          parseFloat(el.medication.selling_price) *
+          parseFloat(el.quantity || 1)
       })
       return total
     },
   },
 
   validations: {
-    form:  {
-      first_name: {required},
-      last_name: {required},
-      gender: {required},
-      birth_date: {required},
-      email: {required, email: (val) => email(emailFormatter(val))},
-      mobile: {required},
+    form: {
+      first_name: { required },
+      last_name: { required },
+      gender: { required },
+      birth_date: { required },
+      email: { required, email: (val) => email(emailFormatter(val)) },
+      mobile: { required },
     },
   },
 
@@ -141,13 +149,12 @@ export default {
 
       try {
         const medicationRequests = this.medicationRequests
-        await this.dispenseDrugs({medicationRequests})
+        await this.dispenseDrugs({ medicationRequests })
         this.$toast.open({
           message: 'Medication successfully dispensed',
         })
         this.$store.dispatch('patients/getMedicationRequests')
         this.$emit('success')
-
       } catch (error) {
         this.loading = false
       }

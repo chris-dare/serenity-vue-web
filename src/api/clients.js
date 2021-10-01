@@ -3,19 +3,19 @@ import http from '@/http'
 export default {
   url: 'providers/',
 
-  list() {
-    return http.get(`${this.url}clients/`)
+  list(providerId) {
+    return http.get(`${this.url}${providerId}/clients`)
   },
 
-  getClientBy(companyId = '') {
-    return http.get(`${this.url}corporates/onboard/${companyId}/`)
+  getClientBy(provider, companyId) {
+    return http.get(`${this.url}${provider}/clients/${companyId}`)
   },
 
   getClientAccount({
     id = '',
     providerId = '',
   } = {}){
-    return http.get(`${this.url}${providerId}/client-accounts/filter?companyId=${id}`)
+    return http.get(`${this.url}${providerId}/client-accounts?owner=${id}`)
   },
 
   getClientBills(providerId, clientId, params){
@@ -33,6 +33,10 @@ export default {
 
   providerAccount(providerId, params) {
     return http.post(`${this.url}${providerId}/client-accounts`, params)
+  },
+
+  clientAccountUpdate(providerId, params) {
+    return http.post(`${this.url}${providerId}/client-accounts/${params.id}/actions`, { action: params.action})
   },
 
   update(params) {
