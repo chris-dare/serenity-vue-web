@@ -32,10 +32,10 @@
             <InfoImageBlock :label="row.company_name" />
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <p>{{ row.admin_phoneno }}</p>
+            <p>{{ row.tin_number }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <p>{{ row.tin_number }}</p>
+            <p>{{ row.admin_phoneno }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <p class="lowercase">{{ row.admin_email }}</p>
