@@ -20,38 +20,50 @@
           </div>
           <div class="flex items-center justify-between pt-4 pb-2">
             <div>
-              <p class="text-md">{{ form && form.state }}</p>
+              <p class="text-md">{{ form && form .account_type }}</p>
               <p class="text-secondary text-xs"> Account type </p>
             </div>
             <div class="text-right">
-              <p class="text-md">{{ $date.formatDate(form.creditStartDate, 'dd MMM, yyyy') }}</p>
+              <p class="text-md">{{ $date.formatDate(form.service_period_start, 'dd MMM, yyyy') }}</p>
               <p class="text-secondary text-xs"> Date </p>
             </div>
           </div>
         </div>
         <div class="py-4">
-          <MultiSelect
-            v-model="form.paymentMethod"
-            placeholder="Please select a mode of payment"
-            custom-field="display"
-            track-by="code"
-            label="display"
-            title="Mode of payment"
-            :options="options"
-            preselect
-          />
-
-          <div class="py-4">
-            <cv-text-input
-              v-model="form.balance"
-              class="inherit-full-input"
-              type="number"
-              label="Amount Recieved"
-              placeholder="0.00"
+          <div class="my-5">
+            <div class="grid grid-cols-6 items-end">
+              <FormInput
+                v-model="form.amount"
+                placeholder="Enter the amount received"
+                label="Amount"
+                type="number"
+                class="se-input-gray col-span-4"
+                required
+              />
+              <MultiSelect
+                v-model="form.currency"
+                :options="currencies"
+                track-by="code"
+                label="display"
+                class="col-span-2"
+                custom-field="code"
+                title="Currency"
+              />
+            </div>
+            <MultiSelect
+              v-model="form.reference_type"
+              placeholder="Please select a reference types"
+              custom-field="code"
+              track-by="code"
+              class="my-4"
+              label="display"
+              title="Reference types"
+              :options="referenceTypes"
+              preselect
             />
             <cv-text-input
               v-model="form.reference"
-              class="inherit-full-input"
+              class="inherit-full-input pt-2"
               type="text"
               label="Reference"
               placeholder="Enter reference"
@@ -115,6 +127,8 @@ export default {
   computed:{
     ...mapState({
       client: (state) => state.clients.client,
+      referenceTypes: (state) => state.resources.referenceTypes,
+      currencies: state => state.resources.currencies,
     }),
     ...mapGetters({
       userName: 'auth/fullName',
@@ -139,6 +153,7 @@ export default {
       depositClient: 'clients/deposit',
       updateClient: 'clients/update',
       addToClient: 'clients/addClientAccount',
+      getClientAccount: 'clients/getClientAccount',
     }),
 
     submit(){
@@ -151,22 +166,24 @@ export default {
 
     async save() {
       this.loading = true
+      const id = this.$route.params.id
       let payload = {
-        amount: parseFloat(this.form.balance), // required
+        amount: parseFloat(this.form.amount), // required
         accountId: this.form.id, //provider client account(required)
         id: this.form.uuid,
         action:'DEPOSIT',
-        currency:'GHS',
+        currency: this.form.currency,
         reference: this.form.reference,
-        reference_type:'BANK_TRANSFER',
+        reference_type: this.form.reference_type,
         comment:'',
       }
       try {
         let data = await this.depositClient(payload)
         if (data.success) {
           let payload = this.client
+          console.log(data)
           payload.balance = data.data.balance
-          this.addToClient(payload)
+          this.getClientAccount(id)
           this.$toast.open({
             message: data.message || 'Client successfully updated',
           })
@@ -187,6 +204,7 @@ export default {
         })
         this.loading = false
       }
+      this.loading = false
     },
 
     async update() {

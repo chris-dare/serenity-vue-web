@@ -13,7 +13,7 @@
         </div>
       </div>
       <div
-        v-if="props.clientAccount.status === 'ACTIVE'"
+        v-if="props.client.status === 'ACTIVE'"
         class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
         @click="listeners['edit']"
       >
@@ -25,11 +25,11 @@
     </div>
     <div class="flex items-center space-x-2">
       <SeButton
-        v-if="props.clientAccount.status === 'ACTIVE' || !props.clientAccount.status === 'SUSPENDED'"
-        class="mx-2"
-        @click="listeners['update']"
+        v-if="props.client.status === 'ACTIVE'"
+        class="mx-2 bg-serenity-gray"
+        @click="listeners['verify']"
       >
-        Update Account
+        Suspend Account
       </SeButton>
       <SeButton
         v-else
@@ -37,36 +37,8 @@
       >
         Verify Client
       </SeButton>
-      <Dropdown
-        :visible.sync="visible"
-        with-shadow
-      >
-        <SeButton
-          slot="label"
-          @click="visible = !visible"
-        >
-          <span>Actions</span>
-        </SeButton>
-        <div class="w-40 bg-white">
-          <div
-            v-for="(option, index) in options"
-            :key="index"
-            class="flex p-4 hover:bg-gray-100"
-            @click="onSelect(option)"
-          >
-            {{ option.label }}
-          </div>
-        </div>
-      </Dropdown>
       <SeButton
-        v-if="props.clientAccount.status === 'ACTIVE'"
-        class="mx-2 bg-serenity-gray"
-        @click="listeners['verify']"
-      >
-        Suspend Account
-      </SeButton>
-      <SeButton
-        v-if="props.clientAccount.status === 'SUSPENDED'"
+        v-if="props.client.status === 'SUSPENDED'"
         class="mx-2 bg-serenity-gray"
         @click="listeners['verify']"
       >

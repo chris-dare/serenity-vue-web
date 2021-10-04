@@ -6,8 +6,7 @@
   >
     <div class="space-y-4">
       <CorporateDetailSummary
-        :client="client"
-        :client-account="clientAccount"
+        :client="{...client, ...clientAccount}"
         @edit="editClient"
         @update="$trigger('client:add:open', {...client } )"
         @verify="$trigger('client:edit:open', { ...client, ...clientAccount })"
@@ -121,7 +120,7 @@ export default {
     },
 
     editClient() {
-      this.addToStoreData(this.client.company)
+      this.addToStoreData({...this.client.company, ...this.clientAccount})
       this.$router.push({ name: 'CompanyInformation', query: { id: this.client.company.main_branch_id } })
     },
 

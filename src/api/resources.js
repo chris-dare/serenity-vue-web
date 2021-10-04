@@ -65,4 +65,8 @@ export default {
   currencies() {
     return http.get('/providers/valueset/currency-type')
   },
+
+  referenceTypes(){
+    return http.get(`${this.url}valueset/user-wallet-reference-type`)
+  },
 }
