@@ -46,22 +46,25 @@
         >
           <cv-radio-group>
             <cv-radio-button
-              v-model="form.status"
+              v-model="form.state"
               name="VERIFY"
               label="VERIFY"
               value="VERIFY"
+              :disabled="form.status === 'ACTIVE'"
             />
             <cv-radio-button
-              v-model="form.status"
+              v-model="form.state"
               name="SUSPEND"
               label="SUSPEND"
               value="SUSPEND"
+              :disabled="form.status === 'SUSPENDED'"
             />
             <cv-radio-button
-              v-model="form.status"
+              v-model="form.state"
               name="CLOSE"
               label="CLOSE"
               value="CLOSE"
+              :disabled="form.status === 'CLOSED'"
             />
           </cv-radio-group>
         </div>
@@ -257,7 +260,7 @@ export default {
       try {
         let data = await this.clientAccountUpdate({
           id: this.form.uuid,
-          action: this.form.status,
+          action: this.form.state,
         })
         if (data.success) {
           let payload = this.client

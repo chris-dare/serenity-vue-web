@@ -13,7 +13,7 @@
         </div>
       </div>
       <div
-        v-if="props.clientAccount.status === 'ACTIVE'"
+        v-if="props.client.status === 'ACTIVE'"
         class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
         @click="listeners['edit']"
       >
@@ -25,11 +25,11 @@
     </div>
     <div class="flex items-center space-x-2">
       <SeButton
-        v-if="props.clientAccount.status === 'ACTIVE' || !props.clientAccount.status === 'SUSPENDED'"
-        class="mx-2"
-        @click="listeners['update']"
+        v-if="props.client.status === 'ACTIVE'"
+        class="mx-2 bg-serenity-gray"
+        @click="listeners['verify']"
       >
-        Update Account
+        Suspend Account
       </SeButton>
       <SeButton
         v-else
@@ -38,14 +38,7 @@
         Verify Client
       </SeButton>
       <SeButton
-        v-if="props.clientAccount.status === 'ACTIVE'"
-        class="mx-2 bg-serenity-gray"
-        @click="listeners['verify']"
-      >
-        Suspend Account
-      </SeButton>
-      <SeButton
-        v-if="props.clientAccount.status === 'SUSPENDED'"
+        v-if="props.client.status === 'SUSPENDED'"
         class="mx-2 bg-serenity-gray"
         @click="listeners['verify']"
       >
@@ -56,7 +49,37 @@
 </template>
 
 <script>
+
 export default {
+
   name: 'CorporateDetailSummary',
+
+  data() {
+    return {
+      visible: false,
+    }
+  },
+
+  computed: {
+    options() {
+      return [
+        {
+          label: 'Verify',
+          event: 'verify',
+        },
+        {
+          label: 'Suspend',
+          event: 'suspend',
+        },
+      ]
+    },
+  },
+
+  methods: {
+    onSelect(val) {
+      this.$emit(val.event)
+      this.visible = false
+    },
+  },
 }
 </script>
