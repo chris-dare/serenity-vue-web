@@ -63,9 +63,10 @@ export default {
     return data
   },
 
-  async deposit({ commit }, payload) {
+  async deposit({ commit, rootState }, payload) {
+    const provider = rootState.auth.provider
     const { data } = await ClientAPI
-      .deposit(payload)
+      .deposit(provider.id, payload)
       .catch(({data: error}) => {
         throw error
       })

@@ -27,8 +27,8 @@ export default {
     return http.post(`${this.url}${providerId}/clients`, params)
   },
 
-  deposit(params) {
-    return http.post(`${this.url}client-accounts/deposit`, params)
+  deposit(providerId, params) {
+    return http.post(`${this.url}${providerId}/client-accounts/${params.id}/actions`, params)
   },
 
   providerAccount(providerId, params) {

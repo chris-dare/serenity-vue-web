@@ -43,11 +43,18 @@
 
           <div class="py-4">
             <cv-text-input
-              v-model="form.amount"
+              v-model="form.balance"
               class="inherit-full-input"
               type="number"
               label="Amount Recieved"
               placeholder="0.00"
+            />
+            <cv-text-input
+              v-model="form.reference"
+              class="inherit-full-input"
+              type="text"
+              label="Reference"
+              placeholder="Enter reference"
             />
             <div v-if="form.paymentMethod === 'corporate'">
               <MultiSelect
@@ -61,14 +68,6 @@
                 sub-title="payment would be billed to the corporate account"
               />
             </div>
-            <!-- <cv-text-input
-              v-else
-              v-model="form.depositor"
-              class="inherit-full-input pt-4"
-              type="text"
-              label="Name of Depositor"
-              placeholder="Please enter the name of the depositor"
-            /> -->
           </div>
         </div>
       </SeForm>
@@ -93,7 +92,6 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-// import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'AddClientDeposit',
@@ -154,22 +152,20 @@ export default {
     async save() {
       this.loading = true
       let payload = {
-        amount: parseFloat(this.form.amount), // required
+        amount: parseFloat(this.form.balance), // required
         accountId: this.form.id, //provider client account(required)
-        creditDurationInDays: parseFloat(this.form.creditDurationInDays), //required
-        creditStartDate: new Date(this.form.creditStartDate), //required
-        depositType: this.form.state, //either limited-credit-active or limited-debit-activerequired
-        companyId: this.form.company.main_branch_id,
-        depositedBy: this.userName,
-        maximum_employees_allowed: parseFloat(this.form.maximum_employees_allowed), //required
+        id: this.form.uuid,
+        action:'DEPOSIT',
+        currency:'GHS',
+        reference: this.form.reference,
+        reference_type:'BANK_TRANSFER',
+        comment:'',
       }
       try {
         let data = await this.depositClient(payload)
-        if (data.successful) {
+        if (data.success) {
           let payload = this.client
-          payload.amount = data.returnedData.amount
-          payload.maximum_employees_allowed = data.returnedData.maximum_employees_allowed
-          payload.creditDurationInDays = data.returnedData.creditDurationInDays
+          payload.balance = data.data.balance
           this.addToClient(payload)
           this.$toast.open({
             message: data.message || 'Client successfully updated',

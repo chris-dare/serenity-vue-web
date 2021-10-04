@@ -5,7 +5,7 @@ export default {
   async getCorporate({ commit }, id) {
     try {
       const { data } = await CorporateAPI.list(id)
-      commit(SET_CORPORATE, data.returnedData)
+      commit(SET_CORPORATE, data.data)
     } catch ({ response: { data: error } }) {
       throw error
     }
