@@ -2,19 +2,26 @@
   <div class="space-y-4">
     <Search
       v-model="filter"
-      placeholder="Search for visit"
+      placeholder="Search for admission"
     />
 
-    <FilterGroup
-      v-model="selected"
-      :filters="filters"
-    />
+    <div class="flex items-center justify-between">
+      <FilterGroup
+        v-model="selected"
+        :filters="filterOptions"
+      />
+
+      <DatePicker
+        v-model="filters.date"
+        type="range"
+      />
+    </div>
 
     <DataTable
       :columns="columns"
       :data="normalizedData"
       :loading="loading"
-      no-data-label="You have no visits"
+      no-data-label="You have no admissions"
       :pagination="pagination"
       @pagination="storePagination"
     >
@@ -29,23 +36,23 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ row.assigned_to_name }}</p>
-          </div>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <div>
             <p>{{ $date.formatDate(row.arrived_at, 'dd MMM, yyyy') }}</p>
             <p class="text-secondary text-xs">{{ $date.formatDate(row.arrived_at, 'HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ getEncounterClassDisplayName(row.visit_class) }}</p>
+            <p>{{ row.ward }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <Tag>{{ row.status }}</Tag>
+            <p>{{ row.type }}</p>
+          </div>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div>
+            <Tag>{{ row.mobile }}</Tag>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -53,28 +60,23 @@
             <TableActions
               :actions="tableActions(row)"
               @end="end(row.id)"
-              @vitals="$trigger('reception:capture:vitals:open', { patient: row.patient, visit: row.id })"
+              @vitals="$trigger('reception:capture:vitals:open', { patient: row.patient, admission: row.id })"
               @view="view(row)"
             />
           </div>
         </cv-data-table-cell>
       </template>
     </DataTable>
-
-    <CaptureVitalsModal />
   </div>
 </template>
 
 <script>
 import DataMixin from '@/mixins/data'
 import { mapActions, mapState } from 'vuex'
-import CaptureVitalsModal from '@/components/vitals/CaptureVitalsModal'
 import debounce from 'lodash/debounce'
 
 export default {
-  name: 'VisitsTable',
-
-  components: {CaptureVitalsModal},
+  name: 'AdmissionsTable',
 
   mixins: [DataMixin],
 
@@ -94,47 +96,50 @@ export default {
     return {
       columns: [
         'Patient',
-        'Assigned to',
         'Date',
+        'Ward',
         'Type',
-        'Status',
+        'Mobile',
         'Action',
       ],
       selected: 'all',
       searchTerms: ['status'],
       filter: '',
+      filters: {
+        date: {},
+      },
     }
   },
 
   computed: {
     ...mapState({
-      visits: (state) => state.visits.visits,
-      visitsTotal: (state) => state.visits.visitsTotal,
-      practitionerVisits: (state) => state.visits.practitionerVisits,
-      practitionerVisitsTotal: (state) => state.visits.practitionerVisitsTotal,
+      admissions: (state) => state.admissions.admissions,
+      admissionsTotal: (state) => state.admissions.admissionsTotal,
+      practitionerAdmissions: (state) => state.admissions.practitionerAdmissions,
+      practitionerAdmissionsTotal: (state) => state.admissions.practitionerAdmissionsTotal,
       provider: (state) => state.auth.provider,
       encounterClasses: (state) => state.resources.encounterClasses,
     }),
 
     data() {
-      return this.selected === 'all' ? this.$date.sortByDate(this.visits, 'arrived_at', 'desc') : this.$date.sortByDate(this.practitionerVisits, 'arrived_at', 'desc')
+      return this.selected === 'all' ? this.$date.sortByDate(this.admissions, 'arrived_at', 'desc') : this.$date.sortByDate(this.practitionerAdmissions, 'arrived_at', 'desc')
     },
 
     total() {
-      return this.selected === 'all' ? this.visitsTotal : this.practitionerVisitsTotal
+      return this.selected === 'all' ? this.admissionsTotal : this.practitionerAdmissionsTotal
     },
 
-    filters() {
+    filterOptions() {
       return [
-        { display: `All Visits (${ this.visits.length })`, code: 'all' },
-        { display: ` My Visits (${ this.practitionerVisits.length })`, code: 'my' },
+        { display: `Assigned to me (${ this.admissionsTotal })`, code: 'my' },
+        { display: ` All (${ this.practitionerAdmissionsTotal })`, code: 'all' },
       ]
     },
   },
 
   watch: {
     filter(search) {
-      this.searchVisits(search)
+      this.searchAdmissions(search)
     },
   },
 
@@ -144,19 +149,21 @@ export default {
       this.pageLength = 5
     }
     this.paginate = true
-    this.refresh()
+    // this.refresh()
   },
 
   methods: {
     ...mapActions({
-      getData: 'visits/getVisits',
-      deleteVisit: 'visits/deleteVisit',
-      setCurrentVisit: 'visits/setCurrentVisit',
-      getAllVisits: 'visits/getAllVisits',
-      getMyVisits: 'visits/getMyVisits',
+    //   getData: 'admissions/getAdmissions',
+      deleteAdmission: 'admissions/deleteAdmission',
+    //   setCurrentAdmission: 'admissions/setCurrentAdmission',
+    //   getAllAdmissions: 'admissions/getAllAdmissions',
+    //   getMyAdmissions: 'admissions/getMyAdmissions',
     }),
 
-    searchVisits: debounce(function(search) {
+    getData() {},
+
+    searchAdmissions: debounce(function(search) {
       this.getData({ search })
     }, 300, false),
 
@@ -173,7 +180,7 @@ export default {
     },
 
     view(row) {
-      this.setCurrentVisit(row)
+      this.setCurrentAdmission(row)
       this.$router.push({name: this.route, params: { id: row.patient }})
     },
 
@@ -185,12 +192,12 @@ export default {
       this.loading = true
 
       if (this.selected === 'all') {
-        await this.getAllVisits({ page: this.page, page_size: ev.length })
+        await this.getAllAdmissions({ page: this.page, page_size: ev.length })
         this.loading = false
         return
       }
 
-      await this.getMyVisits({ page: this.page, page_size: ev.length })
+      await this.getMyAdmissions({ page: this.page, page_size: ev.length })
       this.loading = false
     },
 
@@ -199,12 +206,12 @@ export default {
         confirmButtonText: 'End',
         type: 'delete',
         confirmButtonVariant: 'danger',
-        label: 'Are you sure you want to end this visit?',
+        label: 'Are you sure you want to end this admission?',
         callback: async () => {
           try {
             this.loading = true
-            await this.deleteVisit(id)
-            this.$toast.open({ message: 'The visit has ended' })
+            await this.deleteAdmission(id)
+            this.$toast.open({ message: 'The admission has ended' })
             this.loading = false
           } catch (error) {
             this.loading = false

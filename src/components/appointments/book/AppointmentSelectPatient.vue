@@ -71,8 +71,8 @@ export default {
       ],
       selected: 'existing',
       loading: false,
-      next: 'ClinicsServices',
-      parent: 'Appointments',
+      next: this.$route.meta.next,
+      parent: this.$route.meta.parent,
     }
   },
 
