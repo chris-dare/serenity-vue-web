@@ -18,6 +18,8 @@ export default {
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
       { label: 'Billing', to: 'Billing', component: 'Align', group_by: 'hospital operations'},
       { label: 'Services & pricing', to: 'Services', component: 'Wallet', group_by: 'hospital operations'},
+      { label: 'Wards', to: 'Wards', component: 'HospitalBed'},
+      { label: 'Resources', to: 'Resources', component: 'Result'},
       { label: 'Inventory', to: 'Inventory', component: 'Folder'},
       { label: 'Schedules', to: 'Schedules', component: 'Schedule'},
       { label: 'Team', to: 'Team', component: 'Events', group_by: 'administration'},
@@ -123,6 +125,7 @@ export default {
     ],
     IPD: [
       { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
+      { label: 'Patients', to: 'Patients', component: 'Reference' },
       { label: 'Support', to: 'Support', component: 'Help' },
       { label: 'Settings', to: 'Settings', component: 'Settings' },
     ],

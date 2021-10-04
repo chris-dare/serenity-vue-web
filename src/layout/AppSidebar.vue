@@ -52,6 +52,8 @@ import Medical from '@carbon/icons-vue/es/image--medical/16'
 import Insights from '@carbon/icons-vue/es/activity/16'
 import Money from '@carbon/icons-vue/es/money/16'
 import Report from '@carbon/icons-vue/es/report/16'
+import HospitalBed from '@carbon/icons-vue/es/hospital-bed/16'
+import Result from '@carbon/icons-vue/es/archive/16'
 import AppNavItem from '@/layout/AppNavItem'
 import resize from '@/mixins/resize'
 import { mapGetters, mapState } from 'vuex'
@@ -61,7 +63,7 @@ export default {
 
   components: {
     AppNavItem, Security, Categories, Template, Cross, Reference, Events, Settings, Baggage, Notification, Help, Schedule, Star, Wallet, Align, Folder,
-    Medication, Money, Report, Insights, Medical, List,
+    Medication, Money, Report, Insights, Medical, List, HospitalBed, Result,
   },
 
   mixins: [resize],

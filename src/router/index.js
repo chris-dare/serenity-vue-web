@@ -43,6 +43,18 @@ const routes = [
         meta: { middleware: [isAdmin] },
       },
       {
+        path: '/wards',
+        name: 'Wards',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/wards/Wards.vue'),
+        meta: { middleware: [isAdmin] },
+      },
+      {
+        path: '/resources',
+        name: 'Resources',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/resources/Resources.vue'),
+        meta: { middleware: [isAdmin] },
+      },
+      {
         path: '/services',
         name: 'Services',
         component: () => import(/* webpackChunkName: "admin" */ '../views/client/administration/Services.vue'),
@@ -211,16 +223,96 @@ const routes = [
             path: '',
             name: 'ServiceInformation',
             component: () => import(/* webpackChunkName: "registerservice" */ '../views/client/services/ServiceInformation.vue'),
+            meta: {previous: null, next: 'ServicePricing'},
           },
           {
             path: '/register-service/pricing',
             name: 'ServicePricing',
             component: () => import(/* webpackChunkName: "registerservice" */ '../views/client/services/ServicePricing.vue'),
+            meta: {previous: 'ServiceInformation', next: 'ServiceAvailability'},
           },
           {
             path: '/register-service/availability',
             name: 'ServiceAvailability',
             component: () => import(/* webpackChunkName: "registerservice" */ '../views/client/services/ServiceAvailability.vue'),
+            meta: {previous: 'ServicePricing', next: null},
+          },
+        ],
+      },
+      {
+        path: '/register-ward',
+        component: () => import(/* webpackChunkName: "registerwards" */ '../views/client/wards/RegisterWards.vue'),
+        children: [
+          {
+            path: '',
+            name: 'WardInformation',
+            component: () => import(/* webpackChunkName: "registerwards" */ '../views/client/wards/WardInformation.vue'),
+            meta: {previous: null, next: 'WardPricing'},
+          },
+          {
+            path: 'pricing',
+            name: 'WardPricing',
+            component: () => import(/* webpackChunkName: "registerwards" */ '../views/client/services/ServicePricing.vue'),
+            meta: {previous: 'WardInformation', next: 'WardAvailability'},
+          },
+          {
+            path: 'availability',
+            name: 'WardAvailability',
+            component: () => import(/* webpackChunkName: "registerwards" */ '../views/client/services/ServiceAvailability.vue'),
+            meta: {previous: 'WardPricing', next: null},
+          },
+        ],
+      },
+      {
+        path: '/register-resource',
+        component: () => import(/* webpackChunkName: "registerresources" */ '../views/client/resources/RegisterResource.vue'),
+        children: [
+          {
+            path: '',
+            name: 'ResourceInformation',
+            component: () => import(/* webpackChunkName: "registerresources" */ '../views/client/resources/ResourceInformation.vue'),
+          },
+        ],
+      },
+      {
+        path: '/register-admission',
+        component: () => import(/* webpackChunkName: "registeradmissions" */ '../views/client/admissions/RegisterAdmission.vue'),
+        children: [
+          {
+            path: '',
+            name: 'AdmissionSelectPatient',
+            component: () => import(/* webpackChunkName: "registeradmissions" */ '../views/client/appointments/SelectPatient.vue'),
+            meta: { next: 'AdmissionPricing', previous: null, parent: 'Dashboard'},
+          },
+          {
+            path: 'pricing',
+            name: 'AdmissionPricing',
+            component: () => import(/* webpackChunkName: "registeradmissions" */ '../views/client/admissions/AdmissionPricing.vue'),
+            meta: { next: 'AdmissionDetails', previous: 'AdmissionSelectPatient', parent: 'Dashboard'},
+          },
+          {
+            path: 'details',
+            name: 'AdmissionDetails',
+            component: () => import(/* webpackChunkName: "registeradmissions" */ '../views/client/admissions/AdmissionDetails.vue'),
+            meta: { previous: 'AdmissionPricing', next: 'AdmissionPayment', parent: 'Dashboard'},
+          },
+          {
+            path: 'payment',
+            name: 'AdmissionPayment',
+            component: () => import(/* webpackChunkName: "registeradmissions" */ '../views/client/appointments/AppointmentPayment.vue'),
+            meta: { next: 'AdmissionNotes', previous: 'AdmissionNotes', parent: 'Dashboard'},
+          },
+          {
+            path: 'notes',
+            name: 'AdmissionNotes',
+            component: () => import(/* webpackChunkName: "registeradmissions" */ '../views/client/appointments/AppointmentNotes.vue'),
+            meta: { next: 'AdmissionSummary', previous: 'AdmissionPayment', parent: 'Dashboard'},
+          },
+          {
+            path: 'summary',
+            name: 'AdmissionSummary',
+            component: () => import(/* webpackChunkName: "registeradmissions" */ '../views/client/appointments/AppointmentNotes.vue'),
+            meta: { next: null, previous: 'AdmissionNotes', parent: 'Dashboard'},
           },
         ],
       },
@@ -268,12 +360,13 @@ const routes = [
             path: '',
             name: 'SelectPatient',
             component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/SelectPatient.vue'),
+            meta: { next: 'ClinicsServices', previous: null, parent: 'Appointments'},
           },
           {
             path: '/appointment/:id/update',
             name: 'AppointmentUpdate',
             component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/AppointmentUpdate.vue'),
-            meta: {middleware: [fetchAppointment]},
+            meta: { middleware: [fetchAppointment] },
             props: true,
           },
           {
@@ -295,6 +388,7 @@ const routes = [
             path: '/appointment/notes',
             name: 'AppointmentNotes',
             component: () => import(/* webpackChunkName: "appointment" */ '../views/client/appointments/AppointmentNotes.vue'),
+            meta: { next: 'AppointmentSummary', previous: 'DateDoctor', parent: 'Appointments'},
           },
           {
             path: '/appointment/summary',
