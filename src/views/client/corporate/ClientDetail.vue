@@ -10,7 +10,7 @@
         @edit="editClient"
         @update="$trigger('client:add:open', {...client } )"
         @verify="$trigger('client:edit:open', { ...client, ...clientAccount })"
-        @suspend="suspend"
+        @clientaccount="createAccount"
       />
 
       <div class="bg-white px-4 py-6 grid grid-cols-3 divide-x divide-gray-100 divide-solid">
@@ -82,11 +82,19 @@ export default {
     }),
 
     summaryFields() {
-      return [
-        { label: 'Account type', value: this.clientAccount.account_type },
-        { label: 'Current Balance', value: this.$currency(this.clientAccount.balance).format() },
-        { label: 'Credit start data', value: this.$date.formatDate(this.clientAccount.service_period_start, 'dd MMM, yyyy') },
-      ]
+      if (this.clientAccount) {
+        return [
+          { label: 'Account type', value: this.clientAccount.account_type },
+          { label: 'Current Balance', value: this.$currency(this.clientAccount.balance).format() },
+          { label: 'Credit start data', value: this.$date.formatDate(this.clientAccount.service_period_start, 'dd MMM, yyyy') },
+        ]
+      } else {
+        return [
+          { label: 'Account type', value: '' },
+          { label: 'Current Balance', value: this.$currency(0).format() },
+          { label: 'Credit start data', value: this.$date.formatDate('', 'dd MMM, yyyy') },
+        ]
+      }
     },
   },
 
@@ -107,6 +115,7 @@ export default {
       getClient: 'clients/getClientBy',
       getClientAccount: 'clients/getClientAccount',
       addToStoreData: 'clients/addToCurrentUser',
+      providerClient: 'clients/providerAccount',
     }),
 
     async init() {
@@ -124,8 +133,12 @@ export default {
       this.$router.push({ name: 'CompanyInformation', query: { id: this.client.company.main_branch_id } })
     },
 
-    async suspend(){
-      console.log(this.clientAccount)
+    async createAccount(){
+      this.loading = true
+      const id = this.$route.params.id
+      await this.providerClient({owner: id})
+      this.getClientAccount(id)
+      this.loading = false
     },
   },
 

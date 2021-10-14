@@ -3,7 +3,7 @@
     <div class="flex">
       <div class="flex items-center">
         <div class="space-y-1">
-          <p class="font-semibold">{{ props.client.companyName || props.client.company.company_name }}</p>
+          <p class="font-semibold">{{ props.client.company.company_name }}</p>
           <p class="text-secondary">
             Corporate Client
           </p>
@@ -23,7 +23,10 @@
         >
       </div>
     </div>
-    <div class="flex items-center space-x-2">
+    <div
+      v-if="props.client.account_type"
+      class="flex items-center space-x-2"
+    >
       <SeButton
         v-if="props.client.status === 'ACTIVE'"
         class="mx-2 bg-serenity-gray"
@@ -43,6 +46,14 @@
         @click="listeners['verify']"
       >
         Close Account
+      </SeButton>
+    </div>
+    <div v-else>
+      <SeButton
+        class="mx-2 bg-serenity-primary"
+        @click="listeners['clientaccount']"
+      >
+        Create Client Account
       </SeButton>
     </div>
   </div>

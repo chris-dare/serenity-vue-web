@@ -20,7 +20,7 @@
           </div>
           <div class="flex items-center justify-between pt-4 pb-2">
             <div>
-              <p class="text-md">{{ form && form .account_type }}</p>
+              <p class="text-md">{{ form && form.account_type }}</p>
               <p class="text-secondary text-xs"> Account type </p>
             </div>
             <div class="text-right">
@@ -139,11 +139,13 @@ export default {
     'deposit:add:open': function(data){
       this.visible = true
       this.form = data.params[0]
+      this.getCurrencies()
       this.type = 'add'
     },
     'deposit:edit:open': function(data){
       this.visible = true
       this.form = data.params[0]
+      this.getCurrencies()
       this.type = 'update'
     },
   },
@@ -154,6 +156,7 @@ export default {
       updateClient: 'clients/update',
       addToClient: 'clients/addClientAccount',
       getClientAccount: 'clients/getClientAccount',
+      getCurrencies: 'resources/getCurrencies',
     }),
 
     submit(){
