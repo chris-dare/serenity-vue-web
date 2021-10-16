@@ -228,14 +228,10 @@ export default {
       healthcare_service_name: {
         required,
         async isUnique(value) {
-          if (value === '' || !this.$v.localValue.email.email) return true
-          const { data } = await this.services.find(service => service.healthcare_service_name.toLowerCase() === value.toLowerCase() ).catch(() => false)
+          if (value === '') return true
+          const data = await this.services.find(service => service.healthcare_service_name.toLowerCase() === value.toLowerCase() )
 
-          if (data && data.length) {
-            return false
-          } else {
-            return true
-          }
+          return data ? false : true
         },
       },
       healthcare_service_locations: { required, minLength: minLength(1) },
@@ -320,7 +316,6 @@ export default {
     },
 
     generate: debounce(function () {
-      this.$v.$touch()
       this.generateServiceDescription()
     }, 500),
 
@@ -328,6 +323,7 @@ export default {
       if (this.form.id || !this.form.healthcare_service_name) {
         return
       }
+      this.$v.$touch()
       this.form.comment = `Healthcare service for ${this.form.healthcare_service_name} at ${this.provider.organization_name}`
     },
 
