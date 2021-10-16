@@ -138,7 +138,9 @@ export default {
 
     close() {
       this.visible = false
-      this.form = {}
+      this.form = {
+        price_tiers: [],
+      }
     },
 
     async edit() {

@@ -15,7 +15,9 @@
       :config="configs[type]"
       :placeholder="placeholder"
       class="bg-white border-b h-10 w-full border-serenity-dark px-4"
+      :disabled="disabled"
       v-bind="$attrs"
+      :class="{ 'cursor-not-allowed opacity-40': disabled }"
       @on-change="$emit('change', $event)"
     />
     <p
@@ -54,6 +56,10 @@ export default {
     type: {
       type: String,
       default: 'date',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     disableDatesBeforeToday: {
       type: Boolean,

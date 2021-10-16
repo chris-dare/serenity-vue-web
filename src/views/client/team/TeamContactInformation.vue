@@ -5,12 +5,19 @@
       @submit.prevent
     >
       <div class="grid grid-cols-2 gap-4 items-start">
-        <PhoneInput
+        <!-- <PhoneInput
           v-model="form.phone_number"
           label="Phone number"
           :error-message="$utils.validateRequiredField($v, 'phone_number')"
           format-as-national
           :country-code.sync="form.country_code"
+          required
+          @input="$v.$touch()"
+        /> -->
+        <MsisdnPhoneInput
+          v-model="form.phone_number"
+          label="Phone number"
+          :error-message="$utils.validateRequiredField($v, 'phone_number')"
           required
           @input="$v.$touch()"
         />

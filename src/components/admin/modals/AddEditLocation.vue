@@ -7,8 +7,7 @@
     @modal-hidden="close"
   >
     <template slot="content">
-      <cv-form
-        autocomplete="off"
+      <SeForm
         class="space-y-8"
       >
         <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'New' }} location</p>
@@ -77,7 +76,7 @@
         >
           Cancel
         </p>
-      </cv-form>
+      </SeForm>
     </template>
   </cv-modal>
 </template>
