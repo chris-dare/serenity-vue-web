@@ -6,7 +6,7 @@
           :name="`${currentUser.first_name}  ${currentUser.last_name}`"
           :description="roleName"
           :url="currentUser.photo"
-          :label="`${ currentUser.title } ${currentUser.first_name}  ${currentUser.last_name}`"
+          :label="`${ currentUser.title || '' } ${currentUser.first_name}  ${currentUser.last_name}`"
           size="large"
           :loading="loading"
           label-class="font-semibold"
@@ -85,7 +85,7 @@ export default {
       if (!this.currentUser || !this.currentUser.practitioner_specialty) {
         return ''
       }
-      return this.currentUser.practitioner_specialty.map(sp => sp.Display || sp).join(', ')
+      return this.currentUser.practitioner_specialty.map(sp => sp.display || sp).join(', ')
     },
 
     generalFields() {

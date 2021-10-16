@@ -19,10 +19,18 @@
       </div>
     </div>
 
-    <div v-else>
+    <div
+      v-else
+      class="space-y-6"
+    >
       <p>Select a doctor for the apointment</p>
+      <Search
+        v-model="search"
+        placeholder="Search doctor"
+      />
+      <p v-if="hasNoFilteredData">No available doctors</p>
       <GroupedSlotsListItem
-        v-for="(doctor, index) in doctors"
+        v-for="(doctor, index) in filteredDoctors"
         :key="index"
         v-model="localValue"
         :doctor="doctor"
@@ -57,6 +65,12 @@ export default {
     },
   },
 
+  data() {
+    return {
+      search: '',
+    }
+  },
+
   computed: {
     hasNoData() {
       return isEmpty(this.localValue.slot) && !this.doctors.length && !this.loading
@@ -64,6 +78,14 @@ export default {
 
     hasSlot() {
       return !isEmpty(this.localValue.slot) && !this.loading
+    },
+
+    filteredDoctors() {
+      return this.$utils.getFilteredData(this.doctors, this.search, ['practitioner_name'])
+    },
+
+    hasNoFilteredData() {
+      return this.filteredDoctors.length === 0
     },
   },
 }

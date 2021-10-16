@@ -60,6 +60,7 @@ const renameKeys = (obj, keysMap) => {
 }
 
 const checkArrayType = (obj) => {
+  if (!obj) return
   return typeof obj[0] === 'string' ? 'string' : 'object'
 }
 
