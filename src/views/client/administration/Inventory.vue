@@ -50,6 +50,9 @@
             <p>{{ row.initial_quantity }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
+            <p>{{ row.net_release_quantity }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
             <p>{{ row.expiry_date }}</p>
           </cv-data-table-cell>
 
@@ -95,7 +98,8 @@ export default {
         'Item name',
         'Unit Price',
         'Selling Price',
-        'Item Quantity',
+        'Initial Quantity',
+        'Quantity Available',
         'Expiry Date',
         'Action',
       ],

@@ -67,9 +67,25 @@
           <cv-text-input
             v-model="form.initial_quantity"
             type="number"
-            label="Item quantity"
+            label="Initial item quantity"
             placeholder=""
             :invalid-message="$utils.validateRequiredField($v, 'initial_quantity')"
+          />
+          <cv-text-input
+            v-model="form.in_hand_quantity"
+            type="number"
+            label="In-hand quantity"
+            placeholder=""
+            :invalid-message="$utils.validateRequiredField($v, 'in_hand_quantity')"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-8">
+          <cv-text-input
+            v-model="form.net_release_quantity"
+            type="number"
+            label="Net release quantity"
+            placeholder=""
+            :invalid-message="$utils.validateRequiredField($v, 'net_release_quantity')"
           />
           <cv-text-input
             v-model="form.expiry_date"
@@ -136,7 +152,13 @@ export default {
         minValue: minValue(1),
       },
       initial_quantity: {
-        minValue: minValue(1),
+        minValue: minValue(0),
+      },
+      in_hand_quantity: {
+        minValue: minValue(0),
+      },
+      net_release_quantity: {
+        minValue: minValue(0),
       },
     },
   },
