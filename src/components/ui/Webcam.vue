@@ -167,7 +167,7 @@ export default {
         .then(this.gotDevices)
         .catch((err) => {
           if (err.message === 'Permission denied') {
-            this.$alert('Make sure to enable the camera on your browser', {
+            this.$toast.error('Make sure to enable the camera on your browser', {
               showCancelButton: false,
               type: 'warning',
               confirmButtonText: 'Okay',
