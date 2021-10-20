@@ -3,7 +3,7 @@
     <div class="flex">
       <div class="flex items-center space-x-4">
         <ImageBlock
-          :url="patient.url"
+          :url="patient.photo"
           :alt="patient.name || patient.fullName"
         />
         <div>

@@ -32,6 +32,7 @@
                 <InfoImageBlock
                   :label="row.name"
                   :description="row.gender_age_description"
+                  :url="row.photo"
                   size="base"
                 />
               </div>

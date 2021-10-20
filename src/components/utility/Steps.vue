@@ -32,6 +32,7 @@
         <InfoImageBlock
           :label="patient.fullName"
           :description="patient.mobile"
+          :url="patient.photo"
         />
       </div>
     </div>

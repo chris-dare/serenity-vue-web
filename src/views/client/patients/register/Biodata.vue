@@ -74,11 +74,11 @@
               :multiple="false"
             />
           </div>
-          <div>
-            <p class="bx--label">Capture or Upload Patient Photo</p>
-            <Webcam />
-            <FileUploadButton title="Or upload patient photo" />
-          </div>
+            
+          <UploadImage
+            v-model="form.photo"
+            label="Capture or Upload Patient Photo"
+          />
         </div>
       </div>
     </MultiStepBase>
@@ -106,6 +106,7 @@ export default {
       calOptions: {
         'dateFormat': 'Y-m-d',
       },
+      image: null,
     }
   },
 

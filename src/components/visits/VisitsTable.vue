@@ -24,6 +24,7 @@
             <InfoImageBlock
               :label="concatData(row.patient_detail, ['first_name', 'lastname'])"
               :description="row.patient_detail.mobile"
+              :url="row.patient_detail.photo"
             />
           </div>
         </cv-data-table-cell>

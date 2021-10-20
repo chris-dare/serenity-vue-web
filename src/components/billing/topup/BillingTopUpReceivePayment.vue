@@ -5,6 +5,7 @@
         <InfoImageBlock
           size="large"
           :label="localValue.patient.name"
+          :url="localValue.patient.photo"
         >
           <div class="space-y-1">
             <p class="text-sm text-secondary">{{ localValue.patient.gender_age_description }}</p>

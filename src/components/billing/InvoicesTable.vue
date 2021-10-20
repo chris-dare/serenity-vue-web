@@ -19,6 +19,7 @@
             <div class="flex items-center py-2">
               <InfoImageBlock
                 :label="row.patient_detail.name"
+                :url="row.patient_detail.photo"
                 :description="$utils.concatData(row.patient_detail, ['age', 'gender'])"
                 size="base"
               />

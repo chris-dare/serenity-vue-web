@@ -48,6 +48,8 @@ import { mapActions, mapState } from 'vuex'
 import MultiStep from '@/mixins/multistep'
 import { required, email } from 'vuelidate/lib/validators'
 import { emailFormatter } from '@/services/custom-validators'
+import PatientAPI from '@/api/patients'
+import omit from 'lodash/omit'
 
 export default {
   name: 'Payment',
@@ -118,7 +120,8 @@ export default {
     async save() {
       this.loading = true
       try {
-        const data = await this.createPatient(this.form)
+        const data = await this.createPatient(omit(this.form, ['photo']))
+        await this.uploadImage({...data, ...this.form})
         this.$toast.open({
           message: 'Patient successfully added',
         })
@@ -148,7 +151,8 @@ export default {
       this.addToStoreData(this.form)
 
       try {
-        await this.updatePatient(this.form)
+        await this.uploadImage(this.form)
+        await this.updatePatient(omit(this.form, ['photo']))
         this.$toast.open({
           message: 'Patient successfully updated',
         })
@@ -161,6 +165,17 @@ export default {
       }
 
       this.loading = false
+    },
+
+    async uploadImage(form) {
+      if (!form.photo || typeof form.photo === 'string') return
+      try {
+        let fd = new FormData()
+        fd.append('object_name', form.photo)
+        await PatientAPI.upload(this.$providerId, form.id, fd)
+      } catch (error) {
+        console.log('error', error)
+      }
     },
 
     confirmChanges(id) {

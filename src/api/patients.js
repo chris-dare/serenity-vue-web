@@ -56,4 +56,8 @@ export default {
   deleteReferral(providerId, id) {
     return http.delete(`${this.url}${providerId}/referral-requests/${id}`)
   },
+
+  upload(providerId, patientId, params) {
+    return http.post(`${this.url}${providerId}/patient-photos/${patientId}`, params)
+  },
 }

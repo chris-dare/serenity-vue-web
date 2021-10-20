@@ -12,6 +12,7 @@
           <InfoImageBlock
             :label="appointment.patient.fullName"
             :description="appointment.patient.phone"
+            :url="appointment.patient.photo"
             label-class="text-black font-semibold"
             description-class="text-sm"
           />
