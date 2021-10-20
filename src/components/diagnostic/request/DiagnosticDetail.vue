@@ -12,6 +12,7 @@
           <InfoImageBlock
             :label="summary.patient.user.first_name + ' ' + summary.patient.user.last_name"
             :description="summary.patient.user.mobile"
+            :url="summary.patient.photo"
             label-class="text-black font-semibold"
             description-class="text-sm"
           />

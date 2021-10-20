@@ -19,7 +19,7 @@
       <div :class="customClass.img">
         <img
           v-if="url"
-          class="rounded-full flex-1"
+          class="rounded-full object-cover"
           :class="customClass.img"
           :src="url"
           alt=""
