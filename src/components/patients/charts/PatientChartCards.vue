@@ -8,6 +8,7 @@
       />
       <NewChart v-if="false" />
     </div>
+    <IPDPatientProfileCharts v-if="$isCurrentWorkspace('IPD')" />
     <div class="grid grid-cols-2 gap-2 my-2">
       <EditableCard
         type="comment"
@@ -146,13 +147,14 @@
 import NewChart from './NewChart'
 import ChartCard from './ChartCard'
 import SocialHistoryDetails from '@/components/patients/details/SocialHistoryDetails'
+import IPDPatientProfileCharts from '@/components/ipd/IPDPatientProfileCharts'
 import { mapGetters, mapState } from 'vuex'
 
 
 export default {
   name: 'PatientChartCards',
 
-  components: { NewChart, ChartCard, SocialHistoryDetails },
+  components: { NewChart, ChartCard, SocialHistoryDetails, IPDPatientProfileCharts },
 
   computed: {
     ...mapState({

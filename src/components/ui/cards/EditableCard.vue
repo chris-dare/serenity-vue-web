@@ -2,15 +2,18 @@
   <div class="bg-white py-3 px-5">
     <div class="flex items-center justify-between h-9">
       <p class="text-gray-500">{{ title }}</p>
-      <div
-        v-if="showEdit"
-        class="bg-serenity-light-gray w-9 h-9 rounded-full ml-6 flex items-center justify-center"
-      >
-        <component
-          :is="currentIconComponent"
-          class="w-4 h-4 text-serenity-primary"
-        />
-      </div>
+
+      <slot name="action">
+        <div
+          v-if="showEdit"
+          class="bg-serenity-light-gray w-9 h-9 rounded-full ml-6 flex items-center justify-center"
+        >
+          <component
+            :is="currentIconComponent"
+            class="w-4 h-4 text-serenity-primary"
+          />
+        </div>
+      </slot>
     </div>
     <div>
       <slot />

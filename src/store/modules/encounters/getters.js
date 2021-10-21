@@ -130,7 +130,7 @@ export default {
           group: 'Dataset 1',
           date: getters.getLatestVitalsDate(obs.unit),
           value: obs.value ? obs.value.split('/')[0] : 1,
-          value2: option.code === 'BLOOD_PRESSURE' && obs.value.split('/').length > 1 ? obs.value.split('/')[1] : null,
+          value2: option.code === 'BLOOD_PRESSURE' && obs.value?.split('/')?.length > 1 ? obs.value.split('/')[1] : null,
         }
       })
 

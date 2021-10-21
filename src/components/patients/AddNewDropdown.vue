@@ -26,7 +26,7 @@
         @click="onClick(option)"
       >
         <div
-          v-if="!option.permission || $userCan(option.permission)"
+          v-if="!option.hide"
           class="flex items-center justify-between p-4 hover:bg-gray-200 cursor-pointer"
         >
           <p :class="{'text-orange text-lg': option.noIcon}">{{ option.label }}</p>
@@ -69,14 +69,14 @@ export default {
   computed: {
     options() {
       return [
-        // {
-        //   label: 'Admit Patient',
-        //   component: 'Cursor32',
-        //   color: 'bg-tetiary',
-        //   slug: 'admit',
-        //   permission: null,
-        //   hide: this.workspaceType === 'IPD',
-        // },
+        {
+          label: 'Observations',
+          component: 'Cursor32',
+          color: 'bg-tetiary',
+          slug: 'observation',
+          permission: null,
+          hide: !this.$isCurrentWorkspace('IPD'),
+        },
         {
           label: 'Capture vitals',
           component: 'HealthCross',
@@ -84,6 +84,7 @@ export default {
           // path: { name: 'Vitals', query: {id: this.$route.params.id} },
           value: 'vitals',
           permission: 'vitals.write',
+          hide: !this.$userCan('vitals.write'),
         },
         {
           label: 'Diagnostic test',
@@ -99,6 +100,7 @@ export default {
           color: 'bg-tetiary',
           slug: 'medication:request',
           permission: 'medication.orders.write',
+          hide: !this.$userCan('medication.orders.write'),
         },
         {
           label: 'Note',
