@@ -2,14 +2,14 @@
   <div>
     <div class="max-w-7xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Corporate Clients ({{ filteredData.length }})</p>
+        <p class="text-xl font-bold">Insurance Clients ({{ filteredData.length }})</p>
         <router-link
-          :to="{name:'CompanyInformation'}"
+          :to="{name:'InsuranceInformation'}"
           tag="cv-button"
           class="bg-serenity-primary hover:bg-serenity-primary-highlight px-4"
           kind="primary"
         >
-          Add new company
+          Add new insurance
           <Add class="ml-4 w-5 h-5" />
         </router-link>
       </div>
@@ -43,7 +43,7 @@
           <cv-data-table-cell>
             <router-link
               tag="div"
-              :to="{ name: 'ClientSummary', params: { id: row.main_branch_id } }"
+              :to="{ name: 'InsuranceSummary', params: { id: row.main_branch_id } }"
               class="cursor-pointer"
             >
               View
@@ -60,7 +60,7 @@ import { mapActions, mapState } from 'vuex'
 import DataMixin from '@/mixins/data'
 import Add from '@carbon/icons-vue/es/add/32'
 export default {
-  name: 'CorporateClients',
+  name: 'InsuranceClients',
 
   components: { Add },
 
@@ -100,7 +100,7 @@ export default {
       this.loading = true
 
       try {
-        await this.getData({filters: { organization_type: 'PAY'}})
+        await this.getData({filters: { organization_type: 'INS'}})
         this.loading = false
       } catch (error) {
         this.loading = false

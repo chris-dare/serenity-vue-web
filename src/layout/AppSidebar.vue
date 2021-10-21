@@ -38,6 +38,7 @@ import List from '@carbon/icons-vue/es/list/16'
 import Events from '@carbon/icons-vue/es/events/16'
 import Settings from '@carbon/icons-vue/es/settings/16'
 import Baggage from '@carbon/icons-vue/es/shopping--bag/16'
+import Insurance from '@carbon/icons-vue/es/umbrella/16'
 import Schedule from '@carbon/icons-vue/es/event--schedule/16'
 import Notification from '@carbon/icons-vue/es/notification/16'
 import Medication from '@carbon/icons-vue/es/medication/16'
@@ -62,7 +63,7 @@ export default {
   name: 'AppSidebar',
 
   components: {
-    AppNavItem, Security, Categories, Template, Cross, Reference, Events, Settings, Baggage, Notification, Help, Schedule, Star, Wallet, Align, Folder,
+    AppNavItem, Security, Categories, Template, Cross, Reference, Events, Settings, Baggage, Insurance, Notification, Help, Schedule, Star, Wallet, Align, Folder,
     Medication, Money, Report, Insights, Medical, List, HospitalBed, Result,
   },
 
