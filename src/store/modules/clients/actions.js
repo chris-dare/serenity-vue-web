@@ -3,12 +3,12 @@ import ClientAPI from '@/api/clients'
 import { SET_CLIENTS, DELETE_CLIENT, UPDATE_CLIENT, UPDATE_FORM, SET_FORM, SET_CURRENT_CLIENT, SET_CURRENT_UPDATE, SET_BILLS, SET_CLIENT_ACCOUNT } from './mutation-types'
 
 export default {
-  async getClients({ commit, rootState, state }, refresh = true) {
+  async getClients({ commit, rootState, state }, { refresh = true, filters }) {
     if (!refresh && state.clients.length) {
       return
     }
     const provider = rootState.auth.provider
-    const { data } = await ClientAPI.list(provider.id).catch((error) => {
+    const { data } = await ClientAPI.list(provider.id, filters).catch((error) => {
       throw error
     })
     commit(SET_CLIENTS, data.returnedData)

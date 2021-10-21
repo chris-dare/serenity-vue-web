@@ -77,6 +77,7 @@ export default {
       { label: 'Bills', to: 'Billing', component: 'Align'},
       { label: 'Invoices', to: 'Invoices', component: 'Report' },
       { label: 'Corporate Clients', to: 'CorporateClients', component: 'Baggage' },
+      { label: 'Insurance Clients', to: 'InsuranceClients', component: 'Insurance' },
       // { label: 'Reports', to: 'Reports', component: 'Report' },
       { label: 'Schedules', to: 'Schedules', component: 'Schedule'},
       { label: 'Notifications', to: 'Notifications', component: 'Notification' },

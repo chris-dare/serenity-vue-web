@@ -195,6 +195,61 @@ const routes = [
         ],
       },
       {
+        path: '/insurance',
+        name: 'InsuranceClients',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/client/insurance/InsuranceClients.vue'),
+      },
+      {
+        path: '/insurance/:id',
+        component: () => import(/* webpackChunkName: "corporate" */ '../views/client/insurance/ClientDetail.vue'),
+        children: [
+          {
+            path: 'summary',
+            name: 'InsuranceSummary',
+            component: () => import(/* webpackChunkName: "insurance" */ '../views/client/insurance/ClientSummary.vue'),
+          },
+          {
+            path: 'bills',
+            name: 'InsureanceBills',
+            component: () => import(/* webpackChunkName: "insurance" */ '../views/client/insurance/ClientBills.vue'),
+            props: true,
+          },
+          {
+            path: 'transactions',
+            name: 'InsureanceTransactions',
+            component: () => import(/* webpackChunkName: "insurance" */ '../views/client/insurance/ClientTransactions.vue'),
+            props: true,
+          },
+        ],
+      },
+      {
+        path: '/register-insurance',
+        props: true,
+        component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/insurance/RegisterClient.vue'),
+        children: [
+          {
+            path: '',
+            name: 'InsuranceInformation',
+            component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/insurance/CompanyInformation.vue'),
+          },
+          {
+            path: '/register-client/admin-information',
+            name: 'InsuranceAdminInformation',
+            component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/insurance/CompanyAdminInformation.vue'),
+          },
+          {
+            path: '/register-client/verification',
+            name: 'Verification',
+            component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/insurance/Verification.vue'),
+          },
+        ],
+      },
+      {
+        path: '/clients/:id/employees',
+        name: 'InsureanceEmployees',
+        component: () => import(/* webpackChunkName: "insurance" */ '../views/client/insurance/ClientEmployees.vue'),
+      },
+      {
         path: '/register-team',
         component: () => import(/* webpackChunkName: "registeruser" */ '../views/client/team/RegisterTeam.vue'),
         children: [

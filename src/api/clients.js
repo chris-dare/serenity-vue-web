@@ -3,8 +3,8 @@ import http from '@/http'
 export default {
   url: 'providers/',
 
-  list(providerId) {
-    return http.get(`${this.url}${providerId}/clients`)
+  list(providerId, params) {
+    return http.get(`${this.url}${providerId}/clients`, { params: {...params } })
   },
 
   getClientBy(provider, companyId) {
