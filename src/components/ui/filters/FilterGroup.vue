@@ -1,9 +1,9 @@
 <template>
-  <div class="flex items-center space-x-2">
+  <div class="flex flex-wrap gap-2 items-center">
     <SeButton
       v-for="(filter, index) in filters"
       :key="index"
-      :variant="localValue === filter.code ? 'default' : 'white'"
+      :variant="localValue === filter.code ? 'default' : defaultColor"
       @click="localValue = filter.code"
     >
       {{ filter.display }}
@@ -27,6 +27,11 @@ export default {
     filters: {
       type: Array,
       default: () => [],
+    },
+
+    defaultColor: {
+      type: String,
+      default: 'white',
     },
   },
 }

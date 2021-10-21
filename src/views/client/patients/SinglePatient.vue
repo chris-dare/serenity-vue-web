@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 import SinglePatientModals from '@/components/patients/modals/SinglePatientModals'
 import DetailPageNav from '@/components/patients/DetailPageNav'
 import PatientInfoCard from '@/components/patients/PatientInfoCard'
@@ -32,6 +32,7 @@ export default {
     PatientInfoCard,
     ReceptionActions: () => import('@/components/patients/actions/ReceptionActions'),
     OPDActions: () => import(/* webpackPrefetch: true */ '@/components/patients/actions/OPDActions'),
+    IPDActions: () => import(/* webpackPrefetch: true */ '@/components/patients/actions/IPDActions'),
   },
 
   props: {
@@ -49,11 +50,9 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      workspaceType: (state) => state.global.workspaceType,
-    }),
     actionComponent() {
-      if (this.workspaceType === 'RECEPT') return 'ReceptionActions'
+      if (this.$isCurrentWorkspace('RECEPT')) return 'ReceptionActions'
+      if (this.$isCurrentWorkspace('IPD')) return 'IPDActions'
       return 'OPDActions'
     },
   },

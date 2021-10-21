@@ -10,17 +10,12 @@
       <div class="space-y-4">
         <p class="text-lg font-semibold">Admit patient</p>
         <p>Please choose which ward or service you would want to admit patient to.</p>
-        <cv-select
+        
+        <MultiSelect
           v-model="form.location"
-          label="Ward or service location"
-          class="se-custom-input"
-        >
-          <cv-select-option
-            value="network"
-          >
-            In Patient Department
-          </cv-select-option>
-        </cv-select>
+          :options="[]"
+          title="Ward or service location"
+        />
         <SeButton full>Admit this patient</SeButton>
       </div>
     </template>
