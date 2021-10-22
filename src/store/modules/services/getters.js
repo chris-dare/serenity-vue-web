@@ -14,7 +14,7 @@ export default {
       service.duration= service.slot_duration && service.healthcare_service_appointment_required ? service.slot_duration : 0
 
       if (service.healthcare_service_not_available_times && service.healthcare_service_not_available_times.length) {
-        service.unavailable_times = `${Vue.prototype.$date.formatDate(service.healthcare_service_not_available_times[0].start_date, 'yyyy-MM-dd')} - ${Vue.prototype.$date.formatDate(service.healthcare_service_not_available_times[0].end_date, 'yyyy-MM-dd')}`
+        service.unavailable_times = `${Vue.prototype.$date.formatDate(service.healthcare_service_not_available_times[0].start_date, 'dd MMM, yyyy')} - ${Vue.prototype.$date.formatDate(service.healthcare_service_not_available_times[0].end_date, 'dd MMM, yyyy')}`
       }
 
       service.healthcare_service_available_times.map(serve => {

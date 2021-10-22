@@ -59,6 +59,7 @@
           label="Start Date"
           placeholder="Select a start date"
           format="Z"
+          disable-dates-before-today
         />
         <DatePicker
           v-model="times.end_date"
@@ -67,6 +68,7 @@
           label="End date"
           placeholder="Select an end date"
           format="Z"
+          disable-dates-before-today
         />
         <cv-text-area
           v-model="times.description"

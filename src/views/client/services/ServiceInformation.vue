@@ -228,7 +228,7 @@ export default {
       healthcare_service_name: {
         required,
         async isUnique(value) {
-          if (value === '') return true
+          if (value === '' || this.form.id) return true
           const data = await this.services.find(service => service.healthcare_service_name.toLowerCase() === value.toLowerCase() )
 
           return data ? false : true
