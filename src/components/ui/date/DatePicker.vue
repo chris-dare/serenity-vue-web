@@ -96,7 +96,7 @@ export default {
           dateFormat: this.format || 'Y-m-d',
           minDate: this.disableDatesBeforeToday ? 'today' : this.minDate ? this.minDate : null,
           maxDate: this.maxDate,
-          altFormat: 'Y-m-d',
+          altFormat: 'd M, Y',
           altInput: true,
         },
         wrap: {
