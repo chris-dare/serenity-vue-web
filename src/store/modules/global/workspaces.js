@@ -15,6 +15,7 @@ export default {
       { label: 'Patients', to: 'Patients', component: 'Reference', group_by: 'client care' },
       // { label: 'Pharmacy', to: 'Pharmacy', component: 'Medication' },
       { label: 'Corporate Clients', to: 'CorporateClients', component: 'Baggage' },
+      { label: 'Insurance Clients', to: 'InsuranceClients', component: 'Insurance' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
       { label: 'Billing', to: 'Billing', component: 'Align', group_by: 'hospital operations'},
       { label: 'Services & pricing', to: 'Services', component: 'Wallet', group_by: 'hospital operations'},

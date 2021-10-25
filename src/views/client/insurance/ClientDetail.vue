@@ -63,6 +63,7 @@ export default {
         { label: 'About', path: 'InsuranceSummary' },
         { label: 'Bills', path: 'InsuranceBills' },
         { label: 'Transactions', path: 'InsuranceTransactions' },
+        { label: 'Policies', path: 'InsurancePolicy' },
       ],
       form: {},
       menu: 'client',
