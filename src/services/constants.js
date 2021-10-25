@@ -4,6 +4,7 @@ export default {
       USER_ACCOUNT_TYPE: 'user-account',
       CORPORATE_ACCOUNT_TYPE: 'corporate',
       CASH_TYPE: 'cash',
+      INSURANCE_TYPE: 'insurance',
     }
   },
 }

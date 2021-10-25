@@ -5,6 +5,11 @@ export default {
     return state.patientAccounts?.corporate || []
   },
 
+  insuranceAccounts: (state) => {
+    if (!state.patientAccounts) return []
+    return state.patientAccounts?.insurance || []
+  },
+
   userAccounts: (state) => {
     if (!state.patientAccounts) return []
     return state.patientAccounts?.patient_user || []
