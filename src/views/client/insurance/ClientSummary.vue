@@ -95,7 +95,7 @@ export default {
         this.$trigger('deposit:add:open', { ...this.client, ...this.clientAccount })
         break
       case 'benefactor':
-        this.$router.push({ name: 'ClientEmployees', params: { id: this.client.company.main_branch_id }})
+        this.$router.push({ name: 'InsuranceBenefactors', params: { id: this.client.company.main_branch_id }})
         break
 
       default:

@@ -2,13 +2,13 @@
   <div>
     <div class="max-w-7xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Corporate Employees ({{ filteredData.length }})</p>
+        <p class="text-xl font-bold">Benefactors ({{ filteredData.length }})</p>
 
         <SeButton
           class="mx-2"
           @click="$trigger('corporate-patient:add:open')"
         >
-          Add new employee
+          Add new benefactor
           <Add class="ml-4 w-5 h-5" />
         </SeButton>
       </div>
@@ -68,7 +68,7 @@ import DataMixin from '@/mixins/data'
 import AddCorporatePatient from '@/components/admin/modals/AddCorporatePatient'
 
 export default {
-  name: 'ClientEmployees',
+  name: 'InsuranceBenefactors',
 
   components: { AddCorporatePatient },
 

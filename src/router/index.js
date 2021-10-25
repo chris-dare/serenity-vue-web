@@ -210,14 +210,20 @@ const routes = [
           },
           {
             path: 'bills',
-            name: 'InsureanceBills',
+            name: 'InsuranceBills',
             component: () => import(/* webpackChunkName: "insurance" */ '../views/client/insurance/ClientBills.vue'),
             props: true,
           },
           {
             path: 'transactions',
-            name: 'InsureanceTransactions',
+            name: 'InsuranceTransactions',
             component: () => import(/* webpackChunkName: "insurance" */ '../views/client/insurance/ClientTransactions.vue'),
+            props: true,
+          },
+          {
+            path: 'policies',
+            name: 'InsurancePolicy',
+            component: () => import(/* webpackChunkName: "insurance" */ '../views/client/insurance/ClientPolicy.vue'),
             props: true,
           },
         ],
@@ -245,8 +251,8 @@ const routes = [
         ],
       },
       {
-        path: '/clients/:id/employees',
-        name: 'InsureanceEmployees',
+        path: '/clients/:id/benefactors',
+        name: 'InsuranceBenefactors',
         component: () => import(/* webpackChunkName: "insurance" */ '../views/client/insurance/ClientEmployees.vue'),
       },
       {
