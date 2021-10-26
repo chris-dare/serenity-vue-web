@@ -2,13 +2,13 @@
   <div>
     <div class="max-w-7xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Benefactors ({{ filteredData.length }})</p>
+        <p class="text-xl font-bold">Beneficiary ({{ filteredData.length }})</p>
 
         <SeButton
           class="mx-2"
           @click="$trigger('insurance-patient:add:open')"
         >
-          Add new benefactor
+          Add new Beneficiary
           <Add class="ml-4 w-5 h-5" />
         </SeButton>
       </div>

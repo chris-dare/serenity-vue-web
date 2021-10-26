@@ -50,6 +50,16 @@ export default {
     return data
   },
 
+  async createClientPolicy({ rootState}, payload) {
+    const provider = rootState.auth.provider
+    const { data } = await ClientAPI
+      .createPolicy(provider.id, payload)
+      .catch(({data: error}) => {
+        throw error
+      })
+    return data
+  },
+
   async getClientBills({ commit, rootState }, payload) {
     const provider = rootState.auth.provider
     const { data } = await ClientAPI

@@ -8,7 +8,7 @@
   >
     <template slot="content">
       <SeForm>
-        <p class="text-md font-semibold"> {{ type === 'update' ? 'Update Employee' : 'Add new employee' }}</p>
+        <p class="text-md font-semibold"> {{ type === 'update' ? 'Update Beneficiary' : 'Add new Beneficiary' }}</p>
         <FilterGroup
           v-model="selected"
           :filters="filters"
@@ -123,7 +123,7 @@
           :loading="loading"
           @click="submit"
         >
-          Add benefactor
+          Add Beneficiary
         </SeButton>
       </div>
     </template>

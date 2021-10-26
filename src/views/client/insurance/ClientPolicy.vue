@@ -9,19 +9,48 @@
     </div>
 
     <div class="bg-white px-4 py-6">
-      <div
-        class="flex  items-center justify-between"
-      >
+      <div class="flex items-center justify-between">
         <div>
           <p class="font-semibold">Care Policies</p>
         </div>
         <div>
-          <p>Add new policy</p>
+          <p
+            class="cursor-pointer"
+            @click="$trigger('policy:add:open', {})"
+          >
+            Add new policy
+          </p>
         </div>
       </div>
-      <div class="flex items-center justify-center my-8"> <p>No policies available</p></div>
+      <cv-skeleton-text
+        v-if="loading"
+        :paragraph="true"
+        :line-count="3"
+        width="100%"
+        class="pt-8"
+      />
+      <div
+        v-else
+        class="pt-8"
+      >
+        <div
+          v-for="(policy, index) in policies"
+          :key="index"
+          class="py-4"
+        > 
+          <h1 class="font-semibold">{{ policy.name }}</h1>
+          <h3> Service categories: {{ policy.service_categoriese }} </h3>
+        </div>
+        <div
+          v-if="policies.length === 0"
+          class="flex items-center justify-center"
+        >
+          No policies available
+        </div>
+      </div>
     </div>
- 
+
+    <CreateNewPolicy />
     <!-- <BillingCorporateSettlePayment />
     <p class="text-serenity-primary my-6 font-semibold">What would you like to do?</p>
     <div class="grid grid-cols-4 gap-2 lg:gap-4 my-4">
@@ -38,15 +67,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 // import BillingCorporateSettlePayment from '@/components/billing/BillingCorporateSettlePayment'
+import CreateNewPolicy from '@/components/insurance/NewPolicy'
 import ClientAPI from '@/api/clients'
 
 export default {
   name: 'ClientPolicy',
 
-
-  // components: { BillingCorporateSettlePayment },
+  components: { CreateNewPolicy },
 
   props: {
     id: {
@@ -68,7 +97,7 @@ export default {
         'Action',
       ],
       loading: false,
-      bills: [],
+      policies: [],
       meta: {
         total: 0,
       },
@@ -97,23 +126,26 @@ export default {
     $route: {
       immediate: true,
       handler() {
-        this.getClientBills()
+        this.getClientPolicies()
       },
     },
   },
 
   methods: {
+    ...mapActions({
+      getClientPolicies: 'clients/getClientPolicies',
+    }),
+
     actionOnPagination(ev) {
       this.filters = { page: ev.page, page_size: ev.length }
-      this.getClientBills()
+      this.getClientPolicies()
     },
 
-    async getClientBills() {
+    async getClientPolicies() {
       try {
         this.loading = true
-        const { data } = await ClientAPI.getClientBills(this.$providerId, this.id, this.filters)
-        this.bills = data.results
-        this.meta = data.meta
+        const { data } = await ClientAPI.getClientPolicies(this.id)
+        this.policies = data
         this.loading = false
       } catch (error) {
         this.loading = false
@@ -129,10 +161,16 @@ export default {
 
       switch (client.action) {
       case 'add':
-        this.$trigger('deposit:add:open', { ...this.client, ...this.clientAccount })
+        this.$trigger('deposit:add:open', {
+          ...this.client,
+          ...this.clientAccount,
+        })
         break
       case 'benefactor':
-        this.$router.push({ name: 'InsuranceBenefactors', params: { id: this.client.company.main_branch_id }})
+        this.$router.push({
+          name: 'InsuranceBenefactors',
+          params: { id: this.client.company.main_branch_id },
+        })
         break
 
       default:
