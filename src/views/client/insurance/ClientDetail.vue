@@ -38,7 +38,6 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import Add from '@carbon/icons-vue/es/add/32'
-// import BillingAPI from '@/api/billing'
 import EditClient from '@/components/admin/modals/EditClient'
 import ClientDeposit from '@/components/admin/modals/ClientDeposit'
 import DetailPageNav from '@/components/patients/DetailPageNav'

@@ -75,7 +75,7 @@ export default {
           action: 'client',
         },
         {
-          label: 'Benefactors',
+          label: 'Beneficiary',
           type: 'User',
           description: 'View, add or delete an employee',
           action: 'benefactor',

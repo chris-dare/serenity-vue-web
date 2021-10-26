@@ -18,10 +18,10 @@ export default {
     return http.get(`${this.url}${providerId}/client-accounts?owner=${id}`)
   },
 
-  getClientPolicies({
-    id = '',
-    providerId = '',
-  } = {}){
+  getClientPolicies(
+    providerId,
+    id,
+  ){
     return http.get(`${this.url}${providerId}/client/${id}/health-policies`)
   },
 
@@ -31,6 +31,11 @@ export default {
 
   createBenefactor(providerId, params) {
     return http.post(`${this.url}${providerId}/clients/${params.id}/beneficiaries`, params.form)
+  },
+
+  createPolicy(providerId, params) {
+    console.log(params)
+    return http.post(`${this.url}${providerId}/clients/${params?.id}/health-policies`, params.form)
   },
 
 
