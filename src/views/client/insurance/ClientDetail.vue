@@ -61,9 +61,9 @@ export default {
       selected: 'about',
       links: [
         { label: 'About', path: 'InsuranceSummary' },
+        { label: 'Policies', path: 'InsurancePolicy' },
         { label: 'Bills', path: 'InsuranceBills' },
         { label: 'Transactions', path: 'InsuranceTransactions' },
-        { label: 'Policies', path: 'InsurancePolicy' },
       ],
       form: {},
       menu: 'client',

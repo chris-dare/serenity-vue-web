@@ -7,73 +7,46 @@
         class="w-40"
       />
     </div>
-    <DataTable
-      ref="table"
-      :columns="columns"
-      :pagination="{
-        numberOfItems: meta.total,
-        pageSizes: [10, 15, 20, 25]
-      }"
-      :data="bills"
-      no-data-label="No policies"
-      @pagination="actionOnPagination"
-    >
-      <template #default="{ row }">
-        <cv-data-table-cell>
-          {{ $date.formatDate(row.billInfo.created_at, 'dd MMM, yyyy') }}
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <div>
-            {{ row.billInfo.corporateId }}
-          </div>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <div>
-            <p>{{ row.providerDetails.name }}</p>
-          </div>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <div>
-            <p>{{ $currency(row.billInfo.amount).format() }}</p>
-          </div>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <div>
-            <p>{{ row.billInfo.createdBy }}</p>
-          </div>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <div>
-            <Tag>{{ row.billInfo.status }}</Tag>
-          </div>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
-          <div>
-            <p
-              v-if="row.billInfo.status === 'open'"
-              class="cursor-pointer"
-              @click="settle(row)"
-            >
-              Settle
-            </p>
-          </div>
-        </cv-data-table-cell>
-      </template>
-    </DataTable>
-    <BillingCorporateSettlePayment />
+
+    <div class="bg-white px-4 py-6">
+      <div
+        class="flex  items-center justify-between"
+      >
+        <div>
+          <p class="font-semibold">Care Policies</p>
+        </div>
+        <div>
+          <p>Add new policy</p>
+        </div>
+      </div>
+      <div class="flex items-center justify-center my-8"> <p>No policies available</p></div>
+    </div>
+ 
+    <!-- <BillingCorporateSettlePayment />
+    <p class="text-serenity-primary my-6 font-semibold">What would you like to do?</p>
+    <div class="grid grid-cols-4 gap-2 lg:gap-4 my-4">
+      <DashboardCard
+        v-for="(list, index) in overviewTypes"
+        :key="index"
+        :details="list"
+        :type="list.type"
+        custom-class="bg-white border-0"
+        @click="change(list)"
+      />
+    </div> -->
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import BillingCorporateSettlePayment from '@/components/billing/BillingCorporateSettlePayment'
+// import BillingCorporateSettlePayment from '@/components/billing/BillingCorporateSettlePayment'
 import ClientAPI from '@/api/clients'
 
 export default {
-  name: 'ClientBills',
+  name: 'ClientPolicy',
 
 
-  components: { BillingCorporateSettlePayment },
+  // components: { BillingCorporateSettlePayment },
 
   props: {
     id: {
@@ -106,6 +79,18 @@ export default {
     ...mapGetters({
       noDataLabel: 'clients/getCurrentClientNoDataLabel',
     }),
+    overviewTypes() {
+      const types = [
+        {
+          label: 'Add a policy',
+          type: 'Add',
+          description: 'Make records of a deposit made to the account',
+          action: 'add',
+        },
+      ]
+
+      return types
+    },
   },
 
   watch: {
@@ -138,6 +123,21 @@ export default {
 
     settle(bill) {
       this.$trigger('corporate:settle:open', bill)
+    },
+    change(client) {
+      this.menu = client.type
+
+      switch (client.action) {
+      case 'add':
+        this.$trigger('deposit:add:open', { ...this.client, ...this.clientAccount })
+        break
+      case 'benefactor':
+        this.$router.push({ name: 'InsuranceBenefactors', params: { id: this.client.company.main_branch_id }})
+        break
+
+      default:
+        break
+      }
     },
   },
 }

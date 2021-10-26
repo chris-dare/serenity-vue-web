@@ -18,8 +18,19 @@ export default {
     return http.get(`${this.url}${providerId}/client-accounts?owner=${id}`)
   },
 
+  getClientPolicies({
+    id = '',
+    providerId = '',
+  } = {}){
+    return http.get(`${this.url}${providerId}/client/${id}/health-policies`)
+  },
+
   getClientBills(providerId, clientId, params){
     return http.get(`${this.url}${providerId}/corporates/${clientId}/bills`, { params })
+  },
+
+  createBenefactor(providerId, params) {
+    return http.post(`${this.url}${providerId}/clients/${params.id}/beneficiaries`, params.form)
   },
 
 

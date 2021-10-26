@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import ClientAPI from '@/api/clients'
-import { SET_CLIENTS, DELETE_CLIENT, UPDATE_CLIENT, UPDATE_FORM, SET_FORM, SET_CURRENT_CLIENT, SET_CURRENT_UPDATE, SET_BILLS, SET_CLIENT_ACCOUNT } from './mutation-types'
+import { SET_CLIENTS, DELETE_CLIENT, UPDATE_CLIENT, UPDATE_FORM, SET_FORM, SET_CURRENT_CLIENT, SET_CURRENT_UPDATE, SET_BILLS, SET_CLIENT_ACCOUNT, SET_CLIENT_POLICIES } from './mutation-types'
 
 export default {
   async getClients({ commit, rootState, state }, { refresh = true, filters }) {
@@ -36,6 +36,18 @@ export default {
 
     commit(SET_CLIENT_ACCOUNT, data[0])
     return data[0]
+  },
+
+  async getClientPolicies({ commit, rootState}, payload) {
+    const provider = rootState.auth.provider
+    const { data } = await ClientAPI
+      .getClientPolicies({providerId: provider.id, id: payload})
+      .catch(({data: error}) => {
+        throw error
+      })
+
+    commit(SET_CLIENT_POLICIES, data)
+    return data
   },
 
   async getClientBills({ commit, rootState }, payload) {
