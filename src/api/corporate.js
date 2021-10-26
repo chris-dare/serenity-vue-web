@@ -18,7 +18,6 @@ export default {
   create(params) {
     return http.post(`${this.url}${params.id}/employees`, params.form)
   },
-
   listDependent(id) {
     return http.post(`users/${id}/dependents`)
   },

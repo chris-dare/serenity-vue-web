@@ -6,7 +6,7 @@
 
         <SeButton
           class="mx-2"
-          @click="$trigger('corporate-patient:add:open')"
+          @click="$trigger('insurance-patient:add:open')"
         >
           Add new benefactor
           <Add class="ml-4 w-5 h-5" />
@@ -58,19 +58,19 @@
         </template>
       </DataTable>
     </div>
-    <AddCorporatePatient />
+    <AddInsurancePatient />
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
 import DataMixin from '@/mixins/data'
-import AddCorporatePatient from '@/components/admin/modals/AddCorporatePatient'
+import AddInsurancePatient from '@/components/admin/modals/AddInsurancePatient'
 
 export default {
   name: 'InsuranceBenefactors',
 
-  components: { AddCorporatePatient },
+  components: { AddInsurancePatient },
 
   mixins: [DataMixin],
 

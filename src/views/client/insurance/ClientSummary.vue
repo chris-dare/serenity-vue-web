@@ -69,7 +69,7 @@ export default {
     overviewTypes() {
       const types = [
         {
-          label: 'Record a deposit',
+          label: 'Give credit',
           type: 'Add',
           description: 'Make records of a deposit made to the account',
           action: 'client',
