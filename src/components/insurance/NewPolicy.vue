@@ -60,7 +60,7 @@
               :rows="5"
             />
           </div>
-          <div>
+          <div v-if="type === 'update'">
             <SeButton
               full
               class="mt-8"
@@ -219,7 +219,6 @@ export default {
         },
       }
       try {
-        console.log(id)
         let data = await this.createPolicy({id, form: payload})
         if (data.success) {
           this.$toast.open({
@@ -234,6 +233,7 @@ export default {
           this.visible = false
         }
         // this.$router.go(-1)
+        this.$emit('done')
         this.loading = false
       } catch (error) {
         this.$toast.open({

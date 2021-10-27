@@ -40,6 +40,7 @@ export default {
 
   async getClientPolicies({ commit, rootState}, payload) {
     const provider = rootState.auth.provider
+    console.log(payload)
     const { data } = await ClientAPI
       .getClientPolicies({providerId: provider.id, id: payload})
       .catch(({data: error}) => {

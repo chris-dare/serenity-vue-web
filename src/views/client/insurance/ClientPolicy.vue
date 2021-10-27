@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-4">
-    <div class="flex justify-end">
+    <!-- <div class="flex justify-end">
       <DatePicker
         v-model="filters.date"
         type="range"
         class="w-40"
       />
-    </div>
+    </div> -->
 
     <div class="bg-white px-4 py-6">
       <div class="flex items-center justify-between">
@@ -30,13 +30,12 @@
         class="pt-8"
       />
       <div
-        v-else
+        v-show="!loading && policies"
         class="pt-8"
       >
         <div
           v-for="(policy, index) in policies"
           :key="index"
-          class="py-5"
         >
           <div
             class="grid grid-cols-7 gap-4"
@@ -44,15 +43,18 @@
             <div class="flex items-center col-span-6">
               <div class="space-y-1">
                 <h1 class="font-semibold">{{ policy.name }}</h1>
-                <p class="text-secondary text-sm">
-                  Service:
-                  <span class="text-primary"> {{ policy.service_categories }}</span>
+                <p class="text-secondary text-sm flex">
+                  Service(s):
+                  <span class="text-primary px-4"><ol
+                    v-for="(list, ind) in listService(policy.service_categories)"
+                    :key="ind"
+                  > <li>-  {{ list }}</li></ol></span>
                 </p>
               </div>
             </div>
             <div>
               <div            
-                class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
+                class="bg-serenity-light-gray w-10 h-10 rounded-full ml-8 flex items-center justify-center"
                 @click="editPolicy(policy)"
               >
                 <img
@@ -62,17 +64,21 @@
               </div>
             </div>
           </div>
+          <hr
+            v-if="index < policies.length - 1"
+            class="my-4"
+          >
         </div>
-        <div
-          v-if="policies.length === 0"
-          class="flex items-center justify-center"
-        >
-          No policies available
-        </div>
+      </div>
+      <div
+        v-if="policies.length === 0 && !loading"
+        class="flex items-center justify-center"
+      >
+        No policies available
       </div>
     </div>
 
-    <CreateNewPolicy />
+    <CreateNewPolicy @done="getPolicies" />
     <!-- <BillingCorporateSettlePayment />
     <p class="text-serenity-primary my-6 font-semibold">What would you like to do?</p>
     <div class="grid grid-cols-4 gap-2 lg:gap-4 my-4">
@@ -92,7 +98,6 @@
 import { mapGetters, mapActions } from 'vuex'
 // import BillingCorporateSettlePayment from '@/components/billing/BillingCorporateSettlePayment'
 import CreateNewPolicy from '@/components/insurance/NewPolicy'
-import ClientAPI from '@/api/clients'
 
 export default {
   name: 'ClientPolicy',
@@ -168,13 +173,14 @@ export default {
 
       return types
     },
+    
   },
 
   watch: {
     $route: {
       immediate: true,
       handler() {
-        this.getClientPolicies()
+        this.getPolicies()
       },
     },
   },
@@ -184,15 +190,27 @@ export default {
       getClientPolicies: 'clients/getClientPolicies',
     }),
 
-    actionOnPagination(ev) {
-      this.filters = { page: ev.page, page_size: ev.length }
-      this.getClientPolicies()
+    listService(list){
+      return list.map(element => {
+        console.log(element)
+        if (element.code) {
+          return element.code
+        } else {
+          return element
+        }
+      })
     },
 
-    async getClientPolicies() {
+    actionOnPagination(ev) {
+      this.filters = { page: ev.page, page_size: ev.length }
+      this.getPolicies()
+    },
+
+    async getPolicies() {
+      let id = this.$route.params.id
       try {
         this.loading = true
-        const { data } = await ClientAPI.getClientPolicies(this.id)
+        const { data } = await this.getClientPolicies(id)
         this.policies = data
         this.loading = false
       } catch (error) {
@@ -205,8 +223,9 @@ export default {
       this.$trigger('corporate:settle:open', bill)
     },
     editPolicy(policy){
-      policy.service_categories = policy.service_categories.map(ele => { return { code: ele}})
-      this.$trigger('policy:edit:open', { ...policy })
+      let obj = policy
+      obj.service_categories = policy.service_categories.map(ele => { if(!ele.code){return { code: ele}} else {return ele}})
+      this.$trigger('policy:edit:open', { ...obj })
     },
     change(client) {
       this.menu = client.type
