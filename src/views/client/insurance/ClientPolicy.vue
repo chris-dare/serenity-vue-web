@@ -36,10 +36,32 @@
         <div
           v-for="(policy, index) in policies"
           :key="index"
-          class="py-4"
-        > 
-          <h1 class="font-semibold">{{ policy.name }}</h1>
-          <h3> Service categories: {{ policy.service_categoriese }} </h3>
+          class="py-5"
+        >
+          <div
+            class="grid grid-cols-7 gap-4"
+          >
+            <div class="flex items-center col-span-6">
+              <div class="space-y-1">
+                <h1 class="font-semibold">{{ policy.name }}</h1>
+                <p class="text-secondary text-sm">
+                  Service:
+                  <span class="text-primary"> {{ policy.service_categories }}</span>
+                </p>
+              </div>
+            </div>
+            <div>
+              <div            
+                class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
+                @click="editPolicy(policy)"
+              >
+                <img
+                  src="@/assets/img/edit 1.svg"
+                  class="w-4 h-4 cursor-pointer"
+                >
+              </div>
+            </div>
+          </div>
         </div>
         <div
           v-if="policies.length === 0"
@@ -97,7 +119,33 @@ export default {
         'Action',
       ],
       loading: false,
-      policies: [],
+      policies: [
+        {
+          uuid: 'some-unique-uuid',
+          name: 'Medicaid',
+          service_categories: [
+            ' consultation', 'medication', 'hospitalization', 
+          ],  
+          exclusions:{
+            medications: [],
+            specialties: [],
+            diagnostics: [],
+            procedures: [],
+          },
+        }  ,{
+          uuid: 'some-unique-uuid',
+          name: 'Medicaid',
+          service_categories: [
+            ' consultation',  'hospitalization', 
+          ],  
+          exclusions:{
+            medications: [],
+            specialties: [],
+            diagnostics: [],
+            procedures: [],
+          },
+        },  
+      ],
       meta: {
         total: 0,
       },
@@ -155,6 +203,10 @@ export default {
 
     settle(bill) {
       this.$trigger('corporate:settle:open', bill)
+    },
+    editPolicy(policy){
+      policy.service_categories = policy.service_categories.map(ele => { return { code: ele}})
+      this.$trigger('policy:edit:open', { ...policy })
     },
     change(client) {
       this.menu = client.type
