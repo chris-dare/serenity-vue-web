@@ -18,11 +18,11 @@ export default {
     return http.get(`${this.url}${providerId}/client-accounts?owner=${id}`)
   },
 
-  getClientPolicies(
-    providerId,
-    id,
-  ){
-    return http.get(`${this.url}${providerId}/client/${id}/health-policies`)
+  getClientPolicies({
+    id = '',
+    providerId = '',
+  } = {}){
+    return http.get(`${this.url}${providerId}/clients/${id}/health-policies`)
   },
 
   getClientBills(providerId, clientId, params){
