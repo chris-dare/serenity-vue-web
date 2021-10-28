@@ -91,7 +91,12 @@ export default {
     return {
       date: null,
       // https://chmln.github.io/flatpickr/options/
-      configs: {
+    }
+  },
+
+  computed: {
+    configs() {
+      return {
         date: {
           dateFormat: this.format || 'Y-m-d',
           minDate: this.disableDatesBeforeToday ? 'today' : this.minDate ? this.minDate : null,
@@ -167,8 +172,8 @@ export default {
           altInput: true,
           defaultDate: [startOfMonth(Date.now()), endOfMonth(Date.now())],
         },
-      },
-    }
+      }
+    },
   },
 
   methods: {
@@ -177,7 +182,6 @@ export default {
         this.$emit('change', dateStr)
         return
       }
-      console.log(selectedDates, dateStr, instance)
       instance.element.value = dateStr.replace('to', ':#;')
     },
   },

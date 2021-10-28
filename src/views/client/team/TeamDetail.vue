@@ -15,7 +15,7 @@
       <div class="flex items-center space-x-4 mr-4">
         <p class="text-green-500 font-semibold">Active</p>
         <TeamDetailActionsDropdown
-          @edit="$router.push({ name: 'TeamBiodata' })"
+          @edit="$router.push({ name: 'TeamBiodata', query: { id: $route.params.id } })"
           @delete="$trigger('confirm:delete:open', { data:{}, label: 'Are you sure you want to delete this user?' })"
         />
       </div>
@@ -132,10 +132,9 @@ export default {
     async remove() {
       this.loading = true
       try {
-        await this.deleteUser(this.$route.params.id).then(()=>{
-          this.$toast.open({
-            message: 'User successfully deleted',
-          })
+        await this.deleteUser(this.$route.params.id)
+        this.$toast.open({
+          message: 'User successfully deleted',
         })
         this.loading = false
         this.$trigger('confirm:delete:close')

@@ -140,7 +140,6 @@ export default {
       this.type = 'update'
       this.visible = true
       this.form = data.params[0]
-      console.log(this.form)
     },
   },
 

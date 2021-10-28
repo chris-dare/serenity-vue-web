@@ -58,11 +58,8 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import DataMixin from '@/mixins/data'
-import Add from '@carbon/icons-vue/es/add/32'
 export default {
   name: 'InsuranceClients',
-
-  components: { Add },
 
   mixins: [DataMixin],
 

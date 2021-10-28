@@ -184,7 +184,6 @@ export default {
         let data = await this.depositClient(payload)
         if (data.success) {
           let payload = this.client
-          console.log(data)
           payload.balance = data.data.balance
           this.getClientAccount(id)
           this.$toast.open({
