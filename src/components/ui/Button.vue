@@ -139,3 +139,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.bx--btn{
+  max-width: unset !important;
+}
+</style>

@@ -1,0 +1,107 @@
+<template>
+  <cv-modal
+    class="se-no-title-modal"
+    close-aria-label="Close"
+    :visible="visible"
+    size="sm"
+    @modal-hidden="close"
+  >
+    <template slot="content">
+      <div class="space-y-8">
+        <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'Add' }} insurance service</p>
+        <AddInsuranceForm
+          v-model="form"
+          @invalid="setDisabledState"
+        />
+
+        <div class="flex justify-between items-center">
+          <SeButton
+            variant="outline"
+            @click="close"
+          >
+            Cancel
+          </SeButton>
+          <SeButton
+            :disabled="disabled"
+            @click="submit"
+          >
+            Save
+          </SeButton>
+        </div>
+      </div>
+    </template>
+  </cv-modal>
+</template>
+
+<script>
+import AddInsuranceForm from '@/components/forms/AddInsuranceForm'
+import modalMixin from '@/mixins/modal'
+import pick from 'lodash/pick'
+import InsuranceAPI from '@/api/insurance'
+import { mapActions } from 'vuex'
+
+export default {
+  name: 'AddEditInsuranceModal',
+
+  components: { AddInsuranceForm },
+
+  mixins: [modalMixin],
+
+  data() {
+    return {
+      form: {
+        contribution_currency: 'GHS',
+      },
+      visible: false,
+      loading: false,
+      patient: null,
+      disabled: true,
+    }
+  },
+
+  events: {
+    'insurance:add:open': function(data){
+      this.getInsuranceProvider({filters: { organization_type: 'INS'}})
+      this.visible = true
+      this.patient = data.params[0]
+      if (this.patient) {
+        this.form = pick(this.patient, ['first_name', 'last_name', 'mobile', 'email', 'gender'])
+        this.form.date_of_birth = this.patient.birth_date
+        this.form.contribution_currency = 'GHS'
+      }
+    },
+
+    'insurance:edit:open': function(data){
+      this.visible = true
+      this.form = data.params[0]
+    },
+  },
+
+  methods: {
+    ...mapActions({
+      getInsuranceProvider: 'clients/getClients',
+      getPatientAccounts: 'billing/getPatientAccounts',
+    }),
+
+    async submit() {
+      try {
+        this.loading = true
+        await InsuranceAPI.registerPatientAsBeneficiary(this.$providerId, this.form.managing_organization, this.form)
+        this.$toast.open('Patient added successfully')
+        this.getPatientAccounts({ id: this.patient.id })
+        this.close()
+      } catch (error) {
+        this.$utils.error(error)
+        // 
+      } finally {
+        this.loading = false
+      }
+    },
+
+    setDisabledState(event) {
+      this.disabled = event
+    },
+  },
+
+}
+</script>
