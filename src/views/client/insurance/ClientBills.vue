@@ -2,7 +2,7 @@
   <div class="space-y-4">
     <div class="flex justify-end">
       <DatePicker
-        v-model="filters.date"
+        v-model="filters.date_generated"
         type="range"
         class="w-40"
       />
@@ -20,44 +20,39 @@
     >
       <template #default="{ row }">
         <cv-data-table-cell>
-          {{ $date.formatDate(row.billInfo.created_at, 'dd MMM, yyyy') }}
+          {{ $date.formatDate(row.created_at, 'dd MMM, yyyy') }}
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            {{ row.billInfo.corporateId }}
+            {{ row.charge_item }}
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ row.providerDetails.name }}</p>
+            <p>{{ row.priority }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ $currency(row.billInfo.amount).format() }}</p>
+            <p>{{ row.payee_type }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ row.billInfo.createdBy }}</p>
+            <Tag>{{ row.status }}</Tag>
           </div>
         </cv-data-table-cell>
-        <cv-data-table-cell>
-          <div>
-            <Tag>{{ row.billInfo.status }}</Tag>
-          </div>
-        </cv-data-table-cell>
-        <cv-data-table-cell>
+        <!-- <cv-data-table-cell>
           <div>
             <p
-              v-if="row.billInfo.status === 'open'"
+              v-if="row.status === 'open'"
               class="cursor-pointer"
               @click="settle(row)"
             >
               Settle
             </p>
           </div>
-        </cv-data-table-cell>
+        </cv-data-table-cell> -->
       </template>
     </DataTable>
     <BillingCorporateSettlePayment />
@@ -88,11 +83,9 @@ export default {
       columns: [
         'Date',
         'Bill ID',
-        'Service Provider',
-        'Price',
-        'Practitioner',
+        'Priority',
+        'Payee Type',
         'Status',
-        'Action',
       ],
       loading: false,
       bills: [],
@@ -112,22 +105,32 @@ export default {
     $route: {
       immediate: true,
       handler() {
-        this.getClientBills()
+        this.filters = { payer: this.id }
+        this.getClientClaims()
+      },
+    },
+    filters: {
+      handler(val){
+        if(val){
+          this.getClientClaims()
+        }
       },
     },
   },
 
   methods: {
     actionOnPagination(ev) {
-      this.filters = { page: ev.page, page_size: ev.length }
-      this.getClientBills()
+      let id = this.$route.params.id
+      this.filters = { payer: id, page: ev.page, page_size: ev.length }
+      this.getClientClaims()
     },
 
-    async getClientBills() {
+    async getClientClaims() {
       try {
         this.loading = true
-        const { data } = await ClientAPI.getClientBills(this.$providerId, this.id, this.filters)
+        const { data } = await ClientAPI.getClientClaims(this.$providerId, this.filters)
         this.bills = data.results
+        console.log(this.bills)
         this.meta = data.meta
         this.loading = false
       } catch (error) {
