@@ -86,13 +86,13 @@ export default {
         return [
           { label: 'Account type', value: this.clientAccount.account_type },
           { label: 'Current Balance', value: this.$currency(this.clientAccount.balance).format() },
-          { label: 'Credit start data', value: this.$date.formatDate(this.clientAccount.service_period_start, 'dd MMM, yyyy') },
+          { label: 'Credit start date', value: this.$date.formatDate(this.clientAccount.service_period_start, 'dd MMM, yyyy') },
         ]
       } else {
         return [
           { label: 'Account type', value: '' },
           { label: 'Current Balance', value: this.$currency(0).format() },
-          { label: 'Credit start data', value: this.$date.formatDate('', 'dd MMM, yyyy') },
+          { label: 'Credit start date', value: this.$date.formatDate('', 'dd MMM, yyyy') },
         ]
       }
     },
