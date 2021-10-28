@@ -124,7 +124,6 @@ export default {
       const id = this.$route.params.id
       this.getClient(id)
       this.getClientAccount(id)
-      console.log(this.client)
       // const { data } = await BillingAPI.pendingBillsTotal(this.provider.id, id)
       this.totalPendingBill = 0
     },

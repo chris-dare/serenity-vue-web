@@ -10,7 +10,7 @@
     </template>
     <template slot="content">
       <div class="grid grid-cols-2 gap-4">
-        <MixedInput
+        <FormMixedInput
           v-for="(vital, index) in units"
           :key="index"
           v-model="form[vital.code]"

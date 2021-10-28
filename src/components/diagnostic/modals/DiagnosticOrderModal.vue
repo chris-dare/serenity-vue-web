@@ -141,7 +141,7 @@
             <div
               class="grid grid-cols-2 gap-y-8 my-8"
             >
-              <MixedInput
+              <FormMixedInput
                 v-for="(cat, index) in category.options"
                 :key="index"
                 v-model="categoryValues[cat.code]"

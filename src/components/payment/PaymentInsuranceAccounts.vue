@@ -5,22 +5,32 @@
       :options="insuranceAccounts"
       title="Insurance accounts"
       track-by="id"
-      :custom-label="customLabel"
+      label="description"
       custom-field="uuid"
-      preselect
       :multiple="false"
       :error-message="$utils.validateRequiredField(v, 'account_id')"
       @input="v.$touch()"
     >
       <p slot="noOptions">This patient has no insurance account</p>
+      <div
+        v-if="!hideAddInsurance"
+        slot="afterList"
+        class="p-4 w-full"
+      >
+        <SeButton
+          full
+          variant="secondary-outline"
+          @click="$trigger('insurance:add:open', localValue.patient)"
+        >
+          Add new insurance account
+        </SeButton>
+      </div>
     </MultiSelect>
-    <div class="flex justify-end">
-      <p class="text-serenity-primary text-sm">Available account balance <span class="text-lg font-semibold">{{ $currency(balance).format() }}</span></p>
-    </div>
   </div>
 </template>
 
 <script>
+
 import modelMixin from '@/mixins/model'
 import { mapGetters } from 'vuex'
 
@@ -34,16 +44,17 @@ export default {
       type: Object,
       default: () => {},
     },
+
+    hideAddInsurance: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
     ...mapGetters({
       insuranceAccounts: 'billing/insuranceAccounts',
     }),
-
-    balance() {
-      return this.insuranceAccounts.find(el => el.id === this.localValue.account_id)?.balance
-    },
   },
 
   methods: {

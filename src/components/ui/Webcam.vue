@@ -131,7 +131,6 @@ export default {
     },
 
     async takePhoto() {
-      console.log('here')
       this.isPhotoTaken = !this.isPhotoTaken
       
       const canvas = this.$refs.canvas

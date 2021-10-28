@@ -14,6 +14,7 @@
     <PaymentInsuranceAccounts
       v-else-if="selected === $global.INSURANCE_TYPE"
       v-model="localValue"
+      :hide-add-insurance="!localValue.patient"
       :v="v"
     />
     <PaymentMomo
