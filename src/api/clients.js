@@ -29,6 +29,10 @@ export default {
     return http.get(`${this.url}${providerId}/corporates/${clientId}/bills`, { params })
   },
 
+  getClientClaims(providerId, params){
+    return http.get(`${this.url}${providerId}/finance/claims`, { params })
+  },
+
   createBenefactor(providerId, params) {
     return http.post(`${this.url}${providerId}/clients/${params.id}/beneficiaries`, params.form)
   },
@@ -39,7 +43,7 @@ export default {
 
   updatePolicy(providerId, params) {
     console.log(params)
-    return http.patch(`${this.url}${providerId}/clients/${params?.id}/health-policies/${params.form.id}`, params.form)
+    return http.patch(`${this.url}${providerId}/clients/${params?.id}/health-policies/${params.form.uuid}`, params.form)
   },
 
 
