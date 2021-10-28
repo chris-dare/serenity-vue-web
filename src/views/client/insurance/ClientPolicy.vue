@@ -15,9 +15,15 @@
         </div>
         <div>
           <p
-            class="cursor-pointer"
+            class="cursor-pointer flex"
+            style="font-size: 14px; color: #0B6B74 !important;"
             @click="$trigger('policy:add:open', {})"
           >
+            <img
+              src="@/assets/img/add--filled 2.svg"
+              width="20"
+              class="cursor-pointer mr-1"
+            >
             Add new policy
           </p>
         </div>
@@ -79,6 +85,7 @@
     </div>
 
     <CreateNewPolicy @done="getPolicies" />
+    <CreatePolicyExclusions />
     <!-- <BillingCorporateSettlePayment />
     <p class="text-serenity-primary my-6 font-semibold">What would you like to do?</p>
     <div class="grid grid-cols-4 gap-2 lg:gap-4 my-4">
@@ -98,11 +105,12 @@
 import { mapGetters, mapActions } from 'vuex'
 // import BillingCorporateSettlePayment from '@/components/billing/BillingCorporateSettlePayment'
 import CreateNewPolicy from '@/components/insurance/NewPolicy'
+import CreatePolicyExclusions from '@/components/insurance/PolicyExclusions'
 
 export default {
   name: 'ClientPolicy',
 
-  components: { CreateNewPolicy },
+  components: { CreateNewPolicy, CreatePolicyExclusions },
 
   props: {
     id: {

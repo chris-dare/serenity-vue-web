@@ -3,12 +3,12 @@
     class="se-no-title-modal"
     close-aria-label="Close"
     :visible="visible"
-    size="xs"
+    size="sm"
     @modal-hidden="visible = false"
   >
     <template slot="content">
       <SeForm class="space-y-2 divide-y divide-secondary divide-solid">
-        <p class="text-md font-semibold">{{ type === 'update' ? 'Update Policy' : 'Add New Policy' }}</p>
+        <p class="text-md font-semibold">Exclusion</p>
         <!-- <div>
           <div class="flex items-center py-5">
             <div class="space-y-1">
@@ -61,7 +61,6 @@
             />
           </div>
           <div v-if="type === 'update'">
-            <!-- @click="$trigger('exclude:add:open', {})" -->
             <SeButton
               full
               class="mt-8"
@@ -95,7 +94,7 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'AddNewPolicy',
+  name: 'PolicyExclusion',
 
   data() {
     return {
@@ -133,12 +132,12 @@ export default {
   },
 
   events: {
-    'policy:add:open': function(data){
+    'exclude:add:open': function(data){
       this.visible = true
       this.form = data.params[0]
       this.type = 'add'
     },
-    'policy:edit:open': function(data){
+    'exclude:edit:open': function(data){
       this.visible = true
       this.form = data.params[0]
       this.type = 'update'
