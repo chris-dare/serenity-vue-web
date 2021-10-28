@@ -34,8 +34,12 @@ export default {
   },
 
   createPolicy(providerId, params) {
-    console.log(params)
     return http.post(`${this.url}${providerId}/clients/${params?.id}/health-policies`, params.form)
+  },
+
+  updatePolicy(providerId, params) {
+    console.log(params)
+    return http.patch(`${this.url}${providerId}/clients/${params?.id}/health-policies/${params.form.id}`, params.form)
   },
 
 
