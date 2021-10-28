@@ -90,6 +90,38 @@
               class="inherit-full-input"
               required
             />
+            <FormInput
+              v-model="form.policy_holder"
+              label="Policy holder"
+              type="text"
+              placeholder="Please enter policy holder"
+              class="inherit-full-input"
+              required
+            />
+            <FormInput
+              v-model="form.card_no"
+              label="Card number"
+              type="text"
+              placeholder="Please enter card number"
+              class="inherit-full-input"
+              required
+            />
+            <DatePicker
+              v-model="form.period_start"
+              kind="single"
+              class="se-input-gray"
+              placeholder="dd/mm/yyyy"
+              label="Date of birth"
+              required
+            />
+            <DatePicker
+              v-model="form.period_end"
+              kind="single"
+              class="se-input-gray"
+              placeholder="dd/mm/yyyy"
+              label="Date of birth"
+              required
+            />
 
             <FormInput
               v-model="form.maximum_dependents_allowed"
@@ -213,15 +245,15 @@ export default {
     }),
 
     submit(){
-      this.$v.$touch()
+      // this.$v.$touch()
 
-      if (this.$v.$invalid) {
-        this.$toast.open({
-          message: 'Please these fields are required!',
-          type: 'error',
-        })
-        return
-      }
+      // if (this.$v.$invalid) {
+      //   this.$toast.open({
+      //     message: 'Please these fields are required!',
+      //     type: 'error',
+      //   })
+      //   return
+      // }
 
       if (this.type === 'update') {
         this.update()
@@ -233,9 +265,21 @@ export default {
     async save() {
       this.loading = true
       let id = this.$route.params.id
-      this.form.company_id = id
+      let payload = {
+        managing_organization: id,
+        health_policy: '',
+        date_of_birth: this.form.date_of_birth,
+        period_start: '',
+        period_end: '',
+        contribution_type: 'co-pay',
+        contribution_value: 0,
+        contribution_currency: 'GHS',
+        card_no: '',
+        policy_holder: '',
+        ...this.form,
+      }
       try {
-        await this.addBenefactor({ id, form: this.form })
+        await this.addBenefactor({ id, form:  payload })
         this.$toast.open('Client employee successfully created')
         this.$resetData()
         // if (data) {
