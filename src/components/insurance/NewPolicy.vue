@@ -179,7 +179,6 @@ export default {
         },
       }
       try {
-        console.log(id)
         let data = await this.createPolicy({id, form: payload})
         if (data.success) {
           this.$toast.open({
@@ -209,6 +208,7 @@ export default {
     async update() {
       this.loading = true
       const id = this.$route.params.id
+      this.form.service_categories = this.form.service_categories.map((ele) => ele.code)
       try {
         let data = await this.updatePolicy({id, form: this.form})
         if (data.success) {
