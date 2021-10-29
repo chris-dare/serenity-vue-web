@@ -53,7 +53,7 @@
               required
             />
             <cv-text-area
-              v-model="form.comment"
+              v-model="form.description"
               label="Policy description"
               class="pt-3"
               placeholder="Enter a description of the policy"
@@ -177,6 +177,7 @@ export default {
           procedures: [],
           diagnoses: [],
         },
+        description: this.form.description,
       }
       try {
         let data = await this.createPolicy({id, form: payload})
