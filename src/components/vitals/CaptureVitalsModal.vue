@@ -86,7 +86,7 @@ export default {
         option.label = option.code === 'DEGREES_CELCIUS' ? 'temperature' : option.code.split('_').join(' ').toLowerCase()
         option.disabled = option.code === 'BMI'
         option.type = option.code === 'BMI' ? 'number' : 'text'
-        option.placeholder = option.code === 'BLOOD_PRESSURE' ? '80/120' : ''
+        option.placeholder = option.code === 'BLOOD_PRESSURE' ? '120/80' : ''
         return option
       })
     },
