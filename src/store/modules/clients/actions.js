@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-vars */
 import ClientAPI from '@/api/clients'
-import { SET_CLIENTS, DELETE_CLIENT, UPDATE_CLIENT, UPDATE_FORM, SET_FORM, SET_CURRENT_CLIENT, SET_CURRENT_UPDATE, SET_BILLS } from './mutation-types'
+import { SET_CLIENTS, DELETE_CLIENT, UPDATE_CLIENT, UPDATE_FORM, SET_FORM, SET_CURRENT_CLIENT, SET_CURRENT_UPDATE, SET_BILLS, SET_CLIENT_ACCOUNT, SET_CLIENT_POLICIES, SET_CLAIMS } from './mutation-types'
 
 export default {
-  async getClients({ commit, rootState, state }, refresh = true) {
+  async getClients({ commit, rootState, state }, { refresh = true, filters }) {
     if (!refresh && state.clients.length) {
       return
     }
     const provider = rootState.auth.provider
-    const { data } = await ClientAPI.list(provider.id).catch((error) => {
+    const { data } = await ClientAPI.list(provider.id, filters).catch((error) => {
       throw error
     })
     commit(SET_CLIENTS, data.returnedData)
@@ -17,13 +17,13 @@ export default {
   async getClientBy({ commit, rootState}, payload) {
     const provider = rootState.auth.provider
     const { data } = await ClientAPI
-      .getClientBy(payload)
+      .getClientBy(provider.id, payload)
       .catch(({data: error}) => {
         throw error
       })
 
-    commit(SET_CURRENT_CLIENT, { company: data.returnedData })
-    return data
+    commit(SET_CURRENT_CLIENT, { company: data.data })
+    return data.data
   },
 
   async getClientAccount({ commit, rootState}, payload) {
@@ -34,7 +34,40 @@ export default {
         throw error
       })
 
-    commit(SET_CURRENT_CLIENT, data.returnedData)
+    commit(SET_CLIENT_ACCOUNT, data[0])
+    return data[0]
+  },
+
+  async getClientPolicies({ commit, rootState}, payload) {
+    const provider = rootState.auth.provider
+    console.log(payload)
+    const { data } = await ClientAPI
+      .getClientPolicies({providerId: provider.id, id: payload})
+      .catch(({data: error}) => {
+        throw error
+      })
+
+    commit(SET_CLIENT_POLICIES, data)
+    return data
+  },
+
+  async createClientPolicy({ rootState}, payload) {
+    const provider = rootState.auth.provider
+    const { data } = await ClientAPI
+      .createPolicy(provider.id, payload)
+      .catch(({data: error}) => {
+        throw error
+      })
+    return data
+  },
+
+  async updateClientPolicy({ rootState}, payload) {
+    const provider = rootState.auth.provider
+    const { data } = await ClientAPI
+      .updatePolicy(provider.id, payload)
+      .catch(({data: error}) => {
+        throw error
+      })
     return data
   },
 
@@ -47,6 +80,19 @@ export default {
       })
 
     commit(SET_BILLS, data.returnedData)
+    return data
+  },
+
+
+  async getClientClaims({ commit, rootState }, payload) {
+    const provider = rootState.auth.provider
+    const { data } = await ClientAPI
+      .getClientClaims(provider.id, payload)
+      .catch(({data: error}) => {
+        throw error
+      })
+
+    commit(SET_CLAIMS, data.returnedData)
     return data
   },
 
@@ -63,9 +109,10 @@ export default {
     return data
   },
 
-  async deposit({ commit }, payload) {
+  async deposit({ commit, rootState }, payload) {
+    const provider = rootState.auth.provider
     const { data } = await ClientAPI
-      .deposit(payload)
+      .deposit(provider.id, payload)
       .catch(({data: error}) => {
         throw error
       })
@@ -80,6 +127,15 @@ export default {
       .catch(({data: error}) => {
         throw error
       })
+
+    return data
+  },
+
+  async clientAccountUpdate({ commit, rootState}, payload) {
+    const provider = rootState.auth.provider
+    const { data } = await ClientAPI.clientAccountUpdate(provider.id, payload).catch(({data: error}) => {
+      throw error
+    })
 
     return data
   },

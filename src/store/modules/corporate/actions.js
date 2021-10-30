@@ -1,11 +1,12 @@
 import CorporateAPI from '@/api/corporate'
+import ClientsAPI from '@/api/clients'
 import { SET_CORPORATE, DELETE_CORPORATE, UPDATE_CORPORATE, SET_DEPENDENT, UPDATE_DEPENDENT, CURRENT_DEPENDENT } from './mutation-types'
 
 export default {
   async getCorporate({ commit }, id) {
     try {
       const { data } = await CorporateAPI.list(id)
-      commit(SET_CORPORATE, data.returnedData)
+      commit(SET_CORPORATE, data.data)
     } catch ({ response: { data: error } }) {
       throw error
     }
@@ -14,6 +15,16 @@ export default {
   async createCorporateEmployee({ commit }, payload) {
     try {
       const { data } = await CorporateAPI.create(payload)
+      commit(UPDATE_CORPORATE, data.data)
+    } catch ({ response: { data: error } }) {
+      throw error
+    }
+  },
+
+  async createInsuranceBenefactor({ commit, rootState}, payload) {
+    const provider = rootState.auth.provider
+    try {
+      const { data } = await ClientsAPI.createBenefactor(provider.id, payload)
       commit(UPDATE_CORPORATE, data.data)
     } catch ({ response: { data: error } }) {
       throw error

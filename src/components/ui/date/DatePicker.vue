@@ -15,7 +15,9 @@
       :config="configs[type]"
       :placeholder="placeholder"
       class="bg-white border-b h-10 w-full border-serenity-dark px-4"
+      :disabled="disabled"
       v-bind="$attrs"
+      :class="{ 'cursor-not-allowed opacity-40': disabled }"
       @on-change="$emit('change', $event)"
     />
     <p
@@ -55,6 +57,10 @@ export default {
       type: String,
       default: 'date',
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     disableDatesBeforeToday: {
       type: Boolean,
       default: false,
@@ -85,12 +91,17 @@ export default {
     return {
       date: null,
       // https://chmln.github.io/flatpickr/options/
-      configs: {
+    }
+  },
+
+  computed: {
+    configs() {
+      return {
         date: {
           dateFormat: this.format || 'Y-m-d',
           minDate: this.disableDatesBeforeToday ? 'today' : this.minDate ? this.minDate : null,
           maxDate: this.maxDate,
-          altFormat: 'Y-m-d',
+          altFormat: 'd M, Y',
           altInput: true,
         },
         wrap: {
@@ -161,8 +172,8 @@ export default {
           altInput: true,
           defaultDate: [startOfMonth(Date.now()), endOfMonth(Date.now())],
         },
-      },
-    }
+      }
+    },
   },
 
   methods: {
@@ -171,7 +182,6 @@ export default {
         this.$emit('change', dateStr)
         return
       }
-      console.log(selectedDates, dateStr, instance)
       instance.element.value = dateStr.replace('to', ':#;')
     },
   },

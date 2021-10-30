@@ -20,6 +20,12 @@
         custom-field="code"
         preselect
       />
+      <AddInsuranceForm
+        v-if="form.patient_top_up_payment_methods[0].type === $global.INSURANCE_TYPE && !form.id"
+        v-model="insurance"
+        class="col-span-2"
+        @invalid="setDisabledState"
+      />
       <MultiSelect
         v-if="isMoMo"
         v-model="form.patient_top_up_payment_methods[0].momo_vendor"
@@ -44,15 +50,20 @@
 <script>
 import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
 import PatientSuccessModal from '@/components/patients/modals/PatientSuccessModal'
+import AddInsuranceForm from '@/components/forms/AddInsuranceForm'
 import { mapActions, mapState } from 'vuex'
 import MultiStep from '@/mixins/multistep'
 import { required, email } from 'vuelidate/lib/validators'
 import { emailFormatter } from '@/services/custom-validators'
+import PatientAPI from '@/api/patients'
+import InsuranceAPI from '@/api/insurance'
+import omit from 'lodash/omit'
+// import pick from 'lodash/pick'
 
 export default {
   name: 'Payment',
 
-  components: {PatientSuccessModal},
+  components: { PatientSuccessModal, AddInsuranceForm },
 
   mixins: [MultiStep],
 
@@ -61,11 +72,13 @@ export default {
       form: {
         patient_top_up_payment_methods: [{}],
       },
+      insurance: {},
       icon: Checkmark,
       visible: false,
       parent: 'Patients',
       previous: 'SocialInfo',
       loading: false,
+      insuranceInvalid: false,
     }
   },
 
@@ -78,6 +91,10 @@ export default {
 
     isMoMo() {
       return this.form.patient_top_up_payment_methods[0].type === 'mobile-money'
+    },
+
+    isInsurance() {
+      return this.form.patient_top_up_payment_methods[0].type === this.$global.INSURANCE_TYPE
     },
   },
 
@@ -96,6 +113,7 @@ export default {
     ...mapActions({
       addToStoreData: 'patients/addToCurrentPatient',
       addToCurrentAppointment: 'appointments/addToCurrentAppointment',
+      getInsuranceProvider: 'clients/getClients',
       refresh: 'patients/refreshCurrentPatient',
       createPatient: 'patients/createPatient',
       updatePatient: 'patients/updatePatient',
@@ -104,10 +122,11 @@ export default {
     submit() {
       this.$v.$touch()
 
-      if (this.$v.$invalid) {
+      if (this.$v.$invalid || (!this.form.id && this.insuranceInvalid && this.isInsurance)) {
         this.$toast.error('Fill all required fields in previous steps!')
         return
       }
+
       if (this.form.id) {
         this.update()
       } else {
@@ -118,7 +137,24 @@ export default {
     async save() {
       this.loading = true
       try {
-        const data = await this.createPatient(this.form)
+        
+        const data = await this.createPatient(omit(this.form, ['photo']))
+        await this.uploadImage({ ...data, ...this.form })
+
+        if (this.form.patient_top_up_payment_methods[0].type === this.$global.INSURANCE_TYPE) {
+          this.insurance = {
+            ...this.insurance,
+            first_name: this.form.first_name,
+            last_name: this.form.last_name,
+            mobile: this.form.mobile,
+            email: this.form.email,
+            gender: this.form.gender,
+            date_of_birth: this.form.birth_date,
+          }
+          await InsuranceAPI.registerPatientAsBeneficiary(this.$providerId, this.insurance.managing_organization, this.insurance)
+        }
+
+        
         this.$toast.open({
           message: 'Patient successfully added',
         })
@@ -148,7 +184,8 @@ export default {
       this.addToStoreData(this.form)
 
       try {
-        await this.updatePatient(this.form)
+        await this.uploadImage(this.form)
+        await this.updatePatient(omit(this.form, ['photo']))
         this.$toast.open({
           message: 'Patient successfully updated',
         })
@@ -161,6 +198,17 @@ export default {
       }
 
       this.loading = false
+    },
+
+    async uploadImage(form) {
+      if (!form.photo || typeof form.photo === 'string') return
+      try {
+        let fd = new FormData()
+        fd.append('object_name', form.photo)
+        await PatientAPI.upload(this.$providerId, form.id, fd)
+      } catch (error) {
+        console.log('error', error)
+      }
     },
 
     confirmChanges(id) {
@@ -180,6 +228,10 @@ export default {
     rerouteToAppointment(patient) {
       this.addToCurrentAppointment({ patient })
       this.router.push({ name: 'DateDoctor' })
+    },
+
+    setDisabledState(event) {
+      this.insuranceInvalid = event
     },
 
   },

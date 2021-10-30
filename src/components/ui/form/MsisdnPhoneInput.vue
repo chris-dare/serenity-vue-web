@@ -68,6 +68,7 @@ export default {
       },
       set(val) {
         this.selectedDialCode = split(this.formattedValue, ' ')[0]
+        this.code = get(this.$refs, 'phoneInput.countryCode') ?  get(this.$refs, 'phoneInput.countryCode') : 'GH'
         this.$emit('input', this.convertToMsisdn(val))
       },
     },
@@ -87,9 +88,6 @@ export default {
       if (val.startsWith('+')) {
         const phoneNumber = parsePhoneNumber(val, 'GH')
         this.selectedDialCode = `+${phoneNumber.countryCallingCode}`
-
-
-        this.code = phoneNumber.country
       }
     },
   },

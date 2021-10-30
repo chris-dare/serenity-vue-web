@@ -225,7 +225,15 @@ export default {
 
   validations: {
     form: {
-      healthcare_service_name: { required },
+      healthcare_service_name: {
+        required,
+        async isUnique(value) {
+          if (value === '' || this.form.id) return true
+          const data = await this.services.find(service => service.healthcare_service_name.toLowerCase() === value.toLowerCase() )
+
+          return data ? false : true
+        },
+      },
       healthcare_service_locations: { required, minLength: minLength(1) },
       healthcare_service_categories: { required, minLength: minLength(1) },
       healthcare_service_specialties: { required, minLength: minLength(1) },
@@ -258,6 +266,7 @@ export default {
   computed: {
     ...mapState({
       locations: (state) => state.locations.locations,
+      services: (state) => state.services.services,
       categories: (state) => state.resources.categories,
       specialties: (state) => state.resources.specialties,
       serviceTypes: (state) => state.resources.serviceTypes,
@@ -311,9 +320,10 @@ export default {
     }, 500),
 
     generateServiceDescription() {
-      if (this.form.id) {
+      if (this.form.id || !this.form.healthcare_service_name) {
         return
       }
+      this.$v.$touch()
       this.form.comment = `Healthcare service for ${this.form.healthcare_service_name} at ${this.provider.organization_name}`
     },
 

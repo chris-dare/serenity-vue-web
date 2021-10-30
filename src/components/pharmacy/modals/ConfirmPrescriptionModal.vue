@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white p-2 mb-8">
+  <div class="bg-white p-4 mb-8">
     <div
       v-if="mode === 'prescription'"
       class="mb-4"
@@ -60,7 +60,7 @@
             </div>
           </div>
         </template>
-        <div class="flex my-8 items-center">
+        <div class="mb-8 items-center">
           <div><p class="bx--label pr-4 font-bold mt-4">Available Drugs</p></div>
           <div class="flex-1">
             <Search
@@ -304,7 +304,7 @@ export default {
     },
     maxQuantity() {
       if(!this.selectedInventoryItem)return 0
-      return parseInt(this.selectedInventoryItem.initial_quantity)
+      return parseInt(this.selectedInventoryItem.net_release_quantity)
     },
     filteredPrescriptions() {
       return this.$utils.getFilteredData(this.inventory.data, this.search, ['name'])

@@ -26,6 +26,7 @@ import {
   SET_LANGUAGES,
   SET_VENDORS,
   SET_CURRENCIES,
+  SET_REFERENCE_TYPES,
   SET_PHARMACY_INVENTORY_OPTIONS,
   SET_ENCOUNTER_PRIORITIES,
   SET_OBSERVATION_CATEGORIES,
@@ -133,6 +134,13 @@ export default {
       throw error
     })
     commit(SET_CURRENCIES, data)
+  },
+
+  async getReferenceTypes({ commit  }) {
+    const { data } = await ResourceAPI.referenceTypes().catch((error) => {
+      throw error
+    })
+    commit(SET_REFERENCE_TYPES, data)
   },
 
   async getPaymentMethods({ commit, state }) {

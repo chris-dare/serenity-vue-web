@@ -1,5 +1,6 @@
 import store from '@/store'
 import get from 'lodash/get'
+import omit from 'lodash/omit'
 
 export default class User {
   constructor(data) {
@@ -19,7 +20,7 @@ export default class User {
     const practitioner_specialty = this.data.practitioner_specialty.map(sp => sp.code)
     let editData = renameKeys({ ...this.data, practitioner_specialty},
       { date_of_birth : 'birth_date', phone_number : 'mobile', practitioner_type: 'team_member_type' })
-    return editData
+    return omit(editData, ['country_code'])
   }
 
   getUpdateView() {
@@ -60,6 +61,7 @@ const renameKeys = (obj, keysMap) => {
 }
 
 const checkArrayType = (obj) => {
+  if (!obj) return
   return typeof obj[0] === 'string' ? 'string' : 'object'
 }
 
@@ -67,14 +69,5 @@ const checkArrayType = (obj) => {
 
 // eslint-disable-next-line no-unused-vars
 const user = {
-  // 'title': '',
   'team_member_type': 'clinical_staff',
-  // 'email': '',
-  // 'date_of_birth': '',
-  // 'phone_number': '',
-  'country_code': '+233',
-  // 'qualification': [],
-  // 'gender': '',
-  // 'postal_address':'',
-  // 'home_address':'',
 }

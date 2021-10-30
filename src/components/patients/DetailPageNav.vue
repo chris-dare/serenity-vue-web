@@ -53,9 +53,9 @@ export default {
         { label: 'Summary', path: 'PatientSummary' },
       ]
 
-      if (this.workspaceType !== 'RECEPT') {
-        links.push({ label: 'Timeline', path: 'PatientTimeline' })
-      }
+      // if (this.workspaceType !== 'RECEPT') {
+      //   links.push({ label: 'Timeline', path: 'PatientTimeline' })
+      // }
 
       links.push(
         { label: 'Chart', path: 'PatientCharts' },

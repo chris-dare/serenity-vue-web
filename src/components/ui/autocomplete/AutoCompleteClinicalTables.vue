@@ -99,6 +99,7 @@ export default {
     }),
 
     async asyncFind (query) {
+      if (!query) return
       this.isLoading = true
       await this.getDiagnosisCodeOptions(query)
 
@@ -115,7 +116,7 @@ export default {
 
     getStoreFrontName(props) {
       let data = this.options.find(i => i.value === props.option)
-      return data ? `${data.value} — [${data.label}]` : ''
+      return data ? `${data.value} — [${data.label}]` : props.option
     },
   },
 }

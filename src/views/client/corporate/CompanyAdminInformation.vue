@@ -124,6 +124,7 @@ export default {
       createClient: 'clients/create',
       updateClient: 'clients/update',
       refresh: 'clients/refreshForm',
+      getData: 'clients/getClients',
     }),
     actionChange() {},
     submit() {
@@ -158,6 +159,7 @@ export default {
         })
         this.loading = false
         this.$router.push({name: 'CorporateClients'})
+        this.getData()
       } catch (error) {
         this.$toast.open({
           message: error.message || 'Something went wrong!',

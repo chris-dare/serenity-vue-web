@@ -22,6 +22,7 @@ import {
   SET_VENDORS,
   SET_PHARMACY_INVENTORY_OPTIONS,
   SET_CURRENCIES,
+  SET_REFERENCE_TYPES,
   SET_ENCOUNTER_PRIORITIES,
   SET_OBSERVATION_CATEGORIES,
   SET_DIAGNOSTIC_LAB_PROCEEDURES,
@@ -76,6 +77,10 @@ export default {
 
   [SET_CATEGORIES](state, categories) {
     state.categories = categories
+  },
+
+  [SET_REFERENCE_TYPES](state, referenceTypes) {
+    state.referenceTypes = referenceTypes
   },
 
   [SET_CODES](state, codes) {

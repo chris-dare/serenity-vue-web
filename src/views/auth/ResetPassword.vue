@@ -20,14 +20,14 @@
             Please enter your mobile number or email below to get a reset link.
           </p>
 
-          <div class="mt-8">
+          <div class="mt-8 space-y-4">
             <FormInput
               v-model="form.password"
               required
               :invalid-message="$utils.validateRequiredField($v, 'password')"
               label="Enter new password"
               type="password"
-              class="se-dark-input my-4"
+              class="se-dark-input"
             />
             <FormInput
               v-model="form.confirm_password"

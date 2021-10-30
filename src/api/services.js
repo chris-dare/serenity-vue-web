@@ -22,4 +22,8 @@ export default {
   delete(providerId,id) {
     return http.delete(`${this.url}${providerId}/administration/healthcareservices/${id}`)
   },
+
+  getWards(providerId) {
+    return http.get(`${this.url}${providerId}/administration/healthcareservices`)
+  },
 }

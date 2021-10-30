@@ -285,7 +285,7 @@ export default {
       if (this.patient) {
         params.patient = this.patient
       }
-      params.date = this.prescription_date || this.$date.formatDate(new Date(), 'yyyy-MM-dd\'T\'HH:mm:ssxxx')
+      params.date = this.prescription_date
       this.prescriptions.loading = true
       const response = await EncounterPrescriptionsApi.list(this.provider.id, params)
 

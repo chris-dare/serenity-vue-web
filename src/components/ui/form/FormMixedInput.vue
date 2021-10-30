@@ -3,7 +3,13 @@
     autocomplete="off"
     @submit.prevent
   >
-    <p class="bx--label capitalize">{{ label }}</p>
+    <div class="space-x-1">
+      <span
+        v-if="required"
+        class="error"
+      >*</span>
+      <span class="bx--label capitalize">{{ label }}</span>
+    </div>
     <div class="items-center relative">
       <cv-text-input
         v-model="localValue"
@@ -37,7 +43,7 @@
 <script>
 import modelMixin from '@/mixins/model'
 export default {
-  name: 'MixedInput',
+  name: 'FormMixedInput',
 
   mixins: [modelMixin],
 
@@ -63,6 +69,10 @@ export default {
       default: '',
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    required: {
       type: Boolean,
       default: false,
     },

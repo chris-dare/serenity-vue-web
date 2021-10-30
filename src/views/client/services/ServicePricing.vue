@@ -187,11 +187,15 @@ export default {
     isDiagnostic() {
       return this.form.healthcare_service_categories[0]?.code === 'Diagnostic'
     },
+
+    previous() {
+      return this.$route.meta.previous
+    },
   },
 
   created() {
     if (isEmpty(this.storeData)) {
-      this.$router.push({name: 'ServiceInformation'})
+      this.$router.push({ name: this.previous })
     }
   },
 

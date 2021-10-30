@@ -1,52 +1,18 @@
 <template>
-  <div class="max-w-7xl mx-auto">
-    <p class="text-primary text-xl font-semibold">Register new practitioner</p>
-    <div class="grid grid-cols-4 my-6 gap-6">
-      <div>
-        <cv-radio-group :vertical="true">
-          <router-link
-            v-for="(item, index) in navItems"
-            :key="index"
-            tag="div"
-            :to="{name: item.path}"
-            :class="[checked == item.path ? 'border-serenity-primary' : 'border-serenity-subtle-border']"
-            class="border-l-2  h-20 flex items-center border-solid px-4 cursor-pointer"
-          >
-            <div class="flex">
-              <div>
-                <CircleFilled
-                  v-if="checked == item.path"
-                  class="w-5 h-5"
-                  :class="[checked == item.path ? 'text-serenity-primary' : 'text-primary']"
-                />
-                <div
-                  v-else
-                  class="w-5 h-5 border border-solid rounded-full"
-                />
-              </div>
-              <div class="ml-4">
-                <p
-                  class="leading-4"
-                  :class="[checked == item.path ? 'text-serenity-primary' : 'text-primary']"
-                >
-                  {{ item.label }}
-                </p>
-                <p class="text-xs text-secondary leading-7">{{ item.description }}</p>
-              </div>
-            </div>
-          </router-link>
-        </cv-radio-group>
-      </div>
-      <div class="col-span-3 bg-white py-4 px-8">
-        <router-view />
-      </div>
-    </div>
-  </div>
+  <AppRegisterLayout
+    label="Register new practitioner"
+    :nav-items="navItems"
+    :checked="checked"
+  >
+    <router-view />
+  </AppRegisterLayout>
 </template>
 
 <script>
 import CircleFilled from '@carbon/icons-vue/es/circle--filled/32'
 import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
+import { mapActions } from 'vuex'
+
 export default {
   name: 'RegisterTeam',
   // eslint-disable-next-line vue/no-unused-components
@@ -71,7 +37,25 @@ export default {
       },
     },
   },
+
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      try {
+        if (!to.query.id) return
+        vm.loading = true
+        await vm.getUser(to.query.id)
+        vm.loading = false
+      } catch (error) {
+        vm.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
+        vm.loading = false
+      }
+    })
+  },
+
+  methods: {
+    ...mapActions({
+      getUser: 'practitioners/getUser',
+    }),
+  },
 }
 </script>
-
-<style></style>

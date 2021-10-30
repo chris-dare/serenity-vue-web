@@ -1,7 +1,7 @@
 <template>
   <SeForm class="space-y-4">
     <p class="text-sm">What is the preferred payment method?</p>
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-4 gap-4">
       <InfoLinkCard
         v-for="(type, index) in options"
         :key="index"
@@ -61,17 +61,17 @@ export default {
           value: this.$global.CORPORATE_ACCOUNT_TYPE,
         },
         {
+          label: 'Insurance',
+          description: 'Bills covered by third party insurance',
+          type: 'insurance',
+          value: this.$global.INSURANCE_TYPE,
+        },
+        {
           label: 'Cash',
           description: 'Pay using patient personal account',
           type: 'cash',
           value: this.$global.CASH_TYPE,
         },
-        // {
-        //   label: 'Insurance',
-        //   description: 'Bills covered by third party insurance',
-        //   type: 'insurance',
-        //   value: 'insurance',
-        // },
       ]
 
       if (this.showCashOptions && this.$userCan('bills.acceptcash.write')) {

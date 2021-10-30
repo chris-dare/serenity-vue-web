@@ -1,4 +1,11 @@
-import { SET_SERVICES, UPDATE_SERVICE, DELETE_SERVICE, ADD_SERVICE_DATA, SET_SERVICE_DATA } from './mutation-types'
+import {
+  SET_SERVICES,
+  UPDATE_SERVICE,
+  DELETE_SERVICE,
+  ADD_SERVICE_DATA,
+  SET_SERVICE_DATA,
+  SET_WARDS,
+} from './mutation-types'
 
 export default {
   [SET_SERVICES](state, services) {
@@ -31,5 +38,10 @@ export default {
 
   [SET_SERVICE_DATA](state, data) {
     state.currentService = data
+  },
+
+  // wards
+  [SET_WARDS](state, wards) {
+    state.wards = wards
   },
 }

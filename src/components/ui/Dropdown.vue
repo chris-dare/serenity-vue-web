@@ -59,6 +59,7 @@ export default {
 
   methods: {
     close (e) {
+      if(!this.modalVisible) return
       if (!this.$el.contains(e.target)) {
         this.modalVisible = false
       }

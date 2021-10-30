@@ -46,12 +46,13 @@ export default {
   computed: {
     ...mapState({
       client: (state) => state.clients.client,
+      clientAccount: (state) => state.clients.clientAccount,
     }),
 
     companyFields() {
       return [
-        { label: 'State', value: this.client.state },
-        { label: 'Authorized By', value: this.client.authorizedBy },
+        { label: 'State', value: this.clientAccount.status },
+        { label: 'Authorized By', value: this.client.company.authorizedBy },
         { label: 'Address', value: this.client.company.address },
       ]
     },
@@ -91,7 +92,7 @@ export default {
 
       switch (client.action) {
       case 'client':
-        this.$trigger('deposit:add:open', { ...this.client })
+        this.$trigger('deposit:add:open', { ...this.client, ...this.clientAccount })
         break
       case 'benefactor':
         this.$router.push({ name: 'ClientEmployees', params: { id: this.client.company.main_branch_id }})

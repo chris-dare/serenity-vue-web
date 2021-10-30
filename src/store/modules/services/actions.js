@@ -1,6 +1,13 @@
 /* eslint-disable no-unused-vars */
 import ServicesAPI from '@/api/services'
-import { SET_SERVICES, UPDATE_SERVICE, DELETE_SERVICE, ADD_SERVICE_DATA, SET_SERVICE_DATA } from './mutation-types'
+import {
+  SET_SERVICES,
+  UPDATE_SERVICE,
+  DELETE_SERVICE,
+  ADD_SERVICE_DATA,
+  SET_SERVICE_DATA,
+  SET_WARDS,
+} from './mutation-types'
 
 export default {
   async getServices({ commit, rootState }) {
@@ -68,5 +75,15 @@ export default {
 
   setCurrentService({ commit }, data) {
     commit(SET_SERVICE_DATA, data)
+  },
+
+  async getWards({ commit, rootState }) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ServicesAPI.getWards(provider.id)
+      commit(SET_WARDS, data.data)
+    } catch (error) {
+      throw error.data || error
+    }
   },
 }

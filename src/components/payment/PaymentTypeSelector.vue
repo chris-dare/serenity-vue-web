@@ -11,12 +11,18 @@
       v-model="localValue"
       :v="v"
     />
+    <PaymentInsuranceAccounts
+      v-else-if="selected === $global.INSURANCE_TYPE"
+      v-model="localValue"
+      :hide-add-insurance="!localValue.patient"
+      :v="v"
+    />
     <PaymentMomo
       v-else-if="selected === 'mobile-money'"
       v-model="localValue"
     />
     <PaymentCash
-      v-else-if="selected === 'cash'"
+      v-else-if="selected === $global.CASH_TYPE"
       v-model="localValue"
       :v="v"
       v-bind="$attrs"
@@ -59,6 +65,7 @@
 <script>
 import PaymentUserAccounts from '@/components/payment/PaymentUserAccounts'
 import PaymentCorporateAccounts from '@/components/payment/PaymentCorporateAccounts'
+import PaymentInsuranceAccounts from '@/components/payment/PaymentInsuranceAccounts'
 import PaymentMomo from '@/components/payment/PaymentMomo'
 import PaymentCash from '@/components/payment/PaymentCash'
 import modelMixin from '@/mixins/model'
@@ -66,7 +73,7 @@ import modelMixin from '@/mixins/model'
 export default {
   name: 'PaymentTypeSelector',
 
-  components: { PaymentUserAccounts, PaymentMomo, PaymentCorporateAccounts, PaymentCash },
+  components: { PaymentUserAccounts, PaymentMomo, PaymentCorporateAccounts, PaymentCash, PaymentInsuranceAccounts },
 
   mixins: [modelMixin],
 

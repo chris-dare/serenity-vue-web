@@ -13,19 +13,19 @@
     </template>
     <template slot="content">
       <div class="grid grid-cols-3 gap-4">
-        <MixedInput
+        <FormMixedInput
           v-model="form.rbc"
           label="RBC"
           suffix-text="x10E6/ul"
           placeholder="Value"
         />
-        <MixedInput
+        <FormMixedInput
           v-model="form.haemo"
           label="Haemoglobin"
           suffix-text="g/dL"
           placeholder="Value"
         />
-        <MixedInput
+        <FormMixedInput
           v-model="form.input"
           label="Hematocrit"
           suffix-text="%"

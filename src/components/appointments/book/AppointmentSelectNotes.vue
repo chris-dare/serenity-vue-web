@@ -40,9 +40,9 @@ export default {
     return {
       form: {},
       icon: ChevronRight,
-      previous: 'DateDoctor',
-      parent: 'Appointments',
-      next: 'AppointmentSummary',
+      next: this.$route.meta.next,
+      parent: this.$route.meta.parent,
+      previous: this.$route.meta.previous,
     }
   },
 

@@ -27,6 +27,7 @@
         placeholder="Write the patients medical complaint"
         close-on-select
         required
+        :multiple="false"
       />
 
       <MultiSelect

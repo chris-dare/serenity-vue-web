@@ -32,7 +32,15 @@
           </cv-data-table-cell>
 
           <cv-data-table-cell>
-            <p>{{ row.occupational_role }}</p>
+            <p>{{ row.mobile }}</p>
+          </cv-data-table-cell>
+
+          <cv-data-table-cell>
+            <p>{{ row.email }}</p>
+          </cv-data-table-cell>
+
+          <cv-data-table-cell>
+            <p>{{ row.occupational_role || '-' }}</p>
           </cv-data-table-cell>
 
           <cv-data-table-cell>
@@ -72,6 +80,8 @@ export default {
       loading: false,
       columns: [
         'Employee',
+        'Phone Number',
+        'Email',
         'Occupational Role',
         'Max Dependants Allowed',
         'Action',

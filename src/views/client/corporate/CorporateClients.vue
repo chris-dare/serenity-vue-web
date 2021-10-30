@@ -32,19 +32,13 @@
             <InfoImageBlock :label="row.company_name" />
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <p>{{ row.admin_phoneno }}</p>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
             <p>{{ row.tin_number }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <p class="lowercase">{{ row.admin_email }}</p>
+            <p>{{ row.admin_phoneno }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <Tag
-              :variant="row.state != 'verified' ? 'error' : 'success'"
-              :label="row.state"
-            />
+            <p class="lowercase">{{ row.admin_email }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <router-link
@@ -81,7 +75,6 @@ export default {
         'TIN Number',
         'Mobile',
         'Email',
-        'Status',
         'Action',
       ],
     }
@@ -96,13 +89,23 @@ export default {
   mounted() {
     this.paginate = true
     this.searchTerms = ['company_name', 'tin_number', 'state']
-    this.refresh()
+    this.refreshData()
   },
 
   methods: {
     ...mapActions({
       getData: 'clients/getClients',
     }),
+    async refreshData() {
+      this.loading = true
+
+      try {
+        await this.getData({filters: { organization_type: 'PAY'}})
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
+    },
   },
 
 }

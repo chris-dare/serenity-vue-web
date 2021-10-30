@@ -6,13 +6,14 @@
   >
     <div class="space-y-4">
       <CorporateDetailSummary
-        :client="client"
+        :client="{...client, ...clientAccount}"
         @edit="editClient"
         @update="$trigger('client:add:open', {...client } )"
-        @verify="$trigger('client:edit:open', { ...client.company })"
+        @verify="$trigger('client:edit:open', { ...client, ...clientAccount })"
+        @clientaccount="createAccount"
       />
 
-      <div class="bg-white px-4 py-6 grid grid-cols-5 divide-x divide-gray-100 divide-solid">
+      <div class="bg-white px-4 py-6 grid grid-cols-3 divide-x divide-gray-100 divide-solid">
         <div
           v-for="(field, index) in summaryFields"
           :key="index"
@@ -37,7 +38,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import Add from '@carbon/icons-vue/es/add/32'
-import BillingAPI from '@/api/billing'
+// import BillingAPI from '@/api/billing'
 import EditClient from '@/components/admin/modals/EditClient'
 import ClientDeposit from '@/components/admin/modals/ClientDeposit'
 import DetailPageNav from '@/components/patients/DetailPageNav'
@@ -57,7 +58,6 @@ export default {
         date: null,
       },
       bills: [],
-      clientAccount: [],
       selected: 'about',
       links: [
         { label: 'About', path: 'ClientSummary' },
@@ -76,18 +76,25 @@ export default {
   computed: {
     ...mapState({
       client: (state) => state.clients.client,
+      clientAccount: (state) => state.clients.clientAccount,
       storeData: (state) => state.clients.form,
       provider: (state) => state.auth.provider,
     }),
 
     summaryFields() {
-      return [
-        { label: 'Account type', value: this.client.state },
-        { label: 'Current Balance', value: this.$currency(this.client.amount).format() },
-        { label: 'Credit duration', value: this.client.creditDurationInDays },
-        { label: 'Maximum employees allowed', value: this.client.maximum_employees_allowed },
-        { label: 'Credit start data', value: this.$date.formatDate(this.client.creditStartDate, 'dd MMM, yyyy') },
-      ]
+      if (this.clientAccount) {
+        return [
+          { label: 'Account type', value: this.clientAccount.account_type },
+          { label: 'Current Balance', value: this.$currency(this.clientAccount.balance).format() },
+          { label: 'Credit start date', value: this.$date.formatDate(this.clientAccount.service_period_start, 'dd MMM, yyyy') },
+        ]
+      } else {
+        return [
+          { label: 'Account type', value: '' },
+          { label: 'Current Balance', value: this.$currency(0).format() },
+          { label: 'Credit start date', value: this.$date.formatDate('', 'dd MMM, yyyy') },
+        ]
+      }
     },
   },
 
@@ -108,6 +115,7 @@ export default {
       getClient: 'clients/getClientBy',
       getClientAccount: 'clients/getClientAccount',
       addToStoreData: 'clients/addToCurrentUser',
+      providerClient: 'clients/providerAccount',
     }),
 
     async init() {
@@ -115,15 +123,24 @@ export default {
       const id = this.$route.params.id
       this.getClient(id)
       this.getClientAccount(id)
-      const { data } = await BillingAPI.pendingBillsTotal(this.provider.id, id)
-      this.totalPendingBill = data.returnedData.total_bill
+      // const { data } = await BillingAPI.pendingBillsTotal(this.provider.id, id)
+      this.totalPendingBill = 0
     },
 
     editClient() {
-      this.addToStoreData(this.client.company)
+      this.addToStoreData({...this.client.company, ...this.clientAccount})
       this.$router.push({ name: 'CompanyInformation', query: { id: this.client.company.main_branch_id } })
     },
+
+    async createAccount(){
+      this.loading = true
+      const id = this.$route.params.id
+      await this.providerClient({owner: id})
+      this.getClientAccount(id)
+      this.loading = false
+    },
   },
+
 
 }
 </script>

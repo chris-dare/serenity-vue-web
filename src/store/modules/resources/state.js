@@ -2,6 +2,7 @@ export default () => ({
   resources: [],
   specialties: [],
   categories: [],
+  referenceTypes: [],
   codes: [],
   serviceTypes: [],
   currentResource: {},

@@ -77,7 +77,7 @@ export default {
       type: String,
       default: 'primary',
       validator: value =>
-        ['primary', 'secondary', 'secondary-outline', 'tertiary', 'danger', 'outline', 'ghost', 'white', 'default', 'danger-outline', 'warning', 'success', 'gray'].indexOf(value) !== -1,
+        ['primary', 'secondary', 'secondary-outline', 'tetiary', 'danger', 'outline', 'ghost', 'white', 'default', 'danger-outline', 'warning', 'success', 'gray'].indexOf(value) !== -1,
     },
   },
 
@@ -90,6 +90,7 @@ export default {
       if (this.variant  === 'secondary') {
         return 'bg-black text-white'
       }
+  
       if (this.variant  === 'warning') {
         return 'bg-warning hover:bg-warning text-black'
       }
@@ -114,8 +115,12 @@ export default {
         return 'bg-transparent text-white hover:bg-light border-gray-500 bg-gray-500 focus:bg-gray-400 hover:bg-gray-400'
       }
 
-      if(this.variant === 'white') {
+      if (this.variant === 'white') {
         return 'bg-white hover:bg-white text-placeholder shadow-sm'
+      }
+
+      if (this.variant === 'tetiary') {
+        return 'bg-tetiary hover:bg-tetiary text-secondary shadow-sm'
       }
 
       return 'bg-serenity-primary hover:bg-serenity-primary-highlight'
@@ -134,3 +139,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.bx--btn{
+  max-width: unset !important;
+}
+</style>

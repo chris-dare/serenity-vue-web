@@ -15,6 +15,7 @@ export default {
     dispatch('resources/getMobileMoneyVendors', null, { root:true })
     dispatch('resources/getEncounterStatuses', null, { root:true })
     dispatch('resources/getEncounterClasses', null, { root:true })
+    dispatch('resources/getReferenceTypes', null, { root:true })
 
   },
 

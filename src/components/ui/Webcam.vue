@@ -3,7 +3,10 @@
     ref="webcam"
     class="bg-serenity-light-gray h-3/4 w-full flex items-center justify-center"
   >
-    <div v-if="showVideo">
+    <div
+      v-if="showVideo"
+      class="space-y-1 px-6"
+    >
       <video
         v-show="!isPhotoTaken"
         ref="video"
@@ -14,9 +17,8 @@
       />
       <img
         v-show="isPhotoTaken"
-        width="200"
-        height="auto"
-        :src="photo"
+        class="w-full h-52 object-contain"
+        :src="imageUrl"
       >
       <canvas
         v-show="false"
@@ -25,17 +27,22 @@
         :height="200"
       />
       <div
-        v-if="showVideo"
         class="camera-shoot"
       >
-        <button
-          type="button"
-          class="button"
+        <SeButton
+          v-if="imageUrl && isPhotoTaken"
+          size="sm"
+          @click="changePhoto"
+        >
+          Change Photo
+        </SeButton>
+        <SeButton
+          v-else
+          size="sm"
           @click="takePhoto"
         >
-          <template v-if="photo && isPhotoTaken">Change Photo</template>
-          <template v-else>Take Photo</template>
-        </button>
+          Take Photo
+        </SeButton>
       </div>
     </div>
     <div
@@ -51,10 +58,14 @@
 
 <script>
 import Camera from '@carbon/icons-vue/es/camera/32'
+import model from '@/mixins/model'
+
 export default {
   name: 'Webcam',
 
   components: { Camera },
+
+  mixins: [model],
 
   data() {
     return {
@@ -66,6 +77,7 @@ export default {
       photo: null,
       width: null,
       height: null,
+      imageUrl: null,
     }
   },
 
@@ -88,6 +100,17 @@ export default {
         }
       },
     },
+
+    localValue: {
+      deep: true,
+      handler(val, oldVal) {
+        if (!val || val == oldVal) return
+        
+        this.isPhotoTaken = true
+        this.showVideo = true
+        this.imageUrl = typeof val === 'string' ? val : URL.createObjectURL(val)
+      },
+    },
   },
 
   methods: {
@@ -101,8 +124,15 @@ export default {
         this.createCameraElement()
       }
     },
+
+    async changePhoto() {
+      await this.initVideo()
+      this.isPhotoTaken = false
+    },
+
     async takePhoto() {
       this.isPhotoTaken = !this.isPhotoTaken
+      
       const canvas = this.$refs.canvas
       const video = this.$refs.video
       const context = this.$refs.canvas.getContext('2d')
@@ -110,8 +140,8 @@ export default {
       canvas.setAttribute('height', video.videoHeight)
       context.drawImage(this.$refs.video, 0, 0, video.videoWidth, video.videoHeight)
       let data = canvas.toDataURL('image/png')
-      this.photo = data
-      this.$emit('input', this.photo)
+      this.imageUrl = data
+      this.$emit('input', data)
       // await navigator.mediaDevices
       //   .getUserMedia({ video: true })
       //   .then((stream) => {
@@ -136,7 +166,7 @@ export default {
         .then(this.gotDevices)
         .catch((err) => {
           if (err.message === 'Permission denied') {
-            this.$alert('Make sure to enable the camera on your browser', {
+            this.$toast.error('Make sure to enable the camera on your browser', {
               showCancelButton: false,
               type: 'warning',
               confirmButtonText: 'Okay',

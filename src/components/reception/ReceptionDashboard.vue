@@ -24,6 +24,8 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import VisitsTable from '@/components/visits/VisitsTable'
+
+
 export default {
   name: 'ReceptionDashboard',
 

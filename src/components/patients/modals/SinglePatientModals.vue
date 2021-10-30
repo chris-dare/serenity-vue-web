@@ -1,6 +1,7 @@
 <template>
   <div>
-    <AdmitPatientModal />
+    <AdmitPatientModal v-if="$isCurrentWorkspace('IPD')" />
+    <ObservationsModal v-if="$isCurrentWorkspace('IPD')" />
     <RequestDiagnosticTestModal />
     <AddNotesModal />
     <MarkAsDeceasedModal />
@@ -27,10 +28,21 @@ const MedicationRequestModal = () => import('@/components/patients/modals/Medica
 const EncounterReferralModal = () => import('@/components/patients/encounters/modals/EncounterReferralModal')
 const CaptureVitalsModal = () => import('@/components/vitals/CaptureVitalsModal')
 
-
-
 export default {
   name: 'SinglePatientModals',
-  components: { CaptureVitalsModal, EncounterReferralModal, AdmitPatientModal, MedicationRequestModal, StartEncounterModal, ServiceRequestModal, RequestDiagnosticTestModal, AddNotesModal, MarkAsDeceasedModal, DeceasedDetailsModal, EndVisitConfirmationModal },
+  components: {
+    CaptureVitalsModal,
+    EncounterReferralModal,
+    AdmitPatientModal,
+    MedicationRequestModal,
+    StartEncounterModal,
+    ServiceRequestModal,
+    RequestDiagnosticTestModal,
+    AddNotesModal,
+    MarkAsDeceasedModal,
+    DeceasedDetailsModal,
+    EndVisitConfirmationModal,
+    ObservationsModal: () => import(/* webpackPrefetch: true */ '@/components/ipd/observations/ObservationsModal'),
+  },
 }
 </script>

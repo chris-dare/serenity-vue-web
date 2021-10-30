@@ -7,6 +7,7 @@
     <GetStartedModal :visible.sync="visible" />
     <SearchPatientsModal />
     <BookVisitModal />
+    <AddEditInsuranceModal />
   </div>
 </template>
 
@@ -17,17 +18,19 @@ import GetStartedModal from '@/components/dashboard/GetStartedModal'
 const DiagnosticDashboard = () => import('@/components/diagnostic/DiagnosticDashboard')
 const OPDDashboard = () => import('@/components/opd/OPDDashboard')
 const PharmacyDashboard = () => import('@/components/pharmacy/PharmacyDashboard')
+const IPDDashboard = () => import('@/components/ipd/IPDDashboard')
 const ReceptionDashboard = () => import('@/components/reception/ReceptionDashboard')
 const BillingDashboard = () => import('@/components/billing/BillingDashboard')
 const VirtualCareDashboard = () => import('@/components/virtual-care/VirtualCareDashboard')
 const BookVisitModal = () => import('@/components/visits/BookVisitModal')
+const AddEditInsuranceModal = () => import('@/components/insurance/AddEditInsuranceModal')
 
 import { mapState } from 'vuex'
 
 export default {
   name: 'Dashboard',
 
-  components: { GetStartedModal, BillingDashboard, DiagnosticDashboard, OPDDashboard, PharmacyDashboard, ReceptionDashboard, VirtualCareDashboard, BookVisitModal },
+  components: { GetStartedModal, BillingDashboard, IPDDashboard, DiagnosticDashboard, OPDDashboard, PharmacyDashboard, ReceptionDashboard, VirtualCareDashboard, BookVisitModal, AddEditInsuranceModal },
 
   data() {
     return {
@@ -49,6 +52,9 @@ export default {
 
       if (this.workspaceType === 'OPD') {
         return 'OPDDashboard'
+      }
+      if (this.workspaceType === 'IPD') {
+        return 'IPDDashboard'
       }
       if (this.workspaceType === 'PHARM') {
         return 'PharmacyDashboard'

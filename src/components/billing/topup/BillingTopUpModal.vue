@@ -12,6 +12,7 @@
         v-model="form"
         :bills="patientBills"
         :show-check="showCheck"
+        :v="$v"
       />
 
       <div class="flex items-center justify-between mt-12">
@@ -22,15 +23,6 @@
           Go back
         </SeButton>
         <div class="flex items-center space-x-2">
-          <SeButton
-            v-if="canPayForBills"
-            :icon="icon"
-            :loading="loading"
-            :disabled="!form.selectedBills.length"
-            @click="payForPendingBills($global.USER_ACCOUNT_TYPE)"
-          >
-            Pay for selected bills
-          </SeButton>
           <SeButton
             :icon="icon"
             :loading="loading"
@@ -48,8 +40,9 @@
 import modalMixin from '@/mixins/modal'
 import BillingTopUpStepOne from '@/components/billing/topup/BillingTopUpStepOne'
 import BillingTopUpStepTwo from '@/components/billing/topup/BillingTopUpStepTwo'
+import BillingTopUpReceivePayment from '@/components/billing/topup/BillingTopUpReceivePayment'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
-import { required } from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import BillingAPI from '@/api/billing'
 // import pick from 'lodash/pick'
@@ -58,7 +51,7 @@ import paymentMixin from '@/mixins/payment'
 export default {
   name: 'BillingTopUpModal',
 
-  components: { BillingTopUpStepOne, BillingTopUpStepTwo },
+  components: { BillingTopUpStepOne, BillingTopUpStepTwo, BillingTopUpReceivePayment },
 
   mixins: [modalMixin, paymentMixin],
 
@@ -79,6 +72,7 @@ export default {
       patientBills: [],
       label: 'Top Up Account',
       showCheck: false,
+      type: 'receive',
     }
   },
 
@@ -94,7 +88,7 @@ export default {
     stepComponent() {
       let steps = {
         1: 'BillingTopUpStepOne',
-        2: 'BillingTopUpStepTwo',
+        2: this.type === 'receive' ? 'BillingTopUpReceivePayment' : 'BillingTopUpStepTwo',
       }
 
       return steps[this.step]
@@ -106,7 +100,7 @@ export default {
 
     canPayForBills() {
       if (!this.form.selectedBills.length) return false
-      return this.showCheck && this.step === 2 && (this.totalUserBalance > this.$utils.getTotalValue(this.form.selectedBills, 'charge'))
+      return this.type === 'receive' && this.step === 2 && (this.totalUserBalance > this.$utils.getTotalValue(this.form.selectedBills, 'charge'))
     },
   },
 
@@ -115,12 +109,14 @@ export default {
       this.visible = true
       this.label = 'Top Up Account'
       this.showCheck = false
+      this.type = 'topup'
     },
 
     'billing:receive:open': function(){
       this.visible = true
       this.label = 'Receive Payment'
       this.showCheck = true
+      this.type = 'receive'
     },
 
     'billing:topup:open:two': function(data){
@@ -145,13 +141,30 @@ export default {
     }
 
     if (this.step === 2) {
-      form = Object.assign(form, {
-        payment: {
-          amount: { required },
-          name: { required },
-        },
-      })
+      if (this.form.payment.transaction_type !== 'cash') {
+        form = Object.assign(form, {
+          payment: {
+            account_id: { required },
+          },
+        })
+      }
+
+      if(this.form.payment.transaction_type === 'cash'){
+        form = Object.assign(form, {
+          payment: {
+            amount: { required },
+            currency: { required },
+          },
+        })
+      }
+
+      if (this.type === 'receive') {
+        form = Object.assign(form, {
+          selectedBills: {required, minLength: minLength(1)},
+        })
+      }
     }
+    
 
     return { form }
   },
@@ -182,6 +195,11 @@ export default {
         return
       }
 
+      if (this.type === 'receive') {
+        this.payForPendingBills()
+        return
+      }
+
       this.save()
     },
 
@@ -202,7 +220,12 @@ export default {
           params: this.form.payment,
         })
 
-        await this.payForPendingBills()
+        this.loading = false
+        this.$toast.success('Payment received successfully')
+
+
+        this.close()
+        this.$resetData()
 
       } catch (error) {
         this.loading = false
@@ -210,18 +233,26 @@ export default {
     },
 
     async payForPendingBills() {
-      await this.payForMultipleChargeItems({
-        patient: this.bill.patientid,
-        charge_items: this.form.selectedBills.map(b => b.id),
-        payment_info: this.getPaymentParams({ ...this.form.payment, transaction_type: this.$global.USER_ACCOUNT_TYPE, account_id: this.userAccounts[0].uuid }),
-      })
+      try {
+        this.loading = true
+        await this.payForMultipleChargeItems({
+          patient: this.form.patient.id,
+          charge_items: this.form.selectedBills.map(b => b.id),
+          payment_info: this.getPaymentParams(this.form.payment),
+        })
 
-      this.loading = false
-      this.$toast.success('Payment received successfully')
+        
+        this.$toast.success('Payment received successfully')
 
 
-      this.close()
-      this.$resetData()
+        this.close()
+        this.$resetData()
+      } catch (error) {
+        // 
+      } finally {
+        this.loading = false
+      }
+      
 
     },
 

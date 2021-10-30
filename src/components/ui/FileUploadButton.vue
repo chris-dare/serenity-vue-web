@@ -8,7 +8,6 @@
       ref="input"
       type="file"
       name="file"
-      :value="value"
       class="inputfile hidden"
       accept="image/*,.pdf"
       v-on="inputListeners"
@@ -49,7 +48,7 @@ export default {
     },
 
     value: {
-      type: String,
+      type: [String, File],
       default: null,
     },
   },
@@ -61,7 +60,9 @@ export default {
     inputListeners() {
       return {
         ...this.$listeners,
-        input: event => this.$emit('input', event.target.value),
+        input: event => {
+          this.$emit('input', event.target.files[0])
+        },
       }
     },
   },

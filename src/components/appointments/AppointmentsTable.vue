@@ -35,6 +35,7 @@
             <InfoImageBlock
               :label="row.patient.fullName"
               :description="row.patient.gender_age_description"
+              :url="row.patient.photo"
             />
           </div>
         </cv-data-table-cell>

@@ -3,23 +3,47 @@ import http from '@/http'
 export default {
   url: 'providers/',
 
-  list() {
-    return http.get(`${this.url}clients/`)
+  list(providerId, params) {
+    return http.get(`${this.url}${providerId}/clients`, { params: {...params } })
   },
 
-  getClientBy(companyId = '') {
-    return http.get(`${this.url}corporates/onboard/${companyId}/`)
+  getClientBy(provider, companyId) {
+    return http.get(`${this.url}${provider}/clients/${companyId}`)
   },
 
   getClientAccount({
     id = '',
     providerId = '',
   } = {}){
-    return http.get(`${this.url}${providerId}/client-accounts/filter?companyId=${id}`)
+    return http.get(`${this.url}${providerId}/client-accounts?owner=${id}`)
+  },
+
+  getClientPolicies({
+    id = '',
+    providerId = '',
+  } = {}){
+    return http.get(`${this.url}${providerId}/clients/${id}/health-policies`)
   },
 
   getClientBills(providerId, clientId, params){
     return http.get(`${this.url}${providerId}/corporates/${clientId}/bills`, { params })
+  },
+
+  getClientClaims(providerId, params){
+    return http.get(`${this.url}${providerId}/finance/claims`, { params })
+  },
+
+  createBenefactor(providerId, params) {
+    return http.post(`${this.url}${providerId}/clients/${params.id}/beneficiaries`, params.form)
+  },
+
+  createPolicy(providerId, params) {
+    return http.post(`${this.url}${providerId}/clients/${params?.id}/health-policies`, params.form)
+  },
+
+  updatePolicy(providerId, params) {
+    console.log(params)
+    return http.patch(`${this.url}${providerId}/clients/${params?.id}/health-policies/${params.form.uuid}`, params.form)
   },
 
 
@@ -27,12 +51,16 @@ export default {
     return http.post(`${this.url}${providerId}/clients`, params)
   },
 
-  deposit(params) {
-    return http.post(`${this.url}client-accounts/deposit`, params)
+  deposit(providerId, params) {
+    return http.post(`${this.url}${providerId}/client-accounts/${params.id}/actions`, params)
   },
 
   providerAccount(providerId, params) {
     return http.post(`${this.url}${providerId}/client-accounts`, params)
+  },
+
+  clientAccountUpdate(providerId, params) {
+    return http.post(`${this.url}${providerId}/client-accounts/${params.id}/actions`, { action: params.action})
   },
 
   update(params) {

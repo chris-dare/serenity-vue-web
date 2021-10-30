@@ -12,7 +12,7 @@
         class="space-y-8"
       >
         <p class="text-lg font-semibold">Here is the link to your meeting</p>
-        <MixedInput
+        <FormMixedInput
           v-model="form.title"
           type="text"
           label="share this link with patient to start a meeting"

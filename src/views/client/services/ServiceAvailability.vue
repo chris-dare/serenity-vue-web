@@ -22,12 +22,14 @@
         type="time"
         label="Specify a start time"
         class="col-span-3 se-input-gray"
+        :disabled="form.healthcare_service_available_times[0].is_all_day"
       />
       <DatePicker
         v-model="form.healthcare_service_available_times[0].availableEndTime"
         type="time"
         label="End time"
         class="col-span-3 se-input-gray"
+        :disabled="form.healthcare_service_available_times[0].is_all_day"
       />
       <cv-checkbox
         v-model="form.healthcare_service_available_times[0].is_all_day"
@@ -57,6 +59,7 @@
           label="Start Date"
           placeholder="Select a start date"
           format="Z"
+          disable-dates-before-today
         />
         <DatePicker
           v-model="times.end_date"
@@ -65,6 +68,7 @@
           label="End date"
           placeholder="Select an end date"
           format="Z"
+          disable-dates-before-today
         />
         <cv-text-area
           v-model="times.description"
