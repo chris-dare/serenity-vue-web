@@ -20,7 +20,7 @@
         :key="index"
       >
         <ReportCard
-          v-if="report.category === 'laboratory'"
+          v-if="report.category.toLowerCase() === 'laboratory'"
           :report="report"
           :date="$date.formatDate(report.effective_date_time, 'dd MMM, yyyy')"
           @click="$trigger('lab:result:open', report.id)"

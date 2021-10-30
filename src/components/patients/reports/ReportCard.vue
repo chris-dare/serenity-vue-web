@@ -1,6 +1,6 @@
 <template functional>
   <div
-    class="h-72 border border-subtle border-solid bg-white p-4 cursor-pointer"
+    class="min-h-72 border border-subtle border-solid bg-white p-4 cursor-pointer"
     @click="listeners['click']"
   >
     <div class="flex flex-wrap items-center h-3/5">
@@ -20,7 +20,8 @@
       </span>
     </div>
     <div>
-      <p>{{ props.report.code }} — {{ props.date }}</p>
+      <p>{{ props.report.service_request_detail.display }} ({{ props.report.code }}) </p>
+      <p>{{ props.date }}</p>
     </div>
   </div>
 </template>
