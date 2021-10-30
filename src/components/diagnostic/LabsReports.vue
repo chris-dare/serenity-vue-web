@@ -107,11 +107,11 @@ export default {
       ],
     }
   },
-
   computed: {
     ...mapState({
       data: (state) => state.diagnostic.diagnosticReports,
     }),
+
     filters() {
       return [
         { display: `All (${ this.dataCount })`, code: '' },
@@ -122,6 +122,19 @@ export default {
       ]
     },
   },
+
+  watch: {
+    search: {
+      handler(val) {
+        if (val) {
+          this.loading = true
+          this.getData({search: val}).finally(() =>  this.loading = false)
+         
+        }
+      },
+    },
+  },
+
 
   created() {
     this.paginate = true
@@ -137,7 +150,7 @@ export default {
     async init() {
       this.loading = true
       let id = { patient: this.$route.params.id}
-      await this.getData(id ? id : null).then(() => this.loading = false).finally(() => this.loading = false)
+      this.getData(id ? id : null).then(() => this.loading = false).finally(() => this.loading = false)
     },
   },
 
