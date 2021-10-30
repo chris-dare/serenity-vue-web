@@ -27,7 +27,7 @@
         <div class="grid grid-cols-2 gap-8 border-b border-solid border-subtle pb-6">
           <InfoBlock
             label="Test requested"
-            :description="$utils.concatData(report.service_request_detail, ['code'])"
+            :description="`${report.service_request_detail.display} (${report.service_request_detail.code})`"
             description-class="text-serenity-primary"
           />
           <InfoBlock
@@ -112,25 +112,25 @@
         >
           Close
         </SeButton>
-        <SeButton
-          v-if="!approved && !review"
-          variant="warning"
-          class="mx-3"
-          :loading="reviewLoading"
-          @click="updateResult('submit-for-review')"
-        >
-          Submit for review
-        </SeButton>
+        
         <div
           v-if="diagnostic"
           class="flex items-center"
         >
           <div
             v-if="!approved && !cancelled"
-            class="flex items-center"
+            class="flex items-center space-x-3"
           >
             <SeButton
+              v-if="!approved && !review"
+              variant="warning"
               class="mx-3"
+              :loading="reviewLoading"
+              @click="updateResult('submit-for-review')"
+            >
+              Submit for review
+            </SeButton>
+            <SeButton
               variant="danger"
               :loading="rejectLoading"
               @click="updateResult('reject')"
@@ -138,7 +138,6 @@
               Reject Results
             </SeButton>
             <SeButton
-              class="mx-3"
               :loading="approveLoading"
               @click="updateResult('approve')"
             >
@@ -147,7 +146,6 @@
           </div>
           <SeButton
             v-if="approved"
-            class="mx-3"
             :loading="loading"
             @click="download(report.diagnostic_report_media)"
           >
@@ -176,7 +174,10 @@ export default {
 
   data() {
     return {
-      report: {},
+      report: {
+        service_request_detail: {},
+        diagnostic_report_conclusion_code: [],
+      },
       approveLoading: false,
       rejectLoading: false,
       approval: '',
@@ -229,6 +230,10 @@ export default {
     }),
     close() {
       this.visible = false
+      this.report = {
+        service_request_detail: {},
+        diagnostic_report_conclusion_code: [],
+      }
     },
     async updateResult(status){
       if(status === 'approve'){
