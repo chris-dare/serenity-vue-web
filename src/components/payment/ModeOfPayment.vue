@@ -18,6 +18,7 @@
       :v="v"
       :selected="localValue.transaction_type"
       v-bind="$attrs"
+      :patient="patient"
     />
   </SeForm>
 </template>
@@ -40,6 +41,11 @@ export default {
     },
 
     v: {
+      type: Object,
+      default: () => {},
+    },
+
+    patient: {
       type: Object,
       default: () => {},
     },

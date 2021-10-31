@@ -155,6 +155,7 @@ export default {
       payForService: 'billing/payForService',
       corporatePayForService: 'billing/corporatePayForService',
       topUpUserAccount: 'billing/topUpUserAccount',
+      resetPatientAccounts: 'billing/resetPatientAccounts',
     }),
 
     async confirm(){
@@ -184,6 +185,10 @@ export default {
       const bills = this.type === 'invoice' ? this.bill.line_items : [this.bill]
 
       this.payChargeItems(bills)
+    },
+
+    afterCloseFunction() {
+      this.resetPatientAccounts()
     },
   },
 }

@@ -14,6 +14,10 @@ export default {
       }
               
       this.visible = false
+      this.afterCloseFunction()
+      
     },
+
+    afterCloseFunction() {},
   },
 }

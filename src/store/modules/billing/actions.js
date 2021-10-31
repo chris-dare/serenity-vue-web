@@ -75,6 +75,10 @@ export default {
     }
   },
 
+  async resetPatientAccounts({ commit }) {
+    commit(SET_ACCOUNTS, [])
+  },
+
   async topUpUserAccount({ dispatch, rootState }, { patientId, walletId, params }) {
     try {
       const provider = rootState.auth.provider
