@@ -105,7 +105,7 @@ export default {
       selected: 'user',
       loading: false,
       type: 'bill',
-      patient: {},
+      patient: null,
     }
   },
 
@@ -176,6 +176,7 @@ export default {
       corporatePayForService: 'billing/corporatePayForService',
       getPatientAccounts: 'billing/getPatientAccounts',
       topUpUserAccount: 'billing/topUpUserAccount',
+      resetPatientAccounts: 'billing/resetPatientAccounts',
     }),
 
     submit() {
@@ -188,6 +189,10 @@ export default {
       const bills = this.type === 'invoice' ? this.bill.line_items : [this.bill]
 
       this.payChargeItems(bills)
+    },
+
+    afterCloseFunction() {
+      this.resetPatientAccounts()
     },
   },
 }
