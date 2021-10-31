@@ -34,7 +34,7 @@ export default {
 
   data() {
     return {
-      selected: 'search',
+      selected: '',
       visible: false,
       visitVisible: false,
     }

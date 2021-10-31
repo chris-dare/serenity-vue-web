@@ -53,6 +53,7 @@ export default {
       next: 'CheckoutReceipts',
       previous: 'CheckoutPaymentOptions',
       form: {},
+      parent: 'Dashboard',
     }
   },
 

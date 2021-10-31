@@ -18,6 +18,7 @@
       <AdminProfile />
       <ConfirmActionModal />
       <ActionsModal />
+      <AddEditInsuranceModal />
     </div>
 
     <Offline @detected-condition="handleConnectivityChange" />
@@ -32,6 +33,7 @@ import LeftSidebarLayout from '@/layout/LeftSidebarLayout'
 import ChangePasswordModal from '@/components/layout/ChangePasswordModal'
 import EditProfileModal from '@/components/layout/EditProfileModal'
 import AdminProfile from '@/components/admin/modals/AdminProfile'
+const AddEditInsuranceModal = () => import('@/components/insurance/AddEditInsuranceModal')
 
 import { mapActions } from 'vuex'
 import Offline from 'v-offline'
@@ -48,6 +50,7 @@ export default {
     EditProfileModal,
     Offline,
     AdminProfile,
+    AddEditInsuranceModal,
   },
 
   data() {

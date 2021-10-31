@@ -20,6 +20,7 @@
           show-cash-options
           :v="v"
           :total="totalSelectedBills"
+          :patient="localValue.patient"
         />
       </div>
 

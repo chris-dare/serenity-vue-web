@@ -18,6 +18,7 @@
         :v="$v"
         show-cash-options
         :total="cartTotal"
+        :patient="patient"
       />
     </div>
   </MultiStepBase>
@@ -44,6 +45,7 @@ export default {
         transaction_type: '',
       },
       loading: false,
+      parent: 'Dashboard',
     }
   },
 
@@ -165,6 +167,20 @@ export default {
         patient: this.patient.id,
         medication_dispense: medication_dispenses,
       }
+      // if (this.$userCan('bills.acceptcash.write') && this.form.transaction_type === this.$global.CASH_TYPE) {
+      //   payload.with_payment = true
+      //   payload.payment_info = {
+      //     transaction_type: this.form.transaction_type,
+      //     amount: this.form.amount,
+      //     currency: this.form.currency,
+      //   }
+      // }
+
+      // if (this.$userCan('bills.acceptcash.write') && this.form.transaction_type === this.$global.CASH_TYPE) {
+      //   payload.with_payment = false
+      //   delete payload.payment_info
+      // }
+
       try {
         const {data} = await http.post(`providers/${this.provider.id}/medication-dispenses`, payload)
         // data.forEach(medicationDispense => {

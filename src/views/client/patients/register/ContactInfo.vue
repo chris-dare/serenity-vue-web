@@ -18,7 +18,7 @@
         @input="$v.$touch()"
       />
       <FormInput
-        v-model="form.email"
+        v-model.trim="form.email"
         label="Email address"
         placeholder="Email address"
         class="inherit-full-input"
