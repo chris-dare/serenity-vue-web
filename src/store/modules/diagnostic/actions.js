@@ -81,7 +81,7 @@ export default {
     }
   },
 
-  async getDiagnosticReports({ commit, rootState }, params = {}) {
+  async getDiagnosticReports({ commit, rootState }, params) {
     try {
       const provider = rootState.auth.provider
       const { data } = await DiagnosticAPI.reports(provider.id, params)

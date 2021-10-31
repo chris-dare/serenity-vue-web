@@ -81,6 +81,7 @@ export default {
     ...mapActions({
       getInsuranceProvider: 'clients/getClients',
       getPatientAccounts: 'billing/getPatientAccounts',
+      
     }),
 
     async submit() {
@@ -101,6 +102,8 @@ export default {
     setDisabledState(event) {
       this.disabled = event
     },
+
+    
   },
 
 }
