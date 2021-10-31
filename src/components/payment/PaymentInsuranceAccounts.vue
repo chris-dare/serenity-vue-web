@@ -20,7 +20,7 @@
         <SeButton
           full
           variant="secondary-outline"
-          @click="$trigger('insurance:add:open', localValue.patient)"
+          @click="$trigger('insurance:add:open', localValue.patient || patient)"
         >
           Add new insurance account
         </SeButton>
@@ -48,6 +48,11 @@ export default {
     hideAddInsurance: {
       type: Boolean,
       default: false,
+    },
+
+    patient: {
+      type: Object,
+      default: null,
     },
   },
 

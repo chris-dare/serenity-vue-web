@@ -1,6 +1,7 @@
 <template>
   <MultiStepBase
     :icon="icon"
+    :previous="previous"
     next-label="Next: payment"
     @cancel="cancel"
     @save="validateAndReroute"
@@ -73,7 +74,8 @@ export default {
       selected: 'existing',
       loading: false,
       next: 'CheckoutPaymentOptions',
-      parent: '',
+      previous: 'Pharmacy:Dispense',
+      parent: 'Dashboard',
     }
   },
 

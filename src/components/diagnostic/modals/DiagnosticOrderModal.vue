@@ -252,6 +252,7 @@
         <ModeOfPayment
           v-model="form"
           :v="$v"
+          :patient="form.patient"
         >
           <MultiSelect
             v-model="form.price_tier"

@@ -22,7 +22,7 @@
 
           <div class="mt-8">
             <FormInput
-              v-model="form.email"
+              v-model.trim="form.email"
               v-nested-keyup:input.enter="reset"
               class="my-4"
               label="Email"
