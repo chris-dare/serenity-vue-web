@@ -29,6 +29,7 @@
             :v="$v"
             show-cash-options
             :total="bill.charge"
+            :patient="patient"
           />
           <div class="flex items-center justify-between mt-4">
             <div class="flex items-center space-x-2">
@@ -72,6 +73,7 @@ import modalMixin from '@/mixins/modal'
 import { required, minValue } from 'vuelidate/lib/validators'
 import { mapActions, mapGetters } from 'vuex'
 import paymentMixin from '@/mixins/payment'
+import PatientAPI from '@/api/patients'
 
 export default {
   name: 'ViewBillingDetailsModal',
@@ -96,11 +98,12 @@ export default {
       isExportLoading: false,
       loading: false,
       type: '',
+      patient: null,
     }
   },
 
   events: {
-    'billing:detail:open': function(data){
+    'billing:detail:open': async function(data){
       this.visible = true
       this.bill = data.params[0]
       this.bill.patient = {
@@ -110,6 +113,8 @@ export default {
       this.getPatientAccounts({ id: this.bill.patientid })
       this.form.transaction_type = this.$global.USER_ACCOUNT_TYPE
       this.type = this.bill.line_items ? 'invoice' : 'charge'
+      const patient = await PatientAPI.get(this.$providerId, this.bill.patientid)
+      this.patient = patient.data.data
     },
     'billing:detail:close': function(){
       this.close()

@@ -7,7 +7,6 @@
     <GetStartedModal :visible.sync="visible" />
     <SearchPatientsModal />
     <BookVisitModal />
-    <AddEditInsuranceModal />
   </div>
 </template>
 
@@ -23,14 +22,13 @@ const ReceptionDashboard = () => import('@/components/reception/ReceptionDashboa
 const BillingDashboard = () => import('@/components/billing/BillingDashboard')
 const VirtualCareDashboard = () => import('@/components/virtual-care/VirtualCareDashboard')
 const BookVisitModal = () => import('@/components/visits/BookVisitModal')
-const AddEditInsuranceModal = () => import('@/components/insurance/AddEditInsuranceModal')
 
 import { mapState } from 'vuex'
 
 export default {
   name: 'Dashboard',
 
-  components: { GetStartedModal, BillingDashboard, IPDDashboard, DiagnosticDashboard, OPDDashboard, PharmacyDashboard, ReceptionDashboard, VirtualCareDashboard, BookVisitModal, AddEditInsuranceModal },
+  components: { GetStartedModal, BillingDashboard, IPDDashboard, DiagnosticDashboard, OPDDashboard, PharmacyDashboard, ReceptionDashboard, VirtualCareDashboard, BookVisitModal },
 
   data() {
     return {

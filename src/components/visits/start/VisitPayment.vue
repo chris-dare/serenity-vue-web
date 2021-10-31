@@ -6,18 +6,13 @@
     >
       Please select a patient and service
     </p>
-    <p
-      v-else-if="hasNoAccount"
-      class="error text-base"
-    >
-      This patient has no registered account with which to pay for the service selected
-    </p>
     <ModeOfPayment
       v-else
       v-model="localValue"
       :show-cash-options="hasUserAccount"
       :v="v"
       :total="localValue.service_tier.charge"
+      :patient="localValue.patient"
     />
   </SeForm>
 </template>

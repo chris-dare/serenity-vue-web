@@ -15,6 +15,7 @@
       <ModeOfPayment
         v-model="form"
         :v="$v"
+        :patient="form.patient"
       />
     </div>
   </MultiStepBase>

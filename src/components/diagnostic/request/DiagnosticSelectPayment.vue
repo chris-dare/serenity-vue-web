@@ -25,6 +25,7 @@
         v-model="form"
         :v="$v"
         :total="selectedCharge"
+        :patient="form.patient"
       />
     </div>
   </MultiStepBase>
