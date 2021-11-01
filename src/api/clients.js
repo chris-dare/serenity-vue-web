@@ -30,7 +30,7 @@ export default {
   },
 
   getClientClaims(providerId, params){
-    return http.get(`${this.url}${providerId}/finance/claims`, { params })
+    return http.get(`${this.url}${providerId}/finance/payer_bills`, { params })
   },
 
   createBenefactor(providerId, params) {

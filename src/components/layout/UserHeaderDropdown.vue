@@ -18,7 +18,7 @@
       <div class="flex items-center justify-between px-4 py-4">
         <div>
           <p class="font-semibold text-lg text-white">{{ userName }}</p>
-          <p class="text-secondary">General Practitioner</p>
+          <!-- <p class="text-secondary">{{ user }}</p> -->
         </div>
         <img
           src="@/assets/img/user 1.svg"
@@ -69,6 +69,7 @@ export default {
       userName: 'auth/fullName',
     }),
   },
+
   methods: {
     ...mapActions({
       logout: 'auth/logout',

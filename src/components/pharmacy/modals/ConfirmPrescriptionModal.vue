@@ -46,6 +46,16 @@
                 <div>{{ $utils.getFirstData(currentDrug.drug.medication_request_notes) || '-' }}</div>
               </div>
             </div>
+            <div class="grid grid-cols-4 gap-8 my-4">
+              <div>
+                <div class="font-sm text-gray-400 mb-2">Prescribed on</div>
+                <div>{{ $date.formatDate(currentDrug.drug.medication_detail) }}</div>
+              </div>
+              <div>
+                <div class="font-sm text-gray-400 mb-2">Note</div>
+                <div class="capitalize">{{ $utils.getFirstData(currentDrug.drug.medication_request_dosage_instruction, 'frequency') }}</div>
+              </div>
+            </div>
             <div class="grid grid-cols-2 gap-8 my-4">
               <div>
                 <div class="font-sm text-gray-400 mb-2">Course of therapy</div>
@@ -331,6 +341,7 @@ export default {
           }
         })
         this.currentDrug = this.drugs[0]
+        console.log(this.currentDrug)
       },
     },
     currentDrug: {
