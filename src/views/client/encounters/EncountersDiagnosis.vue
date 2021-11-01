@@ -16,7 +16,7 @@
 
       <cv-checkbox
         v-model="form.is_provisional_diagnosis"
-        label="Is this a provisional diagnosis?"
+        label="Is this a final diagnosis?"
         value="check-1"
       />
 
@@ -95,7 +95,7 @@
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p>{{ row.is_provisional_diagnosis ? 'Provisional' : 'Final' }}</p>
+                <p>{{ row.is_provisional_diagnosis ? 'Final' : 'Provisional' }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
@@ -127,7 +127,7 @@
 
     <div
       v-if="mode === 'create'"
-      class="flex justify-between items-center absolute w-full right-0 bottom-12"
+      class="flex justify-between items-center w-full right-0 bottom-12 mt-5"
     >
       <SeButton
         variant="secondary"
@@ -175,7 +175,7 @@ export default {
       form: {
         condition: '',
         role: 'chief-complaint',
-        is_provisional_diagnosis: true,
+        is_provisional_diagnosis: false,
       },
       loading: false,
       deleteLoading: false,
