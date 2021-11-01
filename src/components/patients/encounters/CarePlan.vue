@@ -69,6 +69,12 @@
       >
         Back to medications
       </SeButton>
+      <SeButton
+        :to="{ name: 'EncountersSummary' }"
+        variant="primary"
+      >
+        Close Encounter
+      </SeButton>
     </div>
   </div>
 </template>

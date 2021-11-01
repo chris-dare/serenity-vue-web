@@ -174,6 +174,10 @@ export default {
     }),
   },
 
+  created() {
+    this.localValue.extra_details.priority = 'routine'
+  },
+
   methods: {
     addDrug() {
       this.localValue.drugs.push({
