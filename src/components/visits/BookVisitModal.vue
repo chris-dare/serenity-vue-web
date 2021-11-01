@@ -164,11 +164,11 @@ export default {
         { label: 'Notes', description: 'Any notes to take', path: 4, completed: false, step: 4, slug: 'notes' },
       ]
 
-      if (this.hasCharge) {
-        navItems.push(
-          { label: 'Payment', description: 'How patient makes payment', path: 5, completed: false, step: 5, slug: 'payment'},
-        )
-      }
+      // if (this.hasCharge) {
+      //   navItems.push(
+      //     { label: 'Payment', description: 'How patient makes payment', path: 5, completed: false, step: 5, slug: 'payment'},
+      //   )
+      // }
 
       navItems.push({ label: 'Summary', description: 'Overview of appointment', path: 6, completed: false, step: 6, slug: 'summary' })
 
@@ -181,16 +181,16 @@ export default {
         2: 'SelectClinic',
         3: 'VisitSelectSlot',
         4: 'VisitNotesForm',
-        5: 'VisitPayment',
-        6: 'AppointmentDetail',
+        // 5: 'VisitPayment',
+        5: 'AppointmentDetail',
       }
 
-      if (this.hasCharge) {
-        components[5] = 'VisitPayment'
-        components[6] = 'AppointmentDetail'
-      } else {
-        components[5] = 'AppointmentDetail'
-      }
+      // if (this.hasCharge) {
+      //   components[5] = 'VisitPayment'
+      //   components[6] = 'AppointmentDetail'
+      // } else {
+      //   components[5] = 'AppointmentDetail'
+      // }
 
       return components[this.step]
     },
