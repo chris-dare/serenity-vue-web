@@ -156,16 +156,16 @@ export default {
       if (this.workspaceType === 'RECEPT') {
         return [
           {
-            label: 'In patient',
-            description: 'for General and special practices',
-            type: 'inpatient',
-            value: 'in-patient',
-          },
-          {
             label: 'Out patient',
             description: 'for General and special practices',
             type: 'outpatient',
             value: 'out-patient',
+          },
+          {
+            label: 'In patient',
+            description: 'for General and special practices',
+            type: 'inpatient',
+            value: 'in-patient',
           },
           {
             label: 'Diagnostic',
@@ -178,16 +178,16 @@ export default {
 
       return [
         {
-          label: 'In patient',
-          description: 'for General and special practices',
-          type: 'inpatient',
-          value: 'in-patient',
-        },
-        {
           label: 'Out patient',
           description: 'for General and special practices',
           type: 'outpatient',
           value: 'out-patient',
+        },
+        {
+          label: 'In patient',
+          description: 'for General and special practices',
+          type: 'inpatient',
+          value: 'in-patient',
         },
         {
           label: 'Virtual care',
