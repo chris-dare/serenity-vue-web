@@ -84,8 +84,8 @@ export default {
       return [
         { display: `All (${this.users.length })`, code: '' },
         { display: 'Reception', code: 'reception' },
-        { display: 'In patient', code: 'in-patient' },
         { display: 'Out patient', code: 'out-patient' },
+        { display: 'In patient', code: 'in-patient' },
       ]
     },
   },
