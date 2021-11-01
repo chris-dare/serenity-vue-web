@@ -1,5 +1,10 @@
 <template>
   <SeForm class="space-y-6">
+    <AddPatientForm
+      v-model="localValue"
+      allow-existing
+      :enable-title="false"
+    />
     <MultiSelect
       v-model="localValue.managing_organization"
       :options="insuranceProviders"
@@ -117,9 +122,12 @@ import { mapState } from 'vuex'
 import modelMixin from '@/mixins/model'
 import { required } from 'vuelidate/lib/validators'
 import InsuranceAPI from '@/api/insurance'
+import AddPatientForm from '@/components/forms/AddPatientForm'
 
 export default {
   name: 'AddInsuranceForm',
+
+  components: {AddPatientForm},
 
   mixins: [modelMixin],
 
@@ -136,6 +144,7 @@ export default {
   computed: {
     ...mapState({
       insuranceProviders: (state) => state.clients.clients,
+      genders: (state) => state.resources.genders,
     }),
   },
 
@@ -165,6 +174,12 @@ export default {
         health_policy: { required },
         contribution_type: { required },
         contribution_value: { required },
+        first_name: { required },
+        last_name: { required },
+        gender: { required },
+        birth_date: { required },
+        mobile: { required },
+        email: { required },
       },
     }
     return data

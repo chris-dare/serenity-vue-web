@@ -1,6 +1,9 @@
 <template>
   <SeForm>
-    <Titles v-model="localValue.title" />
+    <Titles
+      v-if="enableTitle"
+      v-model="localValue.title"
+    />
     <div
       class="grid grid-cols-2 gap-8 py-3"
     >
@@ -42,7 +45,7 @@
       />
       <DatePicker
         v-model="localValue.birth_date"
-        kind="single"
+        :max-date="Date.now()"
         class="inherit-full-input se-input-gray"
         placeholder="dd/mm/yyyy"
         label="Date of birth"
@@ -87,10 +90,34 @@ export default {
 
   mixins: [modelMixin],
 
+  props: {
+    allowExisting: {
+      default: false,
+      type: Boolean,
+    },
+
+    enableTitle: {
+      type: Boolean,
+      default: true,
+    },
+  },
+
   computed: {
     ...mapState({
       genders: (state) => state.resources.genders,
     }),
+  },
+
+  watch: {
+    '$v.localValue.$invalid': {
+      immediate: true,
+      deep: true,
+      handler(newVal, oldVal) {
+        if (newVal !== oldVal) {
+          this.$emit('invalid', newVal)
+        }
+      },
+    },
   },
 
   validations() {
@@ -102,7 +129,7 @@ export default {
           email: (val) => email(emailFormatter(val)),
           required,
           async isUnique(value) {
-            if (value === '' || !this.$v.localValue.email.email) return true
+            if (value === '' || !this.$v.localValue.email.email || this.allowExisting) return true
             const { data } = await UsersAPI.search({ email: value.toLowerCase() }).catch(() => false)
 
             if (data && data.length) {
@@ -115,7 +142,7 @@ export default {
         mobile: {
           required,
           async isUnique(value) {
-            if (value === '' || value?.length < 10) return true
+            if (value === '' || value?.length < 10 || this.allowExisting) return true
             const { data } = await UsersAPI.search({ mobile: value }).catch(() => false)
 
             if (data.length) {
