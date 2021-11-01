@@ -154,6 +154,7 @@ export default {
         {display: 'Routine (lowest)', code: 'routine'},
       ],
       deleteLoading: false,
+      requiredFields: ['code'],
     }
   },
 
@@ -199,6 +200,10 @@ export default {
         { display: 'Current encounter labs', code: 'current' },
         { display: 'Previous labs', code: 'previous' },
       ]
+    },
+
+    hasRequiredFields() {
+      return this.$utils.objectHasRequiredData(this.form, this.requiredFields) && !this.labId
     },
   },
 
@@ -249,7 +254,7 @@ export default {
     },
 
     submit(reroute= false) {
-      if (reroute && this.dataHasNotChanged()) {
+      if (reroute && !this.hasRequiredFields) {
         this.$router.push({ name: 'EncounterMedications', params: { id: this.$route.params.id }})
         return
       }
@@ -329,6 +334,10 @@ export default {
     cancelUpdate() {
       this.$resetData()
       this.$v.$reset()
+      this.form = {
+        priority: 'routine',
+        intent: 'plan',
+      }
       this.$router.go(-1)
     },
   },
