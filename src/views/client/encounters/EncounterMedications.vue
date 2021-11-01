@@ -116,6 +116,7 @@ export default {
         extra_details: {
           medication_request_notes: [{display: ''}],
           medication_request_category: this.$isCurrentWorkspace('OPD') ? 'outpatient' : 'inpatient',
+          priority: 'routine',
         },
         drugs: [
           {

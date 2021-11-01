@@ -1,4 +1,5 @@
-// import values from 'lodash/values'
+import isEmpty from 'lodash/isEmpty'
+
 const validateRequiredField = ($v, field, parent = 'form') => {
   if(!$v[parent])return ''
   const $field = $v[parent][field]
@@ -235,6 +236,15 @@ const getTotalValue = (data, field = 'balance') => {
   return data.reduce((acc, el) => {return acc + el[field]}, 0)
 }
 
+const objectHasRequiredData = (data, fields) => {
+  return !!Object.keys(data).find(field => {
+    if (!fields.includes(field)) {
+      return false
+    }
+    return !isEmpty(data[field])
+  })
+}
+
 export default {
   install(Vue) {
     Vue.prototype.$utils = {
@@ -254,6 +264,7 @@ export default {
       hasData,
       concatData,
       getTotalValue,
+      objectHasRequiredData,
     }
   },
 }

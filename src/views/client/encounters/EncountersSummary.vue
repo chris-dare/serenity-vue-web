@@ -26,7 +26,7 @@
           </div>
         </div>
         <div class="py-4">
-          <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center justify-between mb-3">
             <p class="text-serenity-primary font-bold">Diagnosis</p>
             <router-link
               :to="{ name: 'EncounterDiagnosis' }"
@@ -36,7 +36,7 @@
             </router-link>
           </div>
 
-          <div>
+          <div class="mt-4">
             <p
               v-if="!diagnosis.length"
               class="text-sm"
@@ -46,10 +46,16 @@
             <div
               v-for="(diag, index) in diagnosis"
               :key="index"
-              class="space-y-1"
+              class="space-y-1 mt-5"
             >
               <p class="text-sm font-bold">{{ diag.condition }}</p>
               <p class="capitalize text-sm">{{ diag.role | removeDash }}</p>
+              <p
+                v-if="diag.note"
+                class="text-sm"
+              >
+                <b>Note:</b> {{ diag.note || '' }}
+              </p>
             </div>
           </div>
         </div>
