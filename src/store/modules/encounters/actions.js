@@ -243,6 +243,7 @@ export default {
       const diagnostic = encounter.encounter_diagnosis.find(el => el.id == payload.id)
       diagnostic.role = data.role
       diagnostic.condition = data.condition
+      diagnostic.note = data.note
       commit(SET_ENCOUNTER, encounter)
     } catch ({ response: { data: error } }) {
       throw error

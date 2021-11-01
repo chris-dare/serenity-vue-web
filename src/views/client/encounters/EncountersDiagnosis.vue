@@ -221,6 +221,7 @@ export default {
         this.form.condition = diagnosis.condition
         this.form.role = diagnosis.role
         this.form.id = this.diagnosisId
+        this.form.note = diagnosis.note
       }
     },
 
@@ -270,6 +271,7 @@ export default {
       this.form = {
         condition: '',
         role: '',
+        note: '',
       }
       this.$v.$reset()
       this.$router.go(-1)
