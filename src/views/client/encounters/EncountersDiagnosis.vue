@@ -50,7 +50,7 @@
         type="textarea"
       />
 
-      <div class="flex">
+      <div class="flex justify-end">
         <SeButton
           v-if="mode === 'update'"
           :icon="add"
@@ -127,7 +127,7 @@
 
     <div
       v-if="mode === 'create'"
-      class="flex justify-between items-center w-full right-0 bottom-12 mt-5"
+      class="flex justify-between items-center w-full my-12"
     >
       <SeButton
         variant="secondary"
@@ -196,6 +196,7 @@ export default {
     ...mapGetters({
       currentEncounterDiagnosis: 'encounters/currentEncounterDiagnosis',
     }),
+
     mode() {
       return this.diagnosisId ? 'update' : 'create'
     },
