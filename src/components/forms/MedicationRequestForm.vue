@@ -20,6 +20,16 @@
             track-by="value"
             :multiple="false"
           />
+          <MultiSelect
+            v-model="drug.medication_request_dosage_instruction[0].route"
+            title="Route of drug administration"
+            :options="dosageRoutes"
+            :multiple="false"
+            custom-field="code"
+            label="display"
+            track-by="code"
+            preselect
+          />
 
           <cv-text-input
             v-model="drug.medication_request_dosage_instruction[0].strength"
@@ -52,16 +62,7 @@
             :options="units"
             :multiple="false"
             preselect
-          />
-
-          <MultiSelect
-            v-model="drug.medication_request_dosage_instruction[0].dosage_route"
-            title="Route of drug administration"
-            :options="dosageRoutes"
-            :multiple="false"
-            preselect
-          />
-          
+          />          
 
 
           <DatePicker
