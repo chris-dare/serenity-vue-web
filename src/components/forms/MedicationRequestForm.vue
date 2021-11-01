@@ -28,6 +28,16 @@
             class="inherit-full-input"
           />
 
+          <MultiSelect
+            v-model="drug.medication_request_dosage_instruction[0].frequency"
+            title="Frequency"
+            :options="frequencies"
+            :multiple="false"
+            preselect
+            taggable
+            @tag="addTag(index, $event)"
+          />
+
           <cv-text-input
             v-model="drug.medication_request_dosage_instruction[0].period"
             label="Period"
@@ -43,15 +53,7 @@
             :multiple="false"
             preselect
           />
-          <MultiSelect
-            v-model="drug.medication_request_dosage_instruction[0].frequency"
-            title="Frequency"
-            :options="frequencies"
-            :multiple="false"
-            preselect
-            taggable
-            @tag="addTag(index, $event)"
-          />
+          
 
 
           <DatePicker

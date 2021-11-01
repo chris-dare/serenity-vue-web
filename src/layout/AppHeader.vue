@@ -25,7 +25,7 @@
           alt=""
           class="xl:hidden w-5 h-5 mx-4"
         >
-        <SeForm class="flex items-center flex-1 max-w-lg mr-2">
+        <!-- <SeForm class="flex items-center flex-1 max-w-lg mr-2">
           <cv-text-input
             v-model="search"
             class="no-label-input h-12 flex-1 text-white"
@@ -40,7 +40,7 @@
               alt=""
             >
           </div>
-        </SeForm>
+        </SeForm> -->
         <div class="flex items-center">
           <div class="hidden md:flex items-center">
             <img
@@ -79,7 +79,7 @@
             </cv-select-option>
           </cv-select>
 
-          <NotificationDetailsDropdown />
+          <!-- <NotificationDetailsDropdown /> -->
 
           <UserHeaderDropdown />
         </div>
@@ -90,7 +90,7 @@
 
 <script>
 import UserHeaderDropdown from '@/components/layout/UserHeaderDropdown'
-import NotificationDetailsDropdown from '@/components/layout/NotificationDetailsDropdown'
+// import NotificationDetailsDropdown from '@/components/layout/NotificationDetailsDropdown'
 import Close32 from '@carbon/icons-vue/es/close/32'
 import Menu32 from '@carbon/icons-vue/es/menu/32'
 import resize from '@/mixins/resize'
@@ -101,7 +101,7 @@ export default {
 
   components: {
     UserHeaderDropdown,
-    NotificationDetailsDropdown,
+    // NotificationDetailsDropdown,
     Close32,
     Menu32,
   },
