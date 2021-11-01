@@ -135,8 +135,8 @@ export default {
     return {
       policies: [],
       contributionTypes: [
-        {display: 'Co payment', code: 'COPAY'},
-        {display: 'Co insurance', code: 'COINSURANCE'},
+        {display: 'Co payment (Flat fee)', code: 'COPAY'},
+        {display: 'Co insurance (%)', code: 'COINSURANCE'},
       ],
     }
   },
