@@ -5,7 +5,7 @@
       class="mb-4"
     >
       <div class="font-bold">Prescribed medication by {{ doctor }}</div>
-      <div class="text-xs text-gray-400 mb-2">{{ $date.formatDate(datePrescribed, 'do MMM, yy') }}</div>
+      <div class="text-xs text-gray-400 mb-2">{{ $date.formatDate(datePrescribed, 'dd MMM, yyyy') }}</div>
     </div>
     <div
       v-if="mode === 'prescription'"
@@ -117,10 +117,8 @@
               ref="table"
               :data="inventoryDetails || []"
               :columns="columns"
+              no-data-label="No drug selected"
             >
-              <template slot="no-data">
-                <div class="pl-4 text-gray-400 pt-8 text-lg">No drug selected</div>
-              </template>
               <template #default="{ row }">
                 <cv-data-table-cell>
                   {{ row.selling_price | formatMoney | toCedis }}
@@ -191,10 +189,8 @@
             ref="table"
             :data="currentDrug.selectedDrugs || []"
             :columns="['Drug', 'Dosage', 'Quantity', 'Total', '']"
+            no-data-label="No drug selected"
           >
-            <template slot="no-data">
-              <div class="pl-4 text-gray-400 pt-8 text-lg">No drug selected</div>
-            </template>
             <template #default="{ row }">
               <cv-data-table-cell>
                 {{ row.inventory.name }}

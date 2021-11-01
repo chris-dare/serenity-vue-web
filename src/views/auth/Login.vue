@@ -31,7 +31,7 @@
           </div>
           <div class="mt-8">
             <FormInput
-              v-model="form.email"
+              v-model.trim="form.email"
               required
               :invalid-message="$utils.validateRequiredField($v, 'email')"
               class="my-4 se-dark-input"

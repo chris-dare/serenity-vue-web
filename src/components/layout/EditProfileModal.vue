@@ -58,7 +58,7 @@
               />
             </div>
             <FormInput
-              v-model="form.email_address"
+              v-model.trim="form.email_address"
               label="Email Address"
               type="email"
               placeholder="Enter email address"

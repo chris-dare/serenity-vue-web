@@ -14,8 +14,9 @@
     <PaymentInsuranceAccounts
       v-else-if="selected === $global.INSURANCE_TYPE"
       v-model="localValue"
-      :hide-add-insurance="!localValue.patient"
+      :hide-add-insurance="!patient"
       :v="v"
+      :patient="patient"
     />
     <PaymentMomo
       v-else-if="selected === 'mobile-money'"
@@ -84,6 +85,11 @@ export default {
     },
 
     v: {
+      type: Object,
+      default: () => {},
+    },
+  
+    patient: {
       type: Object,
       default: () => {},
     },

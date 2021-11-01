@@ -40,6 +40,7 @@
           show-cash-options
           :v="$v"
           :total="bill.charge"
+          :patient="patient"
         />
 
         <div class="flex justify-between pt-12">
@@ -85,6 +86,7 @@ import ModeOfPayment from '@/components/payment/ModeOfPayment'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { required, minValue } from 'vuelidate/lib/validators'
+import PatientAPI from '@/api/patients'
 
 export default {
   name: 'BillingSettlePaymentModal',
@@ -103,16 +105,19 @@ export default {
       selected: 'user',
       loading: false,
       type: 'bill',
+      patient: null,
     }
   },
 
   events: {
-    'billing:settle:open': function(data){
+    'billing:settle:open': async function(data){
       this.visible = true
       this.bill = data.params[0]
       this.getPatientAccounts({ id: this.bill.patientid })
       this.form.transaction_type = this.$global.USER_ACCOUNT_TYPE
       this.type = 'bill'
+      const patient = await PatientAPI.get(this.$providerId, this.bill.patientid)
+      this.patient = patient.data.data
     },
     'billing:invoices:settle:open': async function(_ev, { invoice }){
       this.bill = {
@@ -126,6 +131,8 @@ export default {
       this.form.amount = this.bill.charge
       this.visible = true
       this.type = 'invoice'
+      const patient = await PatientAPI.get(this.$providerId, this.bill.patientid)
+      this.patient = patient.data.data
     },
     'billing:settle:close': function(){
       this.close()
@@ -169,6 +176,7 @@ export default {
       corporatePayForService: 'billing/corporatePayForService',
       getPatientAccounts: 'billing/getPatientAccounts',
       topUpUserAccount: 'billing/topUpUserAccount',
+      resetPatientAccounts: 'billing/resetPatientAccounts',
     }),
 
     submit() {
@@ -181,6 +189,10 @@ export default {
       const bills = this.type === 'invoice' ? this.bill.line_items : [this.bill]
 
       this.payChargeItems(bills)
+    },
+
+    afterCloseFunction() {
+      this.resetPatientAccounts()
     },
   },
 }

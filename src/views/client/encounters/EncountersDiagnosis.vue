@@ -95,6 +95,11 @@
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
+                <p>{{ row.is_provisional_diagnosis ? 'Provisional' : 'Final' }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
                 <p>{{ row.condition }}</p>
               </div>
             </cv-data-table-cell>
@@ -170,11 +175,12 @@ export default {
       form: {
         condition: '',
         role: 'chief-complaint',
+        is_provisional_diagnosis: true,
       },
       loading: false,
       deleteLoading: false,
       roles: [ 'admission-diagnosis', 'discharge-diagnosis', 'chief-complaint', 'comorbidity-diagnosis', 'pre-op-diagnosis', 'post-op-diagnosis', 'billing' ],
-      columns: ['Date', 'Condition', 'Role', 'Action'],
+      columns: ['Date', 'Type', 'Condition', 'Role', 'Action'],
       propertiesToCompareChanges: ['form'],
     }
   },

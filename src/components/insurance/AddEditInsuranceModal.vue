@@ -23,6 +23,7 @@
           </SeButton>
           <SeButton
             :disabled="disabled"
+            :loading="loading"
             @click="submit"
           >
             Save
@@ -37,6 +38,7 @@
 import AddInsuranceForm from '@/components/forms/AddInsuranceForm'
 import modalMixin from '@/mixins/modal'
 import pick from 'lodash/pick'
+import omit from 'lodash/omit'
 import InsuranceAPI from '@/api/insurance'
 import { mapActions } from 'vuex'
 
@@ -65,8 +67,8 @@ export default {
       this.visible = true
       this.patient = data.params[0]
       if (this.patient) {
-        this.form = pick(this.patient, ['first_name', 'last_name', 'mobile', 'email', 'gender'])
-        this.form.date_of_birth = this.patient.birth_date
+        this.form = pick(this.patient, ['first_name', 'last_name', 'mobile', 'email', 'gender', 'birth_date'])
+        
         this.form.contribution_currency = 'GHS'
       }
     },
@@ -81,12 +83,14 @@ export default {
     ...mapActions({
       getInsuranceProvider: 'clients/getClients',
       getPatientAccounts: 'billing/getPatientAccounts',
+      
     }),
 
     async submit() {
       try {
         this.loading = true
-        await InsuranceAPI.registerPatientAsBeneficiary(this.$providerId, this.form.managing_organization, this.form)
+        this.form.date_of_birth = this.form.birth_date
+        await InsuranceAPI.registerPatientAsBeneficiary(this.$providerId, this.form.managing_organization, omit(this.form, 'birth_date'))
         this.$toast.open('Patient added successfully')
         this.getPatientAccounts({ id: this.patient.id })
         this.close()
@@ -101,6 +105,8 @@ export default {
     setDisabledState(event) {
       this.disabled = event
     },
+
+    
   },
 
 }
