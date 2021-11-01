@@ -69,4 +69,8 @@ export default {
   referenceTypes(){
     return http.get(`${this.url}valueset/user-wallet-reference-type`)
   },
+
+  dosageRoutes(){
+    return http.get(`${this.url}valueset/dosage-route-type`)
+  },
 }

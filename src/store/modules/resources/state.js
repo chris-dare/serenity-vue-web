@@ -35,4 +35,5 @@ export default () => ({
   serviceGenericPeriodUnits: [],
   serviceRequestCategoryTypes: [],
   serviceRequestSectionTypes: [],
+  dosageRoutes: [],
 })

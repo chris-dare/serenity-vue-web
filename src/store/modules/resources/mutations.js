@@ -29,6 +29,7 @@ import {
   SET_SERVICE_GENERIC_PERIOD_UNIT_TYPES,
   SET_SERVICE_REQUEST_CATEGORY_TYPES,
   SET_SERVICE_REQUEST_SECTION_TYPES,
+  SET_DOSAGE_ROUTES,
 } from './mutation-types'
 
 export default {
@@ -73,6 +74,10 @@ export default {
 
   [SET_SPECIALTIES](state, specialties) {
     state.specialties = specialties
+  },
+
+  [SET_DOSAGE_ROUTES](state, dosageRoutes){
+    state.dosageRoutes = dosageRoutes
   },
 
   [SET_CATEGORIES](state, categories) {

@@ -53,6 +53,14 @@
             :multiple="false"
             preselect
           />
+
+          <MultiSelect
+            v-model="drug.medication_request_dosage_instruction[0].dosage_route"
+            title="Route of drug administration"
+            :options="dosageRoutes"
+            :multiple="false"
+            preselect
+          />
           
 
 
@@ -171,6 +179,7 @@ export default {
       frequencies: (state) => state.global.frequencies,
       units: (state) => state.global.units,
       priorities: (state) => state.global.priorities,
+      dosageRoutes: (state) => state.resources.dosageRoutes,
     }),
   },
 
