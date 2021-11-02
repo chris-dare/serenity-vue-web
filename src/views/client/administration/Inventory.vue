@@ -81,7 +81,7 @@
 
 <script>
 import AddEditInventory from '@/components/admin/modals/AddEditInventory'
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 import DataMixin from '@/mixins/data'
 
 export default {
@@ -103,26 +103,65 @@ export default {
         'Expiry Date',
         'Action',
       ],
+      filters: {},
+      paginate: true,
+      total: 0,
+      loading: false,
+      data: [],
+      meta: 0,
     }
   },
 
-  computed: {
-    ...mapState({
-      data: (state) => state.inventory.inventory,
-    }),
+  
+  watch: {    
+    filters: {
+      handler(val){
+        if(val){
+          this.getData()
+        }
+      },
+    },
+    search: {
+      handler(val){
+        if(val){
+          this.filters = { search: val }
+          this.getData()
+        }
+      },
+    },
   },
 
   created() {
     this.paginate = true
-    this.searchTerms = ['name', 'category', 'selling_price']
+    this.searchTerms = ['name', 'medication', 'category', 'selling_price']
+    this.filters = { page: this.page, page_size: this.pageLength }
     this.refresh()
   },
 
+  
+
   methods: {
     ...mapActions({
-      getData: 'inventory/getInventory',
+      getInventory: 'inventory/getInventory',
       deleteInventory: 'inventory/deleteInventory',
     }),
+
+    actionOnPagination(ev) {
+      this.filters = { page: ev.page, page_size: ev.length }
+      this.getData()
+    },
+
+    async getData() {
+      try {
+        this.loading = true
+        const data  = await this.getInventory(this.filters)
+        this.data = data.results
+        this.meta = data.meta
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
+    },
 
     remove(data) {
       const id = data.id

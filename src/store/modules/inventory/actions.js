@@ -3,11 +3,12 @@ import Vue from 'vue'
 import { SET_INVENTORY, DELETE_INVENTORY, UPDATE_INVENTORY } from './mutation-types'
 
 export default {
-  async getInventory({ commit, rootState }) {
+  async getInventory({ commit, rootState }, params ) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await InventoryAPI.list(provider.id)
-      commit(SET_INVENTORY, data)
+      const { data } = await InventoryAPI.list(provider.id, params)
+      commit(SET_INVENTORY, data.results)
+      return data
     } catch ({ response: { data: error } }) {
       throw error
     }
