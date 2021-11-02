@@ -132,7 +132,7 @@ export default {
 
   data() {
     return {
-      selected: 'in-patient',
+      selected: 'out-patient',
       form: {
         service: null,
       },
