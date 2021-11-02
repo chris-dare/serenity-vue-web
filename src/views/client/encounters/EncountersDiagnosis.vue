@@ -15,7 +15,7 @@
       </p>
 
       <cv-checkbox
-        v-model="form.is_provisional_diagnosis"
+        v-model="form.is_provisional"
         label="Is this a final diagnosis?"
         value="check-1"
       />
@@ -175,7 +175,7 @@ export default {
       form: {
         condition: '',
         role: 'chief-complaint',
-        is_provisional_diagnosis: false,
+        is_provisional: false,
       },
       loading: false,
       deleteLoading: false,
@@ -247,6 +247,7 @@ export default {
     },
 
     submit(reroute = false) {
+      this.form.is_provisional_diagnosis = !this.form.is_provisional
       if (reroute && this.dataHasNotChanged) {
         this.$router.push({ name: 'EncounterLabs', params: { id: this.$route.params.id }})
         return
