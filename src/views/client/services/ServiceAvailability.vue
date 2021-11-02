@@ -187,8 +187,13 @@ export default {
           daysOfWeek: {
             minLength: minLength(1),
           },
-          availableStartTime: { required },
-          availableEndTime: { required },
+          availableStartTime: { required: requiredIf(function () {
+            return !this.form.healthcare_service_available_times[0].is_all_day
+          })},
+          availableEndTime: { required: requiredIf(function () {
+
+            return !this.form.healthcare_service_available_times[0].is_all_day
+          })},
         },
       },
       healthcare_service_not_available_times: {
@@ -229,7 +234,10 @@ export default {
 
     async save() {
       this.loading = true
-
+      if(this.form.healthcare_service_available_times[0].is_all_day){
+        this.form.healthcare_service_available_times[0].availableStartTime = '00:00:00'
+        this.form.healthcare_service_available_times[0].availableEndTime = '00:00:00'
+      }
       try {
         await this.createService(this.formattedForm())
         this.$toast.open({
@@ -249,7 +257,10 @@ export default {
 
     async update() {
       this.loading = true
-
+      if(this.form.healthcare_service_available_times[0].is_all_day){
+        this.form.healthcare_service_available_times[0].availableStartTime = '00:00:00'
+        this.form.healthcare_service_available_times[0].availableEndTime = '00:00:00'
+      }
       try {
         await this.updateService(this.formattedForm())
         this.$toast.open({
