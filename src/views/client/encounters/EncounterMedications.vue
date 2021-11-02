@@ -250,7 +250,7 @@ export default {
     },
 
     submit(reroute= false) {
-      if (reroute && this.dataHasNotChanged()) {
+      if (reroute && this.dataHasNotChanged) {
         this.$router.push({ name: 'EncounterCarePlan', params: { id: this.$route.params.id }})
         return
       }
