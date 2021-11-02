@@ -249,9 +249,11 @@
             {{ form.price_tier ? form.price_tier.display : "Choose price tier" }}
           </h1>
         </div>
+        {{ form.price_tier }}
         <ModeOfPayment
           v-model="form"
           :v="$v"
+          :total="form.price_tier ? form.price_tier.charge : 0"
           :patient="form.patient"
         >
           <MultiSelect
@@ -380,6 +382,7 @@ export default {
 
         return {
           id: price.id,
+          charge: price.charge,
           display: `${this.$currency(price.charge, price.currency).format()} - ${price.description}`,
         }
       })
@@ -390,7 +393,7 @@ export default {
     if(this.form.transaction_type === 'cash'){
       return {
         form: {
-          amount: { required, minValue: minValue(this.cartTotal) },
+          amount: { required, minValue: minValue(this.form.price_tier.charge) },
         },
       }
     }
