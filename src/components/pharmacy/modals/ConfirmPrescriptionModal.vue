@@ -115,9 +115,12 @@
             <div class="font-bold pl-4">Drug Details</div>
             <DataTable
               ref="table"
-              :data="inventoryDetails || []"
+              :data="filteredData"
               :columns="columns"
+              :pagination="pagination"
+              :loading="loading"
               no-data-label="No drug selected"
+              @pagination="actionOnPagination"
             >
               <template #default="{ row }">
                 <cv-data-table-cell>
@@ -231,10 +234,12 @@
 <script>
 import Checkmark from '@carbon/icons-vue/es/checkmark/32'
 import { mapMutations, mapState } from 'vuex'
+import DataMixin from '@/mixins/data'
 import PharmacyInventoryApi from '@/api/pharmacy-inventory'
 
 export default {
   name: 'ConfirmPrescriptionModal',
+
 
   filters: {
     dosage (value) {
@@ -251,6 +256,8 @@ export default {
       return `${value.period} ${value.period_unit}`
     },
   },
+
+  mixins: [DataMixin],
 
   props: {
     prescriptions: {
@@ -289,6 +296,11 @@ export default {
         'Shelf',
         'Rack',
       ],
+      data: [],
+      filters: {},
+      paginate: true,
+      total: 0,
+      meta: 0,
     }
   },
 
@@ -345,7 +357,7 @@ export default {
       handler(currentDrug) {
         if(this.mode === 'prescription' && !currentDrug)return
         const params = this.mode == 'prescription' ? {search: this.$utils.getFirstData(currentDrug.drug.medication_detail)} : null
-        this.fetchInventory(params)
+        this.getData(params)
       },
     },
     patient: {
@@ -386,6 +398,13 @@ export default {
       setCheckoutPatient: 'checkout/Set existing patient',
       addCartItems: 'checkout/ADD_CART_ITEMS',
     }),
+
+    actionOnPagination(ev) {
+      let id = this.$route.params.id
+      this.filters = { payer: id, page: ev.page, page_size: ev.length }
+      this.getData()
+    },
+
     // eslint-disable-next-line
     getPrescriptionClasses(drug){
       if(drug.filled)return 'bg-serenity-primary text-white'
@@ -411,14 +430,12 @@ export default {
       this.setCheckoutPatient(this.patient)
       this.$router.push({name: 'CheckoutPaymentOptions'})
     },
-    async fetchInventory(params = {}, init = true) {
-      if(init){
-        this.inventory.loading = true
-        this.inventory.data = []
-      }
-      const response = await PharmacyInventoryApi.list(params)
+    async getData(params = {}) {
+      this.filters = {...this.filters, ...params}
+      const { data } = await PharmacyInventoryApi.list(this.$providerId, this.filters)
       this.inventory.loading = false
-      this.inventory.data = response.data
+      this.data = data.results
+      this.meta = data.meta
       if(this.selectedInventoryItem){
         const selectedItemIndex = this.inventory.data.findIndex(el => el.id == this.selectedInventoryItem.id)
         if(selectedItemIndex < 0)this.selectedInventoryItem = null

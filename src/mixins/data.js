@@ -23,7 +23,7 @@ export default {
     },
 
     dataCount() {
-      return this.total || this.data.length || 0
+      return this.total || this.meta.total || this.data.length || 0
     },
 
     noData() {
