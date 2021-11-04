@@ -7,7 +7,7 @@
     />
     <FilterGroup
       v-model="search"
-      :filters="filters"
+      :filters="filtering"
     />
     <!-- <div>{{ filteredData }}</div> -->
     <DataTable
@@ -90,6 +90,10 @@ export default {
         'Status',
         'Action',
       ],
+      filters: {},
+      paginate: true,
+      total: 0,
+      meta: 0,
     }
   },
 
@@ -98,7 +102,7 @@ export default {
       data: (state) => state.diagnostic.serviceRequests,
     }),
 
-    filters() {
+    filtering() {
       return [
         { display: `All (${ this.dataCount })`, code: '' },
         { display: 'Active', code: 'active' },
@@ -108,9 +112,21 @@ export default {
     },
   },
 
+  watch: {
+    search: {
+      handler(val) {
+        if (val) {
+          this.loading = true
+          this.getData({search: val}).finally(() =>  this.loading = false)
+        }
+      },
+    },
+  },
+
   created() {
     this.paginate = true
     this.searchTerms = ['code', 'status', 'purpose', 'priority', 'patient_name']
+    this.filters = { payer: this.id, page: this.page, page_size: this.pageLength }
     this.refresh()
   },
 
@@ -118,9 +134,14 @@ export default {
     ...mapActions({
       getData: 'diagnostic/getServiceRequests',
     }),
+    actionOnPagination(ev) {
+      let id = this.$route.params.id
+      this.filters = { payer: id, page: ev.page, page_size: ev.length }
+      this.refresh()
+    },
     async refresh() {
       this.loading = true
-      await this.getData().then(() => this.loading = false).finally(() => this.loading = false)
+      await this.getData(this.filters).then(() => this.loading = false).finally(() => this.loading = false)
     },
   },
 
