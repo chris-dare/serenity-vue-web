@@ -146,8 +146,8 @@
                 :key="index"
                 v-model="categoryValues[cat.code]"
                 class="mx-2"
-                :suffix-text="cat.display"
-                :label="cat.code"
+                :suffix-text="cat.unit"
+                :label="cat.display"
               />
             </div>
 
@@ -246,10 +246,9 @@
             class="text-primary font-bold"
             style="font-size: 36px"
           >
-            {{ form.price_tier ? form.price_tier.display : "Choose price tier" }}
+            {{ form.price_tier ? form.price_tier.display || "Choose price tier" : "Choose price tier" }}
           </h1>
         </div>
-        {{ form.price_tier }}
         <ModeOfPayment
           v-model="form"
           :v="$v"
@@ -309,6 +308,7 @@ export default {
         diagnostic_report_cancelled_reasons: [{}],
         transaction_type: '',
         collection_quantity: '1',
+        price_tier: {},
       },
       options: {
         PREVIOUS_OBSERVATIONS: [],
