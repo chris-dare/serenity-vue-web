@@ -225,7 +225,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await ServiceRequestsAPI.list(provider.id, params)
-      commit(SET_SERVICE_REQUESTS, data)
+      commit(SET_SERVICE_REQUESTS, data.results)
     } catch (error) {
       throw error.data || error
     }

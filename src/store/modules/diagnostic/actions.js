@@ -15,10 +15,11 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await ServiceRequestsAPI.list(provider.id, params)
-      let new_data = data.map((element) => {
+      let new_data = data.results.map((element) => {
         element.patient_name = element.patient_detail.first_name + ' ' + element.patient_detail.lastname
         return element
       })
+      console.log(new_data)
       commit(SET_SERVICE_REQUESTS, new_data)
     } catch ({ response: { data: error } }) {
       throw error
@@ -85,7 +86,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await DiagnosticAPI.reports(provider.id, params)
-      let new_data = data.map((element) => {
+      let new_data = data.results.map((element) => {
         element.patient_name = element.patient_detail.first_name + ' ' + element.patient_detail.lastname
         return element
       })
@@ -99,7 +100,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await DiagnosticAPI.reports(provider.id, payload)
-      let new_data = data.map((element) => {
+      let new_data = data.results.map((element) => {
         element.patient_name = element.patient_detail.first_name + ' ' + element.patient_detail.lastname
         return element
       })
