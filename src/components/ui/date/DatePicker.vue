@@ -18,6 +18,7 @@
       :disabled="disabled"
       v-bind="$attrs"
       :class="{ 'cursor-not-allowed opacity-40': disabled }"
+      :data-qa="qaName"
       @on-change="$emit('change', $event)"
     />
     <p
@@ -66,7 +67,7 @@ export default {
       default: false,
     },
     maxDate: {
-      type: [String, Date],
+      type: [String, Date, Number],
       default: null,
     },
     placeholder: {
@@ -74,7 +75,7 @@ export default {
       default: 'Select a date',
     },
     minDate: {
-      type: [String, Date],
+      type: [String, Date, Number],
       default: null,
     },
     format: {
@@ -173,6 +174,10 @@ export default {
           defaultDate: [startOfMonth(Date.now()), endOfMonth(Date.now())],
         },
       }
+    },
+
+    qaName() {
+      return this.label?.split(' ').join('_').toLowerCase()
     },
   },
 

@@ -55,6 +55,7 @@
 import modalMixin from '@/mixins/modal'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import isToday from 'date-fns/isToday'
+import parseISO from 'date-fns/parseISO'
 import VisitSelectPatient from '@/components/visits/start/VisitSelectPatient'
 import VisitSelectSlot from '@/components/visits/start/VisitSelectSlot'
 import SelectClinic from '@/components/visits/start/SelectClinic'
@@ -64,6 +65,7 @@ import AppointmentDetail from '@/components/appointments/AppointmentDetail'
 import { required, minValue } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/16'
 import Patient from '@/models/Patient'
+import AppointmentsAPI from '@/api/appointments'
 
 export default {
   name: 'BookVisitModal',
@@ -225,13 +227,30 @@ export default {
         return
       }
 
+      this.loading = TextTrackCueList
+
       await this.filter()
+      await this.getPatientAppointments()
       this.step = this.step + 1
+      this.loading = false
     },
 
     async filter() {
       const filters = this.convertFromDatePickerFormat(new Date())
       await this.getSlots({ healthcareservice: this.form.service.id, ...filters })
+    },
+
+    async getPatientAppointments() {
+      const {data} = await AppointmentsAPI.list(this.$providerId, {
+        patient: this.form?.patient?.id,
+        // start__gte: this.$date.userNow(),
+        healthcare_service__id: this.form?.service?.id,
+      })
+      let slot = data.find(app => isToday(parseISO(app.slot.start)))
+      this.form.slot = slot ? {
+        ...slot.slot,
+        practitioner_name: slot.practitioner.full_name,
+      } : null
     },
 
     convertFromDatePickerFormat(val) {

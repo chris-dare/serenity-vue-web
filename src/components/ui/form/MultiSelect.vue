@@ -20,6 +20,7 @@
         :custom-label="customLabel"
         class="group"
         v-bind="$attrs"
+        :data-qa="qaName"
         @input="$emit('select', $event)"
         @search-change="$emit('search-change', $event)"
         @tag="$emit('tag', $event)"
@@ -148,6 +149,10 @@ export default {
   computed: {
     isEmptyData() {
       return isEmpty(this.selected)
+    },
+
+    qaName() {
+      return this.title?.split(' ').join('_').toLowerCase()
     },
   },
 

@@ -1,6 +1,7 @@
 <template>
   <div class="space-y-4">
     <Search
+      v-if="!hideSearch"
       v-model="filter"
       placeholder="Search for patient"
       class="se-input-white"
@@ -83,6 +84,13 @@ export default {
   components: { ViewBillingDetailsModal, BillingSettlePaymentModal },
 
   mixins: [DataMixin],
+
+  props: {
+    hideSearch: {
+      type: Boolean,
+      default: false,
+    },
+  },
 
   data() {
     return {

@@ -10,10 +10,18 @@ export default {
   watch: {
     storeData: {
       immediate: true,
+      deep: true,
       handler(val) {
         this.form = val.id ? { ...this.form , ...val } : { ...val, ...this.form }
       },
     },
+  },
+
+  created() {
+    if (!this.storeData.id) {
+      this.form = { ...this.form , ...this.storeData }
+    }
+    
   },
 
   events: {

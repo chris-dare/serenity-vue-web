@@ -13,6 +13,7 @@
       :type="type"
       v-bind="$attrs"
       class="se-no-label"
+      :data-qa="qaName"
       v-on="$listeners"
     />
   </div>
@@ -50,6 +51,10 @@ export default {
       }
 
       return 'cv-text-input'
+    },
+
+    qaName() {
+      return this.label?.split(' ').join('_').toLowerCase()
     },
   },
 }

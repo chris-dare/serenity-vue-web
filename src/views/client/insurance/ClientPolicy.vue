@@ -200,7 +200,6 @@ export default {
 
     listService(list){
       return list.map(element => {
-        console.log(element)
         if (element.code) {
           return element.code
         } else {

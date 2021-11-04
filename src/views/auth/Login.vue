@@ -83,6 +83,8 @@ import { required, email } from 'vuelidate/lib/validators'
 import { emailFormatter } from '@/services/custom-validators'
 
 export default {
+  name: 'Login',
+
   data() {
     return {
       form: {

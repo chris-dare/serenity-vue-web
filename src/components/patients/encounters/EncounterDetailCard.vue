@@ -105,10 +105,10 @@
       >
         <EncounterNotes />
       </ToggleList>
-      <ToggleList
+      <!-- <ToggleList
         title="Bills / Receipts"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
-      />
+      /> -->
     </div>
   </div>
 </template>

@@ -349,7 +349,6 @@ export default {
           }
         })
         this.currentDrug = this.drugs[0]
-        console.log(this.currentDrug)
       },
     },
     currentDrug: {
