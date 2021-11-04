@@ -5,7 +5,7 @@
       class="mb-4"
     >
       <div class="font-bold">Prescribed medication by {{ doctor }}</div>
-      <div class="text-xs text-gray-400 mb-2">{{ $date.formatDate(datePrescribed, 'dd MMM, yyyy') }}</div>
+      <!-- <div class="text-xs text-gray-400 mb-2">{{ $date.formatDate(datePrescribed, 'dd MMM, yyyy') }}</div> -->
     </div>
     <div
       v-if="mode === 'prescription'"
@@ -49,7 +49,7 @@
             <div class="grid grid-cols-4 gap-8 my-4">
               <div>
                 <div class="font-sm text-gray-400 mb-2">Prescribed on</div>
-                <div>{{ $date.formatDate(currentDrug.drug.medication_detail) }}</div>
+                <!-- <div>{{ $date.formatDate(currentDrug.drug.medication_detail) }}</div> -->
               </div>
               <div>
                 <div class="font-sm text-gray-400 mb-2">Note</div>
@@ -115,19 +115,16 @@
             <div class="font-bold pl-4">Drug Details</div>
             <DataTable
               ref="table"
-              :data="filteredData"
+              :data="inventoryDetails || []"
               :columns="columns"
-              :pagination="pagination"
-              :loading="loading"
               no-data-label="No drug selected"
-              @pagination="actionOnPagination"
             >
               <template #default="{ row }">
                 <cv-data-table-cell>
                   {{ row.selling_price | formatMoney | toCedis }}
                 </cv-data-table-cell>
                 <cv-data-table-cell>
-                  {{ row.initial_quantity }}
+                  {{ row.in_hand_quantity }}
                 </cv-data-table-cell>
                 <cv-data-table-cell>
                   {{ row.batch_number }}
@@ -234,12 +231,10 @@
 <script>
 import Checkmark from '@carbon/icons-vue/es/checkmark/32'
 import { mapMutations, mapState } from 'vuex'
-import DataMixin from '@/mixins/data'
 import PharmacyInventoryApi from '@/api/pharmacy-inventory'
 
 export default {
   name: 'ConfirmPrescriptionModal',
-
 
   filters: {
     dosage (value) {
@@ -256,8 +251,6 @@ export default {
       return `${value.period} ${value.period_unit}`
     },
   },
-
-  mixins: [DataMixin],
 
   props: {
     prescriptions: {
@@ -296,11 +289,6 @@ export default {
         'Shelf',
         'Rack',
       ],
-      data: [],
-      filters: {},
-      paginate: true,
-      total: 0,
-      meta: 0,
     }
   },
 
@@ -325,7 +313,7 @@ export default {
       return parseInt(this.selectedInventoryItem.net_release_quantity)
     },
     filteredPrescriptions() {
-      return this.$utils.getFilteredData(this.inventory.data, this.search, ['name'])
+      return this.$utils.getFilteredData(this.inventory.data, this.search, ['name', 'batch_number'])
     },
     doctor() {
       if(this.prescriptions.length == 0)return
@@ -349,6 +337,7 @@ export default {
           }
         })
         this.currentDrug = this.drugs[0]
+        console.log(this.currentDrug)
       },
     },
     currentDrug: {
@@ -356,7 +345,7 @@ export default {
       handler(currentDrug) {
         if(this.mode === 'prescription' && !currentDrug)return
         const params = this.mode == 'prescription' ? {search: this.$utils.getFirstData(currentDrug.drug.medication_detail)} : null
-        this.getData(params)
+        this.fetchInventory(params)
       },
     },
     patient: {
@@ -364,6 +353,14 @@ export default {
       handler(patient) {
         if(!(patient && patient.id))return null
         this.$store.dispatch('billing/getPatientAccounts', { id: patient.id }, { root:true })
+      },
+    },
+
+    search: {
+      handler(val){
+        if(val){
+          this.fetchInventory({search: val})
+        }
       },
     },
   },
@@ -397,13 +394,6 @@ export default {
       setCheckoutPatient: 'checkout/Set existing patient',
       addCartItems: 'checkout/ADD_CART_ITEMS',
     }),
-
-    actionOnPagination(ev) {
-      let id = this.$route.params.id
-      this.filters = { payer: id, page: ev.page, page_size: ev.length }
-      this.getData()
-    },
-
     // eslint-disable-next-line
     getPrescriptionClasses(drug){
       if(drug.filled)return 'bg-serenity-primary text-white'
@@ -429,12 +419,14 @@ export default {
       this.setCheckoutPatient(this.patient)
       this.$router.push({name: 'CheckoutPaymentOptions'})
     },
-    async getData(params = {}) {
-      this.filters = {...this.filters, ...params}
-      const { data } = await PharmacyInventoryApi.list(this.$providerId, this.filters)
+    async fetchInventory(params = {}, init = true) {
+      if(init){
+        this.inventory.loading = true
+        this.inventory.data = []
+      }
+      const { data } = await PharmacyInventoryApi.list(this.$providerId, params)
       this.inventory.loading = false
-      this.data = data.results
-      this.meta = data.meta
+      this.inventory.data = data.results
       if(this.selectedInventoryItem){
         const selectedItemIndex = this.inventory.data.findIndex(el => el.id == this.selectedInventoryItem.id)
         if(selectedItemIndex < 0)this.selectedInventoryItem = null
