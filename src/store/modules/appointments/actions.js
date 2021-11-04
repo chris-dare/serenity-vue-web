@@ -20,8 +20,8 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI.list(provider.id, filters)
-      commit(SET_APPOINTMENTS, data)
-      commit(SET_APPOINTMENTS_COUNT, data.length)
+      commit(SET_APPOINTMENTS, data.results)
+      commit(SET_APPOINTMENTS_COUNT, data.meta?.total)
     } catch (error) {
       // Vue.prototype.$utils.error(error)
       throw error || error.message
