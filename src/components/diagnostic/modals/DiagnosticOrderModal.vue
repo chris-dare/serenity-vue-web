@@ -146,8 +146,8 @@
                 :key="index"
                 v-model="categoryValues[cat.code]"
                 class="mx-2"
-                :suffix-text="cat.display"
-                :label="cat.code"
+                :suffix-text="cat.unit"
+                :label="cat.display"
               />
             </div>
 
