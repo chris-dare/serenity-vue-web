@@ -165,6 +165,7 @@
             </SeButton>
           </div>
         </div>
+        <small class="text-danger">Quantity unavailable</small>
         <div class="mt-12">
           <div class="font-bold mb-4">
             Selected drugs
