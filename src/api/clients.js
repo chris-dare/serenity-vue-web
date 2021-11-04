@@ -42,7 +42,6 @@ export default {
   },
 
   updatePolicy(providerId, params) {
-    console.log(params)
     return http.patch(`${this.url}${providerId}/clients/${params?.id}/health-policies/${params.form.uuid}`, params.form)
   },
 

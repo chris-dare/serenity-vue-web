@@ -14,6 +14,7 @@
       valid-color="#0B6B74"
       required
       type="tel"
+      :data-qa="qaName"
     />
     <p
       v-if="errorMessage"
@@ -80,6 +81,10 @@ export default {
     formatNational() {
       const phoneNumber = parsePhoneNumber(this.localValue, 'GH')
       return phoneNumber.format('E.164')
+    },
+
+    qaName() {
+      return this.label?.split(' ').join('_').toLowerCase()
     },
   },
 

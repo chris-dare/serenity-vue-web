@@ -25,7 +25,6 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('logIn', () => {
-  console.log('aqui')
   // cy.fixture('auth/login/index').as('loginResponse')
   // cy.server()
   // cy.visit('/login')

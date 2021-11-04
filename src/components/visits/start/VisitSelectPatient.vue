@@ -35,7 +35,7 @@
           :pagination="pagination"
           :data="filteredData"
           :loading="loading"
-          @pagination="actionOnPagination"
+          @pagination="storePagination"
         >
           <template #default="{ row }">
             <cv-data-table-cell>

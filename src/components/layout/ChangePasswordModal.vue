@@ -14,7 +14,7 @@
             <p class="mt-4">Reset Password</p>
           </div>
         </div>
-        <div>
+        <SeForm>
           <div class="grid grid-cols-2 gap-8 my-8">
             <FormInput
               v-model="form.password"
@@ -74,7 +74,7 @@
               Update Password
             </cv-button>
           </div>
-        </div>
+        </SeForm>
       </div>
     </template>
   </cv-modal>
