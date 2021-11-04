@@ -25,7 +25,6 @@
         v-model="search"
         placeholder="Search for inventory item"
       />
-
       <DataTable
         ref="table"
         :data="filteredData"
@@ -83,6 +82,7 @@
 import AddEditInventory from '@/components/admin/modals/AddEditInventory'
 import { mapActions } from 'vuex'
 import DataMixin from '@/mixins/data'
+import PharmacyInventoryApi from '@/api/pharmacy-inventory'
 
 export default {
   name: 'Inventory',
@@ -112,19 +112,11 @@ export default {
     }
   },
 
-  
-  watch: {    
-    filters: {
-      handler(val){
-        if(val){
-          this.getData()
-        }
-      },
-    },
+  watch: { 
     search: {
       handler(val){
         if(val){
-          this.filters = { search: val }
+          this.filters = { ...this.filters, search: val}
           this.getData()
         }
       },
@@ -133,12 +125,10 @@ export default {
 
   created() {
     this.paginate = true
-    this.searchTerms = ['name', 'medication', 'category', 'selling_price']
+    this.searchTerms = ['name', 'medication', 'category', 'selling_price', 'batch_number']
     this.filters = { page: this.page, page_size: this.pageLength }
     this.refresh()
   },
-
-  
 
   methods: {
     ...mapActions({
@@ -154,7 +144,7 @@ export default {
     async getData() {
       try {
         this.loading = true
-        const data  = await this.getInventory(this.filters)
+        const { data } = await PharmacyInventoryApi.list(this.$providerId, this.filters)
         this.data = data.results
         this.meta = data.meta
         this.loading = false
