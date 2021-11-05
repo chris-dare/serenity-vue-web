@@ -246,7 +246,7 @@ export default {
         // start__gte: this.$date.userNow(),
         healthcare_service__id: this.form?.service?.id,
       })
-      let slot = data.find(app => isToday(parseISO(app.slot.start)))
+      let slot = data.results ? data.results.find(app => isToday(parseISO(app.slot.start))) : {}
       this.form.slot = slot ? {
         ...slot.slot,
         practitioner_name: slot.practitioner.full_name,
