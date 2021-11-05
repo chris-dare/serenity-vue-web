@@ -34,6 +34,7 @@ import {
   SET_SERVICE_GENERIC_PERIOD_UNIT_TYPES,
   SET_SERVICE_REQUEST_CATEGORY_TYPES,
   SET_SERVICE_REQUEST_SECTION_TYPES,
+  SET_OBSERVATION_INTERPRETATION_TYPES,
   SET_DOSAGE_ROUTES,
 } from './mutation-types'
 
@@ -222,6 +223,20 @@ export default {
       const { data } = await ObservationsAPI
         .unitTypes()
       commit(SET_OBSERVATION_UNIT_TYPES, data)
+      return data
+    } catch (error) {
+      throw error || error.message
+    }
+  },
+
+  async getObservationInterpretationTypes({ commit, state }) {
+    if (state.interpretationTypes.length) {
+      return
+    }
+    try {
+      const { data } = await ObservationsAPI
+        .interpretationTypes()
+      commit(SET_OBSERVATION_INTERPRETATION_TYPES, data)
       return data
     } catch (error) {
       throw error || error.message

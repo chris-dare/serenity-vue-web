@@ -141,14 +141,30 @@
             <div
               class="grid grid-cols-2 gap-y-8 my-8"
             >
-              <FormMixedInput
+              
+              <div
                 v-for="(cat, index) in category.options"
                 :key="index"
-                v-model="categoryValues[cat.code]"
-                class="mx-2"
-                :suffix-text="cat.unit"
-                :label="cat.display"
-              />
+              >
+                <FormMixedInput
+                  v-if="cat.unit"
+                  v-model="categoryValues[cat.code]"
+                  class="mx-2"
+                  :suffix-text="cat.unit"
+                  :label="cat.display"
+                />
+                <MultiSelect
+                  v-else
+                  v-model="categoryValues[cat.code]"
+                  :title="cat.display"
+                  :multiple="false"
+                  :options="interpretationTypes"
+                  track_by="code"
+                  custom-field="code"
+                  label="display"
+                  placeholder="Search or choose a observation type"
+                />
+              </div>
             </div>
 
             <cv-text-area
@@ -351,6 +367,7 @@ export default {
       categories: (state) => state.resources.observationCategories,
       storeData: (state) => state.appointments.currentAppointment,
       provider: (state) => state.auth.provider,
+      interpretationTypes: (state) => state.resources.interpretationTypes,
     }),
     ...mapGetters({
       practitionerRoleId: 'auth/practitionerRoleId',

@@ -29,6 +29,7 @@ import {
   SET_SERVICE_GENERIC_PERIOD_UNIT_TYPES,
   SET_SERVICE_REQUEST_CATEGORY_TYPES,
   SET_SERVICE_REQUEST_SECTION_TYPES,
+  SET_OBSERVATION_INTERPRETATION_TYPES,
   SET_DOSAGE_ROUTES,
 } from './mutation-types'
 
@@ -134,6 +135,10 @@ export default {
 
   [SET_OBSERVATION_UNIT_TYPES](state, unitTypes) {
     state.unitTypes = unitTypes
+  },
+
+  [SET_OBSERVATION_INTERPRETATION_TYPES](state, interpretationTypes) {
+    state.interpretationTypes = interpretationTypes
   },
 
   [SET_SYSTEM_EXAM_UNIT_TYPES](state, examUnitTypes) {
