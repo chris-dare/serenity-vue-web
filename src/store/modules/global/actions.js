@@ -30,6 +30,7 @@ export default {
     dispatch('resources/getSpecialties', null, { root:true })
     dispatch('services/getServices', null, { root:true })
     dispatch('resources/getDosageRoutes', null, { root:true })
+    dispatch('resources/getObservationInterpretationTypes', null, { root:true })
     dispatch('beforeLoginInit')
   },
 

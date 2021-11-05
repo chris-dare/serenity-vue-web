@@ -19,6 +19,7 @@ export default {
     dispatch('patients/getReferrals', patient , { root:true })
     dispatch('patientAllergies/getAllergies', patient , { root:true })
     dispatch('resources/getObservationUnitTypes', null, { root:true })
+    dispatch('resources/getObservationInterpretationTypes', null, { root:true })
     dispatch('resources/getVitalsUnitTypes', null, { root:true })
     dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
     dispatch('resources/getSystemExamUnitTypes', null, { root:true })

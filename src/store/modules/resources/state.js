@@ -15,6 +15,7 @@ export default () => ({
   religiousAffiliations: [],
   genders: [],
   unitTypes: [],
+  interpretationTypes: [],
   examUnitTypes: [],
   socialUnitTypes: [],
   vitalsUnitTypes: [],

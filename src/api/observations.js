@@ -28,6 +28,10 @@ export default {
     return http.get(`${this.url}valueset/observation-unit-type`)
   },
 
+  interpretationTypes() {
+    return http.get(`${this.url}valueset/observation-interpretation-type`)
+  },
+
   systemTypes() {
     return http.get(`${this.url}valueset/system-exam-review-type`)
   },
