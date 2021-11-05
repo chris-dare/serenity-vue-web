@@ -9,12 +9,12 @@
 
     <FilterGroup
       v-model="search"
-      :filters="filters"
+      :filters="filtering"
     />
 
     <DataTable
       ref="table"
-      :data="filteredData"
+      :data="filteredData || []"
       :columns="columns"
       :loading="loading"
       :pagination="pagination"
@@ -106,6 +106,7 @@ export default {
       searchTerms: ['patient_name', 'status'],
       paginate: true,
       filter: null,
+      filters: {},
     }
   },
 
@@ -118,7 +119,7 @@ export default {
       return this.$date.sortByDate(this.bills, 'created_on', 'desc')
     },
 
-    filters() {
+    filtering() {
       return [
         { display: `All (${ this.dataCount })`, code: '' },
         { display: 'Fully Paid', code: 'billed' },
@@ -132,17 +133,42 @@ export default {
     filter(search) {
       this.searchBills(search)
     },
+
+    filters: {
+      handler(val){
+        if(val){
+          this.getData()
+        }
+      },
+    },
   },
 
   created() {
+    this.filters = { page: this.page, page_size: this.pageLength }
     this.refresh()
   },
 
   methods: {
     ...mapActions({
-      getData: 'billing/getChargeItems',
+      getChargeItems: 'billing/getChargeItems',
       getPatientAccounts: 'billing/getPatientAccounts',
     }),
+
+    actionOnPagination(ev) {
+      this.filters = { page: ev.page, page_size: ev.length }
+      this.getData()
+    },
+
+    async getData() {
+      try {
+        this.loading = true
+        const { data } = await this.getChargeItems(this.filters)
+        this.meta = data.meta
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
+    },
 
     getStatusVariant(status) {
       if (status === 'billable') {
@@ -163,7 +189,7 @@ export default {
     },
 
     searchBills: debounce(function(search) {
-      this.refresh({ search })
+      this.refresh({ search, page: this.page, page_size: this.pageLength })
     }, 300, false),
   },
 }
