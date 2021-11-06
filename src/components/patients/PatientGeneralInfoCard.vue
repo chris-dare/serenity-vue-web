@@ -8,11 +8,11 @@
         />
         <InfoSubBlock
           label="Weight"
-          :description="vitals ? `${vitals.WEIGHT_KG}kg` : '-'"
+          :description="vitals.WEIGHT_KG ? `${vitals.WEIGHT_KG}kg` : '-'"
         />
         <InfoSubBlock
           label="Height"
-          :description="vitals ? `${vitals.HEIGHT_CM}cm` : '-'"
+          :description="vitals.HEIGHT_CM ? `${vitals.HEIGHT_CM}cm` : '-'"
         />
       </div>
       <div class="h-px w-full bg-serenity-light-gray my-5" />
