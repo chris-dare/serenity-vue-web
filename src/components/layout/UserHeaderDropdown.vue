@@ -17,7 +17,7 @@
     >
       <div class="flex items-center justify-between px-4 py-4">
         <div>
-          <p class="font-semibold text-lg text-white">{{ userName }}</p>
+          <p class="font-semibold text-lg text-white">{{ $utils.formatName(userName) }}</p>
           <!-- <p class="text-secondary">{{ user }}</p> -->
         </div>
         <img
@@ -38,7 +38,12 @@
       >
         Account security
       </p>
-      <p class="text-serenity-primary px-4 py-2 cursor-pointer">Support</p>
+      <p 
+        class="text-serenity-primary px-4 py-2 cursor-pointer" 
+        @click="goSupport"
+      >
+        Support
+      </p>
       <div
         class="flex items-center h-12 bg-placeholder px-4 text-white cursor-pointer"
         @click="submit"
@@ -80,6 +85,13 @@ export default {
       // await this.logout()
       this.setLoggedIn(false)
       this.$router.push({ name: 'AuthLogin' })
+    },
+
+    goSupport(){
+      window.open(
+        'https://bit.ly/Serenity_Support',
+        '_blank', // <- This is what makes it open in a new window.
+      )
     },
   },
 }

@@ -3,7 +3,7 @@
     <div class="flex justify-between items-center">
       <p class="text-secondary font-semibold text-xl">
         {{ greeting }},
-        <span class="text-primary">{{ fullName || "Dr. Grey Strep" }}</span>
+        <span class="text-primary">{{ $utils.formatName(fullName) || "-" }}</span>
       </p>
       <div class="text-right">
         <p class="text-xs">

@@ -10,7 +10,7 @@
         alt=""
       >
       <div class="text-lg">
-        {{ patient.fullName }}
+        {{ $utils.formatName(patient.fullName) }}
       </div>
       <div class="text-sm font-light">{{ patient.gender_age_description }}</div>
     </div>

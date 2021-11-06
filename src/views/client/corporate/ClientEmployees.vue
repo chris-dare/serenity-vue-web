@@ -28,7 +28,7 @@
       >
         <template #default="{row}">
           <cv-data-table-cell>
-            <InfoImageBlock :label="concatData(row, ['first_name', 'last_name'])" />
+            <InfoImageBlock :label="$utils.formatName(concatData(row, ['first_name', 'last_name']))" />
           </cv-data-table-cell>
 
           <cv-data-table-cell>

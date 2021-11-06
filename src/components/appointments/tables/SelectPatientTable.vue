@@ -5,7 +5,7 @@
       <div class="flex items-center py-2">
         <div class="w-1/3">
           <p class="text-secondary text-xs">Name</p>
-          <p>{{ internalPatient.fullName || '-' }}</p>
+          <p>{{ $utils.formatName(internalPatient.fullName) || '-' }}</p>
         </div>
         <div class="w-1/3">
           <p class="text-secondary text-xs"> Phone Number</p>

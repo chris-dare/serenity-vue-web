@@ -29,7 +29,7 @@
       >
         <template #default="{row}">
           <cv-data-table-cell>
-            <InfoImageBlock :label="row.company_name" />
+            <InfoImageBlock :label="$utils.formatName(row.company_name)" />
           </cv-data-table-cell>
           <cv-data-table-cell>
             <p>{{ row.tin_number }}</p>

@@ -7,7 +7,7 @@
   >
     <template slot="content">
       <SeForm>
-        <p class="mb-1 font-bold text-xl mt-4">Welcome, {{ fullName }}</p>
+        <p class="mb-1 font-bold text-xl mt-4">Welcome, {{ $utils.formatName(fullName) }}</p>
         <p class="mb-6">
           Please setup your location and department to get started
         </p>

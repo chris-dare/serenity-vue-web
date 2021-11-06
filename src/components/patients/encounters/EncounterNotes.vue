@@ -9,7 +9,7 @@
       <template #default="{ row }">
         <cv-data-table-cell>
           <div class="py-2">
-            {{ getSinglePractitioner(row.encounter_practitioner_id).fullName }}
+            {{ $utils.formatName(getSinglePractitioner(row.encounter_practitioner_id).fullName) }}
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>

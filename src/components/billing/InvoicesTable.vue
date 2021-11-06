@@ -18,7 +18,7 @@
           <cv-data-table-cell>
             <div class="flex items-center py-2">
               <InfoImageBlock
-                :label="row.patient_detail.name"
+                :label="$utils.formatName(row.patient_detail.name)"
                 :url="row.patient_detail.photo"
                 :description="$utils.concatData(row.patient_detail, ['age', 'gender'])"
                 size="base"
@@ -80,7 +80,7 @@
                 <cv-data-table-cell>
                   <div>
                     <InfoImageBlock
-                      :label="request.row.practitioner_name"
+                      :label="$utils.formatName(request.row.practitioner_name)"
                     />
                   </div>
                 </cv-data-table-cell>
