@@ -27,9 +27,9 @@
       />
       <DataTable
         ref="table"
-        :data="filteredData"
         :columns="columns"
         :pagination="pagination"
+        :data="filteredData"
         :loading="loading"
         @pagination="actionOnPagination"
       >
@@ -80,9 +80,9 @@
 
 <script>
 import AddEditInventory from '@/components/admin/modals/AddEditInventory'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import debounce from 'lodash/debounce'
 import DataMixin from '@/mixins/data'
-import PharmacyInventoryApi from '@/api/pharmacy-inventory'
 
 export default {
   name: 'Inventory',
@@ -104,20 +104,24 @@ export default {
         'Action',
       ],
       filters: {},
-      paginate: true,
       total: 0,
       loading: false,
-      data: [],
       meta: 0,
     }
   },
+
+  computed: {
+    ...mapState({
+      data: (state) => state.inventory.inventory,
+    }),
+  },
+  
 
   watch: { 
     search: {
       handler(val){
         if(val){
-          this.filters = { ...this.filters, search: val}
-          this.getData()
+          this.searchInventory(val)
         }
       },
     },
@@ -125,6 +129,7 @@ export default {
 
   created() {
     this.paginate = true
+    this.pageLength = 10
     this.searchTerms = ['name', 'medication', 'category', 'selling_price', 'batch_number']
     this.filters = { page: this.page, page_size: this.pageLength }
     this.refresh()
@@ -137,6 +142,8 @@ export default {
     }),
 
     actionOnPagination(ev) {
+      this.pageLength = ev.length
+      this.page = ev.page
       this.filters = { page: ev.page, page_size: ev.length }
       this.getData()
     },
@@ -144,14 +151,19 @@ export default {
     async getData() {
       try {
         this.loading = true
-        const { data } = await PharmacyInventoryApi.list(this.$providerId, this.filters)
-        this.data = data.results
+        const { data } = await this.getInventory(this.filters)
         this.meta = data.meta
+        this.total = data.meta.total
         this.loading = false
       } catch (error) {
         this.loading = false
       }
     },
+
+    searchInventory: debounce(function(search) {
+      this.filters = { search, page: this.page, page_size: this.pageLength }
+      this.getData()
+    }, 300, false),
 
     remove(data) {
       const id = data.id
