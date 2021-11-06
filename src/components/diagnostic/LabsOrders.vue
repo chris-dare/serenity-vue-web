@@ -37,8 +37,9 @@
             :label="row.status"
           />
         </cv-data-table-cell>
-        <cv-data-table-cell>
+        <cv-data-table-cell v-if="!$isCurrentWorkspace('RECEPT')">
           <div
+           
             class="flex items-center cursor-pointer"
             :disabled="!$userCan('diagnostic.requests.read')"
             @click="$trigger('diagnostic-order:add:open', {...row})"
@@ -82,14 +83,6 @@ export default {
       search: '',
       selected: 'all',
       loading: false,
-      columns: [
-        'Service',
-        'Request time',
-        'Patient',
-        'Specimen',
-        'Status',
-        'Action',
-      ],
       filters: {},
       paginate: true,
       total: 0,
@@ -109,6 +102,20 @@ export default {
         { display: 'Draft', code: 'draft' },
         { display: 'Completed', code: 'completed' },
       ]
+    },
+    columns(){
+      let column = [
+        'Service',
+        'Request time',
+        'Patient',
+        'Specimen',
+        'Status',
+      ]
+      if (!this.$isCurrentWorkspace('RECEPT')) {
+        column.push('Action')
+      }
+      return column
+
     },
   },
 
