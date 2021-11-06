@@ -90,9 +90,9 @@ export default {
     },
   },
 
-  // created() {
-  //   this.refresh()
-  // },
+  created() {
+    this.refresh()
+  },
 
   methods: {
     ...mapActions({

@@ -8,10 +8,10 @@
       v-if="!modal"
       class="my-4 flex items-center justify-between"
     >
-      <FilterGroup
+      <!-- <FilterGroup
         v-model="search"
         :filters="filters"
-      />
+      /> -->
       <FilterDropdown
         v-if="false"
         v-model="selectedFilter"

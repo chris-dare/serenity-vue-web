@@ -179,6 +179,8 @@ export default {
 
   methods: {
     actionOnPagination(ev) {
+      this.page = ev.page
+      this.pageLength = ev.length
       let id = this.$route.params.id
       this.filters = { payer: id, page: ev.page, page_size: ev.length }
       this.getData()
