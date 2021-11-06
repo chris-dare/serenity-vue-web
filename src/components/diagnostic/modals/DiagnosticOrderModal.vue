@@ -604,12 +604,15 @@ export default {
 
     async completePayment() {
       try {
+        console.log(this.form)
         this.loading = true
         let payload = [
           {
             service_request: this.form.id, // a service request raised by a patient
             price_tier: this.form.price_tier.id,
             account_id: this.form.account_id,
+            currency: this.form.currency,
+            amount: this.form.amount,
             transaction_type: this.form.transaction_type, //user-wallet, corporate-account, mobile-money, cash
           },
         ]
