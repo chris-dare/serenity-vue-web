@@ -12,7 +12,7 @@
         <div>
           <div class="flex items-center py-5">
             <div class="space-y-1">
-              <p class="text-lg font-semibold">{{ form && form.first_name + ' ' + form.last_name }}</p>
+              <p class="text-lg font-semibold">{{ form ? $utils.formatName(form.first_name + ' ' + form.last_name) : '-' }}</p>
               <div class="flex items-center">
                 <p class="text-xs">Client Role: {{ form && form.occupational_role }}</p>
               </div>

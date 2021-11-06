@@ -10,7 +10,7 @@
       >
         <div class="col-span-3">
           <InfoImageBlock
-            :label="appointment.patient.fullName"
+            :label="$utils.formatName(appointment.patient.fullName)"
             :description="appointment.patient.phone"
             :url="appointment.patient.photo"
             label-class="text-black font-semibold"

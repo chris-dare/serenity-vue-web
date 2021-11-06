@@ -31,7 +31,7 @@
           <cv-data-table-cell>
             <div class="flex items-center py-2">
               <InfoImageBlock
-                :label="formatName(row.name)"
+                :label="$utils.formatName(row.name)"
                 :description="row.gender_age_description"
                 :url="row.photo"
                 size="base"
@@ -152,16 +152,6 @@ export default {
       searchPatientsStore: 'patients/searchPatients',
       addToStoreData: 'patients/addToCurrentPatient',
     }),
-
-    formatName(val) {
-      let words = val.split(' ')
-      const word = words.map((el ,i) => {
-        return el[0].toUpperCase() + words[i].substr(1)
-      })
-
-      return word.join(' ')
-
-    },
 
     searchPatients: debounce(function(search) {
       this.searchPatientsStore({ search, page: this.page, page_size: this.pageLength })

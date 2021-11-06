@@ -28,7 +28,7 @@
             {{ $date.formatDate(row.occurrence_date, 'MMM dd, yyyy') }}
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <InfoImageBlock :label="row.practitioner_name" />
+            <InfoImageBlock :label="$utils.formatName(row.practitioner_name)" />
           </cv-data-table-cell>
           <cv-data-table-cell>
             <p>{{ row.service_or_product_name }}</p>

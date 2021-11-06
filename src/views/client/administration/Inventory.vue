@@ -36,7 +36,7 @@
         <template #default="{row}">
           <cv-data-table-cell>
             <div class="flex items-center space-x-2 py-2">
-              <p>{{ row.name }}</p>
+              <p>{{ $utils.formatName(row.name) }}</p>
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>

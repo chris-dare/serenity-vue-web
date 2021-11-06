@@ -22,7 +22,7 @@
           {{ row.code }}
         </cv-data-table-cell>
         <cv-data-table-cell>
-          {{ row.patient_detail.first_name + ' ' + row.patient_detail.lastname || '' }}
+          {{ $utils.formatName(row.patient_detail.first_name + ' ' + row.patient_detail.lastname) || '' }}
         </cv-data-table-cell>
         <cv-data-table-cell>
           {{ row.status || '' }}

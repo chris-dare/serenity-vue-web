@@ -25,7 +25,7 @@
           <div class="flex items-center py-4 space-x-2">
             <InfoImageBlock
               :url="row.photo"
-              :label="row.patient_name"
+              :label="$utils.formatName(row.patient_name)"
             />
           </div>
         </cv-data-table-cell>

@@ -30,7 +30,7 @@
         @click="$router.push({name: currentWorkspacePatientPage, params: { id: patient.id }})"
       >
         <InfoImageBlock
-          :label="patient.fullName"
+          :label="$utils.formatName(patient.fullName)"
           :description="patient.mobile"
           :url="patient.photo"
         />

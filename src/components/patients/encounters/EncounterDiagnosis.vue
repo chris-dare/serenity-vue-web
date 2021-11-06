@@ -9,7 +9,7 @@
       <template #default="{ row }">
         <cv-data-table-cell>
           <div class="py-2">
-            {{ row.performer_name }}
+            {{ $utils.formatName(row.performer_name) }}
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>

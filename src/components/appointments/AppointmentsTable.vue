@@ -33,7 +33,7 @@
         <cv-data-table-cell>
           <div class="py-2">
             <InfoImageBlock
-              :label="row.patient.fullName"
+              :label="$utils.formatName(row.patient.fullName)"
               :description="row.patient.gender_age_description"
               :url="row.patient.photo"
             />
