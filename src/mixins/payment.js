@@ -75,12 +75,12 @@ export default {
 
     async print() {
       try {
-        this.loading = true
+        this.printLoading = true
         await this.exportBill(this.bill.invoice_id || this.bill.uuid)
 
-        this.loading = false
+        this.printLoading = false
       } catch (error) {
-        this.loading = false
+        this.printLoading = false
       }
     },
 
