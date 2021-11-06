@@ -94,7 +94,7 @@ export default {
         { label: 'Last Name', value: this.currentUser.last_name },
         { label: 'Phone Number', value: this.currentUser.phone_number },
         { label: 'Email', value: this.currentUser.email },
-        { label: 'Date of Birth', value: this.currentUser.date_of_birth },
+        { label: 'Date of Birth', value: this.$date.formatDate(this.currentUser.date_of_birth, 'dd MMM, yyyy' )},
         { label: 'Title', value: this.currentUser.title },
         { label: 'Sex', value: this.currentUser.gender },
         { label: 'Home Address', value: this.currentUser.home_address },

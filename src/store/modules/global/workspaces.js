@@ -4,6 +4,7 @@ export default {
       { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Patients', component: 'Reference' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
+      { label: 'Diagnostic Orders', to: 'Orders', component: 'List' },
       { label: 'Schedules', to: 'Schedules', component: 'Schedule'},
       // { label: 'Notifications', to: 'Notifications', component: 'Notification' },
       // { label: 'Support', to: 'Support', component: 'Help' },

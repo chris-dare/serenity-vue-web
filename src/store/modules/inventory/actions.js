@@ -32,7 +32,7 @@ export default {
       const { data } = await InventoryAPI.update(payload)
       commit(UPDATE_INVENTORY, data.data)
     } catch ({ response: { data: error } }) {
-      throw error
+      throw error.message
     }
   },
 

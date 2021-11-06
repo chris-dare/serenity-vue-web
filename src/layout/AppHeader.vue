@@ -111,7 +111,7 @@ export default {
   data() {
     return {
       search: '',
-      open: false,
+      open: true,
     }
   },
 

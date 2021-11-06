@@ -49,6 +49,7 @@
             <div class="grid grid-cols-4 gap-8 my-4">
               <div>
                 <div class="font-sm text-gray-400 mb-2">Prescribed on</div>
+                <div>{{ $date.formatDate(currentDrug.drug.created_at, 'dd MMM, yyyy @ HH:mm a') }}</div>
                 <!-- <div>{{ $date.formatDate(currentDrug.drug.medication_detail) }}</div> -->
               </div>
               <div>
@@ -81,7 +82,7 @@
         </div>
         <div class="border-b border-serenity-subtle-border border-solid" />
         <div class="flex my-4">
-          <div class="w-1/3 h-32 overflow-y-scroll">
+          <div class="w-1/3 h-40 overflow-y-scroll">
             <div v-if="inventory.loading">
               <cv-skeleton-text />
               <cv-skeleton-text />
@@ -99,6 +100,7 @@
               {{ item.name }}
               <template v-if="item.dosage_form">- ({{ item.dosage_form }})</template>
               <template v-if="item.dosage_amount">- {{ parseInt(item.dosage_amount) }} {{ item.dosage_unit }}</template>
+              <template> - <b> {{ item.in_hand_quantity + ' available' }}</b></template>
             </div>
             <!-- <DataTable
               :data="inventory.data"

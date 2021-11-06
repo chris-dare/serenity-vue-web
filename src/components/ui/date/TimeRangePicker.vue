@@ -9,7 +9,7 @@
     />
     <Timepicker
       v-model="form.end_time"
-      label="Specify a end time"
+      label="Specify an end time"
       format="HH:mm"
       :hour-range="hourRange"
       :minute-range="minuteRange"
