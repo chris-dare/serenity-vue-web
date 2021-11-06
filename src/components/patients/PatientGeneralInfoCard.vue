@@ -49,7 +49,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    vital: {
+    vitals: {
       type: Object,
       default: () => {},
     },
