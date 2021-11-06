@@ -59,7 +59,7 @@
             </SeButton>
             <SeButton
               v-if="settled"
-              :loading="loading"
+              :loading="printLoading"
               @click="print"
             >
               Print
@@ -104,6 +104,7 @@ export default {
       icon: ChevronRight,
       selected: 'user',
       loading: false,
+      printLoading: false,
       type: 'bill',
       patient: null,
     }
