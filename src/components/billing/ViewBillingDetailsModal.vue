@@ -170,6 +170,10 @@ export default {
 
         this.isExportLoading = false
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
         this.isExportLoading = false
       }
     },

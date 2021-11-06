@@ -155,6 +155,10 @@ export default {
         this.visible = false
         this.loading = false
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
         this.loading = false
       }
     },
