@@ -159,7 +159,6 @@ export default {
         return el[0].toUpperCase() + words[i].substr(1)
       })
 
-      console.log(words, word)
       return word.join(' ')
 
     },
