@@ -151,9 +151,8 @@ export default {
     async getData() {
       try {
         this.loading = true
-        const { data } = await this.getInventory(this.filters)
+        const data = await this.getInventory(this.filters)
         this.meta = data.meta
-        this.total = data.meta.total
         this.loading = false
       } catch (error) {
         this.loading = false
