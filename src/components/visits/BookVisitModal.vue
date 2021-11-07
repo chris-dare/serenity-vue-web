@@ -212,6 +212,7 @@ export default {
       createAppointment: 'appointments/createAppointment',
       createPatient: 'patients/createPatient',
       topUpUserAccount: 'billing/topUpUserAccount',
+      resetPatientAccounts: 'billing/resetPatientAccounts',
     }),
 
     goToStep(step) {
@@ -387,6 +388,11 @@ export default {
       } catch (error) {
         this.loading = false
       }
+    },
+
+    async afterCloseFunction() {
+      console.log('reset')
+      await this.resetPatientAccounts()
     },
   },
 }

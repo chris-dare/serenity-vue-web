@@ -27,7 +27,7 @@
       />
       <DataTable
         ref="table"
-        :data="filteredData"
+        :data="data"
         :columns="columns"
         :pagination="pagination"
         :loading="loading"

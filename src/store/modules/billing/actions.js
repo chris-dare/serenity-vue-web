@@ -18,7 +18,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await BillingAPI.patientBills(provider.id, id)
-      commit(SET_BILLING, data.data)
+      commit(SET_BILLING, data.results || data.data)
     } catch ({ response: { data: error } }) {
       throw error
     }
