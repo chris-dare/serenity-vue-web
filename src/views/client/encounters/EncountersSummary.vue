@@ -1,7 +1,7 @@
 <template>
   <div class="relative h-full flex flex-col pb-6 max-w-6xl">
     <div class="flex-1">
-      <p class="font-semibold">Encounter Summary</p>
+      <p><b>Encounter Summary</b> - Started On {{ $date.formatDate(encounter.start_time, 'dd MMM, yyyy @ HH:mm a') }}</p>
 
       <div class="divide-y divide-solid divide-subtle space-y-4">
         <div class="py-4">

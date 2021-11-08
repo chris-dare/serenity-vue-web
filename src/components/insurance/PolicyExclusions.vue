@@ -178,7 +178,6 @@ export default {
         },
       }
       try {
-        console.log(id)
         let data = await this.createPolicy({id, form: payload})
         if (data.success) {
           this.$toast.open({

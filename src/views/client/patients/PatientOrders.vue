@@ -37,7 +37,7 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
-              <p>{{ row.practitioner_detail ? row.practitioner_detail.name : concatData(row.patient_detail, ['first_name', 'lastname']) }}</p>
+              <p>{{ (row.practitioner_detail ? row.practitioner_detail.name : concatData(row.patient_detail, ['first_name', 'lastname'])) | capitalize }}</p>
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
@@ -74,7 +74,7 @@ export default {
 
   props: {
     id: {
-      type: String,
+      type: [String, Number],
       default: null,
     },
   },

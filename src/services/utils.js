@@ -236,6 +236,16 @@ const getTotalValue = (data, field = 'balance') => {
   return data.reduce((acc, el) => {return acc + el[field]}, 0)
 }
 
+const formatName = (val) => {
+  if (!val) return '-'
+  let words = val.split(' ')
+  const word = words.map((el ,i) => {
+    return el.charAt(0).toUpperCase() + words[i].substr(1)
+  })
+
+  return word.join(' ')
+}
+
 const objectHasRequiredData = (data, fields) => {
   return !!Object.keys(data).find(field => {
     if (!fields.includes(field)) {
@@ -263,6 +273,7 @@ export default {
       objectSubset,
       hasData,
       concatData,
+      formatName,
       getTotalValue,
       objectHasRequiredData,
     }

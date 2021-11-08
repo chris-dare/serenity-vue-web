@@ -10,7 +10,7 @@
         alt=""
       >
       <div class="text-lg">
-        {{ patient.fullName }}
+        {{ patient.fullName | capitalize }}
       </div>
       <div class="text-sm font-light">{{ patient.gender_age_description }}</div>
     </div>

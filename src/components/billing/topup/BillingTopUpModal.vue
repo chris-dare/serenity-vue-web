@@ -228,6 +228,10 @@ export default {
         this.$resetData()
 
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
         this.loading = false
       }
     },
@@ -249,6 +253,10 @@ export default {
         this.$resetData()
       } catch (error) {
         // 
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
       } finally {
         this.loading = false
       }

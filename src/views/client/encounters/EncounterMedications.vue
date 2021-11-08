@@ -15,7 +15,7 @@
       </p>
 
       <div v-if="allergies.length">
-        <p class="text-serenity-primary mb-2">{{ patient.fullName }}'s allergies</p>
+        <p class="text-serenity-primary mb-2">{{ patient.fullName | capitalize }}'s allergies</p>
 
         <div class="flex space-x-2">
           <Tag
@@ -250,7 +250,7 @@ export default {
     },
 
     submit(reroute= false) {
-      if (reroute && this.dataHasNotChanged()) {
+      if (reroute && this.dataHasNotChanged) {
         this.$router.push({ name: 'EncounterCarePlan', params: { id: this.$route.params.id }})
         return
       }

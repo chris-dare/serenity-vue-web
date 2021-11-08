@@ -14,14 +14,14 @@
 
 import GetStartedModal from '@/components/dashboard/GetStartedModal'
 
-const DiagnosticDashboard = () => import('@/components/diagnostic/DiagnosticDashboard')
-const OPDDashboard = () => import('@/components/opd/OPDDashboard')
-const PharmacyDashboard = () => import('@/components/pharmacy/PharmacyDashboard')
-const IPDDashboard = () => import('@/components/ipd/IPDDashboard')
-const ReceptionDashboard = () => import('@/components/reception/ReceptionDashboard')
-const BillingDashboard = () => import('@/components/billing/BillingDashboard')
-const VirtualCareDashboard = () => import('@/components/virtual-care/VirtualCareDashboard')
-const BookVisitModal = () => import('@/components/visits/BookVisitModal')
+import BillingDashboard from '@/components/billing/BillingDashboard'
+import OPDDashboard from '@/components/opd/OPDDashboard'
+import PharmacyDashboard from '@/components/pharmacy/PharmacyDashboard'
+import ReceptionDashboard from '@/components/reception/ReceptionDashboard'
+import DiagnosticDashboard from '@/components/diagnostic/DiagnosticDashboard'
+import IPDDashboard from '@/components/ipd/IPDDashboard'
+import VirtualCareDashboard from '@/components/virtual-care/VirtualCareDashboard'
+import BookVisitModal from '@/components/visits/BookVisitModal'
 
 import { mapState } from 'vuex'
 
@@ -32,7 +32,6 @@ export default {
 
   data() {
     return {
-      selected: 'search',
       visible: false,
     }
   },
@@ -71,12 +70,6 @@ export default {
 
       return 'DefaultDashboard'
     },
-  },
-
-  created() {
-    // if (this.appointmentsCount === 0) {
-    //   this.visible = true
-    // }
   },
 
 

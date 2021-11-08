@@ -83,7 +83,7 @@ export default {
       console.log('date click! ' + arg.dateStr)
     },
     handleEventClicks(arg) {
-      this.$trigger('schedule:view:open', this.schedules.find(sch => sch.id === arg.event.id))
+      this.$trigger('schedule:view:open', this.schedules.find(sch => sch?.id?.toString() === arg.event.id))
     },
   },
 }

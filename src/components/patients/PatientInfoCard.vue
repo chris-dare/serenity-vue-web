@@ -4,10 +4,10 @@
       <div class="flex items-center space-x-4">
         <ImageBlock
           :url="patient.photo"
-          :alt="patient.name || patient.fullName"
+          :alt="(patient.name || patient.fullName) | capitalize"
         />
         <div>
-          <p>{{ patient.name || patient.fullName }}</p>
+          <p>{{ (patient.name || patient.fullName) | capitalize }}</p>
           <p class="text-secondary  capitalize">
             {{ patient.gender_age_description }}
           </p>

@@ -15,6 +15,7 @@ export default () => ({
   religiousAffiliations: [],
   genders: [],
   unitTypes: [],
+  interpretationTypes: [],
   examUnitTypes: [],
   socialUnitTypes: [],
   vitalsUnitTypes: [],
@@ -35,4 +36,5 @@ export default () => ({
   serviceGenericPeriodUnits: [],
   serviceRequestCategoryTypes: [],
   serviceRequestSectionTypes: [],
+  dosageRoutes: [],
 })

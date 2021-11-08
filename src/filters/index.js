@@ -2,10 +2,14 @@ import Vue from 'vue'
 import { format } from 'date-fns'
 import { upperFirst, lowerCase } from 'lodash'
 
-export function capitalize (value) {
-  if (!value) return ''
-  value = value.toString().toLowerCase()
-  return value.charAt(0).toUpperCase() + value.slice(1)
+export function capitalize (val) {
+  if (!val) return '-'
+  let words = val.split(' ')
+  const word = words.map((el) => {
+    return upperFirst(lowerCase(el))
+  })
+
+  return word.join(' ')
 }
 
 export function removeDash (value) {

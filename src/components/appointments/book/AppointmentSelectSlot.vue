@@ -54,7 +54,6 @@
 <script>
 import Time from '@carbon/icons-vue/es/time/32'
 import SlotList from '@/components/appointments/lists/SlotList'
-import SlotListItem from '@/components/appointments/lists/SlotListItem'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
@@ -65,8 +64,7 @@ import isSameDay from 'date-fns/isSameDay'
 export default {
   name: 'AppointmentSelectSlot',
 
-  // eslint-disable-next-line vue/no-unused-components
-  components: { SlotList, SlotListItem },
+  components: { SlotList },
 
   mixins: [MultiStep],
 
@@ -164,7 +162,8 @@ export default {
     async getNextSlot() {
       this.loading = true
       try {
-        await this.getNextAvailableSlot({  healthcareservice_id: this.storeData.service.id })
+        const data = await this.getNextAvailableSlot({  healthcareservice_id: this.storeData.service.id })
+        this.form.slot = data
         this.loading = false
         
       } catch (error) {

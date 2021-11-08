@@ -11,6 +11,7 @@
         :to="props.to"
         class="flex items-center h-12 w-full hover:bg-serenity-primary-highlight relative cursor-pointer"
         exact-active-class="bg-serenity-primary-highlight"
+        :data-qa="props.label"
       >
         <slot />
 

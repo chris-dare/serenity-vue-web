@@ -31,12 +31,6 @@
         v-model="search"
         placeholder="Search for user"
       />
-
-      <FilterGroup
-        v-model="search"
-        :filters="filters"
-        class="my-3"
-      />
     </div>
 
     <div class="grid grid-cols-4 gap-4">
@@ -77,22 +71,22 @@ export default {
     }),
 
     filteredUsers() {
-      return this.users.filter(data => !this.search || data.first_name.toLowerCase().includes(this.search.toLowerCase()) || data.last_name.toLowerCase().includes(this.search.toLowerCase()))
+      return this.users.filter(data => !this.search || data.first_name.toLowerCase().includes(this.search.toLowerCase()) || data.last_name.toLowerCase().includes(this.search.toLowerCase()) || data.email.toLowerCase().includes(this.search.toLowerCase()) || data.phone_number.toLowerCase().includes(this.search.toLowerCase()))
     },
 
     filters() {
       return [
         { display: `All (${this.users.length })`, code: '' },
         { display: 'Reception', code: 'reception' },
-        { display: 'In patient', code: 'in-patient' },
         { display: 'Out patient', code: 'out-patient' },
+        { display: 'In patient', code: 'in-patient' },
       ]
     },
   },
 
-  // created() {
-  //   this.refresh()
-  // },
+  created() {
+    this.refresh()
+  },
 
   methods: {
     ...mapActions({
@@ -102,7 +96,7 @@ export default {
 
     async refresh() {
       this.loading = true
-      // await this.getUsers()
+      await this.getUsers()
       this.loading = false
     },
 

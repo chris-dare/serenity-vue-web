@@ -22,7 +22,7 @@
       >
         <template #default="{row}">
           <cv-data-table-cell>
-            <p class="font-semibold">{{ row.fullName }}</p>
+            <p class="font-semibold">{{ row.fullName | capitalize }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <p class="text-secondary">{{ row.id }}</p>

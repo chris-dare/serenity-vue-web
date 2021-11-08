@@ -9,14 +9,11 @@
 </template>
 
 <script>
-import CircleFilled from '@carbon/icons-vue/es/circle--filled/32'
-import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
 import { mapActions } from 'vuex'
 
 export default {
   name: 'RegisterTeam',
-  // eslint-disable-next-line vue/no-unused-components
-  components: { CircleFilled, Checkmark },
+
   data() {
     return {
       checked: '',

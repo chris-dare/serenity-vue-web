@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import omit from 'lodash/omit'
 import BillingAPI from '@/api/billing'
 import { SET_BILLING, DELETE_BILLING, UPDATE_BILLING, SET_ACCOUNTS } from './mutation-types'
 
@@ -7,17 +8,20 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await BillingAPI.list(provider.id, params)
-      commit(SET_BILLING, data.data)
+      commit(SET_BILLING, data.results || data.data)
+      return data
     } catch ({ response: { data: error } }) {
       throw error
     }
   },
 
-  async getPatientBilling({ commit, rootState }, id) {
+  async getPatientBilling({ commit, rootState }, params={}) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await BillingAPI.patientBills(provider.id, id)
-      commit(SET_BILLING, data.data)
+      let patientId = params.id
+      const { data } = await BillingAPI.patientBills(provider.id, patientId, omit(params, ['id']))
+      commit(SET_BILLING, data.results || data.data)
+      return data
     } catch ({ response: { data: error } }) {
       throw error
     }
