@@ -4,6 +4,7 @@ export function initialState() {
     token: null,
     user: null,
     refreshToken: null,
+    organizations: [],
   }
 }
 

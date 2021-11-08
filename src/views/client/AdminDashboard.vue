@@ -34,7 +34,7 @@
 
 import AddEditWorkspace from '@/components/admin/modals/AddEditWorkspace'
 import AddEditInventory from '@/components/admin/modals/AddEditInventory'
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Dashboard',
@@ -55,6 +55,7 @@ export default {
       appointmentsCount: (state) => state.appointments.appointmentsCount,
       workspacesCount: (state) => state.workspaces.workspacesCount,
       locationsCount: (state) => state.locations.locationsCount,
+      clientsCount: (state) => state.clients.clientsCount,
     }),
 
     dashboardTypes() {
@@ -72,7 +73,7 @@ export default {
         {
           label: 'Corporate Clients',
           type: 'Indentification',
-          value: '8',
+          value: this.clientsCount,
         },
         {
           label: 'Appointment',
@@ -125,7 +126,17 @@ export default {
     },
   },
 
+  created() {
+    if (this.$isCurrentWorkspace('ADMIN')) {
+      this.initAdmin()
+    }
+  },
+
   methods: {
+    ...mapActions({
+      initAdmin: 'global/initAdmin',
+
+    }),
     change(dashboard) {
       this.selected = dashboard.type
 

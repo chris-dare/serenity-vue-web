@@ -67,7 +67,7 @@
     <div v-if="selected === 'virtual-care'">
       <Information class="w-5 h-5 text-info" />
       <p class="my-1">
-        {{ localValue.patient.fullName }} (Patient) must meet the following requirements for
+        {{ localValue.patient.fullName | capitalize }} (Patient) must meet the following requirements for
         virtual care
       </p>
       <p

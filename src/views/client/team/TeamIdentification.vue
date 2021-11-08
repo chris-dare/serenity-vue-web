@@ -101,6 +101,7 @@ export default {
   },
 
   created() {
+    this.getRoles()
     if (isEmpty(this.storeData)) {
       this.$router.push({name: 'TeamBiodata'})
     }
@@ -112,6 +113,7 @@ export default {
       createUser: 'practitioners/createUser',
       updateUser: 'practitioners/updateUser',
       reset: 'practitioners/reset',
+      getRoles: 'roles/getRoles',
     }),
 
     submit() {

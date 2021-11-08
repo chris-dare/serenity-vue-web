@@ -5,7 +5,6 @@
       class="mb-4"
     >
       <div class="font-bold">Prescribed medication by {{ doctor }}</div>
-      <!-- <div class="text-xs text-gray-400 mb-2">{{ $date.formatDate(datePrescribed, 'dd MMM, yyyy') }}</div> -->
     </div>
     <div
       v-if="mode === 'prescription'"
@@ -49,7 +48,7 @@
             <div class="grid grid-cols-4 gap-8 my-4">
               <div>
                 <div class="font-sm text-gray-400 mb-2">Prescribed on</div>
-                <!-- <div>{{ $date.formatDate(currentDrug.drug.medication_detail) }}</div> -->
+                <div>{{ $date.formatDate(currentDrug.drug.created_at, 'dd MMM, yyyy @ HH:mm a') }}</div>
               </div>
               <div>
                 <div class="font-sm text-gray-400 mb-2">Note</div>
@@ -74,42 +73,34 @@
           <div><p class="bx--label pr-4 font-bold mt-4">Available Drugs</p></div>
           <div class="flex-1">
             <Search
-              v-model="search"
+              v-model="params.search"
               placeholder="Search by drug name"
+              @input="searchData"
             />
           </div>
         </div>
         <div class="border-b border-serenity-subtle-border border-solid" />
-        <div class="flex my-4">
-          <div class="w-1/3 h-32 overflow-y-scroll">
-            <div v-if="inventory.loading">
-              <cv-skeleton-text />
-              <cv-skeleton-text />
-              <cv-skeleton-text />
-              <cv-skeleton-text />
-            </div>
-            <div
-              v-for="item in filteredPrescriptions"
-              v-else 
-              :key="item.id"
-              :class="inventoryItemClass(item)"
-              class="font-bold text-gray-600 p-2 cursor-pointer hover:text-serenity-primary hover:bg-green-100 hover:font-bold"
-              @click="selectedInventoryItem = item"
-            >
-              {{ item.name }}
-              <template v-if="item.dosage_form">- ({{ item.dosage_form }})</template>
-              <template v-if="item.dosage_amount">- {{ parseInt(item.dosage_amount) }} {{ item.dosage_unit }}</template>
-            </div>
-            <!-- <DataTable
-              :data="inventory.data"
-              :loading="inventory.loading"
+        <div class="flex mb-4">
+          <div class="w-1/3 h-40 overflow-y-scroll">
+            <DataTable
+              ref="table"
+              small
+              :pagination="pagination"
+              :data="data"
+              :columns="['', '']"
+              :loading="loading"
+              :no-data-label="`${$utils.getFirstData(currentDrug.drug.medication_detail) ? $utils.getFirstData(currentDrug.drug.medication_detail) + ' is not available' : 'No data is available'}`"
+              @pagination="actionOnPagination"
             >
               <template #default="{ row }">
-                <cv-data-table-cell>
-                  {{ row.name }}
+                <cv-data-table-cell 
+                  :class="inventoryItemClass({...row})"
+                  class="font-bold text-gray-600 p-2 cursor-pointer hover:text-serenity-primary hover:bg-green-100 hover:font-bold"
+                >
+                  <div @click="selectDrug(row)">{{ `${row.name} ${ row.dosage_form ? "-" + row.dosage_form : ' ' } ${ row.dosage_amount ? "-" + row.dosage_amount : ' '} - ${row.in_hand_quantity} available` }}</div>
                 </cv-data-table-cell>
               </template>
-            </DataTable> -->
+            </DataTable>
           </div>
           <div class="px-4 w-2/3">
             <div class="font-bold pl-4">Drug Details</div>
@@ -165,7 +156,10 @@
             </SeButton>
           </div>
         </div>
-        <small class="text-danger">Insufficient quantity to dispense</small>
+        <small
+          v-if="!isQuantityValid"
+          class="text-danger"
+        >Insufficient quantity to dispense</small>
         <div class="mt-12">
           <div class="font-bold mb-4">
             Selected drugs
@@ -231,11 +225,13 @@
 
 <script>
 import Checkmark from '@carbon/icons-vue/es/checkmark/32'
-import { mapMutations, mapState } from 'vuex'
-import PharmacyInventoryApi from '@/api/pharmacy-inventory'
+import { mapMutations, mapState, mapActions } from 'vuex'
+import DataMixin from '@/mixins/paginated'
 
 export default {
   name: 'ConfirmPrescriptionModal',
+
+  
 
   filters: {
     dosage (value) {
@@ -252,6 +248,8 @@ export default {
       return `${value.period} ${value.period_unit}`
     },
   },
+
+  mixins: [DataMixin],
 
   props: {
     prescriptions: {
@@ -277,8 +275,8 @@ export default {
         Checkmark,
       },
       search: '',
+      loading: false,
       inventory: {
-        loading: false,
         data: [],
       },
       selectedInventoryItem: null,
@@ -297,6 +295,7 @@ export default {
     ...mapState({
       patient: (state) => state.patients.currentPatient,
       provider: (state) => state.auth.provider,
+      data: (state) => state.inventory.inventory,
     }),
     filledPrescriptions() {
       return this.drugs.filter(el => el.filled)
@@ -313,9 +312,9 @@ export default {
       if(!this.selectedInventoryItem)return 0
       return parseInt(this.selectedInventoryItem.net_release_quantity)
     },
-    filteredPrescriptions() {
-      return this.$utils.getFilteredData(this.inventory.data, this.search, ['name', 'batch_number'])
-    },
+    // filteredPrescriptions() {
+    //   return this.$utils.getFilteredData(this.inventory.data, this.search, ['name', 'batch_number'])
+    // },
     doctor() {
       if(this.prescriptions.length == 0)return
       return this.prescriptions[0].practitioner_detail?.name
@@ -338,15 +337,17 @@ export default {
           }
         })
         this.currentDrug = this.drugs[0]
-        console.log(this.currentDrug)
       },
     },
     currentDrug: {
       immediate: true,
       handler(currentDrug) {
         if(this.mode === 'prescription' && !currentDrug)return
+        this.loading = true
         const params = this.mode == 'prescription' ? {search: this.$utils.getFirstData(currentDrug.drug.medication_detail)} : null
-        this.fetchInventory(params)
+        this.params.search = this.$utils.getFirstData(currentDrug.drug.medication_detail)
+        this.getData(params)
+        this.loading = false
       },
     },
     patient: {
@@ -357,13 +358,15 @@ export default {
       },
     },
 
-    search: {
+    selectedInventoryItem:{
       handler(val){
         if(val){
-          this.fetchInventory({search: val})
+          const selectedItemIndex = this.data.findIndex(el => el.id == val.id)
+          if(selectedItemIndex < 0)this.selectedInventoryItem = null
         }
       },
     },
+
   },
 
   mounted() {
@@ -374,6 +377,7 @@ export default {
         selectedDrugs: [],
       }
     }
+    this.refresh()
   },
 
   validations() {
@@ -395,6 +399,9 @@ export default {
       setCheckoutPatient: 'checkout/Set existing patient',
       addCartItems: 'checkout/ADD_CART_ITEMS',
     }),
+    ...mapActions({
+      getData: 'inventory/getInventory',
+    }),
     // eslint-disable-next-line
     getPrescriptionClasses(drug){
       if(drug.filled)return 'bg-serenity-primary text-white'
@@ -403,7 +410,7 @@ export default {
     },
     inventoryItemClass(item){
       if(this.selectedInventoryItem && item.id == this.selectedInventoryItem.id){
-        return 'bg-green-100 text-serenity-primary font-bold'
+        return 'bg-green-600 text-serenity-primary font-bold'
       }
       return ''
     },
@@ -419,19 +426,6 @@ export default {
       // this.$emit('success', medicationRequests)
       this.setCheckoutPatient(this.patient)
       this.$router.push({name: 'CheckoutPaymentOptions'})
-    },
-    async fetchInventory(params = {}, init = true) {
-      if(init){
-        this.inventory.loading = true
-        this.inventory.data = []
-      }
-      const { data } = await PharmacyInventoryApi.list(this.$providerId, params)
-      this.inventory.loading = false
-      this.inventory.data = data.results
-      if(this.selectedInventoryItem){
-        const selectedItemIndex = this.inventory.data.findIndex(el => el.id == this.selectedInventoryItem.id)
-        if(selectedItemIndex < 0)this.selectedInventoryItem = null
-      }
     },
     addDrug() {
       if(!this.selectedInventoryItem)return
@@ -455,6 +449,9 @@ export default {
     },
     removeDrug(drug) {
       this.currentDrug.selectedDrugs.splice(this.currentDrug.selectedDrugs.indexOf(drug), 1)
+    },
+    selectDrug(drug) {
+      this.selectedInventoryItem = { ...drug}
     },
     checkout() {
       let items = []

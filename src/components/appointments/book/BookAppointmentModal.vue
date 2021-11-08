@@ -94,7 +94,7 @@ export default {
   events: {
     'book:appointment:open': function(data) {
       this.visible = true
-      this.label = data.params[0] === 'followup' ? `Follow up appointment - ${this.currentAppointment.patient.fullName}` : `Walk in patient visit - ${this.currentAppointment.patient.fullName}`
+      this.label = data.params[0] === 'followup' ? `Follow up appointment - ${this.$utils.formatName(this.currentAppointment.patient.fullName)}` : `Walk in patient visit - ${this.$utils.formatName(this.currentAppointment.patient.fullName)}`
     },
     'book:appointment:edit': function(data) {
       this.visible = true

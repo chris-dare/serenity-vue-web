@@ -1,8 +1,12 @@
-import { SET_CLIENTS, SET_BILLS, UPDATE_CLIENT, DELETE_CLIENT, UPDATE_FORM, SET_FORM, SET_CURRENT_CLIENT, SET_CURRENT_UPDATE, SET_CLIENT_ACCOUNT, SET_CLIENT_POLICIES, SET_CLAIMS } from './mutation-types'
+import { SET_CLIENTS, SET_BILLS, UPDATE_CLIENT, SET_CLIENTS_COUNT, DELETE_CLIENT, UPDATE_FORM, SET_FORM, SET_CURRENT_CLIENT, SET_CURRENT_UPDATE, SET_CLIENT_ACCOUNT, SET_CLIENT_POLICIES, SET_CLAIMS } from './mutation-types'
 
 export default {
   [SET_CLIENTS](state, clients) {
     state.clients = clients
+  },
+
+  [SET_CLIENTS_COUNT](state, count) {
+    state.clientsCount = count
   },
 
   [SET_CURRENT_CLIENT](state, client) {

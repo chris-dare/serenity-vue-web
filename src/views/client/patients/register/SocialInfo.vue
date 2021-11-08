@@ -40,7 +40,6 @@
         track_by="code"
         placeholder="Primary language you speak"
         custom-field="code"
-        preselect
       />
       <cv-text-input
         v-model="form.occupation"
@@ -87,10 +86,17 @@ export default {
     }),
   },
 
+  created() {
+    this.getMaritalStatuses()
+    this.getLanguages()
+  },
+
   methods: {
     ...mapActions({
       addToStoreData: 'patients/addToCurrentPatient',
       refresh: 'patients/refreshCurrentPatient',
+      getMaritalStatuses: 'resources/getMaritalStatuses',
+      getLanguages: 'resources/getLanguages',
     }),
   },
 }

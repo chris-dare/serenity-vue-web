@@ -225,7 +225,6 @@ export default {
       services: (state) => state.services.services,
       specialties: (state) => state.resources.specialties,
       storeData: (state) => state.appointments.currentAppointment,
-      types: (state) => state.appointments.appointmentTypes,
       provider: (state) => state.auth.provider,
       location: (state) => state.global.location,
       priorities: (state) => state.resources.priorities,
@@ -323,6 +322,10 @@ export default {
         this.$trigger('confirm:delete:close')
       /* eslint-disable-next-line */
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
       }
       this.deleteLoading = false
     },
@@ -360,6 +363,10 @@ export default {
         // if () {
         // }
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
         this.loading = false
       }
     },
@@ -407,6 +414,10 @@ export default {
           this.acted = true
           /* eslint-disable-next-line */
         } catch (error) {
+          this.$toast.open({
+            message: error.message || 'Something went wrong!',
+            type: 'error',
+          })
         }
       } else {
         this.$toast.error('Please select a patient')

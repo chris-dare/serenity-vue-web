@@ -3,7 +3,7 @@ import Vue from 'vue'
 import { SET_INVENTORY, DELETE_INVENTORY, UPDATE_INVENTORY } from './mutation-types'
 
 export default {
-  async getInventory({ commit, rootState }, params ) {
+  async getInventory({ commit, rootState }, params = {} ) {
     try {
       const provider = rootState.auth.provider
       const { data } = await InventoryAPI.list(provider.id, params)
@@ -18,7 +18,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       payload.provider_id = provider.id
-      const { data } = await InventoryAPI.create(payload)
+      const { data } = await InventoryAPI.create(provider.id, payload)
       commit(UPDATE_INVENTORY, data.data)
     } catch (error) {
       Vue.prototype.$utils.error(error)
@@ -26,13 +26,14 @@ export default {
     }
   },
 
-  async updateInventory({ commit }, payload) {
+  async updateInventory({ commit, rootState }, payload) {
     try {
+      const provider = rootState.auth.provider
       delete payload.provider
-      const { data } = await InventoryAPI.update(payload)
+      const { data } = await InventoryAPI.update(provider.id, payload)
       commit(UPDATE_INVENTORY, data.data)
     } catch ({ response: { data: error } }) {
-      throw error
+      throw error.message
     }
   },
 

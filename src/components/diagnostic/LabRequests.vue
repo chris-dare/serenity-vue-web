@@ -22,7 +22,7 @@
           {{ row.code }}
         </cv-data-table-cell>
         <cv-data-table-cell>
-          {{ row.patient_detail.first_name + ' ' + row.patient_detail.lastname || '' }}
+          {{ (row.patient_detail.first_name + ' ' + row.patient_detail.lastname) | capitalize }}
         </cv-data-table-cell>
         <cv-data-table-cell>
           {{ row.status || '' }}

@@ -95,8 +95,10 @@ export default {
         this.getPatientAccounts({ id: this.patient.id })
         this.close()
       } catch (error) {
-        this.$utils.error(error)
-        // 
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        }) 
       } finally {
         this.loading = false
       }

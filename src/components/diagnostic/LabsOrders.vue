@@ -26,7 +26,7 @@
           {{ $date.formatDate(row.occurence, 'dd MMM, yyyy HH:mm a') || '-' }}
         </cv-data-table-cell>
         <cv-data-table-cell>
-          {{ row.patient_name || '-' }}
+          {{ row.patient_name | capitalize }}
         </cv-data-table-cell>
         <cv-data-table-cell class="text-center">
           {{ $utils.getFirstData(row.specimen, 'display' ) || '-' }}
@@ -37,8 +37,9 @@
             :label="row.status"
           />
         </cv-data-table-cell>
-        <cv-data-table-cell>
+        <cv-data-table-cell v-if="!$isCurrentWorkspace('RECEPT')">
           <div
+           
             class="flex items-center cursor-pointer"
             :disabled="!$userCan('diagnostic.requests.read')"
             @click="$trigger('diagnostic-order:add:open', {...row})"
@@ -82,14 +83,6 @@ export default {
       search: '',
       selected: 'all',
       loading: false,
-      columns: [
-        'Service',
-        'Request time',
-        'Patient',
-        'Specimen',
-        'Status',
-        'Action',
-      ],
       filters: {},
       paginate: true,
       total: 0,
@@ -109,6 +102,20 @@ export default {
         { display: 'Draft', code: 'draft' },
         { display: 'Completed', code: 'completed' },
       ]
+    },
+    columns(){
+      let column = [
+        'Service',
+        'Request time',
+        'Patient',
+        'Specimen',
+        'Status',
+      ]
+      if (!this.$isCurrentWorkspace('RECEPT')) {
+        column.push('Action')
+      }
+      return column
+
     },
   },
 
@@ -135,6 +142,8 @@ export default {
       getData: 'diagnostic/getServiceRequests',
     }),
     actionOnPagination(ev) {
+      this.page = ev.page
+      this.pageLength = ev.length
       let id = this.$route.params.id
       this.filters = { payer: id, page: ev.page, page_size: ev.length }
       this.refresh()

@@ -22,8 +22,9 @@
 
 
       <Search
-        v-model="search"
+        v-model="params.search"
         placeholder="Search for inventory item"
+        @input="searchData"
       />
       <DataTable
         ref="table"
@@ -36,7 +37,7 @@
         <template #default="{row}">
           <cv-data-table-cell>
             <div class="flex items-center space-x-2 py-2">
-              <p>{{ row.name }}</p>
+              <p>{{ row.name | capitalize }}</p>
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
@@ -47,6 +48,9 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <p>{{ row.initial_quantity }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.in_hand_quantity }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <p>{{ row.net_release_quantity }}</p>
@@ -80,9 +84,9 @@
 
 <script>
 import AddEditInventory from '@/components/admin/modals/AddEditInventory'
-import { mapActions } from 'vuex'
-import DataMixin from '@/mixins/data'
-import PharmacyInventoryApi from '@/api/pharmacy-inventory'
+import { mapState, mapActions } from 'vuex'
+// import debounce from 'lodash/debounce'
+import DataMixin from '@/mixins/paginated'
 
 export default {
   name: 'Inventory',
@@ -93,65 +97,34 @@ export default {
 
   data() {
     return {
-      search: '',
       columns: [
         'Item name',
         'Unit Price',
         'Selling Price',
         'Initial Quantity',
-        'Quantity Available',
+        'In-Hand Quantity',
+        'Release Quantity',
         'Expiry Date',
         'Action',
       ],
-      filters: {},
-      paginate: true,
-      total: 0,
-      loading: false,
-      data: [],
-      meta: 0,
     }
   },
 
-  watch: { 
-    search: {
-      handler(val){
-        if(val){
-          this.filters = { ...this.filters, search: val}
-          this.getData()
-        }
-      },
-    },
+  computed: {
+    ...mapState({
+      data: (state) => state.inventory.inventory,
+    }),
   },
 
   created() {
-    this.paginate = true
-    this.searchTerms = ['name', 'medication', 'category', 'selling_price', 'batch_number']
-    this.filters = { page: this.page, page_size: this.pageLength }
     this.refresh()
   },
 
   methods: {
     ...mapActions({
-      getInventory: 'inventory/getInventory',
+      getData: 'inventory/getInventory',
       deleteInventory: 'inventory/deleteInventory',
     }),
-
-    actionOnPagination(ev) {
-      this.filters = { page: ev.page, page_size: ev.length }
-      this.getData()
-    },
-
-    async getData() {
-      try {
-        this.loading = true
-        const { data } = await PharmacyInventoryApi.list(this.$providerId, this.filters)
-        this.data = data.results
-        this.meta = data.meta
-        this.loading = false
-      } catch (error) {
-        this.loading = false
-      }
-    },
 
     remove(data) {
       const id = data.id

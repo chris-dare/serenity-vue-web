@@ -146,7 +146,7 @@ export default {
         admin_last_name: this.form.admin_last_name,
         admin_phoneno : this.form.admin_phoneno,
         admin_email: this.form.admin_email,
-        authorizedBy: this.userName,
+        authorizedBy: this.$utils.formatName(this.userName),
       }
       try {
         await this.createClient(payload)

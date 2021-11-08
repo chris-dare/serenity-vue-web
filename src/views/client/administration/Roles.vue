@@ -85,14 +85,15 @@ export default {
     ...mapState({
       roles: (state) => state.roles.roles,
     }),
+
     filteredRoles() {
       return this.roles.filter(data => !this.search || data.name.toLowerCase().includes(this.search.toLowerCase()))
     },
   },
 
-  // created() {
-  //   this.refresh()
-  // },
+  created() {
+    this.refresh()
+  },
 
   methods: {
     ...mapActions({

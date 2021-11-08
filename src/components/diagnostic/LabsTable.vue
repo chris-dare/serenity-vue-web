@@ -162,6 +162,10 @@ export default {
         this.$trigger('confirm:delete:close')
       /* eslint-disable-next-line */
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
       }
       this.deleteLoading = false
     },

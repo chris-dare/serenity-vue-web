@@ -29,7 +29,7 @@
         <cv-data-table-cell>
           <div class="py-2">
             <InfoImageBlock
-              :label="concatData(row.patient_detail, ['first_name', 'lastname'])"
+              :label="concatData(row.patient_detail, ['first_name', 'lastname']) | capitalize"
               :description="row.patient_detail.mobile"
             />
           </div>
@@ -149,12 +149,14 @@ export default {
       this.pageLength = 5
     }
     this.paginate = true
+    this.getEncounterClasses()
     // this.refresh()
   },
 
   methods: {
     ...mapActions({
     //   getData: 'admissions/getAdmissions',
+      getEncounterClasses: 'resources/getEncounterClasses',
       deleteAdmission: 'admissions/deleteAdmission',
     //   setCurrentAdmission: 'admissions/setCurrentAdmission',
     //   getAllAdmissions: 'admissions/getAllAdmissions',

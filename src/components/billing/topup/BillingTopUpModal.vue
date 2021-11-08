@@ -121,11 +121,19 @@ export default {
 
     'billing:topup:open:two': function(data){
       this.step = 2
-      this.form = { patient:data.params[0], payment: {} }
+      this.form = { 
+        patient: data.params[0], 
+        payment: {
+          currency: 'GHS',
+          transaction_type: this.$global.CASH_TYPE,
+          reference_type: 'CASH_DEPOSIT',
+        },
+      }
       this.initPaymentStep(data.params[0].id)
       this.visible = true
       this.showCheck = false
       this.label = 'Top Up Account'
+      this.type = 'topup'
     },
 
     'billing:topup:close': function(){
@@ -228,6 +236,10 @@ export default {
         this.$resetData()
 
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
         this.loading = false
       }
     },
@@ -249,6 +261,10 @@ export default {
         this.$resetData()
       } catch (error) {
         // 
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
       } finally {
         this.loading = false
       }

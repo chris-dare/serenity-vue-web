@@ -1,20 +1,23 @@
 <template>
   <div class="space-y-4">
     <Search
-      v-model="filter"
+      v-model="params.search"
       placeholder="Search for patient, enter name or MR number"
+      @input="searchData"
     />
     <div
       v-if="!modal"
       class="my-4 flex items-center justify-between"
     >
-      <FilterGroup
-        v-model="search"
+      <!-- <FilterGroup
+        v-model="params.status"
         :filters="filters"
-      />
+        @input="refresh"
+      /> -->
       <FilterDropdown
         v-if="false"
         v-model="selectedFilter"
+        @input="refresh"
       />
     </div>
 
@@ -23,15 +26,15 @@
         ref="table"
         :columns="columns"
         :pagination="pagination"
-        :data="normalizedData"
+        :data="data"
         :loading="loading"
-        @pagination="storePagination"
+        @pagination="actionOnPagination"
       >
         <template #default="{ row }">
           <cv-data-table-cell>
             <div class="flex items-center py-2">
               <InfoImageBlock
-                :label="row.name"
+                :label="row.name | capitalize"
                 :description="row.gender_age_description"
                 :url="row.photo"
                 size="base"
@@ -75,8 +78,7 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import DataMixin from '@/mixins/data'
-import debounce from 'lodash/debounce'
+import DataMixin from '@/mixins/paginated'
 
 export default {
   name: 'PatientsTable',
@@ -111,8 +113,6 @@ export default {
         'Action',
       ],
       selectedFilter: '',
-      filter: '',
-      searchTerms: ['gender'],
     }
   },
 
@@ -128,21 +128,15 @@ export default {
     }),
   },
 
-  watch: {
-    filter(search) {
-      this.searchPatients(search)
-    },
-  },
-
   beforeMount() {
     if (this.modal) {
       this.pageSizes = [5, 10, 15]
-      this.pageLength = 5
+      this.params.page_size = 5
     }
   },
 
   mounted() {
-    this.refresh({ page: this.page, page_size: this.pageLength })
+    this.refresh()
   },
 
   methods: {
@@ -151,10 +145,6 @@ export default {
       searchPatientsStore: 'patients/searchPatients',
       addToStoreData: 'patients/addToCurrentPatient',
     }),
-
-    searchPatients: debounce(function(search) {
-      this.searchPatientsStore({ search, page: this.page, page_size: this.pageLength })
-    }, 300, false),
 
     viewPatient(row){
       this.addToStoreData({...row})

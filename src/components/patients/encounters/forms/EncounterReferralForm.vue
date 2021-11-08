@@ -181,7 +181,7 @@ export default {
       return value.split('_').join(' ').toLowerCase()
     },
     doctorCustomLabel (value) {
-      return `${value.fullName} (${value.specialties ? value.specialties.split('_').join(' ') : ''})`
+      return `${this.$utils.formatName(value.fullName)} (${value.specialties ? value.specialties.split('_').join(' ') : ''})`
     },
 
     reset() {

@@ -22,7 +22,7 @@
         <cv-data-table-cell>
           <div class="py-2">
             <InfoImageBlock
-              :label="concatData(row.patient_detail, ['first_name', 'lastname'])"
+              :label="concatData(row.patient_detail, ['first_name', 'lastname']) | capitalize"
               :description="row.patient_detail.mobile"
               :url="row.patient_detail.photo"
             />
@@ -145,6 +145,7 @@ export default {
       this.pageLength = 5
     }
     this.paginate = true
+    this.getEncounterClasses()
     this.refresh()
   },
 
@@ -155,6 +156,7 @@ export default {
       setCurrentVisit: 'visits/setCurrentVisit',
       getAllVisits: 'visits/getAllVisits',
       getMyVisits: 'visits/getMyVisits',
+      getEncounterClasses: 'resources/getEncounterClasses',
     }),
 
     searchVisits: debounce(function(search) {

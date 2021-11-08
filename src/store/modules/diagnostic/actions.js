@@ -19,7 +19,6 @@ export default {
         element.patient_name = element.patient_detail.first_name + ' ' + element.patient_detail.lastname
         return element
       })
-      console.log(new_data)
       commit(SET_SERVICE_REQUESTS, new_data)
     } catch ({ response: { data: error } }) {
       throw error

@@ -10,9 +10,9 @@
       ref="table"
       :data="[]"
       :columns="columns"
-      :pagination="paginationDetails"
       :class="{'small-table': small}"
-      @pagination="$emit('pagination', $event)"
+      :pagination="paginationDetails"
+      @pagination="onPageChange"
     >
       <template slot="data">
         <cv-data-table-row
@@ -78,6 +78,13 @@ export default {
     },
   },
 
+
+  data() {
+    return {
+      isFirstCall: true,
+    }
+  },
+
   computed: {
     noData() {
       return this.data.length === 0
@@ -89,6 +96,16 @@ export default {
       }
 
       return this.pagination
+    },
+  },
+
+  methods: {
+    onPageChange(event) {
+      if (this.isFirstCall) {
+        this.isFirstCall = false
+        return
+      }
+      this.$emit('pagination', event)
     },
   },
 }

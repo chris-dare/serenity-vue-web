@@ -9,7 +9,7 @@ export default {
       pageStart: 1,
       paginate: false,
       loading: false,
-      pageSizes: [10, 15, 20, 25],
+      pageSizes: [10, 25, 50, 100],
     }
   },
 

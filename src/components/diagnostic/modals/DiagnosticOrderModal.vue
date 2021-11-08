@@ -422,6 +422,10 @@ export default {
     }
   },
   
+  created() {
+    this.getObservationCategory()
+    this.getObservationInterpretationTypes()
+  },
 
   methods: {
     ...mapActions({
@@ -435,6 +439,8 @@ export default {
       addToCurrentAppointment: 'appointments/addToCurrentAppointment',
       payForService: 'billing/userPayService',
       getPatientAccounts: 'billing/getPatientAccounts',
+      getObservationCategory: 'resources/getObservationCategory',
+      getObservationInterpretationTypes: 'resources/getObservationInterpretationTypes',
     }),
 
     close() {
@@ -610,6 +616,8 @@ export default {
             service_request: this.form.id, // a service request raised by a patient
             price_tier: this.form.price_tier.id,
             account_id: this.form.account_id,
+            currency: this.form.currency,
+            amount: this.form.amount,
             transaction_type: this.form.transaction_type, //user-wallet, corporate-account, mobile-money, cash
           },
         ]
