@@ -1,5 +1,6 @@
 export default () => ({
   clients: [],
+  clientsCount: 0,
   bills: [],
   claims: [],
   client: {

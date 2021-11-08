@@ -16,11 +16,11 @@ export default {
     return state.currentPatient.is_deceased
   },
 
-  patientAccountBalance: state => {
+  patientAccountBalance: (state, getters, rootState, rootGetters) => {
     if (!state.currentPatient) return false
     const reducer = (accumulator, currentValue) => accumulator.balance + currentValue.balance
 
-    return state.currentPatient.payment_methods?.patient_user.reduce(reducer, 0)
+    return rootGetters['billing/userAccounts']?.reduce(reducer, 0)
   },
 
   patientMedications: state => {

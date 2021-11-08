@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import modelMixin from '@/mixins/model'
 
 export default {
@@ -29,6 +29,16 @@ export default {
   computed: {
     ...mapState({
       vendors: (state) => state.resources.vendors,
+    }),
+  },
+
+  created() {
+    this.getMobileMoneyVendors()
+  },
+
+  methods: {
+    ...mapActions({
+      getMobileMoneyVendors: 'resources/getMobileMoneyVendors',
     }),
   },
 }

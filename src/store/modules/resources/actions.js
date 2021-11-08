@@ -39,7 +39,8 @@ import {
 } from './mutation-types'
 
 export default {
-  async getResources({ commit, rootState }) {
+  async getResources({ commit, rootState, state }, refresh) {
+    if (!refresh && state.resources.length) return
     const provider = rootState.auth.provider
     const { data } = await ResourceAPI.list(provider.id).catch((error) => {
       throw error
@@ -148,7 +149,10 @@ export default {
     commit(SET_CURRENCIES, data)
   },
 
-  async getReferenceTypes({ commit  }) {
+  async getReferenceTypes({ commit, state  }) {
+    if (state.referenceTypes.length) {
+      return
+    }
     const { data } = await ResourceAPI.referenceTypes().catch((error) => {
       throw error
     })

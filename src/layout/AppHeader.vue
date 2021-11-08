@@ -67,7 +67,7 @@
             v-model="selected"
             class="no-label-input se-dark-input hover:bg-serenity-gray focus:bg-serenity-gray mx-2 lg:mx-6 md:block hidden"
             label="false"
-            @change="actionChange"
+            @change="changeWorkspace"
           >
             <cv-select-option
               v-for="(item, index) in workspaces"
@@ -163,9 +163,11 @@ export default {
       this.selectedLocation = localStorage.getItem('location') ? localStorage.getItem('location') : this.locations.length ? this.locations[0].id : ''
     },
 
-    actionChange(value) {
+    changeWorkspace(value) {
       this.setworkspaceType(value)
       this.$router.push({ name: this.workspaceType === 'ADMIN' ? 'GetStarted' : 'Dashboard'}).catch(()=>{})
+
+      
     },
 
     change() {

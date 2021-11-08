@@ -145,6 +145,7 @@ export default {
       this.pageLength = 5
     }
     this.paginate = true
+    this.getEncounterClasses()
     this.refresh()
   },
 
@@ -155,6 +156,7 @@ export default {
       setCurrentVisit: 'visits/setCurrentVisit',
       getAllVisits: 'visits/getAllVisits',
       getMyVisits: 'visits/getMyVisits',
+      getEncounterClasses: 'resources/getEncounterClasses',
     }),
 
     searchVisits: debounce(function(search) {

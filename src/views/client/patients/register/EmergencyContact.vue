@@ -148,10 +148,15 @@ export default {
     }
   },
 
+  created() {
+    this.getLanguages()
+  },
+
   methods: {
     ...mapActions({
       addToStoreData: 'patients/addToCurrentPatient',
       refresh: 'patients/refreshCurrentPatient',
+      getLanguages: 'resources/getLanguages',
     }),
 
     save() {

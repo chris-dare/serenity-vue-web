@@ -197,12 +197,14 @@ export default {
     if (isEmpty(this.storeData)) {
       this.$router.push({ name: this.previous })
     }
+    this.getCodes()
   },
 
   methods: {
     ...mapActions({
       addToStoreData: 'services/addToCurrentService',
       refreshCurrentService: 'services/refreshCurrentService',
+      getCodes: 'resources/getCodes',
     }),
 
     save() {

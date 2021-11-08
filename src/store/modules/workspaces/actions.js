@@ -3,7 +3,9 @@ import WorkspacesAPI from '@/api/workspaces'
 import { SET_WORKSPACES, DELETE_WORKSPACE, UPDATE_WORKSPACE, SET_WORKSPACES_COUNT } from './mutation-types'
 
 export default {
-  async getWorkspaces({ commit, rootState }) {
+  async getWorkspaces({ commit, rootState, state }, refresh = true) {
+    if (!refresh && state.workspaces.length) return
+
     const provider = rootState.auth.provider
     const { data } = await WorkspacesAPI.list(provider.id).catch((error) => {
       throw error

@@ -43,7 +43,6 @@ export default {
   computed: {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
-      appointmentsCount: (state) => state.appointments.appointmentsCount,
       provider: (state) => state.auth.provider,
     }),
 
