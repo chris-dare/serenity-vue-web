@@ -22,21 +22,22 @@
 
 
       <Search
-        v-model="search"
+        v-model="params.search"
         placeholder="Search for inventory item"
+        @input="searchData"
       />
       <DataTable
         ref="table"
         :columns="columns"
         :pagination="pagination"
-        :data="filteredData"
+        :data="data"
         :loading="loading"
         @pagination="actionOnPagination"
       >
         <template #default="{row}">
           <cv-data-table-cell>
             <div class="flex items-center space-x-2 py-2">
-              <p>{{ $utils.formatName(row.name) }}</p>
+              <p>{{ row.name | capitalize }}</p>
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
@@ -81,8 +82,8 @@
 <script>
 import AddEditInventory from '@/components/admin/modals/AddEditInventory'
 import { mapState, mapActions } from 'vuex'
-import debounce from 'lodash/debounce'
-import DataMixin from '@/mixins/data'
+// import debounce from 'lodash/debounce'
+import DataMixin from '@/mixins/paginated'
 
 export default {
   name: 'Inventory',
@@ -93,7 +94,6 @@ export default {
 
   data() {
     return {
-      search: '',
       columns: [
         'Item name',
         'Unit Price',
@@ -103,10 +103,6 @@ export default {
         'Expiry Date',
         'Action',
       ],
-      filters: {},
-      total: 0,
-      loading: false,
-      meta: 0,
     }
   },
 
@@ -115,54 +111,16 @@ export default {
       data: (state) => state.inventory.inventory,
     }),
   },
-  
-
-  watch: { 
-    search: {
-      handler(val){
-        if(val){
-          this.searchInventory(val)
-        }
-      },
-    },
-  },
 
   created() {
-    this.paginate = true
-    this.pageLength = 10
-    this.searchTerms = ['name', 'medication', 'category', 'selling_price', 'batch_number']
-    this.filters = { page: this.page, page_size: this.pageLength }
     this.refresh()
   },
 
   methods: {
     ...mapActions({
-      getInventory: 'inventory/getInventory',
+      getData: 'inventory/getInventory',
       deleteInventory: 'inventory/deleteInventory',
     }),
-
-    actionOnPagination(ev) {
-      this.pageLength = ev.length
-      this.page = ev.page
-      this.filters = { page: ev.page, page_size: ev.length }
-      this.getData()
-    },
-
-    async getData() {
-      try {
-        this.loading = true
-        const data = await this.getInventory(this.filters)
-        this.meta = data.meta
-        this.loading = false
-      } catch (error) {
-        this.loading = false
-      }
-    },
-
-    searchInventory: debounce(function(search) {
-      this.filters = { search, page: this.page, page_size: this.pageLength }
-      this.getData()
-    }, 300, false),
 
     remove(data) {
       const id = data.id

@@ -5,7 +5,7 @@
     @click="localValue = doctor"
   >
     <InfoImageBlock
-      :label="$utils.formatName(doctor.fullName)"
+      :label="doctor.fullName | capitalize"
       :description="specialties"
     />
 

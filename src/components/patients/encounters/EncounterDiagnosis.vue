@@ -9,7 +9,7 @@
       <template #default="{ row }">
         <cv-data-table-cell>
           <div class="py-2">
-            {{ $utils.formatName(row.performer_name) }}
+            {{ row.performer_name | capitalize }}
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>

@@ -1,8 +1,9 @@
 <template>
   <div class="space-y-4">
     <Search
-      v-model="filter"
+      v-model="params.search"
       placeholder="Search for a history"
+      @input="searchData"
     />
 
     <div class="bg-white p-3">
@@ -15,10 +16,11 @@
         ref="table"
         :columns="columns"
         :pagination="pagination"
-        :data="filteredData"
+        :data="data"
         class="transparent-table"
         :no-data-label="noDataLabel('account history')"
         :loading="loading"
+        @pagination="actionOnPagination"
       >
         <template #default="{ row }">
           <cv-data-table-cell>
@@ -50,9 +52,9 @@
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
-import DataMixin from '@/mixins/data'
+import DataMixin from '@/mixins/paginated'
 import BillingAPI from '@/api/billing'
-import debounce from 'lodash/debounce'
+// import debounce from 'lodash/debounce'
 
 export default {
   name: 'PatientAccountHistory',
@@ -61,7 +63,6 @@ export default {
 
   data() {
     return {
-      search: '',
       columns: [
         'Date',
         'Reference',
@@ -71,9 +72,7 @@ export default {
       ],
       visible: false,
       order: {},
-      searchTerms: ['status'],
       data: [],
-      filter: '',
     }
   },
 
@@ -89,12 +88,6 @@ export default {
     }),
   },
 
-  watch: {
-    filter(search) {
-      this.searchHistory(search)
-    },
-  },
-
   async mounted() {
     await this.getPatientAccounts({ id: this.$route.params.id })
     this.refresh()
@@ -105,20 +98,16 @@ export default {
       getPatientAccounts: 'billing/getPatientAccounts',
     }),
 
-    searchHistory: debounce(function(search) {
-      this.getData({ search })
-    }, 300, false),
-
     async getData(params) {
       this.loading = true
       try {
 
         const { data } = await BillingAPI.getAccountHistory(this.$providerId, this.$route.params.id, this.userAccounts[0].uuid, params)
         this.data = data.results
+        
         this.loading = false
-
+        return data
       } catch (error) {
-        console.log('error', error)
         this.loading = false
       }
     },

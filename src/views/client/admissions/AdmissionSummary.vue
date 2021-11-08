@@ -19,7 +19,7 @@
           >
             <div class="col-span-3">
               <InfoImageBlock
-                :label="$utils.formatName(appointment.patient.fullName)"
+                :label="appointment.patient.fullName | capitalize"
                 :description="appointment.patient.phone"
                 label-class="text-black font-semibold"
                 description-class="text-sm"

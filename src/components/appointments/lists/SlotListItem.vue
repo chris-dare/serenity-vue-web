@@ -5,7 +5,7 @@
     @click="localValue = doctor"
   >
     <InfoImageBlock
-      :label="$utils.formatName(fullName)"
+      :label="fullName | capitalize"
       :description="specialties"
     />
     <div class="text-center">
@@ -63,11 +63,6 @@ export default {
     date(){
       return this.$date.formatDate(this.doctor.start, 'EEEE, do MMM yyyy')
     },
-    
-  },
-
-  created(){
-    
   },
 }
 </script>

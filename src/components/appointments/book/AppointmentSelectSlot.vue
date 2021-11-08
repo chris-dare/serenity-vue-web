@@ -64,7 +64,6 @@ import isSameDay from 'date-fns/isSameDay'
 export default {
   name: 'AppointmentSelectSlot',
 
-  // eslint-disable-next-line vue/no-unused-components
   components: { SlotList },
 
   mixins: [MultiStep],

@@ -15,7 +15,7 @@
       </p>
 
       <div v-if="allergies.length">
-        <p class="text-serenity-primary mb-2">{{ $utils.formatName(patient.fullName) }}'s allergies</p>
+        <p class="text-serenity-primary mb-2">{{ patient.fullName | capitalize }}'s allergies</p>
 
         <div class="flex space-x-2">
           <Tag

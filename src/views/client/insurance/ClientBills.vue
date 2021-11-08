@@ -18,7 +18,7 @@
           <cv-data-table-cell>
             <div class="flex items-center py-2">
               <InfoImageBlock
-                :label="$utils.formatName(row.patient_name)"
+                :label="row.patient_name | capitalize"
                 size="base"
               />
             </div>

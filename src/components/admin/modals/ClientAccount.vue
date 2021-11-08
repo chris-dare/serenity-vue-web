@@ -12,15 +12,15 @@
         <div>
           <div class="flex items-center py-5">
             <div class="space-y-1">
-              <p class="text-lg font-semibold">{{ form ? $utils.formatName(form.first_name + ' ' + form.last_name) : '-' }}</p>
+              <p class="text-lg font-semibold">{{ (form.first_name + ' ' + form.last_name) | capitalize }}</p>
               <div class="flex items-center">
-                <p class="text-xs">Client Role: {{ form && form.occupational_role }}</p>
+                <p class="text-xs">Client Role: {{ form.occupational_role }}</p>
               </div>
             </div>
           </div>
           <div class="flex items-center justify-between pt-4 pb-2">
             <div>
-              <p class="text-md">{{ form && form.maximum_dependents_allowed || 0 }}</p>
+              <p class="text-md">{{ form.maximum_dependents_allowed || 0 }}</p>
               <p class="text-secondary text-xs"> Dependents </p>
             </div>
             <div class="text-right">

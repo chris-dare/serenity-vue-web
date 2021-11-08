@@ -38,7 +38,7 @@
         <cv-data-table-cell>
           <div class="flex items-center space-x-2 py-2">
             <Avatar :name="row.patient_name" />
-            <p>{{ $utils.formatName(row.patient_name) }}</p>
+            <p>{{ row.patient_name | capitalize }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
