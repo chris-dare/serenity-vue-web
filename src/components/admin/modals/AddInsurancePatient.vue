@@ -15,130 +15,15 @@
           class="my-3"
         />
         <div>
-          <div class="grid grid-cols-2 gap-8 my-3">
+          <div class="my-3">
             <AutoCompletePatients
               v-if="selected === 'existing'"
               v-model="patient"
               class="col-span-2"
             />
-            <div
-              v-else
-              class="grid grid-cols-2 gap-8 col-span-2"
-            >
-              <FormInput
-                v-model="form.first_name"
-                label="First name"
-                type="text"
-                placeholder="Please enter first name"
-                class="inherit-full-input"
-                required
-              />
-              <FormInput
-                v-model="form.last_name"
-                label="Last name"
-                type="text"
-                placeholder="Please enter last name"
-                class="inherit-full-input"
-                required
-              />
-              <MsisdnPhoneInput
-                v-model="form.mobile"
-                label="Phone number"
-                required
-              />
-              <FormInput
-                v-model="form.email"
-                label="Email"
-                placeholder="Email"
-                class="inherit-full-input"
-                required
-              />
-              <MultiSelect
-                v-model="form.gender"
-                :options="genders"
-                title="Gender"
-                placeholder="Male or female"
-                track-by="code"
-                label="display"
-                custom-field="code"
-                preselect
-                :multiple="false"
-                required
-              />
-              <DatePicker
-                v-model="form.date_of_birth"
-                kind="single"
-                class="se-input-gray"
-                placeholder="dd/mm/yyyy"
-                label="Date of birth"
-                required
-              />
-            </div>
-            <FormInput
-              v-model="form.occupational_role"
-              label="Occupational role"
-              type="text"
-              placeholder="Please enter occupational role"
-              class="inherit-full-input"
-              required
-            />
-            <FormInput
-              v-model="form.employee_tags"
-              label="Employee tag"
-              type="text"
-              placeholder="Please enter employee tag"
-              class="inherit-full-input"
-              required
-            />
-            <FormInput
-              v-model="form.policy_holder"
-              label="Policy holder"
-              type="text"
-              placeholder="Please enter policy holder"
-              class="inherit-full-input"
-              required
-            />
-            <FormInput
-              v-model="form.card_no"
-              label="Card number"
-              type="text"
-              placeholder="Please enter card number"
-              class="inherit-full-input"
-              required
-            />
-            <DatePicker
-              v-model="form.period_start"
-              kind="single"
-              class="se-input-gray"
-              placeholder="dd/mm/yyyy"
-              label="Date of birth"
-              required
-            />
-            <DatePicker
-              v-model="form.period_end"
-              kind="single"
-              class="se-input-gray"
-              placeholder="dd/mm/yyyy"
-              label="Date of birth"
-              required
-            />
-
-            <FormInput
-              v-model="form.maximum_dependents_allowed"
-              label="Maximum dependents allowed"
-              type="number"
-              placeholder="Enter the maximum dependents allowed"
-              class="inherit-full-input col-span-2"
-              required
-            />
-            <FormInput
-              v-model="form.address"
-              label="Address"
-              placeholder="Enter address here..."
-              :rows="2"
-              type="textarea"
-              class="col-span-2 se-input-gray"
-              required
+            <AddInsuranceForm
+              v-model="form"
+              @invalid="setDisabledState"
             />
           </div>
         </div>
@@ -165,10 +50,13 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { required, email } from 'vuelidate/lib/validators'
+import AddInsuranceForm from '@/components/forms/AddInsuranceForm'
 import { emailFormatter } from '@/services/custom-validators'
 
 export default {
   name: 'AddInsurancePatient',
+
+  components: { AddInsuranceForm },
 
   data() {
     return {
@@ -179,6 +67,7 @@ export default {
       form: {},
       selected: 'existing',
       patient: null,
+      disabled: true,
     }
   },
 
@@ -242,6 +131,7 @@ export default {
       updateClient: 'clients/update',
       addBenefactor: 'corporate/createInsuranceBenefactor',
       updateEmployee: 'corporate/updateCorporateEmployee',
+      getBeneficiaries: 'corporate/getCorporate',
     }),
 
     submit(){
@@ -265,23 +155,14 @@ export default {
     async save() {
       this.loading = true
       let id = this.$route.params.id
-      let payload = {
-        managing_organization: id,
-        health_policy: '',
-        date_of_birth: this.form.date_of_birth,
-        period_start: '',
-        period_end: '',
-        contribution_type: 'co-pay',
-        contribution_value: 0,
-        contribution_currency: 'GHS',
-        card_no: '',
-        policy_holder: '',
-        ...this.form,
-      }
+      this.form.date_of_birth = this.form.birth_date
+      this.form.managing_organization = id
+
       try {
-        await this.addBenefactor({ id, form:  payload })
-        this.$toast.open('Client employee successfully created')
+        await this.addBenefactor({ id, form:  {...this.form} })
+        this.$toast.open('Client beneficiary successfully created')
         this.$resetData()
+        this.getBeneficiaries(id)
         // if (data) {
         //   this.$toast.open({
         //     message: 'Client employee successfully created',
@@ -339,6 +220,10 @@ export default {
       }
 
       return newForm
+    },
+
+    setDisabledState(event) {
+      this.disabled = event
     },
   },
 }
