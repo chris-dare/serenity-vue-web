@@ -22,22 +22,22 @@
 
 
       <Search
-        v-model="search"
+        v-model="params.search"
         placeholder="Search for inventory item"
+        @input="searchData"
       />
-
       <DataTable
         ref="table"
-        :data="filteredData"
         :columns="columns"
         :pagination="pagination"
+        :data="data"
         :loading="loading"
         @pagination="actionOnPagination"
       >
         <template #default="{row}">
           <cv-data-table-cell>
             <div class="flex items-center space-x-2 py-2">
-              <p>{{ row.name }}</p>
+              <p>{{ row.name | capitalize }}</p>
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
@@ -81,8 +81,9 @@
 
 <script>
 import AddEditInventory from '@/components/admin/modals/AddEditInventory'
-import { mapActions, mapState } from 'vuex'
-import DataMixin from '@/mixins/data'
+import { mapState, mapActions } from 'vuex'
+// import debounce from 'lodash/debounce'
+import DataMixin from '@/mixins/paginated'
 
 export default {
   name: 'Inventory',
@@ -93,7 +94,6 @@ export default {
 
   data() {
     return {
-      search: '',
       columns: [
         'Item name',
         'Unit Price',
@@ -113,8 +113,6 @@ export default {
   },
 
   created() {
-    this.paginate = true
-    this.searchTerms = ['name', 'category', 'selling_price']
     this.refresh()
   },
 

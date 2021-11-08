@@ -9,7 +9,7 @@ export default {
       pageStart: 1,
       paginate: false,
       loading: false,
-      pageSizes: [10, 15, 20, 25],
+      pageSizes: [10, 25, 50, 100],
     }
   },
 
@@ -23,7 +23,7 @@ export default {
     },
 
     dataCount() {
-      return this.total || this.data.length || 0
+      return this.total || this.meta?.total || this.data.length || 0
     },
 
     noData() {

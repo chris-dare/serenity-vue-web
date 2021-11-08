@@ -119,6 +119,8 @@ export default {
 
   methods: {
     actionOnPagination(ev) {
+      this.page = ev.page
+      this.pageLength = ev.length
       this.filters = { page: ev.page, page_size: ev.length }
       this.getClientBills()
     },

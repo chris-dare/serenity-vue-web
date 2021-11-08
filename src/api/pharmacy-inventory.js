@@ -1,10 +1,10 @@
 import http from '@/http'
 
 export default {
-  url: 'pharmacy',
+  url: 'providers/',
 
-  list(params = {}) {
-    return http.get(`${this.url}/inventory`, {params})
+  list(providerId, params){
+    return http.get(`${this.url}${providerId}/get-inventory`, { params })
   },
 
 }

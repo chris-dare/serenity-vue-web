@@ -10,6 +10,8 @@ export default {
 
   isLoggedIn: state => state.loggedIn,
 
+  organizations: state => state.organizations,
+
   userPermissions: state => get(state.provider, 'permissions.permissions'),
 
   userWorkspaces: (state, getters, rootState) => {

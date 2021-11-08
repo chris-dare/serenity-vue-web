@@ -62,7 +62,7 @@
       </div>
     </SeForm>
 
-    <div class="flex justify-between items-center absolute w-full right-0 bottom-12">
+    <div class="flex justify-between items-center mt-5 w-full right-0 bottom-12">
       <SeButton
         variant="secondary"
         :to="{name: 'EncounterMedications', params: { id: $route.params.id }}"
@@ -70,16 +70,18 @@
         Back to medications
       </SeButton>
       <SeButton
+        :icon="icon"
         :to="{ name: 'EncountersSummary' }"
         variant="primary"
       >
-        Close Encounter
+        Encounter Summary
       </SeButton>
     </div>
   </div>
 </template>
 
 <script>
+import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import { required } from 'vuelidate/lib/validators'
 import { mapActions, mapState, mapGetters } from 'vuex'
 
@@ -95,6 +97,7 @@ export default {
 
   data() {
     return {
+      icon: ChevronRight,
       form: {},
       loading: false,
       columns: ['Description', 'Action'],

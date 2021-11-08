@@ -67,6 +67,7 @@ export default {
       commit(SET_PATIENTS, data.results)
       commit(SET_PATIENTS_COUNT, data.meta.total)
       commit(SET_PATIENTS_META, data.meta)
+      return data
     } catch (error) {
       throw error.data || error
     }
@@ -225,7 +226,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await ServiceRequestsAPI.list(provider.id, params)
-      commit(SET_SERVICE_REQUESTS, data)
+      commit(SET_SERVICE_REQUESTS, data.results)
     } catch (error) {
       throw error.data || error
     }

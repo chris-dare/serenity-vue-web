@@ -35,13 +35,13 @@
           :pagination="pagination"
           :data="filteredData"
           :loading="loading"
-          @pagination="actionOnPagination"
+          @pagination="storePagination"
         >
           <template #default="{ row }">
             <cv-data-table-cell>
               <div class="flex items-center py-2">
                 <InfoImageBlock
-                  :label="row.name"
+                  :label="row.name | capitalize"
                   :description="row.gender_age_description"
                   :url="row.photo"
                   size="base"

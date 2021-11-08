@@ -1,5 +1,5 @@
 import AuthAPI from '@/api/auth'
-import { SET_LOGGED_IN, SET_USER, SET_TOKEN, SET_REFRESH_TOKEN, SET_PRACTIONER_DATA } from './mutation-types'
+import { SET_LOGGED_IN, SET_USER, SET_TOKEN, SET_REFRESH_TOKEN, SET_ORGANIZATIONS, SET_CURRENT_ORGANIZATION } from './mutation-types'
 import router from '@/router'
 
 export default {
@@ -7,6 +7,7 @@ export default {
     commit(SET_TOKEN, null)
     commit(SET_USER, null)
     commit(SET_LOGGED_IN, false)
+    commit(SET_ORGANIZATIONS, [])
   },
 
   setLoggedIn({commit}, status) {
@@ -20,7 +21,8 @@ export default {
         commit(SET_TOKEN, result.access)
         commit(SET_REFRESH_TOKEN, result.refresh)
         commit(SET_USER, user)
-        commit(SET_PRACTIONER_DATA, result.practitioner_roles[0])
+        commit(SET_CURRENT_ORGANIZATION, result.practitioner_roles[0])
+        commit(SET_ORGANIZATIONS, result.practitioner_roles)
         commit(SET_LOGGED_IN, true)
         return result
       })
@@ -106,7 +108,7 @@ export default {
     return AuthAPI.updateProvider(params)
       .then(({data: result}) => {
         if(result.success){
-          commit(SET_PRACTIONER_DATA, result.data)
+          commit(SET_CURRENT_ORGANIZATION, result.data)
         }
         return result
       })
@@ -120,6 +122,10 @@ export default {
     const { data } = await AuthAPI.getProvider(provider.id).catch((error) => {
       throw error
     })
-    commit(SET_PRACTIONER_DATA, data.data)
+    commit(SET_CURRENT_ORGANIZATION, data.data)
+  },
+
+  async refreshCurrentOrganization({commit}, organization) {
+    commit(SET_CURRENT_ORGANIZATION, organization)
   },
 }

@@ -323,6 +323,10 @@ export default {
         this.$trigger('confirm:delete:close')
       /* eslint-disable-next-line */
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
       }
       this.deleteLoading = false
     },
@@ -360,6 +364,10 @@ export default {
         // if () {
         // }
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
         this.loading = false
       }
     },
@@ -407,6 +415,10 @@ export default {
           this.acted = true
           /* eslint-disable-next-line */
         } catch (error) {
+          this.$toast.open({
+            message: error.message || 'Something went wrong!',
+            type: 'error',
+          })
         }
       } else {
         this.$toast.error('Please select a patient')

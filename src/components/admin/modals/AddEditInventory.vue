@@ -87,11 +87,12 @@
             placeholder=""
             :invalid-message="$utils.validateRequiredField($v, 'net_release_quantity')"
           />
-          <cv-text-input
+          <DatePicker
             v-model="form.expiry_date"
-            type="date"
+            kind="single"
+            class="se-input-gray"
+            placeholder="dd/mm/yyyy"
             label="Item Expiry date"
-            placeholder="eg 23/12/2040"
           />
         </div>
         <cv-text-input
@@ -141,13 +142,8 @@ export default {
 
   validations: {
     form: {
-      category: { required },
-      selling_price: {
-        minValue: minValue(1),
-      },
-      unit_price: {
-        minValue: minValue(1),
-      },
+      selling_price: { required },
+      unit_price: { required },
       dosage_amount: {
         minValue: minValue(1),
       },
@@ -167,12 +163,14 @@ export default {
     'inventory:add:open': function(){
       this.visible = true
       this.medication = false
+      this.form.category = 'medical-stock'
       this.type = 'add'
     },
     'inventory:edit:open': function(data){
       this.visible = true
       this.form = data.params[0]
-      this.medication = data.params[0].category == 'medical-stock'
+      this.form.category = 'medical-stock'
+      this.medication = this.form.category == 'medical-stock'
       this.type = 'update'
     },
   },
@@ -225,6 +223,10 @@ export default {
         this.loading = false
       } catch (error) {
         this.loading = false
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
       }
     },
 
@@ -239,6 +241,10 @@ export default {
 
         this.loading = false
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
         this.loading = false
       }
     },

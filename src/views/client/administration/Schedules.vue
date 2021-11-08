@@ -4,6 +4,7 @@
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Schedules ({{ dataCount || 0 }})</p>
         <SeButton
+          v-if="$isCurrentWorkspace('ADMIN')"
           @click="$trigger('schedule:add:open')"
         >
           Add new schedule
@@ -11,10 +12,8 @@
         </SeButton>
       </div>
 
-      <cv-form
-        autocomplete="off"
+      <SeForm
         class="flex items-end justify-between mt-4"
-        @submit.prevent
       >
         <div class="flex items-center gap-1 w-2/5">
           <MultiSelect
@@ -60,7 +59,7 @@
           class="flex-none se-white-date-picker"
           @change="filter"
         />
-      </cv-form>
+      </SeForm>
 
       <Calendar :loading="loading" />
     </div>

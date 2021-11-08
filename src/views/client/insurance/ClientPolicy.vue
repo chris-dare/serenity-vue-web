@@ -200,7 +200,6 @@ export default {
 
     listService(list){
       return list.map(element => {
-        console.log(element)
         if (element.code) {
           return element.code
         } else {
@@ -210,6 +209,8 @@ export default {
     },
 
     actionOnPagination(ev) {
+      this.page = ev.page
+      this.pageLength = ev.length
       this.filters = { page: ev.page, page_size: ev.length }
       this.getPolicies()
     },

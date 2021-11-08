@@ -19,6 +19,7 @@ export default {
     dispatch('patients/getReferrals', patient , { root:true })
     dispatch('patientAllergies/getAllergies', patient , { root:true })
     dispatch('resources/getObservationUnitTypes', null, { root:true })
+    dispatch('resources/getObservationInterpretationTypes', null, { root:true })
     dispatch('resources/getVitalsUnitTypes', null, { root:true })
     dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
     dispatch('resources/getSystemExamUnitTypes', null, { root:true })
@@ -243,6 +244,7 @@ export default {
       const diagnostic = encounter.encounter_diagnosis.find(el => el.id == payload.id)
       diagnostic.role = data.role
       diagnostic.condition = data.condition
+      diagnostic.note = data.note
       commit(SET_ENCOUNTER, encounter)
     } catch ({ response: { data: error } }) {
       throw error

@@ -1,8 +1,9 @@
 <template>
   <div class="space-y-4">
     <Search
-      v-model="filter"
+      v-model="params.search"
       placeholder="Search for patient, enter name or MR number"
+      @input="searchData"
     />
 
     <div>
@@ -10,15 +11,15 @@
         ref="table"
         :columns="columns"
         :pagination="pagination"
-        :data="normalizedData"
+        :data="data"
         :loading="loading"
-        @pagination="storePagination"
+        @pagination="actionOnPagination"
       >
         <template #default="{ row }">
           <cv-data-table-cell>
             <div class="flex items-center py-2">
               <InfoImageBlock
-                :label="row.patient_detail.name"
+                :label="row.patient_detail.name | capitalize"
                 :url="row.patient_detail.photo"
                 :description="$utils.concatData(row.patient_detail, ['age', 'gender'])"
                 size="base"
@@ -80,7 +81,7 @@
                 <cv-data-table-cell>
                   <div>
                     <InfoImageBlock
-                      :label="request.row.practitioner_name"
+                      :label="request.row.practitioner_name | capitalize"
                     />
                   </div>
                 </cv-data-table-cell>
@@ -118,8 +119,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import DataMixin from '@/mixins/data'
-import debounce from 'lodash/debounce'
+import DataMixin from '@/mixins/paginated'
 import BillingAPI from '@/api/billing'
 import BillingSettlePaymentModal from '@/components/billing/BillingSettlePaymentModal'
 
@@ -143,13 +143,7 @@ export default {
       ],
       nestedTableColumns: ['Practitioner', 'Service/Product', 'Charge', 'Status'],
       selectedFilter: '',
-      filter: '',
-      searchTerms: ['patient_detail.name'],
       data: [],
-      filters: [],
-      paginate: true,
-      total: 0,
-      meta: 0,
     }
   },
 
@@ -159,26 +153,16 @@ export default {
     }),
   },
 
-  watch: {
-    filter(search) {
-      this.searchInvoices(search)
-    },
-  },
-
   mounted() {
-    this.refresh({ page: this.page, page_size: this.pageLength })
+    this.refresh()
   },
 
   methods: {
     async getData(params) {
       const { data } = await BillingAPI.invoices(this.$providerId, params)
-      this.total = data.meta.total
       this.data = data.results
+      return data
     },
-
-    searchInvoices: debounce(function(search) {
-      this.refresh({ search, page: this.page, page_size: this.pageLength })
-    }, 300, false),
 
     getStatusVariant(status) {
       if (status === 'billable') {

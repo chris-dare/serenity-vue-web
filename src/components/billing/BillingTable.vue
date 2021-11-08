@@ -1,19 +1,22 @@
 <template>
   <div class="space-y-4">
     <Search
-      v-model="filter"
+      v-if="!hideSearch"
+      v-model="params.search"
       placeholder="Search for patient"
       class="se-input-white"
+      @input="searchData"
     />
 
     <FilterGroup
-      v-model="search"
-      :filters="filters"
+      v-model="params.status"
+      :filters="filterOptions"
+      @input="refresh"
     />
 
     <DataTable
       ref="table"
-      :data="filteredData"
+      :data="data"
       :columns="columns"
       :loading="loading"
       :pagination="pagination"
@@ -24,7 +27,7 @@
           <div class="flex items-center py-4 space-x-2">
             <InfoImageBlock
               :url="row.photo"
-              :label="row.patient_name"
+              :label="row.patient_name | capitalize"
             />
           </div>
         </cv-data-table-cell>
@@ -73,8 +76,7 @@
 <script>
 import ViewBillingDetailsModal from '@/components/billing/ViewBillingDetailsModal'
 import BillingSettlePaymentModal from '@/components/billing/BillingSettlePaymentModal'
-import DataMixin from '@/mixins/data'
-import debounce from 'lodash/debounce'
+import DataMixin from '@/mixins/paginated'
 import { mapActions, mapState } from 'vuex'
 
 export default {
@@ -83,6 +85,13 @@ export default {
   components: { ViewBillingDetailsModal, BillingSettlePaymentModal },
 
   mixins: [DataMixin],
+
+  props: {
+    hideSearch: {
+      type: Boolean,
+      default: false,
+    },
+  },
 
   data() {
     return {
@@ -95,9 +104,12 @@ export default {
         'Action',
       ],
       loading: false,
-      searchTerms: ['patient_name', 'status'],
       paginate: true,
       filter: null,
+      params: {
+        page: 1,
+        page_size: 10,
+      },
     }
   },
 
@@ -110,24 +122,14 @@ export default {
       return this.$date.sortByDate(this.bills, 'created_on', 'desc')
     },
 
-    filters() {
+    filterOptions() {
       return [
-        { display: `All (${ this.dataCount })`, code: '' },
+        { display: `All (${ this.dataCount })`, code: null },
         { display: 'Fully Paid', code: 'billed' },
         { display: 'Pending', code: 'billable' },
         { display: 'Cancelled', code: 'cancelled' },
       ]
     },
-  },
-
-  watch: {
-    filter(search) {
-      this.searchBills(search)
-    },
-  },
-
-  created() {
-    this.refresh()
   },
 
   methods: {
@@ -153,10 +155,6 @@ export default {
       this.getPatientAccounts({ id: bill.patientid })
       this.$trigger('billing:settle:open', bill)
     },
-
-    searchBills: debounce(function(search) {
-      this.refresh({ search })
-    }, 300, false),
   },
 }
 </script>

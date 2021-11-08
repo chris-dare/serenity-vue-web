@@ -5,7 +5,7 @@
       class="mb-4"
     >
       <div class="font-bold">Prescribed medication by {{ doctor }}</div>
-      <div class="text-xs text-gray-400 mb-2">{{ $date.formatDate(datePrescribed, 'dd MMM, yyyy') }}</div>
+      <!-- <div class="text-xs text-gray-400 mb-2">{{ $date.formatDate(datePrescribed, 'dd MMM, yyyy') }}</div> -->
     </div>
     <div
       v-if="mode === 'prescription'"
@@ -49,7 +49,8 @@
             <div class="grid grid-cols-4 gap-8 my-4">
               <div>
                 <div class="font-sm text-gray-400 mb-2">Prescribed on</div>
-                <div>{{ $date.formatDate(currentDrug.drug.medication_detail) }}</div>
+                <div>{{ $date.formatDate(currentDrug.drug.created_at, 'dd MMM, yyyy @ HH:mm a') }}</div>
+                <!-- <div>{{ $date.formatDate(currentDrug.drug.medication_detail) }}</div> -->
               </div>
               <div>
                 <div class="font-sm text-gray-400 mb-2">Note</div>
@@ -81,7 +82,7 @@
         </div>
         <div class="border-b border-serenity-subtle-border border-solid" />
         <div class="flex my-4">
-          <div class="w-1/3 h-32 overflow-y-scroll">
+          <div class="w-1/3 h-40 overflow-y-scroll">
             <div v-if="inventory.loading">
               <cv-skeleton-text />
               <cv-skeleton-text />
@@ -99,6 +100,7 @@
               {{ item.name }}
               <template v-if="item.dosage_form">- ({{ item.dosage_form }})</template>
               <template v-if="item.dosage_amount">- {{ parseInt(item.dosage_amount) }} {{ item.dosage_unit }}</template>
+              <template> - <b> {{ item.in_hand_quantity + ' available' }}</b></template>
             </div>
             <!-- <DataTable
               :data="inventory.data"
@@ -124,7 +126,7 @@
                   {{ row.selling_price | formatMoney | toCedis }}
                 </cv-data-table-cell>
                 <cv-data-table-cell>
-                  {{ row.initial_quantity }}
+                  {{ row.in_hand_quantity }}
                 </cv-data-table-cell>
                 <cv-data-table-cell>
                   {{ row.batch_number }}
@@ -165,6 +167,10 @@
             </SeButton>
           </div>
         </div>
+        <small
+          v-if="!isQuantityValid"
+          class="text-danger"
+        >Insufficient quantity to dispense</small>
         <div class="mt-12">
           <div class="font-bold mb-4">
             Selected drugs
@@ -313,7 +319,7 @@ export default {
       return parseInt(this.selectedInventoryItem.net_release_quantity)
     },
     filteredPrescriptions() {
-      return this.$utils.getFilteredData(this.inventory.data, this.search, ['name'])
+      return this.$utils.getFilteredData(this.inventory.data, this.search, ['name', 'batch_number'])
     },
     doctor() {
       if(this.prescriptions.length == 0)return
@@ -337,7 +343,6 @@ export default {
           }
         })
         this.currentDrug = this.drugs[0]
-        console.log(this.currentDrug)
       },
     },
     currentDrug: {
@@ -353,6 +358,14 @@ export default {
       handler(patient) {
         if(!(patient && patient.id))return null
         this.$store.dispatch('billing/getPatientAccounts', { id: patient.id }, { root:true })
+      },
+    },
+
+    search: {
+      handler(val){
+        if(val){
+          this.fetchInventory({search: val})
+        }
       },
     },
   },
@@ -416,9 +429,9 @@ export default {
         this.inventory.loading = true
         this.inventory.data = []
       }
-      const response = await PharmacyInventoryApi.list(params)
+      const { data } = await PharmacyInventoryApi.list(this.$providerId, params)
       this.inventory.loading = false
-      this.inventory.data = response.data
+      this.inventory.data = data.results
       if(this.selectedInventoryItem){
         const selectedItemIndex = this.inventory.data.findIndex(el => el.id == this.selectedInventoryItem.id)
         if(selectedItemIndex < 0)this.selectedInventoryItem = null

@@ -43,9 +43,8 @@
 
             <div class="flex space-x-2">
               <SeButton
-                v-if="settled"
                 variant="secondary"
-                :loading="loading"
+                :loading="printLoading"
                 @click="print"
               >
                 Print
@@ -97,6 +96,7 @@ export default {
       },
       isExportLoading: false,
       loading: false,
+      printLoading: false,
       type: '',
       patient: null,
     }
@@ -170,6 +170,10 @@ export default {
 
         this.isExportLoading = false
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
         this.isExportLoading = false
       }
     },

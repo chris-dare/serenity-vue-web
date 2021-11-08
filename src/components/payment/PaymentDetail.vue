@@ -11,7 +11,7 @@
             src="@/assets/img/qr.png"
             alt=""
           >
-          <p class="text-xl"> {{ details.patient.fullName }} </p>
+          <p class="text-xl"> {{ details.patient.fullName | capitalize }} </p>
           <p class="text-secondary text-xs"> {{ details.category }} </p>
         </div>
         <div>

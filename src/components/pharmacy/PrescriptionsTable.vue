@@ -60,7 +60,7 @@
           <cv-data-table-cell>
             <div class="flex items-center py-2">
               <InfoImageBlock
-                :label="row.patient.fullName"
+                :label="row.patient.fullName | capitalize"
                 :description="row.patient.gender_age_description"
                 size="base"
               />

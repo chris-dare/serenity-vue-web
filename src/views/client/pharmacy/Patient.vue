@@ -44,7 +44,7 @@ export default {
 
   props: {
     id: {
-      type: String,
+      type: [String, Number],
       required: true,
     },
   },
@@ -142,6 +142,7 @@ export default {
       this.$store.dispatch('resources/getEncounterStatuses', null, { root:true })
       this.$store.dispatch('patients/getReferrals', id , { root:true })
       this.$store.dispatch('resources/getObservationUnitTypes', null, { root:true })
+      this.$store.dispatch('resources/getObservationInterpretationTypes', null, { root:true })
       this.$store.dispatch('resources/getVitalsUnitTypes', null, { root:true })
       this.$store.dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
       this.$store.dispatch('resources/getSystemExamUnitTypes', null, { root:true })

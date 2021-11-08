@@ -141,14 +141,30 @@
             <div
               class="grid grid-cols-2 gap-y-8 my-8"
             >
-              <FormMixedInput
+              
+              <div
                 v-for="(cat, index) in category.options"
                 :key="index"
-                v-model="categoryValues[cat.code]"
-                class="mx-2"
-                :suffix-text="cat.display"
-                :label="cat.code"
-              />
+              >
+                <FormMixedInput
+                  v-if="cat.unit"
+                  v-model="categoryValues[cat.code]"
+                  class="mx-2"
+                  :suffix-text="cat.unit"
+                  :label="cat.display"
+                />
+                <MultiSelect
+                  v-else
+                  v-model="categoryValues[cat.code]"
+                  :title="cat.display"
+                  :multiple="false"
+                  :options="interpretationTypes"
+                  track_by="code"
+                  custom-field="code"
+                  label="display"
+                  placeholder="Search or choose a observation type"
+                />
+              </div>
             </div>
 
             <cv-text-area
@@ -246,12 +262,13 @@
             class="text-primary font-bold"
             style="font-size: 36px"
           >
-            {{ form.price_tier ? form.price_tier.display : "Choose price tier" }}
+            {{ form.price_tier ? form.price_tier.display || "Choose price tier" : "Choose price tier" }}
           </h1>
         </div>
         <ModeOfPayment
           v-model="form"
           :v="$v"
+          :total="form.price_tier ? form.price_tier.charge : 0"
           :patient="form.patient"
         >
           <MultiSelect
@@ -307,6 +324,7 @@ export default {
         diagnostic_report_cancelled_reasons: [{}],
         transaction_type: '',
         collection_quantity: '1',
+        price_tier: {},
       },
       options: {
         PREVIOUS_OBSERVATIONS: [],
@@ -349,6 +367,7 @@ export default {
       categories: (state) => state.resources.observationCategories,
       storeData: (state) => state.appointments.currentAppointment,
       provider: (state) => state.auth.provider,
+      interpretationTypes: (state) => state.resources.interpretationTypes,
     }),
     ...mapGetters({
       practitionerRoleId: 'auth/practitionerRoleId',
@@ -380,6 +399,7 @@ export default {
 
         return {
           id: price.id,
+          charge: price.charge,
           display: `${this.$currency(price.charge, price.currency).format()} - ${price.description}`,
         }
       })
@@ -390,7 +410,7 @@ export default {
     if(this.form.transaction_type === 'cash'){
       return {
         form: {
-          amount: { required, minValue: minValue(this.cartTotal) },
+          amount: { required, minValue: minValue(this.form.price_tier.charge) },
         },
       }
     }
@@ -590,6 +610,8 @@ export default {
             service_request: this.form.id, // a service request raised by a patient
             price_tier: this.form.price_tier.id,
             account_id: this.form.account_id,
+            currency: this.form.currency,
+            amount: this.form.amount,
             transaction_type: this.form.transaction_type, //user-wallet, corporate-account, mobile-money, cash
           },
         ]

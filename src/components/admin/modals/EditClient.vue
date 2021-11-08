@@ -173,7 +173,7 @@ export default {
         creditStartDate: new Date(this.form.creditStartDate), //required
         depositType: this.form.state, //either limited-credit-active or limited-debit-activerequired
         companyId: this.form.company.main_branch_id,
-        authorizedBy: this.userName,
+        authorizedBy: this.$utils.formatName(this.userName),
         maximum_employees_allowed: this.form.maximum_employees_allowed, //required
       }
       if(this.form.id){
@@ -249,6 +249,10 @@ export default {
         this.visible = false
         this.loading = false
       } catch (error) {
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
         this.loading = false
       }
     },
