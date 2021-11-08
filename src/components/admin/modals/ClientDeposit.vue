@@ -150,6 +150,10 @@ export default {
     },
   },
 
+  created() {
+    this.getReferenceTypes()
+  },
+
   methods: {
     ...mapActions({
       depositClient: 'clients/deposit',
@@ -157,6 +161,7 @@ export default {
       addToClient: 'clients/addClientAccount',
       getClientAccount: 'clients/getClientAccount',
       getCurrencies: 'resources/getCurrencies',
+      getReferenceTypes: 'resources/getReferenceTypes',
     }),
 
     submit(){

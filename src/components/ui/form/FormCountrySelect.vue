@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'FormCountrySelect',
 
@@ -51,6 +51,16 @@ export default {
         this.$emit('input', val)
       },
     },
+  },
+
+  created() {
+    this.getCountries()
+  },
+
+  methods: {
+    ...mapActions({
+      getCountries: 'global/getCountries',
+    }),
   },
 }
 </script>

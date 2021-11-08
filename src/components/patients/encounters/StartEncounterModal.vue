@@ -124,9 +124,14 @@ export default {
     }
   },
 
+  created() {
+    this.getEncounterClasses()
+  },
+
   methods: {
     ...mapActions({
       startEncounter: 'encounters/createEncounter',
+      getEncounterClasses: 'resources/getEncounterClasses',
     }),
 
     async start() {

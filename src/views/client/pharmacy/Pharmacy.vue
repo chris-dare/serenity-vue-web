@@ -44,7 +44,6 @@ export default {
   computed: {
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
-      appointmentsCount: (state) => state.appointments.appointmentsCount,
     }),
 
     availableActions() {

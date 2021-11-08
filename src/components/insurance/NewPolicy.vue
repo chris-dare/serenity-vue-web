@@ -145,6 +145,11 @@ export default {
     },
   },
 
+  created() {
+    this.getCategories()
+    this.getReferenceTypes()
+  },
+
   methods: {
     ...mapActions({
       createPolicy: 'clients/createClientPolicy',
@@ -153,6 +158,8 @@ export default {
       addToClient: 'clients/addClientAccount',
       getClientAccount: 'clients/getClientAccount',
       getCurrencies: 'resources/getCurrencies',
+      getCategories: 'resources/getCategories',
+      getReferenceTypes: 'resources/getReferenceTypes',
     }),
 
     submit(){

@@ -2,40 +2,26 @@ import ResourcesAPI from '@/api/resources'
 import { SET_COUNTRIES, SET_GLOBAL_TYPE, SET_GLOBAL_LOCATION } from './mutation-types'
 
 export default {
-  beforeLoginInit({ dispatch }) {
-    dispatch('getCountries')
-    dispatch('resources/getMaritalStatuses', null, { root:true })
-    dispatch('resources/getPaymentMethods', null, { root:true })
-    dispatch('resources/getCategories', null, { root:true })
-    dispatch('resources/getObservationCategory', null, { root:true })
-    dispatch('resources/getCodes', null, { root:true })
-    dispatch('resources/getServiceTypes', null, { root:true })
-    dispatch('resources/getGenders', null, { root:true })
-    dispatch('resources/getLanguages', null, { root:true })
-    dispatch('resources/getMobileMoneyVendors', null, { root:true })
-    dispatch('resources/getEncounterStatuses', null, { root:true })
-    dispatch('resources/getEncounterClasses', null, { root:true })
-    dispatch('resources/getReferenceTypes', null, { root:true })
+  beforeLoginInit() {
+    // dispatch('resources/getEncounterStatuses', null, { root:true }) (relook)
 
   },
 
   initApp({dispatch}) {
     dispatch('setDefaultWorkpace')
-    dispatch('appointments/getAppointments', {refresh: true}, { root:true })
-    dispatch('patients/getPatients', { page: 1, page_size: 5 }, { root:true })
     dispatch('practitioners/getUsers', null, { root:true })
-    dispatch('roles/getRoles', null, { root:true })
-    dispatch('resources/getResources', null, { root:true })
-    dispatch('workspaces/getWorkspaces', null, { root:true })
+    dispatch('resources/getResources', false, { root:true })
+    dispatch('workspaces/getWorkspaces', false, { root:true })
     dispatch('resources/getSpecialties', null, { root:true })
     dispatch('services/getServices', null, { root:true })
-    dispatch('resources/getDosageRoutes', null, { root:true })
-    dispatch('resources/getObservationInterpretationTypes', null, { root:true })
-    dispatch('beforeLoginInit')
+    dispatch('resources/getGenders', null, { root:true })
   },
 
   initAdmin({ dispatch }) {
-    dispatch('workspaces/getWorkspaces', null,{ root:true })
+    dispatch('workspaces/getWorkspaces', false,{ root:true })
+    dispatch('appointments/getAppointments', {refresh: true}, { root:true })
+    dispatch('patients/getPatients', { page: 1, page_size: 5 }, { root:true })
+    dispatch('clients/getClients', { refresh: false }, { root:true })
     dispatch('roles/getRoles', null,{ root:true })
   },
 

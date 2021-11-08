@@ -109,6 +109,11 @@ export default {
     },
   },
 
+  created() {
+    this.getPaymentMethods()
+    this.getMobileMoneyVendors()
+  },
+
   methods: {
     ...mapActions({
       addToStoreData: 'patients/addToCurrentPatient',
@@ -117,6 +122,8 @@ export default {
       refresh: 'patients/refreshCurrentPatient',
       createPatient: 'patients/createPatient',
       updatePatient: 'patients/updatePatient',
+      getPaymentMethods: 'resources/getPaymentMethods',
+      getMobileMoneyVendors: 'resources/getMobileMoneyVendors',
     }),
 
     submit() {
