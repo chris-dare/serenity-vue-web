@@ -15,8 +15,8 @@ export default {
     return http.get(`${this.url}${providerId}/finance/charge-items`, { params })
   },
 
-  patientBills(providerId, patientId) {
-    return http.get(`${this.url}${providerId}/patients/${patientId}/finance/charge-items`)
+  patientBills(providerId, patientId, params) {
+    return http.get(`${this.url}${providerId}/patients/${patientId}/finance/charge-items`, { params })
   },
 
   patientAccounts(providerId, patientId, params) {

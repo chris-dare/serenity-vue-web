@@ -17,7 +17,7 @@
             src="@/assets/img/qr.png"
             alt=""
           >
-          <p class="text-xs">{{ $utils.formatName(appointment.patient.fullName) }}</p>
+          <p class="text-xs">{{ appointment.patient.fullName | capitalize }}</p>
           <p class="text-secondary text-xs">{{ appointment.patient.gender_age_description }}</p>
         </div>
 
@@ -64,7 +64,7 @@
             <p class="text-secondary text-xs">Date and Doctor</p>
 
             <div class="space-y-2">
-              <p class="font-bold text-xs">{{ $utils.formatName(practitioner.fullName) }}</p>
+              <p class="font-bold text-xs">{{ practitioner.fullName | capitalize }}</p>
 
               <div class="flex items-center space-x-1">
                 <p class="text-secondary text-xs">{{ practitioner.role }}</p>

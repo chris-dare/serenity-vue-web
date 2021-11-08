@@ -244,7 +244,6 @@ const formatName = (val) => {
   })
 
   return word.join(' ')
-
 }
 
 const objectHasRequiredData = (data, fields) => {

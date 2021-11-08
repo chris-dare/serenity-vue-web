@@ -22,7 +22,7 @@
         <cv-data-table-cell>
           <div class="py-2">
             <InfoImageBlock
-              :label="$utils.formatName(concatData(row.patient_detail, ['first_name', 'lastname']))"
+              :label="concatData(row.patient_detail, ['first_name', 'lastname']) | capitalize"
               :description="row.patient_detail.mobile"
               :url="row.patient_detail.photo"
             />

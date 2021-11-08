@@ -26,7 +26,7 @@
           {{ $date.formatDate(row.occurence, 'dd MMM, yyyy HH:mm a') || '-' }}
         </cv-data-table-cell>
         <cv-data-table-cell>
-          {{ $utils.formatName(row.patient_name) || '-' }}
+          {{ row.patient_name | capitalize }}
         </cv-data-table-cell>
         <cv-data-table-cell class="text-center">
           {{ $utils.getFirstData(row.specimen, 'display' ) || '-' }}

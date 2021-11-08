@@ -604,7 +604,6 @@ export default {
 
     async completePayment() {
       try {
-        console.log(this.form)
         this.loading = true
         let payload = [
           {

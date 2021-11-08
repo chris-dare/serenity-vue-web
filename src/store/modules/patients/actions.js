@@ -67,6 +67,7 @@ export default {
       commit(SET_PATIENTS, data.results)
       commit(SET_PATIENTS_COUNT, data.meta.total)
       commit(SET_PATIENTS_META, data.meta)
+      return data
     } catch (error) {
       throw error.data || error
     }

@@ -1,17 +1,19 @@
 <template>
   <div class="space-y-4">
     <Search
-      v-model="search"
+      v-model="params.search"
       placeholder="Search for bill"
+      @input="searchData"
     />
 
     <FilterGroup
-      v-model="search"
+      v-model="params.status"
       :filters="filters"
+      @input="refresh"
     />
     <div class="bg-white p-3">
       <div class="flex items-center justify-between mb-4">
-        <p class=" text-gray-500">Bills</p>
+        <p class="text-gray-500">Bills</p>
       </div>
 
 
@@ -19,16 +21,17 @@
         ref="table"
         :columns="columns"
         :pagination="pagination"
-        :data="filteredData"
+        :data="data"
         class="transparent-table"
         :no-data-label="noDataLabel('bills')"
+        @pagination="actionOnPagination"
       >
         <template #default="{ row }">
           <cv-data-table-cell>
             {{ $date.formatDate(row.occurrence_date, 'MMM dd, yyyy') }}
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <InfoImageBlock :label="$utils.formatName(row.practitioner_name)" />
+            <InfoImageBlock :label="row.practitioner_name | capitalize" />
           </cv-data-table-cell>
           <cv-data-table-cell>
             <p>{{ row.service_or_product_name }}</p>
@@ -73,7 +76,7 @@
 <script>
 import OrderDetailsModal from '@/components/patients/modals/OrderDetailsModal'
 import { mapGetters, mapState, mapActions } from 'vuex'
-import DataMixin from '@/mixins/data'
+import DataMixin from '@/mixins/paginated'
 
 export default {
   name: 'PatientBills',
@@ -84,7 +87,6 @@ export default {
 
   data() {
     return {
-      search: '',
       columns: [
         'Date',
         'Practitioner',
@@ -98,7 +100,6 @@ export default {
       ],
       visible: false,
       order: {},
-      searchTerms: ['status'],
     }
   },
 
@@ -116,7 +117,7 @@ export default {
 
     filters() {
       return [
-        { display: `All (${ this.dataCount })`, code: '' },
+        { display: `All (${ this.dataCount })`, code: null },
         { display: 'Fully Paid', code: 'billed' },
         { display: 'Pending', code: 'billable' },
         { display: 'Cancelled', code: 'cancelled' },
@@ -124,8 +125,8 @@ export default {
     },
   },
 
-  mounted() {
-    this.refresh(this.$route.params.id)
+  created() {
+    this.params.id = this.$route.params.id
   },
 
   methods: {
