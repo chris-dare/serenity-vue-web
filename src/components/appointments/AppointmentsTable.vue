@@ -63,6 +63,7 @@
         <cv-data-table-cell>
           <div class="flex items-center cursor-pointer space-x-6">
             <AppointmentTableActions
+              :data-qa="`table-actions-${row.id}`"
               @edit="edit(row)"
               @delete="confirmRemove(row)"
               @view="view(row)"
