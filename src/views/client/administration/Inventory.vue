@@ -28,9 +28,9 @@
       />
       <DataTable
         ref="table"
+        :data="data"
         :columns="columns"
         :pagination="pagination"
-        :data="data"
         :loading="loading"
         @pagination="actionOnPagination"
       >
@@ -48,6 +48,9 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <p>{{ row.initial_quantity }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <p>{{ row.in_hand_quantity }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <p>{{ row.net_release_quantity }}</p>
@@ -99,7 +102,8 @@ export default {
         'Unit Price',
         'Selling Price',
         'Initial Quantity',
-        'Quantity Available',
+        'In-Hand Quantity',
+        'Release Quantity',
         'Expiry Date',
         'Action',
       ],

@@ -23,3 +23,7 @@ Vue.component('CheckmarkFilled', CheckmarkFilled)
 Vue.component('Diagnostic', Diagnostic)
 Vue.component('Checkmark', Checkmark)
 Vue.component('AddFilled', AddFilled)
+
+import PaymentTypeSelector from '../components/payment/PaymentTypeSelector'
+
+Vue.component('PaymentTypeSelector', PaymentTypeSelector)

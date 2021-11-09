@@ -8,6 +8,13 @@
   >
     <template slot="content">
       <div>
+        <Tag
+          show-icon
+          :variant="getStatusVariant(bill.status)"
+          class="cursor-pointer"
+        >
+          {{ bill.status }}
+        </Tag>
         <BillingSuccessful
           v-if="done"
           @click="close"
@@ -141,6 +148,7 @@ export default {
   computed: {
     ...mapGetters({
       userAccounts: 'billing/userAccounts',
+      getStatusVariant: 'billing/getStatusVariant',
     }),
 
     canMakePayment() {

@@ -146,7 +146,8 @@
 
 <script>
 import modelMixin from '@/mixins/model'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'MedicationRequestForm',
 
@@ -186,9 +187,14 @@ export default {
 
   created() {
     this.localValue.extra_details.priority = 'routine'
+    this.getDosageRoutes()
   },
 
   methods: {
+    ...mapActions({
+      getDosageRoutes: 'resources/getDosageRoutes',
+    }),
+
     addDrug() {
       this.localValue.drugs.push({
         medication_detail: [{display: ''}],

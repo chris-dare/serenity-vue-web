@@ -86,10 +86,17 @@ export default {
     }),
   },
 
+  created() {
+    this.getMaritalStatuses()
+    this.getLanguages()
+  },
+
   methods: {
     ...mapActions({
       addToStoreData: 'patients/addToCurrentPatient',
       refresh: 'patients/refreshCurrentPatient',
+      getMaritalStatuses: 'resources/getMaritalStatuses',
+      getLanguages: 'resources/getLanguages',
     }),
   },
 }

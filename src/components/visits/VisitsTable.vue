@@ -53,6 +53,7 @@
           <div class="flex items-center cursor-pointer space-x-4">
             <TableActions
               :actions="tableActions(row)"
+              :data-qa="`table-actions-${row.id}`"
               @end="end(row.id)"
               @vitals="$trigger('reception:capture:vitals:open', { patient: row.patient, visit: row.id })"
               @view="view(row)"
@@ -145,6 +146,7 @@ export default {
       this.pageLength = 5
     }
     this.paginate = true
+    this.getEncounterClasses()
     this.refresh()
   },
 
@@ -155,6 +157,7 @@ export default {
       setCurrentVisit: 'visits/setCurrentVisit',
       getAllVisits: 'visits/getAllVisits',
       getMyVisits: 'visits/getMyVisits',
+      getEncounterClasses: 'resources/getEncounterClasses',
     }),
 
     searchVisits: debounce(function(search) {
