@@ -78,6 +78,7 @@ export default {
           visit_class: 'ambulatory',
           arrived_at: this.$date.queryNow(),
           service_provider: this.provider.id,
+          location: this.$locationId,
         })
         this.$toast.open({ message: 'This patient has been added to the doctor\'s queue' })
         this.loading = false

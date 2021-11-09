@@ -149,7 +149,7 @@ export default {
     },
     newPrescription() {
       this.setCheckoutPatient(this.patient)
-      this.$router.push({ name: 'Pharmacy:PatientNew'})
+      this.$router.push({ name: 'Pharmacy:New'})
     },
   },
 }

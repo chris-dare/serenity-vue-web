@@ -26,12 +26,12 @@
               <p class="text-secondary text-xs"> Patient contribution </p>
             </div>
             <div>
-              <p>{{ details.transactionid || '-' }}</p>
-              <p class="text-secondary text-xs"> Transaction ID </p>
+              <p>{{ details.payment_method | displayCase }}</p>
+              <p class="text-secondary text-xs"> Payment type </p>
             </div>
             <div>
-              <p>{{ paymentMethod | displayCase }}</p>
-              <p class="text-secondary text-xs"> Payment type </p>
+              <p>{{ details.service_or_product_name || '-' }}</p>
+              <p class="text-secondary text-xs"> Service / Product </p>
             </div>
             <div>
               <p>{{ details.patient.mobile || '-' }}</p>
@@ -42,8 +42,8 @@
               <p class="text-secondary text-xs"> Date </p>
             </div>
             <div>
-              <p>{{ practitionerName || '-' }}</p>
-              <p class="text-secondary text-xs"> Prescribed by </p>
+              <p>{{ details.practitioner_name || '-' }}</p>
+              <p class="text-secondary text-xs"> Practitioner / Doctor </p>
             </div>
             <div
               v-if="doctor"
