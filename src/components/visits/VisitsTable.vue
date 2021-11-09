@@ -53,6 +53,7 @@
           <div class="flex items-center cursor-pointer space-x-4">
             <TableActions
               :actions="tableActions(row)"
+              :data-qa="`table-actions-${row.id}`"
               @end="end(row.id)"
               @vitals="$trigger('reception:capture:vitals:open', { patient: row.patient, visit: row.id })"
               @view="view(row)"
