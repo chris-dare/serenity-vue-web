@@ -38,7 +38,7 @@
           <p>{{ $currency(row.charge).format() }}</p>
         </cv-data-table-cell>
         <cv-data-table-cell>
-          <p>{{ row.payment_method }}</p>
+          <p class="capitalize">{{ row.payment_method | removeDash }}</p>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <Tag

@@ -5,6 +5,7 @@ export default {
       CORPORATE_ACCOUNT_TYPE: 'corporate',
       CASH_TYPE: 'cash',
       INSURANCE_TYPE: 'insurance',
+      COPAY: 'COPAY',
     }
   },
 }

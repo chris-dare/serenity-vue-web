@@ -383,6 +383,7 @@ export default {
             assigned_to: this.provider.practitionerRoleId ,
             visit_class: 'diagnostic',
             arrived_at: this.$date.queryNow(),
+            location: this.$locationId,
           }).then( async (data) => {
             this.loading = false
             this.visitId = data.id

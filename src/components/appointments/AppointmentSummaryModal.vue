@@ -147,6 +147,7 @@ export default {
           visit_class: 'ambulatory',
           arrived_at: this.$date.queryNow(),
           service_provider: this.provider.id,
+          location: this.$locationId,
         })
         this.visible = false
         this.loading = false

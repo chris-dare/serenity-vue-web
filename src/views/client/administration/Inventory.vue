@@ -28,9 +28,9 @@
       />
       <DataTable
         ref="table"
+        :data="data"
         :columns="columns"
         :pagination="pagination"
-        :data="data"
         :loading="loading"
         @pagination="actionOnPagination"
       >

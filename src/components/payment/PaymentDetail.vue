@@ -21,6 +21,10 @@
               <p>{{ $currency(details.charge).format() }}</p>
               <p class="text-secondary text-xs"> Charge </p>
             </div>
+            <div v-if="details.patient_contribution">
+              <p>{{ $currency(details.patient_contribution).format() }}</p>
+              <p class="text-secondary text-xs"> Patient contribution </p>
+            </div>
             <div>
               <p>{{ details.payment_method | displayCase }}</p>
               <p class="text-secondary text-xs"> Payment type </p>
