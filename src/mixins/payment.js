@@ -61,13 +61,20 @@ export default {
       }
     },
 
-    getPaymentParams(details) {
-      if (details.transaction_type === 'cash') {
+    getPaymentParams(details) { 
+      if (details.transaction_type === this.$global.CASH_TYPE) {
         return {
           amount: details.amount,
           currency: details.currency,
           transaction_type: this.$global.CASH_TYPE,
         }
+      }
+      if (details.transaction_type === this.$global.INSURANCE_TYPE) {
+        let paymentInfo = { transaction_type: details.transaction_type, account_id: details.account_id }
+        if (details.copayment_info) {
+          paymentInfo.copayment_info = this.getPaymentParams(details.copayment_info)
+        }
+        return paymentInfo
       }
 
       return { transaction_type: details.transaction_type, account_id: details.account_id }
