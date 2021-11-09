@@ -142,10 +142,15 @@ export default {
     },
   },
 
+  created() {
+    this.getCategories()
+  },
+
   methods: {
     ...mapActions({
       addToStoreData: 'services/addToCurrentService',
       refreshCurrentService: 'services/refreshCurrentService',
+      getCategories: 'resources/getCategories',
     }),
 
     save() {

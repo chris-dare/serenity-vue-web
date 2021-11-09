@@ -422,6 +422,10 @@ export default {
     }
   },
   
+  created() {
+    this.getObservationCategory()
+    this.getObservationInterpretationTypes()
+  },
 
   methods: {
     ...mapActions({
@@ -435,6 +439,8 @@ export default {
       addToCurrentAppointment: 'appointments/addToCurrentAppointment',
       payForService: 'billing/userPayService',
       getPatientAccounts: 'billing/getPatientAccounts',
+      getObservationCategory: 'resources/getObservationCategory',
+      getObservationInterpretationTypes: 'resources/getObservationInterpretationTypes',
     }),
 
     close() {

@@ -149,12 +149,14 @@ export default {
       this.pageLength = 5
     }
     this.paginate = true
+    this.getEncounterClasses()
     // this.refresh()
   },
 
   methods: {
     ...mapActions({
     //   getData: 'admissions/getAdmissions',
+      getEncounterClasses: 'resources/getEncounterClasses',
       deleteAdmission: 'admissions/deleteAdmission',
     //   setCurrentAdmission: 'admissions/setCurrentAdmission',
     //   getAllAdmissions: 'admissions/getAllAdmissions',

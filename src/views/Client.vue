@@ -85,7 +85,10 @@ export default {
   },
 
   created() {
+
     this.initApp()
+
+    
   },
 
   methods: {

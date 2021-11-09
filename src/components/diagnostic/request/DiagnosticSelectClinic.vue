@@ -225,7 +225,6 @@ export default {
       services: (state) => state.services.services,
       specialties: (state) => state.resources.specialties,
       storeData: (state) => state.appointments.currentAppointment,
-      types: (state) => state.appointments.appointmentTypes,
       provider: (state) => state.auth.provider,
       location: (state) => state.global.location,
       priorities: (state) => state.resources.priorities,
