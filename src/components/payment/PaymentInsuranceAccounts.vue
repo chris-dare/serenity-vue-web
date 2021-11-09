@@ -42,8 +42,8 @@
         custom-field="value"
         title="Select payment method"
         :options="options"
-        @input="onTransactionTypeChange"
       />
+
       <PaymentTypeSelector
         v-model="localValue.copayment_info"
         :v="v"
@@ -56,15 +56,11 @@
 </template>
 
 <script>
-import PaymentTypeSelector from '@/components/payment/PaymentTypeSelector'
 import modelMixin from '@/mixins/model'
 import { mapGetters } from 'vuex'
-import pick from 'lodash/pick'
 
 export default {
   name: 'PaymentInsuranceAccounts',
-
-  components: {PaymentTypeSelector},
 
   mixins: [modelMixin],
 
@@ -83,11 +79,15 @@ export default {
       type: Object,
       default: null,
     },
+
+    total: {
+      type: [String, Number],
+      default: 0.00,
+    },
   },
 
   data() {
     return {
-      amountLeft: 0,
       options:[
         {
           label: 'User Account',
@@ -120,6 +120,11 @@ export default {
       if (!this.localValue.account_id) return {}
       return this.insuranceAccounts.find(insuranceAccount => insuranceAccount.uuid === this.localValue.account_id)
     },
+
+    amountLeft() {
+      if (!this.selected.coverage) return 0
+      return parseFloat(this.total) - parseFloat(this.selected.coverage.contribution_value)
+    },
   },
 
   methods: {
@@ -130,13 +135,11 @@ export default {
     onInput() {
       this.v.$touch()
 
-      if (this.selected.type === 'co-pay') {
-        this.localValue.copayment_info = {}
+      if (this.selected.coverage?.contribution_type === this.$global.COPAY) {
+        this.localValue.copayment_info = {
+          transaction_type: this.$global.CASH_TYPE,
+        }
       }
-    },
-
-    onTransactionTypeChange() {
-      this.localValue.copayment_info = pick(this.localValue.copayment_info, ['transaction_type'])
     },
   },
 }

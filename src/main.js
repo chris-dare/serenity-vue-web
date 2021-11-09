@@ -45,6 +45,7 @@ Vue.use(PrintPlugin)
 Vue.use(ConstantsPlugin)
 Vue.use(Vuelidate)
 Vue.use(VuePageTransition)
+
 registerBaseComponents(Vue)
 
 
