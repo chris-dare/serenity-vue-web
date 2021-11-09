@@ -215,7 +215,10 @@ export default {
         this.refresh()
       } catch (error) {
         this.loading = false
-        this.$toast.open('Payment unsuccessful')
+        this.$toast.open({
+          message: error.message || 'Payment unsuccessful!',
+          type: 'error',
+        })
         if (this.$route.params.id) {
           this.$emit('stop')
           return
