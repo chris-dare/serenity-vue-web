@@ -136,6 +136,7 @@ export default {
           assigned_to: appointment.slot.practitioner_role.id,
           visit_class: 'ambulatory',
           arrived_at: this.$date.queryNow(),
+          location: this.$locationId,
         })
         this.$toast.open({ message: 'The visit has started' })
         this.visible = false

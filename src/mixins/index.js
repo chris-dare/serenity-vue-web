@@ -7,6 +7,9 @@ Vue.mixin({
     $providerId() {
       return get(this.$store.state, 'auth.provider.id')
     },
+    $locationId() {
+      return get(this.$store.state, 'global.location')
+    },
   },
   beforeDestroy() {
     if (this.$route && this.$route.name !== 'AuthLogin') {

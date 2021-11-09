@@ -9,6 +9,12 @@
       @click="visible = !visible"
     />
     <div class="w-52 bg-white mt-2">
+      <cv-skeleton-text
+        v-if="loading"
+        class="m-0 p-0"
+        width="100%"
+        :line-count="1"
+      />
       <div
         v-for="(action, index) in actions"
         :key="index"
@@ -37,6 +43,10 @@ export default {
     actions: {
       type: Array,
       default: () => [],
+    },
+    loading: {
+      type: Boolean,
+      default: () => false,
     },
   },
 
