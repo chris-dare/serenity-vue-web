@@ -3,7 +3,7 @@
     class="se-no-title-modal"
     close-aria-label="Close"
     :visible="visible"
-    size="xs"
+    size="small"
     @modal-hidden="visible = false"
   >
     <template slot="content">

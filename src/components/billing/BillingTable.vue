@@ -38,7 +38,7 @@
           <p>{{ $currency(row.charge).format() }}</p>
         </cv-data-table-cell>
         <cv-data-table-cell>
-          <p>{{ row.paymentMethod }}</p>
+          <p>{{ row.payment_method }}</p>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <Tag
@@ -51,7 +51,7 @@
           </Tag>
         </cv-data-table-cell>
         <cv-data-table-cell>
-          <div
+          <!-- <div
             class="flex items-center cursor-pointer"
             @click="$trigger('billing:detail:open', { ...row })"
           >
@@ -64,27 +64,41 @@
                 alt=""
               >
             </div>
+          </div> -->
+          <div class="flex items-center cursor-pointer space-x-4">
+            <TableActions
+              :actions="tableActions(row)"
+              :loading="printLoading"
+              @cancel="$trigger('billing:cancel:open', { ...row })"
+              @print="printBill(row)"
+              @view="$trigger('billing:detail:open', { ...row })"
+            />
           </div>
         </cv-data-table-cell>
       </template>
     </DataTable>
     <ViewBillingDetailsModal />
     <BillingSettlePaymentModal />
+    <CancelBillingModal />
+    <ApproveCancelBillModal />
   </div>
 </template>
 
 <script>
 import ViewBillingDetailsModal from '@/components/billing/ViewBillingDetailsModal'
+import ApproveCancelBillModal from '@/components/billing/ApproveCancelBillModal'
+import CancelBillingModal from '@/components/billing/CancelBillingModal'
 import BillingSettlePaymentModal from '@/components/billing/BillingSettlePaymentModal'
+import paymentMixin from '@/mixins/payment'
 import DataMixin from '@/mixins/paginated'
 import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'BillingTable',
 
-  components: { ViewBillingDetailsModal, BillingSettlePaymentModal },
+  components: { ViewBillingDetailsModal, BillingSettlePaymentModal, CancelBillingModal, ApproveCancelBillModal },
 
-  mixins: [DataMixin],
+  mixins: [DataMixin, paymentMixin],
 
   props: {
     hideSearch: {
@@ -106,6 +120,8 @@ export default {
       loading: false,
       paginate: true,
       filter: null,
+      printLoading: false,
+      bill: {},
       params: {
         page: 1,
         page_size: 10,
@@ -138,6 +154,14 @@ export default {
       getPatientAccounts: 'billing/getPatientAccounts',
     }),
 
+    tableActions(row) {
+      return [
+        { label: 'View bill', event: 'view', show: true },
+        { label: 'Print bill', event: 'print', show: true },
+        { label: `${row.status_display === 'Paid' ? 'Refund' : 'Cancel'} bill`, event: 'cancel', show: true },
+      ]
+    },
+
     getStatusVariant(status) {
       if (status === 'billable') {
         return 'primary'
@@ -148,6 +172,12 @@ export default {
       }
 
       return 'success'
+    },
+
+    printBill(bill){
+      this.bill = {...bill}
+      this.print()
+      console.log(this.bill)
     },
 
     settle(bill) {
