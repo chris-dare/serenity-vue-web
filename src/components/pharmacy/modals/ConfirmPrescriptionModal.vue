@@ -4,7 +4,7 @@
       v-if="mode === 'prescription'"
       class="mb-4"
     >
-      <div class="font-bold">Prescribed medication by {{ doctor }}</div>
+      <div class="font-bold"> {{ doctor ? `Prescribed medication by ${doctor}` : '' }}</div>
     </div>
     <div
       v-if="mode === 'prescription'"
@@ -212,9 +212,11 @@
         </div>
       </div>
     </div>
+    <div class="text-center">No prescriptions</div>
     <div class="my-8 flex items-center justify-end">
       <SeButton
         class="mr-4"
+        :disabled="!currentDrug"
         @click="checkout"
       >
         Prescription filled<ChevronRight class="w-4 h-4 text-white ml-4" />
@@ -373,7 +375,7 @@ export default {
     if(this.mode === 'walk-in'){
       this.currentDrug = {
         filled: false,
-        drug: null,
+        drug: {},
         selectedDrugs: [],
       }
     }
