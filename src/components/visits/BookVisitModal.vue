@@ -319,6 +319,7 @@ export default {
           account_id: this.form.account_id,
           transaction_type: this.form.transaction_type,
           price_tier: this.form.service_tier?.value,
+          location: this.$locationId,
         })
         this.$toast.open({ message: 'The visit has started' })
         this.loading = false
@@ -340,6 +341,7 @@ export default {
           visit_class: 'ambulatory',
           arrived_at: this.$date.queryNow(),
           service_provider: this.provider.id,
+          location: this.$locationId,
         })
         this.visible = false
         this.loading = false
