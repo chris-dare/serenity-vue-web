@@ -103,7 +103,6 @@ export default {
   
     async submit() {
       await this.logout()
-      this.setLoggedIn(false)
       this.$router.push({ name: 'AuthLogin' })
     },
 
