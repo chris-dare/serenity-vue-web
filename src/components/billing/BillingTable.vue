@@ -80,13 +80,11 @@
     <ViewBillingDetailsModal />
     <BillingSettlePaymentModal />
     <CancelBillingModal />
-    <ApproveCancelBillModal />
   </div>
 </template>
 
 <script>
 import ViewBillingDetailsModal from '@/components/billing/ViewBillingDetailsModal'
-import ApproveCancelBillModal from '@/components/billing/ApproveCancelBillModal'
 import CancelBillingModal from '@/components/billing/CancelBillingModal'
 import BillingSettlePaymentModal from '@/components/billing/BillingSettlePaymentModal'
 import paymentMixin from '@/mixins/payment'
@@ -96,7 +94,7 @@ import { mapActions, mapState } from 'vuex'
 export default {
   name: 'BillingTable',
 
-  components: { ViewBillingDetailsModal, BillingSettlePaymentModal, CancelBillingModal, ApproveCancelBillModal },
+  components: { ViewBillingDetailsModal, BillingSettlePaymentModal, CancelBillingModal },
 
   mixins: [DataMixin, paymentMixin],
 
