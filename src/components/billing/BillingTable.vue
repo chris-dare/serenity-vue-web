@@ -69,7 +69,7 @@
             <TableActions
               :actions="tableActions(row)"
               :loading="printLoading"
-              @cancel="$trigger('billing:cancel:open', { ...row })"
+              @cancel="$trigger('billing:cancel:open', { bill: { ...row }, params })"
               @print="printBill(row)"
               @view="$trigger('billing:detail:open', { ...row })"
             />
@@ -158,7 +158,7 @@ export default {
       return [
         { label: 'View bill', event: 'view', show: true },
         { label: 'Print bill', event: 'print', show: true },
-        { label: `${row.status_display === 'Paid' ? 'Refund' : 'Cancel'} bill`, event: 'cancel', show: true },
+        { label: `${row.status_display === 'Paid' ? 'Refund bill' : row.status === 'cancelation-approved' ? 'Cancel Bill' : row.status === 'cancelation-requested' ? 'Approve Request' : 'Submit Request'}`, event: 'cancel', show: true },
       ]
     },
 
@@ -177,7 +177,6 @@ export default {
     printBill(bill){
       this.bill = {...bill}
       this.print()
-      console.log(this.bill)
     },
 
     settle(bill) {

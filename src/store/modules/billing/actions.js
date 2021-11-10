@@ -57,6 +57,16 @@ export default {
     }
   },
 
+  async requestCancelBill({ rootState}, params) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await BillingAPI.requestCancelBill(provider.id, params)
+      return data
+    } catch (response) {
+      throw response.data || response 
+    }
+  },
+
   async exportBill({ rootState }, id) {
     try {
       const provider = rootState.auth.provider

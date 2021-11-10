@@ -17,7 +17,7 @@ export default {
   },
 
   login(params){
-    return authHttp.post(`${this.url}login`, params)
+    return authHttp.post(`providers/${this.url}login`, params)
   },
 
   reset(params){
