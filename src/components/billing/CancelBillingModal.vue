@@ -8,7 +8,7 @@
   >
     <template slot="content">
       <div>
-        <p class="text-serenity-primary my-6 font-semibold">
+        <p class="text-lg font-semibold">
           Cancel Bill
         </p>
         <div class="space-y-6">

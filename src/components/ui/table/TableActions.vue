@@ -12,7 +12,7 @@
       <cv-skeleton-text
         v-if="loading"
         class="m-0 p-0"
-        paragraph
+        width="100%"
         :line-count="1"
       />
       <div
