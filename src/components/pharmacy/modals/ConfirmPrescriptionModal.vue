@@ -148,7 +148,7 @@
               class="inline-flex mt-6"
               size="sm"
               variant="secondary"
-              :disabled="!isQuantityValid"
+              :disabled="isQuantityValid || !form.quantity"
               @click="addDrug"
             >
               <Add />
@@ -157,9 +157,9 @@
           </div>
         </div>
         <small
-          v-if="!isQuantityValid"
+          v-if="isQuantityAvailable && selectedInventoryItem"
           class="text-danger"
-        >Insufficient quantity to dispense</small>
+        >{{ isQuantityValid ?`Can't dispense more than ${selectedInventoryItem.net_release_quantity}` : `Insufficient quantity to dispense` }}</small>
         <div class="mt-12">
           <div class="font-bold mb-4">
             Selected drugs
@@ -308,7 +308,17 @@ export default {
     isQuantityValid(){
       if(!this.selectedInventoryItem)return false
       const quantity = parseInt(this.form.quantity)
-      return  quantity <= this.maxQuantity && quantity > 0
+      console.log(quantity <= this.maxQuantity)
+      return  quantity > this.maxQuantity || quantity > this.availableQuantity 
+    },
+    isQuantityAvailable(){
+      if(!this.selectedInventoryItem)return false
+      const quantity = parseInt(this.form.quantity)
+      return  quantity > this.maxQuantity 
+    },
+    availableQuantity (){
+      if(!this.selectedInventoryItem)return 0
+      return parseInt(this.selectedInventoryItem.in_hand_quantity)
     },
     maxQuantity() {
       if(!this.selectedInventoryItem)return 0
