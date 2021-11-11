@@ -36,14 +36,14 @@ export default class User {
 
     let updateData = { ...this.data, practitioner_specialty}
 
-    return updateData
+    return omit(updateData, ['country_code'])
   }
 
   getCreateView() {
     const practitioner_specialty = this.data.practitioner_specialty.map(sp => sp.code)
     let createData = { ...user, ...this.data, practitioner_specialty }
     createData.practitioner_specialty.map(sp => sp.code)
-    return createData
+    return omit(createData, ['country_code'])
   }
 
 }

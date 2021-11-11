@@ -47,6 +47,10 @@ export default {
     return http.post(`providers/${providerId}/patients/${patientId}/charges/${chargeItemId}/pay`, params)
   },
 
+  requestCancelBill(providerId, params) {
+    return http.post(`providers/${providerId}/finance/charge-items/${params.charge}/actions`, params)
+  },
+
   servicePay(providerId, params) {
     return http.post(`providers/${providerId}/pay/servicerequests`, params)
   },

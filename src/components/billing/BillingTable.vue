@@ -51,26 +51,40 @@
           </Tag>
         </cv-data-table-cell>
         <cv-data-table-cell>
-          <TableActions
-            :actions="tableActions(row)"
-            :loading="printLoading"
-            @cancel="$trigger('billing:cancel:open', { ...row })"
-            @print="printBill(row)"
-            @view="$trigger('billing:detail:open', { ...row })"
-          />
+          <!-- <div
+            class="flex items-center cursor-pointer"
+            @click="$trigger('billing:detail:open', { ...row })"
+          >
+            View
+            <div
+              class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center"
+            >
+              <img
+                src="@/assets/img/view 1.svg"
+                alt=""
+              >
+            </div>
+          </div> -->
+          <div class="flex items-center cursor-pointer space-x-4">
+            <TableActions
+              :actions="tableActions(row)"
+              :loading="printLoading"
+              @cancel="$trigger('billing:cancel:open', { bill: { ...row }, params })"
+              @print="printBill(row)"
+              @view="$trigger('billing:detail:open', { ...row })"
+            />
+          </div>
         </cv-data-table-cell>
       </template>
     </DataTable>
     <ViewBillingDetailsModal />
     <BillingSettlePaymentModal />
     <CancelBillingModal />
-    <ApproveCancelBillModal />
   </div>
 </template>
 
 <script>
 import ViewBillingDetailsModal from '@/components/billing/ViewBillingDetailsModal'
-import ApproveCancelBillModal from '@/components/billing/ApproveCancelBillModal'
 import CancelBillingModal from '@/components/billing/CancelBillingModal'
 import BillingSettlePaymentModal from '@/components/billing/BillingSettlePaymentModal'
 import paymentMixin from '@/mixins/payment'
@@ -80,7 +94,7 @@ import { mapActions, mapState } from 'vuex'
 export default {
   name: 'BillingTable',
 
-  components: { ViewBillingDetailsModal, BillingSettlePaymentModal, CancelBillingModal, ApproveCancelBillModal },
+  components: { ViewBillingDetailsModal, BillingSettlePaymentModal, CancelBillingModal },
 
   mixins: [DataMixin, paymentMixin],
 
@@ -142,7 +156,7 @@ export default {
       return [
         { label: 'View bill', event: 'view', show: true },
         { label: 'Print bill', event: 'print', show: true },
-        { label: `${row.status_display === 'Paid' ? 'Refund' : 'Cancel'} bill`, event: 'cancel', show: true },
+        { label: `${row.status_display === 'Paid' ? 'Refund bill' : row.status === 'cancelation-approved' ? 'Cancel Bill' : row.status === 'cancelation-requested' ? 'Approve Request' : 'Submit Request'}`, event: 'cancel', show: true },
       ]
     },
 
@@ -161,7 +175,6 @@ export default {
     printBill(bill){
       this.bill = {...bill}
       this.print()
-      console.log(this.bill)
     },
 
     settle(bill) {

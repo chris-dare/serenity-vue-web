@@ -101,6 +101,17 @@
           label="Batch Number"
           placeholder="CV2399"
         />
+
+        <FormInput
+          v-model="form.reason"
+          label="Reason"
+          placeholder="Enter reason here..."
+          :rows="2"
+          type="textarea"
+          class="col-span-2 se-input-gray"
+          required
+        />
+
         <div class="flex justify-between items-center">
           <SeButton
             variant="secondary"

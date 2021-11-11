@@ -25,7 +25,7 @@
           :icon="add"
           @click="submit"
         >
-          <template v-if="mode === 'create'">Create test</template>
+          <template v-if="mode === 'create'">Request test</template>
           <template v-else>Update test</template>
         </SeButton>
         <SeButton
