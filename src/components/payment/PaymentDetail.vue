@@ -51,6 +51,10 @@
               <p>{{ doctor || '-' }}</p>
               <p class="text-secondary text-xs"> Dispensed by </p>
             </div>
+            <div>
+              <p>{{ details.invoice_id || '-' }}</p>
+              <p class="text-secondary text-xs"> Invoice # </p>
+            </div>
           </div>
         </div>
         <div v-if="showCart">
