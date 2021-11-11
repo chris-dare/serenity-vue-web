@@ -152,7 +152,7 @@ export default {
     }),
 
     canMakePayment() {
-      return !this.settled && this.bill.charge
+      return !this.settled && this.bill.charge && this.bill.status === 'billable'
     },
   },
 
