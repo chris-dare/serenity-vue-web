@@ -80,7 +80,7 @@ export default {
 
   data() {
     return {
-      isClosed: true,
+      isClosed: false,
       key: Math.random(),
     }
   },

@@ -254,7 +254,7 @@ export default {
     async submitRequest() {
       try {
         this.loading = true
-        const data = await this.requestCancelBill({ charge: this.bill.id, action: 'request-charge-item-cancelation', reason: this.form.reason})
+        const data = await this.requestCancelBill({ charge: this.bill.id, action: 'request-charge-item-cancelation', reason: this.form.cancelation.reason})
         this.visible = false
         this.$toast.open({
           message: data.message,
