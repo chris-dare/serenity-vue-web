@@ -20,6 +20,7 @@ export default {
         return element
       })
       commit(SET_SERVICE_REQUESTS, new_data)
+      return data
     } catch ({ response: { data: error } }) {
       throw error
     }

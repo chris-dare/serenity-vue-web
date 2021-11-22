@@ -2,8 +2,9 @@
   <div class="space-y-4">
     <Search
       v-if="!hideSearch"
-      v-model="search"
+      v-model="params.search"
       placeholder="Search for patient, enter name or MR number"
+      @input="searchData"
     />
     <FilterGroup
       v-model="search"
@@ -12,7 +13,7 @@
     <!-- <div>{{ filteredData }}</div> -->
     <DataTable
       ref="table"
-      :data="filteredData || []"
+      :data="data"
       :columns="columns"
       :pagination="pagination"
       :loading="loading"
@@ -61,8 +62,8 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import DataMixin from '@/mixins/data'
 import DiagnosticOrder from '@/components/diagnostic/modals/DiagnosticOrderModal'
+import DataMixin from '@/mixins/paginated'
 
 export default {
   name: 'LabsOrders',
@@ -131,9 +132,6 @@ export default {
   },
 
   created() {
-    this.paginate = true
-    this.searchTerms = ['code', 'status', 'purpose', 'priority', 'patient_name']
-    this.filters = { payer: this.id, page: this.page, page_size: this.pageLength }
     this.refresh()
   },
 
@@ -141,19 +139,6 @@ export default {
     ...mapActions({
       getData: 'diagnostic/getServiceRequests',
     }),
-    actionOnPagination(ev) {
-      this.page = ev.page
-      this.pageLength = ev.length
-      let id = this.$route.params.id
-      this.filters = { payer: id, page: ev.page, page_size: ev.length }
-      this.refresh()
-    },
-    async refresh() {
-      this.loading = true
-      await this.getData(this.filters).then(() => this.loading = false).finally(() => this.loading = false)
-    },
   },
-
-
 }
 </script>
