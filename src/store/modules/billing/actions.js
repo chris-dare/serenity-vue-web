@@ -147,6 +147,7 @@ export default {
       const provider = rootState.auth.provider
       const { data } = await BillingAPI.servicePay(provider.id, params)
       commit(UPDATE_BILLING, data[0])
+      return data
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error

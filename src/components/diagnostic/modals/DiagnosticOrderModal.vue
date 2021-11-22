@@ -624,7 +624,7 @@ export default {
 
         const data = await this.payForService(payload)
 
-        this.$toast.open('Bill successfully settled' || data)
+        this.$toast.open( data.message || 'Bill successfully settled' )
         this.loading = false
         this.form.status = 'active'
         this.getData()
