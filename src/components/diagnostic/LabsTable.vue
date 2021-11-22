@@ -6,7 +6,7 @@
     />
     <DataTable
       ref="table"
-      :data="data"
+      :data="filteredData || []"
       :columns="columns"
       :pagination="pagination"
       :loading="loading"
@@ -75,7 +75,7 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import DataMixin from '@/mixins/paginated'
+import DataMixin from '@/mixins/data'
 import DeleteModal from '@/components/ui/modals/ConfirmDeleteModal'
 import AddLabResultsModal from '@/components/diagnostic/modals/AddLabResultsModal'
 import DiagnosticOrder from '@/components/diagnostic/modals/DiagnosticOrderModal'
@@ -139,14 +139,14 @@ export default {
   methods: {
     ...mapActions({
       addToStoreData: 'appointments/addToCurrentAppointment',
-      getData: 'patients/getPatientServiceRequests',
+      getPatientServiceRequests: 'patients/getPatientServiceRequests',
       deleteServiceRequest: 'patients/deleteServiceRequest',
     }),
 
     init() {
       this.loading = true
       let id = this.$route.params.id
-      this.refresh({ patient: id }).finally(() => this.loading = false )
+      this.getPatientServiceRequests({ patient: id }).finally(() => this.loading = false )
       
     },
 
@@ -173,6 +173,8 @@ export default {
     confirmDeleteLab(lab) {
       this.$trigger('confirm:delete:open', { data: lab, label: 'Are you sure you want to delete this lab?' })
     },
+
+
   },
 
 }
