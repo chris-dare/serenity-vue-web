@@ -138,19 +138,15 @@ export default {
 
 
   created() {
-    this.init()
+    let id = { patient: this.$route.params.id}
+    this.refresh(id ? id : null).then(() => this.loading = false).finally(() => this.loading = false)
   },
 
   methods: {
     ...mapActions({
       getData: 'diagnostic/getDiagnosticReports',
-      refresh: 'patients/refreshCurrentPatient',
+      // refresh: 'patients/refreshCurrentPatient',
     }),
-    async init() {
-      this.loading = true
-      let id = { patient: this.$route.params.id}
-      this.refresh(id ? id : null).then(() => this.loading = false).finally(() => this.loading = false)
-    },
   },
 
 

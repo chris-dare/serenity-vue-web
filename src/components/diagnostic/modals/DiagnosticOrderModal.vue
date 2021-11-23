@@ -190,7 +190,6 @@
             <SeButton
               class="mx-3"
               :loading="loading"
-              :disabled="!form.is_available_at_provider"
               @click="makePayment"
             >
               Receive payment
@@ -269,8 +268,18 @@
           v-model="form"
           :v="$v"
           :total="form.price_tier ? form.price_tier.charge : 0"
-          :patient="form.patient"
         >
+          <MultiSelect
+            v-if="!form.is_available_at_provider"
+            v-model="healthcare_service"
+            title="Choose lab type"
+            :multiple="false"
+            :options="diagnosticServices"
+            track_by="id"
+            label="healthcare_service_name"
+            custom-field="id"
+            placeholder="Search or choose a lab text to be performed"
+          />
           <MultiSelect
             v-model="form.price_tier"
             title="Choose price tier"
@@ -332,6 +341,7 @@ export default {
       categoryList: [],
       category: {},
       categoryValues: {},
+      healthcare_service: '',
       appendLoading: false,
       sampleRejected: false,
       loading: false,
@@ -372,6 +382,7 @@ export default {
     ...mapGetters({
       practitionerRoleId: 'auth/practitionerRoleId',
       labProceedures: 'services/labProceedures',
+      diagnosticServices: 'services/labProceedures',
     }),
     sampleTaken(){
       return this.form.status === 'sample-collected'
@@ -385,24 +396,29 @@ export default {
     sampleCompleted(){
       return this.form.status === 'completed'
     },
-    priceTiers() {
-      if (!this.form.healthcare_service || !this.labProceedures.length) return []
-      let service = this.labProceedures.find(service => {
-        if(service.id === this.form.healthcare_service) return service
-      })
-
-      if (!service){
-        return []
-      }
-
-      return service.price_tiers.map(price => {
-
-        return {
-          id: price.id,
-          charge: price.charge,
-          display: `${this.$currency(price.charge, price.currency).format()} - ${price.description}`,
+    priceTiers: {
+      get: function () {
+        if (!this.form.healthcare_service || !this.labProceedures.length) return []
+        let service = this.labProceedures.find(service => {
+          if(service.id === this.form.healthcare_service) return service
+        })
+  
+        if (!service){
+          return []
         }
-      })
+  
+        return service.price_tiers.map(price => {
+          return {
+            id: price.id,
+            charge: price.charge,
+            display: `${this.$currency(price.charge, price.currency).format()} - ${price.description}`,
+          }
+        })
+      },
+      // setter
+      set: function (newValue) {
+        return newValue
+      },
     },
   },
 
@@ -420,6 +436,14 @@ export default {
         price_tier: { required },
       },
     }
+  },
+
+  watch: {
+    healthcare_service: {
+      handler(val){
+        this.form.healthcare_service = val
+      },
+    },
   },
   
   created() {
@@ -604,7 +628,6 @@ export default {
         })
       } else {
         this.pay = !this.pay
-        this.form.price_tier.display = 'Choose price tier'
       }
     },
 
@@ -614,6 +637,7 @@ export default {
         let payload = [
           {
             service_request: this.form.id, // a service request raised by a patient
+            healthcare_service: this.form.healthcare_service,
             price_tier: this.form.price_tier.id,
             account_id: this.form.account_id,
             currency: this.form.currency,
@@ -622,9 +646,9 @@ export default {
           },
         ]
 
-        const data = await this.payForService(payload)
+        await this.payForService(payload)
 
-        this.$toast.open( data.message || 'Bill successfully settled' )
+        this.$toast.open( 'Bill successfully settled' )
         this.loading = false
         this.form.status = 'active'
         this.getData()
