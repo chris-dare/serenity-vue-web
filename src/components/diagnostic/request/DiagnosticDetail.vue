@@ -198,14 +198,16 @@ export default {
     async settleBill(item) {
       try {
         this.loading = true
-        const data = await this.payForService({
+        await this.payForService({
           service_request: item.id, // a service request raised by a patient
           price_tier: item.price_tier,
           account_id: this.summary.account_id,
+          currency: this.summary.currency,
+          amount: this.summary.amount,
           transaction_type: this.summary.transaction_type, //user-wallet, corporate-account, mobile-money, cash
         })
 
-        this.$toast.open('Bill successfully settled' || data)
+        this.$toast.open('Bill successfully settled')
         this.loading = false
         if (this.$route.params.id) {
           this.$emit('stop')
