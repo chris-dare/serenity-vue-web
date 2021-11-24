@@ -54,11 +54,11 @@
           />
           <InfoBlock
             label="Specimen"
-            :description="report.specimen_type || '-'"
+            :description="report.specimen_types || '-'"
           />
           <InfoBlock
             label="Conclusion"
-            :description="report.specimen_type || '-'"
+            :description="report.conclusion || '-'"
           />
         </div>
         <div
@@ -130,19 +130,24 @@
             >
               Submit for review
             </SeButton>
-            <SeButton
-              variant="danger"
-              :loading="rejectLoading"
-              @click="updateResult('reject')"
+            <div
+              v-else
+              class="flex items-center space-x-2"
             >
-              Reject Results
-            </SeButton>
-            <SeButton
-              :loading="approveLoading"
-              @click="updateResult('approve')"
-            >
-              Approve Results
-            </SeButton>
+              <SeButton
+                variant="danger"
+                :loading="rejectLoading"
+                @click="updateResult('reject')"
+              >
+                Reject Results
+              </SeButton>
+              <SeButton
+                :loading="approveLoading"
+                @click="updateResult('approve')"
+              >
+                Approve Results
+              </SeButton>
+            </div>
           </div>
           <SeButton
             v-if="approved"
