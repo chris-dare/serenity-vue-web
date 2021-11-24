@@ -6,7 +6,7 @@ export default {
   },
 
   [UPDATE_BILLING](state, billing) {
-    const index = state.billing.findIndex(a => a.id === billing.id)
+    const index = state.billing.findIndex(a => a.id === billing?.id)
     if (index !== -1) {
       state.billing = state.billing.map(a => {
         if (a.id === billing.id) return billing

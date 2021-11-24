@@ -142,11 +142,10 @@ export default {
     }
   },
 
-  async userPayService({ commit, rootState }, params ) {
+  async userPayService({ rootState }, params ) {
     try {
       const provider = rootState.auth.provider
       const { data } = await BillingAPI.servicePay(provider.id, params)
-      commit(UPDATE_BILLING, data ? data[0] : {})
       return data
     } catch (error) {
       Vue.prototype.$utils.error(error)
