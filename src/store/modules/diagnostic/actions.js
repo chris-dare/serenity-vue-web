@@ -15,7 +15,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await ServiceRequestsAPI.list(provider.id, params)
-      let new_data = data.results.map((element) => {
+      let new_data = data?.results.map((element) => {
         element.patient_name = element.patient_detail.first_name + ' ' + element.patient_detail.lastname
         return element
       })
