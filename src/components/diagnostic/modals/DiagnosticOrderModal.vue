@@ -13,7 +13,7 @@
           label="Test unavailable"
         />
         <Tag
-          :variant="form.status !== 'completed' ? 'primary' : form.status === 'cancelled' ? 'error' : 'success'"
+          :variant="form.status === 'sample-collected' ? 'primary' : form.status === 'draft' ? 'error' : 'success'"
           :label="form.status"
         />
       </div>
@@ -312,12 +312,19 @@
 
 <script>
 import ModeOfPayment from '@/components/payment/ModeOfPayment'
-import { required, minValue } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 import { mapActions, mapGetters, mapState } from 'vuex'
 export default {
   name: 'DiagnosticOrderModal',
 
   components: { ModeOfPayment },
+
+  props: {
+    params: {
+      type: Object,
+      default: () => {},
+    },
+  },
 
   data() {
     return {
@@ -423,13 +430,6 @@ export default {
   },
 
   validations() {
-    if(this.form.transaction_type === 'cash'){
-      return {
-        form: {
-          amount: { required, minValue: minValue(this.form.price_tier.charge) },
-        },
-      }
-    }
     return {
       form: {
         account_id: { required },
@@ -651,8 +651,12 @@ export default {
         this.$toast.open( 'Bill successfully settled' )
         this.loading = false
         this.form.status = 'active'
-        this.getData()
-        this.pay = false
+        this.getData(this.params)
+        if(this.$isCurrentWorkspace('BILL')){
+          this.visible = false
+        } else {
+          this.pay = false
+        }
       } catch (error) {
         this.loading = false
         this.$toast.open({

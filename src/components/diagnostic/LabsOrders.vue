@@ -34,13 +34,13 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <Tag
-            :variant="row.status !== 'completed' ? 'primary' : row.status === 'cancelled' ? 'error' : 'success'"
+            :variant="row.status === 'sample-collected' ? 'primary' : row.status === 'draft' ? 'error' : 'success'"
             :label="row.status"
           />
         </cv-data-table-cell>
         <cv-data-table-cell v-if="!$isCurrentWorkspace('RECEPT')">
           <div
-           
+            v-if="row.status === 'draft' && $isCurrentWorkspace('BILL')"
             class="flex items-center cursor-pointer"
             :disabled="!$userCan('diagnostic.requests.read')"
             @click="$trigger('diagnostic-order:add:open', {...row})"
@@ -53,17 +53,20 @@
               >
             </div>
           </div>
+          <div v-else>
+            settled
+          </div>
         </cv-data-table-cell>
       </template>
     </DataTable>
-    <DiagnosticOrder />
+    <DiagnosticOrder :params="params" />
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import DiagnosticOrder from '@/components/diagnostic/modals/DiagnosticOrderModal'
 import DataMixin from '@/mixins/paginated'
+import DiagnosticOrder from '@/components/diagnostic/modals/DiagnosticOrderModal'
 
 export default {
   name: 'LabsOrders',

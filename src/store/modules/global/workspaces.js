@@ -77,6 +77,7 @@ export default {
       { label: 'Dashboard', to: 'Dashboard', component: 'Template' },
       { label: 'Patients', to: 'Billing:Patients', component: 'Reference' },
       { label: 'Bills', to: 'Billing', component: 'Align'},
+      { label: 'Diagnostic Orders', to: 'Orders', component: 'List' },
       { label: 'Invoices', to: 'Invoices', component: 'Report' },
       { label: 'Corporate Clients', to: 'CorporateClients', component: 'Baggage' },
       { label: 'Insurance Clients', to: 'InsuranceClients', component: 'Insurance' },
