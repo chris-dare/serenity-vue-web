@@ -115,7 +115,7 @@ export default {
         'Specimen',
         'Status',
       ]
-      if (!this.$isCurrentWorkspace('RECEPT')) {
+      if (!this.$isCurrentWorkspace('RECEPT') || !this.$isCurrentWorkspace('OPD')) {
         column.push('Action')
       }
       return column
