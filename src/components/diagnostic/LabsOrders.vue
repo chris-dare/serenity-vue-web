@@ -39,8 +39,11 @@
           />
         </cv-data-table-cell>
         <cv-data-table-cell v-if="!$isCurrentWorkspace('RECEPT')">
+          <div v-if="row.status !== 'draft' && $isCurrentWorkspace('BILL')">
+            settled
+          </div>
           <div
-            v-if="row.status === 'draft' && $isCurrentWorkspace('BILL')"
+            v-else
             class="flex items-center cursor-pointer"
             :disabled="!$userCan('diagnostic.requests.read')"
             @click="$trigger('diagnostic-order:add:open', {...row})"
@@ -52,9 +55,6 @@
                 alt=""
               >
             </div>
-          </div>
-          <div v-else>
-            settled
           </div>
         </cv-data-table-cell>
       </template>

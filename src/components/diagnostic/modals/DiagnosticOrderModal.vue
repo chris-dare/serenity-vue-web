@@ -652,7 +652,7 @@ export default {
         this.loading = false
         this.form.status = 'active'
         this.getData(this.params)
-        if(this.$isCurrentWorkspace('BILL')){
+        if(this.form.status !== 'draft' && this.$isCurrentWorkspace('BILL')){
           this.visible = false
         } else {
           this.pay = false
