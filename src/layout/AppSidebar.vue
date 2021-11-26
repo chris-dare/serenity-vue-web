@@ -1,7 +1,7 @@
 <template>
   <cv-side-nav
     id="side-nav"
-    class="bg-serenity-primary max-w-xl transition-all duration-50 overflow-visible"
+    class="bg-serenity-primary max-w-xl transition-all duration-50 overflow-auto"
     :class="[open ? 'w-56' : 'w-12']"
   >
     <div
@@ -86,7 +86,7 @@ export default {
   },
 
   created() {
-    // this.open = this.isTablet
+    this.open = !this.isTablet
   },
 
   events: {

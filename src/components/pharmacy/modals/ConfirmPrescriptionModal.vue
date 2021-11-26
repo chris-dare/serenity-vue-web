@@ -308,7 +308,6 @@ export default {
     isQuantityValid(){
       if(!this.selectedInventoryItem)return false
       const quantity = parseInt(this.form.quantity)
-      console.log(quantity <= this.maxQuantity)
       return  quantity > this.maxQuantity || quantity > this.availableQuantity 
     },
     isQuantityAvailable(){
@@ -443,7 +442,6 @@ export default {
       if(!this.selectedInventoryItem)return
       const quantity = parseInt(this.form.quantity)
       const total = parseFloat(this.selectedInventoryItem.selling_price) * parseInt(quantity)
-      console.info(this.selectedInventoryItem.id)
       const existingItem = this.currentDrug.selectedDrugs.find(el => el.inventory.id == this.selectedInventoryItem.id)
       if(existingItem){
         existingItem.quantity += quantity

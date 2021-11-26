@@ -151,7 +151,7 @@
       :loading="deleteLoading"
       @delete="removeLab"
     />
-    <VirtualCareRequirementsModal :visible.sync="visible" />
+    <VirtualCareRequirementsModal />
   </MultiStepBase>
 </template>
 
@@ -201,7 +201,6 @@ export default {
       categories: [ 'laboratory-procedure', 'imaging', 'counselling', 'education', 'surgical-procedure' ],
       loading: false,
       finalLoading: false,
-      visible: false,
       propertiesToCompareChanges: ['form'],
       columns: ['Date', 'Lab type', 'Priority', 'Order detail', 'Bodysite', 'Specimen', 'Action'],
       acted: false,

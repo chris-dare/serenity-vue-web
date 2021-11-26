@@ -1,14 +1,10 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    title="Exclusion"
   >
-    <template slot="content">
+    <template>
       <SeForm class="space-y-2 divide-y divide-secondary divide-solid">
-        <p class="text-md font-semibold">Exclusion</p>
         <!-- <div>
           <div class="flex items-center py-5">
             <div class="space-y-1">
@@ -75,7 +71,7 @@
         <p 
           class="text-center" 
           style="cursor: pointer" 
-          @click="visible = false"
+          @click="close"
         >
           Cancel
         </p>
@@ -87,19 +83,22 @@
         </SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'PolicyExclusion',
 
+  mixins: [modalMixin],
+
   data() {
     return {
       loading: false,
-      visible: false,
+      name: 'policy-exclusion-modal',
       type: 'add',
       vertical: true,
       form: {
@@ -133,12 +132,12 @@ export default {
 
   events: {
     'exclude:add:open': function(data){
-      this.visible = true
+      this.open()
       this.form = data.params[0]
       this.type = 'add'
     },
     'exclude:edit:open': function(data){
-      this.visible = true
+      this.open()
       this.form = data.params[0]
       this.type = 'update'
     },
@@ -190,14 +189,13 @@ export default {
           this.$toast.open({
             message: data.message || 'Client successfully updated',
           })
-          this.visible = false
         } else {
           this.$toast.open({
             message: data.message || 'Client account update failed',
             type: 'error',
           })
-          this.visible = false
         }
+        this.close()
         // this.$router.go(-1)
         this.loading = false
       } catch (error) {
@@ -220,15 +218,14 @@ export default {
           this.$toast.open({
             message: data.message || 'Client successfully updated',
           })
-          this.visible = false
         } else {
           this.$toast.open({
             message: data.message || 'Client account update failed',
             type: 'error',
           })
-          this.visible = false
         }
         // this.$router.go(-1)
+        this.close()
         this.loading = false
       } catch (error) {
         this.$toast.open({

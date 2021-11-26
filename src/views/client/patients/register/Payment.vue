@@ -43,7 +43,7 @@
         label="Phone number"
       />
     </div>
-    <PatientSuccessModal :visible.sync="visible" />
+    <PatientSuccessModal />
   </MultiStepBase>
 </template>
 
@@ -74,7 +74,6 @@ export default {
       },
       insurance: {},
       icon: Checkmark,
-      visible: false,
       parent: 'Patients',
       previous: 'SocialInfo',
       loading: false,
@@ -172,7 +171,7 @@ export default {
         }
 
         this.confirmChanges(data.id)
-        // this.visible = true
+        // this.$trigger('patient:success')
         this.loading = false
 
       } catch (error) {

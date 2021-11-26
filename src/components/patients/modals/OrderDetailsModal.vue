@@ -1,23 +1,24 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    width="450px"
   >
-    <template slot="content">
-      <div class="flex items-center justify-between mb-6 pr-6 w-full">
-        <p>Order details</p>
-        <Tag
-          show-icon
-          :variant="getStatusVariant(bill.status)"
-          class="cursor-pointer"
-        >
-          {{ bill.status }}
-        </Tag>
-      </div>
-
+    <div
+      slot="title"
+      class="flex items-center justify-between mb-6 pr-6 w-full"
+    >
+      <p>Order details</p>
+      <Tag
+        show-icon
+        :variant="getStatusVariant(bill.status)"
+        class="cursor-pointer"
+      >
+        {{ bill.status }}
+      </Tag>
+    </div>
+    <template>
       <PaymentDetail
         :details="bill"
         label="Payment Transaction"
@@ -27,18 +28,20 @@
         <SeButton
           variant="secondary"
           full
+          @click="close"
         >
           Close
         </SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import PaymentDetail from '@/components/payment/PaymentDetail'
 import {mapGetters} from 'vuex'
 import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'OrderDetailsModal',
 
@@ -51,12 +54,13 @@ export default {
       bill: {
         patient: {},
       },
+      name: 'order-details-modal',
     }
   },
 
   events: {
     'order:details:open': function(data){
-      this.visible = true
+      this.open()
       this.bill = data.params[0]
       this.bill.patient = {
         mobile: this.bill.patient_mobile,

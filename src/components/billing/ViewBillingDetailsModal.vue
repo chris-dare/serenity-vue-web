@@ -1,74 +1,71 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
   >
-    <template slot="content">
-      <div>
-        <Tag
-          show-icon
-          :variant="getStatusVariant(bill.status)"
-          class="cursor-pointer"
-        >
-          {{ bill.status }}
-        </Tag>
-        <BillingSuccessful
-          v-if="done"
-          @click="close"
+    <Tag
+      slot="title"
+      show-icon
+      :variant="getStatusVariant(bill.status)"
+      class="cursor-pointer"
+    >
+      {{ bill.status }}
+    </Tag>
+    <div>
+      <BillingSuccessful
+        v-if="done"
+        @click="close"
+      />
+
+      <div
+        v-else
+        class="space-y-6"
+      >
+        <PaymentDetail
+          :details="bill"
+          label="Payment Transaction"
+          hide-total
+          :show-cart="false"
         />
+        <ModeOfPayment
+          v-if="canMakePayment"
+          v-model="form"
+          :v="$v"
+          show-cash-options
+          :total="bill.charge"
+          :patient="patient"
+        />
+        <div class="flex items-center justify-between mt-4">
+          <div class="flex items-center space-x-2">
+            <SeButton
+              variant="secondary"
+              @click="close"
+            >
+              Cancel
+            </SeButton>
+          </div>
 
-        <div
-          v-else
-          class="space-y-6"
-        >
-          <PaymentDetail
-            :details="bill"
-            label="Payment Transaction"
-            hide-total
-            :show-cart="false"
-          />
-          <ModeOfPayment
-            v-if="canMakePayment"
-            v-model="form"
-            :v="$v"
-            show-cash-options
-            :total="bill.charge"
-            :patient="patient"
-          />
-          <div class="flex items-center justify-between mt-4">
-            <div class="flex items-center space-x-2">
-              <SeButton
-                variant="secondary"
-                @click="close"
-              >
-                Cancel
-              </SeButton>
-            </div>
-
-            <div class="flex space-x-2">
-              <SeButton
-                variant="secondary"
-                :loading="printLoading"
-                @click="print"
-              >
-                Print
-              </SeButton>
-              <SeButton
-                v-if="canMakePayment"
-                :loading="loading"
-                @click="submit"
-              >
-                Settle payment
-              </SeButton>
-            </div>
+          <div class="flex space-x-2">
+            <SeButton
+              variant="secondary"
+              :loading="printLoading"
+              @click="print"
+            >
+              Print
+            </SeButton>
+            <SeButton
+              v-if="canMakePayment"
+              :loading="loading"
+              @click="submit"
+            >
+              Settle payment
+            </SeButton>
           </div>
         </div>
       </div>
-    </template>
-  </cv-modal>
+    </div>
+  </BaseModal>
 </template>
 
 <script>
@@ -98,32 +95,31 @@ export default {
         patient: {},
       },
       done: false,
-      form: {
-        transaction_type: '',
-      },
+      form: {},
       isExportLoading: false,
       loading: false,
       printLoading: false,
       type: '',
       patient: null,
+      name: 'view-billing-details-modal',
     }
   },
 
   events: {
     'billing:detail:open': async function(data){
-      this.visible = true
+      this.$modal.show(this.name)
       this.bill = data.params[0]
       this.bill.patient = {
         mobile: this.bill.patient_mobile,
         fullName: this.bill.patient_name,
       }
       this.getPatientAccounts({ id: this.bill.patientid })
-      this.form.transaction_type = this.$global.USER_ACCOUNT_TYPE
       this.type = this.bill.line_items ? 'invoice' : 'charge'
       const patient = await PatientAPI.get(this.$providerId, this.bill.patientid)
       this.patient = patient.data.data
     },
     'billing:detail:close': function(){
+      this.$modal.hide(this.name)
       this.close()
     },
   },

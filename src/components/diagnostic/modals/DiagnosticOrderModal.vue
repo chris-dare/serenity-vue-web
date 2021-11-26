@@ -1,8 +1,8 @@
 <template>
-  <cv-modal
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
   >
     <template slot="title">
       <div class="flex items-center justify-between">
@@ -18,7 +18,7 @@
         />
       </div>
     </template>
-    <template slot="content">
+    <template>
       <span v-if="!pay">
         <div class="pb-5">
           <div class="space-y-1">
@@ -307,13 +307,14 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import ModeOfPayment from '@/components/payment/ModeOfPayment'
 import { required } from 'vuelidate/lib/validators'
 import { mapActions, mapGetters, mapState } from 'vuex'
+
 export default {
   name: 'DiagnosticOrderModal',
 
@@ -328,7 +329,6 @@ export default {
 
   data() {
     return {
-      visible: false,
       pay: false,
       selected: 'user',
       form : {
@@ -359,12 +359,13 @@ export default {
       specimen: '',
       tier: '',
       specimenTypes: [],
+      name: 'diagnostic-order-modal',
     }
   },
 
   events: {
     'diagnostic-order:add:open': function(data) {
-      this.visible = true
+      this.$modal.show(this.name)
       this.pay = false
       this.loading = false
       this.form = {...this.form, ...data.params[0]}
@@ -468,7 +469,7 @@ export default {
     }),
 
     close() {
-      this.visible = false
+      this.$modal.hide(this.name)
       this.append = false
       this.specimen = false
       this.sampleRejected = false
@@ -653,7 +654,7 @@ export default {
         this.form.status = 'active'
         this.getData(this.params)
         if(this.form.status !== 'draft' && this.$isCurrentWorkspace('BILL')){
-          this.visible = false
+          this.$modal.hide(this.name)
         } else {
           this.pay = false
         }

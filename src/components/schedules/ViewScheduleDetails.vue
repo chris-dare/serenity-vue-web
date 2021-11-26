@@ -1,15 +1,11 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    title="Schedule Details"
+    width="450px"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-8 left-button">
-        <p class="text-lg font-semibold">Schedule Details</p>
-
         <div>
           <p class="text-xs">Practitioner</p>
           <InfoImageBlock
@@ -68,20 +64,23 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions} from 'vuex'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'ViewScheduleDetails',
 
+  mixins: [modalMixin],
+
   data() {
     return {
       form: {},
-      visible: false,
       loading: false,
+      name: 'view-schedule-modal',
     }
   },
 
@@ -96,10 +95,10 @@ export default {
 
   events: {
     'schedule:view:close': function(){
-      this.visible = false
+      this.close()
     },
     'schedule:view:open': function(data){
-      this.visible = true
+      this.open()
       this.form = { ...data.params[0] }
     },
   },
@@ -108,11 +107,6 @@ export default {
     ...mapActions({
       deleteSchedule: 'schedules/deleteSchedule',
     }),
-
-    close() {
-      this.visible = false
-      this.form = {}
-    },
 
     edit() {
       this.$trigger('schedule:edit:open', this.form)

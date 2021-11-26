@@ -1,8 +1,6 @@
 <template>
-  <cv-modal
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
   >
     <template slot="title">
       <div>
@@ -11,7 +9,7 @@
         <p class="text-secondary text-sm">Dr. Grey Stroop</p>
       </div>
     </template>
-    <template slot="content">
+    <template>
       <div>
         <SeButton
           variant="secondary"
@@ -28,30 +26,28 @@
         </SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'EditRequestModal',
 
+  mixins: [modalMixin],
+
   data() {
     return {
-      visible: false,
       form: {},
       loading: false,
+      name: 'edit-request-modal',
     }
   },
 
   events: {
     'edit-request:add:open': function() {
-      this.visible = true
-    },
-  },
-
-  methods: {
-    close() {
-      this.visible = false
+      this.open()
     },
   },
 }

@@ -1,4 +1,5 @@
 import get from 'lodash/get'
+import Vue from 'vue'
 export default {
   fullName: state => {
     return state.user ? `${state.user.first_name} ${state.user.last_name}` : null
@@ -24,6 +25,13 @@ export default {
         value: workspace.split('.')[0],
       }
     }): []
+  },
+
+  hasPaymentPermission: () => {
+    return Vue.prototype.$userCan('bills.acceptcash.read')
+    || Vue.prototype.$userCan('bills.acceptuseracccount.write')
+    || Vue.prototype.$userCan('bills.acceptcorporate.write')
+    || Vue.prototype.$userCan('bills.acceptinsurance.write')
   },
 
   practitionerRoleId: state => get(state.provider, 'practitionerRoleId'),

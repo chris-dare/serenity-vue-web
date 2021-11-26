@@ -1,16 +1,15 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    :title="form.id ? 'Edit locations' : 'New locations'"
+    width="450px"
   >
-    <template slot="content">
+    <template>
       <SeForm
         class="space-y-8"
       >
-        <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'New' }} location</p>
         <FormInput
           v-model="form.location_name"
           type="text"
@@ -78,15 +77,18 @@
         </p>
       </SeForm>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import { required, maxLength, minLength } from 'vuelidate/lib/validators'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'AddEditLocation',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -96,17 +98,17 @@ export default {
         postal_code: '',
         country: 'GH',
       },
-      visible: false,
       loading: false,
+      name: 'add-edit-location-modal',
     }
   },
 
   events: {
     'location:add:open': function(){
-      this.visible = true
+      this.open()
     },
     'location:edit:open': function(data){
-      this.visible = true
+      this.open()
       this.form = data.params[0]
     },
   },
@@ -155,7 +157,7 @@ export default {
         this.$toast.open({
           message: 'Location successfully added',
         })
-        this.visible = false
+        this.close()
       }
 
       this.loading = false
@@ -175,18 +177,10 @@ export default {
         this.$toast.open({
           message: 'Location successfully updated',
         })
-        this.visible = false
+        this.close()
       }
 
       this.loading = false
-    },
-
-    close() {
-      this.form = {
-        country: 'GH',
-      }
-      this.$v.$reset()
-      this.visible = false
     },
   },
 }

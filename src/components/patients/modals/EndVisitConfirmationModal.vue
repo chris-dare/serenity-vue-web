@@ -1,12 +1,11 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    width="450px"
   >
-    <template slot="content">
+    <template>
       <div class="flex flex-col items-center justify-center space-y-4">
         <StatusSuccess
           v-if="!failure"
@@ -32,7 +31,7 @@
         </p>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -50,7 +49,7 @@ export default {
       visible: false,
       callback: null,
       type: 'success',
-
+      name: 'end-visit-confirmation-modal',
     }
   },
 
@@ -59,10 +58,12 @@ export default {
       if(this.visible)return
       this.callback = callback
       this.visible = true
+      this.$modal.show(this.name)
     },
 
     'visit:end:close': function(){
       this.visible = false
+      this.$modal.hide(this.name)
     },
   },
 
@@ -106,6 +107,7 @@ export default {
   
     close() {
       this.visible = false
+      this.$modal.hide(this.name)
     },
   },
 }

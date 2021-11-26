@@ -1,14 +1,12 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    title="Admit patient"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-4">
-        <p class="text-lg font-semibold">Admit patient</p>
         <p>Please choose which ward or service you would want to admit patient to.</p>
         
         <MultiSelect
@@ -19,7 +17,7 @@
         <SeButton full>Admit this patient</SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -29,16 +27,16 @@ export default {
   data() {
     return {
       form: {},
-      visible: false,
+      name: 'admit-patient-modal',
     }
   },
 
   events: {
     'profile:admit:open': function(){
-      this.visible = true
+      this.$modal.show(this.name)
     },
     'profile:admit:close': function(){
-      this.visible = false
+      this.$modal.hide(this.name)
     },
   },
 }

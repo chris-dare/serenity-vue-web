@@ -1,8 +1,6 @@
 <template>
-  <cv-modal
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
   >
     <template slot="title">
       <div>
@@ -10,37 +8,38 @@
         <p class="text-secondary text-sm">Add a new lab test to performed on patient</p>
       </div>
     </template>
-    <template slot="content">
+    <template>
       <SeForm class="space-y-8 mt-8">
         <SelectService
           v-if="nextPage === 'service'"
           :modal="true"
           @next="nextPage = 'pay'"
-          @stop="visible = false"
-          @back="visible = false"
+          @stop="close"
+          @back="close"
         />
         <SelectPayment
           v-if="nextPage === 'pay'"
           :modal="true"
           @next="nextPage = 'summary'"
-          @stop="visible = false"
+          @stop="close"
           @back="nextPage = 'service'"
         />
         <SelectDetail
           v-if="nextPage === 'summary'"
           :modal="true"
-          @next="visible = false"
-          @stop="visible = false"
+          @next="close"
+          @stop="close"
           @back="nextPage = 'pay'"
         />
       </SeForm>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import DataMixin from '@/mixins/data'
+import modalMixin from '@/mixins/modal'
 import SelectService from '@/components/diagnostic/request/DiagnosticSelectClinic'
 import SelectPayment from '@/components/diagnostic/request/DiagnosticSelectPayment'
 import SelectDetail from '@/components/diagnostic/request/DiagnosticSummaryDetail'
@@ -50,11 +49,10 @@ export default {
 
   components: { SelectService, SelectPayment, SelectDetail },
 
-  mixins: [DataMixin],
+  mixins: [DataMixin, modalMixin],
 
   data() {
     return {
-      visible: false,
       nextPage: 'service',
       form: {
         order_detail: [{display: ''}],
@@ -65,12 +63,13 @@ export default {
       mode: 'create',
       loading: false,
       columns: ['Date', 'Lab type', 'Priority', 'Order detail', 'Bodysite', 'Specimen', 'Action'],
+      name: 'add-lab-modal',
     }
   },
 
   events: {
     'new-lab:add:open': function() {
-      this.visible = true
+      this.open()
       this.nextPage = 'service',
       this.mode = 'create'
     },
@@ -104,11 +103,8 @@ export default {
       this.form = lab
     },
 
-    close() {
-      this.visible = false
-    },
     add(){
-      this.visible = false
+      this.close()
       this.$trigger('requestedlabs:add:open')
     },
   },

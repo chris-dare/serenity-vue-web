@@ -1,20 +1,18 @@
 <template>
-  <cv-modal
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    title="Create Referral"
   >
-    <template slot="title">
-      <p class="text-lg font-semibold">Create Referral</p>
-    </template>
-    <template slot="content">
+    <template>
       <EncounterReferralForm />
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
 export default {
   name: 'EncounterReferralModal',
 
@@ -22,18 +20,20 @@ export default {
     EncounterReferralForm: () => import('@/components/patients/encounters/forms/EncounterReferralForm'),
   },
 
+  mixins: [modalMixin],
+
   data() {
     return {
-      visible: false,
+      name: 'encounter-referral-modal',
     }
   },
 
   events: {
     'profile:referral:open': function(){
-      this.visible = true
+      this.open()
     },
     'profile:referral:close': function(){
-      this.visible = false
+      this.close()
     },
   },
 }

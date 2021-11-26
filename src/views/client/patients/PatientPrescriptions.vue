@@ -86,7 +86,7 @@
       </div>
     </div>
     
-    <TreatmentPlanModal :visible.sync="treatmentVisible" />
+    <TreatmentPlanModal />
   </div>
 </template>
 
@@ -118,7 +118,6 @@ export default {
       ],
       visible: false,
       prescription: {},
-      treatmentVisible: false,
       paginate: true,
     }
   },

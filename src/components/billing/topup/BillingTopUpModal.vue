@@ -1,11 +1,10 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
   >
-    <template slot="content">
+    <template>
       <p class="text-lg font-semibold">{{ label }}</p>
       <component
         :is="stepComponent"
@@ -33,7 +32,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -73,6 +72,7 @@ export default {
       label: 'Top Up Account',
       showCheck: false,
       type: 'receive',
+      name: 'billing-topup-modal',
     }
   },
 
@@ -106,14 +106,14 @@ export default {
 
   events: {
     'billing:topup:open': function(){
-      this.visible = true
+      this.open()
       this.label = 'Top Up Account'
       this.showCheck = false
       this.type = 'topup'
     },
 
     'billing:receive:open': function(){
-      this.visible = true
+      this.open()
       this.label = 'Receive Payment'
       this.showCheck = true
       this.type = 'receive'
@@ -130,7 +130,7 @@ export default {
         },
       }
       this.initPaymentStep(data.params[0].id)
-      this.visible = true
+      this.open()
       this.showCheck = false
       this.label = 'Top Up Account'
       this.type = 'topup'

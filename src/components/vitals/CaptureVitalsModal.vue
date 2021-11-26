@@ -1,14 +1,12 @@
 <template>
-  <cv-modal
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    width="70%"
+    title="Vitals"
   >
-    <template slot="title">
-      <h1>Vitals</h1>
-    </template>
-    <template slot="content">
+    <template>
       <div class="grid grid-cols-2 gap-4">
         <FormMixedInput
           v-for="(vital, index) in units"
@@ -39,7 +37,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -47,9 +45,12 @@ import { mapActions, mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 import { required } from 'vuelidate/lib/validators'
 const bpvalidator = (value) => !!value?.includes('/')
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'CaptureVitalsModal',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -57,18 +58,19 @@ export default {
       visible: false,
       loading: false,
       patient: null,
+      name: 'capture-vitals-modal',
     }
   },
 
   events: {
     'capture:vitals:open': function(){
-      this.visible = true
+      this.open()
       this.patient = this.$route.params.id
     },
     'reception:capture:vitals:open': async function(data){
       this.getEncounters({patient: data.params[0].patient, visit: data.params[0].visit, status: 'planned' })
       await this.getVitalsUnitTypes()
-      this.visible = true
+      this.open()
       this.patient = data.params[0].patient
     },
     'capture:vitals:close': function(){
@@ -107,11 +109,6 @@ export default {
       getVitalsUnitTypes: 'resources/getVitalsUnitTypes',
       getEncounters: 'encounters/getEncounters',
     }),
-
-    close() {
-      this.form = {}
-      this.visible = false
-    },
 
     async save() {
       this.$v.$touch()

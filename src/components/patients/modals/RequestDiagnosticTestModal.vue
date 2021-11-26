@@ -1,14 +1,12 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    title="Request diagnostic test"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-4">
-        <p class="text-lg font-semibold">Request diagnostic test</p>
         <cv-select
           v-model="form.location"
           label="Choose lab type"
@@ -40,7 +38,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -50,16 +48,16 @@ export default {
   data() {
     return {
       form: {},
-      visible: false,
+      name: 'request-diagnostic-test-modal',
     }
   },
 
   events: {
     'profile:test:open': function(){
-      this.visible = true
+      this.$modal.show(this.name)
     },
     'profile:test:close': function(){
-      this.visible = false
+      this.$modal.hide(this.name)
     },
   },
 }

@@ -2,8 +2,8 @@
   <MultiStepBase
     :icon="icon"
     next-label="Complete payment"
-    :previous="previous"
     :loading="loading"
+    @back="$router.back()"
     @cancel="cancel"
     @save="onSave"
   >
@@ -41,9 +41,7 @@ export default {
     return {
       next: 'CheckoutReceipts',
       previous: 'CheckoutSelectPatient',
-      form: {
-        transaction_type: '',
-      },
+      form: {},
       loading: false,
       parent: 'Dashboard',
     }
@@ -68,7 +66,6 @@ export default {
   },
 
   mounted() {
-    this.form.transaction_type = this.$global.USER_ACCOUNT_TYPE
     if(this.existingPatient){
       this.form.patient = this.existingPatient
     }

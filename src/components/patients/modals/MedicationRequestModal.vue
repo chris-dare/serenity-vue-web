@@ -1,17 +1,15 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    title="Medication"
+    width="70%"
   >
-    <template slot="content">
+    <template>
       <SeForm
         class="space-y-8"
       >
-        <p class="text-lg font-semibold">Medication</p>
-
         <MedicationRequestForm
           v-model="form"
           :v="$v"
@@ -35,7 +33,7 @@
         </div>
       </SeForm>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -44,12 +42,15 @@ import { mapActions, mapState } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 import MedicationRequestForm from '@/components/forms/MedicationRequestForm'
 import isEmpty from 'lodash/isEmpty'
+import modalMixin from '@/mixins/modal'
 
 
 export default {
   name: 'MedicationRequestModal',
 
   components: { MedicationRequestForm },
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -67,21 +68,21 @@ export default {
         ],
       },
       icon: ChevronRight,
-      visible: false,
       loading: false,
       intentOptions: [ 'proposal', 'plan', 'directive', 'order', 'original-order', 'reflex-order', 'filler-order', 'instance-order', 'option' ],
       statuses: [ 'draft', 'active', 'on-hold', 'revoked', 'completed', 'entered-in-error', 'unknown' ],
       therapyTypes: [ 'continuous', 'acute', 'seasonal' ],
       categories: [ 'inpatient', 'outpatient', 'community', 'discharge' ],
+      name: 'medication-request-modal',
     }
   },
 
   events: {
     'profile:medication:request:open': function(){
-      this.visible = true
+      this.open()
     },
     'profile:medication:request:close': function(){
-      this.visible = false
+      this.close()
     },
   },
 
@@ -210,23 +211,6 @@ export default {
       })
 
       return newForm
-    },
-
-    close() {
-      this.form = {
-        extra_details: {
-          medication_notes: [{display: ''}],
-        },
-        drugs: [
-          {
-            medication_detail: [{display: ''}],
-            course_of_therapy_type: '',
-            medication_request_dosage_instruction: [{frequency: ''}],
-          },
-        ],
-      },
-      this.$v.$reset()
-      this.visible = false
     },
 
     addTag(index, tag) {

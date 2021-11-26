@@ -51,20 +51,6 @@
           </Tag>
         </cv-data-table-cell>
         <cv-data-table-cell>
-          <!-- <div
-            class="flex items-center cursor-pointer"
-            @click="$trigger('billing:detail:open', { ...row })"
-          >
-            View
-            <div
-              class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center"
-            >
-              <img
-                src="@/assets/img/view 1.svg"
-                alt=""
-              >
-            </div>
-          </div> -->
           <div class="flex items-center cursor-pointer space-x-4">
             <TableActions
               :actions="tableActions(row)"
@@ -156,7 +142,7 @@ export default {
       return [
         { label: 'View bill', event: 'view', show: true },
         { label: 'Print bill', event: 'print', show: true },
-        { label: `${row.status_display === 'Paid' ? 'Refund bill' : row.status === 'cancelation-approved' ? 'Cancel Bill' : row.status === 'cancelation-requested' ? 'Approve Request' : 'Submit Request'}`, event: 'cancel', show: true },
+        { label: row.status_display === 'Paid' ? 'Refund bill' : row.status === 'cancelation-approved' ? 'Cancel Bill' : row.status === 'cancelation-requested' ? 'Approve Request' : 'Submit Request', event: 'cancel', show: true },
       ]
     },
 

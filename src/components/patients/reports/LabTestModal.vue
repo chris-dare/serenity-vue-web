@@ -1,15 +1,9 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    title="Laboratory Test Result"
   >
-    <template slot="content">
-      <div class="flex items-center justify-between mb-6 w-full">
-        <p>Laboratory Test Result</p>
-      </div>
+    <template>
       <div
         v-if="!loading"
         class="space-y-6"
@@ -160,13 +154,14 @@
         </SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import modalMixin from '@/mixins/modal'
 import DiagnosticAPI from '@/api/diagnostic'
 import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'LabTestModal',
 
@@ -184,7 +179,7 @@ export default {
       reviewLoading: false,
       loading: false,
       diagnostic: false,
-      visible: false,
+      name: 'lab-test-modal',
     }
   },
 
@@ -206,7 +201,7 @@ export default {
   events: {
     'lab:result:open': async function({params}){
       this.loading = true
-      this.visible = true
+      this.open()
       const { data } = await DiagnosticAPI.get(this.provider.id, params[0])
       this.report = data
       this.loading = false
@@ -215,7 +210,7 @@ export default {
       this.loading = true
       const { data } = await DiagnosticAPI.get(this.provider.id, params[0])
       this.report = data
-      this.visible = true
+      this.open()
       this.approval = this.report.status
       this.diagnostic = true
       this.loading = false
@@ -228,13 +223,7 @@ export default {
       getData: 'diagnostic/getDiagnosticReports',
       updateResultStatus: 'diagnostic/updateResultStatus',
     }),
-    close() {
-      this.visible = false
-      this.report = {
-        service_request_detail: {},
-        diagnostic_report_conclusion_code: [],
-      }
-    },
+  
     async updateResult(status){
       if(status === 'approve'){
         this.approveLoading = true

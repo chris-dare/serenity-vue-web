@@ -183,12 +183,12 @@ const routes = [
             component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/corporate/CompanyInformation.vue'),
           },
           {
-            path: '/register-client/admin-information',
+            path: 'admin-information',
             name: 'CompanyAdminInformation',
             component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/corporate/CompanyAdminInformation.vue'),
           },
           {
-            path: '/register-client/verification',
+            path: 'verification',
             name: 'Verification',
             component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/corporate/Verification.vue'),
           },
@@ -239,13 +239,13 @@ const routes = [
             component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/insurance/CompanyInformation.vue'),
           },
           {
-            path: '/register-client/admin-information',
+            path: 'admin-information',
             name: 'InsuranceAdminInformation',
             component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/insurance/CompanyAdminInformation.vue'),
           },
           {
-            path: '/register-client/verification',
-            name: 'Verification',
+            path: 'verification',
+            name: 'InsuranceVerification',
             component: () => import(/* webpackChunkName: "registerclient" */ '../views/client/insurance/Verification.vue'),
           },
         ],
@@ -460,7 +460,7 @@ const routes = [
       },
       {
         path: '/diagnostic',
-        name: 'Diagnostic',
+        // name: 'Diagnostic',
         component: () => import(/* webpackChunkName: "diagnostic" */ '../views/client/diagnostic/NewDiagnostic.vue'),
         children: [
           {

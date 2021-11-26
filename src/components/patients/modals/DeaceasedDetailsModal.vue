@@ -1,14 +1,13 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    title="Deceased patient information"
+    width="450px"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-8">
-        <p class="text-lg font-semibold">Deceased patient information</p>
         <InfoBlock
           label="Cause of death"
           :description="patient.cause_of_death"
@@ -49,7 +48,7 @@
         </SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -60,16 +59,16 @@ export default {
   data() {
     return {
       form: {},
-      visible: false,
+      name: 'deceased-details-modal',
     }
   },
 
   events: {
     'profile:deceased-info:open': function(){
-      this.visible = true
+      this.$modal.show(this.name)
     },
     'profile:deceased-info:close': function(){
-      this.visible = false
+      this.$modal.hide(this.name)
     },
   },
 

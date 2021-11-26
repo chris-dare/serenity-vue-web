@@ -217,7 +217,6 @@ export default {
       const patient = state.currentPatient
       const { data } = await ServiceRequestsAPI.list(provider.id, {patient: patient.id})
       commit(SET_SERVICE_REQUESTS, data)
-      console.log(data)
       return data
     } catch (error) {
       throw error.data || error
