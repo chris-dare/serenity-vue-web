@@ -148,7 +148,7 @@ export default {
         }
       }catch(e){
         this.$toast.open({
-          message: defaultErrorMessage,
+          message: e.message,
           type: 'error',
         })
       }
