@@ -1,11 +1,8 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="modalVisible"
-    size="xs"
+  <BaseModal
+    :name="name"
   >
-    <template slot="content">
+    <template>
       <div class="w-full flex flex-col items-center justify-center">
         <img
           src="@/assets/img/calendar--event 1.svg"
@@ -29,28 +26,25 @@
         </router-link>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
 export default {
   name: 'AppointmentSuccessModal',
 
-  props: {
-    visible: {
-      type: Boolean,
-      default: false,
-    },
+  mixins: [modalMixin],
+
+  data() {
+    return {
+      name: 'appointment-success-modal',
+    }
   },
 
-  computed: {
-    modalVisible: {
-      set(val) {
-        this.$emit('visible:update', val)
-      },
-      get() {
-        return this.visible
-      },
+  events: {
+    'appointment:success:open': function(){
+      this.open()
     },
   },
 }

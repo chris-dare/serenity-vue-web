@@ -1,12 +1,11 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    width="70%"
   >
-    <template slot="content">
+    <template>
       <MultiStepModal
         ref="steps"
         v-model="step"
@@ -42,7 +41,7 @@
         />
       </MultiStepModal>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 <script>
 import Checkmark from '@carbon/icons-vue/es/checkmark/32'
@@ -53,6 +52,7 @@ import PrescriptionPaymentForm from '@/components/pharmacy/PrescriptionPaymentFo
 import PrintBillForm from '@/components/pharmacy/PrintBillForm'
 import MultiStepModal from '@/components/global/MultiStepModal'
 import Patient from '@/models/Patient'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'NonPatientPrescriptionModal',
@@ -65,10 +65,11 @@ export default {
     PrintBillForm,
   },
 
-  mixins: [MultiStepModall],
+  mixins: [MultiStepModall, modalMixin],
 
   data() {
     return {
+      name: 'non-patient-prescription-modal',
       form: {a: 1},
       visible: false,
       icons: {
@@ -107,7 +108,7 @@ export default {
   methods: {
     cancel() {
       this.$resetData('form')
-      this.visible = false
+      this.close()
     },
     onPatientCreated(patient) {
       this.patient = new Patient(patient).getNormalizedView()
@@ -122,10 +123,10 @@ export default {
   events: {
     'pharmacy:nonpatient_prescription:open': function(){
       this.step = 0
-      this.visible = true
+      this.open()
     },
     'pharmacy:nonpatient_prescription:close': function(){
-      this.visible = false
+      this.close()
     },
   },
 }

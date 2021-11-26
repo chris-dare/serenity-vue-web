@@ -1,12 +1,12 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
+  <BaseModal
+    name="add-edit-insurance-modal"
     close-aria-label="Close"
-    :visible="visible"
     size="sm"
-    @modal-hidden="close"
+    height="auto"
+    scrollable
   >
-    <template slot="content">
+    <template>
       <div class="space-y-8">
         <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'Add' }} insurance service</p>
         <AddInsuranceForm
@@ -31,7 +31,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -54,7 +54,6 @@ export default {
       form: {
         contribution_currency: 'GHS',
       },
-      visible: false,
       loading: false,
       patient: null,
       disabled: true,
@@ -64,7 +63,7 @@ export default {
   events: {
     'insurance:add:open': function(data){
       this.getInsuranceProvider({filters: { organization_type: 'INS'}})
-      this.visible = true
+      this.$modal.show('add-edit-insurance-modal')
       this.patient = data.params[0]
       if (this.patient) {
         this.form = pick(this.patient, ['first_name', 'last_name', 'mobile', 'email', 'gender', 'birth_date'])
@@ -74,7 +73,7 @@ export default {
     },
 
     'insurance:edit:open': function(data){
-      this.visible = true
+      this.$modal.show('add-edit-insurance-modal')
       this.form = data.params[0]
     },
   },
@@ -93,7 +92,7 @@ export default {
         await InsuranceAPI.registerPatientAsBeneficiary(this.$providerId, this.form.managing_organization, omit(this.form, 'birth_date'))
         this.$toast.open('Patient added successfully')
         this.getPatientAccounts({ id: this.patient.id })
-        this.close()
+        this.$modal.hide('add-edit-insurance-modal')
       } catch (error) {
         this.$toast.open({
           message: error.message || 'Something went wrong!',

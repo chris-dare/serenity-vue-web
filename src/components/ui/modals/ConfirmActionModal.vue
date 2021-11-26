@@ -1,12 +1,11 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
+  <BaseModal
+    name="confirm-action-modal"
     close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+    size="sm"
+    height="auto"
   >
-    <template slot="content">
+    <template>
       <div class="w-full flex flex-col items-center justify-center pt-6 space-y-4">
         <p class="text-serenity-primary my-4 text-lg">Are you sure you want to delete {{ label }}</p>
         <div class="flex items-center justify-between space-x-4">
@@ -25,7 +24,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -51,12 +50,14 @@ export default {
       this.data = data
       this.callback = callback
       this.visible = true
+      this.$modal.show('confirm-action-modal')
     },
   },
 
   watch: {
     '$route'(){
       this.visible = false
+      this.$modal.hide('confirm-action-modal')
     },
   },
 
@@ -75,6 +76,7 @@ export default {
     },
     cancel() {
       this.visible = false
+      this.$modal.hide('confirm-action-modal')
     },
   },
 }

@@ -18,8 +18,8 @@
       <div
         v-for="(action, index) in actions"
         :key="index"
-
-        @click="$emit(action.event)"
+        role="button"
+        @click="onClick(action)"
       >
         <div
           v-if="action.show"
@@ -54,6 +54,13 @@ export default {
     return {
       visible: false,
     }
+  },
+
+  methods: {
+    onClick(action) {
+      this.$emit(action.event)
+      this.visible = false
+    },
   },
 }
 </script>

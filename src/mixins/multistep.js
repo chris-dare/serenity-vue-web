@@ -12,13 +12,13 @@ export default {
       immediate: true,
       deep: true,
       handler(val) {
-        this.form = val.id ? { ...this.form , ...val } : { ...val, ...this.form }
+        this.form = val?.id ? { ...this.form , ...val } : { ...val, ...this.form }
       },
     },
   },
 
   created() {
-    if (!this.storeData.id) {
+    if (!this.storeData?.id) {
       this.form = { ...this.form , ...this.storeData }
     }
     
@@ -26,7 +26,7 @@ export default {
 
   events: {
     'multistep:save': function() {
-      this.addToStoreData(this.storeData.id ? { ...this.storeData, ...this.form } : { ...this.form , ...this.storeData })
+      this.addToStoreData(this.storeData?.id ? { ...this.storeData, ...this.form } : { ...this.form , ...this.storeData })
     },
   },
 

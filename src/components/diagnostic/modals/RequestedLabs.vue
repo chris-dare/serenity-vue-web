@@ -1,8 +1,8 @@
 <template>
-  <cv-modal
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
   >
     <template slot="title">
       <div>
@@ -10,7 +10,7 @@
         <p class="text-secondary text-sm">What action do you want to perform?</p>
       </div>
     </template>
-    <template slot="content">
+    <template>
       <div class="mt-5">
         <SeButton
           variant="secondary"
@@ -23,30 +23,27 @@
         <p class="text-secondary text-sm mt-2">Lab test requires a patient sample</p>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
 export default {
   name: 'RequestedLabsModal',
 
+  mixins: [modalMixin],
+
   data() {
     return {
-      visible: false,
       form: {},
       loading: false,
+      name: 'requested-labs-modal',
     }
   },
 
   events: {
     'requestedlabs:add:open': function() {
-      this.visible = true
-    },
-  },
-
-  methods: {
-    close() {
-      this.visible = false
+      this.open()
     },
   },
 }

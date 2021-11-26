@@ -10,7 +10,6 @@
     @save="save"
   >
     <AppointmentDetail :appointment="storeData" />
-    <AppointmentSuccessModal :visible.sync="visible" />
     <BillingDetailsModal
       :appointment="storeData"
     />
@@ -19,7 +18,6 @@
 
 <script>
 import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
-import AppointmentSuccessModal from '@/components/patients/modals/AppointmentSuccessModal'
 import BillingDetailsModal from '@/components/appointments/BillingDetailsModal'
 import AppointmentDetail from '@/components/appointments/AppointmentDetail'
 import { mapActions, mapState } from 'vuex'
@@ -29,7 +27,7 @@ import MultiStep from '@/mixins/multistep'
 export default {
   name: 'AppointmentSummaryDetail',
 
-  components: { AppointmentSuccessModal, BillingDetailsModal, AppointmentDetail },
+  components: { BillingDetailsModal, AppointmentDetail },
 
   mixins: [MultiStep],
 
@@ -43,7 +41,6 @@ export default {
   data() {
     return {
       icon: Checkmark,
-      visible: false,
       previous: 'AppointmentNotes',
       parent: 'Appointments',
     }

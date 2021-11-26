@@ -1,14 +1,12 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    title="Add notes"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-4">
-        <p class="text-lg font-semibold">Add notes</p>
         <FormInput
           v-model="form.notes"
           :label="label"
@@ -30,7 +28,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -63,19 +61,19 @@ export default {
 
   data() {
     return {
-      visible: false,
       form: {},
       loading: false,
       callback: null,
+      name: 'notes-modal',
     }
   },
 
   events: {
     'notes:open': function(){
-      this.visible = true
+      this.$modal.show(this.name)
     },
     'notes:edit': function(data) {
-      this.visible = true
+      this.$modal.show(this.name)
       this.form = { ...data.params[0] }
     },
     'notes:loading': function(data) {
@@ -102,7 +100,7 @@ export default {
     close() {
       this.form = {}
       this.$v.$reset()
-      this.visible = false
+      this.$modal.hide(this.name)
       this.loading = false
       this.$emit('close')
     },

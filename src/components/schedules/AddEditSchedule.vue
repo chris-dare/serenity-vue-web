@@ -1,18 +1,14 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    :title="form.id ? 'Edit schedule' : 'New schedule'"
   >
-    <template slot="content">
-      <cv-form
-        autocomplete="off"
+    <template>
+      <SeForm
         class="space-y-8 left-button"
-        @submit.prevent
       >
-        <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'New' }} schedule</p>
         <MultiSelect
           v-model="form.practitioner"
           title="Who are you scheduling?"
@@ -138,18 +134,21 @@
             {{ form.id ? 'Save changes' : 'Create schedule' }}
           </SeButton>
         </div>
-      </cv-form>
+      </SeForm>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 import format from 'date-fns/format'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'AddEditSchedule',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -160,17 +159,17 @@ export default {
         end_time: '17:00:00',
         comment: '',
       },
-      visible: false,
       loading: false,
+      name: 'add-edit-schedule',
     }
   },
 
   events: {
     'schedule:add:open': function(){
-      this.visible = true
+      this.open()
     },
     'schedule:edit:open': function(data){
-      this.visible = true
+      this.open()
       this.form = { ...data.params[0] }
       this.form.check = parseInt(this.form.recurring_weeks) > 1 ? 'yes' : 'no'
     },
@@ -279,11 +278,6 @@ export default {
       } catch (error) {
         this.loading = false
       }
-    },
-
-    close() {
-      this.$resetData()
-      this.$v.$reset()
     },
 
     customLabel ({ first_name, last_name }) {

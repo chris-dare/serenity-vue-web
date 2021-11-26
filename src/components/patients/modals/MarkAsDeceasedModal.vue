@@ -1,18 +1,17 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    title="Mark this patient as deceased"
+    width="450px"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-8">
-        <p class="text-lg font-semibold">Mark this patient as deceased</p>
         <DatePicker
           v-model="form.deceased_date_time"
           type="datetime"
-          class="w-full max-w-full inherit-full-input"
+          class="w-full max-w-full inherit-full-input se-input-gray"
           placeholder="dd/mm/yyyy"
           label="Date"
         />
@@ -40,7 +39,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -51,17 +50,17 @@ export default {
   data() {
     return {
       form: {},
-      visible: false,
       loading: false,
+      name: 'mark-as-deceased-modal',
     }
   },
 
   events: {
     'profile:deceased:open': function(){
-      this.visible = true
+      this.$modal.show(this.name)
     },
     'profile:deceased:close': function(){
-      this.visible = false
+      this.$modal.hide(this.name)
     },
   },
 
@@ -87,7 +86,7 @@ export default {
     },
 
     close() {
-      this.visible = false
+      this.$modal.hide(this.name)
       this.form = {}
     },
   },

@@ -1,14 +1,11 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    title="Add new dependent"
+    width="450px"
   >
-    <template slot="content">
+    <template>
       <div>
-        <p class="text-md font-semibold">Add new dependent</p>
         <div>
           <div class="grid grid-cols-2 gap-8 my-3">
             <AutoCompletePatients v-model="form" />
@@ -64,7 +61,7 @@
         </SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -80,12 +77,12 @@ export default {
   data() {
     return {
       loading: false,
-      visible: false,
       type: 'add',
       vertical: true,
       form: {
         relationship: 'DEPENDENT',
       },
+      name: 'add-dependent-modal',
     }
   },
 
@@ -124,11 +121,11 @@ export default {
 
   events: {
     'dependent:add:open': function(){
-      this.visible = true
+      this.open()
       this.type = 'add'
     },
     'dependent:edit:open': function(data){
-      this.visible = true
+      this.open()
       this.form = data.params[0]
       this.type = 'update'
     },

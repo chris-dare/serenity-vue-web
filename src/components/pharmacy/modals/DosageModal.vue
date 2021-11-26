@@ -1,17 +1,11 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
   >
-    <template slot="content">
-      <cv-form
+    <template>
+      <SeForm
         v-if="drug"
-        autocomplete="off"
         class="space-y-8"
-        @submit.prevent
       >
         <div class="mt-8 flex justify-between items-center">
           <div>
@@ -31,7 +25,7 @@
             class="inherit-full-input"
           />
         </div>
-      </cv-form>
+      </SeForm>
       <div class="mt-12 flex justify-between items-center">
         <SeButton
           variant="secondary"
@@ -47,13 +41,12 @@
         </SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import { mapGetters, mapState, mapMutations } from 'vuex'
-
 
 export default {
   name: 'DosageModal',
@@ -68,6 +61,7 @@ export default {
       loading: false,
       drug: null,
       callback: null,
+      name: 'dosage-modal',
     }
   },
 
@@ -94,12 +88,12 @@ export default {
 
     open(item, callback) {
       this.drug = item
-      this.visible = true
+      this.$modal.show(this.name)
       this.callback = callback
     },
 
     close() {
-      this.visible = false
+      this.$modal.hide(this.name)
     },
   },
 }

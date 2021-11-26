@@ -14,7 +14,20 @@ export default {
       }
               
       this.visible = false
+      if (this.name) {
+        this.$modal.hide(this.name)
+      }
+      
       this.afterCloseFunction()
+      
+    },
+
+    open() {
+      this.visible = true
+
+      if (this.name) {
+        this.$modal.show(this.name)
+      }
       
     },
 

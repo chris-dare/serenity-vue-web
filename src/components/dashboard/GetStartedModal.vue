@@ -1,11 +1,8 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="modalVisible"
-    size="xs"
+  <BaseModal
+    :name="name"
   >
-    <template slot="content">
+    <template>
       <SeForm>
         <p class="mb-1 font-bold text-xl mt-4">Welcome, {{ fullName | capitalize }}</p>
         <p class="mb-6">
@@ -60,14 +57,17 @@
         </div>
       </SeForm>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'GetStartedModal',
+
+  mixins: [modalMixin],
 
   props: {
     visible: {
@@ -79,6 +79,7 @@ export default {
   data() {
     return {
       form: {},
+      name: 'get-started-modal',
     }
   },
 
@@ -96,6 +97,12 @@ export default {
       get() {
         return this.visible
       },
+    },
+  },
+
+  events: {
+    'get:started:open': function(){
+      this.open()
     },
   },
 }

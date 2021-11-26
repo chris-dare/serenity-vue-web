@@ -1,15 +1,9 @@
 <template>
-  <cv-modal
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    title="Diagnostic Reports"
   >
-    <template slot="title">
-      <div>
-        <h1>Diagnostic Reports</h1>
-      </div>
-    </template>
-    <template slot="content">
+    <template>
       <div class="flex items-center py-5">
         <div class="space-y-1">
           <p class="text-lg font-semibold">{{ form && form.code }}</p>
@@ -86,22 +80,25 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'DiagnosticReportModal',
 
+  mixins: [modalMixin],
+
   data() {
     return {
-      visible: false,
       form: {},
       loading: false,
       approveLoading: false,
       approval: '',
+      name: 'diagnostic-report-modal',
     }
   },
 
@@ -116,9 +113,6 @@ export default {
     ...mapActions({
       updateDiagnosticReport: 'diagnostic/updateDiagnosticReport',
     }),
-    close() {
-      this.visible = false
-    },
     async approveResult(){
       this.approveLoading = true
       this.form.status = 'final'

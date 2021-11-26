@@ -1,12 +1,8 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
   >
-    <template slot="content">
+    <template>
       <div>
         <BillingSuccessful
           v-if="done"
@@ -94,7 +90,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -124,12 +120,13 @@ export default {
       },
       isExportLoading: false,
       loading: false,
+      name: 'billing-corporate-settle-modal',
     }
   },
 
   events: {
     'corporate:settle:open': function(data){
-      this.visible = true
+      this.open()
       this.bill = data.params[0]
       this.form.transaction_type = this.$global.USER_ACCOUNT_TYPE
     },

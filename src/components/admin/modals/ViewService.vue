@@ -1,15 +1,12 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    height="auto"
+    scrollable
+    name="view-service-modal"
+    title="Service Details"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-8 left-button">
-        <p class="text-lg font-semibold">Service Details</p>
-
         <InfoBlock
           label="Service name"
           :description="form.healthcare_service_name"
@@ -102,7 +99,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -116,17 +113,16 @@ export default {
       form: {
         price_tiers: [],
       },
-      visible: false,
       loading: false,
     }
   },
 
   events: {
     'service:view:close': function(){
-      this.visible = false
+      this.$modal.hide('view-service-modal')
     },
     'service:view:open': function(data){
-      this.visible = true
+      this.$modal.show('view-service-modal')
       this.form = { ...data.params[0] }
     },
   },
@@ -137,7 +133,7 @@ export default {
     }),
 
     close() {
-      this.visible = false
+      this.$modal.hide('view-service-modal')
       this.form = {
         price_tiers: [],
       }

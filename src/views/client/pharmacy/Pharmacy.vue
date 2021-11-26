@@ -15,13 +15,11 @@
         @click="change(dashboard)"
       />
     </div>
-    <GetStartedModal :visible.sync="visible" />
     <NonPatientPrescriptionModal />
   </div>
 </template>
 
 <script>
-import GetStartedModal from '@/components/dashboard/GetStartedModal'
 import NonPatientPrescriptionModal from '@/components/pharmacy/modals/NonPatientPrescriptionModal'
 import { mapState } from 'vuex'
 
@@ -29,14 +27,12 @@ export default {
   name: 'Dashboard',
 
   components: {
-    GetStartedModal,
     NonPatientPrescriptionModal,
   },
 
   data() {
     return {
       selected: 'search',
-      visible: false,
       visitVisible: false,
     }
   },

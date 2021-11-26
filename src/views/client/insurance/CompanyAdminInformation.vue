@@ -174,7 +174,7 @@ export default {
     },
     async update(){
       this.addToStoreData(this.form)
-      this.$router.push({name: 'Verification'})
+      this.$router.push({name: 'InsuranceVerification'})
     },
   },
 }

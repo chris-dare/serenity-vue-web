@@ -1,15 +1,12 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    title="Observations"
   >
-    <template slot="content">
+    <template>
       <SeForm class="space-y-8">
-        <p class="text-lg font-semibold">Observations</p>
-
         <FilterGroup
           v-model="selected"
           :filters="filters"
@@ -21,7 +18,7 @@
         />
       </SeForm>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -33,7 +30,7 @@ import RiskAssessmentTools from '@/components/ipd/observations/RiskAssessmentToo
 import ObservationsCharts from '@/components/ipd/observations/ObservationsCharts'
 
 export default {
-  name: 'AddEditInventory',
+  name: 'ObservationsModal',
 
   components: {
     IntakeChart,
@@ -48,7 +45,6 @@ export default {
       form: {},
       selected: 'intake',
       loading: false,
-      visible: false,
     }
   },
 
@@ -78,11 +74,11 @@ export default {
 
   events: {
     'profile:observation:open': function(){
-      this.visible = true
+      this.$modal.show(this.name)
       this.form = {}
     },
     'observation:edit:open': function(data){
-      this.visible = true
+      this.$modal.show(this.name)
       this.form = data.params[0]
     },
   },
@@ -94,8 +90,7 @@ export default {
     }),
 
     close() {
-      this.$v.$reset()
-      this.visible = false
+      this.$modal.hide(this.name)
     },
   },
 }
