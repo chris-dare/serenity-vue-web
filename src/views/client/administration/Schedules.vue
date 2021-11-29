@@ -4,7 +4,6 @@
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Schedules ({{ dataCount || 0 }})</p>
         <SeButton
-          v-if="$isCurrentWorkspace('ADMIN')"
           @click="$trigger('schedule:add:open')"
         >
           Add new schedule
