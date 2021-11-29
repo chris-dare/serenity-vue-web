@@ -101,7 +101,6 @@ export default {
   },
 
   printChargeItem(providerId,id) {
-
     return http({
       method: 'get',
       url: `${this.url}${providerId}/finance/charge-items/${id}/print`,

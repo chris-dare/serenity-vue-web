@@ -84,13 +84,7 @@ export default {
     async print() {
       try {
         this.printLoading = true
-        if (this.bill.status_display === 'Unpaid') {
-          await this.exportBill(this.bill.invoice_id || this.bill.id)
-        } else {
-          await this.exportChargeItem(this.bill.id || this.bill.invoice_id)
-        }
-        
-
+        await this.exportChargeItem(this.bill.id)
         this.printLoading = false
       } catch (error) {
         this.printLoading = false
