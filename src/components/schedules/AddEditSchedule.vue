@@ -280,8 +280,8 @@ export default {
       }
     },
 
-    customLabel ({ first_name, last_name }) {
-      return `${first_name} ${last_name}`
+    customLabel ({ first_name, last_name, title }) {
+      return `${title} ${first_name} ${last_name}`
     },
   },
 }
