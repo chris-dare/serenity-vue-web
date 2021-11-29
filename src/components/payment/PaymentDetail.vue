@@ -51,6 +51,12 @@
               <p>{{ doctor || '-' }}</p>
               <p class="text-secondary text-xs"> Dispensed by </p>
             </div>
+          </div>
+          <div class="grid grid-cols-2 items-center py-4">
+            <div>
+              <p>{{ details.transaction || '-' }}</p>
+              <p class="text-secondary text-xs"> Transaction # </p>
+            </div>
             <div>
               <p>{{ details.invoice_id || '-' }}</p>
               <p class="text-secondary text-xs"> Invoice # </p>

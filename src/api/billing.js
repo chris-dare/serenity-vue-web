@@ -100,4 +100,17 @@ export default {
     })
   },
 
+  printChargeItem(providerId,id) {
+
+    return http({
+      method: 'get',
+      url: `${this.url}${providerId}/finance/charge-items/${id}/print`,
+      responseType: 'blob',
+    }).then((response) =>
+    {
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      window.printJS(url)
+    })
+  },
+
 }
