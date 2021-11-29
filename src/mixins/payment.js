@@ -21,6 +21,7 @@ export default {
       payForInvoice: 'billing/payForInvoice',
       payForMultipleChargeItems: 'billing/payForMultipleChargeItems',
       exportBill: 'billing/exportBill',
+      exportChargeItem: 'billing/exportChargeItem',
     }),
 
     async pay() {
@@ -83,7 +84,12 @@ export default {
     async print() {
       try {
         this.printLoading = true
-        await this.exportBill(this.bill.invoice_id || this.bill.uuid)
+        if (this.bill.status_display === 'Unpaid') {
+          await this.exportBill(this.bill.invoice_id || this.bill.id)
+        } else {
+          await this.exportChargeItem(this.bill.id || this.bill.invoice_id)
+        }
+        
 
         this.printLoading = false
       } catch (error) {
