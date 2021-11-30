@@ -8,6 +8,7 @@
       <PatientsTable
         :filters="filters"
         route="Pharmacy:PatientPrescriptions"
+        :query="{ type: 'existing' }"
       />
     </div>
   </div>

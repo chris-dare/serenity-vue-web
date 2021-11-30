@@ -424,18 +424,21 @@ export default {
       addCartItems: 'checkout/addCartItems',
       getPatientAccounts: 'billing/getPatientAccounts',
     }),
-    // eslint-disable-next-line
+
+
     getPrescriptionClasses(drug){
       if(drug.filled)return 'bg-serenity-primary text-white'
       if(this.currentDrug.drug.id == drug.drug.id) return 'bg-gray-800 text-white'
       return 'bg-gray-200 text-gray-600'
     },
+
     inventoryItemClass(item){
       if(this.selectedInventoryItem && item.id == this.selectedInventoryItem.id){
         return 'bg-green-600 text-serenity-primary font-bold'
       }
       return ''
     },
+
     async dispenseDrugs() {
       this.$v.$touch()
       if (this.$v.$invalid) {
@@ -449,6 +452,7 @@ export default {
       this.setCheckoutPatient(this.patient)
       this.$router.push({name: 'CheckoutPaymentOptions'})
     },
+
     addDrug() {
       if(!this.selectedInventoryItem)return
       const quantity = parseInt(this.form.quantity)
@@ -468,12 +472,15 @@ export default {
       this.selectedInventoryItem = null
       this.search = ''
     },
+
     removeDrug(drug) {
       this.currentDrug.selectedDrugs.splice(this.currentDrug.selectedDrugs.indexOf(drug), 1)
     },
+
     selectDrug(drug) {
       this.selectedInventoryItem = { ...drug}
     },
+
     checkout() {
       let items = []
       if(this.mode === 'walk-in'){
@@ -512,11 +519,11 @@ export default {
       }
       this.addCartItems({items})
       this.setAction('medicationDispense')
-      // if(this.$route.query.type !== 'existing'){
-      //   this.setCheckoutPatient(null)
-      // }else{
-      //   this.setCheckoutPatient(this.patient)
-      // }
+      if(this.$route.query.type !== 'existing'){
+        this.setCheckoutPatient(null)
+      }else{
+        this.setCheckoutPatient(this.patient)
+      }
       this.$router.push({name: 'Pharmacy:Dispense'})
     },
   },
