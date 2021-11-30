@@ -5,6 +5,7 @@
     height="auto"
     scrollable
     class="top-8 h-main min-h-main"
+    v-on="$listeners"
   >
     <div>
       <Close
@@ -44,6 +45,14 @@ export default {
   computed: {
     hasTitle() {
       return this.$scopedSlots.title || this.title
+    },
+  },
+
+  watch: {
+    $route: {
+      handler() {
+        this.$modal.hide(this.name)
+      },
     },
   },
 }

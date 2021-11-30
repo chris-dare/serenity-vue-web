@@ -46,7 +46,7 @@
 
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
-import { mapGetters, mapState, mapMutations } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 
 export default {
   name: 'DosageModal',
@@ -78,8 +78,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations({
-      removeCartItem: 'checkout/REMOVE_CART_ITEM',
+    ...mapActions({
+      removeCartItem: 'checkout/removeCartItem',
     }),
     submit() {
       this.callback({quantity: parseInt(this.form.quantity)})

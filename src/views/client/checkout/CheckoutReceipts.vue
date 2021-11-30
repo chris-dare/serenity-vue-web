@@ -85,6 +85,8 @@ export default {
     ...mapActions({
       addToStoreData: 'checkout/addToCheckout',
       refresh: 'checkout/refreshCheckout',
+      addCartItems: 'checkout/addCartItems',
+      setPaymentMethod: 'checkout/setPaymentMethod',
     }),
 
     async print() {
@@ -115,8 +117,8 @@ export default {
       //   type: 'pdf',
       //   base64: true,
       // })
-      this.$store.commit('checkout/SET_PAYMENT_METHOD', null)
-      this.$store.commit('checkout/ADD_CART_ITEMS', {items: []})
+      this.setPaymentMethod(null)
+      this.addCartItems({items: []})
       setTimeout(() => {
         this.loading = false
         this.$router.push({name: 'Dashboard'})

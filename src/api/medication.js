@@ -46,4 +46,8 @@ export default {
     })
     return http.post(`${this.url}${providerId}/medication-dispenses`, payload)
   },
+
+  createDispense(providerId, payload) {
+    return http.post(`providers/${providerId}/medication-dispenses`, payload)
+  },
 }

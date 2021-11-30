@@ -75,7 +75,7 @@ export default {
       }
 
       if (dashboard.value === 'new') {
-        this.$router.push({ name: 'Pharmacy:New'})
+        this.$router.push({ name: 'Pharmacy:New', query: { type: 'new' } })
       }
     },
   },

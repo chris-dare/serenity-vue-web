@@ -21,7 +21,7 @@
       </div>
     </div>
     <div v-if="currentDrug">
-      <div>
+      <div class="space-y-8">
         <template v-if="mode === 'prescription'">
           <div class="font-bold">Prescription details for {{ $utils.getFirstData(currentDrug.drug.medication_detail) }}</div>
           <div>
@@ -69,84 +69,84 @@
             </div>
           </div>
         </template>
-        <div class="mb-8 items-center">
-          <div><p class="bx--label pr-4 font-bold mt-4">Available Drugs</p></div>
-          <div class="flex-1">
-            <Search
-              v-model="params.search"
-              placeholder="Search by drug name"
-              @input="searchData"
-            />
-          </div>
+        <div class="space-y-1">
+          <p class="text-sm font-bold">Available Drugs</p>
+          <Search
+            v-model="params.search"
+            placeholder="Search by drug name"
+            @input="searchData"
+          />
         </div>
         <div class="border-b border-serenity-subtle-border border-solid" />
-        <div class="flex mb-4">
-          <div class="w-1/3 h-40 overflow-y-scroll">
-            <DataTable
-              ref="table"
-              small
-              :pagination="pagination"
-              :data="data"
-              :columns="['', '']"
-              :loading="loading"
-              :no-data-label="`${$utils.getFirstData(currentDrug.drug.medication_detail) ? $utils.getFirstData(currentDrug.drug.medication_detail) + ' is not available' : 'No data is available'}`"
-              @pagination="actionOnPagination"
-            >
-              <template #default="{ row }">
-                <cv-data-table-cell 
-                  :class="inventoryItemClass({...row})"
-                  class="font-bold text-gray-600 p-2 cursor-pointer hover:text-serenity-primary hover:bg-green-100 hover:font-bold"
-                >
-                  <div @click="selectDrug(row)">{{ `${row.name} ${ row.dosage_form ? "-" + row.dosage_form : ' ' } ${ row.dosage_amount ? "-" + row.dosage_amount : ' '} - ${row.in_hand_quantity} available` }}</div>
-                </cv-data-table-cell>
-              </template>
-            </DataTable>
-          </div>
-          <div class="px-4 w-2/3">
-            <div class="font-bold pl-4">Drug Details</div>
-            <DataTable
-              ref="table"
-              :data="inventoryDetails || []"
-              :columns="columns"
-              no-data-label="No drug selected"
-            >
-              <template #default="{ row }">
-                <cv-data-table-cell>
-                  {{ row.selling_price | formatMoney | toCedis }}
-                </cv-data-table-cell>
-                <cv-data-table-cell>
-                  {{ row.in_hand_quantity }}
-                </cv-data-table-cell>
-                <cv-data-table-cell>
-                  {{ row.batch_number }}
-                </cv-data-table-cell>
-                <cv-data-table-cell>
-                  {{ row.expiry_date }}
-                </cv-data-table-cell>
-                <cv-data-table-cell>
-                  {{ row.rack }}
-                </cv-data-table-cell>
-                <cv-data-table-cell>
+        
+        <div>
+          <div class="grid grid-cols-3 gap-x-4 gap-y-2">
+            <p class="font-bold">Drugs</p>
+            <p class="font-bold col-span-2">Drug Details</p>
+            <div class="h-40 overflow-y-scroll">
+              <DataTable
+                ref="table"
+                small
+                :pagination="pagination"
+                :data="data"
+                :columns="['']"
+                :loading="loading"
+                :no-data-label="`${$utils.getFirstData(currentDrug.drug.medication_detail) ? $utils.getFirstData(currentDrug.drug.medication_detail) + ' is not available' : 'No data is available'}`"
+                @pagination="actionOnPagination"
+              >
+                <template #default="{ row }">
+                  <cv-data-table-cell 
+                    :class="inventoryItemClass({...row})"
+                    class="font-bold text-gray-600 p-2 cursor-pointer hover:text-serenity-primary hover:bg-green-100 hover:font-bold"
+                  >
+                    <div @click="selectDrug(row)">{{ `${row.name} ${ row.dosage_form ? "-" + row.dosage_form : ' ' } ${ row.dosage_amount ? "-" + row.dosage_amount : ' '} - ${row.in_hand_quantity} available` }}</div>
+                  </cv-data-table-cell>
+                </template>
+              </DataTable>
+            </div>
+            <div class="col-span-2">
+              <DataTable
+                ref="table"
+                :data="inventoryDetails || []"
+                :columns="columns"
+                no-data-label="No drug selected"
+                small
+              >
+                <template #default="{ row }">
+                  <cv-data-table-cell>
+                    {{ row.selling_price | formatMoney | toCedis }}
+                  </cv-data-table-cell>
+                  <cv-data-table-cell>
+                    {{ row.in_hand_quantity }}
+                  </cv-data-table-cell>
+                  <cv-data-table-cell>
+                    {{ row.batch_number }}
+                  </cv-data-table-cell>
+                  <cv-data-table-cell>
+                    {{ row.expiry_date }}
+                  </cv-data-table-cell>
+                  <cv-data-table-cell>
+                    {{ row.rack }}
+                  </cv-data-table-cell>
+                  <cv-data-table-cell>
                   <!-- {{ row.rack }} -->
-                </cv-data-table-cell>
-              </template>
-            </DataTable>
+                  </cv-data-table-cell>
+                </template>
+              </DataTable>
+            </div>
           </div>
         </div>
-        <div class="mt-12">
-          <div class="font-bold">Quantity</div>
-          <div>
-            <cv-number-input
+        <div class="pt-10 space-y-2">
+          <p class="font-bold">Quantity</p>
+          <div class="flex items-center space-x-4">
+            <FormInput
               v-model="form.quantity"
               type="number"
-              class="inline-block mr-4"
               placeholder=""
               :min="1"
               :max="maxQuantity"
             />
-            <SeButton 
-              class="inline-flex mt-6"
-              size="sm"
+            <SeButton
               variant="secondary"
               :disabled="isQuantityValid || !form.quantity"
               @click="addDrug"
@@ -159,11 +159,13 @@
         <small
           v-if="isQuantityAvailable && selectedInventoryItem"
           class="text-danger"
-        >{{ isQuantityValid ?`Can't dispense more than ${selectedInventoryItem.net_release_quantity}` : `Insufficient quantity to dispense` }}</small>
-        <div class="mt-12">
-          <div class="font-bold mb-4">
+        >
+          {{ isQuantityValid ?`Can't dispense more than ${selectedInventoryItem.net_release_quantity}` : `Insufficient quantity to dispense` }}
+        </small>
+        <div class="pt-10 space-y-4">
+          <p class="font-bold">
             Selected drugs
-          </div>
+          </p>
           <!-- <div
             v-if="currentDrug.selectedDrugs.length == 0"
             class="text-gray-400"
@@ -212,7 +214,6 @@
         </div>
       </div>
     </div>
-    <div class="text-center">No prescriptions</div>
     <div class="my-8 flex items-center justify-end">
       <SeButton
         class="mr-4"
@@ -227,23 +228,23 @@
 
 <script>
 import Checkmark from '@carbon/icons-vue/es/checkmark/32'
-import { mapMutations, mapState, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import DataMixin from '@/mixins/paginated'
 
 export default {
   name: 'ConfirmPrescriptionModal',
 
-  
-
   filters: {
     dosage (value) {
       if (!value) return ''
-      let frequency_unit = ''
-      if(value.frequency_unit == 'Hourly')frequency_unit = 'Hour'
-      if(value.frequency_unit == 'Weekly')frequency_unit = 'Week'
-      if(value.frequency_unit == 'Daily')frequency_unit = 'Day'
-      if(value.frequency_unit == 'Monthly')frequency_unit = 'Month'
-      return `${value.frequency} every ${frequency_unit}`
+
+      let frequencyUnits = {
+        Hourly: 'Hour',
+        Weekly: 'Week',
+        Daily: 'Day',
+        Monthly: 'Month',
+      }
+      return `${value.frequency} every ${frequencyUnits[value.frequency_unit]}`
     },
     duration (value) {
       if (!value) return ''
@@ -299,37 +300,46 @@ export default {
       provider: (state) => state.auth.provider,
       data: (state) => state.inventory.inventory,
     }),
+
     filledPrescriptions() {
       return this.drugs.filter(el => el.filled)
     },
+
     inventoryDetails() {
       return this.selectedInventoryItem ? [this.selectedInventoryItem] : []
     },
+
     isQuantityValid(){
       if(!this.selectedInventoryItem)return false
       const quantity = parseInt(this.form.quantity)
       return  quantity > this.maxQuantity || quantity > this.availableQuantity 
     },
+
     isQuantityAvailable(){
       if(!this.selectedInventoryItem)return false
       const quantity = parseInt(this.form.quantity)
       return  quantity > this.maxQuantity 
     },
+
     availableQuantity (){
       if(!this.selectedInventoryItem)return 0
       return parseInt(this.selectedInventoryItem.in_hand_quantity)
     },
+
     maxQuantity() {
       if(!this.selectedInventoryItem)return 0
       return parseInt(this.selectedInventoryItem.net_release_quantity)
     },
+
     // filteredPrescriptions() {
     //   return this.$utils.getFilteredData(this.inventory.data, this.search, ['name', 'batch_number'])
     // },
+
     doctor() {
       if(this.prescriptions.length == 0)return
       return this.prescriptions[0].practitioner_detail?.name
     },
+
     datePrescribed() {
       if(this.prescriptions.length == 0)return
       return this.prescriptions[0].created_at
@@ -353,10 +363,11 @@ export default {
     currentDrug: {
       immediate: true,
       handler(currentDrug) {
-        if(this.mode === 'prescription' && !currentDrug)return
+        if (this.mode === 'prescription' && !currentDrug) return
+
         this.loading = true
-        const params = this.mode == 'prescription' ? {search: this.$utils.getFirstData(currentDrug.drug.medication_detail)} : null
-        this.params.search = this.$utils.getFirstData(currentDrug.drug.medication_detail)
+        const params = this.mode == 'prescription' ? {search: this.$utils.getFirstData(currentDrug?.drug.medication_detail)} : null
+        this.params.search = this.$utils.getFirstData(currentDrug?.drug.medication_detail)
         this.getData(params)
         this.loading = false
       },
@@ -365,7 +376,7 @@ export default {
       immediate: true,
       handler(patient) {
         if(!(patient && patient.id))return null
-        this.$store.dispatch('billing/getPatientAccounts', { id: patient.id }, { root:true })
+        this.getPatientAccounts({ id: patient.id })
       },
     },
 
@@ -406,12 +417,12 @@ export default {
   },
   
   methods: {
-    ...mapMutations({
-      setCheckoutPatient: 'checkout/Set existing patient',
-      addCartItems: 'checkout/ADD_CART_ITEMS',
-    }),
     ...mapActions({
       getData: 'inventory/getInventory',
+      setCheckoutPatient: 'checkout/setCheckoutPatient',
+      setAction: 'checkout/setAction',
+      addCartItems: 'checkout/addCartItems',
+      getPatientAccounts: 'billing/getPatientAccounts',
     }),
     // eslint-disable-next-line
     getPrescriptionClasses(drug){
@@ -435,6 +446,7 @@ export default {
       //   return el.drug
       // })
       // this.$emit('success', medicationRequests)
+      console.log('aha', this.patient)
       this.setCheckoutPatient(this.patient)
       this.$router.push({name: 'CheckoutPaymentOptions'})
     },
@@ -500,12 +512,13 @@ export default {
         return
       }
       this.addCartItems({items})
-      this.$store.commit('checkout/SET_ACTION', 'medicationDispense')
-      if(this.$route.name == 'Pharmacy:New'){
-        this.setCheckoutPatient(null)
-      }else{
-        this.setCheckoutPatient(this.patient)
-      }
+      this.setAction('medicationDispense')
+      // if(this.$route.query.type !== 'existing'){
+      //   console.log('here'. this.$route)
+      //   this.setCheckoutPatient(null)
+      // }else{
+      //   this.setCheckoutPatient(this.patient)
+      // }
       this.$router.push({name: 'Pharmacy:Dispense'})
     },
   },

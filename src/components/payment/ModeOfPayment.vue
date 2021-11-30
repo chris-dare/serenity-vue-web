@@ -10,6 +10,9 @@
         <Information class="ml-1 w-4" />
       </cv-tooltip>
     </p>
+    <p v-if="hasNoOptions">
+      You have no permissions to accept payments
+    </p>
     <div class="grid grid-cols-4 gap-4">
       <InfoLinkCard
         v-for="(type, index) in options"
@@ -69,7 +72,7 @@ export default {
           description: 'Select associated user account',
           type: 'user',
           value: this.$global.USER_ACCOUNT_TYPE,
-          hide: !this.$userCan('bills.acceptuseracccount.write'),
+          hide: !this.$userCan('bills.acceptuseraccount.write'),
         },
         {
           label: 'Corporate Account',
@@ -90,7 +93,7 @@ export default {
           description: 'Pay using patient personal account',
           type: 'cash',
           value: this.$global.CASH_TYPE,
-          hide: !this.$userCan('bills.acceptcash.read'),
+          hide: !this.$userCan('bills.acceptcash.write'),
         },
       ]
 
@@ -106,6 +109,11 @@ export default {
       }
 
       return options
+    },
+
+    hasNoOptions() {
+      let availableOptions = this.options.find(option => !option.hide)
+      return availableOptions.length === 0
     },
   },
 

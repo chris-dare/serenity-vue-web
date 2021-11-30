@@ -10,7 +10,7 @@
       :variant="getStatusVariant(bill.status)"
       class="cursor-pointer"
     >
-      {{ bill.status }}
+      {{ bill.status_display }}
     </Tag>
     <div>
       <BillingSuccessful
