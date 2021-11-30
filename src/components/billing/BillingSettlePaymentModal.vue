@@ -63,7 +63,7 @@
               Print
             </SeButton>
             <SeButton
-              v-else
+              v-if="!settled && hasPaymentPermission"
               :icon="icon"
               :loading="loading"
               @click="submit"
@@ -162,6 +162,7 @@ export default {
     ...mapGetters({
       currentWorkspacePatientPage: 'global/currentWorkspacePatientPage',
       userAccounts: 'billing/userAccounts',
+      hasPaymentPermission: 'auth/hasPaymentPermission',
     }),
   },
 

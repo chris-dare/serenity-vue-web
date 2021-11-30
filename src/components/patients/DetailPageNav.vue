@@ -79,7 +79,7 @@ export default {
   methods: {
     goTo(link) {
       if (this.type === 'route') {
-        this.$router.push({ name: link.path })
+        this.$router.push({ name: link.path, query: link.query })
       }
 
       this.selected = link.path

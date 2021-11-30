@@ -36,7 +36,7 @@
         class="space-y-1"
       >
         <p class="text-secondary">The selected insurance policy is a {{ selected.coverage.contribution_type }} plan, select the payment method for remaining amount of </p>
-        <h1 class="text-3xl font-bold">{{ this.$currency(selected.coverage.contribution_value, localValue.currency).format() }}</h1>
+        <h1 class="text-3xl font-bold">{{ this.$currency(amountLeft, localValue.currency).format() }}</h1>
       </div>
       <MultiSelect
         v-model="localValue.copayment_info.transaction_type"
@@ -50,7 +50,7 @@
       <PaymentTypeSelector
         v-model="localValue.copayment_info"
         :v="v"
-        :total="selected.coverage.contribution_value"
+        :total="amountLeft"
         :selected="localValue.copayment_info.transaction_type"
         v-bind="$attrs"
         :patient="patient"
@@ -130,6 +130,16 @@ export default {
       if (!this.selected.coverage) return 0
       return parseFloat(this.total) - parseFloat(this.selected.coverage.contribution_value)
     },
+
+    hasToTopUp() {
+      return this.amountLeft > 0
+    },
+  },
+
+  created() {
+    if (this.localValue?.copayment_info?.coverage) {
+      this.isCopayment = true
+    }
   },
 
   methods: {
@@ -141,7 +151,7 @@ export default {
       this.v.$touch()
 
       
-      if (this.selected.coverage?.contribution_type === this.$global.COPAY) {
+      if (this.hasToTopUp) {
         this.isCopayment = true
         this.localValue.copayment_info = {
           transaction_type: this.$global.CASH_TYPE,

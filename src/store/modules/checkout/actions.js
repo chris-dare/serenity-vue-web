@@ -1,5 +1,5 @@
 import CheckoutAPI from '@/api/billing'
-import { SET_CHECKOUT, DELETE_CHECKOUT, UPDATE_CHECKOUT, SET_PAYMENT_RESULT, SET_PAYMENT_METHOD, UPDATE_CART_ITEM, ADD_CART_ITEMS, ADD_CHECKOUT_DATA, SET_CHECKOUT_DATA, SET_EXISTING_PATIENT, SET_ACTION, REMOVE_CART_ITEM } from './mutation-types'
+import { SET_CHECKOUT, DELETE_CHECKOUT, CLEAR_CART, UPDATE_CHECKOUT, SET_PAYMENT_RESULT, SET_PAYMENT_METHOD, UPDATE_CART_ITEM, ADD_CART_ITEMS, ADD_CHECKOUT_DATA, SET_CHECKOUT_DATA, SET_EXISTING_PATIENT, SET_ACTION, REMOVE_CART_ITEM } from './mutation-types'
 
 export default {
   async getCheckout({ commit, rootState }) {
@@ -10,6 +10,16 @@ export default {
     } catch ({ response: { data: error } }) {
       throw error
     }
+  },
+
+  resetCheckout({ commit }) {
+    commit(SET_CHECKOUT_DATA, {})
+    commit(SET_CHECKOUT, [])
+    commit(SET_EXISTING_PATIENT, null)
+    commit(SET_PAYMENT_RESULT, null)
+    commit(SET_ACTION, null)
+    commit(SET_PAYMENT_METHOD, null)
+    commit(CLEAR_CART)
   },
 
   addToCheckout({ commit }, data) {
@@ -27,6 +37,7 @@ export default {
   setAction({ commit }, data) {
     commit(SET_ACTION, data)
   },
+
   addCartItems({ commit }, data) {
     commit(ADD_CART_ITEMS, data)
   },
@@ -42,6 +53,7 @@ export default {
   setPaymentResult({ commit }, data) {
     commit(SET_PAYMENT_RESULT, data)
   },
+
   setPaymentMethod({ commit }, data) {
     commit(SET_PAYMENT_METHOD, data)
   },

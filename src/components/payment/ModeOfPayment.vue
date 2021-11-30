@@ -1,37 +1,45 @@
 <template>
   <SeForm class="space-y-4">
-    <p class="text-sm flex items-center">
-      What is the preferred payment method?
-      
-
-      <cv-tooltip
-        tip="You will only see payment methods that you have permission to access."
-      >
-        <Information class="ml-1 w-4" />
-      </cv-tooltip>
-    </p>
-    <p v-if="hasNoOptions">
+    <p
+      v-if="hasNoOptions"
+      class="text-red-500"
+    >
       You have no permissions to accept payments
     </p>
-    <div class="grid grid-cols-4 gap-4">
-      <InfoLinkCard
-        v-for="(type, index) in options"
-        :key="index"
-        :is-selected="localValue.transaction_type === type.value"
-        :details="type"
-        :type="type.type"
-        @click="onClick(type)"
+    <div
+      v-if="!hasNoOptions"
+      class="space-y-4"
+    >
+      <p class="text-sm flex items-center">
+        What is the preferred payment method?
+      
+
+        <cv-tooltip
+          tip="You will only see payment methods that you have permission to access."
+        >
+          <Information class="ml-1 w-4" />
+        </cv-tooltip>
+      </p>
+      <div class="grid grid-cols-4 gap-4">
+        <InfoLinkCard
+          v-for="(type, index) in options"
+          :key="index"
+          :is-selected="localValue.transaction_type === type.value"
+          :details="type"
+          :type="type.type"
+          @click="onClick(type)"
+        />
+      </div>
+      <slot />
+
+      <PaymentTypeSelector
+        v-model="localValue"
+        :v="v"
+        :selected="localValue.transaction_type"
+        v-bind="$attrs"
+        :patient="patient"
       />
     </div>
-    <slot />
-
-    <PaymentTypeSelector
-      v-model="localValue"
-      :v="v"
-      :selected="localValue.transaction_type"
-      v-bind="$attrs"
-      :patient="patient"
-    />
   </SeForm>
 </template>
 
@@ -112,8 +120,8 @@ export default {
     },
 
     hasNoOptions() {
-      let availableOptions = this.options.find(option => !option.hide)
-      return availableOptions.length === 0
+      let availableOptions = this.options?.find(option => !option.hide)
+      return !availableOptions
     },
   },
 
