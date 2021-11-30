@@ -190,6 +190,12 @@
             <SeButton
               class="mx-3"
               :loading="loading"
+              @click="raiseBill"
+            >
+              Raise bill
+            </SeButton>
+            <SeButton
+              class="mx-3"
               @click="makePayment"
             >
               Receive payment
@@ -463,6 +469,7 @@ export default {
       getServiceTypes: 'diagnostic/getServiceTypes',
       addToCurrentAppointment: 'appointments/addToCurrentAppointment',
       payForService: 'billing/userPayService',
+      raiseBillForService: 'billing/raiseBill',
       getPatientAccounts: 'billing/getPatientAccounts',
       getObservationCategory: 'resources/getObservationCategory',
       getObservationInterpretationTypes: 'resources/getObservationInterpretationTypes',
@@ -664,6 +671,24 @@ export default {
           message: error.message || 'Payment unsuccessful!',
           type: 'error',
         })
+      }
+    },
+    async raiseBill() {
+      try {
+        this.loading = true
+        let payload = {
+          service_request: this.form.id, // a service request raised by a patient
+          healthcare_service: this.form.healthcare_service,
+          price_tier: this.form.price_tier.id,
+        }
+
+        await this.raiseBillForService(payload)
+
+        this.$toast.open( 'Bill successfully raised' )
+        this.loading = false
+        this.getData(this.params)
+      } catch (error) {
+        this.loading = false
       }
     },
   },

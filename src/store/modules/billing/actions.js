@@ -153,6 +153,17 @@ export default {
     }
   },
 
+  async raiseBill({ rootState }, params ) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await BillingAPI.raiseBill(provider.id, params)
+      return data
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
+    }
+  },
+
   async corporatePayForService({ commit }, { patientId, chargeItemId, params }) {
     try {
       const { data } = await BillingAPI.corporatePay(patientId, chargeItemId, params)
