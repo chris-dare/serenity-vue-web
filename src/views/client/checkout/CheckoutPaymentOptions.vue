@@ -27,7 +27,7 @@
 <script>
 import ModeOfPayment from '@/components/payment/ModeOfPayment'
 import { mapState, mapActions, mapGetters } from 'vuex'
-import { required, minValue } from 'vuelidate/lib/validators'
+import { required, minValue, requiredIf } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
 import MedicationAPI from '@/api/medication'
 
@@ -86,7 +86,9 @@ export default {
     }
     return {
       form: {
-        account_id: { required },
+        account_id: { required: requiredIf(() => {
+          return this.hasPaymentPermission
+        }) },
       },
     }
   },
@@ -153,7 +155,8 @@ export default {
         origin,
         patient: this.patient.id,
         medication_dispense: medication_dispenses,
-        locationId: this.$locationId,
+        location: this.$locationId,
+        medication_request_category: this.$isCurrentWorkspace('PHARM') ? 'outpatient' : 'inpatient',
       }
       if (this.hasPaymentPermission) {
         payload.with_payment = true
@@ -169,8 +172,8 @@ export default {
       }
 
       try { 
-        const {data} = await MedicationAPI.createDispense(payload)
-        this.setPaymentResult(data)
+        const {data} = await MedicationAPI.createDispense(this.$providerId, payload)
+        this.setPaymentResult(data.data)
         this.$toast.open('Prescriptions dispensed successfully')
         this.reRoute()
       } catch (error) {

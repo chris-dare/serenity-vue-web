@@ -75,7 +75,7 @@ export default {
       ],
       links: [
         { label: 'Summary', path: 'Pharmacy:PatientSummary' },
-        { label: 'Prescriptions', path: 'Pharmacy:PatientPrescriptions' },
+        { label: 'Prescriptions', path: 'Pharmacy:PatientPrescriptions', query: { type: 'existing' }},
       ],
     }
   },

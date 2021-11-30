@@ -145,10 +145,11 @@ export default {
     ...mapGetters({
       userAccounts: 'billing/userAccounts',
       getStatusVariant: 'billing/getStatusVariant',
+      hasPaymentPermission: 'auth/hasPaymentPermission',
     }),
 
     canMakePayment() {
-      return !this.settled && this.bill.charge && this.bill.status === 'billable'
+      return !this.settled && this.bill.charge && this.bill.status === 'billable' && this.hasPaymentPermission
     },
   },
 

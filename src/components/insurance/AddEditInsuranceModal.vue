@@ -1,6 +1,6 @@
 <template>
   <BaseModal
-    name="add-edit-insurance-modal"
+    :name="name"
     close-aria-label="Close"
     size="sm"
     height="auto"
@@ -57,13 +57,14 @@ export default {
       loading: false,
       patient: null,
       disabled: true,
+      name: 'add-edit-insurance-modal',
     }
   },
 
   events: {
     'insurance:add:open': function(data){
       this.getInsuranceProvider({filters: { organization_type: 'INS'}})
-      this.$modal.show('add-edit-insurance-modal')
+      this.open()
       this.patient = data.params[0]
       if (this.patient) {
         this.form = pick(this.patient, ['first_name', 'last_name', 'mobile', 'email', 'gender', 'birth_date'])
@@ -73,7 +74,7 @@ export default {
     },
 
     'insurance:edit:open': function(data){
-      this.$modal.show('add-edit-insurance-modal')
+      this.open()
       this.form = data.params[0]
     },
   },
@@ -92,7 +93,7 @@ export default {
         await InsuranceAPI.registerPatientAsBeneficiary(this.$providerId, this.form.managing_organization, omit(this.form, 'birth_date'))
         this.$toast.open('Patient added successfully')
         this.getPatientAccounts({ id: this.patient.id })
-        this.$modal.hide('add-edit-insurance-modal')
+        this.close()
       } catch (error) {
         this.$toast.open({
           message: error.message || 'Something went wrong!',
@@ -106,8 +107,6 @@ export default {
     setDisabledState(event) {
       this.disabled = event
     },
-
-    
   },
 
 }

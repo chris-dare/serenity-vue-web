@@ -446,7 +446,6 @@ export default {
       //   return el.drug
       // })
       // this.$emit('success', medicationRequests)
-      console.log('aha', this.patient)
       this.setCheckoutPatient(this.patient)
       this.$router.push({name: 'CheckoutPaymentOptions'})
     },
@@ -514,7 +513,6 @@ export default {
       this.addCartItems({items})
       this.setAction('medicationDispense')
       // if(this.$route.query.type !== 'existing'){
-      //   console.log('here'. this.$route)
       //   this.setCheckoutPatient(null)
       // }else{
       //   this.setCheckoutPatient(this.patient)
