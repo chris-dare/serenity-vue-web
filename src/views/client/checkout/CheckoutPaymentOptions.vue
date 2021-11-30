@@ -26,10 +26,11 @@
 
 <script>
 import ModeOfPayment from '@/components/payment/ModeOfPayment'
-import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { required, minValue } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
-import http from '@/http'
+import MedicationAPI from '@/api/medication'
+
 export default {
   name: 'CheckoutPaymentOptions',
 
@@ -57,19 +58,22 @@ export default {
       cartAction: (state) => state.checkout.action,
       user: (state) => state.auth.user,
     }),
+    
+    ...mapGetters({
+      cartTotal: 'checkout/cartTotal',
+      hasPaymentPermission: 'auth/hasPaymentPermission',
+    }),
+
     patient() {
       return this.existingPatient || this.currentPatient
     },
-    ...mapGetters({
-      cartTotal: 'checkout/cartTotal',
-    }),
   },
 
   mounted() {
     if(this.existingPatient){
       this.form.patient = this.existingPatient
     }
-    this.$store.dispatch('billing/getPatientAccounts', { id: this.patient.id }, { root:true })
+    this.getPatientAccounts({ id: this.patient.id })
   },
 
   validations() {
@@ -92,11 +96,11 @@ export default {
       addToStoreData: 'checkout/addToCheckout',
       refresh: 'checkout/refreshCheckout',
       createMedicationRequest: 'patients/createMedicationRequest',
+      updateCartItem: 'checkout/updateCartItem',
+      setPaymentResult: 'checkout/setPaymentResult',
+      getPatientAccounts: 'billing/getPatientAccounts',
     }),
-    ...mapMutations({
-      updateCartItem: 'checkout/UPDATE_CART_ITEM',
-      setPaymentResult: 'checkout/SET_PAYMENT_RESULT',
-    }),
+
     onSave(){
       this.validateAndReroute(false)
       if (this.$v.$invalid) {
@@ -108,10 +112,10 @@ export default {
         break
       }
     },
+
     formatMedication(item) {
       let newForm = []
 
-      // this.cart.forEach(item => {
       newForm.push({
         quantity: item.quantity,
         requester_practitioner_role: this.$store.getters['auth/practitionerRoleId'],
@@ -120,22 +124,15 @@ export default {
         course_of_therapy_type: 'continuous',
         medication_request_dosage_instruction: [{
           strength: `${item.inventory.rate}${item.inventory.dosage_unit}`,
-          /* eslint-disable */
           frequency: 'BID (twice a day)',
-          period_unit: "Weeks",
-          period: "2",
-          /* eslint-enable */
+          period_unit: 'Weeks',
+          period: '2',
         }],
       })
-      // })
-      // newForm.forEach(drug => {
-      //   if(drug.next_refill){
-      //     drug.next_refill = this.$date.formatDate(drug.next_refill, 'yyyy-MM-dd')
-      //   }
-      // })
 
       return newForm
     },
+
     async dispense() {
       this.loading =  true
       let origin = 'encounter'
@@ -152,45 +149,30 @@ export default {
           quantity: cartItem.quantity,
         }
       })
-      const payload = {
-        with_payment: true,
-        payment_info: {
+      let payload = {
+        origin,
+        patient: this.patient.id,
+        medication_dispense: medication_dispenses,
+        locationId: this.$locationId,
+      }
+      if (this.hasPaymentPermission) {
+        payload.with_payment = true
+        payload.payment_info = {
           transaction_type: this.form.transaction_type,
           amount: this.form.amount,
           currency: this.form.currency,
           account_id: this.form.account_id,
-        },
-        origin,
-        patient: this.patient.id,
-        medication_dispense: medication_dispenses,
+        }
+      } else {
+        payload.with_payment = false
+        delete payload.payment_info
       }
-      // if (this.$userCan('bills.acceptcash.write') && this.form.transaction_type === this.$global.CASH_TYPE) {
-      //   payload.with_payment = true
-      //   payload.payment_info = {
-      //     transaction_type: this.form.transaction_type,
-      //     amount: this.form.amount,
-      //     currency: this.form.currency,
-      //   }
-      // }
 
-      // if (this.$userCan('bills.acceptcash.write') && this.form.transaction_type === this.$global.CASH_TYPE) {
-      //   payload.with_payment = false
-      //   delete payload.payment_info
-      // }
-
-      try {
-        const {data} = await http.post(`providers/${this.provider.id}/medication-dispenses`, payload)
-        // data.forEach(medicationDispense => {
-        //   this.$store.commit('checkout/UPDATE_CART_ITEM', {
-        //     id: medicationDispense.medication,
-        //   })
-        //   this.$store.commit('checkout/SET_PAYMENT_METHOD', this.form.transaction_type)
-        //   this.$store.commit('checkout/SET_PAYMENT_RESULT', data)
-        // })
-        this.$store.commit('checkout/SET_PAYMENT_RESULT', data)
+      try { 
+        const {data} = await MedicationAPI.createDispense(payload)
+        this.setPaymentResult(data)
         this.$toast.open('Prescriptions dispensed successfully')
         this.reRoute()
-        // eslint-disable-next-line
       } catch (error) {
         this.$toast.error('There was an error dispensing prescription')
       }

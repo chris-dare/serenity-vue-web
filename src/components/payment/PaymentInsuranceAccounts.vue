@@ -28,10 +28,13 @@
     </MultiSelect>
 
     <div
-      v-if="localValue.copayment_info"
+      v-if="isCopayment"
       class="py-6 space-y-6"
     >
-      <div class="space-y-1">
+      <div
+        v-if="selected.coverage"
+        class="space-y-1"
+      >
         <p class="text-secondary">The selected insurance policy is a {{ selected.coverage.contribution_type }} plan, select the payment method for remaining amount of </p>
         <h1 class="text-3xl font-bold">{{ this.$currency(selected.coverage.contribution_value, localValue.currency).format() }}</h1>
       </div>
@@ -109,6 +112,7 @@ export default {
           value: this.$global.CASH_TYPE,
         },
       ],
+      isCopayment: false,
     }
   },
 
@@ -136,11 +140,13 @@ export default {
     onInput() {
       this.v.$touch()
 
-      this.localValue.copayment_info = {
-        transaction_type: this.$global.CASH_TYPE,
-      }
-      // if (this.selected.coverage?.contribution_type === this.$global.COPAY) {
-      // } 
+      
+      if (this.selected.coverage?.contribution_type === this.$global.COPAY) {
+        this.isCopayment = true
+        this.localValue.copayment_info = {
+          transaction_type: this.$global.CASH_TYPE,
+        }
+      } 
     },
   },
 }

@@ -5,6 +5,7 @@
     scrollable
     width="70%"
     title="Walk in patient visit"
+    @closed="close"
   >
     <template>
       <AppRegisterLayout
