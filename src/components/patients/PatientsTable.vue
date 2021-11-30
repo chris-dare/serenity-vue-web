@@ -96,6 +96,11 @@ export default {
       default: 'PatientSummary',
     },
 
+    query: {
+      type: Object,
+      default: null,
+    },
+
     filters: {
       type: Array,
       default: () => [],
@@ -148,7 +153,7 @@ export default {
 
     viewPatient(row){
       this.addToStoreData({...row})
-      this.$router.push({ name: this.route, params: { id: row.id} })
+      this.$router.push({ name: this.route, params: { id: row.id}, query: this.query})
     },
   },
 }
