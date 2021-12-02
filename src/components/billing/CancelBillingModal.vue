@@ -148,6 +148,9 @@ export default {
     return {
       bill: {
         patient: {},
+        cancelation : {
+          reason: '',
+        },
       },
       done: false,
       form: {
