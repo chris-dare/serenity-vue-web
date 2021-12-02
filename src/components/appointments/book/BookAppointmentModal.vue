@@ -1,9 +1,8 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     width="70%"
+    @closed="close"
   >
     <template>
       <AppRegisterLayout

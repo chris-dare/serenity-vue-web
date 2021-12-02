@@ -1,10 +1,7 @@
 <template>
   <BaseModal
     :name="name"
-    close-aria-label="Close"
-    size="sm"
-    height="auto"
-    scrollable
+    @closed="close"
   >
     <template>
       <div class="space-y-8">

@@ -1,9 +1,8 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     title="Cancel Bill"
+    @closed="close"
   >
     <template>
       <div>

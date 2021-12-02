@@ -1,9 +1,8 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     width="450px"
+    @closed="close"
   >
     <template>
       <div class="flex flex-col items-center justify-center space-y-4">
@@ -38,11 +37,14 @@
 import StatusSuccess from '@carbon/icons-vue/es/watson-health/ai-status--complete/32'
 import StatusFailure from '@carbon/icons-vue/es/watson-health/ai-status--failed/32'
 import { mapGetters, mapState } from 'vuex'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'EndVisitConfirmationModal',
 
   components: { StatusSuccess, StatusFailure },
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -58,12 +60,12 @@ export default {
       if(this.visible)return
       this.callback = callback
       this.visible = true
-      this.$modal.show(this.name)
+      this.open()
     },
 
     'visit:end:close': function(){
       this.visible = false
-      this.$modal.hide(this.name)
+      this.close()
     },
   },
 
@@ -103,11 +105,6 @@ export default {
           //empty
         }
       }
-    },
-  
-    close() {
-      this.visible = false
-      this.$modal.hide(this.name)
     },
   },
 }

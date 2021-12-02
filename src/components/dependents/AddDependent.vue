@@ -3,6 +3,7 @@
     :name="name"
     title="Add new dependent"
     width="450px"
+    @closed="close"
   >
     <template>
       <div>

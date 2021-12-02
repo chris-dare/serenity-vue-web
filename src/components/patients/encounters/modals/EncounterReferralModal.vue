@@ -1,9 +1,8 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     title="Create Referral"
+    @closed="close"
   >
     <template>
       <EncounterReferralForm />

@@ -1,8 +1,6 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     width="70%"
     title="Walk in patient visit"
     @closed="close"

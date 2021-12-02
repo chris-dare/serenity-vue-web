@@ -2,6 +2,7 @@
   <BaseModal
     :name="name"
     title="Lab results"
+    @closed="close"
   >
     <template>
       <LabsTable />

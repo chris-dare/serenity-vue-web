@@ -1,10 +1,10 @@
 <template>
   <BaseModal
     class="se-no-title-modal"
-    name="edit-profile-modal"
+    :name="name"
     close-aria-label="Close"
     title="Edit Profile"
-    height="auto"
+    @closed="close"
   >
     <template>
       <SeForm>
@@ -96,16 +96,25 @@
 import { required } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Camera from '@carbon/icons-vue/es/camera/32'
+import modalMixin from '@/mixins/modal'
+
 export default {
+  name: 'EditProfileModal',
+
   components: {Camera},
+
+  mixins: [modalMixin],
+
   data(){
     return {
       saving: false,
       form: {},
       icon: ChevronRight,
       updateSuccessful: false,
+      name: 'edit-profile-modal',
     }
   },
+
   validations: {
     form: {
       first_name: { required },
@@ -120,12 +129,6 @@ export default {
     },
   },
   methods: {
-    open(){
-      this.$modal.show('edit-profile-modal')
-    },
-    close() {
-      this.$modal.hide('edit-profile-modal')
-    },
     submit(){
       this.saving = true
       setTimeout(()=>{

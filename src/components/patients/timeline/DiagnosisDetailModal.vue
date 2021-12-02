@@ -2,9 +2,8 @@
   <BaseModal
     class="se-no-title-modal se-modal-no-padding"
     :name="name"
-    height="auto"
-    scrollable
     width="450px"
+    @closed="close"
   >
     <template>
       <div
@@ -65,6 +64,7 @@
 
 <script>
 import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'DiagnosisDetailModal',
 
@@ -74,6 +74,7 @@ export default {
     return {
       form: {},
       visible: false,
+      name: 'diagnosis-detail-modal',
     }
   },
 

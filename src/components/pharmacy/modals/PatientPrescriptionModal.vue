@@ -1,6 +1,7 @@
 <template>
   <BaseModal
     :name="name"
+    @closed="cancel"
   >
     <template>
       <MultiStepModal

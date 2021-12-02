@@ -4,6 +4,7 @@
     height="auto"
     scrollable
     title="New deposit"
+    @closed="close"
   >
     <template>
       <SeForm class="space-y-2 divide-y divide-secondary divide-solid">

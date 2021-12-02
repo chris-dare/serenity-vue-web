@@ -58,6 +58,7 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div
+              v-if="$userCan('patient.read')"
               class="flex items-center cursor-pointer"
               @click="viewPatient({...row})"
             >

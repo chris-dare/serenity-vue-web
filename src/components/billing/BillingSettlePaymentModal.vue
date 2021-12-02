@@ -1,9 +1,8 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     :title="`Settle payment -  ${ bill.patientname }`"
+    @closed="close"
   >
     <template>
       <div class="space-y-4">

@@ -1,26 +1,28 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     :title="form.id ? 'Edit schedule' : 'New schedule'"
+    @closed="close"
   >
     <template>
       <SeForm
         class="space-y-8 left-button"
       >
-        <MultiSelect
+        <p
+          v-if="form.id"
+          class="font-bold"
+        >
+          Practitioner: {{ form.practitioner_name }}
+        </p>
+        <AutoCompletePractitioners
+          v-else
           v-model="form.practitioner"
           title="Who are you scheduling?"
-          :multiple="false"
-          :options="practitioners"
-          label="first_name"
-          track-by="id"
-          placeholder="Select or search for practitioner"
-          :custom-label="customLabel"
           :error-message="$utils.validateRequiredField($v, 'practitioner')"
           :disabled="!!form.id"
+          placeholder="Type to search for practitioner"
           required
+          custom-field="id"
         />
 
         <div class="grid grid-cols-2 gap-4">
@@ -144,9 +146,12 @@ import { mapActions, mapState } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 import format from 'date-fns/format'
 import modalMixin from '@/mixins/modal'
+import AutoCompletePractitioners from '@/components/ui/autocomplete/AutoCompletePractitioners'
 
 export default {
   name: 'AddEditSchedule',
+
+  components: { AutoCompletePractitioners },
 
   mixins: [modalMixin],
 
@@ -178,7 +183,6 @@ export default {
   computed: {
     ...mapState({
       workspaces: (state) => state.workspaces.workspaces,
-      practitioners: (state) => state.practitioners.users,
       services: (state) => state.services.services,
       locations: (state) => state.locations.locations,
     }),

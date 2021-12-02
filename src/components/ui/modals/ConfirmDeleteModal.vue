@@ -1,8 +1,7 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollables
+    @closed="close"
   >
     <template>
       <div class="w-full flex flex-col items-center justify-center pt-6 space-y-4">
@@ -28,9 +27,12 @@
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'ConfirmDeleteModal',
+
+  mixins: [modalMixin],
 
   props: {
     loading: {
@@ -50,18 +52,18 @@ export default {
 
   events: {
     'confirm:delete:open': function(data){
-      this.$modal.show(this.name)
+      this.open()
       this.label = data.params[0].label
       this.data = data.params[0].data
     },
     'confirm:delete:close': function(){
-      this.$modal.hide(this.name)
+      this.close()
     },
   },
 
   watch: {
     '$route'(){
-      this.$modal.hide(this.name)
+      this.close()
     },
   },
 }

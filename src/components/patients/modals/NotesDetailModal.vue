@@ -1,10 +1,9 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     title="Note details"
     width="450px"
+    @closed="close"
   >
     <template>
       <div>
@@ -60,6 +59,7 @@
 <script>
 import modalMixin from '@/mixins/modal'
 import { mapActions } from 'vuex'
+
 export default {
   name: 'NotesDetailModal',
 

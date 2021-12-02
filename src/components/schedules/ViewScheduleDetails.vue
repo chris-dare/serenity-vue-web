@@ -3,6 +3,7 @@
     :name="name"
     title="Schedule Details"
     width="450px"
+    @closed="close"
   >
     <template>
       <div class="space-y-8 left-button">

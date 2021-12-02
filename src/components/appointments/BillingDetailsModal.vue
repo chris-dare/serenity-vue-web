@@ -1,8 +1,7 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
+    @closed="close"
   >
     <template>
       <div>
@@ -148,9 +147,8 @@ export default {
       this.$router.push({ name: 'Appointments'})
     },
 
-    close() {
+    afterCloseFunction() {
       this.refreshCurrentAppointment()
-      this.$modal.hide(this.name)
     },
   },
 }

@@ -3,7 +3,7 @@
     class="mx-auto max-w-7xl space-y-4"
   >
     <div class="flex items-center justify-between">
-      <p class="text-xl font-bold">Team members ({{ users.length }})</p>
+      <p class="text-xl font-bold">Team members ({{ dataCount }})</p>
 
 
 
@@ -28,21 +28,30 @@
 
     <div>
       <Search
-        v-model="search"
+        v-model="params.search"
         placeholder="Search for user"
+        @input="searchData"
       />
     </div>
 
     <div class="grid grid-cols-4 gap-4">
       <TeamCard
-        v-for="(item, index) in filteredUsers"
+        v-for="(item, index) in data"
         :key="index"
         :user="item"
         :details="item"
       />
     </div>
+
+    <cv-pagination
+      :number-of-items="dataCount"
+      :page="params.page"
+      :page-sizes="pageSizes"
+      class="w-full"
+      @change="actionOnPagination"
+    />
     <p
-      v-if="!filteredUsers.length"
+      v-if="noData"
       class="text-center w-full py-6"
     >
       No team members to show
@@ -52,11 +61,15 @@
 
 <script>
 import TeamCard from '@/components/team/TeamCard'
+import DataMixin from '@/mixins/paginated'
 import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'Team',
 
   components: {TeamCard},
+
+  mixins: [DataMixin],
 
   data() {
     return {
@@ -67,16 +80,12 @@ export default {
 
   computed: {
     ...mapState({
-      users: (state) => state.practitioners.users,
+      data: (state) => state.practitioners.users,
     }),
-
-    filteredUsers() {
-      return this.users.filter(data => !this.search || data.first_name.toLowerCase().includes(this.search.toLowerCase()) || data.last_name.toLowerCase().includes(this.search.toLowerCase()) || data.email.toLowerCase().includes(this.search.toLowerCase()) || data.phone_number.toLowerCase().includes(this.search.toLowerCase()))
-    },
 
     filters() {
       return [
-        { display: `All (${this.users.length })`, code: '' },
+        { display: `All (${this.dataCount })`, code: '' },
         { display: 'Reception', code: 'reception' },
         { display: 'Out patient', code: 'out-patient' },
         { display: 'In patient', code: 'in-patient' },
@@ -84,21 +93,11 @@ export default {
     },
   },
 
-  created() {
-    this.refresh()
-  },
-
   methods: {
     ...mapActions({
-      getUsers: 'practitioners/getUsers',
+      getData: 'practitioners/getUsers',
       reset: 'practitioners/reset',
     }),
-
-    async refresh() {
-      this.loading = true
-      await this.getUsers()
-      this.loading = false
-    },
 
     go() {
       this.reset()

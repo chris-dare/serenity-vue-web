@@ -47,7 +47,6 @@ export default {
     ...mapGetters({
       availableSlots: 'appointments/availableSlots',
       slots: 'appointments/slots',
-      practitioners: 'practitioners/practitioners',
     }),
   },
 

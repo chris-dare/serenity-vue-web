@@ -3,6 +3,7 @@
     :name="name"
     width="450px"
     title="Virtual Care Requirements"
+    @closed="close"
   >
     <template>
       <div>

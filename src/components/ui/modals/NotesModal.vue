@@ -1,9 +1,8 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     title="Add notes"
+    @closed="close"
   >
     <template>
       <div class="space-y-4">
@@ -33,9 +32,12 @@
 
 <script>
 import { requiredIf } from 'vuelidate/lib/validators'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'NotesModal',
+
+  mixins: [modalMixin],
 
   props: {
     label: {
@@ -70,10 +72,10 @@ export default {
 
   events: {
     'notes:open': function(){
-      this.$modal.show(this.name)
+      this.open()
     },
     'notes:edit': function(data) {
-      this.$modal.show(this.name)
+      this.open()
       this.form = { ...data.params[0] }
     },
     'notes:loading': function(data) {
@@ -97,11 +99,7 @@ export default {
   },
 
   methods: {
-    close() {
-      this.form = {}
-      this.$v.$reset()
-      this.$modal.hide(this.name)
-      this.loading = false
+    afterCloseFunction() {
       this.$emit('close')
     },
 

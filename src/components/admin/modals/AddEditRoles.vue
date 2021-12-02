@@ -1,10 +1,11 @@
 <template>
   <BaseModal
     class="se-no-title-modal"
-    name="add-edit-roles"
+    :name="name"
     height="auto"
     :title="type === 'update' ? 'Edit Role' : 'Duplicate Role'"
     scrollable
+    @closed="close"
   >
     <template>
       <div class="space-y-8">
@@ -117,6 +118,7 @@ export default {
       ],
       loading: false,
       type: 'update',
+      name: 'add-edit-roles',
     }
   },
   validations: {
@@ -144,15 +146,15 @@ export default {
 
   events: {
     'role:add:open': function(){
-      this.$modal.show('add-edit-roles')
+      this.open()
     },
     'role:edit:open': function(data){
-      this.$modal.show('add-edit-roles')
+      this.open()
       this.form = this.$utils.formatIncomingRoles(data.params[0])
       this.type = 'update'
     },
     'role:duplicate:open': function(data){
-      this.$modal.show('add-edit-roles')
+      this.open()
       this.form = this.$utils.formatIncomingRoles(data.params[0])
       this.form.name += ' Duplicate'
       this.type = 'duplicate'
@@ -201,7 +203,7 @@ export default {
         this.$toast.open({
           message: 'Role successfully added',
         })
-        this.$modal.hide('add-edit-roles')
+        this.close()
       }
 
       this.loading = false
@@ -222,7 +224,7 @@ export default {
       this.$toast.open({
         message: 'Role successfully updated',
       })
-      this.$modal.hide('add-edit-roles')
+      this.close()
 
       this.loading = false
     },
@@ -243,7 +245,7 @@ export default {
       this.$toast.open({
         message: 'Role successfully duplicated',
       })
-      this.$modal.hide('add-edit-roles')
+      this.close()
 
       this.loading = false
     },

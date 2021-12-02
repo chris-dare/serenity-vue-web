@@ -1,12 +1,13 @@
 <template>
   <BaseModal
-    name="admin-profile"
+    :name="name"
     close-aria-label="Close"
     size="sm"
     title="Update Admin Profile"
     height="auto"
     scrollable
     :shift-y="0.1"
+    @closed="close"
   >
     <template>
       <div>
@@ -146,11 +147,14 @@ import { required, email } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Camera from '@carbon/icons-vue/es/camera/32'
 import { emailFormatter } from '@/services/custom-validators'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'AdminProfile',
 
   components: { Camera },
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -158,6 +162,7 @@ export default {
       },
       loading: false,
       icon: ChevronRight,
+      name: 'admin-profile',
     }
   },
 
@@ -173,7 +178,7 @@ export default {
     },
     'admin:profile:open': function(){
       this.form = Object.assign({}, this.form, this.user)
-      this.$modal.show('admin-profile')
+      this.open()
     },
   },
 
@@ -211,7 +216,7 @@ export default {
           this.$toast.open({
             message: data.message || 'Profile updated successfully',
           })
-          this.$modal.hide('admin-profile')
+          this.close()
         }else{
           this.$toast.open({
             message: data.message || 'Something went wrong!',

@@ -2,6 +2,7 @@
   <BaseModal
     :name="name"
     title="Diagnostic Reports"
+    @closed="close"
   >
     <template>
       <div class="flex items-center py-5">

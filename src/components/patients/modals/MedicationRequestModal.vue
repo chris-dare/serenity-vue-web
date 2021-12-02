@@ -1,10 +1,9 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     title="Medication"
     width="70%"
+    @closed="close"
   >
     <template>
       <SeForm

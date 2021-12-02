@@ -2,6 +2,7 @@
   <BaseModal
     :name="name"
     title="Laboratory Test Result"
+    @closed="close"
   >
     <template>
       <div
