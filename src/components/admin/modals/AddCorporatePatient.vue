@@ -21,7 +21,6 @@
               class="col-span-2"
             />
             <div
-              v-else
               class="grid grid-cols-2 gap-8 col-span-2"
             >
               <FormInput
