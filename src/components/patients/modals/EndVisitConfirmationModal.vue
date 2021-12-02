@@ -1,12 +1,10 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    width="450px"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="flex flex-col items-center justify-center space-y-4">
         <StatusSuccess
           v-if="!failure"
@@ -32,25 +30,28 @@
         </p>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import StatusSuccess from '@carbon/icons-vue/es/watson-health/ai-status--complete/32'
 import StatusFailure from '@carbon/icons-vue/es/watson-health/ai-status--failed/32'
 import { mapGetters, mapState } from 'vuex'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'EndVisitConfirmationModal',
 
   components: { StatusSuccess, StatusFailure },
 
+  mixins: [modalMixin],
+
   data() {
     return {
       visible: false,
       callback: null,
       type: 'success',
-
+      name: 'end-visit-confirmation-modal',
     }
   },
 
@@ -59,10 +60,12 @@ export default {
       if(this.visible)return
       this.callback = callback
       this.visible = true
+      this.open()
     },
 
     'visit:end:close': function(){
       this.visible = false
+      this.close()
     },
   },
 
@@ -102,10 +105,6 @@ export default {
           //empty
         }
       }
-    },
-  
-    close() {
-      this.visible = false
     },
   },
 }

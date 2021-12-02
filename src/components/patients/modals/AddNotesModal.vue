@@ -1,14 +1,12 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    title="Add notes"
+    width="450px"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-4">
-        <p class="text-lg font-semibold">Add notes</p>
         <cv-text-area
           v-model="form.notes"
           label="Note details"
@@ -21,29 +19,33 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'AddNotesModal',
 
   components: { ChevronRight },
 
+  mixins: [modalMixin],
+
   data() {
     return {
       form: {},
-      visible: false,
+      name: 'add-notes-modal',
     }
   },
 
   events: {
     'profile:notes:open': function(){
-      this.visible = true
+      this.open()
     },
     'profile:notes:close': function(){
-      this.visible = false
+      this.close()
     },
   },
 }

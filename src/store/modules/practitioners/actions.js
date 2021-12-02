@@ -5,12 +5,13 @@ import Vue from 'vue'
 import { SET_USERS, DELETE_USER, UPDATE_USER, ADD_USER_DATA, SET_CURRENT_USER } from './mutation-types'
 
 export default {
-  async getUsers({ commit, rootState }) {
+  async getUsers({ commit, rootState }, params = { page: 1, page_size: 10 }) {
     const provider = rootState.auth.provider
-    const { data } = await UsersAPI.list(provider.id).catch((error) => {
+    const { data } = await UsersAPI.list(provider.id, params).catch((error) => {
       throw error
     })
     commit(SET_USERS, data.data ? data.data : [])
+    return data
   },
 
   async getUser({ commit, rootState }, id) {

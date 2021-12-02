@@ -1,8 +1,7 @@
 <template>
-  <cv-modal
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    @closed="close"
   >
     <template slot="title">
       <div>
@@ -11,7 +10,7 @@
         <p class="text-secondary text-sm">Dr Grey Strep</p>
       </div>
     </template>
-    <template slot="content">
+    <template>
       <div class="grid grid-cols-3 gap-4">
         <FormMixedInput
           v-model="form.rbc"
@@ -49,30 +48,28 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'RequestLabModal',
 
+  mixins: [modalMixin],
+
   data() {
     return {
-      visible: false,
       form: {},
       loading: false,
+      name: 'request-lab-modal',
     }
   },
 
   events: {
     'request:add:open': function() {
-      this.visible = true
-    },
-  },
-
-  methods: {
-    close() {
-      this.visible = false
+      this.open()
     },
   },
 }

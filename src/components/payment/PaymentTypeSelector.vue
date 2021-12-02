@@ -17,6 +17,7 @@
       :hide-add-insurance="!patient"
       :v="v"
       :patient="patient"
+      v-bind="$attrs"
     />
     <PaymentMomo
       v-else-if="selected === 'mobile-money'"

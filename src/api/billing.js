@@ -55,6 +55,10 @@ export default {
     return http.post(`providers/${providerId}/pay/servicerequests`, params)
   },
 
+  raiseBill(providerId, params) {
+    return http.post(`providers/${providerId}/finance/raise-service-request-bill`, params)
+  },
+
   invoicePay(providerId, invoiceId, params) {
     return http.post(`providers/${providerId}/finance/invoices/${invoiceId}/pay`, params)
   },
@@ -92,6 +96,18 @@ export default {
     return http({
       method: 'get',
       url: `${this.url}${providerId}/finance/invoices/${id}/print`,
+      responseType: 'blob',
+    }).then((response) =>
+    {
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      window.printJS(url)
+    })
+  },
+
+  printChargeItem(providerId,id) {
+    return http({
+      method: 'get',
+      url: `${this.url}${providerId}/finance/charge-items/${id}/print`,
       responseType: 'blob',
     }).then((response) =>
     {

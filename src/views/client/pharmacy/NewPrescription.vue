@@ -1,7 +1,7 @@
 <template>
-  <div class="max-w-7xl mx-auto">
+  <div class="max-w-7xl mx-auto space-y-8">
     <UserDetailsHeader />
-    <div class="my-12 flex items-center justify-between">
+    <div class="flex items-center justify-between">
       <p class="text-xl font-bold">New prescription</p>
     </div>
     <div

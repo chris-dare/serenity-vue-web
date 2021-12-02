@@ -1,11 +1,9 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="modalVisible"
-    size="xs"
+  <BaseModal
+    :name="name"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="w-full flex flex-col items-center justify-center pt-6">
         <img
           src="@/assets/img/doctor 1.svg"
@@ -29,28 +27,26 @@
         </router-link>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'PatientSuccessModal',
 
-  props: {
-    visible: {
-      type: Boolean,
-      default: false,
-    },
+  mixins: [modalMixin],
+
+  data() {
+    return {
+      name: 'patient-success-modal',
+    }
   },
 
-  computed: {
-    modalVisible: {
-      set(val) {
-        this.$emit('visible:update', val)
-      },
-      get() {
-        return this.visible
-      },
+  events: {
+    'patient:success:open': function(){
+      this.open()
     },
   },
 }

@@ -27,7 +27,7 @@ export default {
       ]
 
       if (this.$route.query.id) {
-        navItems.push({ label: 'Verification', description: 'Client Verification', path: 'Verification'})
+        navItems.push({ label: 'Verification', description: 'Client Verification', path: 'InsuranceVerification'})
       }
 
       return navItems

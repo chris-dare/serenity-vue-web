@@ -15,6 +15,9 @@ import Vuelidate from 'vuelidate'
 import VuePageTransition from 'vue-page-transition'
 import HasPermissionDirective from '@/plugins/has-permission'
 import { registerBaseComponents } from '@/services/globals'
+import VModal from 'vue-js-modal'
+
+Vue.use(VModal)
 
 
 // all vue plugins
@@ -33,8 +36,6 @@ import '@/assets/styles/app.scss'
 
 
 Vue.directive('has-permission', HasPermissionDirective)
-
-Vue.use(require('vue-faker'))
 
 Vue.use(DatePlugin)
 Vue.use(UtilsPlugin)

@@ -1,6 +1,6 @@
 <template>
   <SeForm>
-    <cv-header class="relative bg-black flex">
+    <header class="relative bg-black flex">
       <div
         class="w-12 h-12 bg-serenity-gray flex justify-center items-center cursor-pointer"
         @click="change"
@@ -86,7 +86,7 @@
           <UserHeaderDropdown />
         </div>
       </div>
-    </cv-header>
+    </header>
   </SeForm>
 </template>
 

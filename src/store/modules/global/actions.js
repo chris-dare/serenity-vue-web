@@ -1,5 +1,5 @@
 import ResourcesAPI from '@/api/resources'
-import { SET_COUNTRIES, SET_GLOBAL_TYPE, SET_GLOBAL_LOCATION } from './mutation-types'
+import { SET_COUNTRIES, SET_GLOBAL_WORKSPACE_TYPE, SET_GLOBAL_LOCATION } from './mutation-types'
 
 export default {
   beforeLoginInit() {
@@ -9,7 +9,6 @@ export default {
 
   initApp({dispatch}) {
     dispatch('setDefaultWorkpace')
-    dispatch('practitioners/getUsers', null, { root:true })
     dispatch('resources/getResources', false, { root:true })
     dispatch('workspaces/getWorkspaces', false, { root:true })
     dispatch('resources/getSpecialties', null, { root:true })
@@ -41,7 +40,7 @@ export default {
 
   setworkspaceType({ commit }, type) {
     localStorage.setItem('workspace', type)
-    commit(SET_GLOBAL_TYPE, type)
+    commit(SET_GLOBAL_WORKSPACE_TYPE, type)
   },
 
   setGlobalLocation({ commit }, type) {
@@ -56,7 +55,12 @@ export default {
     let workspace = localStorage.getItem('workspace') ? localStorage.getItem('workspace')
       : !!admin ? admin.value
         : !!opd ? opd.value
-          : this.workspaces[0].value
-    commit(SET_GLOBAL_TYPE, workspace)
+          : workspaces[0].value
+
+    // if (workspaces.find(works => works.value !== workspace)) {
+    //   workspace = workspaces[0].value
+    // }
+
+    commit(SET_GLOBAL_WORKSPACE_TYPE, workspace)
   },
 }

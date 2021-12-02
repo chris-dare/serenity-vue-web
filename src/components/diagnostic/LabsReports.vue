@@ -2,8 +2,9 @@
   <div class="space-y-4">
     <Search
       v-if="!hideSearch"
-      v-model="search"
+      v-model="params.search"
       placeholder="Search for patient, enter name or MR number"
+      @input="searchData"
     />
     <div
       v-if="hideSearch"
@@ -23,7 +24,7 @@
     />
     <DataTable
       ref="table"
-      :data="filteredData"
+      :data="data"
       :columns="columns"
       :pagination="pagination"
       :loading="loading"
@@ -65,7 +66,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import DataMixin from '@/mixins/data'
+import DataMixin from '@/mixins/paginated'
 import LabTestModal from '@/components/patients/reports/LabTestModal'
 
 
@@ -137,21 +138,15 @@ export default {
 
 
   created() {
-    this.paginate = true
-    this.searchTerms = ['code', 'specimen', 'status', 'patient_name']
-    this.init()
+    let id = { patient: this.$route.params.id}
+    this.refresh(id ? id : null).then(() => this.loading = false).finally(() => this.loading = false)
   },
 
   methods: {
     ...mapActions({
       getData: 'diagnostic/getDiagnosticReports',
-      refresh: 'patients/refreshCurrentPatient',
+      // refresh: 'patients/refreshCurrentPatient',
     }),
-    async init() {
-      this.loading = true
-      let id = { patient: this.$route.params.id}
-      this.getData(id ? id : null).then(() => this.loading = false).finally(() => this.loading = false)
-    },
   },
 
 

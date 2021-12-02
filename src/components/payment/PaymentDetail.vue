@@ -51,28 +51,36 @@
               <p>{{ doctor || '-' }}</p>
               <p class="text-secondary text-xs"> Dispensed by </p>
             </div>
+          </div>
+          <div class="grid grid-cols-2 items-center py-4">
+            <div>
+              <p>{{ details.transaction || '-' }}</p>
+              <p class="text-secondary text-xs"> Transaction # </p>
+            </div>
             <div>
               <p>{{ details.invoice_id || '-' }}</p>
               <p class="text-secondary text-xs"> Invoice # </p>
             </div>
           </div>
         </div>
-        <div v-if="showCart">
-          <div
-            v-for="item in cart"
-            :key="item.id"
-            class="flex items-center justify-between pt-4 pb-7 border-b border-solid border-secondary"
-          >
-            <div>
-              <p>{{ item.name }} <span class="ml-2 text-sm">( {{ $currency(item.selling_price).format() }} x {{ item.quantity }} )</span></p>
-              <p class="text-secondary text-xs"> Service / Product </p>
-            </div>
-            <div class="text-right">
-              <p class="">{{ $currency(item.line_total).format() }} </p>
-              <p class="text-secondary text-xs"> Amount to be paid </p>
+        <slot name="cart">
+          <div v-if="showCart">
+            <div
+              v-for="item in cart"
+              :key="item.id"
+              class="flex items-center justify-between pt-4 pb-7 border-b border-solid border-secondary"
+            >
+              <div>
+                <p>{{ item.name }} <span class="ml-2 text-sm">( {{ $currency(item.selling_price).format() }} x {{ item.quantity }} )</span></p>
+                <p class="text-secondary text-xs"> Service / Product </p>
+              </div>
+              <div class="text-right">
+                <p class="">{{ $currency(item.line_total).format() }} </p>
+                <p class="text-secondary text-xs"> Amount to be paid </p>
+              </div>
             </div>
           </div>
-        </div>
+        </slot>
 
         <div
           v-if="!hideTotal"

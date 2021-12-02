@@ -2,7 +2,7 @@
   <MultiStepBase
     :previous="previous"
     :icon="icon"
-    next-label="Next: View Sumaary"
+    next-label="Next: View Summary"
     :query="$route.query"
     :modal="modal"
     @cancel="cancel"
@@ -25,7 +25,6 @@
         v-model="form"
         :v="$v"
         :total="selectedCharge"
-        :patient="form.patient"
       />
     </div>
   </MultiStepBase>

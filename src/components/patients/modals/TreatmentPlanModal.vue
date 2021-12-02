@@ -1,17 +1,14 @@
 <template>
-  <cv-modal
-    close-aria-label="Close"
-    class="se-no-title-modal"
-    :visible="modalVisible"
-    size="xs"
-    @modal-hidden="modalVisible = false"
+  <BaseModal
+    :name="name"
+    width="450px"
+    title="Treatment plan"
+    @closed="close"
   >
     <template
-      slot="content"
       class="p-0 mb-4"
     >
       <div class="text-xs">
-        <p>Treatment plan</p>
         <div class="my-4">
           <p class="text-gray-500 ">Proceedure</p>
           <p class="text-serenity-primary mt-1 ">
@@ -79,31 +76,27 @@
         </cv-button>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'TreatmentPlanModal',
 
-  props: {
-    visible: {
-      type: Boolean,
-      default: false,
-    },
+  mixins: [modalMixin],
+
+  data() {
+    return {
+      name: 'treatment-plan-modal',
+    }
   },
 
-  computed: {
-    modalVisible: {
-      set(val) {
-        this.$emit('visible:update', val)
-      },
-      get() {
-        return this.visible
-      },
+  events: {
+    'treatment:plan:open': function(){
+      this.open()
     },
   },
 }
 </script>
-
-<style></style>

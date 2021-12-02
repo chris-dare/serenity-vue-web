@@ -1,14 +1,14 @@
 <template>
-  <cv-modal
+  <BaseModal
     class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="visible = false"
+    :name="name"
+    height="auto"
+    :title="type === 'update' ? 'Edit Role' : 'Duplicate Role'"
+    scrollable
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-8">
-        <p class="text-lg font-semibold">{{ type === 'update' ? 'Edit' : 'Duplicate' }} Role</p>
         <FormInput
           v-model="form.name"
           type="text"
@@ -90,7 +90,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -118,6 +118,7 @@ export default {
       ],
       loading: false,
       type: 'update',
+      name: 'add-edit-roles',
     }
   },
   validations: {
@@ -145,15 +146,15 @@ export default {
 
   events: {
     'role:add:open': function(){
-      this.visible = true
+      this.open()
     },
     'role:edit:open': function(data){
-      this.visible = true
+      this.open()
       this.form = this.$utils.formatIncomingRoles(data.params[0])
       this.type = 'update'
     },
     'role:duplicate:open': function(data){
-      this.visible = true
+      this.open()
       this.form = this.$utils.formatIncomingRoles(data.params[0])
       this.form.name += ' Duplicate'
       this.type = 'duplicate'
@@ -202,7 +203,7 @@ export default {
         this.$toast.open({
           message: 'Role successfully added',
         })
-        this.visible = false
+        this.close()
       }
 
       this.loading = false
@@ -223,7 +224,7 @@ export default {
       this.$toast.open({
         message: 'Role successfully updated',
       })
-      this.visible = false
+      this.close()
 
       this.loading = false
     },
@@ -244,7 +245,7 @@ export default {
       this.$toast.open({
         message: 'Role successfully duplicated',
       })
-      this.visible = false
+      this.close()
 
       this.loading = false
     },

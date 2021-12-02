@@ -33,7 +33,7 @@ export default {
       const schedule = new Schedule(payload).getCreateView()
       const provider = rootState.auth.provider
       const { data } = await SchedulesAPI
-        .create(provider.id, payload.practitioner.id, schedule)
+        .create(provider.id, payload.practitioner, schedule)
       dispatch('getSchedules', {})
       return data
     } catch (error) {
@@ -47,9 +47,9 @@ export default {
       const schedule = new Schedule(payload).getUpdateView()
       const provider = rootState.auth.provider
       const { data } = await SchedulesAPI
-        .update(provider.id, payload.practitioner.id, payload.id, schedule)
+        .update(provider.id, payload.practitioner, payload.id, schedule)
 
-      const normalizedSchedule = new Schedule({ ...data.data, practitioner_id: payload.practitioner.id }).getNormalizedUpdateView()
+      const normalizedSchedule = new Schedule({ ...data.data, practitioner_id: payload.practitioner }).getNormalizedUpdateView()
       commit(UPDATE_SCHEDULE, normalizedSchedule)
     } catch (error) {
       Vue.prototype.$utils.error(error)

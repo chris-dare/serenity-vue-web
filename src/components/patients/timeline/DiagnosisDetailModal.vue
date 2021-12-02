@@ -1,12 +1,11 @@
 <template>
-  <cv-modal
+  <BaseModal
     class="se-no-title-modal se-modal-no-padding"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+    :name="name"
+    width="450px"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div
         :style="`background:${form.color}`"
         class="h-20 py-4 px-8"
@@ -60,28 +59,33 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'DiagnosisDetailModal',
+
+  mixins: [modalMixin],
 
   data() {
     return {
       form: {},
       visible: false,
+      name: 'diagnosis-detail-modal',
     }
   },
 
   events: {
     'patient:medication:open': function(event, param){
       this.form = param
-      this.visible = true
+      this.open()
     },
     'patient:medication:close': function(event, param){
       this.form = param
-      this.visible = false
+      this.close()
     },
   },
 }

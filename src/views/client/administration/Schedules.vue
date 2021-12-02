@@ -4,7 +4,6 @@
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Schedules ({{ dataCount || 0 }})</p>
         <SeButton
-          v-if="$isCurrentWorkspace('ADMIN')"
           @click="$trigger('schedule:add:open')"
         >
           Add new schedule
@@ -16,16 +15,11 @@
         class="flex items-end justify-between mt-4"
       >
         <div class="flex items-center gap-1 w-2/5">
-          <MultiSelect
+          <AutoCompletePractitioners
             v-model="filters.practitioner"
             title="Practitioner"
-            :multiple="false"
-            :options="practitioners"
-            :custom-label="$utils.customNameLabel"
-            label="first_name"
-            track-by="id"
-            class="multiselect-white flex-1"
             custom-field="id"
+            class="multiselect-white flex-1"
             @input="filter"
           />
 
@@ -72,13 +66,14 @@
 import Calendar from '@/components/schedules/Calendar'
 import AddEditSchedule from '@/components/schedules/AddEditSchedule'
 import ViewScheduleDetails from '@/components/schedules/ViewScheduleDetails'
+import AutoCompletePractitioners from '@/components/ui/autocomplete/AutoCompletePractitioners'
 import { mapActions, mapState } from 'vuex'
 import DataMixin from '@/mixins/data'
 
 export default {
   name: 'Schedules',
 
-  components: { Calendar, AddEditSchedule, ViewScheduleDetails },
+  components: { Calendar, AddEditSchedule, ViewScheduleDetails, AutoCompletePractitioners },
 
   mixins: [DataMixin],
 
@@ -98,7 +93,6 @@ export default {
   computed: {
     ...mapState({
       locations: (state) => state.locations.locations,
-      practitioners: (state) => state.practitioners.users,
       services: (state) => state.services.services,
       data: (state) => state.schedules.schedules,
     }),

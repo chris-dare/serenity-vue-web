@@ -1,8 +1,7 @@
 <template>
-  <cv-modal
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    @closed="close"
   >
     <template slot="title">
       <div>
@@ -11,7 +10,7 @@
         <p class="text-secondary text-sm">Dr. Grey Stroop</p>
       </div>
     </template>
-    <template slot="content">
+    <template>
       <div>
         <cv-select
           v-model="doctor"
@@ -56,30 +55,27 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
 export default {
   name: 'ExternalModal',
 
+  mixins: [modalMixin],
+
   data() {
     return {
-      visible: false,
       form: {},
       loading: false,
+      name: 'external-process-modal',
     }
   },
 
   events: {
     'external:add:open': function() {
-      this.visible = true
-    },
-  },
-
-  methods: {
-    close() {
-      this.visible = false
+      this.open()
     },
   },
 }

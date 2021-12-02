@@ -2,12 +2,13 @@
   <div>
     <div class="max-w-7xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Patients</p>
+        <p class="text-xl font-bold">Patients ({{ patientsCount }})</p>
       </div>
 
       <PatientsTable
         :filters="filters"
         route="Pharmacy:PatientPrescriptions"
+        :query="{ type: 'existing' }"
       />
     </div>
   </div>

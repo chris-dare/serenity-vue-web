@@ -1,14 +1,13 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    :title="type === 'update' ? 'Update Employee' : 'Add new employee'"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <SeForm>
-        <p class="text-md font-semibold"> {{ type === 'update' ? 'Update Employee' : 'Add new employee' }}</p>
         <FilterGroup
           v-model="selected"
           :filters="filters"
@@ -115,7 +114,7 @@
         <p
           class="text-center"
           style="cursor: pointer"
-          @click="visible = false"
+          @click="close"
         >
           Cancel
         </p>
@@ -127,26 +126,29 @@
         </SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { required, email } from 'vuelidate/lib/validators'
 import { emailFormatter } from '@/services/custom-validators'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'AddCorporatePatient',
 
+  mixins: [modalMixin],
+
   data() {
     return {
       loading: false,
-      visible: false,
       type: 'add',
       vertical: true,
       form: {},
       selected: 'existing',
       patient: null,
+      name: 'add-corporate-patient-modal',
     }
   },
 
@@ -184,11 +186,11 @@ export default {
 
   events: {
     'corporate-patient:add:open': function(){
-      this.visible = true
+      this.open()
       this.type = 'add'
     },
     'corporate-patient:edit:open': function(data){
-      this.visible = true
+      this.open()
       this.form = data.params[0]
       this.type = 'update'
     },
@@ -242,13 +244,13 @@ export default {
         //   this.$toast.open({
         //     message: 'Client employee successfully created',
         //   })
-        //   this.visible = false
+        //   this.close()
         // } else {
         //   this.$toast.open({
         //     message: 'Creating employee failed',
         //     type: 'error',
         //   })
-        //   this.visible = false
+        //   this.close()
         // }
         // // this.$router.go(-1)
         // this.loading = false
@@ -268,7 +270,7 @@ export default {
         this.$toast.open({
           message: 'Employee successfully updated',
         })
-        this.visible = false
+        this.close()
         this.loading = false
       } catch (error) {
         this.$toast.open({

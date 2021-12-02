@@ -1,17 +1,14 @@
 <template>
-  <cv-modal
-    close-aria-label="Close"
-    class="se-no-title-modal"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    width="450px"
+    title="Medication details"
+    @closed="close"
   >
     <template
-      slot="content"
       class="p-0 mb-4"
     >
       <div class="text-xs">
-        <p>Medication details</p>
         <div class="my-4">
           <p class="text-gray-500 ">Drug</p>
           <p class="text-serenity-primary mt-1 ">
@@ -80,12 +77,13 @@
         </SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import modalMixin from '@/mixins/modal'
 import { mapActions } from 'vuex'
+
 export default {
   name: 'PrescriptionModal',
 
@@ -101,10 +99,10 @@ export default {
   events: {
     'prescription:detail:open': function(data){
       this.form = data.params[0]
-      this.visible = true
+      this.open()
     },
     'prescription:detail:close': function(){
-      this.visible = false
+      this.close()
     },
   },
 

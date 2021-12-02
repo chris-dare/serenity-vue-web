@@ -1,13 +1,12 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="modalVisible"
-    size="xs"
+  <BaseModal
+    :name="name"
+    width="450px"
+    title="Virtual Care Requirements"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div>
-        <p class="my-2 font-semibold">Virtual Care Requirements</p>
         <p class="text-placeholder text-xs">
           Patient does not have sudden weakness or numbness in the face, arm or
           leg (especially on one side of the body)
@@ -46,35 +45,28 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
+import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'VirtualCareRequirementsModal',
 
-  props: {
-    visible: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  mixins: [modalMixin],
 
   data() {
     return {
       icon: Checkmark,
+      name: 'virtual-care-requirements-modal',
     }
   },
 
-  computed: {
-    modalVisible: {
-      set(val) {
-        this.$emit('visible:update', val)
-      },
-      get() {
-        return this.visible
-      },
+  events: {
+    'virtual:care:open': function(){
+      this.open()
     },
   },
 }

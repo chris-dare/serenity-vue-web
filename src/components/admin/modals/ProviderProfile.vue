@@ -1,18 +1,14 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    title="Update Provider Profile"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div>
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-primary text-xl font-semibold">Update Provider Profile</p>
-          </div>
-        </div>
-        <cv-form @submit.prevent="">
+        <SeForm>
           <div>
             <div class="flex flex-col items-center justify-center mt-8">
               <img
@@ -77,10 +73,10 @@
               </cv-button>
             </div>
           </div>
-        </cv-form>
+        </SeForm>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -88,11 +84,14 @@ import { required } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Camera from '@carbon/icons-vue/es/camera/32'
 import { mapState, mapActions } from 'vuex'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'ProviderProfile',
 
   components: { Camera },
+
+  mixins: [modalMixin],
 
   data(){
     return {
@@ -101,6 +100,7 @@ export default {
       form: {},
       icon: ChevronRight,
       updateSuccessful: false,
+      name: 'provider-profile-modal',
     }
   },
 
@@ -119,10 +119,10 @@ export default {
 
   events: {
     'provider:profile:close': function(){
-      this.visible = false
+      this.close()
     },
     'provider:profile:open': function(){
-      this.visible = true
+      this.open()
       this.form = Object.assign(this.provider)
     },
   },
@@ -155,7 +155,7 @@ export default {
           this.$toast.open({
             message: data.message || 'Provider updated successfully',
           })
-          this.visible = false
+          this.close()
         }else{
           this.$toast.open({
             message: data.message || 'Something went wrong!',
@@ -165,11 +165,6 @@ export default {
       }
 
       this.loading = false
-    },
-    close() {
-      this.$v.$reset()
-      this.visible = false
-      this.form = {}
     },
   },
 }

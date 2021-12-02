@@ -1,14 +1,11 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    title="Admit patient"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-4">
-        <p class="text-lg font-semibold">Admit patient</p>
         <p>Please choose which ward or service you would want to admit patient to.</p>
         
         <MultiSelect
@@ -19,26 +16,29 @@
         <SeButton full>Admit this patient</SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
 export default {
   name: 'AdmitPatientModal',
+
+  mixins: [modalMixin],
 
   data() {
     return {
       form: {},
-      visible: false,
+      name: 'admit-patient-modal',
     }
   },
 
   events: {
     'profile:admit:open': function(){
-      this.visible = true
+      this.open()
     },
     'profile:admit:close': function(){
-      this.visible = false
+      this.close()
     },
   },
 }

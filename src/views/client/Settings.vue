@@ -21,7 +21,7 @@
 
 <script>
 import ProviderProfile from '@/components/admin/modals/ProviderProfile'
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Settings',
@@ -68,10 +68,13 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch('auth/getProvider')
+    this.getProvider()
   },
 
   methods: {
+    ...mapActions({
+      getProvider:'auth/getProvider',
+    }),
     change(dashboard) {
       this.selected = dashboard.value
 

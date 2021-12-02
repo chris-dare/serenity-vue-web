@@ -13,8 +13,6 @@ import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { mapGetters } from 'vuex'
-import groupBy from 'lodash/groupBy'
-import forOwn from 'lodash/forOwn'
 
 export default {
   name: 'Calendar',
@@ -51,19 +49,6 @@ export default {
     ...mapGetters({
       schedules: 'schedules/schedules',
     }),
-
-    normalizedData() {
-      let schedules = this.schedules
-      let groupedSchedules = groupBy(schedules, 'practitioner.id')
-
-      forOwn(groupedSchedules, function(value, key) {
-        console.log('value', key, value)
-        // this.$date.sortByDate(value, 'start')
-      })
-
-
-      return groupedSchedules
-    },
   },
 
   watch: {

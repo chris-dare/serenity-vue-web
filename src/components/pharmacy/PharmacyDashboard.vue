@@ -22,7 +22,7 @@
 <script>
 import PrescriptionsTable from '@/components/pharmacy/PrescriptionsTable.vue'
 import NonPatientPrescriptionModal from '@/components/pharmacy/modals/NonPatientPrescriptionModal'
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Dashboard',
@@ -67,6 +67,10 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      setCheckoutPatient: 'checkout/setCheckoutPatient',
+    }),
+
     change(dashboard) {
       this.selected = dashboard.value
 
@@ -75,7 +79,8 @@ export default {
       }
 
       if (dashboard.value === 'new') {
-        this.$router.push({ name: 'Pharmacy:New'})
+        this.setCheckoutPatient(null)
+        this.$router.push({ name: 'Pharmacy:New', query: { type: 'new' } })
       }
     },
   },

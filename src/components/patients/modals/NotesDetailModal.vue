@@ -1,15 +1,11 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    title="Note details"
+    width="450px"
+    @closed="close"
   >
-    <template slot="content">
-      <div class="flex items-center justify-between mb-6 w-full">
-        <p>Note details</p>
-      </div>
+    <template>
       <div>
         <p class="text-secondary mb-2">Written by</p>
         <div class="flex items-center">
@@ -57,12 +53,13 @@
         </SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import modalMixin from '@/mixins/modal'
 import { mapActions } from 'vuex'
+
 export default {
   name: 'NotesDetailModal',
 
@@ -71,12 +68,13 @@ export default {
   data() {
     return {
       note: {},
+      name: 'notes-detail-modal',
     }
   },
 
   events: {
     'notes:detail:open': function(_ev, { data }){
-      this.visible = true
+      this.open()
       this.note = data
     },
     'notes:detail:close': function() {

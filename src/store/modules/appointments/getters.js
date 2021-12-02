@@ -21,6 +21,7 @@ export default {
 
   slots: (state) => state.slots,
 
+  // eslint-disable-next-line no-unused-vars
   availableSlots: (state, getters, rootState, rootGetters) => (date, time = null) => {
     let slots = state.slots.filter(slot => isSameDay(new Date(slot.start), new Date(date)))
 
@@ -33,9 +34,9 @@ export default {
     }
 
     return slots.map(slot => {
-      const practitioner = rootGetters['practitioners/practitioners'].find(a => a.id === slot.practitionerid)
+      // const practitioner = rootGetters['practitioners/practitioners'].find(a => a.id === slot.practitionerid)
 
-      slot.practitioner = practitioner ? practitioner : { practitioner_specialty: []}
+      // slot.practitioner = practitioner ? practitioner : { practitioner_specialty: []}
       slot.slot = `${Vue.prototype.$date.formatDate(slot.start, 'hh:mm a')} - ${Vue.prototype.$date.formatDate(slot.end, 'hh:mm a')}`
       return slot
     })

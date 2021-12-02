@@ -4,15 +4,12 @@
 
     <component :is="workspaceComponent" />
 
-    <GetStartedModal :visible.sync="visible" />
     <SearchPatientsModal />
     <BookVisitModal />
   </div>
 </template>
 
 <script>
-
-import GetStartedModal from '@/components/dashboard/GetStartedModal'
 
 import BillingDashboard from '@/components/billing/BillingDashboard'
 import OPDDashboard from '@/components/opd/OPDDashboard'
@@ -28,13 +25,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'Dashboard',
 
-  components: { GetStartedModal, BillingDashboard, IPDDashboard, DiagnosticDashboard, OPDDashboard, PharmacyDashboard, ReceptionDashboard, VirtualCareDashboard, BookVisitModal },
-
-  data() {
-    return {
-      visible: false,
-    }
-  },
+  components: { BillingDashboard, IPDDashboard, DiagnosticDashboard, OPDDashboard, PharmacyDashboard, ReceptionDashboard, VirtualCareDashboard, BookVisitModal },
 
   computed: {
     ...mapState({
@@ -43,32 +34,17 @@ export default {
     }),
 
     workspaceComponent() {
-      if (this.workspaceType === 'DIAG') {
-        return 'DiagnosticDashboard'
+      let components = {
+        DIAG: 'DiagnosticDashboard',
+        OPD: 'OPDDashboard',
+        IPD: 'IPDDashboard',
+        PHARM: 'PharmacyDashboard',
+        RECEPT: 'ReceptionDashboard',
+        VIRT: 'VirtualCareDashboard',
+        BILL: 'BillingDashboard',
       }
 
-      if (this.workspaceType === 'OPD') {
-        return 'OPDDashboard'
-      }
-      if (this.workspaceType === 'IPD') {
-        return 'IPDDashboard'
-      }
-      if (this.workspaceType === 'PHARM') {
-        return 'PharmacyDashboard'
-      }
-      if (this.workspaceType === 'RECEPT') {
-        return 'ReceptionDashboard'
-      }
-
-      if (this.workspaceType === 'VIRT') {
-        return 'VirtualCareDashboard'
-      }
-
-      if (this.workspaceType === 'BILL') {
-        return 'BillingDashboard'
-      }
-
-      return 'DefaultDashboard'
+      return components[this.workspaceType] || 'DefaultDashboard'
     },
   },
 

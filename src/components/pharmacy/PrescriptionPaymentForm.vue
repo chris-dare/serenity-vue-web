@@ -143,7 +143,10 @@ export default {
   methods: {
     ...mapActions({
       dispenseDrugs: 'patients/dispenseDrugs',
+      getMedicationRequests: 'patients/getMedicationRequests',
+      
     }),
+
     async submit() {
       this.loading = true
 
@@ -153,7 +156,7 @@ export default {
         this.$toast.open({
           message: 'Medication successfully dispensed',
         })
-        this.$store.dispatch('patients/getMedicationRequests')
+        this.getMedicationRequests()
         this.$emit('success')
       } catch (error) {
         this.loading = false

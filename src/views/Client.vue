@@ -13,19 +13,21 @@
           </vue-page-transition>
         </template>
       </LeftSidebarLayout>
-      <ChangePasswordModal ref="changePasswordModal" />
-      <EditProfileModal ref="editProfileModal" />
+      <ChangePasswordModal />
+      <EditProfileModal />
       <AdminProfile />
       <ConfirmActionModal />
       <ActionsModal />
       <AddEditInsuranceModal />
     </div>
 
-    <Offline @detected-condition="handleConnectivityChange" />
+    <!-- <Offline @detected-condition="handleConnectivityChange" /> -->
   </div>
 </template>
 
 <script>
+/* eslint-disable vue/no-unused-components */
+
 import AppHeader from '@/layout/AppHeader'
 import AppSidebar from '@/layout/AppSidebar'
 import UtilityBar from '@/components/utility/UtilityBar'
@@ -74,15 +76,6 @@ export default {
   //     },
   //   },
   // },
-
-  events: {
-    'profile:edit': function(){
-      this.$refs.editProfileModal.open()
-    },
-    'profile:security': function(){
-      this.$refs.changePasswordModal.open()
-    },
-  },
 
   created() {
 

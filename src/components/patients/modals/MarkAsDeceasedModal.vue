@@ -1,18 +1,16 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    title="Mark this patient as deceased"
+    width="450px"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-8">
-        <p class="text-lg font-semibold">Mark this patient as deceased</p>
         <DatePicker
           v-model="form.deceased_date_time"
           type="datetime"
-          class="w-full max-w-full inherit-full-input"
+          class="w-full max-w-full inherit-full-input se-input-gray"
           placeholder="dd/mm/yyyy"
           label="Date"
         />
@@ -40,28 +38,31 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import modalMixin from '@/mixins/modal'
 export default {
   name: 'MarkAsDeceasedModal',
+
+  mixins: [modalMixin],
 
   data() {
     return {
       form: {},
-      visible: false,
       loading: false,
+      name: 'mark-as-deceased-modal',
     }
   },
 
   events: {
     'profile:deceased:open': function(){
-      this.visible = true
+      this.open()
     },
     'profile:deceased:close': function(){
-      this.visible = false
+      this.close()
     },
   },
 
@@ -84,11 +85,6 @@ export default {
       } catch (error) {
         this.loading = false
       }
-    },
-
-    close() {
-      this.visible = false
-      this.form = {}
     },
   },
 }

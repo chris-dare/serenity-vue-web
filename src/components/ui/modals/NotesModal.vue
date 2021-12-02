@@ -1,14 +1,11 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    title="Add notes"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-4">
-        <p class="text-lg font-semibold">Add notes</p>
         <FormInput
           v-model="form.notes"
           :label="label"
@@ -30,14 +27,17 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { requiredIf } from 'vuelidate/lib/validators'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'NotesModal',
+
+  mixins: [modalMixin],
 
   props: {
     label: {
@@ -63,19 +63,19 @@ export default {
 
   data() {
     return {
-      visible: false,
       form: {},
       loading: false,
       callback: null,
+      name: 'notes-modal',
     }
   },
 
   events: {
     'notes:open': function(){
-      this.visible = true
+      this.open()
     },
     'notes:edit': function(data) {
-      this.visible = true
+      this.open()
       this.form = { ...data.params[0] }
     },
     'notes:loading': function(data) {
@@ -99,11 +99,7 @@ export default {
   },
 
   methods: {
-    close() {
-      this.form = {}
-      this.$v.$reset()
-      this.visible = false
-      this.loading = false
+    afterCloseFunction() {
       this.$emit('close')
     },
 

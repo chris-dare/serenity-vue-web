@@ -70,12 +70,12 @@ export default {
       let dates = []
 
       for (let index = 0; index < 20; index++) {
-        const element = {date: this.$faker().date.past()}
+        const element = {date: Date.now()}
         const num = Math.floor(Math.random() * (this.filters.length + 1))
         const types = []
 
         for (let index = 0; index < num; index++) {
-          types.push({...this.filters[index],time:format(this.$faker().date.past(), 'HH:mm')})
+          types.push({...this.filters[index],time:format(Date.now(), 'HH:mm')})
         }
 
         element.types = types
