@@ -1,12 +1,9 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-8">
         <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'Add' }} insurance service</p>
         <AddInsuranceForm
@@ -31,7 +28,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -54,17 +51,17 @@ export default {
       form: {
         contribution_currency: 'GHS',
       },
-      visible: false,
       loading: false,
       patient: null,
       disabled: true,
+      name: 'add-edit-insurance-modal',
     }
   },
 
   events: {
     'insurance:add:open': function(data){
       this.getInsuranceProvider({filters: { organization_type: 'INS'}})
-      this.visible = true
+      this.open()
       this.patient = data.params[0]
       if (this.patient) {
         this.form = pick(this.patient, ['first_name', 'last_name', 'mobile', 'email', 'gender', 'birth_date'])
@@ -74,7 +71,7 @@ export default {
     },
 
     'insurance:edit:open': function(data){
-      this.visible = true
+      this.open()
       this.form = data.params[0]
     },
   },
@@ -107,8 +104,6 @@ export default {
     setDisabledState(event) {
       this.disabled = event
     },
-
-    
   },
 
 }

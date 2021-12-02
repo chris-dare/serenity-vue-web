@@ -1,12 +1,11 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
+  <BaseModal
+    :name="name"
     close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="cancel"
+    size="sm"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="w-full flex flex-col items-center justify-center pt-6 space-y-4">
         <p class="text-serenity-primary my-4 text-lg">{{ label }}</p>
         <div class="flex items-center justify-between space-x-4">
@@ -27,12 +26,15 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
 export default {
   name: 'ActionsModal',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -48,6 +50,7 @@ export default {
       cancelButtonVariant: 'secondary',
       confirmButtonVariant: 'default',
       loading: false,
+      name: 'actions-modal',
     }
   },
 
@@ -63,6 +66,7 @@ export default {
       this.confirmCallback = callback
       this.cancelCallback = cancel
       this.visible = true
+      this.open()
       this.cancelButtonVariant = cancelButtonVariant
       this.confirmButtonVariant = confirmButtonVariant
     },
@@ -71,6 +75,7 @@ export default {
   watch: {
     '$route'() {
       this.visible = false
+      this.close()
     },
   },
 
@@ -84,14 +89,11 @@ export default {
         } catch {
           //empty
         }finally{
-          this.cancel()
+          this.close()
         }
       } else {
-        this.cancel()
+        this.close()
       }
-    },
-    cancel() {
-      this.visible = false
     },
 
     async handleAction(action) {
@@ -104,10 +106,10 @@ export default {
           } catch {
           //empty
           }finally{
-            this.cancel()
+            this.close()
           }
         } else {
-          this.cancel()
+          this.close()
         }
       }
     },

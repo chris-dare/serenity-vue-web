@@ -1,14 +1,13 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    :title="form.id ? 'Edit workspace' : 'Add workspace'"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <SeForm class="space-y-8 left-button">
-        <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'New' }} workspace</p>
         <FormInput
           v-model="form.workspace_name"
           label="Name"
@@ -57,23 +56,27 @@
         </div>
       </SeForm>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'AddEditWorkspace',
 
+  mixins: [modalMixin],
+
   data() {
     return {
       form: {
-        workspace_type: '',
+        workspace_type: [],
       },
       visible: false,
       loading: false,
+      name: 'add-edit-workspace-modal',
       workspaceTypes: [
         {'name': 'Billing', 'type': 'BILL'},
         {'name': 'Reception', 'type': 'RECEPT'},
@@ -92,10 +95,10 @@ export default {
 
   events: {
     'workspace:add:open': function(){
-      this.visible = true
+      this.open()
     },
     'workspace:edit:open': function(data){
-      this.visible = true
+      this.open()
       this.form = { ...data.params[0] }
     },
   },
@@ -166,12 +169,6 @@ export default {
 
       this.loading = false
 
-    },
-    close() {
-      this.visible = false
-      this.form = {
-        workspace_type: [],
-      }
     },
   },
 }

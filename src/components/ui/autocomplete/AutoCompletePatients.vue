@@ -17,6 +17,7 @@
         :max-height="600"
         :hide-selected="true"
         v-bind="$attrs"
+        :loading="loading"
         @search-change="(val) => fetchPatients(val, true)"
         @remove="$emit('remove', $event)"
       />
@@ -51,6 +52,7 @@ export default {
     return {
       options: [],
       defaultOptionsFound: false,
+      loading: false,
     }
   },
 
@@ -71,12 +73,14 @@ export default {
         this.options = []
         return
       }
+      this.loading = true
       const { data } = await PatientsApi.list(this.provider.id, { search })
 
       this.options = data.results
       if (userInitiated == false) {
         this.defaultOptionsFound = false
       }
+      this.loading = false
     },
 
     customLabel(value) {

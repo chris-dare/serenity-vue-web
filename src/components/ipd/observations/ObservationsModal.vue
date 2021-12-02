@@ -1,15 +1,11 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    title="Observations"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <SeForm class="space-y-8">
-        <p class="text-lg font-semibold">Observations</p>
-
         <FilterGroup
           v-model="selected"
           :filters="filters"
@@ -21,11 +17,12 @@
         />
       </SeForm>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import modalMixin from '@/mixins/modal'
 import IntakeChart from '@/components/ipd/observations/IntakeChart'
 import OutputChart from '@/components/ipd/observations/OutputChart'
 import ObservationVitalCharts from '@/components/ipd/observations/ObservationVitalCharts'
@@ -33,7 +30,7 @@ import RiskAssessmentTools from '@/components/ipd/observations/RiskAssessmentToo
 import ObservationsCharts from '@/components/ipd/observations/ObservationsCharts'
 
 export default {
-  name: 'AddEditInventory',
+  name: 'ObservationsModal',
 
   components: {
     IntakeChart,
@@ -43,12 +40,14 @@ export default {
     ObservationsCharts,
   },
 
+  mixins: [modalMixin],
+
   data() {
     return {
       form: {},
       selected: 'intake',
       loading: false,
-      visible: false,
+      name: 'observations-modal',
     }
   },
 
@@ -78,11 +77,11 @@ export default {
 
   events: {
     'profile:observation:open': function(){
-      this.visible = true
+      this.open()
       this.form = {}
     },
     'observation:edit:open': function(data){
-      this.visible = true
+      this.open()
       this.form = data.params[0]
     },
   },
@@ -92,11 +91,6 @@ export default {
       createInventory: 'inventory/createInventory',
       updateInventory: 'inventory/updateInventory',
     }),
-
-    close() {
-      this.$v.$reset()
-      this.visible = false
-    },
   },
 }
 </script>

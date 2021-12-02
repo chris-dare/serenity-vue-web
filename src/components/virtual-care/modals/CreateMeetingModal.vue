@@ -1,12 +1,10 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    width="450px"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <SeForm
         v-if="confirmed"
         class="space-y-8"
@@ -68,16 +66,19 @@
         </div>
       </SeForm>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import Copy from '@carbon/icons-vue/es/copy--link/32'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'CreateMeetingModal',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -89,6 +90,7 @@ export default {
       visible: false,
       icon: Copy,
       confirmed: false,
+      name: 'create-meeting-modal',
     }
   },
 
@@ -100,7 +102,7 @@ export default {
 
   events: {
     'create:meeting:open': function(){
-      this.visible = true
+      this.open()
     },
   },
 
@@ -135,7 +137,7 @@ export default {
         this.$toast.open({
           message: 'Meeting successfully added',
         })
-        this.visible = false
+        this.close()
 
         this.loading = false
       } catch (error) {
@@ -150,21 +152,12 @@ export default {
         this.$toast.open({
           message: 'Meeting successfully updated',
         })
-        this.visible = false
+        this.close()
 
         this.loading = false
       } catch (error) {
         this.loading = false
       }
-    },
-
-    close() {
-      this.form = {
-        sub_group: 'Medication',
-        category: 'medical-stock',
-      }
-      this.$v.$reset()
-      this.visible = false
     },
   },
 }

@@ -1,14 +1,14 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    width="450px"
+    title="Update client account"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-2 divide-y divide-black divide-solid">
-        <p class="text-md font-semibold">Update client account</p>
         <div>
           <div class="flex items-center py-5">
             <div class="space-y-1">
@@ -45,7 +45,7 @@
         <p 
           class="text-center" 
           style="cursor: pointer" 
-          @click="visible = false"
+          @click="close"
         >
           Cancel
         </p>
@@ -57,15 +57,18 @@
         </SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
+import modalMixin from '@/mixins/modal'
 // import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'AddClientAccount',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -76,6 +79,7 @@ export default {
       form: {
         paymentMethod: 'cash',
       },
+      name: 'client-account-modal',
     }
   },
 
@@ -90,12 +94,12 @@ export default {
 
   events: {
     'client-account:add:open': function(data){
-      this.visible = true
+      this.open()
       this.form = data.params[0]
       this.type = 'add'
     },
     'client-account:edit:open': function(data){
-      this.visible = true
+      this.open()
       this.form = data.params[0]
       this.type = 'update'
     },
@@ -126,13 +130,13 @@ export default {
           this.$toast.open({
             message: data.message || 'Client account successfully updated',
           })
-          this.visible = false
+          this.close()
         } else {
           this.$toast.open({
             message: data.message || 'Client account update failed',
             type: 'error',
           })
-          this.visible = false
+          this.close()
         }
         // this.$router.go(-1)
         this.loading = false
@@ -152,7 +156,7 @@ export default {
         this.$toast.open({
           message: 'Client successfully verified',
         })
-        this.visible = false
+        this.close()
         this.loading = false
       } catch (error) {
         this.$toast.open({

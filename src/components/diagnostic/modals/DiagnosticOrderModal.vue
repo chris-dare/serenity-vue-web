@@ -1,8 +1,7 @@
 <template>
-  <cv-modal
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    @closed="close"
   >
     <template slot="title">
       <div class="flex items-center justify-between">
@@ -13,12 +12,12 @@
           label="Test unavailable"
         />
         <Tag
-          :variant="form.status !== 'completed' ? 'primary' : form.status === 'cancelled' ? 'error' : 'success'"
+          :variant="form.status === 'sample-collected' ? 'primary' : form.status === 'draft' ? 'error' : 'success'"
           :label="form.status"
         />
       </div>
     </template>
-    <template slot="content">
+    <template>
       <span v-if="!pay">
         <div class="pb-5">
           <div class="space-y-1">
@@ -190,7 +189,12 @@
             <SeButton
               class="mx-3"
               :loading="loading"
-              :disabled="!form.is_available_at_provider"
+              @click="raiseBill"
+            >
+              Raise bill
+            </SeButton>
+            <SeButton
+              class="mx-3"
               @click="makePayment"
             >
               Receive payment
@@ -269,8 +273,18 @@
           v-model="form"
           :v="$v"
           :total="form.price_tier ? form.price_tier.charge : 0"
-          :patient="form.patient"
         >
+          <MultiSelect
+            v-if="!form.is_available_at_provider"
+            v-model="healthcare_service"
+            title="Choose lab type"
+            :multiple="false"
+            :options="diagnosticServices"
+            track_by="id"
+            label="healthcare_service_name"
+            custom-field="id"
+            placeholder="Search or choose a lab text to be performed"
+          />
           <MultiSelect
             v-model="form.price_tier"
             title="Choose price tier"
@@ -298,21 +312,28 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import ModeOfPayment from '@/components/payment/ModeOfPayment'
-import { required, minValue } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 import { mapActions, mapGetters, mapState } from 'vuex'
+
 export default {
   name: 'DiagnosticOrderModal',
 
   components: { ModeOfPayment },
 
+  props: {
+    params: {
+      type: Object,
+      default: () => {},
+    },
+  },
+
   data() {
     return {
-      visible: false,
       pay: false,
       selected: 'user',
       form : {
@@ -332,6 +353,7 @@ export default {
       categoryList: [],
       category: {},
       categoryValues: {},
+      healthcare_service: '',
       appendLoading: false,
       sampleRejected: false,
       loading: false,
@@ -342,12 +364,13 @@ export default {
       specimen: '',
       tier: '',
       specimenTypes: [],
+      name: 'diagnostic-order-modal',
     }
   },
 
   events: {
     'diagnostic-order:add:open': function(data) {
-      this.visible = true
+      this.$modal.show(this.name)
       this.pay = false
       this.loading = false
       this.form = {...this.form, ...data.params[0]}
@@ -372,6 +395,7 @@ export default {
     ...mapGetters({
       practitionerRoleId: 'auth/practitionerRoleId',
       labProceedures: 'services/labProceedures',
+      diagnosticServices: 'services/labProceedures',
     }),
     sampleTaken(){
       return this.form.status === 'sample-collected'
@@ -385,41 +409,47 @@ export default {
     sampleCompleted(){
       return this.form.status === 'completed'
     },
-    priceTiers() {
-      if (!this.form.healthcare_service || !this.labProceedures.length) return []
-      let service = this.labProceedures.find(service => {
-        if(service.id === this.form.healthcare_service) return service
-      })
-
-      if (!service){
-        return []
-      }
-
-      return service.price_tiers.map(price => {
-
-        return {
-          id: price.id,
-          charge: price.charge,
-          display: `${this.$currency(price.charge, price.currency).format()} - ${price.description}`,
+    priceTiers: {
+      get: function () {
+        if (!this.form.healthcare_service || !this.labProceedures.length) return []
+        let service = this.labProceedures.find(service => {
+          if(service.id === this.form.healthcare_service) return service
+        })
+  
+        if (!service){
+          return []
         }
-      })
+  
+        return service.price_tiers.map(price => {
+          return {
+            id: price.id,
+            charge: price.charge,
+            display: `${this.$currency(price.charge, price.currency).format()} - ${price.description}`,
+          }
+        })
+      },
+      // setter
+      set: function (newValue) {
+        return newValue
+      },
     },
   },
 
   validations() {
-    if(this.form.transaction_type === 'cash'){
-      return {
-        form: {
-          amount: { required, minValue: minValue(this.form.price_tier.charge) },
-        },
-      }
-    }
     return {
       form: {
         account_id: { required },
         price_tier: { required },
       },
     }
+  },
+
+  watch: {
+    healthcare_service: {
+      handler(val){
+        this.form.healthcare_service = val
+      },
+    },
   },
   
   created() {
@@ -438,13 +468,14 @@ export default {
       getServiceTypes: 'diagnostic/getServiceTypes',
       addToCurrentAppointment: 'appointments/addToCurrentAppointment',
       payForService: 'billing/userPayService',
+      raiseBillForService: 'billing/raiseBill',
       getPatientAccounts: 'billing/getPatientAccounts',
       getObservationCategory: 'resources/getObservationCategory',
       getObservationInterpretationTypes: 'resources/getObservationInterpretationTypes',
     }),
 
     close() {
-      this.visible = false
+      this.$modal.hide(this.name)
       this.append = false
       this.specimen = false
       this.sampleRejected = false
@@ -604,7 +635,6 @@ export default {
         })
       } else {
         this.pay = !this.pay
-        this.form.price_tier.display = 'Choose price tier'
       }
     },
 
@@ -614,6 +644,7 @@ export default {
         let payload = [
           {
             service_request: this.form.id, // a service request raised by a patient
+            healthcare_service: this.form.healthcare_service,
             price_tier: this.form.price_tier.id,
             account_id: this.form.account_id,
             currency: this.form.currency,
@@ -622,19 +653,41 @@ export default {
           },
         ]
 
-        const data = await this.payForService(payload)
+        await this.payForService(payload)
 
-        this.$toast.open('Bill successfully settled' || data)
+        this.$toast.open( 'Bill successfully settled' )
         this.loading = false
         this.form.status = 'active'
-        this.getData()
-        this.pay = false
+        this.getData(this.params)
+        if(this.form.status !== 'draft' && this.$isCurrentWorkspace('BILL')){
+          this.$modal.hide(this.name)
+        } else {
+          this.pay = false
+        }
       } catch (error) {
         this.loading = false
         this.$toast.open({
           message: error.message || 'Payment unsuccessful!',
           type: 'error',
         })
+      }
+    },
+    async raiseBill() {
+      try {
+        this.loading = true
+        let payload = {
+          service_request: this.form.id, // a service request raised by a patient
+          healthcare_service: this.form.healthcare_service,
+          price_tier: this.form.price_tier.id,
+        }
+
+        await this.raiseBillForService(payload)
+
+        this.$toast.open( 'Bill successfully raised' )
+        this.loading = false
+        this.getData(this.params)
+      } catch (error) {
+        this.loading = false
       }
     },
   },

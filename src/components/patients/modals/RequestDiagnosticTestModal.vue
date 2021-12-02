@@ -1,14 +1,11 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    title="Request diagnostic test"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-4">
-        <p class="text-lg font-semibold">Request diagnostic test</p>
         <cv-select
           v-model="form.location"
           label="Choose lab type"
@@ -40,26 +37,30 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'RequestDiagnosticTestModal',
+
+  mixins: [modalMixin],
 
   data() {
     return {
       form: {},
-      visible: false,
+      name: 'request-diagnostic-test-modal',
     }
   },
 
   events: {
     'profile:test:open': function(){
-      this.visible = true
+      this.open()
     },
     'profile:test:close': function(){
-      this.visible = false
+      this.close()
     },
   },
 }

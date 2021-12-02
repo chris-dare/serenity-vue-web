@@ -1,15 +1,10 @@
 <template>
-  <cv-modal
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    title="Update Medical History"
+    @closed="close"
   >
-    <template slot="title">
-      <p class="text-lg font-semibold capitalize">Update medical history</p>
-    </template>
-
-    <template slot="content">
+    <template>
       <SeForm class="space-y-8">
         <AutoCompleteClinicalTables
           v-model="form.PREVIOUS_ILLNESS"
@@ -72,7 +67,7 @@
         </div>
       </SeForm>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -101,12 +96,13 @@ export default {
       loading: false,
       removedObservations: [],
       removedAllergies: [],
+      name: 'medical-history-modal',
     }
   },
 
   events: {
     'medical:history:open': function(){
-      this.visible = true
+      this.open()
       this.init()
     },
     'medical:history:close': function(){
@@ -249,7 +245,7 @@ export default {
         }
 
         this.loading = false
-        this.visible = false
+        this.close()
         this.$resetData()
       } catch (error) {
         this.loading = false

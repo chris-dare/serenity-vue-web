@@ -58,6 +58,7 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div
+              v-if="$userCan('patient.read')"
               class="flex items-center cursor-pointer"
               @click="viewPatient({...row})"
             >
@@ -94,6 +95,11 @@ export default {
     route: {
       type: String,
       default: 'PatientSummary',
+    },
+
+    query: {
+      type: Object,
+      default: null,
     },
 
     filters: {
@@ -148,7 +154,7 @@ export default {
 
     viewPatient(row){
       this.addToStoreData({...row})
-      this.$router.push({ name: this.route, params: { id: row.id} })
+      this.$router.push({ name: this.route, params: { id: row.id}, query: this.query})
     },
   },
 }

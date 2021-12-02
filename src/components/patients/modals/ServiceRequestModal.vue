@@ -1,19 +1,16 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    width="450px"
+    :title="form.id ? 'Edit Service Request' : 'New Service Request'"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <cv-form
         autocomplete="off"
         class="space-y-8"
         @submit.prevent
       >
-        <p class="my-2 font-semibold">{{ form.id ? 'Edit' : 'New' }} Service Request</p>
-
         <ServiceRequestForm
           v-model="form"
           :v="$v"
@@ -35,7 +32,7 @@
         </div>
       </cv-form>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -59,19 +56,20 @@ export default {
       },
       loading: false,
       categories: [ 'laboratory-procedure', 'imaging', 'counselling', 'education', 'surgical-procedure' ],
+      name: 'service-request-modal',
     }
   },
 
   events: {
     'service:request:open': function(){
-      this.visible = true
+      this.open()
     },
     'service:request:edit': function(data){
-      this.visible = true
+      this.open()
       this.form = { ...data.params[0] }
     },
     'service:request:close': function(){
-      this.visible = false
+      this.close()
     },
   },
 

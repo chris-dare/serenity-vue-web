@@ -1,12 +1,9 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div>
         <div
           v-if="appointment.patient"
@@ -97,13 +94,17 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import {  mapActions } from 'vuex'
+import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'BillingDetailsModal',
+
+  mixins: [modalMixin],
 
   props: {
     appointment: {
@@ -114,7 +115,7 @@ export default {
 
   data() {
     return {
-      visible: false,
+      name: 'billing-details-modal',
     }
   },
 
@@ -127,7 +128,7 @@ export default {
 
   events: {
     'billing:details:open': function() {
-      this.visible = true
+      this.open()
     },
     'billing:details:close': function() {
       this.close()
@@ -138,6 +139,7 @@ export default {
     ...mapActions({
       refreshCurrentAppointment: 'appointments/refreshCurrentAppointment',
     }),
+
     returnToAppointment() {
       this.visible = !this.visible
       this.refreshCurrentAppointment()
@@ -145,9 +147,8 @@ export default {
       this.$router.push({ name: 'Appointments'})
     },
 
-    close() {
-      this.refreshCurrentAppointment
-      this.visible = false
+    afterCloseFunction() {
+      this.refreshCurrentAppointment()
     },
   },
 }

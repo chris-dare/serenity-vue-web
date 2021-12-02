@@ -1,8 +1,7 @@
 <template>
-  <cv-modal
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    @closed="close"
   >
     <template slot="title">
       <div>
@@ -10,7 +9,7 @@
         <p class="text-secondary text-sm">Add a new lab test to performed on patient</p>
       </div>
     </template>
-    <template slot="content">
+    <template>
       <SeForm class="space-y-8 mt-8">
         <div class="space-y-4">
           <MultiSelect
@@ -141,21 +140,21 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import DataMixin from '@/mixins/data'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'AddLabResultsModal',
 
-  mixins: [DataMixin],
+  mixins: [DataMixin, modalMixin],
 
   data() {
     return {
-      visible: false,
       nextPay: false,
       form: {
         order_detail: [{display: ''}],
@@ -167,16 +166,17 @@ export default {
       loading: false,
       columns: ['Date', 'Lab type', 'Priority', 'Order detail', 'Bodysite', 'Specimen', 'Action'],
       deleteLoading: false,
+      name: 'add-lab-results-modal',
     }
   },
 
   events: {
     'lab:add:open': function() {
-      this.visible = true
+      this.open()
       this.mode = 'create'
     },
     'lab-report:update:open': function(data) {
-      this.visible = true
+      this.open()
       this.form = data.params[0]
       this.mode = 'update'
     },
@@ -235,11 +235,8 @@ export default {
       this.$trigger('confirm:delete:open', { data: lab, label: 'Are you sure you want to delete this lab?' })
     },
 
-    close() {
-      this.visible = false
-    },
     add(){
-      this.visible = false
+      this.close()
       this.$trigger('requestedlabs:add:open')
     },
   },

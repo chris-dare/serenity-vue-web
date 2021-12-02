@@ -84,7 +84,7 @@
       </p>
       <p
         class="underline text-info text-xs cursor-pointer"
-        @click="visible = !visible"
+        @click="$trigger('virtual:care:open')"
       >
         Check requirements
       </p>
@@ -105,7 +105,7 @@
         class="se-checkbox"
       />
     </div>
-    <VirtualCareRequirementsModal :visible.sync="visible" />
+    <VirtualCareRequirementsModal />
   </MultiStepBase>
 </template>
 
@@ -136,7 +136,6 @@ export default {
       form: {
         service: null,
       },
-      visible: false,
       next: 'DateDoctor',
       previous: 'SelectPatient',
       parent: 'Appointments',

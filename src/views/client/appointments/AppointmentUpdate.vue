@@ -2,6 +2,7 @@
   <MultiStepBase
     :icon="icon"
     :next-label="title"
+    :loading="loading"
     @cancel="cancel"
     @save="submit"
   >
@@ -137,9 +138,14 @@ export default {
       return specialties ? specialties.healthcare_service_specialties : []
     },
 
+    // filteredData() {
+    //   if (!this.form.date) return []
+    //   return this.availableSlots(this.form.date)
+    // },
+
     filteredData() {
       if (!this.form.date) return []
-      return this.availableSlots(this.form.date)
+      return this.slots
     },
 
     title() {
@@ -179,8 +185,6 @@ export default {
     },
 
     async update() {
-
-
       this.loading = true
       await this.updateAppointment(this.form).then(() => {
         this.$toast.open({
@@ -191,6 +195,7 @@ export default {
       this.$trigger('billing:details:open')
       this.loading = false
     },
+
     async reschedule() {
       this.$v.$touch()
 

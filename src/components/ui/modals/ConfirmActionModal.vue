@@ -1,18 +1,15 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="w-full flex flex-col items-center justify-center pt-6 space-y-4">
         <p class="text-serenity-primary my-4 text-lg">Are you sure you want to delete {{ label }}</p>
         <div class="flex items-center justify-between space-x-4">
           <SeButton
             variant="white"
-            @click="cancel"
+            @click="close"
           >
             Close
           </SeButton>
@@ -25,12 +22,15 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
 export default {
   name: 'ConfirmActionModal',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -39,6 +39,7 @@ export default {
       type: '',
       data: null,
       callback: null,
+      name: 'confirm-action-modal',
     }
   },
 
@@ -51,12 +52,14 @@ export default {
       this.data = data
       this.callback = callback
       this.visible = true
+      this.open()
     },
   },
 
   watch: {
     '$route'(){
       this.visible = false
+      this.close()
     },
   },
 
@@ -69,12 +72,9 @@ export default {
         } catch {
           //empty
         }finally{
-          this.cancel()
+          this.close()
         }
       }
-    },
-    cancel() {
-      this.visible = false
     },
   },
 }

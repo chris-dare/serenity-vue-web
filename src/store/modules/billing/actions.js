@@ -79,6 +79,18 @@ export default {
     }
   },
 
+  async exportChargeItem({ rootState }, id) {
+    try {
+      const provider = rootState.auth.provider
+      const data = await BillingAPI.printChargeItem(provider.id, id)
+
+      return data
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
+    }
+  },
+
   async getPatientAccounts({ commit, rootState }, { id, params }) {
     try {
       const provider = rootState.auth.provider
@@ -142,11 +154,22 @@ export default {
     }
   },
 
-  async userPayService({ commit, rootState }, params ) {
+  async userPayService({ rootState }, params ) {
     try {
       const provider = rootState.auth.provider
       const { data } = await BillingAPI.servicePay(provider.id, params)
-      commit(UPDATE_BILLING, data[0])
+      return data
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
+    }
+  },
+
+  async raiseBill({ rootState }, params ) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await BillingAPI.raiseBill(provider.id, params)
+      return data
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error

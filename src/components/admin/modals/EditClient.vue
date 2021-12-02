@@ -1,14 +1,13 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    :title="type !== 'update' ? 'Edit client account' : 'Update client account'"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-8">
-        <p class="text-lg font-semibold">{{ type !== 'update' ? 'Edit' : 'Update' }} client account</p>
         <div
           v-if="type === 'update'"
           class="grid grid-cols-1 gap-8"
@@ -89,7 +88,7 @@
           <p 
             class="text-center" 
             style="cursor: pointer" 
-            @click="visible = false"
+            @click="close"
           >
             Cancel
           </p>
@@ -102,22 +101,25 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'AddEditClient',
 
+  mixins: [modalMixin],
+
   data() {
     return {
       loading: false,
-      visible: false,
       type: 'add',
       vertical: true,
       form: {},
+      name: 'edit-client-modal',
     }
   },
 
@@ -132,13 +134,13 @@ export default {
 
   events: {
     'client:add:open': function(data){
-      this.visible = true
+      this.open()
       this.form = data.params[0]
       this.type = 'add'
     },
     'client:edit:open': function(data){
       this.type = 'update'
-      this.visible = true
+      this.open()
       this.form = data.params[0]
     },
   },
@@ -189,13 +191,13 @@ export default {
             this.$toast.open({
               message: data.message || 'Client successfully updated',
             })
-            this.visible = false
+            this.close()
           } else {
             this.$toast.open({
               message: data.message || 'Client account update failed',
               type: 'error',
             })
-            this.visible = false
+            this.close()
           }
           // this.$router.go(-1)
           this.loading = false
@@ -219,13 +221,13 @@ export default {
             this.$toast.open({
               message: data.message || 'Client successfully updated',
             })
-            this.visible = false
+            this.close()
           } else {
             this.$toast.open({
               message: data.message || 'Client account update failed',
               type: 'error',
             })
-            this.visible = false
+            this.close()
           }
           // this.$router.go(-1)
           this.loading = false
@@ -246,7 +248,7 @@ export default {
         this.$toast.open({
           message: 'Client successfully verified',
         })
-        this.visible = false
+        this.close()
         this.loading = false
       } catch (error) {
         this.$toast.open({
@@ -273,13 +275,13 @@ export default {
           this.$toast.open({
             message: data.message || 'Client successfully updated',
           })
-          this.visible = false
+          this.close()
         } else {
           this.$toast.open({
             message: data.message || 'Client account update failed',
             type: 'error',
           })
-          this.visible = false
+          this.close()
         }
         this.loading = false
       } catch (error) {

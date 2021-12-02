@@ -2,8 +2,9 @@
   <div class="space-y-4">
     <Search
       v-if="!hideSearch"
-      v-model="search"
+      v-model="params.search"
       placeholder="Search for patient, enter name or MR number"
+      @input="searchData"
     />
     <FilterGroup
       v-model="search"
@@ -12,7 +13,7 @@
     <!-- <div>{{ filteredData }}</div> -->
     <DataTable
       ref="table"
-      :data="filteredData || []"
+      :data="data"
       :columns="columns"
       :pagination="pagination"
       :loading="loading"
@@ -33,13 +34,16 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <Tag
-            :variant="row.status !== 'completed' ? 'primary' : row.status === 'cancelled' ? 'error' : 'success'"
+            :variant="row.status === 'sample-collected' ? 'primary' : row.status === 'draft' ? 'error' : 'success'"
             :label="row.status"
           />
         </cv-data-table-cell>
         <cv-data-table-cell v-if="!$isCurrentWorkspace('RECEPT')">
+          <div v-if="row.status !== 'draft' && $isCurrentWorkspace('BILL')">
+            settled
+          </div>
           <div
-           
+            v-else
             class="flex items-center cursor-pointer"
             :disabled="!$userCan('diagnostic.requests.read')"
             @click="$trigger('diagnostic-order:add:open', {...row})"
@@ -55,13 +59,13 @@
         </cv-data-table-cell>
       </template>
     </DataTable>
-    <DiagnosticOrder />
+    <DiagnosticOrder :params="params" />
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import DataMixin from '@/mixins/data'
+import DataMixin from '@/mixins/paginated'
 import DiagnosticOrder from '@/components/diagnostic/modals/DiagnosticOrderModal'
 
 export default {
@@ -111,7 +115,7 @@ export default {
         'Specimen',
         'Status',
       ]
-      if (!this.$isCurrentWorkspace('RECEPT')) {
+      if (!this.$isCurrentWorkspace('RECEPT') || !this.$isCurrentWorkspace('OPD')) {
         column.push('Action')
       }
       return column
@@ -131,9 +135,6 @@ export default {
   },
 
   created() {
-    this.paginate = true
-    this.searchTerms = ['code', 'status', 'purpose', 'priority', 'patient_name']
-    this.filters = { payer: this.id, page: this.page, page_size: this.pageLength }
     this.refresh()
   },
 
@@ -141,19 +142,6 @@ export default {
     ...mapActions({
       getData: 'diagnostic/getServiceRequests',
     }),
-    actionOnPagination(ev) {
-      this.page = ev.page
-      this.pageLength = ev.length
-      let id = this.$route.params.id
-      this.filters = { payer: id, page: ev.page, page_size: ev.length }
-      this.refresh()
-    },
-    async refresh() {
-      this.loading = true
-      await this.getData(this.filters).then(() => this.loading = false).finally(() => this.loading = false)
-    },
   },
-
-
 }
 </script>

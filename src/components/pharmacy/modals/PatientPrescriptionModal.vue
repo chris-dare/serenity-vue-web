@@ -1,12 +1,9 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    @closed="cancel"
   >
-    <template slot="content">
+    <template>
       <MultiStepModal
         ref="steps"
         v-model="step"
@@ -40,9 +37,10 @@
         />
       </MultiStepModal>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
-<Checkmark32 />
+
+
 <script>
 import { mapState } from 'vuex'
 import Checkmark from '@carbon/icons-vue/es/checkmark/32'
@@ -83,6 +81,7 @@ export default {
         Checkmark,
       },
       medicationRequestsToDispense: [],
+      name: 'patient-prescription-modal',
     }
   },
 
@@ -111,11 +110,11 @@ export default {
   events: {
     'pharmacy:patient_prescription:open': function(event, mode = 'confirm'){
       this.step = 0
-      this.visible = true
+      this.$modal.show(this.name)
       this.mode = mode
     },
     'pharmacy:patient_prescription:close': function(){
-      this.visible = false
+      this.$modal.hide(this.name)
     },
   },
 }

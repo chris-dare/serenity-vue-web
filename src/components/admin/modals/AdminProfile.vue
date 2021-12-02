@@ -1,18 +1,16 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
+  <BaseModal
+    :name="name"
     close-aria-label="Close"
-    :visible="visible"
     size="sm"
-    @modal-hidden="visible = false"
+    title="Update Admin Profile"
+    height="auto"
+    scrollable
+    :shift-y="0.1"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div>
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-primary text-xl font-semibold">Update Admin Profile</p>
-          </div>
-        </div>
         <div>
           <div>
             <div class="flex flex-col items-center justify-center mt-8">
@@ -140,7 +138,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -149,19 +147,22 @@ import { required, email } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Camera from '@carbon/icons-vue/es/camera/32'
 import { emailFormatter } from '@/services/custom-validators'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'AdminProfile',
 
   components: { Camera },
 
+  mixins: [modalMixin],
+
   data() {
     return {
       form: {
       },
-      visible: false,
       loading: false,
       icon: ChevronRight,
+      name: 'admin-profile',
     }
   },
 
@@ -177,7 +178,7 @@ export default {
     },
     'admin:profile:open': function(){
       this.form = Object.assign({}, this.form, this.user)
-      this.visible = true
+      this.open()
     },
   },
 
@@ -215,7 +216,7 @@ export default {
           this.$toast.open({
             message: data.message || 'Profile updated successfully',
           })
-          this.visible = false
+          this.close()
         }else{
           this.$toast.open({
             message: data.message || 'Something went wrong!',

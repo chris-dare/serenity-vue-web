@@ -1,30 +1,28 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    :title="form.id ? 'Edit schedule' : 'New schedule'"
+    @closed="close"
   >
-    <template slot="content">
-      <cv-form
-        autocomplete="off"
+    <template>
+      <SeForm
         class="space-y-8 left-button"
-        @submit.prevent
       >
-        <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'New' }} schedule</p>
-        <MultiSelect
+        <p
+          v-if="form.id"
+          class="font-bold"
+        >
+          Practitioner: {{ form.practitioner_name }}
+        </p>
+        <AutoCompletePractitioners
+          v-else
           v-model="form.practitioner"
           title="Who are you scheduling?"
-          :multiple="false"
-          :options="practitioners"
-          label="first_name"
-          track-by="id"
-          placeholder="Select or search for practitioner"
-          :custom-label="customLabel"
           :error-message="$utils.validateRequiredField($v, 'practitioner')"
           :disabled="!!form.id"
+          placeholder="Type to search for practitioner"
           required
+          custom-field="id"
         />
 
         <div class="grid grid-cols-2 gap-4">
@@ -138,18 +136,24 @@
             {{ form.id ? 'Save changes' : 'Create schedule' }}
           </SeButton>
         </div>
-      </cv-form>
+      </SeForm>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 import format from 'date-fns/format'
+import modalMixin from '@/mixins/modal'
+import AutoCompletePractitioners from '@/components/ui/autocomplete/AutoCompletePractitioners'
 
 export default {
   name: 'AddEditSchedule',
+
+  components: { AutoCompletePractitioners },
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -160,17 +164,17 @@ export default {
         end_time: '17:00:00',
         comment: '',
       },
-      visible: false,
       loading: false,
+      name: 'add-edit-schedule',
     }
   },
 
   events: {
     'schedule:add:open': function(){
-      this.visible = true
+      this.open()
     },
     'schedule:edit:open': function(data){
-      this.visible = true
+      this.open()
       this.form = { ...data.params[0] }
       this.form.check = parseInt(this.form.recurring_weeks) > 1 ? 'yes' : 'no'
     },
@@ -179,7 +183,6 @@ export default {
   computed: {
     ...mapState({
       workspaces: (state) => state.workspaces.workspaces,
-      practitioners: (state) => state.practitioners.users,
       services: (state) => state.services.services,
       locations: (state) => state.locations.locations,
     }),
@@ -281,13 +284,8 @@ export default {
       }
     },
 
-    close() {
-      this.$resetData()
-      this.$v.$reset()
-    },
-
-    customLabel ({ first_name, last_name }) {
-      return `${first_name} ${last_name}`
+    customLabel ({ first_name, last_name, title }) {
+      return `${title} ${first_name} ${last_name}`
     },
   },
 }

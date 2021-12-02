@@ -34,6 +34,11 @@
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
+            <div class="flex items-center space-x-2 py-2">
+              <p>{{ row.categories }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
             <p class="lowercase">{{ row.healthcare_service_appointment_required ? 'Yes' : 'No' }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
@@ -121,6 +126,7 @@ export default {
       search: '',
       columns: [
         'Service',
+        'Category',
         'Appointment?',
         'Locations',
         'Action',

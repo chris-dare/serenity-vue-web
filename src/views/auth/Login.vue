@@ -53,7 +53,7 @@
               kind="primary"
               class="shake-anim my-6 max-w-full w-full bg-serenity-primary justify-start"
               data-test="submit"
-              @click="login"
+              @click="signIn"
             >
               <img
                 data-test="loading"
@@ -117,17 +117,23 @@ export default {
   methods: {
     ...mapActions({
       setLoggedIn: 'auth/setLoggedIn',
+      login: 'auth/login',
     }),
-    async login() {
+
+    async signIn() {
       this.$v.$touch()
       if (this.$v.$invalid) {
         return
       }
       this.saving = true
       try{
-        await this.$store.dispatch('auth/login', this.form)
+        await this.login(this.form)
 
-        this.$router.push(sessionStorage.getItem('redirectUrl') ? sessionStorage.getItem('redirectUrl') : { name: this.$isCurrentWorkspace('ADMIN') ? 'GetStarted' : 'Dashboard' })
+        this.$router.push(
+          sessionStorage.getItem('redirectUrl') ?
+            sessionStorage.getItem('redirectUrl') :
+            { name: this.$isCurrentWorkspace('ADMIN') ? 'GetStarted' : 'Dashboard' },
+        )
       }catch(error){
         this.$refs.loginButton.$el.classList.add('shake-anim-active')
         setTimeout(()=> {

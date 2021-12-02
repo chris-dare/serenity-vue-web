@@ -4,7 +4,7 @@
       alignment="center"
       direction="right"
       :tip="props.label"
-      class="w-full"
+      class="w-full se-tooltip"
     >
       <router-link
         tag="div"

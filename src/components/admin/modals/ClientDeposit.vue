@@ -1,12 +1,12 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    title="New deposit"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <SeForm class="space-y-2 divide-y divide-secondary divide-solid">
         <p class="text-md font-semibold">New deposit</p>
         <div>
@@ -87,7 +87,7 @@
         <p 
           class="text-center" 
           style="cursor: pointer" 
-          @click="visible = false"
+          @click="close()"
         >
           Cancel
         </p>
@@ -99,14 +99,17 @@
         </SeButton>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'AddClientDeposit',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -121,6 +124,7 @@ export default {
       options: [
         {display: 'Cash', code: 'cash'},
       ],
+      name: 'client-deposit-modal',
     }
   },
 
@@ -137,13 +141,13 @@ export default {
 
   events: {
     'deposit:add:open': function(data){
-      this.visible = true
+      this.open()
       this.form = data.params[0]
       this.getCurrencies()
       this.type = 'add'
     },
     'deposit:edit:open': function(data){
-      this.visible = true
+      this.open()
       this.form = data.params[0]
       this.getCurrencies()
       this.type = 'update'
@@ -194,13 +198,13 @@ export default {
           this.$toast.open({
             message: data.message || 'Client successfully updated',
           })
-          this.visible = false
+          this.close()
         } else {
           this.$toast.open({
             message: data.message || 'Client account update failed',
             type: 'error',
           })
-          this.visible = false
+          this.close()
         }
         // this.$router.go(-1)
         this.loading = false
@@ -221,7 +225,7 @@ export default {
         this.$toast.open({
           message: 'Client successfully verified',
         })
-        this.visible = false
+        this.close()
         this.loading = false
       } catch (error) {
         this.$toast.open({

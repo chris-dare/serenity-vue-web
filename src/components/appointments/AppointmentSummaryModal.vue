@@ -1,21 +1,21 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    @closed="close"
   >
-    <template slot="content">
+    <div
+      slot="title"
+      class="flex items-center justify-between"
+    >
+      <p class="mb-2">Appointment details</p>
+      <div
+        class="flex justify-center items-center rounded-full h-4 w-4 mr-3 bg-tetiary"
+      >
+        <Edit class="w-3 h-3 text-serenity-primary" />
+      </div>
+    </div>
+    <template>
       <div>
-        <div class="flex items-center justify-between">
-          <p class="mb-2">Appointment details</p>
-          <div
-            class="flex justify-center items-center rounded-full h-4 w-4 mr-3 bg-tetiary"
-          >
-            <Edit class="w-3 h-3 text-serenity-primary" />
-          </div>
-        </div>
         <AppointmentDetail :appointment="appointment" />
         
         <div class="flex items-center justify-center flex-col space-y-3 mt-6">
@@ -61,18 +61,21 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import AppointmentDetail from '@/components/appointments/AppointmentDetail'
 import { mapState, mapActions } from 'vuex'
 import isToday from 'date-fns/isToday'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'AppointmentSummaryModal',
 
   components: {  AppointmentDetail },
+
+  mixins: [modalMixin],
 
   props: {
     appointment: {
@@ -83,16 +86,16 @@ export default {
 
   data() {
     return {
-      visible: false,
+      name: 'appointment-summary-modal',
     }
   },
 
   events: {
     'appointment:summary:open': function() {
-      this.visible = true
+      this.open()
     },
     'appointment:summary:edit': function(data) {
-      this.visible = true
+      this.open()
       this.form.notes = data.params[0]
     },
     'appointment:summary:close': function() {
@@ -117,17 +120,14 @@ export default {
       setCurrentAppointment: 'appointments/setCurrentAppointment',
     }),
 
-    close() {
-      this.visible = false
-    },
     print() {
       this.$trigger('billing:details:open')
-      this.visible = false
+      this.close()
     },
 
     cancel() {
       this.$trigger('notes:open')
-      this.visible = false
+      this.close()
     },
 
     reschedule() {
@@ -149,7 +149,7 @@ export default {
           service_provider: this.provider.id,
           location: this.$locationId,
         })
-        this.visible = false
+        this.close()
         this.loading = false
         this.$toast.open({ message: 'The visit has started' })
       } catch (error) {

@@ -119,7 +119,6 @@
       </div>
 
       <div
-        v-if="isDiagnostic"
         class="space-y-8"
       >
         <MultiSelect

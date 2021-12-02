@@ -1,38 +1,36 @@
 <template>
-  <cv-modal
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    title="Lab results"
+    @closed="close"
   >
-    <template slot="title">Lab results</template>
-    <template slot="content">
+    <template>
       <LabsTable />
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import LabsTable from '@/components/diagnostic/LabsTable'
+import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'ViewLabResultsModal',
 
   components: { LabsTable },
 
+  mixins: [modalMixin],
+
   data() {
     return {
       visible: false,
+      name: 'view-lab-results-modal',
     }
   },
 
   events: {
     'lab:view:open': function() {
-      this.visible = true
-    },
-  },
-
-  methods: {
-    close() {
-      this.visible = false
+      this.open()
     },
   },
 }

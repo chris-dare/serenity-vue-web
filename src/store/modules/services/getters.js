@@ -8,7 +8,7 @@ export default {
       service.available_days= service.healthcare_service_available_times && service.healthcare_service_available_times.length ? service.healthcare_service_available_times[0].daysOfWeek.join(', ') : '-'
       service.description= service.healthcare_service_not_available_times && service.healthcare_service_not_available_times.length ? service.healthcare_service_not_available_times[0].description :'-'
       service.unavailable_times= ''
-      service.categories= service.healthcare_service_categories ? service.healthcare_service_categories.map(service => service.text).join(', ') : '-'
+      service.categories= service.healthcare_service_categories ? service.healthcare_service_categories[0].text : '-'
       service.types= service.healthcare_service_types ? service.healthcare_service_types.map(service => service.text).join(', ') : '-'
       service.specialties= service.healthcare_service_specialties ? service.healthcare_service_specialties.map(service => service.display).join(', ') : '-'
       service.duration= service.slot_duration && service.healthcare_service_appointment_required ? service.slot_duration : 0

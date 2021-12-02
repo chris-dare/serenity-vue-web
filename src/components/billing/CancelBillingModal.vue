@@ -1,16 +1,11 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    title="Cancel Bill"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div>
-        <p class="text-lg font-semibold">
-          Cancel Bill
-        </p>
         <div class="space-y-6">
           <PaymentDetail
             :details="bill"
@@ -129,7 +124,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -167,12 +162,13 @@ export default {
       type: '',
       patient: null,
       params: {},
+      name: 'cancel-billing-modal',
     }
   },
 
   events: {
     'billing:cancel:open': async function(data){
-      this.visible = true
+      this.open()
       this.bill = data.params[0].bill
       this.params = data.params[0].params
       this.bill.patient = {
@@ -255,7 +251,7 @@ export default {
       try {
         this.loading = true
         const data = await this.requestCancelBill({ charge: this.bill.id, action: 'request-charge-item-cancelation', reason: this.form.cancelation.reason})
-        this.visible = false
+        this.close()
         this.$toast.open({
           message: data.message,
         })
@@ -271,11 +267,10 @@ export default {
     },
 
     async approveRequest() {
-      console.log(this.bill)
       try {
         this.loading = true
         const data = await this.requestCancelBill({ charge: this.bill.id, action: 'approve-charge-item-cancelation-request', cancelation_request: this.bill.cancelation.uuid})
-        this.visible = false
+        this.close()
         this.$toast.open({
           message: data.message,
         })
@@ -294,7 +289,7 @@ export default {
       try {
         this.loading = true
         const data = await this.requestCancelBill({ charge: this.bill.id, action: 'cancel-charge-item', cancelation_request: this.bill.cancelation.uuid})
-        this.visible = false
+        this.close()
         this.$toast.open({
           message: data.message,
         })

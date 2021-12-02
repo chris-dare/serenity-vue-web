@@ -1,15 +1,13 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    height="auto"
+    scrollable
+    :name="name"
+    title="Service Details"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-8 left-button">
-        <p class="text-lg font-semibold">Service Details</p>
-
         <InfoBlock
           label="Service name"
           :description="form.healthcare_service_name"
@@ -102,31 +100,34 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'ViewService',
+
+  mixins: [modalMixin],
 
   data() {
     return {
       form: {
         price_tiers: [],
       },
-      visible: false,
       loading: false,
+      name: 'view-service-modal',
     }
   },
 
   events: {
     'service:view:close': function(){
-      this.visible = false
+      this.close()
     },
     'service:view:open': function(data){
-      this.visible = true
+      this.open()
       this.form = { ...data.params[0] }
     },
   },
@@ -135,13 +136,6 @@ export default {
     ...mapActions({
       getService: 'services/getService',
     }),
-
-    close() {
-      this.visible = false
-      this.form = {
-        price_tiers: [],
-      }
-    },
 
     async edit() {
       await this.getService(this.form.id)

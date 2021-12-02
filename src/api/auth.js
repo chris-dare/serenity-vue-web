@@ -21,7 +21,7 @@ export default {
   },
 
   reset(params){
-    return authHttp.post(`${this.url}password-reset/`, params)
+    return authHttp.post(`providers/${this.url}password-reset/`, params)
   },
 
   refresh(params){

@@ -2,7 +2,7 @@
   <div>
     <div class="max-w-7xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Patients</p>
+        <p class="text-xl font-bold">Patients ({{ patientsCount }})</p>
       </div>
       <PatientsTable
         route="Diagnostic:Patient"
@@ -13,7 +13,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import PatientsTable from '@/components/diagnostic/PatientsTable'
+import PatientsTable from '@/components/patients/PatientsTable'
 
 export default {
   name: 'DiagnosticPatients',

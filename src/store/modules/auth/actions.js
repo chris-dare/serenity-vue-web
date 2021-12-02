@@ -31,9 +31,10 @@ export default {
       })
   },
 
-  logout({ commit }) {
+  async logout({ commit, dispatch }) {
     commit(SET_TOKEN, null)
     commit(SET_LOGGED_IN, false)
+    await dispatch('checkout/resetCheckout', null, { root: true })
     // return AuthAPI.logout()
     //   .then(({ data: result }) => {
     //     commit(SET_TOKEN, null)

@@ -1,88 +1,87 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="xs"
-    @modal-hidden="visible = false"
+  <BaseModal
+    :name="name"
+    width="450px"
+    title="Start Encounter"
+    @closed="close"
   >
-    <template slot="content">
-      <cv-form
-        autocomplete="off"
-        class="space-y-8"
-        @submit.prevent
-      >
-        <p class="text-lg font-semibold">Start Encounter</p>
-        <MultiSelect
-          v-model="form.service_type"
-          title="Service type"
-          :multiple="false"
-          :options="services"
-          label="healthcare_service_name"
-          placeholder="Select service type"
-          custom-field="id"
-          track-by="id"
-          internal-search
-          :error-message="$utils.validateRequiredField($v, 'service_type')"
-          required
-        />
-        <MultiSelect
-          v-model="form.encounter_class"
-          title="Encounter class"
-          :multiple="false"
-          :options="encounterClasses"
-          label="display"
-          placeholder="Select code"
-          custom-field="code"
-          track-by="code"
-          internal-search
-          :error-message="$utils.validateRequiredField($v, 'encounter_class')"
-          required
-        />
-        <MultiSelect
-          v-model="form.priority"
-          title="Priority"
-          :multiple="false"
-          :options="encounterPriorities"
-          label="display"
-          placeholder="Select priority"
-          custom-field="code"
-          track-by="code"
-          internal-search
-          :error-message="$utils.validateRequiredField($v, 'priority')"
-          required
-        />
-        <div class="flex items-center justify-between">
-          <SeButton
-            variant="secondary"
-            @click="close"
-          >
-            Cancel
-          </SeButton>
-          <SeButton
-            :loading="loading"
-            @click="start"
-          >
-            Start Encounter
-          </SeButton>
+    <template>
+      <SeForm>
+        <div class="space-y-8">
+          <MultiSelect
+            v-model="form.service_type"
+            title="Service type"
+            :multiple="false"
+            :options="services"
+            label="healthcare_service_name"
+            placeholder="Select service type"
+            custom-field="id"
+            track-by="id"
+            internal-search
+            :error-message="$utils.validateRequiredField($v, 'service_type')"
+            required
+          />
+          <MultiSelect
+            v-model="form.encounter_class"
+            title="Encounter class"
+            :multiple="false"
+            :options="encounterClasses"
+            label="display"
+            placeholder="Select code"
+            custom-field="code"
+            track-by="code"
+            internal-search
+            :error-message="$utils.validateRequiredField($v, 'encounter_class')"
+            required
+          />
+          <MultiSelect
+            v-model="form.priority"
+            title="Priority"
+            :multiple="false"
+            :options="encounterPriorities"
+            label="display"
+            placeholder="Select priority"
+            custom-field="code"
+            track-by="code"
+            internal-search
+            :error-message="$utils.validateRequiredField($v, 'priority')"
+            required
+          />
+          <div class="flex items-center justify-between">
+            <SeButton
+              variant="secondary"
+              @click="close"
+            >
+              Cancel
+            </SeButton>
+            <SeButton
+              :loading="loading"
+              @click="start"
+            >
+              Start Encounter
+            </SeButton>
+          </div>
         </div>
-      </cv-form>
+      </SeForm>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'StartEncounterModal',
 
+  mixins: [modalMixin],
+
   data() {
     return {
       form: {},
-      visible: false,
       loading: false,
+      name: 'start-encounter-modal',
     }
   },
 
@@ -107,10 +106,10 @@ export default {
 
   events: {
     'start:encounter:open': function(){
-      this.visible = true
+      this.open()
     },
     'start:encounter:close': function(){
-      this.visible = false
+      this.close()
     },
   },
 
@@ -151,14 +150,10 @@ export default {
         await this.startEncounter(form)
         this.$toast.open({ message: 'Encounter has started' })
         this.loading = false
-        this.visible = false
+        this.close()
       } catch (error) {
         this.loading = false
       }
-    },
-
-    close() {
-      this.visible = false
     },
   },
 }

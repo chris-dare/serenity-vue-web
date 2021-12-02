@@ -51,6 +51,7 @@
       :rows="5"
       label="Reason"
       type="textarea"
+      class="se-input-gray"
     />
 
     <div class="flex justify-end mt-12">

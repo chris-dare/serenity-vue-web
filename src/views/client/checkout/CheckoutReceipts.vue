@@ -63,10 +63,13 @@ export default {
       cart: state => state.checkout.cart,
       existingPatient: (state) => state.checkout.existingPatient,
       currentPatient: (state) => state.checkout.currentCheckout.patient,
+      currentInvoice: (state) => state.checkout.paymentResult,
     }),
+  
     patient() {
       return this.existingPatient || this.currentPatient
     },
+  
     paymentDetails() {
       return {
         patient: this.patient || {},
@@ -85,6 +88,9 @@ export default {
     ...mapActions({
       addToStoreData: 'checkout/addToCheckout',
       refresh: 'checkout/refreshCheckout',
+      addCartItems: 'checkout/addCartItems',
+      setPaymentMethod: 'checkout/setPaymentMethod',
+      resetCheckout: 'checkout/resetCheckout',
     }),
 
     async print() {
@@ -107,7 +113,7 @@ export default {
 
       const pdfBlob = await res.blob()
       const url = URL.createObjectURL(pdfBlob)
-      console.info('shit', url)
+      // console.info('shit', url)
       // window.open(url)
       window.printJS(url, 'image')
       // window.printJS({
@@ -115,8 +121,9 @@ export default {
       //   type: 'pdf',
       //   base64: true,
       // })
-      this.$store.commit('checkout/SET_PAYMENT_METHOD', null)
-      this.$store.commit('checkout/ADD_CART_ITEMS', {items: []})
+      // this.setPaymentMethod(null)
+      // this.addCartItems({items: []})
+      this.resetCheckout()
       setTimeout(() => {
         this.loading = false
         this.$router.push({name: 'Dashboard'})

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="space-x-1">
+    <div
+      v-if="label"
+      class="space-x-1"
+    >
       <span
         v-if="required"
         class="error"

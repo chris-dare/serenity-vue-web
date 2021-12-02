@@ -1,12 +1,10 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="large"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    width="70%"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <AppRegisterLayout
         :label="label"
         :nav-items="navItems"
@@ -23,7 +21,7 @@
         />
       </AppRegisterLayout>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -35,11 +33,14 @@ const AppointmentSelectNotes = () => import('@/components/appointments/book/Appo
 const AppointmentSelectClinic = () => import('@/components/appointments/book/AppointmentSelectClinic')
 import { mapState, mapActions } from 'vuex'
 // import get from 'lodash/get'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'BookAppointmentModal',
 
   components: {  AppointmentSelectClinic, AppointmentSelectPatient, AppointmentSelectNotes, AppointmentSelectSlot, AppointmentSummaryDetail },
+
+  mixins: [modalMixin],
 
   props: {
     appointment: {
@@ -59,6 +60,7 @@ export default {
       step: 2,
       label: '',
       loading: false,
+      name: 'book-appointment-modal',
     }
   },
 
@@ -93,11 +95,11 @@ export default {
 
   events: {
     'book:appointment:open': function(data) {
-      this.visible = true
+      this.open()
       this.label = data.params[0] === 'followup' ? `Follow up appointment - ${this.$utils.formatName(this.currentAppointment.patient.fullName)}` : `Walk in patient visit - ${this.$utils.formatName(this.currentAppointment.patient.fullName)}`
     },
     'book:appointment:edit': function(data) {
-      this.visible = true
+      this.open()
       this.form.notes = data.params[0]
     },
     'book:appointment:close': function() {
@@ -110,11 +112,6 @@ export default {
       getSlots: 'appointments/getSlots',
       createVisit: 'visits/createVisit',
     }),
-  
-    close() {
-      this.step = 2
-      this.visible = false
-    },
 
     save(appointment) {
       if (this.type === 'followup') {
@@ -139,7 +136,7 @@ export default {
           location: this.$locationId,
         })
         this.$toast.open({ message: 'The visit has started' })
-        this.visible = false
+        this.close()
         this.loading = false
         
       } catch (error) {

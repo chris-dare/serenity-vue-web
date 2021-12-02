@@ -25,7 +25,7 @@
 
 <script>
 /* eslint-disable */
-import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import DetailPageNav from '@/components/patients/DetailPageNav'
 import Medication from '@carbon/icons-vue/es/medication/32'
 import PatientPrescriptionModal from '@/components/pharmacy/modals/PatientPrescriptionModal'
@@ -75,7 +75,7 @@ export default {
       ],
       links: [
         { label: 'Summary', path: 'Pharmacy:PatientSummary' },
-        { label: 'Prescriptions', path: 'Pharmacy:PatientPrescriptions' },
+        { label: 'Prescriptions', path: 'Pharmacy:PatientPrescriptions', query: { type: 'existing' }},
       ],
     }
   },
@@ -124,32 +124,20 @@ export default {
   methods: {
     ...mapActions({
       findPatient: 'patients/findPatient',
+      getPatient: 'patients/getPatient',
+      getMedicationRequests: 'patients/getMedicationRequests',
       refresh: 'patients/refreshCurrentPatient',
+      setCheckoutPatient: 'checkout/setCheckoutPatient',
     }),
-    ...mapMutations({
-      setCheckoutPatient: 'checkout/Set existing patient',
-    }),
+
     async initSinglePatientInformation(id) {
-      await this.$store.dispatch('patients/getPatient', id)
-      this.$store.dispatch('appointments/getAppointments', { filters: { patient: id, ordering: '-start' } }, { root:true })
-      this.$store.dispatch('patients/getServiceRequests', id)
-      await this.$store.dispatch('patients/getMedicationRequests', { patient: id })
-      this.$store.dispatch('patients/getObservations', { refresh:true, filters: { patient: id }})
-      this.$store.dispatch('patients/getDiagnosis', id)
-      this.$store.dispatch('patients/getNotes', id)
-      this.$store.dispatch('diagnostic/getDiagnosticReports')
-      this.$store.dispatch('encounters/getEncounters', {patient: id } , { root:true })
-      this.$store.dispatch('resources/getEncounterStatuses', null, { root:true })
-      this.$store.dispatch('patients/getReferrals', id , { root:true })
-      this.$store.dispatch('resources/getObservationUnitTypes', null, { root:true })
-      this.$store.dispatch('resources/getObservationInterpretationTypes', null, { root:true })
-      this.$store.dispatch('resources/getVitalsUnitTypes', null, { root:true })
-      this.$store.dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
-      this.$store.dispatch('resources/getSystemExamUnitTypes', null, { root:true })
+      await this.getPatient(id)
+      await this.getMedicationRequests({ patient: id })
     },
+
     newPrescription() {
       this.setCheckoutPatient(this.patient)
-      this.$router.push({ name: 'Pharmacy:New'})
+      this.$router.push({ name: 'Pharmacy:New', query: { type: 'existing' }})
     },
   },
 }

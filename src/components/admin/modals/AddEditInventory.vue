@@ -1,14 +1,13 @@
 <template>
-  <cv-modal
-    class="se-no-title-modal"
-    close-aria-label="Close"
-    :visible="visible"
-    size="sm"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    height="auto"
+    scrollable
+    :title="form.id ? 'Edit inventory' : 'Add new inventory'"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <SeForm class="space-y-8">
-        <p class="text-lg font-semibold">{{ form.id ? 'Edit' : 'Add new' }} inventory</p>
         <div class="grid grid-cols-2 gap-8 items-end">
           <cv-text-input
             v-model="form.name"
@@ -128,15 +127,18 @@
         </div>
       </SeForm>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import { required, minValue } from 'vuelidate/lib/validators'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'AddEditInventory',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -146,8 +148,8 @@ export default {
       },
       medication: false,
       loading: false,
-      visible: false,
       type: 'add',
+      name: 'add-edit-inventory',
     }
   },
 
@@ -172,13 +174,13 @@ export default {
 
   events: {
     'inventory:add:open': function(){
-      this.visible = true
+      this.open()
       this.medication = false
       this.form.category = 'medical-stock'
       this.type = 'add'
     },
     'inventory:edit:open': function(data){
-      this.visible = true
+      this.open()
       this.form = data.params[0]
       this.form.category = 'medical-stock'
       this.medication = this.form.category == 'medical-stock'
@@ -258,15 +260,6 @@ export default {
         })
         this.loading = false
       }
-    },
-
-    close() {
-      this.form = {
-        sub_group: 'Medication',
-        category: 'medical-stock',
-      }
-      this.$v.$reset()
-      this.visible = false
     },
   },
 }

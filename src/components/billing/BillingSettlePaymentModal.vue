@@ -1,14 +1,11 @@
 <template>
-  <cv-modal
-    close-aria-label="Close"
-    :visible="visible"
-    size="small"
-    class="se-no-title-modal"
-    @modal-hidden="close"
+  <BaseModal
+    :name="name"
+    :title="`Settle payment -  ${ bill.patientname }`"
+    @closed="close"
   >
-    <template slot="content">
+    <template>
       <div class="space-y-4">
-        <p class="text-lg font-semibold">Settle payment -  {{ bill.patientname }}</p>
         <div
           v-if="type === 'bill'"
           class="flex justify-between items-center"
@@ -65,7 +62,7 @@
               Print
             </SeButton>
             <SeButton
-              v-else
+              v-if="!settled && hasPaymentPermission"
               :icon="icon"
               :loading="loading"
               @click="submit"
@@ -76,7 +73,7 @@
         </div>
       </div>
     </template>
-  </cv-modal>
+  </BaseModal>
 </template>
 
 <script>
@@ -98,24 +95,22 @@ export default {
   data() {
     return {
       bill: {},
-      form: {
-        transaction_type: '',
-      },
+      form: {},
       icon: ChevronRight,
       selected: 'user',
       loading: false,
       printLoading: false,
       type: 'bill',
       patient: null,
+      name: 'billing-settle-payment-modal',
     }
   },
 
   events: {
     'billing:settle:open': async function(data){
-      this.visible = true
+      this.open()
       this.bill = data.params[0]
       this.getPatientAccounts({ id: this.bill.patientid })
-      this.form.transaction_type = this.$global.USER_ACCOUNT_TYPE
       this.type = 'bill'
       const patient = await PatientAPI.get(this.$providerId, this.bill.patientid)
       this.patient = patient.data.data
@@ -128,9 +123,8 @@ export default {
         patientid: invoice.patient_detail.id,
       }
       await this.getPatientAccounts({ id: this.bill.patientid })
-      this.form.transaction_type = this.$global.USER_ACCOUNT_TYPE
       this.form.amount = this.bill.charge
-      this.visible = true
+      this.open()
       this.type = 'invoice'
       const patient = await PatientAPI.get(this.$providerId, this.bill.patientid)
       this.patient = patient.data.data
@@ -167,6 +161,7 @@ export default {
     ...mapGetters({
       currentWorkspacePatientPage: 'global/currentWorkspacePatientPage',
       userAccounts: 'billing/userAccounts',
+      hasPaymentPermission: 'auth/hasPaymentPermission',
     }),
   },
 
