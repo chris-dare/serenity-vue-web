@@ -96,8 +96,12 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
+import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'AddEditRole',
+
+  mixins: [modalMixin],
 
   data() {
     return {

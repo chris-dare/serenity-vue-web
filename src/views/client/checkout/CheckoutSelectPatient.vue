@@ -85,6 +85,7 @@ export default {
     }),
     ...mapGetters({
       cartTotal: 'checkout/cartTotal',
+      patients: 'patients/patients',
     }),
   },
 
