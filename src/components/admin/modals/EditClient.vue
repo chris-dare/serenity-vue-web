@@ -4,6 +4,7 @@
     height="auto"
     scrollable
     :title="type !== 'update' ? 'Edit client account' : 'Update client account'"
+    @closed="close"
   >
     <template>
       <div class="space-y-8">

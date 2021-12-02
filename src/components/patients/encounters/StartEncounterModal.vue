@@ -1,10 +1,9 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     width="450px"
     title="Start Encounter"
+    @closed="close"
   >
     <template>
       <SeForm>
@@ -71,9 +70,12 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'StartEncounterModal',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -104,10 +106,10 @@ export default {
 
   events: {
     'start:encounter:open': function(){
-      this.$modal.show(this.name)
+      this.open()
     },
     'start:encounter:close': function(){
-      this.$modal.hide(this.name)
+      this.close()
     },
   },
 
@@ -148,14 +150,10 @@ export default {
         await this.startEncounter(form)
         this.$toast.open({ message: 'Encounter has started' })
         this.loading = false
-        this.$modal.hide(this.name)
+        this.close()
       } catch (error) {
         this.loading = false
       }
-    },
-
-    close() {
-      this.$modal.hide(this.name)
     },
   },
 }

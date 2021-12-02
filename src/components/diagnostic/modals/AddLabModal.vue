@@ -1,6 +1,7 @@
 <template>
   <BaseModal
     :name="name"
+    @closed="close"
   >
     <template slot="title">
       <div>

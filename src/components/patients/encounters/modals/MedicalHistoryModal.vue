@@ -1,9 +1,8 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     title="Update Medical History"
+    @closed="close"
   >
     <template>
       <SeForm class="space-y-8">

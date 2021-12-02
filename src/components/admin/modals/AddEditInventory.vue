@@ -4,6 +4,7 @@
     height="auto"
     scrollable
     :title="form.id ? 'Edit inventory' : 'Add new inventory'"
+    @closed="close"
   >
     <template>
       <SeForm class="space-y-8">

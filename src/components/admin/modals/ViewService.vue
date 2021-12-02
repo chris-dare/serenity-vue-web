@@ -2,8 +2,9 @@
   <BaseModal
     height="auto"
     scrollable
-    name="view-service-modal"
+    :name="name"
     title="Service Details"
+    @closed="close"
   >
     <template>
       <div class="space-y-8 left-button">
@@ -104,9 +105,12 @@
 
 <script>
 import { mapActions } from 'vuex'
+import modalMixin from '@/mixins/modal'
 
 export default {
   name: 'ViewService',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -114,15 +118,16 @@ export default {
         price_tiers: [],
       },
       loading: false,
+      name: 'view-service-modal',
     }
   },
 
   events: {
     'service:view:close': function(){
-      this.$modal.hide('view-service-modal')
+      this.close()
     },
     'service:view:open': function(data){
-      this.$modal.show('view-service-modal')
+      this.open()
       this.form = { ...data.params[0] }
     },
   },
@@ -131,13 +136,6 @@ export default {
     ...mapActions({
       getService: 'services/getService',
     }),
-
-    close() {
-      this.$modal.hide('view-service-modal')
-      this.form = {
-        price_tiers: [],
-      }
-    },
 
     async edit() {
       await this.getService(this.form.id)

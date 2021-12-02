@@ -1,9 +1,8 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     title="Observations"
+    @closed="close"
   >
     <template>
       <SeForm class="space-y-8">
@@ -23,6 +22,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import modalMixin from '@/mixins/modal'
 import IntakeChart from '@/components/ipd/observations/IntakeChart'
 import OutputChart from '@/components/ipd/observations/OutputChart'
 import ObservationVitalCharts from '@/components/ipd/observations/ObservationVitalCharts'
@@ -40,11 +40,14 @@ export default {
     ObservationsCharts,
   },
 
+  mixins: [modalMixin],
+
   data() {
     return {
       form: {},
       selected: 'intake',
       loading: false,
+      name: 'observations-modal',
     }
   },
 
@@ -74,11 +77,11 @@ export default {
 
   events: {
     'profile:observation:open': function(){
-      this.$modal.show(this.name)
+      this.open()
       this.form = {}
     },
     'observation:edit:open': function(data){
-      this.$modal.show(this.name)
+      this.open()
       this.form = data.params[0]
     },
   },
@@ -88,10 +91,6 @@ export default {
       createInventory: 'inventory/createInventory',
       updateInventory: 'inventory/updateInventory',
     }),
-
-    close() {
-      this.$modal.hide(this.name)
-    },
   },
 }
 </script>

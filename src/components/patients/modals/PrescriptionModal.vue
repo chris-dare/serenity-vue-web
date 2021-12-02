@@ -1,10 +1,9 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     width="450px"
     title="Medication details"
+    @closed="close"
   >
     <template
       class="p-0 mb-4"
@@ -84,6 +83,7 @@
 <script>
 import modalMixin from '@/mixins/modal'
 import { mapActions } from 'vuex'
+
 export default {
   name: 'PrescriptionModal',
 

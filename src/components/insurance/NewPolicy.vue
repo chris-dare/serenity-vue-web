@@ -2,6 +2,7 @@
   <BaseModal
     :name="name"
     :title="type === 'update' ? 'Update Policy' : 'Add New Policy'"
+    @closed="close"
   >
     <template>
       <SeForm class="space-y-2 divide-y divide-secondary divide-solid">

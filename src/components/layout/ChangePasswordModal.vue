@@ -1,8 +1,9 @@
 <template>
   <BaseModal
     height="auto"
-    name="change-password-modal"
+    :name="name"
     title="Settings"
+    @closed="close"
   >
     <div v-if="updateSuccessful" />
     <div>
@@ -76,8 +77,13 @@
 import { mapActions } from 'vuex'
 import { required, sameAs } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import modalMixin from '@/mixins/modal'
 
 export default {
+  name: 'ChangePasswordModal',
+
+  mixins: [modalMixin],
+
   data(){
     return {
       saving: false,
@@ -88,6 +94,7 @@ export default {
       },
       icon: ChevronRight,
       updateSuccessful: false,
+      name: 'change-password-modal',
     }
   },
   validations: {
@@ -108,19 +115,6 @@ export default {
       changePassword: 'auth/changePassword',
     }),
 
-    open(){
-      this.$modal.show('change-password-modal')
-    },
-
-    close() {
-      this.form = {
-        password: '',
-        confirm_password: '',
-        new_password: '',
-      }
-      this.$v.$reset()
-      this.$modal.hide('change-password-modal')
-    },
     async submit() {
       if(this.saving) return
 

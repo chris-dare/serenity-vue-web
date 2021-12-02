@@ -5,6 +5,7 @@
     scrollable
     width="450px"
     title="Update client account"
+    @closed="close"
   >
     <template>
       <div class="space-y-2 divide-y divide-black divide-solid">

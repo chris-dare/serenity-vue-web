@@ -4,6 +4,7 @@
     height="auto"
     scrollable
     :title="type === 'update' ? 'Update Employee' : 'Add new employee'"
+    @closed="close"
   >
     <template>
       <SeForm>

@@ -4,6 +4,7 @@
     height="auto"
     scrollable
     :title="form.id ? 'Edit workspace' : 'Add workspace'"
+    @closed="close"
   >
     <template>
       <SeForm class="space-y-8 left-button">

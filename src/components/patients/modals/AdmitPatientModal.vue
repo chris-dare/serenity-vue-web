@@ -1,9 +1,8 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     title="Admit patient"
+    @closed="close"
   >
     <template>
       <div class="space-y-4">
@@ -21,8 +20,11 @@
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
 export default {
   name: 'AdmitPatientModal',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -33,10 +35,10 @@ export default {
 
   events: {
     'profile:admit:open': function(){
-      this.$modal.show(this.name)
+      this.open()
     },
     'profile:admit:close': function(){
-      this.$modal.hide(this.name)
+      this.close()
     },
   },
 }

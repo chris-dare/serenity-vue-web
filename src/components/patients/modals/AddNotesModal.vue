@@ -1,10 +1,9 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     title="Add notes"
     width="450px"
+    @closed="close"
   >
     <template>
       <div class="space-y-4">
@@ -25,10 +24,14 @@
 
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
+import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'AddNotesModal',
 
   components: { ChevronRight },
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -39,10 +42,10 @@ export default {
 
   events: {
     'profile:notes:open': function(){
-      this.$modal.show(this.name)
+      this.open()
     },
     'profile:notes:close': function(){
-      this.$modal.hide(this.name)
+      this.close()
     },
   },
 }

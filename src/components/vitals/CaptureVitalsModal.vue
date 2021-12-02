@@ -1,10 +1,9 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     width="70%"
     title="Vitals"
+    @closed="close"
   >
     <template>
       <div class="grid grid-cols-2 gap-4">

@@ -1,10 +1,9 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     title="Mark this patient as deceased"
     width="450px"
+    @closed="close"
   >
     <template>
       <div class="space-y-8">
@@ -44,8 +43,11 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import modalMixin from '@/mixins/modal'
 export default {
   name: 'MarkAsDeceasedModal',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -57,10 +59,10 @@ export default {
 
   events: {
     'profile:deceased:open': function(){
-      this.$modal.show(this.name)
+      this.open()
     },
     'profile:deceased:close': function(){
-      this.$modal.hide(this.name)
+      this.close()
     },
   },
 
@@ -83,11 +85,6 @@ export default {
       } catch (error) {
         this.loading = false
       }
-    },
-
-    close() {
-      this.$modal.hide(this.name)
-      this.form = {}
     },
   },
 }

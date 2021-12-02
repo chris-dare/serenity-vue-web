@@ -1,8 +1,7 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
+    @closed="close"
   >
     <template slot="title">
       <div>

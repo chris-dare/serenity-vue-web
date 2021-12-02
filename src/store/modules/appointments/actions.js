@@ -50,6 +50,7 @@ export default {
     }
   },
 
+  // eslint-disable-next-line no-unused-vars
   async getNextAvailableSlot({ commit, rootState, rootGetters }, filters) {
     try {
       const provider = rootState.auth.provider
@@ -58,7 +59,7 @@ export default {
       if (data.data && data.success) {
         const slot = {
           ...data.data,
-          practitioner: rootGetters['practitioners/practitioners'].find(a => a.id === data.data.practitionerid),
+          // practitioner: rootGetters['practitioners/practitioners'].find(a => a.id === data.data.practitionerid),
         }
         commit(ADD_APPOINTMENT_DATA, { slot })
         return slot

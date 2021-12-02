@@ -4,6 +4,7 @@
     height="auto"
     scrollable
     title="Update Provider Profile"
+    @closed="close"
   >
     <template>
       <div>

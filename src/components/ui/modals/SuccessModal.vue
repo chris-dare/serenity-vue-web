@@ -1,6 +1,7 @@
 <template>
   <BaseModal
     :name="name"
+    @closed="close"
   >
     <template>
       <div class="w-full flex flex-col items-center justify-center pt-6 space-y-4">

@@ -9,7 +9,6 @@ export default {
 
   initApp({dispatch}) {
     dispatch('setDefaultWorkpace')
-    dispatch('practitioners/getUsers', null, { root:true })
     dispatch('resources/getResources', false, { root:true })
     dispatch('workspaces/getWorkspaces', false, { root:true })
     dispatch('resources/getSpecialties', null, { root:true })

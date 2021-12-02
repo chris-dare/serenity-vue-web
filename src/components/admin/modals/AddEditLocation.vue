@@ -5,6 +5,7 @@
     scrollable
     :title="form.id ? 'Edit locations' : 'New locations'"
     width="450px"
+    @closed="close"
   >
     <template>
       <SeForm

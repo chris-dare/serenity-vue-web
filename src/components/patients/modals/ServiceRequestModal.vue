@@ -1,10 +1,9 @@
 <template>
   <BaseModal
     :name="name"
-    height="auto"
-    scrollable
     width="450px"
     :title="form.id ? 'Edit Service Request' : 'New Service Request'"
+    @closed="close"
   >
     <template>
       <cv-form

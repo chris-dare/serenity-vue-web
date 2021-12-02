@@ -1,9 +1,9 @@
 <template>
   <BaseModal
-    name="actions-modal"
+    :name="name"
     close-aria-label="Close"
     size="sm"
-    height="auto"
+    @closed="close"
   >
     <template>
       <div class="w-full flex flex-col items-center justify-center pt-6 space-y-4">
@@ -30,8 +30,11 @@
 </template>
 
 <script>
+import modalMixin from '@/mixins/modal'
 export default {
   name: 'ActionsModal',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -47,6 +50,7 @@ export default {
       cancelButtonVariant: 'secondary',
       confirmButtonVariant: 'default',
       loading: false,
+      name: 'actions-modal',
     }
   },
 
@@ -62,7 +66,7 @@ export default {
       this.confirmCallback = callback
       this.cancelCallback = cancel
       this.visible = true
-      this.$modal.show('actions-modal')
+      this.open()
       this.cancelButtonVariant = cancelButtonVariant
       this.confirmButtonVariant = confirmButtonVariant
     },
@@ -71,7 +75,7 @@ export default {
   watch: {
     '$route'() {
       this.visible = false
-      this.$modal.hide('actions-modal')
+      this.close()
     },
   },
 
@@ -85,15 +89,11 @@ export default {
         } catch {
           //empty
         }finally{
-          this.cancel()
+          this.close()
         }
       } else {
-        this.cancel()
+        this.close()
       }
-    },
-    cancel() {
-      this.visible = false
-      this.$modal.hide('actions-modal')
     },
 
     async handleAction(action) {
@@ -106,10 +106,10 @@ export default {
           } catch {
           //empty
           }finally{
-            this.cancel()
+            this.close()
           }
         } else {
-          this.cancel()
+          this.close()
         }
       }
     },
