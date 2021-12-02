@@ -14,7 +14,7 @@
             :show-cart="false"
           />
           <FormInput
-            v-model="form.cancelation.reason"
+            v-model="bill.cancelation.reason"
             type="textarea"
             placeholder="Enter reason of cancellation"
             label="Reason of cancellation"
@@ -250,7 +250,7 @@ export default {
     async submitRequest() {
       try {
         this.loading = true
-        const data = await this.requestCancelBill({ charge: this.bill.id, action: 'request-charge-item-cancelation', reason: this.form.cancelation.reason})
+        const data = await this.requestCancelBill({ charge: this.bill.id, action: 'request-charge-item-cancelation', reason: this.bill.cancelation.reason})
         this.close()
         this.$toast.open({
           message: data.message,
