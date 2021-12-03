@@ -16,7 +16,12 @@
       />
       <CurrencySelect v-model="localValue.currency" />
 
-      <p class="error col-span-6">{{ $utils.validateRequiredField(v, 'amount') }}</p>
+      <p
+        v-if="$utils.validateRequiredField(v, 'amount') || isValueInvalid"
+        class="error col-span-6"
+      >
+        {{ $utils.validateRequiredField(v, 'amount') || `Amount should not be less than ${total}` }}
+      </p>
     </div>
   </div>
   <div v-else>
@@ -40,6 +45,12 @@ export default {
     v: {
       type: Object,
       default: () => {},
+    },
+  },
+
+  computed: {
+    isValueInvalid() {
+      return Number(this.localValue.amount) < Number(this.total)
     },
   },
 

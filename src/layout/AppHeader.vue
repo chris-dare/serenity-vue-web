@@ -162,7 +162,10 @@ export default {
       // this.open = this.isTablet
       await this.getLocations(false)
 
-      this.selectedLocation = localStorage.getItem('location') ? localStorage.getItem('location') : this.locations.length ? this.locations[0].id : ''
+      let location = localStorage.getItem('location') ? localStorage.getItem('location') : this.locations.length ? this.locations[0].id : ''
+      const locationExists = !!this.locations.find(lc => lc.value === location)
+
+      this.selectedLocation = locationExists ? location : this.locations[0].id
     },
 
     changeWorkspace(value) {

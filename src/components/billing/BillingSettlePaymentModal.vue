@@ -55,9 +55,16 @@
               View patient profile
             </SeButton>
             <SeButton
-              v-if="settled"
+              v-if="settled && type === 'bill'"
               :loading="printLoading"
               @click="print"
+            >
+              Print
+            </SeButton>
+            <SeButton
+              v-if="settled && type === 'invoice'"
+              :loading="printLoading"
+              @click="printInvoice"
             >
               Print
             </SeButton>

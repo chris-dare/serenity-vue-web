@@ -15,10 +15,7 @@ import Vuelidate from 'vuelidate'
 import VuePageTransition from 'vue-page-transition'
 import HasPermissionDirective from '@/plugins/has-permission'
 import { registerBaseComponents } from '@/services/globals'
-import VModal from 'vue-js-modal'
 import VueMask from 'v-mask'
-
-
 
 // all vue plugins
 import '@/plugins'
@@ -47,7 +44,6 @@ Vue.use(ConstantsPlugin)
 Vue.use(Vuelidate)
 Vue.use(VueMask)
 
-Vue.use(VModal)
 Vue.use(VuePageTransition)
 
 registerBaseComponents(Vue)
