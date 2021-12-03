@@ -240,6 +240,8 @@ export default {
         await this.addEmployee({ id, form: this.form })
         this.$toast.open('Client employee successfully created')
         this.getEmployees( id )
+        this.loading = false
+        this.close()
         // if (data) {
         //   this.$toast.open({
         //     message: 'Client employee successfully created',
