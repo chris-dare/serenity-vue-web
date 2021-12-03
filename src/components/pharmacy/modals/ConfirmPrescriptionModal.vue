@@ -296,7 +296,7 @@ export default {
 
   computed: {
     ...mapState({
-      patient: (state) => state.patients.currentPatient,
+      patient: (state) => state.checkout.existingPatient,
       provider: (state) => state.auth.provider,
       data: (state) => state.inventory.inventory,
     }),

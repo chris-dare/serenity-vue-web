@@ -133,7 +133,6 @@ export default {
   },
 
   async updateUserPermissions({ commit, state }, role) {
-    console.log('role', role)
     if (state.provider.permissions.id !== role.id) return
     commit(SET_CURRENT_ORGANIZATION_ROLE, role)
   },

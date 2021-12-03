@@ -91,6 +91,16 @@ export default {
       }
     },
 
+    async printInvoice() {
+      try {
+        this.printLoading = true
+        await this.exportBill(this.bill.uuid)
+        this.printLoading = false
+      } catch (error) {
+        this.printLoading = false
+      }
+    },
+
     getValidationMessages(v) {
       if (v.amount?.$invalid) {
         return 'Please enter a valid amount'
