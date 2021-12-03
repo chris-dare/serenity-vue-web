@@ -51,6 +51,7 @@
               label="Date of Birth"
               :error-message="$utils.validateRequiredField($v, 'birth_date')"
               required
+              :max-date="new Date()"
             />
 
             <MultiSelect

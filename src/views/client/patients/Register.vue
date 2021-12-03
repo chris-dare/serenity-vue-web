@@ -39,6 +39,7 @@ export default {
     next(async vm => {
       await vm.getPatient(to.query.id)
       vm.getReligiousAffliations()
+      vm.getPaymentMethods()
     })
   },
 
@@ -52,6 +53,7 @@ export default {
       getReligiousAffliations: 'resources/getReligiousAffliations',
       getPatient: 'patients/getPatient',
       refresh: 'patients/refreshCurrentPatient',
+      getPaymentMethods: 'resources/getPaymentMethods',
     }),
   },
 }
