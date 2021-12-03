@@ -16,8 +16,8 @@ import VuePageTransition from 'vue-page-transition'
 import HasPermissionDirective from '@/plugins/has-permission'
 import { registerBaseComponents } from '@/services/globals'
 import VModal from 'vue-js-modal'
+import VueMask from 'v-mask'
 
-Vue.use(VModal)
 
 
 // all vue plugins
@@ -45,6 +45,9 @@ Vue.use(ScrollPlugin)
 Vue.use(PrintPlugin)
 Vue.use(ConstantsPlugin)
 Vue.use(Vuelidate)
+Vue.use(VueMask)
+
+Vue.use(VModal)
 Vue.use(VuePageTransition)
 
 registerBaseComponents(Vue)

@@ -26,7 +26,7 @@ const validateRequiredField = ($v, field, parent = 'form') => {
     }
 
     if($field.maxValue === false){
-      return `${formattedField} should not be less than ${$field.$params.maxValue.min}`
+      return `${formattedField} should not be more than ${$field.$params.maxValue.max}`
     }
 
     if($field.email === false){
@@ -70,8 +70,8 @@ const renameKeys = (keysMap, obj) =>
 
 const formatIncomingRoles = (data) => {
   let role = { ...data }
-  let resources = data.permissions.resources
-  let workspaces = data.permissions.workspaces
+  let resources = role.permissions.resources
+  let workspaces = role.permissions.workspaces
   let newResources = []
   let newWorkspaces = []
 

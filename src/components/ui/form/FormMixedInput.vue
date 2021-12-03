@@ -13,6 +13,7 @@
     <div class="items-center relative">
       <cv-text-input
         v-model="localValue"
+        v-mask="mask"
         :placeholder="placeholder"
         class="col-span-4 se-no-label"
         :disabled="disabled"
@@ -50,6 +51,10 @@ export default {
 
   props: {
     placeholder: {
+      type: String,
+      default: '',
+    },
+    mask: {
       type: String,
       default: '',
     },
