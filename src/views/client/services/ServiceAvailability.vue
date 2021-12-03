@@ -300,7 +300,7 @@ export default {
     },
 
     formattedForm() {
-      let newForm = { ...this.form }
+      let newForm = { ...this.form, provider: this.$providerId }
 
       newForm.healthcare_service_not_available_times = newForm.healthcare_service_not_available_times.filter(time => time.description)
 
