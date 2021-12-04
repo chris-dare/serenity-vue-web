@@ -34,8 +34,8 @@
           <cv-data-table-cell>
             <div class="flex items-center py-2">
               <InfoImageBlock
-                :label="row.name | capitalize"
-                :description="row.gender_age_description"
+                :label="$utils.customNameLabel(row.user) | capitalize"
+                :description="`${$utils.concatData(row, ['gender', 'age'], ', ')} ${row.age ? 'years' : ''}`"
                 :url="row.photo"
                 size="base"
               />
@@ -43,7 +43,7 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
-              <p>{{ row.phone }}</p>
+              <p>{{ row.mobile }}</p>
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import DataMixin from '@/mixins/paginated'
 
 export default {
@@ -125,12 +125,9 @@ export default {
   computed: {
     ...mapState({
       total: (state) => state.patients.patientsCount,
+      data: (state) => state.patients.patients,
       meta: (state) => state.patients.patientsMeta,
       workspaceType: (state) => state.global.workspaceType,
-    }),
-
-    ...mapGetters({
-      data: 'patients/patients',
     }),
   },
 

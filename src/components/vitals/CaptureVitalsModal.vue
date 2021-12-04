@@ -45,7 +45,7 @@
 import { mapActions, mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 import isEmpty from 'lodash/isEmpty'
-import { required } from 'vuelidate/lib/validators'
+import { required, minValue, maxValue } from 'vuelidate/lib/validators'
 const bpvalidator = (value) => !!value?.includes('/')
 import modalMixin from '@/mixins/modal'
 
@@ -105,6 +105,10 @@ export default {
         required,
         bpvalidator,
       },
+      OXYGEN_SATURATION: {
+        minValue: minValue(0),
+        maxValue: maxValue(100),
+      },
     },
   },
 
@@ -140,6 +144,10 @@ export default {
     },
 
     setBMI: debounce(function(code) {
+      if (code === 'OXYGEN_SATURATION' && this.$v.form?.OXYGEN_SATURATION?.$invalid) {
+        this.$v?.form?.OXYGEN_SATURATION?.$touch()
+      }
+      
       if (!this.form.WEIGHT_KG || !this.form.HEIGHT_CM) return this.form.BMI
       if (code !== 'WEIGHT_KG' && code !== 'HEIGHT_CM') return this.form.BMI
 
