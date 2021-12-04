@@ -13,7 +13,7 @@
         @clientaccount="createAccount"
       />
 
-      <div class="bg-white px-4 py-6 grid grid-cols-3 divide-x divide-gray-100 divide-solid">
+      <div class="bg-white px-4 py-6 grid grid-cols-4 divide-x divide-gray-100 divide-solid">
         <div
           v-for="(field, index) in summaryFields"
           :key="index"
@@ -86,6 +86,7 @@ export default {
         return [
           { label: 'Account type', value: this.clientAccount.account_type },
           { label: 'Current Balance', value: this.$currency(this.clientAccount.balance).format() },
+          { label: 'Credit limit', value: this.$currency(this.clientAccount.limit).format() },
           { label: 'Credit start date', value: this.$date.formatDate(this.clientAccount.service_period_start, 'dd MMM, yyyy') },
         ]
       } else {

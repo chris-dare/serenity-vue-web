@@ -781,22 +781,22 @@ const routes = [
       {
         path: '/checkout',
         props: true,
-        component: () => import(/* webpackChunkName: "checkout" */ '../views/client/checkout/CheckoutIndex.vue'),
+        component: () => import(/* webpackChunkName: "pharmacy" */ '../views/client/checkout/CheckoutIndex.vue'),
         children: [
           {
             path: '',
             name: 'CheckoutSelectPatient',
-            component: () => import(/* webpackChunkName: "checkout" */ '../views/client/checkout/CheckoutSelectPatient.vue'),
+            component: () => import(/* webpackChunkName: "pharmacy" */ '../views/client/checkout/CheckoutSelectPatient.vue'),
           },
           {
             path: 'payment-options',
             name: 'CheckoutPaymentOptions',
-            component: () => import(/* webpackChunkName: "checkout" */ '../views/client/checkout/CheckoutPaymentOptions.vue'),
+            component: () => import(/* webpackChunkName: "pharmacy" */ '../views/client/checkout/CheckoutPaymentOptions.vue'),
           },
           {
             path: 'receipts',
             name: 'CheckoutReceipts',
-            component: () => import(/* webpackChunkName: "checkout" */ '../views/client/checkout/CheckoutReceipts.vue'),
+            component: () => import(/* webpackChunkName: "pharmacy" */ '../views/client/checkout/CheckoutReceipts.vue'),
           },
         ],
       },

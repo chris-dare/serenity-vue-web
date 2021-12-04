@@ -1,4 +1,4 @@
-import { SET_LOGGED_IN, SET_USER, SET_TOKEN, SET_REFRESH_TOKEN, SET_CURRENT_ORGANIZATION, SET_ORGANIZATIONS } from './mutation-types'
+import { SET_LOGGED_IN, SET_USER, SET_TOKEN, SET_REFRESH_TOKEN, SET_CURRENT_ORGANIZATION, SET_ORGANIZATIONS, SET_CURRENT_ORGANIZATION_ROLE } from './mutation-types'
 
 export default {
   [SET_LOGGED_IN](state, loggedIn) {
@@ -25,5 +25,10 @@ export default {
   [SET_CURRENT_ORGANIZATION](state, data) {
     const provider = state.provider || {}
     state.provider = Object.assign(provider, { ...data, practitionerRoleId: data.id, id: data.organization_uuid})
+  },
+
+  [SET_CURRENT_ORGANIZATION_ROLE](state, data) {
+    const provider = state.provider || {}
+    state.provider.permissions = Object.assign(provider.permissions, { ...data })
   },
 }

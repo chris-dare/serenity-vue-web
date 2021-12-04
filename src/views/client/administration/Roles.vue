@@ -36,7 +36,7 @@
               </p>
               <p
                 class="cursor-pointer"
-                @click="$trigger('role:edit:open', {...row})"
+                @click="$trigger('role:edit:open', { ...row })"
               >
                 Edit
               </p>

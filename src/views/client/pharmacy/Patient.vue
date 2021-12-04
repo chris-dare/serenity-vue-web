@@ -18,18 +18,14 @@
         :links="links"
       />
       <router-view />
-      <!-- <PatientPrescriptionModal :medication-requests="activeMedications" /> -->
     </div>
   </AppStatePage>
 </template>
 
 <script>
-/* eslint-disable */
 import { mapState, mapActions, mapGetters } from 'vuex'
 import DetailPageNav from '@/components/patients/DetailPageNav'
 import Medication from '@carbon/icons-vue/es/medication/32'
-import PatientPrescriptionModal from '@/components/pharmacy/modals/PatientPrescriptionModal'
-import EncounterPrescriptionsApi from '@/api/encounter-prescriptions.js'
 import PatientInfoCard from '@/components/patients/PatientInfoCard'
 
 export default {
@@ -38,8 +34,7 @@ export default {
   components: {
     DetailPageNav,
     Medication,
-    PatientPrescriptionModal,
-    PatientInfoCard
+    PatientInfoCard,
   },
 
   props: {

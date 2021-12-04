@@ -1,7 +1,7 @@
 <template>
   <MultiStepBase
     :icon="icon"
-    next-label="Complete payment"
+    next-label="Dispense medication"
     :loading="loading"
     @back="$router.back()"
     @cancel="cancel"
@@ -14,7 +14,7 @@
       </div>
       <div class="my-6 h-0 border-t border-solid border-dark border-opacity-10" />
       <ModeOfPayment
-        v-model="form"
+        v-model="form.payment_info"
         :v="$v"
         show-cash-options
         :total="cartTotal"
@@ -29,6 +29,7 @@ import ModeOfPayment from '@/components/payment/ModeOfPayment'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { required, minValue, requiredIf } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
+import paymentMixin from '@/mixins/payment'
 import MedicationAPI from '@/api/medication'
 
 export default {
@@ -36,13 +37,15 @@ export default {
 
   components: { ModeOfPayment },
 
-  mixins: [MultiStep],
+  mixins: [MultiStep, paymentMixin],
 
   data() {
     return {
       next: 'CheckoutReceipts',
       previous: 'CheckoutSelectPatient',
-      form: {},
+      form: {
+        payment_info: {},
+      },
       loading: false,
       parent: 'Dashboard',
     }
@@ -77,18 +80,22 @@ export default {
   },
 
   validations() {
-    if(this.form.transaction_type === 'cash'){
+    if(this.form.payment_info.transaction_type === this.$global.CASH_TYPE){
       return {
         form: {
-          amount: { required, minValue: minValue(this.cartTotal) },
+          payment_info: {
+            amount: { required, minValue: minValue(this.cartTotal) },
+          },
         },
       }
     }
     return {
       form: {
-        account_id: { required: requiredIf(() => {
-          return this.hasPaymentPermission
-        }) },
+        payment_info: {
+          account_id: { required: requiredIf(() => {
+            return this.hasPaymentPermission
+          }) },
+        },
       },
     }
   },
@@ -160,12 +167,7 @@ export default {
       }
       if (this.hasPaymentPermission) {
         payload.with_payment = true
-        payload.payment_info = {
-          transaction_type: this.form.transaction_type,
-          amount: this.form.amount,
-          currency: this.form.currency,
-          account_id: this.form.account_id,
-        }
+        payload.payment_info = this.getPaymentParams(this.form.payment_info)
       } else {
         payload.with_payment = false
         delete payload.payment_info
@@ -181,6 +183,8 @@ export default {
       }
       this.loading =  false
     },
+
+
   },
 }
 </script>

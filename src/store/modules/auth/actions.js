@@ -1,5 +1,5 @@
 import AuthAPI from '@/api/auth'
-import { SET_LOGGED_IN, SET_USER, SET_TOKEN, SET_REFRESH_TOKEN, SET_ORGANIZATIONS, SET_CURRENT_ORGANIZATION } from './mutation-types'
+import { SET_LOGGED_IN, SET_USER, SET_TOKEN, SET_REFRESH_TOKEN, SET_ORGANIZATIONS, SET_CURRENT_ORGANIZATION, SET_CURRENT_ORGANIZATION_ROLE } from './mutation-types'
 import router from '@/router'
 
 export default {
@@ -130,5 +130,10 @@ export default {
 
   async refreshCurrentOrganization({commit}, organization) {
     commit(SET_CURRENT_ORGANIZATION, organization)
+  },
+
+  async updateUserPermissions({ commit, state }, role) {
+    if (state.provider.permissions.id !== role.id) return
+    commit(SET_CURRENT_ORGANIZATION_ROLE, role)
   },
 }

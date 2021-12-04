@@ -57,10 +57,8 @@ export default {
         : !!opd ? opd.value
           : workspaces[0].value
 
-    // if (workspaces.find(works => works.value !== workspace)) {
-    //   workspace = workspaces[0].value
-    // }
+    const userHasWorkspace = !!workspaces.find(workspac => workspac.value === workspace)
 
-    commit(SET_GLOBAL_WORKSPACE_TYPE, workspace)
+    commit(SET_GLOBAL_WORKSPACE_TYPE, userHasWorkspace ? workspace : workspaces[0].value)
   },
 }

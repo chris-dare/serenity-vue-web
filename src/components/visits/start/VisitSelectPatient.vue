@@ -5,6 +5,7 @@
     <Search
       v-model="search"
       placeholder="Search for patient, enter name or MR number"
+      class="w-full"
     />
 
     <FilterGroup

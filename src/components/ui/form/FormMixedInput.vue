@@ -13,6 +13,7 @@
     <div class="items-center relative">
       <cv-text-input
         v-model="localValue"
+        v-mask="mask"
         :placeholder="placeholder"
         class="col-span-4 se-no-label"
         :disabled="disabled"
@@ -53,6 +54,10 @@ export default {
       type: String,
       default: '',
     },
+    mask: {
+      type: [String, Object, Function],
+      default: '',
+    },
     label: {
       type: String,
       default: '',
@@ -86,3 +91,17 @@ export default {
   },
 }
 </script>
+
+<style>
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+</style>

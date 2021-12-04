@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import RolesAPI from '@/api/roles'
+import Vue from 'vuex'
 import { SET_ROLES, DELETE_ROLE, UPDATE_ROLE } from './mutation-types'
 
 export default {
@@ -22,16 +23,20 @@ export default {
     commit(UPDATE_ROLE, data.data)
   },
 
-  async updateRole({ commit, rootState}, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await RolesAPI
-      .update(provider.id, payload)
-      .catch((error) => {
-        throw error.data || error
-      })
+  async updateRole({ commit, rootState, dispatch }, payload) {
 
-    commit(UPDATE_ROLE, data.data)
-    return data
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await RolesAPI
+        .update(provider.id, payload)
+
+      commit(UPDATE_ROLE, data.data)
+      dispatch('auth/updateUserPermissions', data.data, { root:true })
+      return data
+    } catch (error) {
+      throw error.data || error
+    }
+    
   },
 
   async duplicateRole({ commit, rootState}, payload) {
