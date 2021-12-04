@@ -26,6 +26,8 @@
         placeholder="Search or choose a lab text to be performed"
         :error-message="$utils.validateRequiredField(v, 'code')"
         required
+        :internal-search="false"
+        @search-change="searchLabProceedures"
       />
 
 
@@ -80,6 +82,7 @@
 import modelMixin from '@/mixins/model'
 import { mapGetters } from 'vuex'
 import ServiceRequestAPI from '@/api/service-requests'
+import debounce from 'lodash/debounce'
 
 export default {
   name: 'ServiceRequestForm',
@@ -136,14 +139,18 @@ export default {
   },
 
   methods: {
-    async getLabProceedures() {
+    async getLabProceedures(params = {}) {
       try {
-        const { data } = await ServiceRequestAPI.getServiceRequestProceedures()
+        const { data } = await ServiceRequestAPI.getServiceRequestProceedures(params)
         this.labProceedures = data
       } catch (error) {
         console.log(error)
       }
     },
+
+    searchLabProceedures: debounce(function(search) {
+      this.getLabProceedures({ search })
+    }, 300, false),
   },
 }
 </script>

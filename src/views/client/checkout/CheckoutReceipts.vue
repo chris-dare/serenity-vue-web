@@ -9,17 +9,19 @@
 
     <template slot="actions">
       <div class="flex items-center justify-between mt-12 mb-6">
-        <div />
-        <div class="flex items-center space-x-2">
-          <div />
-          <SeButton
-            :icon="icon"
-            :loading="loading"
-            @click="print"
-          >
-            Print receipt
-          </SeButton>
-        </div>
+        <SeButton
+          variant="outline"
+          :to="{name: parent}"
+        >
+          Cancel
+        </SeButton>
+        <SeButton
+          :icon="icon"
+          :loading="loading"
+          @click="print"
+        >
+          Print receipt
+        </SeButton>
       </div>
     </template>
   </MultiStepBase>

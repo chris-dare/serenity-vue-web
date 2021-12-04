@@ -36,13 +36,22 @@
           >
             Go back
           </SeButton>
-          <SeButton
-            :icon="icon"
-            :loading="loading"
-            @click="next"
-          >
-            {{ isLastStep ? "Book appointment and Start Visit" : "Next" }}
-          </SeButton>
+          <div class="flex items-center space-x-2">
+            <SeButton
+              v-if="stepComponent === 'VisitPayment'"
+              variant="secondary"
+              @click="skip"
+            >
+              Skip
+            </SeButton>
+            <SeButton
+              :icon="icon"
+              :loading="loading"
+              @click="next"
+            >
+              {{ isLastStep ? "Start Visit" : "Next" }}
+            </SeButton>
+          </div>
         </div>
       </AppRegisterLayout>
     </template>
@@ -51,6 +60,7 @@
 
 <script>
 import modalMixin from '@/mixins/modal'
+import paymentMixin from '@/mixins/payment'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import isToday from 'date-fns/isToday'
 import parseISO from 'date-fns/parseISO'
@@ -70,7 +80,7 @@ export default {
 
   components: { VisitSelectPatient, SelectClinic, VisitSelectSlot, VisitNotesForm, VisitPayment, AppointmentDetail },
 
-  mixins: [modalMixin],
+  mixins: [modalMixin, paymentMixin],
 
   data() {
     return {
@@ -199,6 +209,12 @@ export default {
     },
   },
 
+  watch: {
+    step() {
+      this.loading = false
+    },
+  },
+
   methods: {
     ...mapActions({
       getData: 'patients/getPatients',
@@ -248,6 +264,7 @@ export default {
       this.form.slot = slot ? {
         ...slot.slot,
         practitioner_name: slot.practitioner.full_name,
+        practitioner_role: slot.practitioner.practitioner_role,
       } : null
     },
 
@@ -271,10 +288,10 @@ export default {
         return
       }
 
-      if (this.step === 5 && this.form.amount && this.form.transaction_type === 'cash') {
-        this.receiveCash()
-        return
-      }
+      // if (this.step === 5 && this.form.amount && this.form.transaction_type === 'cash') {
+      //   this.receiveCash()
+      //   return
+      // }
 
       if (this.step === 2) {
         this.checkForSpecialty()
@@ -282,6 +299,11 @@ export default {
       }
 
       this.step = this.step + 1
+    },
+
+    skip() {
+      this.form.transaction_type = null
+      this.next()
     },
 
     previous() {
@@ -317,6 +339,7 @@ export default {
           transaction_type: this.form.transaction_type,
           price_tier: this.form.service_tier?.value,
           location: this.$locationId,
+          ...this.getPaymentParams(this.form),
         })
         this.$toast.open({ message: 'The visit has started' })
         this.loading = false

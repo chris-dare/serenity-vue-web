@@ -4,7 +4,7 @@
       v-model="localValue.account_id"
       :options="corporateAccounts"
       title="Corporate accounts"
-      track-by="id"
+      track-by="uuid"
       :custom-label="customLabel"
       custom-field="uuid"
       preselect

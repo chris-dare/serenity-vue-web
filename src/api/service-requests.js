@@ -29,8 +29,8 @@ export default {
     return http.delete(`${this.url}${providerId}/servicerequests/${id}`)
   },
 
-  getServiceRequestProceedures() {
-    return http.get('providers/valueset/diagnostic-order-type')
+  getServiceRequestProceedures(params) {
+    return http.get('providers/valueset/diagnostic-order-type',{ params })
   },
 
   getServiceRequestSectionTypes() {
