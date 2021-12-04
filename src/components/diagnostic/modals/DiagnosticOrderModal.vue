@@ -190,7 +190,7 @@
               class="mx-3"
               @click="makePayment"
             >
-              Receive payment
+              Raise bill / Receive payment
             </SeButton>
           </div>
           <div v-else>
