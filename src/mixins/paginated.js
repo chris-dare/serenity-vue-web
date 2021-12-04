@@ -12,6 +12,7 @@ export default {
       params: {
         page: 1,
         page_size: 10,
+        search: '',
       },
       filter: '',
       dataMeta: null,
