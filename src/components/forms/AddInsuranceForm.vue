@@ -173,7 +173,7 @@ export default {
         period_end: { required },
         health_policy: { required },
         contribution_type: { required },
-        contribution_value: { required, minValue: minValue(0), maxValue: maxValue(100)},
+        contribution_value: { required },
         first_name: { required },
         last_name: { required },
         gender: { required },
@@ -181,6 +181,10 @@ export default {
         mobile: { required },
         email: { required },
       },
+    }
+
+    if (this.localValue.contribution_type === 'COPAY') {
+      data.contribution_value = { required, minValue: minValue(0), maxValue: maxValue(100)}
     }
     return data
   },
