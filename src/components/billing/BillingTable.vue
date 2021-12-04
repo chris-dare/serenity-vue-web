@@ -142,7 +142,7 @@ export default {
       return [
         { label: 'View bill', event: 'view', show: true },
         { label: 'Print bill', event: 'print', show: true },
-        { label: row.status_display === 'Paid' ? 'Refund bill' : row.status === 'cancelation-approved' ? 'Cancel Bill' : row.status === 'cancelation-requested' ? 'Approve Request' : 'Submit Request', event: 'cancel', show: true },
+        { label: row.status_display === 'Paid' ? 'Refund bill' : row.status === 'cancelation-approved' ? 'Cancel Bill' : row.status === 'cancelation-requested' ? 'Approve Request' : 'Cancel Request', event: 'cancel', show: true },
       ]
     },
 
