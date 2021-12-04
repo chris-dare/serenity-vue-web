@@ -187,14 +187,6 @@
             class="flex items-center"
           >
             <SeButton
-              v-if="form.is_available_at_provider"
-              class="mx-3"
-              :loading="loading"
-              @click="raiseBill"
-            >
-              Raise bill
-            </SeButton>
-            <SeButton
               class="mx-3"
               @click="makePayment"
             >
@@ -308,7 +300,7 @@
             <SeButton
               v-if="form.price_tier"
               class="mx-3"
-              :loading="loading"
+              :loading="raiseLoading"
               @click="raiseBill"
             >
               Raise bill
@@ -368,6 +360,7 @@ export default {
       appendLoading: false,
       sampleRejected: false,
       loading: false,
+      raiseLoading: false,
       append: false,
       rejectLoading: false,
       removedObservations: [],
@@ -684,22 +677,21 @@ export default {
       }
     },
     async raiseBill() {
-      console.log(this.form)
       try {
-        this.loading = true
-        let payload = {
+        this.raiseLoading = true
+        let payload = [{
           service_request: this.form.id, // a service request raised by a patient
           healthcare_service: this.form.healthcare_service,
-          price_tier: this.form.price_tier,
-        }
+          price_tier: this.form.price_tier.id,
+        }]
 
         await this.raiseBillForService(payload)
 
         this.$toast.open( 'Bill successfully raised' )
-        this.loading = false
+        this.raiseLoading = false
         this.getData(this.params)
       } catch (error) {
-        this.loading = false
+        this.raiseLoading = false
       }
     },
   },
