@@ -83,7 +83,7 @@
               :key="index"
               class="space-y-1"
             >
-              <li class="text-sm">{{ diag.code }}</li>
+              <li class="text-sm">{{ diag.display }} - {{ diag.priority }} - {{ diag.purpose }}</li>
             </div>
           </div>
         </div>
@@ -112,7 +112,7 @@
               class="space-y-1"
             >
               <li class="text-sm">
-                {{ $utils.getFirstData(medication.medication_detail) }} -
+                {{ $utils.getFirstData(medication.medication_detail) }} {{ $utils.getFirstData(medication.medication_detail) }} {{ $utils.getFirstData(medication.medication_request_dosage_instruction, 'strength') }} -
                 {{ $utils.getFirstData(medication.medication_request_dosage_instruction, 'period') }} {{ $utils.getFirstData(medication.medication_request_dosage_instruction, 'period_unit') }}
                 {{ $utils.getFirstData(medication.medication_request_dosage_instruction, 'frequency') }} {{ $utils.getFirstData(medication.medication_request_dosage_instruction, 'frequency_unit') }}
               </li>

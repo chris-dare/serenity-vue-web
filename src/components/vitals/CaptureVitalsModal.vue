@@ -17,6 +17,7 @@
           :disabled="vital.disabled"
           :placeholder="vital.placeholder"
           :invalid-message="$utils.validateRequiredField($v, vital.code)"
+          :type="vital.type"
           @input="setBMI(vital.code)"
         />
       </div>
@@ -92,6 +93,7 @@ export default {
         option.type = option.code === 'BMI' ? 'number' : 'text'
         option.placeholder = option.code === 'BLOOD_PRESSURE' ? '120/80' : ''
         option.mask = option.code === 'BLOOD_PRESSURE' ? '###/###' : ''
+        option.type = option.code === 'BLOOD_PRESSURE' ? 'text' : 'number'
         return option
       })
     },

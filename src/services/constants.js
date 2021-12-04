@@ -6,6 +6,7 @@ export default {
       CASH_TYPE: 'cash',
       INSURANCE_TYPE: 'insurance',
       COPAY: 'COPAY',
+      COINSURANCE: 'COINSURANCE',
     }
   },
 }
