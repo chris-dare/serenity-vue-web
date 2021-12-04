@@ -128,7 +128,7 @@ export default {
 
     amountLeft() {
       if (!this.selected.coverage) return 0
-      return parseFloat(this.total) - parseFloat(this.selected.coverage.contribution_value)
+      return parseFloat(this.total) - (this.selected.coverage.contribution_type === 'COPAY' ? parseFloat(this.selected.coverage.contribution_value) : ((100 - parseFloat(this.selected.coverage.contribution_value)/100) * parseFloat(this.total)))
     },
 
     hasToTopUp() {

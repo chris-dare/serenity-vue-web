@@ -187,6 +187,7 @@
             class="flex items-center"
           >
             <SeButton
+              v-if="form.is_available_at_provider"
               class="mx-3"
               :loading="loading"
               @click="raiseBill"
@@ -303,12 +304,22 @@
           >
             Go back
           </SeButton>
-          <SeButton
-            :loading="loading"
-            @click="completePayment"
-          >
-            Make payment
-          </SeButton>
+          <div class="flex">
+            <SeButton
+              v-if="form.price_tier"
+              class="mx-3"
+              :loading="loading"
+              @click="raiseBill"
+            >
+              Raise bill
+            </SeButton>
+            <SeButton
+              :loading="loading"
+              @click="completePayment"
+            >
+              Make payment
+            </SeButton>
+          </div>
         </div>
       </div>
     </template>
@@ -673,12 +684,13 @@ export default {
       }
     },
     async raiseBill() {
+      console.log(this.form)
       try {
         this.loading = true
         let payload = {
           service_request: this.form.id, // a service request raised by a patient
           healthcare_service: this.form.healthcare_service,
-          price_tier: this.form.price_tier.id,
+          price_tier: this.form.price_tier,
         }
 
         await this.raiseBillForService(payload)
