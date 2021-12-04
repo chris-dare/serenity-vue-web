@@ -77,11 +77,9 @@ export default {
   //   },
   // },
 
-  created() {
+  async created() {
 
-    this.initApp()
-
-    
+    await this.initApp()
   },
 
   methods: {

@@ -119,6 +119,7 @@
       </div>
 
       <div
+        v-if="isDiagnostic"
         class="space-y-8"
       >
         <MultiSelect
@@ -291,6 +292,7 @@ export default {
 
   created() {
     this.getCategories()
+    this.getServiceTypes()
   },
 
   methods: {
@@ -298,6 +300,7 @@ export default {
       addToStoreData: 'services/addToCurrentService',
       refreshCurrentService: 'services/refreshCurrentService',
       getCategories: 'resources/getCategories',
+      getServiceTypes: 'resources/getServiceTypes',
     }),
 
     save() {

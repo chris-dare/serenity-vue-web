@@ -120,7 +120,7 @@
 <script>
 import { mapState } from 'vuex'
 import modelMixin from '@/mixins/model'
-import { required } from 'vuelidate/lib/validators'
+import { required, minValue, maxValue } from 'vuelidate/lib/validators'
 import InsuranceAPI from '@/api/insurance'
 import AddPatientForm from '@/components/forms/AddPatientForm'
 
@@ -181,6 +181,10 @@ export default {
         mobile: { required },
         email: { required },
       },
+    }
+
+    if (this.localValue.contribution_type === 'COPAY') {
+      data.contribution_value = { required, minValue: minValue(0), maxValue: maxValue(100)}
     }
     return data
   },

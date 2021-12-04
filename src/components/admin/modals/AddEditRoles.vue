@@ -1,10 +1,7 @@
 <template>
   <BaseModal
-    class="se-no-title-modal"
     :name="name"
-    height="auto"
     :title="type === 'update' ? 'Edit Role' : 'Duplicate Role'"
-    scrollable
     @closed="close"
   >
     <template>
@@ -37,7 +34,7 @@
             placeholder="Search for feature"
           />
 
-          <div class="h-96 overflow-auto">
+          <div>
             <div class="grid grid-cols-4 items-center h-8 bg-gray-100">
               <p
                 v-for="(item, index) in columns"
@@ -96,8 +93,12 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
+import modalMixin from '@/mixins/modal'
+
 export default {
   name: 'AddEditRole',
+
+  mixins: [modalMixin],
 
   data() {
     return {
@@ -132,14 +133,19 @@ export default {
     ...mapState({
       resources: (state) => state.resources.resources,
       workspaces: (state) => state.workspaces.workspaces,
-
     }),
+
     ...mapGetters({
       resourceInd: 'resources/resources',
     }),
+
     filteredResourceInd(){
       return this.resourceInd.filter(el => {
         return el.rootLabel.toLowerCase().includes(this.search.toLowerCase())
+      }).sort(function(a, b){
+        if(a.rootLabel < b.rootLabel) { return -1 }
+        if(a.rootLabel > b.rootLabel) { return 1 }
+        return 0
       })
     },
   },
@@ -150,12 +156,12 @@ export default {
     },
     'role:edit:open': function(data){
       this.open()
-      this.form = this.$utils.formatIncomingRoles(data.params[0])
+      this.form = this.$utils.formatIncomingRoles({ ...data.params[0], permissions: {...data.params[0].permissions} })
       this.type = 'update'
     },
     'role:duplicate:open': function(data){
       this.open()
-      this.form = this.$utils.formatIncomingRoles(data.params[0])
+      this.form = this.$utils.formatIncomingRoles({ ...data.params[0], permissions: {...data.params[0].permissions} })
       this.form.name += ' Duplicate'
       this.type = 'duplicate'
     },
@@ -249,6 +255,8 @@ export default {
 
       this.loading = false
     },
+
+    afterCloseFunction() {},
   },
 }
 </script>

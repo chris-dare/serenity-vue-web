@@ -19,9 +19,10 @@
     </div>
     <p class="text-primary mb-4">Select your patient below</p>
     <Search
-      v-model="search"
+      v-model="params.search"
       placeholder="Search for patient, enter name or MR number"
       class="mb-4"
+      @input="searchData"
     />
     <cv-data-table-skeleton
       v-if="dataLoading"
@@ -29,7 +30,6 @@
       :rows="3"
     />
 
-    <!-- header -->
     <div v-else>
       <div
         :class="[`grid-cols-${columns.length + 1}`]"
@@ -43,13 +43,12 @@
           <p class="font-semibold">{{ column }}</p>
         </div>
       </div>
-      <!-- body -->
       <div
 
         class="divide-y divide-dark divide-opacity-10 divide-solid"
       >
         <div
-          v-for="(row, rowIndex) in normalizedData"
+          v-for="(row, rowIndex) in data.slice(0,5)"
           :key="`${rowIndex}`"
           :class="[`grid-cols-${columns.length + 1}`, internalPatient.id === row.id ? 'bg-gray-100' : 'bg-white']"
           class="grid grid-cols-3 gap-4 items-center hover:bg-gray-100 p-4 cursor-pointer"
@@ -69,13 +68,12 @@
             />
           </div>
         </div>
-        <cv-pagination
-          :number-of-items="dataCount"
-          :page="page"
-          :backwards-button-disabled="page === 1"
-          :forwards-button-disabled="false"
-          :page-sizes="pagination.pageSizes"
-          @change="storePagination"
+        
+        <Pagination
+          v-model="params.page"
+          :total="dataCount"
+          :page-size="params.page_size"
+          @change="actionOnPagination"
         />
       </div>
     </div>
@@ -84,23 +82,25 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import debounce from 'lodash/debounce'
-import data from '@/mixins/data'
+import DataMixin from '@/mixins/paginated'
 import isEmpty from 'lodash/isEmpty'
+import Pagination from '../../patients/Pagination.vue'
 
 export default {
   name: 'SelectPatientTable',
 
-  mixins: [data],
+  components: {Pagination},
+
+  mixins: [DataMixin],
 
   props: {
     columns: {
       type: Array,
-      default:() => [],
+      default: () => [],
     },
     patient: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     dataLoading: {
       type: Boolean,
@@ -112,13 +112,11 @@ export default {
     },
   },
 
-  data () {
+  data() {
     return {
       selected: false,
-      searchTerms: null,
     }
   },
-
 
   computed: {
     ...mapState({
@@ -128,7 +126,6 @@ export default {
     ...mapGetters({
       data: 'patients/patients',
     }),
-
     internalPatient: {
       set(val) {
         this.$emit('update:patient', val)
@@ -137,42 +134,25 @@ export default {
         return this.patient
       },
     },
-
     patientSelected() {
       return this.internalPatient && !isEmpty(this.internalPatient)
     },
   },
 
-
-  watch: {
-    search(val) {
-      this.searchPatients(val)
-    },
-  },
-
   created() {
-    this.pageLength = 5
-    this.pageSizes = [5, 10, 15, 20, 25]
+    this.pageSizes = [5, 10, 15]
+    this.params.page_size = 5
+    this.params.useStore = true
     if (!this.hideSelectedPatient && this.patient.first_name) {
-      this.search = this.patient.first_name
+      this.params.search = this.patient.first_name
     }
-  },
-
-
-  mounted() {
-    this.paginate = true
-    this.pageLength = 5
+    this.refresh()
   },
 
   methods: {
     ...mapActions({
       getData: 'patients/getPatients',
-      searchPatientsStore: 'patients/searchPatients',
     }),
-
-    searchPatients: debounce(function(search) {
-      this.searchPatientsStore({ search, page: 1, page_size: 5 })
-    }, 300, false),
   },
 }
 </script>

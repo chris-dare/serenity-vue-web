@@ -81,6 +81,7 @@ import { mapActions, mapState } from 'vuex'
 import MultiStep from '@/mixins/multistep'
 import { requiredIf, email } from 'vuelidate/lib/validators'
 import { emailFormatter } from '@/services/custom-validators'
+import isEmpty from 'lodash/isEmpty'
 
 export default {
   name: 'EmergencyContact',
@@ -149,6 +150,9 @@ export default {
   },
 
   created() {
+    if (isEmpty(this.form.patient_related_person[0])) {
+      this.form.patient_related_person[0] = {}
+    }
     this.getLanguages()
   },
 

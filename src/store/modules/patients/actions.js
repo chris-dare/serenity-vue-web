@@ -60,7 +60,15 @@ export default {
     dispatch('billing/getPatientAccounts', { id }, { root:true })
   },
 
-  async getPatients({ commit, rootState }, params = { page: 1, page_size: 10 }) {
+  async getPatients({ commit, rootState, state }, params = { page: 1, page_size: 10 }) {
+    if (
+      !params.search
+      && params.useStore
+      && state.patients.length
+      && params.page === state.patientsMeta.current
+    ) {
+      return
+    }
     try {
       const provider = rootState.auth.provider
       const { data } = await PatientsAPI.list(provider.id, params)

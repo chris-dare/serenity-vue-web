@@ -55,6 +55,7 @@
               class="pt-3"
               placeholder="Enter a description of the policy"
               :rows="5"
+              required
             />
           </div>
           <div v-if="type === 'update'">
@@ -91,6 +92,7 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import modalMixin from '@/mixins/modal'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'AddNewPolicy',
@@ -129,6 +131,14 @@ export default {
           code: service.code,
         }
       })
+    },
+  },
+
+  validations: {
+    form: {
+      name: { required },
+      service_categories: { required },
+      description: { required },
     },
   },
 
@@ -171,6 +181,15 @@ export default {
     },
 
     async save() {
+      this.$v.$touch()
+
+      if (this.$v.$invalid) {
+        this.$toast.open({
+          message: 'Please these fields are required!',
+          type: 'error',
+        })
+        return
+      }
       this.loading = true
       const id = this.$route.params.id
       let payload = {

@@ -130,7 +130,6 @@
 <script>
 import PaymentDetail from '@/components/payment/PaymentDetail'
 import modalMixin from '@/mixins/modal'
-import { required, minValue } from 'vuelidate/lib/validators'
 import { mapActions, mapGetters } from 'vuex'
 import paymentMixin from '@/mixins/payment'
 import PatientAPI from '@/api/patients'
@@ -148,6 +147,9 @@ export default {
     return {
       bill: {
         patient: {},
+        cancelation : {
+          reason: '',
+        },
       },
       done: false,
       form: {
@@ -177,6 +179,7 @@ export default {
       }
       this.getPatientAccounts({ id: this.bill.patientid })
       this.form.transaction_type = this.$global.USER_ACCOUNT_TYPE
+      this.form.cancelation.reason = this.bill.cancelation.reason || ''
       this.type = this.bill.line_items ? 'invoice' : 'charge'
       const patient = await PatientAPI.get(this.$providerId, this.bill.patientid)
       this.patient = patient.data.data
@@ -184,23 +187,6 @@ export default {
     'billing:cancel:close': function(){
       this.close()
     },
-  },
-
-  validations() {
-    if(this.form.transaction_type === 'cash'){
-      return {
-        form: {
-          amount: { required, minValue: minValue(this.bill.charge) },
-          currency: { required },
-        },
-      }
-    } else {
-      return {
-        form: {
-          account_id: { required },
-        },
-      }
-    }
   },
 
   computed: {

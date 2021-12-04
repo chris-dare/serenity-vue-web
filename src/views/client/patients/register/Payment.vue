@@ -58,6 +58,7 @@ import { emailFormatter } from '@/services/custom-validators'
 import PatientAPI from '@/api/patients'
 import InsuranceAPI from '@/api/insurance'
 import omit from 'lodash/omit'
+import isEmpty from 'lodash/isEmpty'
 // import pick from 'lodash/pick'
 
 export default {
@@ -109,7 +110,9 @@ export default {
   },
 
   created() {
-    this.getPaymentMethods()
+    if (isEmpty(this.form.patient_top_up_payment_methods[0])) {
+      this.form.patient_top_up_payment_methods[0] = {}
+    }
     this.getMobileMoneyVendors()
   },
 
@@ -121,7 +124,7 @@ export default {
       refresh: 'patients/refreshCurrentPatient',
       createPatient: 'patients/createPatient',
       updatePatient: 'patients/updatePatient',
-      getPaymentMethods: 'resources/getPaymentMethods',
+      
       getMobileMoneyVendors: 'resources/getMobileMoneyVendors',
     }),
 

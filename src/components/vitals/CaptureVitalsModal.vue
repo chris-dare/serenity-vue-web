@@ -11,11 +11,13 @@
           v-for="(vital, index) in units"
           :key="index"
           v-model="form[vital.code]"
+          :mask="vital.mask"
           :suffix-text="vital.display"
           :label="vital.label"
           :disabled="vital.disabled"
           :placeholder="vital.placeholder"
           :invalid-message="$utils.validateRequiredField($v, vital.code)"
+          :type="vital.type"
           @input="setBMI(vital.code)"
         />
       </div>
@@ -42,6 +44,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import debounce from 'lodash/debounce'
+import isEmpty from 'lodash/isEmpty'
 import { required } from 'vuelidate/lib/validators'
 const bpvalidator = (value) => !!value?.includes('/')
 import modalMixin from '@/mixins/modal'
@@ -80,6 +83,7 @@ export default {
   computed: {
     ...mapState({
       vitalsOptions: state => state.resources.vitalsUnitTypes,
+      currentEncounter: state => state.encounters.currentEncounter,
     }),
 
     units() {
@@ -88,6 +92,8 @@ export default {
         option.disabled = option.code === 'BMI'
         option.type = option.code === 'BMI' ? 'number' : 'text'
         option.placeholder = option.code === 'BLOOD_PRESSURE' ? '120/80' : ''
+        option.mask = option.code === 'BLOOD_PRESSURE' ? '###/###' : ''
+        option.type = option.code === 'BLOOD_PRESSURE' ? 'text' : 'number'
         return option
       })
     },
@@ -126,6 +132,9 @@ export default {
         this.loading = false
         this.close()
       } catch (error) {
+        if (isEmpty(this.currentEncounter)) {
+          this.$toast.error('This patient has no encounter')
+        }
         this.loading = false
       }
     },

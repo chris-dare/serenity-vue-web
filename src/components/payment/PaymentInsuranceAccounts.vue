@@ -4,7 +4,7 @@
       v-model="localValue.account_id"
       :options="insuranceAccounts"
       title="Insurance accounts"
-      track-by="id"
+      track-by="uuid"
       label="description"
       custom-field="uuid"
       :multiple="false"
@@ -126,9 +126,23 @@ export default {
       return this.insuranceAccounts.find(insuranceAccount => insuranceAccount.uuid === this.localValue.account_id)
     },
 
+    insuranceType() {
+      if (!this.selected?.coverage?.contribution_type) return this.$global.COPAY
+      return this.selected.coverage.contribution_type
+    },
+
     amountLeft() {
       if (!this.selected.coverage) return 0
-      return parseFloat(this.total) - parseFloat(this.selected.coverage.contribution_value)
+      const contributionValue = parseFloat(this.selected.coverage.contribution_value)
+      let amount = this.insuranceType === this.$global.COINSURANCE ?
+        (contributionValue / 100) * parseFloat(this.total) :
+        contributionValue
+
+      // check to make sure that the value isn't greater than the total
+      if (amount > this.total) {
+        amount = this.total
+      }
+      return amount > 0 ? amount : 0
     },
 
     hasToTopUp() {
@@ -149,14 +163,18 @@ export default {
 
     onInput() {
       this.v.$touch()
-
       
       if (this.hasToTopUp) {
         this.isCopayment = true
         this.localValue.copayment_info = {
           transaction_type: this.$global.CASH_TYPE,
         }
-      } 
+      } else {
+        this.isCopayment = false
+        this.localValue.copayment_info = null
+      }
+
+      this.v.$reset()
     },
   },
 }

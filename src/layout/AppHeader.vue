@@ -162,29 +162,20 @@ export default {
       // this.open = this.isTablet
       await this.getLocations(false)
 
-      this.selectedLocation = localStorage.getItem('location') ? localStorage.getItem('location') : this.locations.length ? this.locations[0].id : ''
+      let location = localStorage.getItem('location') ? localStorage.getItem('location') : this.locations.length ? this.locations[0].id : ''
+      const locationExists = !!this.locations.find(lc => lc.value === location)
+
+      this.selectedLocation = locationExists ? location : this.locations[0].id
     },
 
     changeWorkspace(value) {
       this.setworkspaceType(value)
       this.$router.push({ name: this.workspaceType === 'ADMIN' ? 'GetStarted' : 'Dashboard'}).catch(()=>{})
-
-      
     },
 
     change() {
       this.open = !this.open
       this.$trigger('update:nav', this.open)
-    },
-
-    setDefaultWorkspace() {
-      const admin = this.workspaces.find(workspace => workspace.value === 'ADMIN')
-      const opd = this.workspaces.find(workspace => workspace.value === 'ADMIN')
-      let workspace = localStorage.getItem('workspace') ? localStorage.getItem('workspace')
-        : !!admin ? admin.value
-          : !!opd ? opd.value
-            : this.workspaces[0].value
-      this.setworkspaceType(workspace)
     },
   },
 }

@@ -21,7 +21,6 @@
               class="col-span-2"
             />
             <div
-              v-else
               class="grid grid-cols-2 gap-8 col-span-2"
             >
               <FormInput
@@ -212,6 +211,7 @@ export default {
       updateClient: 'clients/update',
       addEmployee: 'corporate/createCorporateEmployee',
       updateEmployee: 'corporate/updateCorporateEmployee',
+      getEmployees: 'corporate/getCorporate',
     }),
 
     submit(){
@@ -239,7 +239,9 @@ export default {
       try {
         await this.addEmployee({ id, form: this.form })
         this.$toast.open('Client employee successfully created')
-        this.$resetData()
+        this.getEmployees( id )
+        this.loading = false
+        this.close()
         // if (data) {
         //   this.$toast.open({
         //     message: 'Client employee successfully created',
