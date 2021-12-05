@@ -10,7 +10,7 @@
         :options="options"
         :multiple="false"
         :searchable="true"
-        :internal-search="true"
+        :internal-search="false"
         :clear-on-select="false"
         :close-on-select="false"
         :limit="3"

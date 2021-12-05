@@ -1,11 +1,21 @@
 <template>
   <div>
-    <div class="bx--label space-x-1">
+    <div class="bx--label space-x-1 flex items-center">
       <span
         v-if="required"
         class="error"
       >*</span>
-      {{ title }}
+      <span>{{ title }}</span>
+
+      <cv-tooltip
+        v-if="information"
+        :tip="information"
+      >
+        <Information
+          v-if="information"
+          class="w-4 h-4"
+        />
+      </cv-tooltip>
     </div>
     <div class="flex item-center group relative">
       <VueMultiselect
@@ -69,10 +79,12 @@
 <script>
 import VueMultiselect from 'vue-multiselect'
 import isEmpty from 'lodash/isEmpty'
+import Information from '@carbon/icons-vue/es/information/32'
+
 export default {
   name: 'MultiSelect',
 
-  components: { VueMultiselect },
+  components: { VueMultiselect, Information },
 
   props: {
     options: {
@@ -136,6 +148,11 @@ export default {
     required: {
       type: Boolean,
       default: false,
+    },
+
+    information: {
+      type: String,
+      default: '',
     },
   },
 

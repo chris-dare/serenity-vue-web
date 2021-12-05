@@ -3,7 +3,7 @@
     :name="name"
     height="auto"
     scrollable
-    :title="type === 'update' ? 'Update Employee' : 'Add new employee'"
+    :title="type === 'update' ? 'Update Employee' : 'Add New employee'"
     @closed="close"
   >
     <template>
