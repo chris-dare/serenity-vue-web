@@ -266,6 +266,7 @@
           v-model="form"
           :v="$v"
           :total="form.price_tier ? form.price_tier.charge : 0"
+          :patient="patient"
         >
           <MultiSelect
             v-if="!form.is_available_at_provider"
@@ -287,6 +288,7 @@
             label="display"
             placeholder="Search or choose a lab text to be performed"
             :invalid-message="$utils.validateRequiredField($v, 'price_tier')"
+            information="Please select a service and price tier to raise a bill"
           />
         </ModeOfPayment>
         <div class="flex items-center justify-between mt-12">
@@ -368,6 +370,7 @@ export default {
       tier: '',
       specimenTypes: [],
       name: 'diagnostic-order-modal',
+      patient: null,
     }
   },
 
@@ -384,6 +387,8 @@ export default {
       } else {
         this.pay = !this.pay
       }
+
+      this.patient = { id: this.form.patient, ...this.form.patient_detail, last_name: this.form.patient_detail?.lastname}
       this.specimen = !!this.form.specimen
     },
   },
