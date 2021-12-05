@@ -298,7 +298,6 @@
           </SeButton>
           <div class="flex">
             <SeButton
-              v-if="form.price_tier"
               class="mx-3"
               :loading="raiseLoading"
               @click="raiseBill"
@@ -693,6 +692,14 @@ export default {
       }
     },
     async raiseBill() {
+
+      if (!this.form.price_tier) {
+        this.$toast.open({
+          message: 'Please the price tier is required!',
+          type: 'error',
+        })
+        return
+      }
       try {
         this.raiseLoading = true
         let payload = [{
@@ -708,6 +715,10 @@ export default {
         this.getData(this.params)
       } catch (error) {
         this.raiseLoading = false
+        this.$toast.open({
+          message: error.message || 'Raising bill unsuccessful!',
+          type: 'error',
+        })
       }
     },
   },
