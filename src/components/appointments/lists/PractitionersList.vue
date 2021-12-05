@@ -40,12 +40,11 @@
               :doctor="doctor"
             />
           </div>
-          <cv-pagination
-            :number-of-items="normalizedData.length"
-            :page="page" 
-            :backwards-button-disabled="page === 1"
-            :forwards-button-disabled="false"
-            :page-sizes="pagination.pageSizes"
+
+          <Pagination
+            :value="page"
+            :total="normalizedData.length"
+            :page-size="5"
             @change="actionOnPagination"
           />
         </div>
@@ -56,13 +55,14 @@
 
 <script>
 import PractionersListItem from '@/components/appointments/lists/PractitionersListItem'
+import Pagination from '@/components/patients/Pagination'
 import modelMixin from '@/mixins/model'
 import dataMixin from '@/mixins/data'
 
 export default {
   name: 'PractitionersList',
 
-  components: {PractionersListItem},
+  components: { PractionersListItem, Pagination },
 
   mixins: [modelMixin, dataMixin],
 

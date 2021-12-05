@@ -398,3 +398,8 @@ button:focus {
 .bx--tooltip__trigger:not(.bx--btn--icon-only){
   font-size: inherit;
 }
+
+.bx--number input[type='number']{
+    width: 100%;
+    min-width: fit-content;
+}

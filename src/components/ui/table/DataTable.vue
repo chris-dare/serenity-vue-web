@@ -11,8 +11,6 @@
       :data="[]"
       :columns="columns"
       :class="{'small-table': small}"
-      :pagination="paginationDetails"
-      @pagination="onPageChange"
     >
       <template slot="data">
         <cv-data-table-row
@@ -30,6 +28,13 @@
         </cv-data-table-row>
       </template>
     </cv-data-table>
+    <Pagination
+      v-if="paginationDetails"
+      :value="paginationDetails.page"
+      :total="paginationDetails.numberOfItems"
+      :page-size="paginationDetails.itemsPerPage"
+      @change="onPageChange"
+    />
     <slot
       v-if="noData && !loading"
       class="text-center w-full"
@@ -43,8 +48,11 @@
 </template>
 
 <script>
+import Pagination from '@/components/patients/Pagination'
 export default {
   name: 'DataTable',
+
+  components: {Pagination},
 
   props: {
     columns: {
