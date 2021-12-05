@@ -135,6 +135,7 @@ export default {
     if (this.modal) {
       this.pageSizes = [5, 10, 15]
       this.params.page_size = 5
+      this.params.useStore = true
     }
   },
 

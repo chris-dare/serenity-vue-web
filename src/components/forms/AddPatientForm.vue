@@ -41,7 +41,6 @@
         :multiple="false"
         :invalid-message="$utils.validateRequiredField($v, 'gender', 'localValue')"
         required
-        @input="$v.$touch()"
       />
       <DatePicker
         v-model="localValue.birth_date"
@@ -79,11 +78,14 @@
 </template>
 
 <script>
+/* eslint-disable no-unused-vars */
+
 import { mapState } from 'vuex'
 import modelMixin from '@/mixins/model'
 import { required, email } from 'vuelidate/lib/validators'
 import UsersAPI from '@/api/users'
 import { emailFormatter } from '@/services/custom-validators'
+import isEmpty from 'lodash/isEmpty'
 
 export default {
   name: 'AddPatientForm',
@@ -129,8 +131,8 @@ export default {
           email: (val) => email(emailFormatter(val)),
           required,
           async isUnique(value) {
-            if (value === '' || !this.$v.localValue.email.email || this.allowExisting) return true
-            const { data } = await UsersAPI.search({ email: value.toLowerCase() }).catch(() => false)
+            if (isEmpty(value) || !this.$v.localValue.email.email || this.allowExisting) return true
+            const { data } = await UsersAPI.search({ email: value?.toLowerCase() }).catch(() => false)
 
             if (data && data.length) {
               return false
@@ -142,7 +144,7 @@ export default {
         mobile: {
           required,
           async isUnique(value) {
-            if (value === '' || value?.length < 10 || this.allowExisting) return true
+            if (isEmpty(value) || value?.length < 10 || this.allowExisting) return true
             const { data } = await UsersAPI.search({ mobile: value }).catch(() => false)
 
             if (data.length) {

@@ -63,6 +63,7 @@ module.exports = {
       }),
       minWidth: {
         32: '8rem',
+        8: '2rem',
       },
       transformOrigin: {
         0: '0',

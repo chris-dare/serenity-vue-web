@@ -2,12 +2,6 @@
   <div class="space-y-4">
     <p class="text-primary font-semibold">Find patient</p>
 
-    <Search
-      v-model="search"
-      placeholder="Search for patient, enter name or MR number"
-      class="w-full"
-    />
-
     <FilterGroup
       v-model="selectedFilter"
       :filters="filters"
@@ -29,14 +23,23 @@
         </div>
       </div>
 
-      <div v-else>
+      <div
+        v-else
+        class="space-y-4"
+      >
+        <Search
+          v-model="params.search"
+          placeholder="Search for patient, enter name or MR number"
+          class="w-full"
+          @input="searchData"
+        />
         <DataTable
           ref="table"
           :columns="columns"
           :pagination="pagination"
-          :data="filteredData"
+          :data="data.slice(0,5)"
           :loading="loading"
-          @pagination="storePagination"
+          @pagination="actionOnPagination"
         >
           <template #default="{ row }">
             <cv-data-table-cell>
@@ -71,11 +74,10 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
-import DataMixin from '@/mixins/data'
+import DataMixin from '@/mixins/paginated'
 import modelMixin from '@/mixins/model'
 import AddPatientForm from '@/components/forms/AddPatientForm'
 import { required } from 'vuelidate/lib/validators'
-import debounce from 'lodash/debounce'
 
 export default {
   name: 'VisitPatient',
@@ -114,10 +116,6 @@ export default {
   },
 
   watch: {
-    search(val) {
-      this.searchPatients(val)
-    },
-
     selectedFilter(val) {
       if (val === 'new') {
         this.localValue.patient = {}
@@ -127,8 +125,12 @@ export default {
 
   beforeMount() {
     this.pageSizes = [5, 10, 15]
-    this.pageLength = 5
-    this.refresh({ page: 1, page_size: 5 })
+    this.params.page_size = 5
+    this.params.useStore = true
+  },
+
+  mounted() {
+    this.refresh()
   },
 
   validations: {
@@ -146,7 +148,6 @@ export default {
   methods: {
     ...mapActions({
       getData: 'patients/getPatients',
-      searchPatientsStore: 'patients/searchPatients',
     }),
 
     start(row) {
@@ -167,10 +168,6 @@ export default {
 
       this.$emit('create')
     },
-
-    searchPatients: debounce(function(search) {
-      this.searchPatientsStore({ search, page: 1, page_size: 5 })
-    }, 300, false),
   },
 }
 </script>
