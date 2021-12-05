@@ -34,7 +34,7 @@
           <cv-data-table-cell>
             <div class="flex items-center py-2">
               <InfoImageBlock
-                :label="$utils.customNameLabel(row.user) | capitalize"
+                :label="$utils.customNameLabel(row || row.user) | capitalize"
                 :description="`${$utils.concatData(row, ['gender', 'age'], ', ')} ${row.age ? 'years' : ''}`"
                 :url="row.photo"
                 size="base"

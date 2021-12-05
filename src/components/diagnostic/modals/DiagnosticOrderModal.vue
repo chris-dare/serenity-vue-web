@@ -642,6 +642,25 @@ export default {
       }
     },
 
+    getPaymentParams(details) { 
+      if (details.transaction_type === this.$global.CASH_TYPE) {
+        return {
+          amount: details.amount,
+          currency: details.currency || 'GHS',
+          transaction_type: this.$global.CASH_TYPE,
+        }
+      }
+      if (details.transaction_type === this.$global.INSURANCE_TYPE) {
+        let paymentInfo = { transaction_type: details.transaction_type, account_id: details.account_id }
+        if (details.copayment_info) {
+          paymentInfo.copayment_info = this.getPaymentParams(details.copayment_info)
+        }
+        return paymentInfo
+      }
+
+      return { transaction_type: details.transaction_type, account_id: details.account_id }
+    },
+
     async completePayment() {
       try {
         this.loading = true
@@ -650,10 +669,7 @@ export default {
             service_request: this.form.id, // a service request raised by a patient
             healthcare_service: this.form.healthcare_service,
             price_tier: this.form.price_tier.id,
-            account_id: this.form.account_id,
-            currency: this.form.currency,
-            amount: this.form.amount,
-            transaction_type: this.form.transaction_type, //user-wallet, corporate-account, mobile-money, cash
+            ...this.getPaymentParams(this.form),
           },
         ]
 
