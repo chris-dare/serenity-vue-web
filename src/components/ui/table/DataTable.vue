@@ -28,13 +28,6 @@
         </cv-data-table-row>
       </template>
     </cv-data-table>
-    <Pagination
-      v-if="paginationDetails"
-      :value="paginationDetails.page"
-      :total="paginationDetails.numberOfItems"
-      :page-size="paginationDetails.itemsPerPage"
-      @change="onPageChange"
-    />
     <slot
       v-if="noData && !loading"
       class="text-center w-full"
@@ -44,6 +37,13 @@
         {{ noDataLabel }}
       </p>
     </slot>
+    <Pagination
+      v-if="paginationDetails"
+      :value="paginationDetails.page"
+      :total="paginationDetails.numberOfItems"
+      :page-size="paginationDetails.itemsPerPage"
+      @change="onPageChange"
+    />
   </div>
 </template>
 
