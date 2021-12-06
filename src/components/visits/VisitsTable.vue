@@ -147,7 +147,7 @@ export default {
     }
     this.paginate = true
     this.getEncounterClasses()
-    this.refresh()
+    this.storePagination({ length: 5, page: 1 })
   },
 
   methods: {
@@ -182,7 +182,7 @@ export default {
     },
 
     async storePagination(ev) {
-      this.pageStart = ev.start
+      this.pageStart = ev.start || 1
       this.pageLength = ev.length
       this.page = ev.page
 

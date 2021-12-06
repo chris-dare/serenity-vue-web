@@ -271,7 +271,7 @@ export default {
       } else {
         this.form.requesting_practitioner_role = this.provider.practitionerRoleId
         this.form.patient = this.$route.params.id
-        this.form.location = this.location.id
+        this.form.location = this.$locationId
         this.form.encounter = this.encounter.id
         this.form.visit_id = this.visitId
         this.save(reroute)

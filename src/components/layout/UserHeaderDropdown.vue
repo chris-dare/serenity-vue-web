@@ -36,6 +36,8 @@
             :class="{'bg-placeholder': $providerId === organization.organization_uuid}"
             @click="switchOrganization(organization)"
           >
+            {{ organization.first_name }}
+            {{ organization.last_name }} -
             {{ organization.organization_name }}
           </div>
         </div>

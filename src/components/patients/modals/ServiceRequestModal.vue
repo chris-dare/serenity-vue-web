@@ -113,6 +113,7 @@ export default {
         this.form.requested_location = this.location.id
         this.form.visit_id = this.visitId
         this.form.encounter = this.encounter.id
+        this.form.location = this.$locationId
         this.form.status = this.$isCurrentWorkspace('IPD') ? 'active' : 'draft'
 
         this.save()
