@@ -43,11 +43,10 @@
       />
     </div>
 
-    <cv-pagination
-      :number-of-items="dataCount"
-      :page="params.page"
-      :page-sizes="pageSizes"
-      class="w-full"
+    <Pagination
+      :value="params.page"
+      :total="dataCount"
+      :page-size="10"
       @change="actionOnPagination"
     />
     <p
@@ -61,13 +60,14 @@
 
 <script>
 import TeamCard from '@/components/team/TeamCard'
+import Pagination from '@/components/patients/Pagination'
 import DataMixin from '@/mixins/paginated'
 import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Team',
 
-  components: {TeamCard},
+  components: { TeamCard, Pagination },
 
   mixins: [DataMixin],
 

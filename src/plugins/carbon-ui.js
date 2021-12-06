@@ -24,7 +24,6 @@ import {
   CvButtonSkeleton,
   CvNumberInput,
   CvDataTableSkeleton,
-  CvPagination,
   CvLoading,
   CvTooltip,
 } from '@carbon/vue/src/index'
@@ -52,6 +51,5 @@ Vue.component(CvInlineNotification.name, CvInlineNotification)
 Vue.component(CvButtonSkeleton.name, CvButtonSkeleton)
 Vue.component(CvNumberInput.name, CvNumberInput)
 Vue.component(CvDataTableSkeleton.name, CvDataTableSkeleton)
-Vue.component(CvPagination.name, CvPagination)
 Vue.component(CvLoading.name, CvLoading)
 Vue.component(CvTooltip.name, CvTooltip)

@@ -10,7 +10,7 @@
       v-model="search"
       :filters="filtering"
     />
-    <!-- <div>{{ filteredData }}</div> -->
+
     <DataTable
       ref="table"
       :data="data"
@@ -34,7 +34,7 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <Tag
-            :variant="row.status === 'sample-collected' ? 'primary' : row.status === 'draft' ? 'error' : 'success'"
+            :variant="getStatusVariant(row.status)"
             :label="row.status"
           />
         </cv-data-table-cell>
@@ -142,6 +142,17 @@ export default {
     ...mapActions({
       getData: 'diagnostic/getServiceRequests',
     }),
+    getStatusVariant(status) {
+      if (status === 'sample-collected') {
+        return 'primary'
+      }
+
+      if (status === 'draft') {
+        return 'error'
+      }
+
+      return 'success'
+    },
   },
 }
 </script>

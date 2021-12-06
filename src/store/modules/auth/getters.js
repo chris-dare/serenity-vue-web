@@ -2,7 +2,7 @@ import get from 'lodash/get'
 import Vue from 'vue'
 export default {
   fullName: state => {
-    return state.user ? `${state.user.first_name} ${state.user.last_name}` : null
+    return state.provider ? `${state.provider.first_name} ${state.provider.last_name}` : state.user ? `${state.user.first_name} ${state.user.last_name}` : null
   },
 
   authorizationHeader: state => {

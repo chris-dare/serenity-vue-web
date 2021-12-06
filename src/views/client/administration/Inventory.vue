@@ -85,7 +85,6 @@
 <script>
 import AddEditInventory from '@/components/admin/modals/AddEditInventory'
 import { mapState, mapActions } from 'vuex'
-// import debounce from 'lodash/debounce'
 import DataMixin from '@/mixins/paginated'
 
 export default {
