@@ -22,6 +22,7 @@
         </SeButton>
         <div class="flex items-center space-x-2">
           <SeButton
+            v-if="canPayForBills"
             :icon="icon"
             :loading="loading"
             @click="next"
@@ -98,8 +99,10 @@ export default {
     },
 
     canPayForBills() {
-      if (!this.form.selectedBills.length) return false
-      return this.type === 'receive' && this.step === 2 && (this.totalUserBalance > this.$utils.getTotalValue(this.form.selectedBills, 'charge'))
+      if (this.type !== 'receive' || this.step === 1) return true
+      if (!this.patientBills.length) return false
+      return this.type === 'receive' && this.step === 2 
+      // && (this.totalUserBalance > this.$utils.getTotalValue(this.form.selectedBills, 'charge'))
     },
   },
 
@@ -198,7 +201,7 @@ export default {
       }
 
       if (this.type === 'receive') {
-        this.payForPendingBills()
+        await this.payForPendingBills()
         return
       }
 
@@ -220,6 +223,7 @@ export default {
           patientId: this.form.patient.uuid,
           walletId: this.userAccounts[0].uuid,
           params: this.form.payment,
+          location: this.$locationId,
         })
 
         this.loading = false
@@ -245,6 +249,7 @@ export default {
           patient: this.form.patient.uuid,
           charge_items: this.form.selectedBills.map(b => b.id),
           payment_info: this.getPaymentParams(this.form.payment),
+          location: this.$locationId,
         })
 
         

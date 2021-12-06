@@ -31,7 +31,7 @@ export default {
     },
 
     pagination() {
-      return { itemsPerPage: this.pageLength, numberOfItems: this.dataCount, pageSizes: this.pageSizes  }
+      return { itemsPerPage: this.pageLength, numberOfItems: this.dataCount, pageSizes: this.pageSizes, page: this.page  }
     },
   },
 

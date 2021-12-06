@@ -18,6 +18,7 @@
         <SeButton
           full
           :variant="failure ? 'warning' : 'primary'"
+          :loading="loading"
           @click="confirm"
         >
           {{ buttonLabel }}
@@ -36,7 +37,7 @@
 <script>
 import StatusSuccess from '@carbon/icons-vue/es/watson-health/ai-status--complete/32'
 import StatusFailure from '@carbon/icons-vue/es/watson-health/ai-status--failed/32'
-import { mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import modalMixin from '@/mixins/modal'
 
 export default {
@@ -52,6 +53,7 @@ export default {
       callback: null,
       type: 'success',
       name: 'end-visit-confirmation-modal',
+      loading: false,
     }
   },
 
@@ -75,6 +77,7 @@ export default {
     }),
     ...mapGetters({
       failure: 'encounters/currentEncounterCannotBeFinished',
+      hasEncounterBegan: 'encounters/hasEncounterBegan',
     }),
 
     label() {
@@ -91,12 +94,16 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      startEncounter: 'encounters/startEncounter',
+    }),
+
     async confirm() {
       if (this.failure) {
-        this.$router.push({ name: 'EncounterReview', params: { encounter: this.encounter.id, id: this.$route.params.id } })
-        this.close()
+        await this.handleFailure()
         return
       }
+
       if (this.callback) {
         try {
           await this.callback(this.data)
@@ -105,6 +112,27 @@ export default {
           //empty
         }
       }
+    },
+
+    async handleFailure() {
+      try {
+        this.loading = true
+        if (!this.hasEncounterBegan) {
+          await this.startEncounter(this.encounter.id)
+          this.goToReview()
+        } else {
+          this.goToReview()
+        }
+      } catch (error) {
+        // 
+      } finally {
+        this.loading = false
+      }
+    },
+
+    goToReview() {
+      this.$router.push({ name: 'EncounterReview', params: { encounter: this.encounter.id, id: this.$route.params.id } })
+      this.close()
     },
   },
 }

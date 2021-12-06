@@ -31,6 +31,7 @@ export default {
           patientId: this.bill.patientid,
           invoiceId: this.bill.invoice_id || this.bill.uuid,
           params: this.getPaymentParams(this.form),
+          location: this.$locationId,
         })
         this.$toast.open('Bill successfully settled')
         this.settled = true
@@ -50,6 +51,7 @@ export default {
           patient: this.bill.patientid,
           charge_items: bills.map(b => b.id),
           payment_info: this.getPaymentParams(this.form),
+          location: this.$locationId,
         })
         this.$toast.open('Bill successfully settled')
         this.settled = true

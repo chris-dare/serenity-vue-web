@@ -347,6 +347,7 @@ export default {
     async startVisit(){
       this.loading = true
       this.form.patient = this.storeData.patient.id
+      this.form.location = this.$locationId
       try {
         await this.createServiceRequest([this.form])
         this.loading = false

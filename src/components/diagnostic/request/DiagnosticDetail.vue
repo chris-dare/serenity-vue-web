@@ -181,6 +181,7 @@ export default {
       payload.healthcare_service = this.summary.code.id
       payload.patient = this.summary.patient.id
       payload.visit = null
+      payload.location = this.$locationId
       await this.createServiceRequest([payload]).then((data) => {
         this.loading = false
         this.$toast.open({
