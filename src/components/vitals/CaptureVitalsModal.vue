@@ -45,8 +45,10 @@
 import { mapActions, mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 import isEmpty from 'lodash/isEmpty'
-import { required, minValue, maxValue } from 'vuelidate/lib/validators'
-const bpvalidator = (value) => !!value?.includes('/')
+import { minValue, maxValue } from 'vuelidate/lib/validators'
+// eslint-disable-next-line no-useless-escape
+const regex = new RegExp(/^\b(29[0-9]|2[0-9][0-9]|[01]?[0-9][0-9]?)\/(29[0-9]|2[0-9][0-9]|[01]?[0-9][0-9]?)$/)
+const bpvalidator = (value) => !!value.match(regex)
 import modalMixin from '@/mixins/modal'
 
 export default {
@@ -102,7 +104,6 @@ export default {
   validations: {
     form: {
       BLOOD_PRESSURE: {
-        required,
         bpvalidator,
       },
       OXYGEN_SATURATION: {
