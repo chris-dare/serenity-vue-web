@@ -6,9 +6,9 @@
     >
       <div class="grid grid-cols-2 gap-4 items-start">
         <MsisdnPhoneInput
-          v-model="form.phone_number"
+          v-model="form.mobile"
           label="Phone number"
-          :error-message="$utils.validateRequiredField($v, 'phone_number')"
+          :error-message="$utils.validateRequiredField($v, 'mobile')"
           required
           @input="$v.$touch()"
         />
@@ -83,7 +83,7 @@ export default {
 
   validations: {
     form: {
-      phone_number: { required, maxLength: maxLength(15), minLength: minLength(9) },
+      mobile: { required, maxLength: maxLength(15), minLength: minLength(9) },
       email: { required, email: (val) => email(emailFormatter(val))},
     },
   },
