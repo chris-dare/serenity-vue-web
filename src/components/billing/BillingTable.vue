@@ -141,7 +141,7 @@ export default {
     tableActions(row) {
       return [
         { label: 'View bill', event: 'view', show: true },
-        { label: row.status === 'billable' ? 'Print bill' : 'Print Transaction', event: 'print', show: true },
+        { label: row.status === 'billable' ? 'Print bill' : 'Print receipt', event: 'print', show: true },
         { label: row.status_display === 'Paid' ? 'Refund bill' : row.status === 'cancelation-approved' ? 'Cancel Bill' : row.status === 'cancelation-requested' ? 'Approve Request' : 'Cancel Request', event: 'cancel', show: true },
       ]
     },
