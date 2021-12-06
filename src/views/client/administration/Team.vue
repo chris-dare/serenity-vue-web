@@ -43,18 +43,20 @@
       />
     </div>
 
-    <Pagination
-      :value="params.page"
-      :total="dataCount"
-      :page-size="10"
-      @change="actionOnPagination"
-    />
+    
     <p
       v-if="noData"
       class="text-center w-full py-6"
     >
       No team members to show
     </p>
+
+    <Pagination
+      :value="params.page"
+      :total="dataCount"
+      :page-size="10"
+      @change="actionOnPagination"
+    />
   </div>
 </template>
 
@@ -91,6 +93,10 @@ export default {
         { display: 'In patient', code: 'in-patient' },
       ]
     },
+  },
+
+  created() {
+    this.refresh()
   },
 
   methods: {
