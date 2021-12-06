@@ -188,16 +188,9 @@
           >
             <SeButton
               class="mx-3"
-              :loading="loading"
-              @click="raiseBill"
-            >
-              Raise bill
-            </SeButton>
-            <SeButton
-              class="mx-3"
               @click="makePayment"
             >
-              Receive payment
+              Raise bill / Receive payment
             </SeButton>
           </div>
           <div v-else>
@@ -273,6 +266,7 @@
           v-model="form"
           :v="$v"
           :total="form.price_tier ? form.price_tier.charge : 0"
+          :patient="patient"
         >
           <MultiSelect
             v-if="!form.is_available_at_provider"
@@ -294,6 +288,7 @@
             label="display"
             placeholder="Search or choose a lab text to be performed"
             :invalid-message="$utils.validateRequiredField($v, 'price_tier')"
+            information="Please select a service and price tier to raise a bill"
           />
         </ModeOfPayment>
         <div class="flex items-center justify-between mt-12">
@@ -303,12 +298,21 @@
           >
             Go back
           </SeButton>
-          <SeButton
-            :loading="loading"
-            @click="completePayment"
-          >
-            Make payment
-          </SeButton>
+          <div class="flex">
+            <SeButton
+              class="mx-3"
+              :loading="raiseLoading"
+              @click="raiseBill"
+            >
+              Raise bill
+            </SeButton>
+            <SeButton
+              :loading="loading"
+              @click="completePayment"
+            >
+              Make payment
+            </SeButton>
+          </div>
         </div>
       </div>
     </template>
@@ -357,6 +361,7 @@ export default {
       appendLoading: false,
       sampleRejected: false,
       loading: false,
+      raiseLoading: false,
       append: false,
       rejectLoading: false,
       removedObservations: [],
@@ -365,6 +370,7 @@ export default {
       tier: '',
       specimenTypes: [],
       name: 'diagnostic-order-modal',
+      patient: null,
     }
   },
 
@@ -381,6 +387,8 @@ export default {
       } else {
         this.pay = !this.pay
       }
+
+      this.patient = { id: this.form.patient, ...this.form.patient_detail, last_name: this.form.patient_detail?.lastname}
       this.specimen = !!this.form.specimen
     },
   },
@@ -638,6 +646,25 @@ export default {
       }
     },
 
+    getPaymentParams(details) { 
+      if (details.transaction_type === this.$global.CASH_TYPE) {
+        return {
+          amount: details.amount,
+          currency: details.currency || 'GHS',
+          transaction_type: this.$global.CASH_TYPE,
+        }
+      }
+      if (details.transaction_type === this.$global.INSURANCE_TYPE) {
+        let paymentInfo = { transaction_type: details.transaction_type, account_id: details.account_id }
+        if (details.copayment_info) {
+          paymentInfo.copayment_info = this.getPaymentParams(details.copayment_info)
+        }
+        return paymentInfo
+      }
+
+      return { transaction_type: details.transaction_type, account_id: details.account_id }
+    },
+
     async completePayment() {
       try {
         this.loading = true
@@ -646,10 +673,7 @@ export default {
             service_request: this.form.id, // a service request raised by a patient
             healthcare_service: this.form.healthcare_service,
             price_tier: this.form.price_tier.id,
-            account_id: this.form.account_id,
-            currency: this.form.currency,
-            amount: this.form.amount,
-            transaction_type: this.form.transaction_type, //user-wallet, corporate-account, mobile-money, cash
+            ...this.getPaymentParams(this.form),
           },
         ]
 
@@ -673,21 +697,33 @@ export default {
       }
     },
     async raiseBill() {
+
+      if (!this.form.price_tier) {
+        this.$toast.open({
+          message: 'Please the price tier is required!',
+          type: 'error',
+        })
+        return
+      }
       try {
-        this.loading = true
-        let payload = {
+        this.raiseLoading = true
+        let payload = [{
           service_request: this.form.id, // a service request raised by a patient
           healthcare_service: this.form.healthcare_service,
           price_tier: this.form.price_tier.id,
-        }
+        }]
 
         await this.raiseBillForService(payload)
 
         this.$toast.open( 'Bill successfully raised' )
-        this.loading = false
+        this.raiseLoading = false
         this.getData(this.params)
       } catch (error) {
-        this.loading = false
+        this.raiseLoading = false
+        this.$toast.open({
+          message: error.message || 'Raising bill unsuccessful!',
+          type: 'error',
+        })
       }
     },
   },

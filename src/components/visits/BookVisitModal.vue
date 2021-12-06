@@ -392,7 +392,7 @@ export default {
       this.loading = true
       try {
         await this.topUpUserAccount({
-          patientId: this.form.patient.id,
+          patientId: this.form.patient.uuid,
           walletId: this.userAccounts[0].uuid,
           params: {
             amount: this.form.amount,

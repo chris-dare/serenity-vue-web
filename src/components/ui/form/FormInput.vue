@@ -2,13 +2,22 @@
   <div>
     <div
       v-if="label"
-      class="space-x-1"
+      class="space-x-1 bx--label"
     >
       <span
         v-if="required"
         class="error"
       >*</span>
-      <span class="bx--label">{{ label }}</span>
+      <span class="">{{ label }}</span>
+      <cv-tooltip
+        v-if="information"
+        :tip="information"
+      >
+        <Information
+          v-if="information"
+          class="w-4 h-4"
+        />
+      </cv-tooltip>
     </div>
     <component
       :is="inputComponent"
@@ -24,8 +33,12 @@
 
 <script>
 import modelMixin from '@/mixins/model'
+import Information from '@carbon/icons-vue/es/information/16'
+
 export default {
   name: 'FormInput',
+
+  components: {Information},
 
   mixins: [modelMixin],
 
@@ -41,6 +54,10 @@ export default {
     required: {
       type: Boolean,
       default: false,
+    },
+    information: {
+      type: String,
+      default: '',
     },
   },
 

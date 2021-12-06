@@ -23,8 +23,9 @@ export default class Patient {
       data.mobile = data.user.mobile
       data.fullName = `${data.user.name_prefix || ''} ${data.user.first_name || ''} ${data.user.last_name || ''}`
       data.name = `${data.user.first_name || ''} ${data.user.last_name || ''}`
-    }else{
+    } else {
       data.fullName = `${data.name_prefix || ''} ${data.first_name || ''} ${data.last_name || data.lastname || ''}`
+      data.name = `${data.first_name || ''} ${data.last_name || ''}`
     }
 
     if (data.gender) {

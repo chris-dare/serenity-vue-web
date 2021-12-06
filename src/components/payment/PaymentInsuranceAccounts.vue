@@ -20,7 +20,7 @@
         <SeButton
           full
           variant="secondary-outline"
-          @click="$trigger('insurance:add:open', localValue.patient || patient)"
+          @click="$trigger('insurance:add:open', selectedPatient)"
         >
           Add new insurance account
         </SeButton>
@@ -147,6 +147,24 @@ export default {
 
     hasToTopUp() {
       return this.amountLeft > 0
+    },
+
+    selectedPatient() {
+      return typeof this.patient !== 'string' ? this.patient : this.localValue.patient
+    },
+  },
+
+  watch: {
+    hasToTopUp: {
+      immediate: true,
+      handler(val){
+        if (val && this.localValue && this.selected) {
+          this.isCopayment = true
+          this.localValue.copayment_info = {
+            transaction_type: this.$global.CASH_TYPE,
+          }
+        }
+      },
     },
   },
 

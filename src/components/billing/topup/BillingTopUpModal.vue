@@ -197,11 +197,6 @@ export default {
         return
       }
 
-      if (!this.userAccounts.length) {
-        this.$toast.error('The top up process requires a user account which this patient does not have.')
-        return
-      }
-
       if (this.type === 'receive') {
         this.payForPendingBills()
         return
@@ -213,8 +208,8 @@ export default {
     async initPaymentStep(id) {
       this.form.selectedBills = []
       this.getPatientAccounts({ id })
-      const { data } = await BillingAPI.patientBills(this.$providerId, id)
-      this.patientBills = data?.data
+      const { data } = await BillingAPI.patientBills(this.$providerId, id, { status: 'billable' })
+      this.patientBills = data?.results
     },
 
     async save() {
@@ -222,7 +217,7 @@ export default {
       try {
         this.form.payment.cashier = this.provider.practitionerRoleId
         await this.topUpUserAccount({
-          patientId: this.form.patient.id,
+          patientId: this.form.patient.uuid,
           walletId: this.userAccounts[0].uuid,
           params: this.form.payment,
         })
@@ -247,7 +242,7 @@ export default {
       try {
         this.loading = true
         await this.payForMultipleChargeItems({
-          patient: this.form.patient.id,
+          patient: this.form.patient.uuid,
           charge_items: this.form.selectedBills.map(b => b.id),
           payment_info: this.getPaymentParams(this.form.payment),
         })

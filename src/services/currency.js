@@ -5,5 +5,6 @@ const cedi = (value, symbol = 'GHS') => currency(value, { symbol, decimal: '.', 
 export default {
   install(Vue) {
     Vue.prototype.$currency = cedi
+    Vue.prototype.$number = currency
   },
 }

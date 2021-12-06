@@ -392,6 +392,7 @@ export default {
   },
 
   mounted() {
+    this.params.available = true
     if(this.mode === 'walk-in'){
       this.currentDrug = {
         filled: false,

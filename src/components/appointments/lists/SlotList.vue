@@ -43,12 +43,11 @@
               :doctor="doctor"
             />
           </div>
-          <cv-pagination
-            :number-of-items="normalizedData.length"
-            :page="page" 
-            :backwards-button-disabled="page === 1"
-            :forwards-button-disabled="false"
-            :page-sizes="pagination.pageSizes"
+          
+          <Pagination
+            :value="page"
+            :total="normalizedData.length"
+            :page-size="5"
             @change="actionOnPagination"
           />
         </div>
@@ -59,13 +58,14 @@
 
 <script>
 import SlotListItem from '@/components/appointments/lists/SlotListItem'
+import Pagination from '@/components/patients/Pagination'
 import modelMixin from '@/mixins/model'
 import dataMixin from '@/mixins/data'
 
 export default {
   name: 'SlotList',
 
-  components: {SlotListItem},
+  components: {SlotListItem, Pagination},
 
   mixins: [modelMixin, dataMixin],
 

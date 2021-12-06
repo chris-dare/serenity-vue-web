@@ -10,7 +10,7 @@
         :options="options"
         :multiple="false"
         :searchable="true"
-        :internal-search="true"
+        :internal-search="false"
         :clear-on-select="false"
         :close-on-select="false"
         :limit="3"
@@ -18,7 +18,7 @@
         :hide-selected="true"
         v-bind="$attrs"
         :loading="loading"
-        @search-change="(val) => fetchPatients(val, true)"
+        @search-change="(val) => throttledSend(val, true)"
         @remove="$emit('remove', $event)"
       />
     </div>
@@ -65,7 +65,7 @@ export default {
   methods: {
     throttledSend: debounce(function(search, userInitiated) {
       this.fetchPatients(search, userInitiated)
-    }, 1500),
+    }, 300),
 
     async fetchPatients(search, userInitiated) {
 
@@ -84,7 +84,7 @@ export default {
     },
 
     customLabel(value) {
-      return this.$utils.concatData(value, ['title', 'first_name', 'other_names', 'last_name'])
+      return this.$utils.concatData(value, ['title', 'first_name', 'other_names', 'last_name', 'mobile'])
     },
   },
 }

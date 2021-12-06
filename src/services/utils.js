@@ -227,9 +227,9 @@ const hasData = (data, field) => {
   return !!(data && data[field])
 }
 
-const concatData = (data, fields) => {
+const concatData = (data, fields, separator = ' ') => {
   if (!data) return ''
-  return fields.map(field => data[field]).filter(name => name).join(' ')
+  return fields.map(field => data[field]).filter(name => name).join(separator)
 }
 
 const getTotalValue = (data, field = 'balance') => {

@@ -55,7 +55,7 @@ export default {
       default: '',
     },
     mask: {
-      type: [String, Object, Function],
+      type: [String, Object, Function, Array],
       default: '',
     },
     label: {
