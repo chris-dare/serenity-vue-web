@@ -41,17 +41,23 @@
                 </div>
               </div>
               <div>
+                <div class="font-sm text-gray-400 mb-2">Period</div>
+                <div>
+                  {{ $utils.getFirstData(currentDrug.drug.medication_request_dosage_instruction, 'period') }}
+                  {{ $utils.getFirstData(currentDrug.drug.medication_request_dosage_instruction, 'period_unit') }}
+                </div>
+              </div>
+              <div>
                 <div class="font-sm text-gray-400 mb-2">Instruction</div>
                 <div>{{ $utils.getFirstData(currentDrug.drug.medication_request_notes) || '-' }}</div>
               </div>
-            </div>
-            <div class="grid grid-cols-4 gap-8 my-4">
+            
               <div>
                 <div class="font-sm text-gray-400 mb-2">Prescribed on</div>
                 <div>{{ $date.formatDate(currentDrug.drug.created_at, 'dd MMM, yyyy @ HH:mm a') }}</div>
               </div>
               <div>
-                <div class="font-sm text-gray-400 mb-2">Note</div>
+                <div class="font-sm text-gray-400 mb-2 col-span-2">Note</div>
                 <div class="capitalize">{{ $utils.getFirstData(currentDrug.drug.medication_request_dosage_instruction, 'frequency') }}</div>
               </div>
             </div>
