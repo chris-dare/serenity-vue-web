@@ -2,7 +2,7 @@
   <BaseModal
     :name="name"
     width="70%"
-    title="Vitals"
+    :title="title"
     @closed="close"
   >
     <template>
@@ -46,9 +46,7 @@ import { mapActions, mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 import isEmpty from 'lodash/isEmpty'
 import { minValue, maxValue } from 'vuelidate/lib/validators'
-// eslint-disable-next-line no-useless-escape
-const regex = new RegExp(/^\b(29[0-9]|2[0-9][0-9]|[01]?[0-9][0-9]?)\/(29[0-9]|2[0-9][0-9]|[01]?[0-9][0-9]?)$/)
-const bpvalidator = (value) => !!value.match(regex)
+import { bpValidator } from '@/services/custom-validators'
 import modalMixin from '@/mixins/modal'
 
 export default {
@@ -72,7 +70,7 @@ export default {
       this.patient = this.$route.params.id
     },
     'reception:capture:vitals:open': async function(data){
-      this.getEncounters({patient: data.params[0].patient, visit: data.params[0].visit, status: 'planned' })
+      this.setVitalsEncounter(data.params[0].encounters[0])
       await this.getVitalsUnitTypes()
       this.open()
       this.patient = data.params[0].patient
@@ -99,12 +97,17 @@ export default {
         return option
       })
     },
+
+    title() {
+      return `Vitals - ${this.currentEncounter?.patient_detail ?
+        this.currentEncounter.patient_detail.first_name: ''} ${this.currentEncounter?.patient_detail ? this.currentEncounter.patient_detail.lastname: ''}`
+    },
   },
 
   validations: {
     form: {
       BLOOD_PRESSURE: {
-        bpvalidator,
+        bpValidator,
       },
       OXYGEN_SATURATION: {
         minValue: minValue(0),
@@ -118,6 +121,7 @@ export default {
       createVitals: 'patients/createVitals',
       getVitalsUnitTypes: 'resources/getVitalsUnitTypes',
       getEncounters: 'encounters/getEncounters',
+      setVitalsEncounter: 'encounters/setVitalsEncounter',
     }),
 
     async save() {
@@ -159,6 +163,10 @@ export default {
 
       this.form.BMI = bmi.toFixed(2)
     }, 300, false),
+
+    afterCloseFunction() {
+      this.setVitalsEncounter(null)
+    },
   },
 }
 </script>

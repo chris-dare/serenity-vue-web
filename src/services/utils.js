@@ -37,7 +37,7 @@ const validateRequiredField = ($v, field, parent = 'form') => {
       return `${formattedField} already exists`
     }
 
-    if($field.bpvalidator === false){
+    if($field.bpValidator === false){
       return `A valid ${formattedField.toLowerCase()} is required`
     }
 
