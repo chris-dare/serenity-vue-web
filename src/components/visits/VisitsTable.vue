@@ -55,7 +55,7 @@
               :actions="tableActions(row)"
               :data-qa="`table-actions-${row.id}`"
               @end="end(row.id)"
-              @vitals="$trigger('reception:capture:vitals:open', { patient: row.patient, visit: row.id })"
+              @vitals="$trigger('reception:capture:vitals:open', { patient: row.patient, visit: row.id, encounters: row.upcoming_encounters })"
               @view="view(row)"
             />
           </div>
