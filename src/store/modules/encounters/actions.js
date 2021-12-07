@@ -53,6 +53,10 @@ export default {
     commit(SET_ENCOUNTER, state.encounters.find(encounter => encounter.id === id))
   },
 
+  setVitalsEncounter({commit}, encounter) {
+    commit(SET_ENCOUNTER, encounter)
+  },
+
   setPatientCurrentEncounter({commit}, encounter) {
     commit(SET_PATIENT_CURRENT_ENCOUNTER, encounter)
   },
