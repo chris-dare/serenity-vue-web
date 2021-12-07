@@ -290,17 +290,6 @@ export default {
       this.loading = false
     },
 
-    // this.$v.$touch()
-
-    // if (this.$v.$invalid) {
-    //   this.$toast.error(this.getValidationMessages(this.$v.form))
-    //   return
-    // }
-
-    // const bills = this.type === 'invoice' ? this.bill.line_items : [this.bill]
-
-    // this.payChargeItems(bills)
-
     afterCloseFunction() {
       this.resetPatientAccounts()
     },
