@@ -3,7 +3,7 @@
     :name="name"
     height="auto"
     scrollable
-    :title="type === 'update' ? 'Update Employee' : 'Add New employee'"
+    :title="type === 'update' ? 'Update Employee' : 'Add New Employee'"
     @closed="close"
   >
     <template>
@@ -11,7 +11,7 @@
         <FilterGroup
           v-model="selected"
           :filters="filters"
-          class="my-3"
+          class="mb-3"
         />
         <div>
           <div class="grid grid-cols-2 gap-8 my-3">
