@@ -83,6 +83,15 @@
               <p>{{ $date.formatDate(row.encounter_medication_request[0].created_at, 'dd MMM, yyyy') }}</p>
             </div>
           </cv-data-table-cell>
+          <!-- <cv-data-table-cell>
+            <div>
+              <Tag
+                :variant="getStatusVariant(row.status)"
+              >
+                {{ row.status }}
+              </Tag>
+            </div>
+          </cv-data-table-cell> -->
           <cv-data-table-cell v-if="$isCurrentWorkspace('PHARM')">
             <slot
               name="action"
@@ -134,6 +143,15 @@
                 <cv-data-table-cell>
                   <div>
                     <p>{{ $utils.getFirstData(request.row.medication_request_notes, 'display') }}</p>
+                  </div>
+                </cv-data-table-cell>
+                <cv-data-table-cell>
+                  <div>
+                    <Tag
+                      :variant="getStatusVariant(request.row.status)"
+                    >
+                      {{ request.row.status }}
+                    </Tag>
                   </div>
                 </cv-data-table-cell>
                 <cv-data-table-cell>
@@ -227,6 +245,7 @@ export default {
         'Requester',
         'Priority',
         'Date prescribed',
+        // 'Status'
       ]
 
       if (this.$isCurrentWorkspace('PHARM')) {
@@ -242,6 +261,7 @@ export default {
         'Frequency',
         'Duration',
         'Special Instruction',
+        'Status'
       ]
 
       if (this.$isCurrentWorkspace('OPD')) {
@@ -305,6 +325,18 @@ export default {
         })
       this.prescriptions.loading = false
       this.prescriptions.data = prescriptions
+    },
+
+    getStatusVariant(status) {
+      if (status === 'billable') {
+        return 'primary'
+      }
+
+      if (status === 'completed') {
+        return 'error'
+      }
+
+      return 'success'
     },
   },
 }
