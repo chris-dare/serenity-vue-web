@@ -132,7 +132,7 @@ export default {
     },
 
     amountLeft() {
-      if (!this.selected.coverage) return 0
+      if (!this.selected?.coverage) return 0
       const contributionValue = parseFloat(this.selected.coverage.contribution_value)
       let amount = this.insuranceType === this.$global.COINSURANCE ?
         (contributionValue / 100) * parseFloat(this.total) :

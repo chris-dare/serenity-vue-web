@@ -17,6 +17,13 @@
       <CurrencySelect v-model="localValue.currency" />
 
       <p
+        v-if="false"
+        class="text-secondary"
+      >
+        Balance: {{ remainingBalance }}
+      </p>
+
+      <p
         v-if="$utils.validateRequiredField(v, 'amount') || isValueInvalid"
         class="error col-span-6"
       >
@@ -51,6 +58,10 @@ export default {
   computed: {
     isValueInvalid() {
       return Number(this.localValue.amount) < Number(this.total)
+    },
+
+    remainingBalance() {
+      return 0
     },
   },
 
