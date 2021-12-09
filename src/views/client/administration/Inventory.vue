@@ -26,6 +26,7 @@
         placeholder="Search for inventory item"
         @input="searchData"
       />
+
       <DataTable
         ref="table"
         :data="data"
@@ -90,7 +91,7 @@ import DataMixin from '@/mixins/paginated'
 export default {
   name: 'Inventory',
 
-  components: {AddEditInventory},
+  components: { AddEditInventory },
 
   mixins: [DataMixin],
 
@@ -116,6 +117,7 @@ export default {
   },
 
   created() {
+    // this.params.search = ''
     this.refresh()
   },
 

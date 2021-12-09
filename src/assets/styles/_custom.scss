@@ -299,6 +299,17 @@ button:focus {
     @apply bg-white;
   }
 }
+.multiselect-borderless{
+  .multiselect__single{
+   @apply mt-1;
+  }
+  .multiselect{
+    width: 60px !important;
+  }
+  .multiselect__tags{
+    @apply rounded-none border-0;
+  }
+}
 
 .vue__time-picker, .vue-phone-number-input{
   @apply h-10 w-full;

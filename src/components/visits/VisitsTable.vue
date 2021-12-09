@@ -12,7 +12,7 @@
 
     <DataTable
       :columns="columns"
-      :data="normalizedData"
+      :data="data"
       :loading="loading"
       no-data-label="You have no visits"
       :pagination="pagination"
@@ -76,7 +76,7 @@ import debounce from 'lodash/debounce'
 export default {
   name: 'VisitsTable',
 
-  components: {CaptureVitalsModal},
+  components: { CaptureVitalsModal },
 
   mixins: [DataMixin],
 
@@ -138,6 +138,11 @@ export default {
     filter(search) {
       this.searchVisits(search)
     },
+
+    selected() {
+      this.pageLength = this.data.length
+      this.page = 1
+    },
   },
 
   beforeMount() {
@@ -147,7 +152,7 @@ export default {
     }
     this.paginate = true
     this.getEncounterClasses()
-    this.storePagination({ length: 5, page: 1 })
+    this.getData({ page_size: 5, page: 1 })
   },
 
   methods: {
