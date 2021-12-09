@@ -303,6 +303,7 @@ export default {
   computed: {
     ...mapState({
       patient: (state) => state.checkout.existingPatient,
+      currentPatient: (state) => state.patients.currentPatient,
       provider: (state) => state.auth.provider,
       data: (state) => state.inventory.inventory,
     }),
@@ -524,12 +525,12 @@ export default {
         })
         return
       }
-      this.addCartItems({items})
+      this.addCartItems({ items })
       this.setAction('medicationDispense')
       if(this.$route.query.type !== 'existing'){
         this.setCheckoutPatient(null)
       }else{
-        this.setCheckoutPatient(this.patient)
+        this.setCheckoutPatient(this.patient || this.currentPatient)
       }
       this.$router.push({name: 'Pharmacy:Dispense'})
     },
