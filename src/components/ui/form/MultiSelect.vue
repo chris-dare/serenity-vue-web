@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="bx--label space-x-1 flex items-center">
+    <div
+      v-if="title"
+      class="bx--label space-x-1 flex items-center"
+    >
       <span
         v-if="required"
         class="error"
