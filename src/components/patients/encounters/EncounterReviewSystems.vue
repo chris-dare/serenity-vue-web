@@ -11,6 +11,7 @@
       custom-field="code"
       :error-message="$utils.validateRequiredField($v, 'unit')"
       required
+      open-direction="bottom"
     />
 
     <FormInput

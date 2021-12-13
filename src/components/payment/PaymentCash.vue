@@ -6,7 +6,7 @@
     >
       Patient should pay <span class="text-lg font-semibold">{{ $currency(total).format() }}</span> to cashier
     </p>
-    <div class="mt-2 grid grid-cols-6 items-end">
+    <div class="mt-2 grid grid-cols-6 items-end gap-y-2">
       <cv-text-input
         v-model="localValue.amount"
         type="number"
@@ -17,10 +17,10 @@
       <CurrencySelect v-model="localValue.currency" />
 
       <p
-        v-if="false"
-        class="text-secondary"
+        v-if="remainingBalance"
+        class="text-secondary col-span-6"
       >
-        Balance: {{ remainingBalance }}
+        Change: {{ $currency(remainingBalance).format() }}
       </p>
 
       <p
@@ -61,7 +61,8 @@ export default {
     },
 
     remainingBalance() {
-      return 0
+      if ((!this.localValue.amount && !this.total) || this.isValueInvalid) return null
+      return  Number(this.localValue.amount) - Number(this.total) 
     },
   },
 
