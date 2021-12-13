@@ -36,6 +36,7 @@ export default {
   computed: {
     ...mapState({
       visits: state => state.visits.visits,
+      practitionerVisits: (state) => state.visits.practitionerVisits,
       bills: state => state.billing.billing,
       serviceRequests: state => state.diagnostic.serviceRequests,
       medicationRequests: state => state.patients.patientMedications,
@@ -61,6 +62,10 @@ export default {
           }
           return bill
         })
+      }
+
+      if (this.$isCurrentWorkspace('OPD')) {
+        return this.practitionerVisits
       }
 
       return this.visits
