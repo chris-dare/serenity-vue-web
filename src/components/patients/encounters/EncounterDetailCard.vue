@@ -6,7 +6,7 @@
     v-else
     class="bg-white pb-4"
   >
-    <div class="p-4 grid grid-cols-2">
+    <div class="p-4 grid grid-cols-2 relative">
       <div>
         <p class="text-secondary">Doctor in charge</p>
         <InfoImageBlock
@@ -22,6 +22,14 @@
           </p>
         </div>
       </div>
+
+      <IconButton
+        class="absolute right-4 top-4"
+        :loading="loading"
+        @click="goToWizard"
+      >
+        <Edit class="w-4 h-4 text-serenity-primary" />
+      </IconButton>
     </div>
     <div>
       <ToggleList
@@ -118,7 +126,7 @@ import EncounterDiagnosis from './EncounterDiagnosis'
 import EncounterNotes from './EncounterNotes'
 import EncounterServiceRequests from './EncounterServiceRequests'
 import EncounterDiagnosticReports from './EncounterDiagnosticReports'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import isEmpty from 'lodash/isEmpty'
 
 export default {
@@ -133,6 +141,12 @@ export default {
     SocialHistoryDetails: () => import('@/components/patients/details/SocialHistoryDetails'),
     EncounterReviewSystemTable: () => import(/* webpackPrefetch: true */ './EncounterReviewSystemTable'),
     EncounterMedicationTable: () => import(/* webpackPrefetch: true */ '@/components/patients/encounters/EncounterMedicationTable'),
+  },
+
+  data() {
+    return {
+      loading: false,
+    }
   },
 
   computed: {
@@ -157,6 +171,30 @@ export default {
     },
   },
 
+  methods: {
+    ...mapActions({
+      startEncounter: 'encounters/startEncounter',
+    }),
+
+    async goToWizard() {
+      if (this.currentEncounter.status === 'in-progress' || this.currentEncounter.status === 'finished') {
+        this.$router.push({ name: 'EncounterReview', params: { encounter: this.currentEncounter.id, id: this.$route.params.id } })
+        return
+      }
+
+      try {
+        this.loading = true
+        await this.startEncounter(this.currentEncounter.id)
+        this.$router.push({ name: 'EncounterReview', params: { encounter: this.currentEncounter.id, id: this.$route.params.id } })
+        this.loading = false
+      } catch (error) {
+        console.log('er', error.data)
+      } finally {
+        this.loading = false
+      }
+      
+    },
+  },
 
 }
 </script>
