@@ -70,7 +70,6 @@ export default {
       this.patient = this.$route.params.id
     },
     'reception:capture:vitals:open': async function(data){
-      console.log('current', data.params[0].encounters[0])
       // this.getEncounters({patient: data.params[0].patient, visit: data.params[0].visit.id, status: 'planned' })
       this.setVitalsEncounter(data.params[0].encounters[0])
       await this.getVitalsUnitTypes()

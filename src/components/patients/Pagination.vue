@@ -1,48 +1,57 @@
 <template>
-  <div class="flex items-center justify-between">
-    <div v-if="total">
-      <p>Total: {{ $number(total, { precision: 0, separator: ',', symbol: ''}).format() }}</p>
+  <div class="flex items-center justify-between border-t border-solid border-serenity-dark bg-tetiary h-10 divide-x divide-serenity-dark my-4">
+    <div class="flex items-center bg-serenity-dark gap-x-px h-full">
+      <div
+        v-if="pageSizes"
+        class="flex items-center space-x-2 bg-tetiary px-2 h-full"
+      >
+        <p class="text-xs">Items per page:</p>
+        <MultiSelect
+          v-model="pageSize"
+          :options="pageSizes"
+          :custom-label="customLabel"
+          class="multiselect-borderless"
+          :searchable="false"
+          @select="onChangePageSize"
+        />
+      </div>
+      <div
+        v-if="total"
+        class="flex items-center bg-tetiary px-2 h-full"
+      >
+        <p class="text-xs">Total: {{ $number(total, { precision: 0, separator: ',', symbol: ''}).format() }} items</p>
+      </div>
     </div>
-    <div class="flex items-center justify-center space-x-1 py-4">
+    <div class="grid grid-cols-4 bg-serenity-dark gap-x-px h-full">
+      <div class="col-span-2 flex items-center bg-tetiary px-2 border-l border-serenity-dark">
+        <MultiSelect
+          v-model="localValue"
+          :options="normalizedVisiblePages"
+          :custom-label="customLabel"
+          class="multiselect-borderless"
+          :options-limit="4"
+          @select="onChange"
+        />
+        <p class="text-xs">of {{ $number(numberOfPages, { precision: 0, separator: ',', symbol: ''}).format() }}</p>
+      </div>
       <button
         :disabled="localValue === 1"
         role="button"
-        class="bg-gray-200 rounded h-8 w-8 flex items-center justify-center"
-        :class="{'cursor-not-allowed bg-opacity-40': localValue === 1}"
+        class="flex items-center justify-center bg-tetiary px-2 h-full hover:bg-gray-200"
+        :class="{'cursor-not-allowed': localValue === 1}"
         @click="onChange(localValue-1)"
       >
         <ChevronLeft />
       </button>
       <button
-        v-for="(visiblePage, index) in normalizedVisiblePages"
-        :key="index"
-        role="button"
-        class="bg-gray-200 rounded h-8 w-auto min-w-8 px-2 flex items-center justify-center"
-        :class="{ 'text-serenity-primary font-bold': visiblePage === localValue }"
-        @click="onChange(visiblePage)"
-      >
-        {{ visiblePage }}
-      </button>
-      <button
         :disabled="localValue === numberOfPages"
         role="button"
-        class="bg-gray-200 rounded h-8 w-8 flex items-center justify-center"
-        :class="{'cursor-not-allowed bg-opacity-40': localValue === numberOfPages}"
+        class="flex items-center justify-center bg-tetiary px-2 h-full hover:bg-gray-200"
+        :class="{'cursor-not-allowed': localValue === numberOfPages}"
         @click="onChange(localValue + 1)"
       >
         <ChevronRight />
       </button>
-    </div>
-
-    <div class="flex items-center">
-      <p>Go to:</p>
-      <FormInput
-        :value="localValue"
-        type="number"
-        class="w-20"
-        :max="numberOfPages"
-        @input="staggerChange"
-      />
     </div>
   </div>
 </template>
@@ -51,11 +60,12 @@
 import modelMixin from '@/mixins/model'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/16'
 import ChevronLeft from '@carbon/icons-vue/es/chevron--left/16'
-import debounce from 'lodash/debounce'
+import throttle from 'lodash/throttle'
 
 export default {
   name: 'Pagination',
 
+  // eslint-disable-next-line vue/no-unused-components
   components: { ChevronRight, ChevronLeft },
 
   mixins: [modelMixin],
@@ -70,11 +80,15 @@ export default {
       type: Number,
       default: 5,
     },
+    pageSizes: {
+      type: Array,
+      default: () => [5, 10, 15,20,50],
+    },
   },
 
   data() {
     return {
-      visiblePagesCount: 5,
+      visiblePagesCount: 10,
     }
   },
 
@@ -141,9 +155,22 @@ export default {
       })
     },
 
-    staggerChange: debounce(function(value) {
+    staggerChange: throttle(function(value) {
       this.onChange(value)
     }, 300),
+
+    onChangePageSize(value) {
+      this.$emit('change', {
+        page: this.localValue,
+        page_size: value,
+        length: value,
+        start: this.pageStart,
+      })
+    },
+
+    customLabel (value) {
+      return value
+    },
   },
 }
 </script>
