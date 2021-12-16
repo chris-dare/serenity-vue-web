@@ -23,7 +23,7 @@
         />
         <InfoBlock
           label="Phone Number"
-          :description="patient.user ? patient.user.mobile : '-'"
+          :description="patient.phone"
         />
         <InfoBlock
           label="Address"
@@ -31,7 +31,7 @@
         />
         <InfoBlock
           label="Email"
-          :description="patient.user ? patient.user.email : '-'"
+          :description="patient.email"
         />
       </div>
     </div>
