@@ -43,16 +43,16 @@
           <SeButton
             :icon="icon"
             :loading="loading"
-            @click="onSave"
+            @click="dispense(false)"
           >
             Raise bill
           </SeButton>
           <SeButton
             :icon="icon"
             :loading="loading"
-            @click="dispense(false)"
+            @click="onSave"
           >
-            Dispense medication
+            Receive Payment
           </SeButton>
         </div>
       </div>
