@@ -76,7 +76,7 @@ export default {
         let patient = data.patient_detail ? data.patient_detail : data.patient ? data.patient : {}
         return {
           fullName: this.$utils.concatData(patient, ['first_name', 'lastname']),
-          time: data.authored_on || data.created_at || data.arrived_at || data.occurrence_date,
+          time: data.next_encounter_due || data.authored_on || data.created_at || data.arrived_at || data.occurrence_date,
           mobile: patient.mobile,
           id: patient.id || data.patient,
           due: patient.due,
