@@ -112,6 +112,30 @@ export default {
     priceTier() {
       return `${this.$currency(this.selectedPriceTier.charge, this.selectedPriceTier.currency).format()} - ${this.selectedPriceTier.description}`
     },
+
+    options() {
+      let options = [
+        {
+          hide: !this.$userCan('bills.acceptuseraccount.write'),
+        },
+        {
+          hide: !this.$userCan('bills.acceptcorporate.write'),
+        },
+        {
+          hide: !this.$userCan('bills.acceptinsurance.write'),
+        },
+        {
+          hide: !this.$userCan('bills.acceptcash.write'),
+        },
+      ]
+
+      return options
+    },
+
+    hasNoOptions() {
+      let availableOptions = this.options?.find(option => !option.hide)
+      return !availableOptions
+    },
   },
 
   validations() {
@@ -150,21 +174,30 @@ export default {
       this.refresh()
     },
 
-    save() {
-      this.$v.$touch()
+    save() {  
+      if(!this.hasNoOptions){
+        this.$v.$touch()
 
-      if (this.$v.$invalid) {
-        this.$toast.error('Please select an account')
-        return
+        if (this.$v.$invalid) {
+          this.$toast.error('Please select an account')
+          return
+        }
+        this.addToCurrentAppointment( this.form)
+
+        if (this.modal) {
+          this.$emit('next')
+          return
+        }
+
+        this.$router.push({ name: 'DiagnosticSummary' })
+      } else {
+        if (this.modal) {
+          this.$emit('next')
+          return
+        }
+
+        this.$router.push({ name: 'DiagnosticSummary' })
       }
-      this.addToCurrentAppointment( this.form)
-
-      if (this.modal) {
-        this.$emit('next')
-        return
-      }
-
-      this.$router.push({ name: 'DiagnosticSummary' })
     },
   },
 }

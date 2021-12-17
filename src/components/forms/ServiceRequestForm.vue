@@ -46,7 +46,7 @@
       <FormInput
         v-model="localValue.note"
         label="Note"
-        placeholder="Leave a note for the lab tecnician"
+        placeholder="Leave a note for the lab technician"
         :rows="4"
         type="textarea"
         class="col-span-2 se-input-gray"
