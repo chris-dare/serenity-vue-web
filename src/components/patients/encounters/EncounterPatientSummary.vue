@@ -15,9 +15,9 @@
       <div>
         <p v-if="props.patient">{{ props.patient.name }}</p>
         <p v-else>--</p>
-        <p class="text-secondary  capitalize">
-          <template v-if="patient">
-            {{ props.patient.gender_age_description }}
+        <p class="text-secondary capitalize">
+          <template v-if="props.patient">
+            {{ props.patient.gender_age_description }}, {{ props.patient.mr_number }}
           </template>
           <template v-else>--</template>
         </p>
@@ -28,7 +28,7 @@
       </div>
     </div>
     <div
-      v-if="patient"
+      v-if="props.patient"
       class="grid grid-cols-3 gap-4"
     >
       <InfoSubBlock

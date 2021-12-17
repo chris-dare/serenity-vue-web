@@ -152,9 +152,15 @@ export default {
       return (index) => this.initialSelected === index
     },
   },
+
+  created() {
+    this.setCheckoutPatient(this.patient)
+  },
+
   methods: {
     ...mapActions({
       getPatientAccounts: 'billing/getPatientAccounts',
+      setCheckoutPatient: 'checkout/setCheckoutPatient',
     }),
   },
 }

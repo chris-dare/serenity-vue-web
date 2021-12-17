@@ -30,13 +30,13 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ row.assigned_to_name }}</p>
+            <p>{{ row.assigned_to_name | capitalize }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ $date.formatDate(row.arrived_at, 'dd MMM, yyyy') }}</p>
-            <p class="text-secondary text-xs">{{ $date.formatDate(row.arrived_at, 'HH:mm a') }}</p>
+            <p>{{ $date.formatDate(row.next_encounter_due, 'dd MMM, yyyy') }}</p>
+            <p class="text-secondary text-xs">{{ $date.formatDate(row.next_encounter_due, 'HH:mm a') }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -97,7 +97,7 @@ export default {
       columns: [
         'Patient',
         'Assigned to',
-        'Date',
+        'Encounter due in',
         'Type',
         'Status',
         'Action',
@@ -151,6 +151,7 @@ export default {
       this.pageLength = 5
     }
     this.paginate = true
+    this.selected = this.$isCurrentWorkspace('OPD') ? 'my' : 'all'
     this.getEncounterClasses()
     this.getData({ page_size: 5, page: 1 })
   },

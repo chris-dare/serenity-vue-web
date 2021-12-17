@@ -142,7 +142,26 @@ export default {
       return [
         { label: 'View bill', event: 'view', show: true },
         { label: row.status === 'billable' ? 'Print bill' : 'Print receipt', event: 'print', show: true },
-        { label: row.status_display === 'Paid' ? 'Refund bill' : row.status === 'cancelation-approved' ? 'Cancel Bill' : row.status === 'cancelation-requested' ? 'Approve Request' : 'Cancel Request', event: 'cancel', show: true },
+        {
+          label: 'Refund bill',
+          event: 'cancel',
+          show: row.status_display === 'Paid',
+        },
+        {
+          label: 'Cancel Bill',
+          event: 'cancel',
+          show: row.status === 'cancelation-approved' && this.$userCan('bills.finishcancelation.write'),
+        },
+        {
+          label: 'Approve Request',
+          event: 'cancel',
+          show: row.status === 'cancelation-requested' && this.$userCan('bills.approvecancelation.write'),
+        },
+        {
+          label: 'Request Cancelation',
+          event: 'cancel',
+          show: row.status_display !== 'Paid' && row.status !== 'cancelation-requested' && row.status !== 'cancelation-approved' && this.$userCan('bills.requestcancelation.write'),
+        },
       ]
     },
 

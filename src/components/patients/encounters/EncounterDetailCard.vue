@@ -22,14 +22,15 @@
           </p>
         </div>
       </div>
-
-      <IconButton
-        class="absolute right-4 top-4"
-        :loading="loading"
-        @click="goToWizard"
-      >
-        <Edit class="w-4 h-4 text-serenity-primary" />
-      </IconButton>
+      <div class="absolute right-4 top-4">
+        <IconButton
+          v-if="$userCan('encounters.pastencounters.write')"
+          :loading="loading"
+          @click="goToWizard"
+        >
+          <Edit class="w-4 h-4 text-serenity-primary" />
+        </IconButton>
+      </div>
     </div>
     <div>
       <ToggleList
