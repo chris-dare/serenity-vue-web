@@ -33,7 +33,7 @@
           <cv-text-area
             v-model="form.patient_instruction"
             label="Note"
-            placeholder="Leave a note for the lab tecnician"
+            placeholder="Leave a note for the lab technician"
             :rows="4"
             class="col-span-2"
           />

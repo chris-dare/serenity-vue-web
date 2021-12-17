@@ -27,7 +27,7 @@
         <cv-text-area
           v-model="form.notes"
           label="Note"
-          placeholder="Leave a note for the lab tecnician"
+          placeholder="Leave a note for the lab technician"
           :rows="10"
         />
         <SeButton>Add Test <Add class="w-4 h-4 text-white ml-4" /></SeButton>
