@@ -73,6 +73,7 @@
                 Print
               </SeButton>
               <SeButton
+                v-if="$userCan('bills.approvecancelation.write')"
                 variant="warning"
                 :loading="loading"
                 @click="approveRequest"
@@ -93,6 +94,7 @@
                 Print
               </SeButton>
               <SeButton
+                v-if="$userCan('bills.finishcancelation.write')"
                 variant="danger"
                 :loading="loading"
                 @click="cancelItemBill"
@@ -113,6 +115,7 @@
                 Print
               </SeButton>
               <SeButton
+                v-if="$userCan('bills.requestcancelation.write')"
                 variant="primary"
                 :loading="loading"
                 @click="submitRequest"
@@ -179,7 +182,7 @@ export default {
       }
       this.getPatientAccounts({ id: this.bill.patientid })
       this.form.transaction_type = this.$global.USER_ACCOUNT_TYPE
-      this.form.cancelation.reason = this.bill.cancelation.reason || ''
+      this.form.cancelation.reason = this.bill?.cancelation?.reason || ''
       this.type = this.bill.line_items ? 'invoice' : 'charge'
       const patient = await PatientAPI.get(this.$providerId, this.bill.patientid)
       this.patient = patient.data.data

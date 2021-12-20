@@ -10,7 +10,7 @@
           v-model="pageSize"
           :options="pageSizes"
           :custom-label="customLabel"
-          class="multiselect-borderless"
+          class="multiselect-borderless mt-px"
           :searchable="false"
           @select="onChangePageSize"
         />

@@ -21,6 +21,42 @@
         :patient="patient"
       />
     </div>
+
+    <div slot="actions">
+      <div class="flex items-center justify-between mt-12 mb-6">
+        <div class="flex items-center space-x-2">
+          <SeButton
+            v-if="!modal"
+            variant="outline"
+            @click="cancel"
+          >
+            Cancel
+          </SeButton>
+          <SeButton
+            variant="secondary"
+            @click="$router.back()"
+          >
+            Go back
+          </SeButton>
+        </div>
+        <div class="flex items-center space-x-2">
+          <SeButton
+            :icon="icon"
+            :loading="loading"
+            @click="dispense(false)"
+          >
+            Raise bill
+          </SeButton>
+          <SeButton
+            :icon="icon"
+            :loading="loading"
+            @click="onSave"
+          >
+            Receive Payment
+          </SeButton>
+        </div>
+      </div>
+    </div>
   </MultiStepBase>
 </template>
 
@@ -142,7 +178,7 @@ export default {
       return newForm
     },
 
-    async dispense() {
+    async dispense(withPayment = true) {
       this.loading =  true
       let origin = 'encounter'
       for(let i = 0; i < this.cart.length; i++){
@@ -165,7 +201,7 @@ export default {
         location: this.$locationId,
         medication_request_category: this.$isCurrentWorkspace('PHARM') ? 'outpatient' : 'inpatient',
       }
-      if (this.hasPaymentPermission) {
+      if (this.hasPaymentPermission && withPayment) {
         payload.with_payment = true
         payload.payment_info = this.getPaymentParams(this.form.payment_info)
       } else {
