@@ -91,6 +91,18 @@ export default {
     }
   },
 
+  async exportCorporateBills({ rootState }, params) {
+    try {
+      const provider = rootState.auth.provider
+      const data = await BillingAPI.printCorporateBill(provider.id, params)
+
+      return data
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
+    }
+  },
+
   async getPatientAccounts({ commit, rootState }, { id, params }) {
     try {
       const provider = rootState.auth.provider

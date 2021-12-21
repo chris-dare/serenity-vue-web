@@ -1,18 +1,31 @@
 <template>
   <div class="space-y-4">
-    <Search
-      v-model="filter"
+    <!-- <Search
+      v-model="search"
       placeholder="Search for patient, enter name or MR number"
-    />
+      @input="searchData"
+    /> -->
+
+    <BillingTableFilters
+      v-model="lists"
+    >
+      <SeButton
+        variant="secondary"
+        :loading="printLoading"
+        @click="print"
+      >
+        Print
+      </SeButton>
+    </BillingTableFilters>
 
     <div>
       <DataTable
         ref="table"
+        :data="data"
         :columns="columns"
         :pagination="pagination"
-        :data="normalizedData"
         :loading="loading"
-        @pagination="storePagination"
+        @pagination="actionOnPagination"
       >
         <template #default="{ row }">
           <cv-data-table-cell>
@@ -107,16 +120,17 @@
 </template>
 
 <script>
-import { mapGetters,mapState } from 'vuex'
-import DataMixin from '@/mixins/data'
+import { mapGetters,mapState, mapActions } from 'vuex'
+import DataMixin from '@/mixins/paginated'
 import debounce from 'lodash/debounce'
 import BillingSettlePaymentModal from '@/components/billing/BillingSettlePaymentModal'
+import BillingTableFilters from '@/components/billing/BillingTableFilters'
 import ClientAPI from '@/api/clients'
 
 export default {
   name: 'Cldata',
 
-  components: {BillingSettlePaymentModal},
+  components: {BillingSettlePaymentModal, BillingTableFilters},
 
 
   mixins: [DataMixin],
@@ -140,11 +154,12 @@ export default {
       ],
       nestedTableColumns: ['Date', 'Bill ID', 'Priority', 'Payee Type', 'Status' ],
       selectedFilter: '',
-      filter: '',
       searchTerms: ['patient_detail.name'],
       data: [],
+      lists: {},
       filters: {},
       paginate: true,
+      printLoading: false,
       total: 0,
       meta: 0,
     }
@@ -168,9 +183,19 @@ export default {
       },
     },
 
-    filters: {
+    lists: {
       handler(val){
         if(val){
+          let filters = { ...this.filters }
+
+          if (val.end) {
+            filters.date_to = this.$date.formatQueryParamsDate(val.end)
+            delete filters.end
+            filters.date_from = this.$date.formatQueryParamsDate(val.start || Date.now())
+            delete filters.start
+          }
+
+          this.filters = { ...filters }
           this.getData()
         }
       },
@@ -178,6 +203,9 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      exportBill: 'billing/exportCorporateBills',
+    }),
     actionOnPagination(ev) {
       this.page = ev.page
       this.pageLength = ev.length
@@ -216,8 +244,18 @@ export default {
       }
 
       return 'success'
-    },  
-    
+    }, 
+    async print() {
+      let id = this.$route.params.id
+      let payload = { payer: id, ...this.filters}
+      try {
+        this.printLoading = true
+        await this.exportBill(payload)
+        this.printLoading = false
+      } catch (error) {
+        this.printLoading = false
+      }
+    },
 
   },
 }
