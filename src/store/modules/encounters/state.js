@@ -16,4 +16,5 @@ export default () => ({
     {label: 'short stay', value: 'SS'},
     {label: 'virtual', value: 'VR'},
   ],
+  patientEncounterOverride: false,
 })

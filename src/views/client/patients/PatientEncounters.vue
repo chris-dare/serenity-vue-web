@@ -23,7 +23,7 @@
 <script>
 import EncounterDetailCard from '@/components/patients/encounters/EncounterDetailCard'
 import EncountersList from '@/components/patients/encounters/EncountersList'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'PatientEncounters',
@@ -34,6 +34,20 @@ export default {
     ...mapGetters({
       onGoingEncounters: 'encounters/onGoingEncounters',
       pastEncounters: 'encounters/pastEncounters',
+    }),
+  },
+
+  created() {
+    this.setPatientCurrentEncounterOverride(true)
+  },
+
+  beforeDestroy() {
+    this.setPatientCurrentEncounterOverride(false)
+  },
+
+  methods: {
+    ...mapActions({
+      setPatientCurrentEncounterOverride: 'encounters/setPatientCurrentEncounterOverride',
     }),
   },
 }
