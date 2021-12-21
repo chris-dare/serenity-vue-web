@@ -1,7 +1,7 @@
 import EncountersAPI from '@/api/encounters'
 import Vue from 'vue'
 import Encounter from '@/models/Encounter'
-import { SET_ENCOUNTERS, UPDATE_ENCOUNTER, SET_ENCOUNTER, SET_ENCOUNTER_STATE, SET_PATIENT_CURRENT_ENCOUNTER } from './mutation-types'
+import { SET_ENCOUNTERS, UPDATE_ENCOUNTER, SET_ENCOUNTER, SET_ENCOUNTER_STATE, SET_PATIENT_CURRENT_ENCOUNTER, SET_PATIENT_CURRENT_ENCOUNTER_OVERRIDE } from './mutation-types'
 
 export default {
   async initSinglePatientEncounterInformation({dispatch}, {encounter, patient }) {
@@ -59,6 +59,10 @@ export default {
 
   setPatientCurrentEncounter({commit}, encounter) {
     commit(SET_PATIENT_CURRENT_ENCOUNTER, encounter)
+  },
+
+  setPatientCurrentEncounterOverride({commit}, status) {
+    commit(SET_PATIENT_CURRENT_ENCOUNTER_OVERRIDE, status)
   },
 
   async getEncounter({ commit, rootState }, id) {
