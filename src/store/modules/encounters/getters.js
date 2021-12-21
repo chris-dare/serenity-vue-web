@@ -4,6 +4,7 @@ import isEmpty from 'lodash/isEmpty'
 
 export default {
   // hasActiveEncounter: (state,getters) => !!getters.onGoingEncounters.length,
+  currentEncounter: (state) => state.patientEncounterOverride ? state.currentPatientEncounter : state.currentEncounter ,
   hasActiveEncounter: (state,getters) => getters.currentEncounterStatus === 'planned' || getters.currentEncounterStatus === 'in progress',
 
   hasEncounterBegan: (state,getters) => getters.currentEncounterStatus === 'in progress',
@@ -23,9 +24,9 @@ export default {
     return !state.currentEncounter.chief_complaint || !state.currentEncounter.history_of_presenting_illness || isEmpty(getters.currentEncounterVitals)
   },
 
-  currentEncounterPractitioner: (state) => {
-    if (!state.currentEncounter) return {}
-    return state.currentEncounter?.encounter_participant[0]?.practitioner_detail || {}
+  currentEncounterPractitioner: (state, getters) => {
+    if (!getters.currentEncounter) return {}
+    return getters.currentEncounter?.encounter_participant[0]?.practitioner_detail || {}
   },
 
   currentEncounterVitals: (state, getters, rootState) => {
@@ -34,74 +35,74 @@ export default {
     return getters.currentEncounterObservations.filter(vital => options.includes(vital.unit))
   },
 
-  currentEncounterStatus: state => {
+  currentEncounterStatus: (state) => {
     if (isEmpty(state.currentEncounter?.status)) return ''
     return state.currentEncounter.status.split('-').join(' ')
   },
 
-  currentEncounterLocations: state => {
-    if (!state.currentEncounter) return []
-    return state.currentEncounter.encounter_location
+  currentEncounterLocations: (state, getters) => {
+    if (!getters.currentEncounter) return []
+    return getters.currentEncounter.encounter_location
   },
 
-  currentEncounterNotes: state => {
-    if (!state.currentEncounter) return []
-    return state.currentEncounter.encounter_patient_notes
+  currentEncounterNotes: (state, getters) => {
+    if (!getters.currentEncounter) return []
+    return getters.currentEncounter.encounter_patient_notes
   },
 
-  currentEncounterCarePlans: state => {
-    if (!state.currentEncounter || !state.currentEncounter.encounter_care_plan) return []
-    return state.currentEncounter.encounter_care_plan
+  currentEncounterCarePlans: (state, getters) => {
+    if (!getters.currentEncounter || !getters.currentEncounter.encounter_care_plan) return []
+    return getters.currentEncounter.encounter_care_plan
   },
 
   currentEncounterReferrals: (state, getters, rootState ) => {
-    if (!rootState.patients.patientReferrals || !state.currentEncounter) return []
-    return rootState.patients.patientReferrals.filter(ref => ref.encounter === state.currentEncounter.id)
+    if (!rootState.patients.patientReferrals || !getters.currentEncounter) return []
+    return rootState.patients.patientReferrals.filter(ref => ref.encounter === getters.currentEncounter.id)
   },
 
-  currentEncounterDiagnosis: state => {
-    if (!state.currentEncounter || !state.currentEncounter.encounter_diagnosis) return []
-    return state.currentEncounter.encounter_diagnosis
+  currentEncounterDiagnosis: (state, getters) => {
+    if (!getters.currentEncounter || !getters.currentEncounter.encounter_diagnosis) return []
+    return getters.currentEncounter.encounter_diagnosis
   },
 
-  currentEncounterComplaints: state => {
-    if (!state.currentEncounter || !state.currentEncounter.encounter_diagnosis) return []
-    return state.currentEncounter.encounter_diagnosis.filter(diag => diag.role.includes('complaint'))
+  currentEncounterComplaints: (state, getters) => {
+    if (!getters.currentEncounter || !getters.currentEncounter.encounter_diagnosis) return []
+    return getters.currentEncounter.encounter_diagnosis.filter(diag => diag.role.includes('complaint'))
   },
 
-  currentEncounterPresentingComplaint: (state) => {
-    if (!state.currentEncounter) return 'No complaint available'
-    return state.currentEncounter.chief_complaint
+  currentEncounterPresentingComplaint: (state, getters) => {
+    if (!getters.currentEncounter) return 'No complaint available'
+    return getters.currentEncounter.chief_complaint
   },
 
-  currentEncounterHistoryComplaint: (state) => {
-    if (!state.currentEncounter) return 'No complaint available'
-    return state.currentEncounter.history_of_presenting_illness
+  currentEncounterHistoryComplaint: (state, getters) => {
+    if (!getters.currentEncounter) return 'No complaint available'
+    return getters.currentEncounter.history_of_presenting_illness
   },
 
   currentEncounterServiceRequests: (state, getters, rootState) => {
-    if (!state.currentEncounter) return []
-    return rootState.patients.patientServiceRequests.filter(service => service.encounter === state.currentEncounter.id)
+    if (!getters.currentEncounter) return []
+    return rootState.patients.patientServiceRequests.filter(service => service.encounter === getters.currentEncounter.id)
   },
 
   currentPatientServiceRequests: (state, getters, rootState) => {
-    if (!state.currentEncounter) return []
+    if (!getters.currentEncounter) return []
     return rootState.patients.patientServiceRequests
   },
 
   currentEncounterDiagnosticReports: (state, getters, rootState) => {
-    if (!state.currentEncounter) return []
-    return rootState.diagnostic.diagnosticReports.filter(report => report.encounter === state.currentEncounter.id)
+    if (!getters.currentEncounter) return []
+    return rootState.diagnostic.diagnosticReports.filter(report => report.encounter === getters.currentEncounter.id)
   },
 
   currentEncounterMedicationRequests: (state, getters, rootState) => {
-    if (!state.currentEncounter) return []
-    return rootState.patients.patientMedications.filter(medication => medication.encounter === state.currentEncounter.id)
+    if (!getters.currentEncounter) return []
+    return rootState.patients.patientMedications.filter(medication => medication.encounter === getters.currentEncounter.id)
   },
 
   currentEncounterObservations: (state, getters, rootState) => {
-    if (!state.currentEncounter) return []
-    return rootState.patients.patientObservations.filter(obs => obs.encounter === state.currentEncounter.id)
+    if (!getters.currentEncounter) return []
+    return rootState.patients.patientObservations.filter(obs => obs.encounter === getters.currentEncounter.id)
   },
 
   currentEncounterLatestVitals: (state, getters, rootState) => {
@@ -183,7 +184,7 @@ export default {
     const observations = rootGetters['patients/patientObservations']
     if (!observations) return {}
 
-    const currentEncounterObservations = observations.filter(enc => enc.encounter === state.currentEncounter.id)
+    const currentEncounterObservations = observations.filter(enc => enc.encounter === getters.currentEncounter.id)
 
     const history = rootState.resources.socialUnitTypes.map(social => social.code)
     let vitals = {}

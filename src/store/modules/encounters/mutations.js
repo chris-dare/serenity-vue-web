@@ -1,4 +1,4 @@
-import { SET_ENCOUNTERS, SET_ENCOUNTER, UPDATE_ENCOUNTER, DELETE_ENCOUNTER, SET_ENCOUNTER_STATE, SET_PATIENT_CURRENT_ENCOUNTER } from './mutation-types'
+import { SET_ENCOUNTERS, SET_ENCOUNTER, UPDATE_ENCOUNTER, DELETE_ENCOUNTER, SET_ENCOUNTER_STATE, SET_PATIENT_CURRENT_ENCOUNTER, SET_PATIENT_CURRENT_ENCOUNTER_OVERRIDE } from './mutation-types'
 
 export default {
   [SET_ENCOUNTERS](state, encounters) {
@@ -15,6 +15,10 @@ export default {
 
   [SET_ENCOUNTER_STATE](state, data) {
     state.encounterState = data
+  },
+
+  [SET_PATIENT_CURRENT_ENCOUNTER_OVERRIDE](state, data) {
+    state.patientEncounterOverride = data
   },
 
   [UPDATE_ENCOUNTER](state, encounter) {
