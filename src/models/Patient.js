@@ -12,21 +12,15 @@ export default class Patient {
       ...this.data,
       // age: this.data.birth_date ? differenceInYears(Date.now(), new Date(`${this.data.birth_date}`)) : null,
       phone: this.data.mobile || this.data.user?.mobile,
+      mobile: this.data.mobile || this.data.user?.mobile,
       email: this.data.email || this.data.user?.email,
     }
 
     data.age_years = data.age ? `${data.age} years` : null
     data.gender_age_description = ''
 
-    if(data.user && typeof data.user === 'object'){
-      data.email = data.user.email
-      data.mobile = data.user.mobile
-      data.fullName = `${data.user.name_prefix || ''} ${data.user.first_name || ''} ${data.user.last_name || ''}`
-      data.name = `${data.user.first_name || ''} ${data.user.last_name || ''}`
-    } else {
-      data.fullName = `${data.name_prefix || ''} ${data.first_name || ''} ${data.last_name || data.lastname || ''}`
-      data.name = `${data.first_name || ''} ${data.last_name || ''}`
-    }
+    data.name = `${data.first_name || data.user?.first_name } ${data.last_name || data.user?.last_name}`
+    data.fullName = `${data.name_prefix || ''} ${data.first_name || data.user?.first_name} ${data.last_name || data.lastname || data.user?.last_name}`
 
     if (data.gender) {
       data.gender_age_description = `${data.gender}`
