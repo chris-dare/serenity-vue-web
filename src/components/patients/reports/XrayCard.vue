@@ -18,7 +18,7 @@
       </span>
     </div>
     <div>
-      <p>{{ props.report.code }} — {{ props.date }}</p>
+      <p>{{ props.report.display }} — {{ props.date }}</p>
     </div>
   </div>
 </template>

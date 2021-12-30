@@ -293,8 +293,8 @@ export default {
           last_name: this.patient.last_name,
           date_of_birth: this.patient.birth_date,
           gender: this.patient.gender,
-          mobile: this.patient.user.mobile,
-          email: this.patient.user.email,
+          mobile: this.patient.mobile,
+          email: this.patient.email,
         }
       }
 

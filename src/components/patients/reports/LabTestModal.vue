@@ -2,6 +2,7 @@
   <BaseModal
     :name="name"
     title="Laboratory Test Result"
+    width="700px"
     @closed="close"
   >
     <template>
