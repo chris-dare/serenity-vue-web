@@ -221,7 +221,7 @@ export default {
 
       this.form = {
         ...this.form,
-        healthcare_service_service_provision_code: code.code,
+        healthcare_service_service_provision_code: code?.code,
         // healthcare_service_service_provision_display_text: code.display_text,
       }
 
