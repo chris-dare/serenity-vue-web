@@ -9,7 +9,7 @@ export default {
     }
     const provider = rootState.auth.provider
     const { data } = await ClientAPI.list(provider.id, filters).catch((error) => {
-      throw error
+      throw error.data || error
     })
     commit(SET_CLIENTS, data.returnedData)
     commit(SET_CLIENTS_COUNT, data.returnedData.length)
@@ -20,7 +20,7 @@ export default {
     const { data } = await ClientAPI
       .getClientBy(provider.id, payload)
       .catch(({data: error}) => {
-        throw error
+        throw error.data || error
       })
 
     commit(SET_CURRENT_CLIENT, { company: data.data })
@@ -32,7 +32,7 @@ export default {
     const { data } = await ClientAPI
       .getClientAccount({providerId: provider.id, id: payload})
       .catch(({data: error}) => {
-        throw error
+        throw error.data || error
       })
 
     commit(SET_CLIENT_ACCOUNT, data[0])
@@ -44,7 +44,7 @@ export default {
     const { data } = await ClientAPI
       .getClientPolicies({providerId: provider.id, id: payload})
       .catch(({data: error}) => {
-        throw error
+        throw error.data || error
       })
 
     commit(SET_CLIENT_POLICIES, data)
@@ -56,7 +56,7 @@ export default {
     const { data } = await ClientAPI
       .createPolicy(provider.id, payload)
       .catch(({data: error}) => {
-        throw error
+        throw error.data || error
       })
     return data
   },
@@ -66,7 +66,7 @@ export default {
     const { data } = await ClientAPI
       .updatePolicy(provider.id, payload)
       .catch(({data: error}) => {
-        throw error
+        throw error.data || error
       })
     return data
   },
@@ -76,7 +76,7 @@ export default {
     const { data } = await ClientAPI
       .getClientBills(provider.id, payload)
       .catch(({data: error}) => {
-        throw error
+        throw error.data || error
       })
 
     commit(SET_BILLS, data.returnedData)
@@ -89,7 +89,7 @@ export default {
     const { data } = await ClientAPI
       .getClientClaims(provider.id, payload)
       .catch(({data: error}) => {
-        throw error
+        throw error.data || error
       })
 
     commit(SET_CLAIMS, data.returnedData)
@@ -101,7 +101,7 @@ export default {
     const { data } = await ClientAPI
       .create(provider.id, payload)
       .catch(({data: error}) => {
-        throw error
+        throw error.data || error
       })
 
     commit(UPDATE_FORM, data.returnedData)
@@ -114,7 +114,7 @@ export default {
     const { data } = await ClientAPI
       .deposit(provider.id, payload)
       .catch(({data: error}) => {
-        throw error
+        throw error.data || error
       })
 
     return data
@@ -125,7 +125,7 @@ export default {
     const { data } = await ClientAPI
       .providerAccount(provider.id, payload)
       .catch(({data: error}) => {
-        throw error
+        throw error.data || error
       })
 
     return data
@@ -134,7 +134,7 @@ export default {
   async clientAccountUpdate({ commit, rootState}, payload) {
     const provider = rootState.auth.provider
     const { data } = await ClientAPI.clientAccountUpdate(provider.id, payload).catch(({data: error}) => {
-      throw error
+      throw error.data || error
     })
 
     return data
@@ -156,7 +156,7 @@ export default {
     const { data } = await ClientAPI
       .update(payload)
       .catch(({ response: { data: error } }) => {
-        throw error
+        throw error.data || error
       })
 
     commit(SET_CURRENT_UPDATE, data.returnedData)
@@ -173,7 +173,7 @@ export default {
     await ClientAPI
       .delete(provider.id,id)
       .catch(({ response: { data: error } }) => {
-        throw error
+        throw error.data || error
       })
 
     commit(DELETE_CLIENT, id)
