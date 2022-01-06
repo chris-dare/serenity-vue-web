@@ -23,7 +23,7 @@
           <div class="py-2">
             <InfoImageBlock
               :label="concatData(row.patient_detail, ['first_name', 'lastname']) | capitalize"
-              :description="row.patient_detail.mobile"
+              :description="getPatientDetail(row.patient_detail)"
               :url="row.patient_detail.photo"
             />
           </div>
@@ -221,6 +221,11 @@ export default {
           }
         },
       })
+    },
+
+    getPatientDetail(detail) {
+      let age = detail.age ? `, ${detail.age} years` : ''
+      return `${detail.mobile}${age}`
     },
   },
 }

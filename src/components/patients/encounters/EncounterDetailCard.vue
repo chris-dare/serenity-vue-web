@@ -109,11 +109,18 @@
         <EncounterMedicationTable hide-action />
       </ToggleList>
       <ToggleList
+        title="Care Plans"
+        class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
+      >
+        <CarePlanTable />
+      </ToggleList>
+      <ToggleList
         title="Notes"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
       >
         <EncounterNotes />
       </ToggleList>
+      
       <!-- <ToggleList
         title="Bills / Receipts"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
@@ -127,6 +134,7 @@ import EncounterDiagnosis from './EncounterDiagnosis'
 import EncounterNotes from './EncounterNotes'
 import EncounterServiceRequests from './EncounterServiceRequests'
 import EncounterDiagnosticReports from './EncounterDiagnosticReports'
+import CarePlanTable from '@/components/patients/tables/CarePlanTable'
 import { mapState, mapGetters, mapActions } from 'vuex'
 import isEmpty from 'lodash/isEmpty'
 
@@ -139,6 +147,7 @@ export default {
     EncounterNotes,
     EncounterServiceRequests,
     EncounterDiagnosticReports,
+    CarePlanTable,
     SocialHistoryDetails: () => import('@/components/patients/details/SocialHistoryDetails'),
     EncounterReviewSystemTable: () => import(/* webpackPrefetch: true */ './EncounterReviewSystemTable'),
     EncounterMedicationTable: () => import(/* webpackPrefetch: true */ '@/components/patients/encounters/EncounterMedicationTable'),
