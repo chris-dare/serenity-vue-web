@@ -6,11 +6,16 @@
       <EncounterReferralForm :referral="referral" />
 
       <div v-if="mode == 'create'">
-        <p class="mb-2 font-semibold">Referrals in this consultation</p>
+        <p class="mb-2 font-semibold">Referrals</p>
+
+        <FilterGroup
+          v-model="selectedFilter"
+          :filters="filters"
+        />
 
         <DataTable
           small
-          :data="currentEncounterReferrals"
+          :data="referrals"
           :columns="columns"
           no-data-label="No Referrals"
         >
@@ -115,7 +120,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import Printer from '@carbon/icons-vue/es/printer/16'
 
 export default {
@@ -139,11 +144,16 @@ export default {
       referral: null,
       output: null,
       referralToBePrinted: {},
+      selectedFilter: 'current',
     }
   },
 
 
   computed: {
+    ...mapState({
+      patientReferrals: state => state.patients.patientReferrals,
+    }),
+
     ...mapGetters({
       getSinglePractitionerByRole: 'practitioners/getSinglePractitionerByRole',
       currentEncounterReferrals: 'encounters/currentEncounterReferrals',
@@ -151,6 +161,21 @@ export default {
 
     mode() {
       return this.referralId ? 'update' : 'create'
+    },
+
+    referrals() {
+      if (this.selectedFilter === 'previous') {
+        return this.patientReferrals.filter(ref => ref.encounter !== this.$route.params.encounter)
+      }
+
+      return this.currentEncounterReferrals
+    },
+
+    filters() {
+      return [
+        { display: 'Current encounter referrals', code: 'current' },
+        { display: 'Previous referrals', code: 'previous' },
+      ]
     },
   },
 

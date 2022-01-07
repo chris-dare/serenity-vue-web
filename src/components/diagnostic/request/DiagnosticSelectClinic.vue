@@ -24,128 +24,10 @@
       />
     </div>
     <SeForm class="space-y-8 mt-8">
-      <!-- <div class="space-y-4">
-        <MultiSelect
-          v-model="form.code"
-          title="Choose a service"
-          :multiple="false"
-          :options="services"
-          label="healthcare_service_name"
-          track-by="id"
-          placeholder="Select service"
-          :error-message="$utils.validateRequiredField($v, 'code')"
-          @select="clear"
-        />
-
-        <cv-text-area
-          v-model="form.patient_instruction"
-          label="Note"
-          placeholder="Leave a note for the lab tecnician"
-          :rows="4"
-          class="col-span-2"
-        />
-
-        <div class="grid grid-cols-2 gap-4">
-          <MultiSelect
-            ref="serviceTier"
-            v-model="form.service_tier"
-            title="Choose a service tier"
-            :multiple="false"
-            :options="serviceTiers"
-            label="label"
-            track-by="value"
-            placeholder="Service tiers"
-            :error-message="$utils.validateRequiredField($v, 'service_tier')"
-            preselect
-          />
-          <PrioritiesSelect
-            v-model="form.priority"
-            :options="priorities"
-          />
-        </div>
-        <div class="flex items-center">
-          <cv-checkbox
-            v-model="form.forTravel"
-            value="true"
-            label="This is for travel"
-          />
-          <cv-text-input
-            v-if="form.forTravel"
-            v-model="form.passport_number"
-            type="text"
-            label="Passport number"
-            placeholder="Passport number"
-          />
-        </div>
-      </div> -->
       <ServiceRequestForm
         v-model="form"
         :v="$v"
       />
-
-      <!-- <div class="flex space-x-2">
-        <SeButton
-          :loading="loading"
-          :icon="mode === 'create' ? add : edit"
-          @click="submit"
-        >
-          <template v-if="mode === 'create'">Add test</template>
-          <template v-else>Update test</template>
-        </SeButton>
-        <SeButton
-          v-if="mode === 'update'"
-          class="ml-2"
-          variant="secondary"
-          @click="mode = 'create'"
-        >
-          Cancel
-        </SeButton>
-      </div> -->
-
-
-      <!-- <div v-if="mode === 'create'">
-        <p class="mb-2 font-semibold">Previous Labs of {{ storeData.patient ? storeData.patient.first_name + ' ' + storeData.patient.last_name : '' }}</p>
-
-        <DataTable
-          small
-          :data="currentEncounterServiceRequests"
-          :columns="columns"
-          no-data-label="No labs"
-        >
-          <template #default="{row}">
-            <cv-data-table-cell>
-              <p>{{ $date.formatDate(row.authored_on, 'dd MMM, yyyy') }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ row.service }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ row.priority | capitalize }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ $utils.getFirstData(row.order_detail) }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ $utils.getFirstData(row.service_request_bodysite) }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <p>{{ row.specimen }}</p>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div class="flex items-center space-x-2">
-                <Edit
-                  class="w-4 h-4 cursor-pointer"
-                  @click="updateRequest({...row})"
-                />
-                <Trash
-                  class="w-4 h-4 cursor-pointer"
-                  @click="confirmDeleteLab(row.id)"
-                />
-              </div>
-            </cv-data-table-cell>
-          </template>
-        </DataTable>
-      </div> -->
     </SeForm>
     <DeleteModal
       :loading="deleteLoading"
@@ -159,7 +41,6 @@
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Add from '@carbon/icons-vue/es/add/32'
 import Edit from '@carbon/icons-vue/es/edit/32'
-// import See from '@carbon/icons-vue/es/view/32'
 import DeleteModal from '@/components/ui/modals/ConfirmDeleteModal'
 import ServiceRequestForm from '@/components/forms/ServiceRequestForm'
 import VirtualCareRequirementsModal from '@/components/appointments/VirtualCareRequirementsModal'

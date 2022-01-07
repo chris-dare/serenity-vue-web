@@ -20,6 +20,7 @@ import {
   UPDATE_REFERRAL,
   DELETE_REFERRAL,
   SET_PATIENTS_META,
+  SET_CARE_PLANS,
 } from './mutation-types'
 
 export default {
@@ -150,5 +151,9 @@ export default {
 
   [DELETE_REFERRAL](state, id) {
     state.patientReferrals = state.patientReferrals.filter((es) => es.id !== id)
+  },
+
+  [SET_CARE_PLANS](state, patientCarePlans) {
+    state.patientCarePlans = patientCarePlans
   },
 }

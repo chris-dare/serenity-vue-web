@@ -306,7 +306,7 @@ export default {
 
       newForm.healthcare_service_specialties = newForm.healthcare_service_specialties.map(service => {
         return {
-          code: service.code,
+          code: service?.code,
         }
       })
 

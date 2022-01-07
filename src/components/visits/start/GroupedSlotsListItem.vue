@@ -13,7 +13,8 @@
           v-for="(slot, index) in slots"
           :key="index"
           class="text-placeholder bg-gray-100 py-3 flex items-center justify-center cursor-pointer"
-          @click="localValue.slot = slot"
+          :class="{'cursor-not-allowed bg-opacity-50 text-opacity-50': slot.status !=='free'}"
+          @click="selectSlot(slot)"
         >
           {{ $date.formatDate(slot.start, 'HH:mm') }}
         </div>
@@ -67,6 +68,13 @@ export default {
     ...mapActions({
       createVisit: 'visits/createVisit',
     }),
+
+    selectSlot(slot) {
+      if (slot.status !== 'free') {
+        return
+      }
+      this.localValue.slot = slot
+    },
 
     async addToQueue() {
       try {
