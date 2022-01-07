@@ -9,6 +9,7 @@ export function initialState() {
     patientServiceRequests: [],
     patientObservations: [],
     patientReferrals: [],
+    patientCarePlans: [],
     patientsMeta: {
       page: 1,
       page_size: 10,

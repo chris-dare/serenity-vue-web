@@ -31,6 +31,14 @@
         </div>
         <div class="flex items-center">
           <SeButton
+            v-if="skip && !modal"
+            class="mr-2"
+            variant="secondary"
+            @click="$router.push({ name: 'DiagnosticSummary' })"
+          >
+            Skip
+          </SeButton>
+          <SeButton
             :icon="icon"
             :loading="loading"
             @click="$emit('save')"
@@ -55,6 +63,10 @@ export default {
     previous: {
       type: String,
       default: null,
+    },
+    skip: {
+      type: Boolean,
+      default: false,
     },
     query: {
       type: Object,

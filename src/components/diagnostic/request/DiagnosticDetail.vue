@@ -150,6 +150,30 @@ export default {
       )
       return `${this.$currency(price[0].charge, price[0].currency).format()} - ${price[0].description}`
     },
+
+    options() {
+      let options = [
+        {
+          hide: !this.$userCan('bills.acceptuseraccount.write'),
+        },
+        {
+          hide: !this.$userCan('bills.acceptcorporate.write'),
+        },
+        {
+          hide: !this.$userCan('bills.acceptinsurance.write'),
+        },
+        {
+          hide: !this.$userCan('bills.acceptcash.write'),
+        },
+      ]
+
+      return options
+    },
+
+    hasNoOptions() {
+      let availableOptions = this.options?.find(option => !option.hide)
+      return !availableOptions
+    },
   },
 
   created(){
@@ -172,7 +196,6 @@ export default {
         this.$toast.error('Please select a patient')
         this.loading = false
       }
-      this.loading = false
     },
 
     async startVisit(){
@@ -188,7 +211,17 @@ export default {
           message: 'Service Request successfully added',
         })
         let item = data[0]
-        this.settleBill(item)
+        if (!this.hasNoOptions) {
+          this.settleBill(item)
+        } else {
+          this.loading = false
+          if (this.$route.params.id) {
+            this.$emit('stop')
+            return
+          }
+          this.$router.push({ name: 'Orders' })
+          this.refresh()
+        }
       }).catch (() => {
         this.loading = false
         this.$toast.error('Request not successful')

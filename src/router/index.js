@@ -658,6 +658,11 @@ const routes = [
             component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientCharts.vue'),
           },
           {
+            path: 'bills',
+            name: 'Pharmacy:PatientBills',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientBills.vue'),
+          },
+          {
             path: '',
             name: 'Pharmacy:PatientPrescriptions',
             component: () => import(/* webpackChunkName: "patient" */ '../views/client/pharmacy/patient/Prescriptions.vue'),
