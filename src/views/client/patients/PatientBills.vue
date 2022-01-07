@@ -5,18 +5,24 @@
       placeholder="Search for bill"
       @input="searchData"
     />
-
-    <FilterGroup
-      v-model="params.status"
-      :filters="filters"
-      @input="refresh"
-    />
+    <BillingPatientFilters v-model="lists">
+      <FilterGroup
+        v-model="params.status"
+        :filters="filters"
+        @input="searchData"
+      />
+      <MultiSelect
+        v-model="category"
+        :options="serviceCategoryTypes"
+        :multiple="false"
+        placeholder="Select a service request category"
+        label="display"
+        track-by="code"
+        custom-field="code"
+        title="Service request category"
+      />
+    </BillingPatientFilters>
     <div class="bg-white p-3">
-      <div class="flex items-center justify-between mb-4">
-        <p class="text-gray-500">Bills</p>
-      </div>
-
-
       <DataTable
         ref="table"
         :columns="columns"
@@ -76,12 +82,13 @@
 <script>
 import OrderDetailsModal from '@/components/patients/modals/OrderDetailsModal'
 import { mapGetters, mapState, mapActions } from 'vuex'
+import BillingPatientFilters from '@/components/billing/BillingPatientFilters'
 import DataMixin from '@/mixins/paginated'
 
 export default {
   name: 'PatientBills',
 
-  components: { OrderDetailsModal },
+  components: { OrderDetailsModal, BillingPatientFilters },
 
   mixins: [DataMixin],
 
@@ -100,12 +107,15 @@ export default {
       ],
       visible: false,
       order: {},
+      lists: {},
+      category: '',
     }
   },
 
   computed: {
     ...mapState({
       data: state => state.billing.billing,
+      serviceCategoryTypes: (state) => state.resources.serviceRequestCategoryTypes,
     }),
 
     ...mapGetters({
@@ -122,6 +132,32 @@ export default {
         { display: 'Pending', code: 'billable' },
         { display: 'Cancelled', code: 'cancelled' },
       ]
+    },
+  },
+
+  watch:{
+    lists: {
+      handler(val){
+        if(val){
+
+          if (val.end) {
+            this.params.created_on__before = this.$date.formatQueryParamsDate(val.end)
+            this.params.created_on__after = this.$date.formatQueryParamsDate(val.start || Date.now())
+          }
+          this.searchData()
+        }
+      },
+    },
+
+    category: {
+      handler(val){
+        if(val){
+          if (val) {
+            this.params.category = val
+          }
+          this.searchData()
+        }
+      },
     },
   },
 
