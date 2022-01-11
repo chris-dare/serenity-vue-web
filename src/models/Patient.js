@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import isEmpty from 'lodash/isEmpty'
-import differenceInYears from 'date-fns/differenceInYears'
 
 export default class Patient {
   constructor(data) {
@@ -10,7 +9,6 @@ export default class Patient {
   getNormalizedView() {
     let data = {
       ...this.data,
-      // age: this.data.birth_date ? differenceInYears(Date.now(), new Date(`${this.data.birth_date}`)) : null,
       phone: this.data.mobile || this.data.user?.mobile,
       mobile: this.data.mobile || this.data.user?.mobile,
       email: this.data.email || this.data.user?.email,

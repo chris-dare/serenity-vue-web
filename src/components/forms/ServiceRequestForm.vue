@@ -19,7 +19,7 @@
         v-model="localValue.code"
         title="Choose lab test"
         :multiple="false"
-        :options="labProceedures"
+        :options="filteredData"
         track_by="code"
         label="display"
         custom-field="code"
@@ -105,6 +105,7 @@ export default {
         {display: 'Routine (lowest)', code: 'routine'},
       ],
       labProceedures: [],
+      filteredData: [],
     }
   },
 
@@ -139,9 +140,10 @@ export default {
   },
 
   methods: {
-    async getLabProceedures(params = {}) {
+    async getLabProceedures(params={}) {
       try {
         const { data } = await ServiceRequestAPI.getServiceRequestProceedures(params)
+        
         this.labProceedures = data
       } catch (error) {
         console.log(error)
@@ -149,7 +151,7 @@ export default {
     },
 
     searchLabProceedures: debounce(function(search) {
-      this.getLabProceedures({ search })
+      this.filteredData = this.labProceedures.filter(data => !search || data.alias.toLowerCase().includes(search.toLowerCase()) || data.display.toLowerCase().includes(search.toLowerCase()))
     }, 300, false),
   },
 }
