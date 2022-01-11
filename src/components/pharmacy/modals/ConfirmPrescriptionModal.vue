@@ -150,7 +150,7 @@
               type="number"
               placeholder=""
               :min="1"
-              :max="maxQuantity"
+              :max="availableQuantity"
             />
             <SeButton
               variant="secondary"
