@@ -154,9 +154,10 @@ export default {
       const provider = rootState.auth.provider
       encounter.encounter_patient_notes.push({ ...payload })
       const { data } = await EncountersAPI.update(provider.id, encounter)
+
       commit(SET_ENCOUNTER, data)
       commit(UPDATE_ENCOUNTER, data)
-      dispatch('patients/getNotes', rootState.patients.currentPatient.uuid, { root:true })
+      dispatch('patients/getNotes', rootState.patients.currentPatient.id, { root:true })
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error

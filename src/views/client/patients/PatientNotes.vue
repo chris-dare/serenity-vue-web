@@ -65,7 +65,7 @@
               <p>{{ row.display }}</p>
             </div>
           </cv-data-table-cell>
-          <cv-data-table-cell>
+          <!-- <cv-data-table-cell>
             <div>
               <p
                 v-if="row.encounter"
@@ -75,7 +75,7 @@
                 View encounter
               </p>
             </div>
-          </cv-data-table-cell>
+          </cv-data-table-cell> -->
           <cv-data-table-cell>
             <div class="flex items-center space-x-2 justify-start">
               <IconButton @click="$trigger('notes:detail:open', { data: row })">
@@ -116,7 +116,7 @@ export default {
         'Date',
         'Written By',
         'Note',
-        'Encounter',
+        // 'Encounter',
         'Action',
       ],
       visible: false,

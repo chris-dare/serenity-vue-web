@@ -53,6 +53,7 @@
               <PrioritiesSelect
                 v-model="tier.priority"
                 class="col-span-2"
+                required
               />
               <FormInput
                 v-if="isDiagnostic"
@@ -253,6 +254,9 @@ export default {
             required,
           },
           currency: {
+            required,
+          },
+          priority: {
             required,
           },
           charge: {
