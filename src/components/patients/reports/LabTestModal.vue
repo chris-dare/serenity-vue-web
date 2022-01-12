@@ -146,7 +146,6 @@
             </div>
           </div>
           <SeButton
-            v-if="approved"
             :loading="loading"
             @click="download(report.diagnostic_report_media)"
           >
