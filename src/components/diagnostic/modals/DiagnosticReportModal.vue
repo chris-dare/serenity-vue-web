@@ -75,6 +75,7 @@
           <SeButton
             class="mx-3"
             :loading="loading"
+            @click="download(form.diagnostic_report_media)"
           >
             Download Document
           </SeButton>
@@ -127,6 +128,19 @@ export default {
         this.approveLoading = false
         this.$toast.open({
           message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+      }
+    },
+    download(pdf){
+      const file = this.$utils.getFirstData(pdf, 'file')
+      if(file){
+        this.loading = true
+        this.$utils.downloadPDF(file)
+        this.loading = false
+      } else {
+        this.$toast.open({
+          message: 'Download failed!',
           type: 'error',
         })
       }
