@@ -92,8 +92,8 @@ export default {
         return element
       })
       commit(SET_DIAGNOSTIC_REPORTS, new_data)
-    } catch ({ response: { data: error } }) {
-      throw error
+    } catch (error) {
+      throw error.data || error
     }
   },
 
@@ -106,8 +106,8 @@ export default {
         return element
       })
       commit(SET_DIAGNOSTIC_REPORTS, new_data)
-    } catch ({ response: { data: error } }) {
-      throw error
+    } catch (error) {
+      throw error.data || error
     }
   },
 
@@ -116,8 +116,8 @@ export default {
       const provider = rootState.auth.provider
       const { data } = await DiagnosticAPI.create(provider.id, payload)
       commit(UPDATE_DIAGNOSTIC_REPORT, data.results)
-    } catch ({ response: { data: error } }) {
-      throw error
+    } catch (error) {
+      throw error.data || error
     }
   },
 
