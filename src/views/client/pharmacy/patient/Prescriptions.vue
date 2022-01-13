@@ -71,6 +71,14 @@
         </div>
       </div>
     </div>
+    <PharmacyDateFilters
+      v-model="lists"
+    >
+      <Search
+        v-model="params.search"
+        placeholder="Search for prescription..."
+      />
+    </PharmacyDateFilters>
     <ConfirmPrescriptionModal
       mode="prescription"
       :prescriptions="activeMedications"
@@ -82,12 +90,19 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import ConfirmPrescriptionModal from '@/components/pharmacy/modals/ConfirmPrescriptionModal'
+import PharmacyDateFilters from '@/components/pharmacy/PharmacyDateFilters'
+import DataMixin from '@/mixins/paginated'
 
 export default {
   name: 'Prescriptions',
+
   components: {
     ConfirmPrescriptionModal,
+    PharmacyDateFilters,
   },
+
+  mixins: [DataMixin],
+
   data() {
     return {
       filteredStatus: 'active',
@@ -98,12 +113,14 @@ export default {
         'Instruction',
         'Refill',
       ],
+      lists: {},
       prescriptions: {
         loading: false,
         data: [],
       },
     }
   },
+
   computed: {
     ...mapState({
       patient: (state) => state.patients.currentPatient,
@@ -150,6 +167,21 @@ export default {
 
     isSelected() {
       return (index) => this.initialSelected === index
+    },
+  },
+
+  watch: {
+    lists: {
+      handler(val){
+        if(val){
+
+          if (val.end) {
+            this.params.created_on__before = this.$date.formatQueryParamsDate(val.end)
+            this.params.created_on__after = this.$date.formatQueryParamsDate(val.start || Date.now())
+          }
+          this.searchData()
+        }
+      },
     },
   },
 
