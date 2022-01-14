@@ -61,7 +61,10 @@
               <p class="text-secondary text-xs"> Priority </p>
             </div>
           </div>
-
+          <div>
+            <p class="text-md">{{ form.note || 'N/A' }}</p>
+            <p class="text-secondary text-xs"> Request Note </p>
+          </div>
           <div
             v-if="!sampleTaken && !unPaid"
           >
