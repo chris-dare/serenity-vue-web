@@ -463,11 +463,19 @@ export default {
 
     addDrug() {
       if(!this.selectedInventoryItem)return
-      const quantity = parseInt(this.form.quantity) < this.availableQuantity ? this.availableQuantity : parseInt(this.form.quantity)
+      const quantity = parseInt(this.form.quantity)
       const total = parseFloat(this.selectedInventoryItem.selling_price) * parseInt(quantity)
       const existingItem = this.currentDrug.selectedDrugs.find(el => el.inventory.id == this.selectedInventoryItem.id)
       if(existingItem){
-        existingItem.quantity += quantity
+        if(existingItem.quantity + quantity > this.availableQuantity) {
+          existingItem.quantity = this.availableQuantity
+          this.$toast.open({
+            message: `Can't dispense more than ${this.availableQuantity}`,
+            type: 'error',
+          })
+        } else {
+          existingItem.quantity += quantity
+        }
       }else{
         this.currentDrug.selectedDrugs.push({
           inventory: this.selectedInventoryItem,
