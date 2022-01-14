@@ -109,10 +109,10 @@ export default {
 
   methods: {
     onPageChange(event) {
-      if (this.isFirstCall) {
-        this.isFirstCall = false
-        return
-      }
+      // if (this.isFirstCall) {
+      //   this.isFirstCall = false
+      //   return
+      // }
       this.$emit('pagination', event)
     },
   },

@@ -150,7 +150,7 @@
               type="number"
               placeholder=""
               :min="1"
-              :max="maxQuantity"
+              :max="availableQuantity"
             />
             <SeButton
               variant="secondary"
@@ -467,7 +467,15 @@ export default {
       const total = parseFloat(this.selectedInventoryItem.selling_price) * parseInt(quantity)
       const existingItem = this.currentDrug.selectedDrugs.find(el => el.inventory.id == this.selectedInventoryItem.id)
       if(existingItem){
-        existingItem.quantity += quantity
+        if(existingItem.quantity + quantity > this.availableQuantity) {
+          existingItem.quantity = this.availableQuantity
+          this.$toast.open({
+            message: `Can't dispense more than ${this.availableQuantity}`,
+            type: 'error',
+          })
+        } else {
+          existingItem.quantity += quantity
+        }
       }else{
         this.currentDrug.selectedDrugs.push({
           inventory: this.selectedInventoryItem,

@@ -1,6 +1,6 @@
 <template>
   <AppRegisterLayout
-    label="Add a new service"
+    :label="$route.query.id ? 'Update service' : 'Add a new service'"
     :nav-items="navItems"
     :checked="checked"
   >

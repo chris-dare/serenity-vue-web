@@ -71,13 +71,13 @@ export default {
     }),
     dashboardTypes() {
       return [
-        {
-          label: 'Add Labs',
-          description: 'Create a new lab test for patient',
-          type: 'add',
-          value: 'add',
-          hide: !this.$userCan('diagnostic.requests.write'),
-        },
+        // {
+        //   label: 'Add Labs',
+        //   description: 'Create a new lab test for patient',
+        //   type: 'add',
+        //   value: 'add',
+        //   hide: !this.$userCan('diagnostic.requests.write'),
+        // },
         {
           label: 'View Lab results',
           description: 'View previous enteted lab results',
