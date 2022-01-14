@@ -77,6 +77,7 @@
       <Search
         v-model="params.search"
         placeholder="Search for prescription..."
+        @input="searchData"
       />
     </PharmacyDateFilters>
     <ConfirmPrescriptionModal
@@ -193,6 +194,7 @@ export default {
     ...mapActions({
       getPatientAccounts: 'billing/getPatientAccounts',
       setCheckoutPatient: 'checkout/setCheckoutPatient',
+      getData: 'inventory/getInventory',
     }),
   },
 }

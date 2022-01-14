@@ -463,7 +463,7 @@ export default {
 
     addDrug() {
       if(!this.selectedInventoryItem)return
-      const quantity = parseInt(this.form.quantity)
+      const quantity = parseInt(this.form.quantity) < this.availableQuantity ? this.availableQuantity : parseInt(this.form.quantity)
       const total = parseFloat(this.selectedInventoryItem.selling_price) * parseInt(quantity)
       const existingItem = this.currentDrug.selectedDrugs.find(el => el.inventory.id == this.selectedInventoryItem.id)
       if(existingItem){
