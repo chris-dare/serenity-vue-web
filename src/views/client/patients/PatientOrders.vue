@@ -41,7 +41,7 @@
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <p>{{ row.code }}</p>
+            <p>{{ row.display }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
@@ -85,13 +85,13 @@ export default {
       columns: [
         'Date',
         'Requester',
-        'Code',
+        'Service',
         'Order detail',
         'Category',
         'Status',
       ],
       order: {},
-      searchTerms: ['code', 'priority', 'specimen', 'status'],
+      searchTerms: ['code', 'display', 'priority', 'specimen', 'status'],
       filter:'',
     }
   },

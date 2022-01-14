@@ -7,7 +7,7 @@
       >
         <p class="text-xs">Items per page:</p>
         <MultiSelect
-          v-model="pageSize"
+          v-model="size"
           :options="pageSizes"
           :custom-label="customLabel"
           class="multiselect-borderless mt-px"
@@ -89,6 +89,7 @@ export default {
   data() {
     return {
       visiblePagesCount: 10,
+      size: this.pageSize,
     }
   },
 
