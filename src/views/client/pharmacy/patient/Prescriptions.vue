@@ -104,6 +104,13 @@ export default {
 
   mixins: [DataMixin],
 
+  props: {
+    id: {
+      type: [String, Number],
+      required: true,
+    },
+  },
+
   data() {
     return {
       filteredStatus: 'active',
@@ -188,13 +195,14 @@ export default {
 
   created() {
     this.setCheckoutPatient(this.patient)
+    this.params.patient = this.patient.id
   },
 
   methods: {
     ...mapActions({
       getPatientAccounts: 'billing/getPatientAccounts',
       setCheckoutPatient: 'checkout/setCheckoutPatient',
-      getData: 'inventory/getInventory',
+      getData: 'patients/getMedicationRequests',
     }),
   },
 }
