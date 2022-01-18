@@ -46,13 +46,14 @@
           <cv-data-table-cell>
             <p>{{ row.maximum_dependents_allowed || 0 }}</p>
           </cv-data-table-cell>
-
           <cv-data-table-cell>
-            <div
-              class="flex items-center cursor-pointer"
-              @click="addCurrent(row)"
-            >
-              View
+            <div class="flex items-center cursor-pointer space-x-4">
+              <TableActions
+                :actions="tableActions(row)"
+                :loading="loading"
+                @suspend="suspend()"
+                @view="addCurrent(row)"
+              />
             </div>
           </cv-data-table-cell>
         </template>
@@ -106,6 +107,13 @@ export default {
       getData: 'corporate/getCorporate',
       addToCurrent: 'corporate/addToCurrentDependent',
     }),
+
+    tableActions() {
+      return [
+        { label: 'View', event: 'view', show: true },
+        { label: 'Suspend', event: 'suspend', show: true },
+      ]
+    },
 
     async refresh() {
       this.loading = true
