@@ -145,18 +145,18 @@
               </SeButton>
             </div>
           </div>
-          <SeButton
-            :loading="loading"
-            @click="download(report.diagnostic_report_media)"
-          >
-            Download Document
-          </SeButton>
         </div>
         <SeButton
           v-else
           variant="secondary"
         >
           Repeat this test
+        </SeButton>
+        <SeButton
+          :loading="loading"
+          @click="download(report.diagnostic_report_media)"
+        >
+          Download Document
         </SeButton>
       </div>
     </template>
