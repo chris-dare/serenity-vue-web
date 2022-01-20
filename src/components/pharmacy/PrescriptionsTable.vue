@@ -97,7 +97,7 @@
               <TableActions
                 :actions="tableActions(row)"
                 :loading="printLoading"
-                @print="printPrescription()"
+                @print="printPrescription(row)"
                 @view="$router.push({ name: route, params: { id: row.patient_id} })"
               />
             </div>
@@ -286,15 +286,24 @@ export default {
     ...mapActions({
       getData: 'patients/getPatients',
       searchPatientsStore: 'patients/searchPatients',
+      printing: 'encounters/exportPrescription',
     }),
 
     tableActions() {
       return [
-        { label: 'Depense', event: 'view', show: this.$isCurrentWorkspace('PHARM') },
+        { label: 'Dispense', event: 'view', show: this.$isCurrentWorkspace('PHARM') },
         { label: 'Print prescription', event: 'print', show: true },
       ]
     },
-    printPrescription(){
+
+    async printPrescription(drug){
+      try {
+        this.printLoading = true
+        await this.printing(drug.id)
+        this.printLoading = false
+      } catch (error) {
+        this.printLoading = false
+      }
     },
 
     searchPatients: debounce(function(search) {
