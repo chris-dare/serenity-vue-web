@@ -33,7 +33,7 @@
         v-model="form.chief_complaint"
         :rows="5"
         placeholder="Reason for visit"
-        @input="throttledSend"
+        @blur="throttledSend"
       />
     </ToggleList>
     <ToggleList
@@ -45,7 +45,7 @@
         v-model="form.history_of_presenting_illness"
         :rows="5"
         placeholder="Progress of complaint"
-        @input="throttledSend"
+        @blur="throttledSend"
       />
     </ToggleList>
     <ToggleList
@@ -69,7 +69,7 @@
         v-model="family.FAMILY_HISTORY"
         :rows="5"
         placeholder="Family history"
-        @input="throttledSendHistory"
+        @blur="throttledSendHistory"
       />
     </ToggleList>
     <ToggleList
