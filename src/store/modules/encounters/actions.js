@@ -230,6 +230,18 @@ export default {
     }
   },
 
+  async exportPrescription({ rootState }, id) {
+    try {
+      const provider = rootState.auth.provider
+      const data = await EncountersAPI.printPrescription(provider.id, id)
+
+      return data
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
+    }
+  },
+
   async deleteCarePlan({ commit, state, rootState}, id) {
     try {
       let encounter = state.currentEncounter
