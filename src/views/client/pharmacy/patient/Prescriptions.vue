@@ -71,19 +71,21 @@
         </div>
       </div>
     </div>
-    <PharmacyDateFilters
-      v-model="lists"
-    >
-      <Search
-        v-model="params.search"
-        placeholder="Search for prescription..."
-        @input="searchData"
+    <div class="space-y-4">
+      <PharmacyDateFilters
+        v-model="lists"
+      >
+        <Search
+          v-model="params.search"
+          placeholder="Search for prescription..."
+          @input="searchData"
+        />
+      </PharmacyDateFilters>
+      <ConfirmPrescriptionModal
+        mode="prescription"
+        :prescriptions="activeMedications"
       />
-    </PharmacyDateFilters>
-    <ConfirmPrescriptionModal
-      mode="prescription"
-      :prescriptions="activeMedications"
-    />
+    </div>
   </div>
 </template>
 

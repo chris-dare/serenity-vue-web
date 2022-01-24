@@ -122,7 +122,7 @@ export default {
           {
             medication_detail: [{display: ''}],
             course_of_therapy_type: '',
-            medication_request_dosage_instruction: [{frequency: ''}],
+            medication_request_dosage_instruction: [{frequency: '', route: 'ORAL_USE', period_unit: 'Days'}],
           },
         ],
       },

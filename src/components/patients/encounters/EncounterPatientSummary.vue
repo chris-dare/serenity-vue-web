@@ -13,7 +13,14 @@
         :alt="null"
       />
       <div>
-        <p v-if="props.patient">{{ props.patient.name }}</p>
+        <div
+          v-if="props.patient"
+          role="button"
+          class="cursor-pointer"
+          @click="listeners['click']"
+        >
+          <p>{{ props.patient.name }}</p>
+        </div>
         <p v-else>--</p>
         <p class="text-secondary capitalize">
           <template v-if="props.patient">

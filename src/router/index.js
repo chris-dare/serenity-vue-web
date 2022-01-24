@@ -663,9 +663,16 @@ const routes = [
             component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientBills.vue'),
           },
           {
-            path: '',
+            path: 'prescriptions',
             name: 'Pharmacy:PatientPrescriptions',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientPrescriptions.vue'),
+            props: true,
+          },
+          {
+            path: '',
+            name: 'Pharmacy:PatientPendingPrescriptions',
             component: () => import(/* webpackChunkName: "patient" */ '../views/client/pharmacy/patient/Prescriptions.vue'),
+            props: true,
           },
         ],
       },

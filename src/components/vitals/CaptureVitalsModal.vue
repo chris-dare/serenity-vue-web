@@ -45,6 +45,8 @@
 import { mapActions, mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 import isEmpty from 'lodash/isEmpty'
+import omitBy from 'lodash/omitBy'
+import isNil from 'lodash/isNil'
 import { minValue, maxValue } from 'vuelidate/lib/validators'
 import { bpValidator } from '@/services/custom-validators'
 import modalMixin from '@/mixins/modal'
@@ -61,6 +63,7 @@ export default {
       loading: false,
       patient: null,
       name: 'capture-vitals-modal',
+      type: 'encounter',
     }
   },
 
@@ -68,9 +71,11 @@ export default {
     'capture:vitals:open': function(){
       this.open()
       this.patient = this.$route.params.id
+      this.type = 'encounter'
     },
     'reception:capture:vitals:open': async function(data){
       this.setVitalsEncounter(data.params[0].encounters[0])
+      this.type = 'reception'
       await this.getVitalsUnitTypes()
       this.open()
       this.patient = data.params[0].patient
@@ -134,9 +139,10 @@ export default {
         })
         return
       }
+
       try {
         this.loading = true
-        await this.createVitals({ payload: this.form, patient: this.patient })
+        await this.createVitals({ payload: omitBy(this.form, isNil), patient: this.patient })
         this.$toast.open({ message: 'Vitals saved' })
         this.loading = false
         this.close()
@@ -165,7 +171,9 @@ export default {
     }, 300, false),
 
     afterCloseFunction() {
-      this.setVitalsEncounter(null)
+      if (this.type === 'reception') {
+        this.setVitalsEncounter(null)
+      }
     },
   },
 }
