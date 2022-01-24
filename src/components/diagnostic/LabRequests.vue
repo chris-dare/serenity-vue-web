@@ -19,7 +19,7 @@
     >
       <template #default="{ row }">
         <cv-data-table-cell>
-          {{ row.code }}
+          {{ row.display }}
         </cv-data-table-cell>
         <cv-data-table-cell>
           {{ (row.patient_detail.first_name + ' ' + row.patient_detail.lastname) | capitalize }}
@@ -77,7 +77,7 @@ export default {
       selected: 'all',
       loading: false,
       columns: [
-        'Report ID',
+        'Report',
         'Patient',
         'Status',
         'Action',

@@ -15,129 +15,132 @@ export default {
     commit(SET_CLIENTS_COUNT, data.returnedData.length)
   },
 
-  async getClientBy({ commit, rootState}, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await ClientAPI
-      .getClientBy(provider.id, payload)
-      .catch(({data: error}) => {
-        throw error.data || error
-      })
-
-    commit(SET_CURRENT_CLIENT, { company: data.data })
-    return data.data
+  async getClientBy({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ClientAPI.getClientBy(provider.id, payload)
+      commit(SET_CURRENT_CLIENT, { company: data.data })
+      return data.data
+    } catch (error) {
+      throw error.data || error
+    }
   },
 
-  async getClientAccount({ commit, rootState}, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await ClientAPI
-      .getClientAccount({providerId: provider.id, id: payload})
-      .catch(({data: error}) => {
-        throw error.data || error
-      })
+  async getClientAccount({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ClientAPI.getClientAccount({providerId: provider.id, id: payload})
 
-    commit(SET_CLIENT_ACCOUNT, data[0])
-    return data[0]
+      commit(SET_CLIENT_ACCOUNT, data[0])
+      return data[0]
+    } catch (error) {
+      throw error.data || error
+    }
   },
 
-  async getClientPolicies({ commit, rootState}, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await ClientAPI
-      .getClientPolicies({providerId: provider.id, id: payload})
-      .catch(({data: error}) => {
-        throw error.data || error
-      })
-
-    commit(SET_CLIENT_POLICIES, data)
-    return data
+  async getClientPolicies({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ClientAPI
+        .getClientPolicies({providerId: provider.id, id: payload})
+      commit(SET_CLIENT_POLICIES, data)
+      return data
+    } catch (error) {
+      throw error.data || error
+    }
   },
 
-  async createClientPolicy({ rootState}, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await ClientAPI
-      .createPolicy(provider.id, payload)
-      .catch(({data: error}) => {
-        throw error.data || error
-      })
-    return data
+  async createClientPolicy({ rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ClientAPI
+        .createPolicy(provider.id, payload)
+      return data
+    } catch (error) {
+      throw error.data || error
+    }
   },
 
-  async updateClientPolicy({ rootState}, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await ClientAPI
-      .updatePolicy(provider.id, payload)
-      .catch(({data: error}) => {
-        throw error.data || error
-      })
-    return data
+  async updateClientPolicy({ rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ClientAPI
+        .updatePolicy(provider.id, payload)
+      return data
+    } catch (error) {
+      throw error.data || error
+    }
+    
   },
 
   async getClientBills({ commit, rootState }, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await ClientAPI
-      .getClientBills(provider.id, payload)
-      .catch(({data: error}) => {
-        throw error.data || error
-      })
-
-    commit(SET_BILLS, data.returnedData)
-    return data
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ClientAPI
+        .getClientBills(provider.id, payload)
+      commit(SET_BILLS, data.returnedData)
+      return data
+    } catch (error) {
+      throw error.data || error
+    }
   },
 
 
   async getClientClaims({ commit, rootState }, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await ClientAPI
-      .getClientClaims(provider.id, payload)
-      .catch(({data: error}) => {
-        throw error.data || error
-      })
-
-    commit(SET_CLAIMS, data.returnedData)
-    return data
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ClientAPI
+        .getClientClaims(provider.id, payload)
+      commit(SET_CLAIMS, data.returnedData)
+      return data
+    } catch (error) {
+      throw error.data || error
+    } 
   },
 
-  async create({ commit, rootState}, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await ClientAPI
-      .create(provider.id, payload)
-      .catch(({data: error}) => {
-        throw error.data || error
-      })
-
-    commit(UPDATE_FORM, data.returnedData)
-    commit(SET_FORM, {})
-    return data
+  async create({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ClientAPI
+        .create(provider.id, payload)
+      commit(UPDATE_FORM, data.returnedData)
+      commit(SET_FORM, {})
+      return data
+    } catch (error) {
+      throw error.data || error
+    }
   },
 
   async deposit({ commit, rootState }, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await ClientAPI
-      .deposit(provider.id, payload)
-      .catch(({data: error}) => {
-        throw error.data || error
-      })
-
-    return data
-  },
-
-  async providerAccount({ commit, rootState}, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await ClientAPI
-      .providerAccount(provider.id, payload)
-      .catch(({data: error}) => {
-        throw error.data || error
-      })
-
-    return data
-  },
-
-  async clientAccountUpdate({ commit, rootState}, payload) {
-    const provider = rootState.auth.provider
-    const { data } = await ClientAPI.clientAccountUpdate(provider.id, payload).catch(({data: error}) => {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ClientAPI
+        .deposit(provider.id, payload)
+      return data
+    } catch (error) {
       throw error.data || error
-    })
+    }
+  },
 
-    return data
+  async providerAccount({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ClientAPI
+        .providerAccount(provider.id, payload)
+      return data
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
+  async clientAccountUpdate({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ClientAPI.clientAccountUpdate(provider.id, payload)
+      return data
+    } catch (error) {
+      throw error.data || error
+    }
   },
 
   addToCurrentUser({ commit }, data) {
@@ -153,29 +156,29 @@ export default {
   },
 
   async update({ commit }, payload) {
-    const { data } = await ClientAPI
-      .update(payload)
-      .catch(({ response: { data: error } }) => {
-        throw error.data || error
-      })
-
-    commit(SET_CURRENT_UPDATE, data.returnedData)
-    commit(UPDATE_CLIENT, data.returnedData)
-    return data
+    try {
+      const { data } = await ClientAPI
+        .update(payload)
+      commit(SET_CURRENT_UPDATE, data.returnedData)
+      commit(UPDATE_CLIENT, data.returnedData)
+      return data
+    } catch (error) {
+      throw error.data || error
+    }
   },
 
   refreshForm({ commit}) {
     commit(SET_FORM, {})
   },
 
-  async deleteClient({ commit, rootState}, id) {
-    const provider = rootState.auth.provider
-    await ClientAPI
-      .delete(provider.id,id)
-      .catch(({ response: { data: error } }) => {
-        throw error.data || error
-      })
-
-    commit(DELETE_CLIENT, id)
+  async deleteClient({ commit, rootState }, id) {
+    try {
+      const provider = rootState.auth.provider
+      await ClientAPI
+        .delete(provider.id,id)
+      commit(DELETE_CLIENT, id)
+    } catch (error) {
+      throw error.data || error
+    }
   },
 }

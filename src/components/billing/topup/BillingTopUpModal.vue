@@ -69,7 +69,7 @@ export default {
         selectedBills: [],
       },
       patientBills: [],
-      label: 'Top Up Account',
+      label: 'Top Up Accountount',
       showCheck: false,
       type: 'receive',
       name: 'billing-topup-modal',
@@ -221,7 +221,7 @@ export default {
         this.form.payment.cashier = this.provider.practitionerRoleId
         await this.topUpUserAccount({
           patientId: this.form.patient.uuid,
-          walletId: this.userAccounts[0].uuid,
+          walletId: this.form.patient.payment_methods.corporate[0] ? this.form.patient.payment_methods.corporate[0].uuid : '',
           params: this.form.payment,
           location: this.$locationId,
         })
