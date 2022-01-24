@@ -70,8 +70,8 @@ export default {
       ],
       links: [
         { label: 'Summary', path: 'Pharmacy:PatientSummary' },
-        { label: 'Prescriptions', path: 'Pharmacy:PatientPrescriptions' },
         { label: 'Pending Prescriptions', path: 'Pharmacy:PatientPendingPrescriptions', query: { type: 'existing' }},
+        { label: 'Prescriptions', path: 'Pharmacy:PatientPrescriptions' },
         { label: 'Bills', path: 'Pharmacy:PatientBills' },
       ],
     }
