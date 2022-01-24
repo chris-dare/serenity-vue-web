@@ -19,13 +19,13 @@
         v-for="(report, index) in filteredData"
         :key="index"
       >
-        <ReportCard
-          v-if="report.category.toLowerCase() === 'laboratory'"
+        <XrayCard
+          v-if="report.specimen_types === 'image scan'"
           :report="report"
           :date="$date.formatDate(report.effective_date_time, 'dd MMM, yyyy')"
           @click="$trigger('lab:result:open', report.id)"
         />
-        <XrayCard
+        <ReportCard
           v-else
           :report="report"
           :date="$date.formatDate(report.effective_date_time, 'dd MMM, yyyy')"
