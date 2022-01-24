@@ -69,7 +69,7 @@ export default {
         selectedBills: [],
       },
       patientBills: [],
-      label: 'Top Up Accountount',
+      label: 'Top Up Account',
       showCheck: false,
       type: 'receive',
       name: 'billing-topup-modal',
