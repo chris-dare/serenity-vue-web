@@ -137,28 +137,34 @@ export default {
       patientAllergies: state => state.patientAllergies.allergies,
       workspaceType: (state) => state.global.workspaceType,
     }),
+    
     ...mapGetters({
       patientMedications: 'patients/patientMedications',
       currentEncounterDiagnosis: 'encounters/currentEncounterDiagnosis',
       userAccounts: 'billing/userAccounts',
       corporateAccounts: 'billing/corporateAccounts',
     }),
+
     corporateAccountNames(){
       return this.corporateAccounts.map(el => el.description).join(', ')
     },
+
     userAccountNames(){
       return this.userAccounts.map(el => el.description).join(', ')
     },
+
     provisionalDiagnosis() {
       return this.currentEncounterDiagnosis.filter(el => {
         return el.status === 'PROVISIONAL'
       })
     },
+
     finalDiagnosis() {
       return this.currentEncounterDiagnosis.filter(el => {
         return el.status !== 'PROVISIONAL'
       })
     },
+
     availableActions() {
       const types = [
         {
@@ -171,6 +177,7 @@ export default {
 
       return types
     },
+
     activeMedications() {
       return this.patientMedications.filter(el => el.status == 'active')
     },
