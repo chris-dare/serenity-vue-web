@@ -72,18 +72,17 @@
       </div>
     </div>
     <div class="space-y-4">
-      <PharmacyDateFilters
+      <!-- <PharmacyDateFilters
         v-model="lists"
-      >
-        <Search
-          v-model="params.search"
-          placeholder="Search for prescription..."
-          @input="searchData"
-        />
-      </PharmacyDateFilters>
+      > -->
+      <Search
+        v-model="search"
+        placeholder="Search prescription..."
+      />
+      <!-- </PharmacyDateFilters> -->
       <ConfirmPrescriptionModal
         mode="prescription"
-        :prescriptions="activeMedications"
+        :prescriptions="data"
       />
     </div>
   </div>
@@ -93,15 +92,15 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import ConfirmPrescriptionModal from '@/components/pharmacy/modals/ConfirmPrescriptionModal'
-import PharmacyDateFilters from '@/components/pharmacy/PharmacyDateFilters'
-import DataMixin from '@/mixins/paginated'
+// import PharmacyDateFilters from '@/components/pharmacy/PharmacyDateFilters'
+import DataMixin from '@/mixins/data'
 
 export default {
   name: 'Prescriptions',
 
   components: {
     ConfirmPrescriptionModal,
-    PharmacyDateFilters,
+    // PharmacyDateFilters,
   },
 
   mixins: [DataMixin],
@@ -124,6 +123,8 @@ export default {
         'Refill',
       ],
       lists: {},
+      search: '',
+      searchTerms: ['practitioner_detail.name'],
       prescriptions: {
         loading: false,
         data: [],
@@ -171,7 +172,7 @@ export default {
 
       return types
     },
-    activeMedications() {
+    data() {
       return this.patientMedications.filter(el => el.status == 'active')
     },
 
@@ -181,23 +182,25 @@ export default {
   },
 
   watch: {
-    lists: {
-      handler(val){
-        if(val){
+    // lists: {
+    //   handler(val){
+    //     if(val){
 
-          if (val.end) {
-            this.params.created_on__before = this.$date.formatQueryParamsDate(val.end)
-            this.params.created_on__after = this.$date.formatQueryParamsDate(val.start || Date.now())
-          }
-          this.searchData()
-        }
-      },
-    },
+    //       if (val.end) {
+    //         this.params.created_on__before = this.$date.formatQueryParamsDate(val.end)
+    //         this.params.created_on__after = this.$date.formatQueryParamsDate(val.start || Date.now())
+    //       }
+    //       this.searchData()
+    //     }
+    //   },
+    // },
   },
 
   created() {
+    this.searchTerms = ['medication_detail.display']
     this.setCheckoutPatient(this.patient)
-    this.params.patient = this.patient.id
+    console.log(this.data)
+    // this.params.patient = this.patient.id
   },
 
   methods: {
