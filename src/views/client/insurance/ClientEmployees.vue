@@ -52,7 +52,6 @@
               <TableActions
                 :actions="tableActions(row)"
                 :loading="loading"
-                @suspend="suspend()"
                 @view="addCurrent(row)"
               />
             </div>
@@ -119,7 +118,7 @@ export default {
     tableActions() {
       return [
         { label: 'View', event: 'view', show: true },
-        { label: 'Suspend', event: 'suspend', show: true },
+        // { label: 'Suspend', event: 'suspend', show: true },
       ]
     },
 
