@@ -97,7 +97,6 @@
               <TableActions
                 :actions="tableActions(row)"
                 :loading="printLoading"
-                @print="printPrescription(row)"
                 @view="$router.push({ name: route, params: { id: row.patient_id} })"
               />
             </div>
@@ -292,7 +291,7 @@ export default {
     tableActions() {
       return [
         { label: 'Dispense', event: 'view', show: this.$isCurrentWorkspace('PHARM') },
-        { label: 'Print prescription', event: 'print', show: true },
+        // { label: 'Print prescription', event: 'print', show: true },
       ]
     },
 
