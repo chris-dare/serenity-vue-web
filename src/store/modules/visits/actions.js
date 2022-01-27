@@ -27,6 +27,7 @@ export default {
       if (data.results.length) {
         dispatch('setCurrentVisit', data.results[0])
       }
+      return data.results[0]
     } catch (error) {
       throw error.data || error
     }

@@ -22,6 +22,12 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'CarePlanTable',
 
+  data() {
+    return {
+      columns: ['Description'],
+    }
+  },
+
   computed: {
     ...mapState({
       carePlans: (state) => state.patients.patientCarePlans,
