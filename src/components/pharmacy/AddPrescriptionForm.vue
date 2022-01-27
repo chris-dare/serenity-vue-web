@@ -62,7 +62,7 @@
 
           <cv-text-input
             v-model="detail.medication_request_dosage_instruction[0].strength"
-            label="Strength"
+            label="Dose"
             type="text"
             class="inherit-full-input"
           />

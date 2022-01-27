@@ -31,6 +31,18 @@ export default {
     return http.patch(`${this.url}${providerId}/encounter-patient-diagnosis/${params.id}`, params)
   },
 
+  printPrescription(providerId,id) {
+    return http({
+      method: 'get',
+      url: `${this.url}${providerId}/medicationrequests/print/${id}`,
+      responseType: 'blob',
+    }).then((response) =>
+    {
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      window.printJS(url)
+    })
+  },
+
   deleteDiagnosis(providerId, id) {
     return http.delete(`${this.url}${providerId}/encounter-patient-diagnosis/${id}`)
   },

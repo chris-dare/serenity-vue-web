@@ -71,19 +71,21 @@
         </div>
       </div>
     </div>
-    <PharmacyDateFilters
-      v-model="lists"
-    >
-      <Search
-        v-model="params.search"
-        placeholder="Search for prescription..."
-        @input="searchData"
+    <div class="space-y-4">
+      <PharmacyDateFilters
+        v-model="lists"
+      >
+        <Search
+          v-model="params.search"
+          placeholder="Search for prescription..."
+          @input="searchData"
+        />
+      </PharmacyDateFilters>
+      <ConfirmPrescriptionModal
+        mode="prescription"
+        :prescriptions="activeMedications"
       />
-    </PharmacyDateFilters>
-    <ConfirmPrescriptionModal
-      mode="prescription"
-      :prescriptions="activeMedications"
-    />
+    </div>
   </div>
 </template>
 
@@ -103,6 +105,13 @@ export default {
   },
 
   mixins: [DataMixin],
+
+  props: {
+    id: {
+      type: [String, Number],
+      required: true,
+    },
+  },
 
   data() {
     return {
@@ -128,28 +137,34 @@ export default {
       patientAllergies: state => state.patientAllergies.allergies,
       workspaceType: (state) => state.global.workspaceType,
     }),
+    
     ...mapGetters({
       patientMedications: 'patients/patientMedications',
       currentEncounterDiagnosis: 'encounters/currentEncounterDiagnosis',
       userAccounts: 'billing/userAccounts',
       corporateAccounts: 'billing/corporateAccounts',
     }),
+
     corporateAccountNames(){
       return this.corporateAccounts.map(el => el.description).join(', ')
     },
+
     userAccountNames(){
       return this.userAccounts.map(el => el.description).join(', ')
     },
+
     provisionalDiagnosis() {
       return this.currentEncounterDiagnosis.filter(el => {
         return el.status === 'PROVISIONAL'
       })
     },
+
     finalDiagnosis() {
       return this.currentEncounterDiagnosis.filter(el => {
         return el.status !== 'PROVISIONAL'
       })
     },
+
     availableActions() {
       const types = [
         {
@@ -162,6 +177,7 @@ export default {
 
       return types
     },
+
     activeMedications() {
       return this.patientMedications.filter(el => el.status == 'active')
     },
@@ -188,13 +204,14 @@ export default {
 
   created() {
     this.setCheckoutPatient(this.patient)
+    this.params.patient = this.patient.id
   },
 
   methods: {
     ...mapActions({
       getPatientAccounts: 'billing/getPatientAccounts',
       setCheckoutPatient: 'checkout/setCheckoutPatient',
-      getData: 'inventory/getInventory',
+      getData: 'patients/getMedicationRequests',
     }),
   },
 }

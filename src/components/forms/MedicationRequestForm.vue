@@ -33,7 +33,7 @@
 
           <cv-text-input
             v-model="drug.medication_request_dosage_instruction[0].strength"
-            label="Strength"
+            label="Dose"
             type="text"
             class="inherit-full-input"
           />
@@ -199,7 +199,7 @@ export default {
       this.localValue.drugs.push({
         medication_detail: [{display: ''}],
         course_of_therapy_type: '',
-        medication_request_dosage_instruction: [{frequency: ''}],
+        medication_request_dosage_instruction: [{frequency: '', route: 'ORAL_USE', period_unit: 'Days'}],
       })
     },
 

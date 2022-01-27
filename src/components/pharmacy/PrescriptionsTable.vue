@@ -92,25 +92,14 @@
               </Tag>
             </div>
           </cv-data-table-cell> -->
-          <cv-data-table-cell v-if="$isCurrentWorkspace('PHARM')">
-            <slot
-              name="action"
-              :row="row"
-            >
-              <router-link
-                tag="div"
-                :to="{ name: route, params: { id: row.patient_id} }"
-                class="flex items-center cursor-pointer"
-              >
-                Dispense
-                <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
-                  <img
-                    src="@/assets/img/view 1.svg"
-                    alt=""
-                  >
-                </div>
-              </router-link>
-            </slot>
+          <cv-data-table-cell>
+            <div class="flex items-center cursor-pointer space-x-4">
+              <TableActions
+                :actions="tableActions(row)"
+                :loading="printLoading"
+                @view="$router.push({ name: route, params: { id: row.patient_id} })"
+              />
+            </div>
           </cv-data-table-cell>
         </template>
         <template #expand="{ row }">
@@ -218,6 +207,7 @@ export default {
         data: [],
       },
       prescription_date: null,
+      printLoading: false,
     }
   },
 
@@ -295,7 +285,25 @@ export default {
     ...mapActions({
       getData: 'patients/getPatients',
       searchPatientsStore: 'patients/searchPatients',
+      printing: 'encounters/exportPrescription',
     }),
+
+    tableActions() {
+      return [
+        { label: 'Dispense', event: 'view', show: this.$isCurrentWorkspace('PHARM') },
+        // { label: 'Print prescription', event: 'print', show: true },
+      ]
+    },
+
+    async printPrescription(drug){
+      try {
+        this.printLoading = true
+        await this.printing(drug.id)
+        this.printLoading = false
+      } catch (error) {
+        this.printLoading = false
+      }
+    },
 
     searchPatients: debounce(function(search) {
       this.fetchPrescriptions({ search })

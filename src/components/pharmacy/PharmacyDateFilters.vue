@@ -4,7 +4,7 @@
     class="mt-4"
     @submit.prevent
   >
-    <div class="grid grid-cols-2 gap-12">
+    <div class="grid grid-cols-2 gap-12 items-end">
       <slot />
       <DateRangePicker
         v-model="localValue"

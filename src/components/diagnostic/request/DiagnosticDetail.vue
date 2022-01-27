@@ -10,8 +10,8 @@
       >
         <div class="flex items-center col-span-6">
           <InfoImageBlock
-            :label="summary.patient.user.first_name + ' ' + summary.patient.user.last_name"
-            :description="summary.patient.user.mobile"
+            :label="summary.patient.first_name + ' ' + summary.patient.last_name"
+            :description="summary.patient.mobile"
             :url="summary.patient.photo"
             label-class="text-black font-semibold"
             description-class="text-sm"
