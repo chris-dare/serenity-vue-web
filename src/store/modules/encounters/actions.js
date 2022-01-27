@@ -57,6 +57,10 @@ export default {
     commit(SET_ENCOUNTER, encounter)
   },
 
+  setEncounterFromUpcomingEncounters({commit}, encounters) {
+    commit(SET_ENCOUNTER, encounters.find(encounter => encounter.status === 'in-progress' || encounter.status === 'planned'))
+  },
+
   setPatientCurrentEncounter({commit}, encounter) {
     commit(SET_PATIENT_CURRENT_ENCOUNTER, encounter)
   },

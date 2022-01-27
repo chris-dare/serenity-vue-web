@@ -15,7 +15,7 @@
       </p>
 
       <cv-checkbox
-        v-model="form.is_provisional"
+        v-model="form.is_final"
         label="Is this a final diagnosis?"
         value="check-1"
       />
@@ -95,7 +95,7 @@
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
-                <p>{{ row.is_provisional_diagnosis ? 'Final' : 'Provisional' }}</p>
+                <p>{{ row.status | capitalize }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
@@ -155,6 +155,7 @@ import Add from '@carbon/icons-vue/es/add/32'
 import { mapActions, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import unsavedChanges from '@/mixins/unsaved-changes'
+import omit from 'lodash/omit'
 
 export default {
   name: 'EncountersDiagnosis',
@@ -175,7 +176,7 @@ export default {
       form: {
         condition: '',
         role: 'chief-complaint',
-        is_provisional: false,
+        is_final: false,
       },
       loading: false,
       deleteLoading: false,
@@ -222,6 +223,7 @@ export default {
         this.form.role = diagnosis.role
         this.form.id = this.diagnosisId
         this.form.note = diagnosis.note
+        this.form.is_final = diagnosis.status === 'FINAL'
       }
     },
 
@@ -247,7 +249,7 @@ export default {
     },
 
     submit(reroute = false) {
-      this.form.is_provisional_diagnosis = !this.form.is_provisional
+      this.form.status = this.form.is_final ? 'FINAL' : 'PROVISIONAL'
       if (reroute && this.dataHasNotChanged) {
         this.$router.push({ name: 'EncounterLabs', params: { id: this.$route.params.id }})
         return
@@ -282,7 +284,7 @@ export default {
       this.loading = true
 
       try {
-        await this.createDiagnosis(this.form)
+        await this.createDiagnosis(omit(this.form, ['is_final']))
         this.loading = false
         this.$toast.open({
           message: 'Diagnosis successfully added',
@@ -300,7 +302,7 @@ export default {
     async update() {
       this.loading = true
       try {
-        await this.updateDiagnosis(this.form)
+        await this.updateDiagnosis(omit(this.form, ['is_final']))
         this.loading = false
         this.$toast.open({
           message: 'Diagnosis successfully updated',
