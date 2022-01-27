@@ -78,8 +78,7 @@ export default {
       await ServiceRequestsAPI.delete(provider.id, id)
       commit(DELETE_SERVICE_REQUEST, id)
     } catch (error) {
-      Vue.prototype.$utils.error(error)
-      throw error
+      throw error.data || error
     }
   },
 
@@ -136,8 +135,8 @@ export default {
       const provider = rootState.auth.provider
       const { data } = await DiagnosticAPI.updateReport(provider.id, payload)
       commit(UPDATE_DIAGNOSTIC_REPORT, data)
-    } catch ({ response: { data: error } }) {
-      throw error
+    } catch (error) {
+      throw error.data || error
     }
   },
 
@@ -148,8 +147,7 @@ export default {
       commit(UPDATE_DIAGNOSTIC_REPORT, data)
       return data
     } catch (error) {
-      Vue.prototype.$utils.error(error)
-      throw error
+      throw error.data || error
     }
   },
 
@@ -158,8 +156,8 @@ export default {
       const provider = rootState.auth.provider
       await DiagnosticAPI.delete(provider.id, id)
       commit(DELETE_DIAGNOSTIC_REPORT, id)
-    } catch ({ response: { data: error } }) {
-      throw error
+    } catch (error) {
+      throw error.data || error
     }
   },
 }

@@ -73,7 +73,7 @@
             class="grid grid-cols-4 gap-1 mt-6"
           >
             <div class="text-left">
-              <p class="text-secondary capitalize">{{ list.code | removeDash }}</p>
+              <p class="text-secondary capitalize">{{ list.display | removeDash }}</p>
             </div>
             <div class="flex items-center justify-begin">
               <p>{{ list.value || '-' }}</p>

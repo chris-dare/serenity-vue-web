@@ -7,6 +7,7 @@
             :patient="patient"
             :vitals="vitals"
             :status="status"
+            @click="$router.push({ name: currentWorkspacePatientPage, params: patient.id })"
           />
 
           <div class="px-4">
@@ -90,6 +91,7 @@ export default {
     ...mapGetters({
       vitals: 'encounters/currentEncounterLatestVitals',
       status: 'encounters/currentEncounterStatus',
+      currentWorkspacePatientPage: 'global/currentWorkspacePatientPage',
     }),
 
     links() {

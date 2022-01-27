@@ -8,7 +8,7 @@
       <div>
         <PatientInfoCard class="mb-0 border-b border-solid border-tetiary">
           <div class="space-y-1">
-            <p class="text-right text-xl font-semibold">{{ $currency(patientAccountBalance).format() }}</p>
+            <p class="text-right text-xl font-semibold">{{ $currency(getBalance(patient) || 0).format() }}</p>
             <p class="text-right text-secondary text-sm">Account balance</p>
             <div class="space-x-2 flex items-center">
               <SeButton @click="$trigger('billing:topup:open:two', patient)">Load Account</SeButton>
@@ -104,6 +104,15 @@ export default {
       initBillingPatientInformation: 'patients/initBillingPatientInformation',
       refresh: 'patients/refreshCurrentPatient',
     }),
+    getBalance(patient){
+      if (patient.payment_methods.corporate[0]){
+        return patient.payment_methods.corporate[0].balance || 0
+      } else if (patient.payment_methods.insurance[0]) {
+        return patient.payment_methods.insurance[0].balance || 0
+      } else {
+        return 0
+      }
+    },
   },
 
 }

@@ -57,6 +57,10 @@ export default {
     commit(SET_ENCOUNTER, encounter)
   },
 
+  setEncounterFromUpcomingEncounters({commit}, encounters) {
+    commit(SET_ENCOUNTER, encounters.find(encounter => encounter.status === 'in-progress' || encounter.status === 'planned'))
+  },
+
   setPatientCurrentEncounter({commit}, encounter) {
     commit(SET_PATIENT_CURRENT_ENCOUNTER, encounter)
   },
@@ -227,6 +231,18 @@ export default {
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error
+    }
+  },
+
+  async exportPrescription({ rootState }, id) {
+    try {
+      const provider = rootState.auth.provider
+      const data = await EncountersAPI.printPrescription(provider.id, id)
+
+      return data
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 

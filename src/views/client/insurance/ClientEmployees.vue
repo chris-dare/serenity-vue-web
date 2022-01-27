@@ -48,11 +48,12 @@
           </cv-data-table-cell>
 
           <cv-data-table-cell>
-            <div
-              class="flex items-center cursor-pointer"
-              @click="addCurrent(row)"
-            >
-              View
+            <div class="flex items-center cursor-pointer space-x-4">
+              <TableActions
+                :actions="tableActions(row)"
+                :loading="loading"
+                @view="addCurrent(row)"
+              />
             </div>
           </cv-data-table-cell>
         </template>
@@ -112,6 +113,13 @@ export default {
       let id = this.$route.params.id
       await this.getData( id )
       this.loading = false
+    },
+
+    tableActions() {
+      return [
+        { label: 'View', event: 'view', show: true },
+        // { label: 'Suspend', event: 'suspend', show: true },
+      ]
     },
 
     addCurrent(client){

@@ -32,7 +32,7 @@
     >
       <template #default="{ row }">
         <cv-data-table-cell>
-          {{ row && row.code || '-' }}
+          {{ row && row.display || '-' }}
         </cv-data-table-cell>
         <cv-data-table-cell>
           {{ $date.formatDate(row.effective_date_time, 'dd MMM, yyyy HH:mm a') || '-' }}
@@ -100,7 +100,7 @@ export default {
       selected: 'all',
       loading: false,
       columns: [
-        'Report ID',
+        'Report',
         'Date',
         'Patient',
         'Status',

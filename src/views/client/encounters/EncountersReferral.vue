@@ -185,9 +185,14 @@ export default {
     },
   },
 
+  mounted() {
+    this.getUsers()
+  },
+
   methods: {
     ...mapActions({
       deleteReferral: 'patients/deleteReferral',
+      getUsers: 'practitioners/getUsers',
     }),
 
     async removeReferral(id) {
