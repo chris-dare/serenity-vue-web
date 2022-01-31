@@ -57,7 +57,7 @@
       </div>
     </div>
     <SeForm class="space-y-8 mt-8">
-      <MultipleRequestForm
+      <ServiceRequestForm
         v-model="labRequest"
         :v="$v"
       />
@@ -75,7 +75,7 @@ import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Add from '@carbon/icons-vue/es/add/32'
 import Edit from '@carbon/icons-vue/es/edit/32'
 import DeleteModal from '@/components/ui/modals/ConfirmDeleteModal'
-import MultipleRequestForm from '@/components/forms/MultipleRequestForm'
+import ServiceRequestForm from '@/components/forms/ServiceRequestForm'
 import VirtualCareRequirementsModal from '@/components/appointments/VirtualCareRequirementsModal'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
@@ -84,7 +84,7 @@ import MultiStep from '@/mixins/multistep'
 export default {
   name: 'DiagnosticSelectClinic',
 
-  components: { VirtualCareRequirementsModal, DeleteModal, MultipleRequestForm },
+  components: { VirtualCareRequirementsModal, DeleteModal, ServiceRequestForm },
 
   mixins: [MultiStep],
 
@@ -236,7 +236,8 @@ export default {
     addLabRequest(){
       let service = this.labLists.find(service => service.code.id === this.labRequest.code.id)
       if(!service){
-        this.labLists = [...this.labLists, this.labRequest]
+        this.labLists = [...this.labLists, { ...this.labRequest }]
+        this.labRequest = {}
       }
       console.log(this.labLists)
     },
