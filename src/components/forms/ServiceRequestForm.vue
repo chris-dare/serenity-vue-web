@@ -80,8 +80,7 @@
 
 <script>
 import modelMixin from '@/mixins/model'
-import { mapGetters } from 'vuex'
-import ServiceRequestAPI from '@/api/service-requests'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 
 export default {
@@ -104,12 +103,15 @@ export default {
         {display: 'ASAP (medium)', code: 'asap'},
         {display: 'Routine (lowest)', code: 'routine'},
       ],
-      labProceedures: [],
       filteredData: [],
     }
   },
 
   computed: {
+    ...mapState({
+      labProceedures: state => state.resources.diagnosticLabProceedures,
+    }),
+
     ...mapGetters({
       diagnosticServices: 'services/labProceedures',
     }),
@@ -135,20 +137,18 @@ export default {
     },
   },
 
-  created() {
-    this.getLabProceedures()
+  async created() {
+    await this.getDiagnosticLabProceedures()
+
+    if (this.localValue?.display) {
+      this.searchLabProceedures(this.localValue.display)
+    }
   },
 
   methods: {
-    async getLabProceedures(params={}) {
-      try {
-        const { data } = await ServiceRequestAPI.getServiceRequestProceedures(params)
-        
-        this.labProceedures = data
-      } catch (error) {
-        console.log(error)
-      }
-    },
+    ...mapActions({
+      getDiagnosticLabProceedures: 'resources/getDiagnosticLabProceedures',
+    }),
 
     searchLabProceedures: debounce(function(search) {
       this.filteredData = this.labProceedures.filter(data => !search || data.alias.toLowerCase().includes(search.toLowerCase()) || data.display.toLowerCase().includes(search.toLowerCase()))

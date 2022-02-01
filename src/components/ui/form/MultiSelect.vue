@@ -180,14 +180,17 @@ export default {
     value: {
       immediate: true,
       handler(val, oldVal) {
+        if (val !== oldVal && this.options.length) {
+          this.assignSelected()
+        }
+      },
+    },
+
+    options: {
+      immediate: true,
+      handler(val, oldVal) {
         if (val !== oldVal) {
-          let data = {}
-          if (this.customField) {
-            data = this.options.find(option => option[this.customField] === this.value)
-          } else {
-            data = this.value
-          }
-          this.selected = data
+          this.assignSelected()
         }
       },
     },
@@ -214,6 +217,17 @@ export default {
         })
       }
       this.selected = ''
+    },
+
+    assignSelected() {
+      let data = {}
+
+      if (this.customField) {
+        data = this.options.find(option => option[this.customField] === this.value)
+      } else {
+        data = this.value
+      }
+      this.selected = data
     },
   },
 }

@@ -230,6 +230,7 @@ export default {
     this.setCheckoutPatient(this.patient)
     console.log(this.data)
     // this.params.patient = this.patient.id
+    this.getAllergies(this.patient?.id)
   },
 
   methods: {
@@ -237,6 +238,7 @@ export default {
       getPatientAccounts: 'billing/getPatientAccounts',
       setCheckoutPatient: 'checkout/setCheckoutPatient',
       getData: 'patients/getMedicationRequests',
+      getAllergies: 'patientAllergies/getAllergies',
     }),
   },
 }

@@ -32,19 +32,13 @@ import {
 
 export default {
   async initSinglePatientInformation({dispatch}, id) {
-    console.log('patients', id)
     await dispatch('getPatient', id)
-    dispatch('appointments/getAppointments', { filters: { patient: id, ordering: '-start' } }, { root:true })
     dispatch('getObservations', { refresh:true, filters: { patient: id }})
-    dispatch('getDiagnosis', id)
-    dispatch('getNotes', id)
     await dispatch('visits/getPatientCurrentVisits', { patient: id, status: 'arrived' }, { root:true })
     // await dispatch('encounters/setEncounterFromUpcomingEncounters', visit?.upcoming_encounters, { root:true})
     await dispatch('encounters/getEncounters', { patient: id } , { root:true })
     dispatch('encounters/getVisitEncounter', { patient: id } , { root:true })
-    dispatch('resources/getEncounterStatuses', null, { root:true })
-    dispatch('patients/getReferrals', id , { root:true })
-    dispatch('patientAllergies/getAllergies', id , { root:true })
+    dispatch('patients/getReferrals', id , { root:true }) //on the fence
     dispatch('resources/getObservationUnitTypes', null, { root:true })
     dispatch('resources/getVitalsUnitTypes', null, { root:true })
     dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
@@ -54,7 +48,6 @@ export default {
   },
 
   async initBillingPatientInformation({ dispatch, state }, id) {
-    console.log('billing patient information', id)
     await dispatch('getPatient', id)
 
     let patient = state.currentPatient
@@ -95,7 +88,6 @@ export default {
   },
 
   async getPatient({ commit, rootState }, id) {
-    console.log('get patient', id)
     if (!id) return
     try {
       const provider = rootState.auth.provider
@@ -161,7 +153,6 @@ export default {
   },
 
   async findPatient({commit, dispatch, state}, id) {
-    console.log('patientss', id)
     const patient = state.patients.find(patient => patient.id === id)
 
     if (patient) {
