@@ -28,10 +28,11 @@
     <div
       v-for="(list, index) in labLists"
       :key="index"
+      class="mt-3 border-b border-solid border-subtle"
     >
       <div
         v-if="list.code.id"
-        class="grid grid-cols-7 gap-4"
+        class="grid grid-cols-8 gap-4 items-center mb-3"
       >
         <div class="flex items-center col-span-6">
           <div class="space-y-1">
@@ -44,9 +45,20 @@
               v-if="list.price_tier"
               class="text-secondary text-sm"
             >
-              <!-- Price: <span class="text-primary">{{ priceTier(list) }}</span> -->
+              Price: <span class="text-primary">{{ priceTier(list) }}</span>
+            </p>
+            <p
+              class="text-secondary text-sm"
+            >
+              Priority: <span class="text-primary">{{ list.priority }}</span>
             </p>
           </div>
+        </div>
+        <div>
+          <Edit
+            class="w-4 h-4 cursor-pointer"
+            @click="editLab(list)"
+          />
         </div>
         <div>
           <Trash
@@ -78,7 +90,6 @@ import DeleteModal from '@/components/ui/modals/ConfirmDeleteModal'
 import ServiceRequestForm from '@/components/forms/ServiceRequestForm'
 import VirtualCareRequirementsModal from '@/components/appointments/VirtualCareRequirementsModal'
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { required } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
 
 export default {
@@ -127,9 +138,6 @@ export default {
   },
 
   validations: {
-    labRequest: {
-      code: { required },
-    },
   },
 
   computed: {
@@ -204,6 +212,7 @@ export default {
       let price = service.price_tiers.filter(
         (result) => list.price_tier === result.id,
       )
+      console.log(price)
       return `${this.$currency(price[0].charge, price[0].currency).format()} - ${price[0].description}`
     },
 
@@ -226,6 +235,7 @@ export default {
       // } else {
       //   this.storeData.patient.id ? this.getPatientServiceRequests(this.storeData.patient.id) : this.$toast.error('Please select a patient')
       }
+      this.labLists = this.form.labs || []
     },
 
     async updateRequest(lab){
@@ -239,7 +249,7 @@ export default {
         this.labLists = [...this.labLists, { ...this.labRequest }]
         this.labRequest = {}
       }
-      console.log(this.labLists)
+      this.form.labs = this.labLists
     },
 
     deleteLab(list){
@@ -250,6 +260,11 @@ export default {
         }
       }
       this.labLists = [...this.labLists]
+      this.form.labs = this.labLists
+    },
+
+    editLab(list){
+      this.labRequest = list
     },
 
     async removeLab(id) {
@@ -273,12 +288,14 @@ export default {
     },
 
     submit() {
-      this.$v.$touch()
-
-      if (this.$v.$invalid && this.mode === 'create') {
-        this.$toast.error('Please fill all required fields')
+      if(this.labRequest.code.id){
+        this.addLabRequest()
+      }
+      if (!this.labLists && this.mode === 'create') {
+        this.$toast.error('Please add a lab request')
         return
       }
+      this.form.labs = this.labLists
 
       if (this.mode === 'update') {
         this.update()
