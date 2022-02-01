@@ -72,14 +72,15 @@
       </div>
     </div>
     <div class="space-y-4">
-      <!-- <PharmacyDateFilters
+      <PharmacyDateFilters
         v-model="lists"
-      > -->
-      <Search
-        v-model="search"
-        placeholder="Search prescription..."
-      />
-      <!-- </PharmacyDateFilters> -->
+        @change="searchByDate"
+      >
+        <Search
+          v-model="search"
+          placeholder="Search prescription..."
+        />
+      </PharmacyDateFilters>
       <ConfirmPrescriptionModal
         mode="prescription"
         :prescriptions="activeData"
@@ -92,7 +93,7 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import ConfirmPrescriptionModal from '@/components/pharmacy/modals/ConfirmPrescriptionModal'
-// import PharmacyDateFilters from '@/components/pharmacy/PharmacyDateFilters'
+import PharmacyDateFilters from '@/components/pharmacy/PharmacyDateFilters'
 import DataMixin from '@/mixins/data'
 
 export default {
@@ -100,7 +101,7 @@ export default {
 
   components: {
     ConfirmPrescriptionModal,
-    // PharmacyDateFilters,
+    PharmacyDateFilters,
   },
 
   mixins: [DataMixin],
@@ -129,6 +130,9 @@ export default {
         loading: false,
         data: [],
       },
+      activeMedications: [],
+      created_on_before: '',
+      created_on_after: '',
     }
   },
 
@@ -161,7 +165,6 @@ export default {
         this.activeMedications = newValue
       },
     },
-
 
     ...mapState({
       patient: (state) => state.patients.currentPatient,
@@ -202,9 +205,6 @@ export default {
 
       return types
     },
-    activeMedications() {
-      return this.patientMedications.filter(el => el.status == 'active')
-    },
 
     isSelected() {
       return (index) => this.initialSelected === index
@@ -212,22 +212,18 @@ export default {
   },
 
   watch: {
-    // lists: {
-    //   handler(val){
-    //     if(val){
-
-    //       if (val.end) {
-    //         this.params.created_on__before = this.$date.formatQueryParamsDate(val.end)
-    //         this.params.created_on__after = this.$date.formatQueryParamsDate(val.start || Date.now())
-    //       }
-    //       this.searchData()
-    //     }
-    //   },
-    // },
+    lists: {
+      handler(val){
+        if(val){
+          this.searchByDate(val)
+        }
+      },
+    },
   },
 
   created() {
     this.setCheckoutPatient(this.patient)
+    this.activeMedications = this.patientMedications.filter(el => el.status == 'active')
     console.log(this.data)
     // this.params.patient = this.patient.id
     this.getAllergies(this.patient?.id)
@@ -240,6 +236,17 @@ export default {
       getData: 'patients/getMedicationRequests',
       getAllergies: 'patientAllergies/getAllergies',
     }),
+    
+    searchByDate(el){
+      let endDate = new Date(el.end)
+      let startDate = new Date(el.start)
+
+      let list = this.activeMedications.filter(function(date) { 
+        return new Date(date.created_at) >= startDate && new Date(date.created_at) <= endDate 
+      })
+
+      this.activeData = list
+    },
   },
 }
 </script>
