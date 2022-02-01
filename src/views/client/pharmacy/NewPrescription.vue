@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import ConfirmPrescriptionModal from '@/components/pharmacy/modals/ConfirmPrescriptionModal'
 
 export default {
@@ -184,6 +184,16 @@ export default {
 
       return types
     },
+  },
+
+  created() {
+    this.getAllergies(this.patient.id)
+  },
+
+  methods: {
+    ...mapActions({
+      getAllergies: 'patientAllergies/getAllergies',
+    }),
   },
 }
 </script>
