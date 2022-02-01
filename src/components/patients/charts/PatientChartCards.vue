@@ -148,7 +148,7 @@ import NewChart from './NewChart'
 import ChartCard from './ChartCard'
 import SocialHistoryDetails from '@/components/patients/details/SocialHistoryDetails'
 import IPDPatientProfileCharts from '@/components/ipd/IPDPatientProfileCharts'
-import { mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 
 export default {
@@ -167,6 +167,18 @@ export default {
       patientMedications: 'patients/patientMedications',
       socialHistory: 'encounters/currentPatientSocialHistory',
       patientPreviousIllness: 'patients/patientPreviousIllness',
+    }),
+  },
+
+  created() {
+    this.getDiagnosis(this.$route.params.id)
+    this.getAllergies(this.$route.params.id)
+  },
+
+  methods: {
+    ...mapActions({
+      getDiagnosis: 'patients/getDiagnosis',
+      getAllergies: 'patientAllergies/getAllergies',
     }),
   },
 }

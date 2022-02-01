@@ -17,7 +17,6 @@ export default {
   },
 
   patientAccountBalance: (state, getters, rootState, rootGetters) => {
-    console.log(state.currentPatient)
     if (!state.currentPatient) return false
     const reducer = (accumulator, currentValue) => accumulator.balance + currentValue.balance
 

@@ -35,8 +35,8 @@
                 label="Price"
                 placeholder="Service tier price"
                 class="col-span-2"
-                type="number"
                 required
+                :mask="currencyMask"
               />
               <CurrencySelect
                 v-model="tier.currency"
@@ -139,6 +139,13 @@ import { required, minLength, requiredIf } from 'vuelidate/lib/validators'
 import { mapActions, mapState } from 'vuex'
 import isEmpty from 'lodash/isEmpty'
 import MultiStep from '@/mixins/multistep'
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+const currencyMask = createNumberMask({
+  prefix: '',
+  allowDecimal: true,
+  includeThousandsSeparator: false,
+  allowNegative: false,
+})
 
 export default {
   name: 'ServicePricing',
@@ -150,6 +157,7 @@ export default {
       type: 'single',
       tiers: [],
       code: 'cost',
+      currencyMask,
       form: {
         price_tiers: [
           {

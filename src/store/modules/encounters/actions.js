@@ -41,6 +41,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       params.visit = rootGetters['visits/visitId']
+      if (!params.visit) return
       const { data } = await EncountersAPI.list(provider.id, params)
       commit(SET_ENCOUNTER, data.find(encounter => encounter.status === 'in-progress') || data[0])
       commit(SET_PATIENT_CURRENT_ENCOUNTER, data.find(encounter => encounter.status === 'in-progress') || data[0])

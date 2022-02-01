@@ -22,6 +22,7 @@
     <component
       :is="inputComponent"
       v-model="localValue"
+      v-mask="mask"
       :type="type"
       v-bind="$attrs"
       class="se-no-label"
@@ -57,6 +58,10 @@ export default {
     },
     information: {
       type: String,
+      default: '',
+    },
+    mask: {
+      type: [String, Object, Function, Array],
       default: '',
     },
   },

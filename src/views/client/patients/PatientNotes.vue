@@ -136,12 +136,17 @@ export default {
     }),
   },
 
+  created() {
+    this.getNotes(this.$route.params.id)
+  },
+
   methods: {
     ...mapActions({
       createPatientNote: 'encounters/createNote',
       updatePatientNote: 'encounters/updateNote',
       deletePatientNote: 'encounters/removeNote',
       setCurrentEncounter: 'encounters/setCurrentEncounter',
+      getNotes: 'patients/getNotes',
     }),
 
     showOrder(data) {

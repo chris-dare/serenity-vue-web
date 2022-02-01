@@ -224,6 +224,9 @@ export default {
   created() {
     this.setCheckoutPatient(this.patient)
     this.activeMedications = this.patientMedications.filter(el => el.status == 'active')
+    console.log(this.data)
+    // this.params.patient = this.patient.id
+    this.getAllergies(this.patient?.id)
   },
 
   methods: {
@@ -231,6 +234,7 @@ export default {
       getPatientAccounts: 'billing/getPatientAccounts',
       setCheckoutPatient: 'checkout/setCheckoutPatient',
       getData: 'patients/getMedicationRequests',
+      getAllergies: 'patientAllergies/getAllergies',
     }),
     
     searchByDate(el){
