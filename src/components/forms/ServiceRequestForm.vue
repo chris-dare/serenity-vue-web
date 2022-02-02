@@ -140,6 +140,8 @@ export default {
   async created() {
     await this.getDiagnosticLabProceedures()
 
+    this.filteredData = this.labProceedures
+
     if (this.localValue?.display) {
       this.searchLabProceedures(this.localValue.display)
     }
