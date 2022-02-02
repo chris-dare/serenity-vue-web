@@ -8,6 +8,7 @@
 
     <BillingTableFilters
       v-model="lists"
+      @change="searchByDate"
     >
       <SeButton
         variant="secondary"
@@ -186,17 +187,7 @@ export default {
     lists: {
       handler(val){
         if(val){
-          let filters = { ...this.filters }
-
-          if (val.end) {
-            filters.date_to = this.$date.formatQueryParamsDate(val.end)
-            delete filters.end
-            filters.date_from = this.$date.formatQueryParamsDate(val.start || Date.now())
-            delete filters.start
-          }
-
-          this.filters = { ...filters }
-          this.getData()
+          this.searchByDate(val)
         }
       },
     },
@@ -229,6 +220,20 @@ export default {
     searchInvoices: debounce(function(search) {
       this.refresh({ search, page: this.page, page_size: this.pageLength })
     }, 300, false),
+
+    searchByDate(val){
+      let filters = { ...this.filters }
+
+      if (val.end) {
+        filters.date_to = this.$date.formatQueryParamsDate(val.end)
+        delete filters.end
+        filters.date_from = this.$date.formatQueryParamsDate(val.start || Date.now())
+        delete filters.start
+      }
+
+      this.filters = { ...filters }
+      this.getData()
+    },
 
     settle(bill) {
       this.$trigger('corporate:settle:open', bill)

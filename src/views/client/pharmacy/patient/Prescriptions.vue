@@ -74,16 +74,16 @@
     <div class="space-y-4">
       <PharmacyDateFilters
         v-model="lists"
+        @change="searchByDate"
       >
         <Search
-          v-model="params.search"
-          placeholder="Search for prescription..."
-          @input="searchData"
+          v-model="search"
+          placeholder="Search prescription..."
         />
       </PharmacyDateFilters>
       <ConfirmPrescriptionModal
         mode="prescription"
-        :prescriptions="activeMedications"
+        :prescriptions="activeData"
       />
     </div>
   </div>
@@ -94,7 +94,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import ConfirmPrescriptionModal from '@/components/pharmacy/modals/ConfirmPrescriptionModal'
 import PharmacyDateFilters from '@/components/pharmacy/PharmacyDateFilters'
-import DataMixin from '@/mixins/paginated'
+import DataMixin from '@/mixins/data'
 
 export default {
   name: 'Prescriptions',
@@ -124,47 +124,75 @@ export default {
         'Refill',
       ],
       lists: {},
+      search: '',
+      searchTerms: ['course_of_therapy_type', 'name', 'practitioner_detail.name'],
       prescriptions: {
         loading: false,
         data: [],
       },
+      activeMedications: [],
+      created_on_before: '',
+      created_on_after: '',
     }
   },
 
   computed: {
+    activeData: {
+      get: function () {
+        let search = this.search.trim().toLowerCase()
+
+        return this.search.trim() !== ''
+          ? this.activeMedications.filter((d) => {
+            return (
+              d.practitioner_detail.name
+                .toString()
+                .toLowerCase()
+                .indexOf(search) > -1 ||
+              d.course_of_therapy_type
+                .toString()
+                .toLowerCase()
+                .indexOf(search) > -1 ||
+              d.medication_detail[0].display
+                .toString()
+                .toLowerCase()
+                .indexOf(search) > -1
+            )
+          })
+          : this.activeMedications
+      },
+      // setter
+      set: function (newValue) {
+        this.activeMedications = newValue
+      },
+    },
+
     ...mapState({
       patient: (state) => state.patients.currentPatient,
       patientAllergies: state => state.patientAllergies.allergies,
       workspaceType: (state) => state.global.workspaceType,
     }),
-    
     ...mapGetters({
       patientMedications: 'patients/patientMedications',
       currentEncounterDiagnosis: 'encounters/currentEncounterDiagnosis',
       userAccounts: 'billing/userAccounts',
       corporateAccounts: 'billing/corporateAccounts',
     }),
-
     corporateAccountNames(){
       return this.corporateAccounts.map(el => el.description).join(', ')
     },
-
     userAccountNames(){
       return this.userAccounts.map(el => el.description).join(', ')
     },
-
     provisionalDiagnosis() {
       return this.currentEncounterDiagnosis.filter(el => {
         return el.status === 'PROVISIONAL'
       })
     },
-
     finalDiagnosis() {
       return this.currentEncounterDiagnosis.filter(el => {
         return el.status !== 'PROVISIONAL'
       })
     },
-
     availableActions() {
       const types = [
         {
@@ -178,10 +206,6 @@ export default {
       return types
     },
 
-    activeMedications() {
-      return this.patientMedications.filter(el => el.status == 'active')
-    },
-
     isSelected() {
       return (index) => this.initialSelected === index
     },
@@ -191,12 +215,7 @@ export default {
     lists: {
       handler(val){
         if(val){
-
-          if (val.end) {
-            this.params.created_on__before = this.$date.formatQueryParamsDate(val.end)
-            this.params.created_on__after = this.$date.formatQueryParamsDate(val.start || Date.now())
-          }
-          this.searchData()
+          this.searchByDate(val)
         }
       },
     },
@@ -204,7 +223,10 @@ export default {
 
   created() {
     this.setCheckoutPatient(this.patient)
-    this.params.patient = this.patient.id
+    this.activeMedications = this.patientMedications.filter(el => el.status == 'active')
+    console.log(this.data)
+    // this.params.patient = this.patient.id
+    this.getAllergies(this.patient?.id)
   },
 
   methods: {
@@ -212,7 +234,19 @@ export default {
       getPatientAccounts: 'billing/getPatientAccounts',
       setCheckoutPatient: 'checkout/setCheckoutPatient',
       getData: 'patients/getMedicationRequests',
+      getAllergies: 'patientAllergies/getAllergies',
     }),
+    
+    searchByDate(el){
+      let endDate = new Date(el.end)
+      let startDate = new Date(el.start)
+
+      let list = this.activeMedications.filter(function(date) { 
+        return new Date(date.created_at) >= startDate && new Date(date.created_at) <= endDate 
+      })
+
+      this.activeData = list
+    },
   },
 }
 </script>
