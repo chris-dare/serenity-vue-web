@@ -175,10 +175,25 @@ export default {
     }
   },
 
-  validations: {
-    form: {
-      code: { required },
-    },
+  validations() {
+    if (this.mode === 'create') {
+      return {
+        serviceRequests: {
+          $each: {
+            code: { required },
+          },
+        },
+      }
+    }
+
+    if (this.mode === 'update') {
+      return {
+        form : {
+          code: { required },
+        },
+      }
+    }
+    
   },
 
   computed: {
