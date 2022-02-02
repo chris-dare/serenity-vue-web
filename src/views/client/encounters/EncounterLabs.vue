@@ -19,6 +19,7 @@
         v-model="serviceRequests"
         :default-value="form"
         label="Order Labs/ imaging"
+        button-label="Add new lab"
       >
         <template #default="{ data }">
           <ServiceRequestForm

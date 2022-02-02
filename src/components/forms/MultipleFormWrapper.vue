@@ -2,7 +2,14 @@
   <div class="space-y-6">
     <div class="flex items-center justify-between">
       <p class="font-semibold">{{ label }}</p>
-      <IconButton @click="add"><Add /></IconButton>
+
+      <div
+        class="flex items-center space-x-2 text-serenity-primary my-6 cursor-pointer text-sm w-auto"
+        @click="add"
+      >
+        <AddAlt class="w-5 h-5" />
+        <p class="text-serenity-primary">{{ buttonLabel }}</p>
+      </div>
     </div>
     <div
       v-for="(val, index) in localValue"
@@ -36,6 +43,11 @@ export default {
 
     defaultValue: {
       type: [String, Array, Object],
+      default: null,
+    },
+
+    buttonLabel: {
+      type: String,
       default: null,
     },
   },

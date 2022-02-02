@@ -180,7 +180,7 @@ export default {
     value: {
       immediate: true,
       handler(val, oldVal) {
-        if (val !== oldVal && this.options.length) {
+        if (val !== oldVal && this.options?.length) {
           this.assignSelected()
         }
       },

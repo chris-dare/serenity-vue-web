@@ -32,11 +32,11 @@
               />
               <FormInput
                 v-model="tier.charge"
+                v-mask="currencyMask"
                 label="Price"
                 placeholder="Service tier price"
                 class="col-span-2"
                 required
-                :mask="currencyMask"
               />
               <CurrencySelect
                 v-model="tier.currency"
