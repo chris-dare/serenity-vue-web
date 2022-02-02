@@ -4,7 +4,7 @@
       v-for="(drug, index) in localValue.drugs"
       :key="index"
     >
-      <p class="text-serenity-green font-semibold mb-4">{{ index+1 }}.</p>
+      <p class="text-serenity-green font-semibold mb-4">{{ index + 1 }}.</p>
       <div class="grid grid-cols-12 gap-x-4 gap-y-8 items-center">
         <div class="col-span-11 grid grid-cols-3 gap-4 items-center">
           <AutoCompleteMedication

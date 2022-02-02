@@ -7,17 +7,27 @@
       >
         Update Lab
       </p>
-      <p
-        v-else
-        class="font-semibold"
-      >
-        Order Labs/ imaging
-      </p>
 
       <ServiceRequestForm
+        v-if="mode === 'update'"
         v-model="form"
         :v="$v"
       />
+
+      <MultipleFormWrapper
+        v-else
+        v-model="serviceRequests"
+        :default-value="form"
+        label="Order Labs/ imaging"
+        button-label="Add new lab"
+      >
+        <template #default="{ data }">
+          <ServiceRequestForm
+            :value="data"
+            :v="$v"
+          />
+        </template>
+      </MultipleFormWrapper>
 
       <div class="flex justify-end space-x-2">
         <SeButton
@@ -118,19 +128,21 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import ServiceRequestForm from '@/components/forms/ServiceRequestForm'
 import unsavedChanges from '@/mixins/unsaved-changes'
+import MultipleFormWrapper from '@/components/forms/MultipleFormWrapper'
 
 export default {
   name: 'EncountersLabs',
 
   components: {
     ServiceRequestForm,
+    MultipleFormWrapper,
   },
 
   mixins: [unsavedChanges],
 
   props: {
     labId: {
-      type: String,
+      type: [String, Number],
       default: null,
     },
   },
@@ -155,6 +167,11 @@ export default {
       ],
       deleteLoading: false,
       requiredFields: ['code'],
+
+      serviceRequests: [{
+        priority: 'routine',
+        intent: 'plan',
+      }],
     }
   },
 
@@ -269,11 +286,16 @@ export default {
       if (this.mode === 'update') {
         this.update()
       } else {
-        this.form.requesting_practitioner_role = this.provider.practitionerRoleId
-        this.form.patient = this.$route.params.id
-        this.form.location = this.$locationId
-        this.form.encounter = this.encounter.id
-        this.form.visit_id = this.visitId
+        
+        this.serviceRequests.map(request => {
+          request.requesting_practitioner_role = this.provider.practitionerRoleId
+          request.patient = this.$route.params.id
+          request.location = this.$locationId
+          request.encounter = this.encounter.id
+          request.visit_id = this.visitId
+          request.status = this.$isCurrentWorkspace('IPD') ? 'active' : 'draft'
+          return request
+        })
         this.save(reroute)
       }
     },
@@ -282,8 +304,7 @@ export default {
       this.loading = true
 
       try {
-        this.form.status = this.$isCurrentWorkspace('IPD') ? 'active' : 'draft'
-        await this.createServiceRequest([this.form])
+        await this.createServiceRequest(this.serviceRequests)
         this.loading = false
         this.$toast.open({
           message: 'Service Request successfully added',
@@ -339,6 +360,16 @@ export default {
         intent: 'plan',
       }
       this.$router.go(-1)
+    },
+
+    addLab() {
+      this.serviceRequests.push({
+        priority: 'routine',
+        intent: 'plan',
+      })
+    },
+    removeLabLocal(index) {
+      this.serviceRequests.splice(index, 1)
     },
   },
 }

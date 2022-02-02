@@ -111,7 +111,15 @@ export default {
     },
 
     priceTier() {
-      return `${this.$currency(this.selectedPriceTier.charge, this.selectedPriceTier.currency).format()} - ${this.selectedPriceTier.description}`
+      if(this.storeData.labs) {
+        let service = this.storeData.labs.map((el) => this.labProceedures.find(service => service.id === el.code.id))
+        let prices = service.map((el, i) => el.price_tiers.find(price => price.id === this.storeData.labs[i].price_tier))
+        let num = prices.map((a) => a.charge)
+        console.log(num)
+        return  `${this.$currency(num.reduce((a, b) => parseFloat(a) + parseFloat(b), 0), prices[0].currency).format()} for ${service.length} labs`
+      } else {
+        return `${this.$currency(this.selectedPriceTier.charge, this.selectedPriceTier.currency).format()} - ${this.selectedPriceTier.description}`
+      }
     },
 
     options() {

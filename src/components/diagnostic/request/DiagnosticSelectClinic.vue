@@ -5,9 +5,11 @@
     :previous="previous"
     :modal="modal"
     :loading="finalLoading"
+    :add="true"
     :query="$route.query"
     @back="goBack"
     @cancel="cancel"
+    @add="addLabRequest"
     @save="validateAndReroute"
   >
     <p class="text-primary my-4">
@@ -23,9 +25,52 @@
         @click="selected = appointment.value"
       />
     </div>
+    <div
+      v-for="(list, index) in labLists"
+      :key="index"
+      class="mt-3 border-b border-solid border-subtle"
+    >
+      <div
+        v-if="list.code.id"
+        class="grid grid-cols-8 gap-4 items-center mb-3"
+      >
+        <div class="flex items-center col-span-6">
+          <div class="space-y-1">
+            <p class="text-black font-semibold">{{ list.code.service_request_category }}</p>
+            <p class="text-secondary text-sm">
+              Service:
+              <span class="text-primary">{{ list.code.healthcare_service_name }}</span>
+            </p>
+            <p
+              v-if="list.price_tier"
+              class="text-secondary text-sm"
+            >
+              Price: <span class="text-primary">{{ priceTier(list) }}</span>
+            </p>
+            <p
+              class="text-secondary text-sm"
+            >
+              Priority: <span class="text-primary">{{ list.priority }}</span>
+            </p>
+          </div>
+        </div>
+        <div>
+          <Edit
+            class="w-4 h-4 cursor-pointer"
+            @click="editLab(list)"
+          />
+        </div>
+        <div>
+          <Trash
+            class="w-4 h-4 cursor-pointer"
+            @click="deleteLab(list)"
+          />
+        </div>
+      </div>
+    </div>
     <SeForm class="space-y-8 mt-8">
       <ServiceRequestForm
-        v-model="form"
+        v-model="labRequest"
         :v="$v"
       />
     </SeForm>
@@ -45,16 +90,14 @@ import DeleteModal from '@/components/ui/modals/ConfirmDeleteModal'
 import ServiceRequestForm from '@/components/forms/ServiceRequestForm'
 import VirtualCareRequirementsModal from '@/components/appointments/VirtualCareRequirementsModal'
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { required } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
-import unsavedChanges from '@/mixins/unsaved-changes'
 
 export default {
   name: 'DiagnosticSelectClinic',
 
   components: { VirtualCareRequirementsModal, DeleteModal, ServiceRequestForm },
 
-  mixins: [MultiStep, unsavedChanges],
+  mixins: [MultiStep],
 
   props: {
     modal: {
@@ -74,7 +117,7 @@ export default {
       edit: Edit,
       selected: 'diagnostic',
       mode: 'create',
-      form: {
+      labRequest: {
         priority: 'routine',
         code: null,
         forTravel: null,
@@ -82,7 +125,7 @@ export default {
       categories: [ 'laboratory-procedure', 'imaging', 'counselling', 'education', 'surgical-procedure' ],
       loading: false,
       finalLoading: false,
-      propertiesToCompareChanges: ['form'],
+      // propertiesToCompareChanges: ['labRequest'],
       columns: ['Date', 'Lab type', 'Priority', 'Order detail', 'Bodysite', 'Specimen', 'Action'],
       acted: false,
       deleteLoading: false,
@@ -90,13 +133,11 @@ export default {
       previous: 'DiagnosticSelectPatient',
       parent: 'DiagnosticDashboard',
       visitId: '',
+      labLists: [],
     }
   },
 
   validations: {
-    form: {
-      code: { required },
-    },
   },
 
   computed: {
@@ -164,6 +205,17 @@ export default {
       this.$router.push({ name: 'Dashboard'})
     },
 
+    priceTier(list) {
+      if (!list.code || !this.labProceedures.length) return 'Select Service'
+      let service = this.labProceedures.find(service => service.id === list.code.id)
+      if (!service) 'Select Service'
+      let price = service.price_tiers.filter(
+        (result) => list.price_tier === result.id,
+      )
+      console.log(price)
+      return `${this.$currency(price[0].charge, price[0].currency).format()} - ${price[0].description}`
+    },
+
     ...mapActions({
       addToStoreData: 'appointments/addToCurrentAppointment',
       refresh: 'appointments/refreshCurrentAppointment',
@@ -183,11 +235,36 @@ export default {
       // } else {
       //   this.storeData.patient.id ? this.getPatientServiceRequests(this.storeData.patient.id) : this.$toast.error('Please select a patient')
       }
+      this.labLists = this.form.labs || []
     },
 
     async updateRequest(lab){
       this.mode = 'update'
       this.form = lab
+    },
+
+    addLabRequest(){
+      let service = this.labLists.find(service => service.code.id === this.labRequest.code.id)
+      if(!service){
+        this.labLists = [...this.labLists, { ...this.labRequest }]
+        this.labRequest = {}
+      }
+      this.form.labs = this.labLists
+    },
+
+    deleteLab(list){
+      for( let i = 0; i < this.labLists.length; i++){                          
+        if ( this.labLists[i].code.id === list.code.id) { 
+          this.labLists.splice(i, 1)
+          i--
+        }
+      }
+      this.labLists = [...this.labLists]
+      this.form.labs = this.labLists
+    },
+
+    editLab(list){
+      this.labRequest = list
     },
 
     async removeLab(id) {
@@ -211,12 +288,14 @@ export default {
     },
 
     submit() {
-      this.$v.$touch()
-
-      if (this.$v.$invalid && this.mode === 'create') {
-        this.$toast.error('Please fill all required fields')
+      if(this.labRequest.code.id){
+        this.addLabRequest()
+      }
+      if (!this.labLists && this.mode === 'create') {
+        this.$toast.error('Please add a lab request')
         return
       }
+      this.form.labs = this.labLists
 
       if (this.mode === 'update') {
         this.update()

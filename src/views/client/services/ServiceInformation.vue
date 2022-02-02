@@ -229,7 +229,7 @@ export default {
         required,
         async isUnique(value) {
           if (value === '' || this.form.id) return true
-          const data = await this.services.find(service => service.healthcare_service_name.toLowerCase() === value.toLowerCase() )
+          const data = await this.services.find(service => service.healthcare_service_name?.toLowerCase() === value?.toLowerCase() )
 
           return data ? false : true
         },
