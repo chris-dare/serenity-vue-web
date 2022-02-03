@@ -5,11 +5,9 @@
     :previous="previous"
     :modal="modal"
     :loading="finalLoading"
-    :add="true"
     :query="$route.query"
     @back="goBack"
     @cancel="cancel"
-    @add="addLabRequest"
     @save="validateAndReroute"
   >
     <p class="text-primary my-4">
@@ -72,7 +70,17 @@
       <ServiceRequestForm
         v-model="labRequest"
         :v="$v"
-      />
+      >
+        <div class="flex justify-end">
+          <SeButton
+            class="mt-3"
+            :loading="loading"
+            @click="addLabRequest"
+          >
+            Add new lab
+          </SeButton>
+        </div>
+      </ServiceRequestForm>
     </SeForm>
     <DeleteModal
       :loading="deleteLoading"
@@ -246,6 +254,14 @@ export default {
     addLabRequest(){
       let service = this.labLists.find(service => service.code.id === this.labRequest.code.id)
       if(!service){
+        if (!this.labRequest.price_tier) {
+          this.$toast.open({
+            message: 'Select a price tier',
+            type: 'error',
+          })
+          return
+        }
+        this.labRequest.priority = this.labRequest.priority || 'routine'
         this.labLists = [...this.labLists, { ...this.labRequest }]
         this.labRequest = {}
       }
@@ -288,10 +304,12 @@ export default {
     },
 
     submit() {
-      if(this.labRequest.code.id){
+      // if(this.labRequest){
+      //   this.addLabRequest()
+      //   return
+      // }
+      if (this.labRequest || !this.labLists || this.mode === 'create') {
         this.addLabRequest()
-      }
-      if (!this.labLists && this.mode === 'create') {
         this.$toast.error('Please add a lab request')
         return
       }

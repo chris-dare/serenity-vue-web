@@ -85,6 +85,7 @@ export default {
       previous: 'DiagnosticService',
       next: 'DiagnosticSummary',
       parent: 'DiagnosticDashboard',
+      totalCash: 0,
     }
   },
   computed: {
@@ -107,7 +108,7 @@ export default {
     },
 
     selectedCharge() {
-      return this.selectedPriceTier.charge || 0
+      return this.totalCash || this.selectedPriceTier.charge || 0
     },
 
     priceTier() {
@@ -115,8 +116,8 @@ export default {
         let service = this.storeData.labs.map((el) => this.labProceedures.find(service => service.id === el.code.id))
         let prices = service.map((el, i) => el.price_tiers.find(price => price.id === this.storeData.labs[i].price_tier))
         let num = prices.map((a) => a.charge)
-        console.log(num)
-        return  `${this.$currency(num.reduce((a, b) => parseFloat(a) + parseFloat(b), 0), prices[0].currency).format()} for ${service.length} labs`
+        this.calTotal(num)
+        return  `${this.$currency(this.totalCash, prices[0].currency).format()} for ${service.length} labs`
       } else {
         return `${this.$currency(this.selectedPriceTier.charge, this.selectedPriceTier.currency).format()} - ${this.selectedPriceTier.description}`
       }
@@ -181,6 +182,10 @@ export default {
     cancel(){
       this.$router.push({ name: 'Dashboard'})
       this.refresh()
+    },
+
+    calTotal(num){
+      this.totalCash = num.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
     },
 
     save() {  

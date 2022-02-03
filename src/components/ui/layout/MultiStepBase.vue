@@ -39,14 +39,6 @@
             Skip
           </SeButton>
           <SeButton
-            v-if="add"
-            class="mr-2"
-            :loading="loading"
-            @click="$emit('add')"
-          >
-            Add a lab 
-          </SeButton>
-          <SeButton
             :icon="icon"
             :loading="loading"
             @click="$emit('save')"
@@ -73,10 +65,6 @@ export default {
       default: null,
     },
     skip: {
-      type: Boolean,
-      default: false,
-    },
-    add: {
       type: Boolean,
       default: false,
     },
