@@ -225,9 +225,7 @@ export default {
         })
         
         if (!this.hasNoOptions) {
-          data.forEach(item => {
-            this.settleBill(item)
-          })
+          this.settleBill(data)
         } else {
           this.loading = false
           if (this.$route.params.id) {
@@ -244,16 +242,20 @@ export default {
     },
 
     async settleBill(item) {
+      console.log(this.summary)
       try {
         this.loading = true
-        await this.payForService({
-          service_request: item.id, // a service request raised by a patient
-          price_tier: item.price_tier,
-          account_id: this.summary.account_id,
-          currency: this.summary.currency,
-          amount: this.summary.amount,
-          transaction_type: this.summary.transaction_type, //user-wallet, corporate-account, mobile-money, cash
+        let payload = item.map(element => {
+          return {
+            service_request: element.id, // a service request raised by a patient
+            price_tier: element.price_tier,
+            account_id: this.summary.account_id,
+            currency: this.summary.currency,
+            amount: this.summary.amount,
+            transaction_type: this.summary.transaction_type, //user-wallet, corporate-account, mobile-money, cash
+          }
         })
+        await this.payForService(payload)
 
         this.$toast.open('Bill successfully settled')
         this.loading = false
