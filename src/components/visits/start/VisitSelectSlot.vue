@@ -28,6 +28,8 @@ import GroupedSlotsList from '@/components/visits/start/GroupedSlotsList'
 import { mapGetters, mapActions } from 'vuex'
 import Time from '@carbon/icons-vue/es/time/16'
 import modelMixin from '@/mixins/model'
+import addDays from 'date-fns/addDays'
+import parseISO from 'date-fns/parseISO'
 
 export default {
   name: 'VisitSelectSlot',
@@ -98,7 +100,7 @@ export default {
     convertFromDatePickerFormat(val) {
       return {
         start__gt: val,
-        end__lt: this.$date.formatDate(this.$date.endOfDate(val), 'yyyy-MM-dd\'T\'HH:mm:ssxxx'),
+        end__lt: this.$date.formatDate(addDays(parseISO(val), 1), 'yyyy-MM-dd\'T\'HH:mm:ssxxx'),
       }
     },
   },
