@@ -74,6 +74,7 @@ import { required, minValue } from 'vuelidate/lib/validators'
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/16'
 import Patient from '@/models/Patient'
 import AppointmentsAPI from '@/api/appointments'
+import addDays from 'date-fns/addDays'
 
 export default {
   name: 'BookVisitModal',
@@ -243,7 +244,7 @@ export default {
 
       this.loading = true
 
-      await this.filter()
+      // await this.filter()
       await this.getPatientAppointments()
       this.step = this.step + 1
       this.loading = false
@@ -271,7 +272,7 @@ export default {
     convertFromDatePickerFormat(val) {
       return {
         start__gt: this.$date.formatQueryParamsDate(val),
-        end__lt: this.$date.formatQueryParamsDate(this.$date.endOfDate(val)),
+        end__lt: this.$date.formatDate(addDays(val, 1), 'yyyy-MM-dd\'T\'HH:mm:ssxxx'),
       }
     },
 
