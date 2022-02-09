@@ -18,7 +18,7 @@
           <p>{{ $date.formatDate(row.authored_on, 'dd MMM, yyyy') }}</p>
         </cv-data-table-cell>
         <cv-data-table-cell>
-          <p>{{ row.code }}</p>
+          <p>{{ row.display }}</p>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <p>{{ row.priority | capitalize }}</p>
