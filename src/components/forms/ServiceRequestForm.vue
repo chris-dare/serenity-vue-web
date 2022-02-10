@@ -154,7 +154,7 @@ export default {
     }),
 
     searchLabProceedures: debounce(function(search) {
-      this.filteredData = this.labProceedures.filter(data => !search || data.alias.toLowerCase().includes(search.toLowerCase()) || data.display.toLowerCase().includes(search.toLowerCase()))
+      this.filteredData = this.labProceedures.filter(data => !search || data.alias?.toLowerCase().includes(search?.toLowerCase()) || data.display?.toLowerCase().includes(search?.toLowerCase()))
     }, 300, false),
   },
 }
