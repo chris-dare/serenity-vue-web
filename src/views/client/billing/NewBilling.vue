@@ -21,7 +21,7 @@ export default {
   
   computed: {
     title() {
-      return this.isUpdate ? 'Update Billing Request' : this.isReschedule ? 'Reschedule Billing Request' : 'New Billing Request'
+      return this.isUpdate ? 'Update Billing Request' : this.isReschedule ? 'Reschedule Billing Request' : 'Raise bill'
     },
     isUpdate() {
       return this.$route.query.type === 'update'
@@ -63,7 +63,7 @@ export default {
 
   methods: {
     ...mapActions({
-      refresh: 'Billing Requests/refreshCurrentBilling Request',
+      refresh: 'requests/refreshCurrentDiagnostic',
     }),  
   },
 }

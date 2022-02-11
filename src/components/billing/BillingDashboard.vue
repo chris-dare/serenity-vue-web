@@ -56,8 +56,8 @@ export default {
           value: 'clients',
         },
         {
-          label: 'Create bill',
-          description: 'Create a new bill for patient',
+          label: 'Raise bill',
+          description: 'Raise a new bill for patient',
           type: 'cash',
           value: 'create',
         },

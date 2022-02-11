@@ -34,7 +34,7 @@
             v-if="skip && !modal"
             class="mr-2"
             variant="secondary"
-            @click="$router.push({ name: 'DiagnosticSummary' })"
+            @click="$emit('skipping')"
           >
             Skip
           </SeButton>
