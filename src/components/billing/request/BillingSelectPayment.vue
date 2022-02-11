@@ -5,7 +5,7 @@
     next-label="Next: View Summary"
     :query="$route.query"
     :modal="modal"
-    :skip="false"
+    skip="BillingSummary"
     @cancel="cancel"
     @back="goBack"
     @save="save"

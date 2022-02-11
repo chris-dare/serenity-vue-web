@@ -25,15 +25,6 @@
         placeholder="Search or choose a lab text to be performed"
       />
 
-      <FormInput
-        v-model="localValue.note"
-        label="Comment"
-        placeholder="Leave a comment"
-        :rows="4"
-        type="textarea"
-        class="col-span-2 se-input-gray"
-      />
-
       <div
         v-if="isDiagnostic"
         class="flex items-center"
@@ -58,8 +49,7 @@
 
 <script>
 import modelMixin from '@/mixins/model'
-import { mapActions, mapGetters, mapState } from 'vuex'
-import debounce from 'lodash/debounce'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'ServiceRequestForm',
@@ -122,34 +112,6 @@ export default {
         }
       })
     },
-  },
-
-  async created() {
-    await this.getDiagnosticLabProceedures()
-    this.init()
-
-    this.filteredData = this.labProceedures
-
-    if (this.localValue?.display) {
-      this.searchLabProceedures(this.localValue.display)
-    }
-  },
-
-  methods: {
-    ...mapActions({
-      getDiagnosticLabProceedures: 'resources/getDiagnosticLabProceedures',
-      getPatientServiceRequests: 'patients/getPatientServiceRequests',
-    }),
-
-    async init() {
-      this.loading = true
-      let id = this.storeData.patient.id
-      await this.getPatientServiceRequests({ patient: id }).finally(() => this.loading = false )
-    },
-
-    searchLabProceedures: debounce(function(search) {
-      this.filteredData = this.labProceedures.filter(data => !search || data.alias.toLowerCase().includes(search.toLowerCase()) || data.display.toLowerCase().includes(search.toLowerCase()))
-    }, 300, false),
   },
 }
 </script>

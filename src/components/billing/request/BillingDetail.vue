@@ -179,13 +179,18 @@ export default {
       createDiagnosticVisit: 'visits/createDiagnosticVisit',
       createServiceRequest: 'patients/createServiceRequest',
       refresh: 'appointments/refreshCurrentAppointment',
+      raiseBillForService: 'billing/raiseBill',
       payForService: 'billing/userPayService',
     }),
 
     async save() {
       this.loading = true
       if(this.summary.patient.id){
-        this.settleBill()
+        if (this.summary.account_id || this.summary.amount){
+          this.settleBill()
+        } else {
+          this.raiseBill()
+        }
       } else {
         this.$toast.error('Please select a patient')
         this.loading = false
@@ -265,6 +270,44 @@ export default {
         this.refresh()
       } catch (error) {
         this.loading = false
+        this.$toast.open({
+          message: error.message || 'payment of bill unsuccessful!',
+          type: 'error',
+        })
+      }
+    },
+
+    async raiseBill() {
+      this.loading = true
+
+      try {
+        let payload = this.summary.labs.map(element => {
+          return {
+            service_request: element.code.id, // a service request raised by a patient
+            price_tier: element.price_tier,
+            account_id: this.summary.account_id,
+            currency: this.summary.currency,
+            amount: this.summary.amount,
+            transaction_type: this.summary.transaction_type, //user-wallet, corporate-account, mobile-money, cash
+          }
+        })
+
+        await this.raiseBillForService(payload)
+
+        this.$toast.open( 'Bill successfully raised' )
+        this.loading = false
+        if (this.$route.params.id) {
+          this.$emit('stop')
+          return
+        }
+        this.$router.push({ name: 'Billing' })
+        this.refresh()
+      } catch (error) {
+        this.loading = false
+        this.$toast.open({
+          message: error.message || 'Raising bill unsuccessful!',
+          type: 'error',
+        })
       }
     },
 

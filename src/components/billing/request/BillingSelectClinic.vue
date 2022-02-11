@@ -162,13 +162,8 @@ export default {
     },
   },
 
-  watch: {
-    labId() {
-      this.init()
-    },
-  },
-
-  created(){
+  async created(){
+    await this.getDiagnosticLabProceedures()
     this.init()
   },
 
@@ -198,21 +193,19 @@ export default {
       refresh: 'appointments/refreshCurrentAppointment',
       createVisit: 'visits/createVisit',
       getPatientServiceRequests: 'patients/getPatientServiceRequests',
+      getDiagnosticLabProceedures: 'resources/getDiagnosticLabProceedures',
       createServiceRequest: 'patients/createServiceRequest',
       updateServiceRequest: 'patients/updateServiceRequest',
       setCurrentEncounter: 'encounters/setCurrentEncounter',
       deleteServiceRequest: 'patients/deleteServiceRequest',
     }),
 
-    init() {
-      if(this.mode === 'update'){
-        let lab = this.currentEncounterServiceRequests.find(el => el.id === this.labId)
-        lab = JSON.parse(JSON.stringify(lab))
-        Object.assign(this.form, lab)
-      // } else {
-      //   this.storeData.patient.id ? this.getPatientServiceRequests(this.storeData.patient.id) : this.$toast.error('Please select a patient')
-      }
+    async init() {
+      this.loading = true
+      let id = this.storeData.patient.id
+      await this.getPatientServiceRequests({ patient: id }).finally(() => this.loading = false )
       this.labLists = this.form.labs || []
+      this.loading = false
     },
 
     async updateRequest(lab){

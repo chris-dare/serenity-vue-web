@@ -63,7 +63,7 @@ export default {
 
   methods: {
     ...mapActions({
-      refresh: 'Diagnostic Requests/refreshCurrentDiagnostic Request',
+      refresh: 'requests/refreshCurrentDiagnostic',
     }),  
   },
 }
