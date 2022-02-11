@@ -102,7 +102,7 @@
         :loading="loading"
         @click="save"
       >
-        Done
+        {{ this.summary.account_id || this.summary.amount ? 'Complete payment' : 'Raise Bill' }}
       </SeButton>
     </div>
   </div>

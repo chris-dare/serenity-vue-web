@@ -5,7 +5,8 @@
     next-label="Next: View Summary"
     :query="$route.query"
     :modal="modal"
-    skip="BillingSummary"
+    :skip="true"
+    @skipping="skipping()"
     @cancel="cancel"
     @back="goBack"
     @save="save"
@@ -186,6 +187,13 @@ export default {
 
     calTotal(num){
       this.totalCash = num.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
+    },
+
+    skipping(){
+      this.form.amount = ''
+      this.form.account_id = ''
+      this.addToCurrentAppointment( this.form)
+      this.$router.push({ name: 'BillingSummary'})
     },
 
     save() {  

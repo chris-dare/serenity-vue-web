@@ -5,7 +5,8 @@
     next-label="Next: View Summary"
     :query="$route.query"
     :modal="modal"
-    skip="DiagnosticSummary"
+    :skip="true"
+    @skipping="skipping"
     @cancel="cancel"
     @back="goBack"
     @save="save"
@@ -182,6 +183,10 @@ export default {
     cancel(){
       this.$router.push({ name: 'Dashboard'})
       this.refresh()
+    },
+
+    skipping(){
+      this.$router.push({ name: 'DiagnosticSummary'})
     },
 
     calTotal(num){

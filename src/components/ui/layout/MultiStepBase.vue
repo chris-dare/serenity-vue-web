@@ -34,7 +34,7 @@
             v-if="skip && !modal"
             class="mr-2"
             variant="secondary"
-            @click="$router.push({ name: skip })"
+            @click="$emit('skipping')"
           >
             Skip
           </SeButton>
@@ -65,8 +65,8 @@ export default {
       default: null,
     },
     skip: {
-      type: String,
-      default: '',
+      type: Boolean,
+      default: false,
     },
     query: {
       type: Object,
