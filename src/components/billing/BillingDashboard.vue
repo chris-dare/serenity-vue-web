@@ -55,6 +55,13 @@ export default {
           type: 'baggage',
           value: 'clients',
         },
+        {
+          label: 'Raise bill',
+          description: 'Raise a new bill for patient',
+          type: 'cash',
+          value: 'create',
+        },
+        
       ]
     },
   },
@@ -80,6 +87,9 @@ export default {
         break
       case 'clients':
         this.$router.push({ name: 'CorporateClients' })
+        break
+      case 'create':
+        this.$router.push({ name: 'BillingSelectPatient' })
         break
 
       default:

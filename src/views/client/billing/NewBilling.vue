@@ -11,7 +11,7 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
-  name: 'NewDiagnosticRequest',
+  name: 'NewBillingRequest',
 
   data() {
     return {
@@ -21,7 +21,7 @@ export default {
   
   computed: {
     title() {
-      return this.isUpdate ? 'Update Diagnostic Request' : this.isReschedule ? 'Reschedule Diagnostic Request' : 'New Diagnostic Request'
+      return this.isUpdate ? 'Update Billing Request' : this.isReschedule ? 'Reschedule Billing Request' : 'Raise bill'
     },
     isUpdate() {
       return this.$route.query.type === 'update'
@@ -34,14 +34,14 @@ export default {
     navItems() {
       if (this.isUpdate) {
         return [
-          { label: 'Update Diagnostic Request', description: 'Update existing Diagnostic Request', path: 'DiagnosticRequestUpdate', completed: false, slug: 'select-patient'},
+          { label: 'Update Billing Request', description: 'Update existing Billing Request', path: 'BillingRequestUpdate', completed: false, slug: 'select-patient'},
         ]
       }
       return[
-        { label: 'Select patient', description: 'Existing or new patient', path: 'DiagnosticSelectPatient', completed: false, slug: 'select-patient'},
-        { label: 'Diagnostic Services', description: 'Choose service', path: 'DiagnosticService', completed: false, slug: 'clinics'},
-        { label: 'Payment', description: 'How patient makes payment', path: 'DiagnosticPayment', completed: true, slug: 'payment'},
-        { label: 'Summary', description: 'Overview of request', path: 'DiagnosticSummary', completed: true, slug: 'summary'},
+        { label: 'Select patient', description: 'Existing or new patient', path: 'BillingSelectPatient', completed: false, slug: 'select-patient'},
+        { label: 'Billing Services', description: 'Choose serviceand tiers', path: 'BillingService', completed: false, slug: 'clinics'},
+        { label: 'Payment', description: 'How patient makes payment', path: 'BillingPayment', completed: true, slug: 'payment'},
+        { label: 'Summary', description: 'Overview of request', path: 'BillingSummary', completed: true, slug: 'summary'},
       ]
     },
   },

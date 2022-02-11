@@ -11,44 +11,29 @@
     @save="validateAndReroute"
   >
     <p class="text-primary my-4">
-      {{ modal ? 'Reason for visit' : 'Create a diagnostic request' }}
+      {{ modal ? 'Reason for visit' : 'Add a service' }}
     </p>
-    <div class="grid grid-cols-3 gap-4">
-      <InfoLinkCard
-        v-for="(appointment, index) in appointmentTypes"
-        :key="index"
-        :is-selected="selected === appointment.value"
-        :details="appointment"
-        :type="appointment.type"
-        @click="selected = appointment.value"
-      />
-    </div>
     <div
       v-for="(list, index) in labLists"
       :key="index"
       class="mt-3 border-b border-solid border-subtle"
     >
       <div
-        v-if="list.code.id"
+        v-if="list.code.code"
         class="grid grid-cols-8 gap-4 items-center mb-3"
       >
         <div class="flex items-center col-span-6">
           <div class="space-y-1">
-            <p class="text-black font-semibold">{{ list.code.service_request_category }}</p>
+            <p class="text-black font-semibold">{{ list.code.category }}</p>
             <p class="text-secondary text-sm">
               Service:
-              <span class="text-primary">{{ list.code.healthcare_service_name }}</span>
+              <span class="text-primary">{{ list.code.display }}</span>
             </p>
             <p
               v-if="list.price_tier"
               class="text-secondary text-sm"
             >
               Price: <span class="text-primary">{{ priceTier(list) }}</span>
-            </p>
-            <p
-              class="text-secondary text-sm"
-            >
-              Priority: <span class="text-primary">{{ list.priority }}</span>
             </p>
           </div>
         </div>
@@ -77,7 +62,7 @@
             :loading="loading"
             @click="addLabRequest"
           >
-            Add new lab
+            Add new service
           </SeButton>
         </div>
       </ServiceRequestForm>
@@ -95,13 +80,13 @@ import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Add from '@carbon/icons-vue/es/add/32'
 import Edit from '@carbon/icons-vue/es/edit/32'
 import DeleteModal from '@/components/ui/modals/ConfirmDeleteModal'
-import ServiceRequestForm from '@/components/forms/ServiceRequestForm'
+import ServiceRequestForm from '@/components/forms/MultiServiceForm'
 import VirtualCareRequirementsModal from '@/components/appointments/VirtualCareRequirementsModal'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import MultiStep from '@/mixins/multistep'
 
 export default {
-  name: 'DiagnosticSelectClinic',
+  name: 'BillingSelectClinic',
 
   components: { VirtualCareRequirementsModal, DeleteModal, ServiceRequestForm },
 
@@ -137,9 +122,9 @@ export default {
       columns: ['Date', 'Lab type', 'Priority', 'Order detail', 'Bodysite', 'Specimen', 'Action'],
       acted: false,
       deleteLoading: false,
-      next: 'DiagnosticPayment',
-      previous: 'DiagnosticSelectPatient',
-      parent: 'DiagnosticDashboard',
+      next: 'BillingPayment',
+      previous: 'BillingSelectPatient',
+      parent: 'BillingDashboard',
       visitId: '',
       labLists: [],
     }
@@ -175,31 +160,10 @@ export default {
         },
       ]
     },
-
-    serviceTiers() {
-      if (!this.form.code || !this.form.code.price_tiers) return []
-      return this.form.code.price_tiers.map(tier => {
-        return {
-          label: `${tier.display} - ${tier.currency} ${tier.charge}`,
-          value: tier.display,
-        }
-      })
-    },
-
-    specialties() {
-      if (!this.form.service) return []
-      if (this.form.id) return this.services.find(service => service.id === this.form.service.id).healthcare_service_specialties
-      return this.form.service.healthcare_service_specialties
-    },
   },
 
-  watch: {
-    labId() {
-      this.init()
-    },
-  },
-
-  created(){
+  async created(){
+    await this.getDiagnosticLabProceedures()
     this.init()
   },
 
@@ -215,11 +179,12 @@ export default {
 
     priceTier(list) {
       if (!list.code || !this.labProceedures.length) return 'Select Service'
-      let service = this.labProceedures.find(service => service.id === list.code.id)
+      let service = this.labProceedures.find(service => service.order_code=== list.code.code)
       if (!service) 'Select Service'
       let price = service.price_tiers.filter(
         (result) => list.price_tier === result.id,
       )
+      console.log(price)
       return `${this.$currency(price[0].charge, price[0].currency).format()} - ${price[0].description}`
     },
 
@@ -228,21 +193,19 @@ export default {
       refresh: 'appointments/refreshCurrentAppointment',
       createVisit: 'visits/createVisit',
       getPatientServiceRequests: 'patients/getPatientServiceRequests',
+      getDiagnosticLabProceedures: 'resources/getDiagnosticLabProceedures',
       createServiceRequest: 'patients/createServiceRequest',
       updateServiceRequest: 'patients/updateServiceRequest',
       setCurrentEncounter: 'encounters/setCurrentEncounter',
       deleteServiceRequest: 'patients/deleteServiceRequest',
     }),
 
-    init() {
-      if(this.mode === 'update'){
-        let lab = this.currentEncounterServiceRequests.find(el => el.id === this.labId)
-        lab = JSON.parse(JSON.stringify(lab))
-        Object.assign(this.form, lab)
-      // } else {
-      //   this.storeData.patient.id ? this.getPatientServiceRequests(this.storeData.patient.id) : this.$toast.error('Please select a patient')
-      }
+    async init() {
+      this.loading = true
+      let id = this.storeData.patient.id
+      await this.getPatientServiceRequests({ patient: id }).finally(() => this.loading = false )
       this.labLists = this.form.labs || []
+      this.loading = false
     },
 
     async updateRequest(lab){
@@ -260,7 +223,6 @@ export default {
           })
           return
         }
-        this.labRequest.priority = this.labRequest.priority || 'routine'
         this.labLists = [...this.labLists, { ...this.labRequest }]
         this.labRequest = {}
       }

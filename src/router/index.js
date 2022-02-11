@@ -486,6 +486,33 @@ const routes = [
         ],
       },
       {
+        path: '/bill',
+        // name: 'billing',
+        component: () => import(/* webpackChunkName: "billing" */ '../views/client/billing/NewBilling.vue'),
+        children: [
+          {
+            path: '',
+            name: 'BillingSelectPatient',
+            component: () => import(/* webpackChunkName: "billing" */ '../views/client/billing/SelectPatient.vue'),
+          },
+          {
+            path: '/bill/service',
+            name: 'BillingService',
+            component: () => import(/* webpackChunkName: "billing" */ '../views/client/billing/BillingService.vue'),
+          },
+          {
+            path: '/bill/payment',
+            name: 'BillingPayment',
+            component: () => import(/* webpackChunkName: "billing" */ '../views/client/billing/BillingPayment.vue'),
+          },
+          {
+            path: '/bill/summary',
+            name: 'BillingSummary',
+            component: () => import(/* webpackChunkName: "billing" */ '../views/client/billing/BillingSummary.vue'),
+          },
+        ],
+      },
+      {
         path: '/patients/:id',
         component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/SinglePatient.vue'),
         props: true,
