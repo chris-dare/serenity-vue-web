@@ -6,7 +6,7 @@
     :query="$route.query"
     :modal="modal"
     :skip="true"
-    @skipping="skipping"
+    @skipping="skipping()"
     @cancel="cancel"
     @back="goBack"
     @save="save"
@@ -40,7 +40,7 @@ import { required, minValue } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
 import modelMixin from '@/mixins/model'
 export default {
-  name: 'DiagnosticSelectPayment',
+  name: 'BillingSelectPayment',
 
   components: {
     ModeOfPayment,
@@ -83,9 +83,9 @@ export default {
           value: 'insurance',
         },
       ],
-      previous: 'DiagnosticService',
-      next: 'DiagnosticSummary',
-      parent: 'DiagnosticDashboard',
+      previous: 'BillingService',
+      next: 'BillingSummary',
+      parent: 'BillingDashboard',
       totalCash: 0,
     }
   },
@@ -101,7 +101,7 @@ export default {
 
     selectedPriceTier() {
       if (!this.storeData.code || !this.labProceedures.length) return 'Select Service'
-      let service = this.labProceedures.find(service => service.id === this.storeData.code.id)
+      let service = this.labProceedures.find(service => service.order_code === this.storeData.code.code)
       if (!service) return 'Select Service'
       return service?.price_tiers.find(
         (result) => this.storeData.price_tier === result.id,
@@ -114,7 +114,7 @@ export default {
 
     priceTier() {
       if(this.storeData.labs) {
-        let service = this.storeData.labs.map((el) => this.labProceedures.find(service => service.id === el.code.id))
+        let service = this.storeData.labs.map((el) => this.labProceedures.find(service => service.order_code === el.code.code))
         let prices = service.map((el, i) => el.price_tiers.find(price => price.id === this.storeData.labs[i].price_tier))
         let num = prices.map((a) => a.charge)
         this.calTotal(num)
@@ -169,7 +169,7 @@ export default {
     if(this.storeData.patient.id) {
       this.getPatientAccounts({ id: this.storeData.patient.id })
     } else {
-      this.$router.push({ name: 'DiagnosticSelectPatient' })
+      this.$router.push({ name: 'BillingSelectPatient' })
     }
   },
 
@@ -185,12 +185,15 @@ export default {
       this.refresh()
     },
 
-    skipping(){
-      this.$router.push({ name: 'DiagnosticSummary'})
-    },
-
     calTotal(num){
       this.totalCash = num.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
+    },
+
+    skipping(){
+      this.form.amount = ''
+      this.form.account_id = ''
+      this.addToCurrentAppointment( this.form)
+      this.$router.push({ name: 'BillingSummary'})
     },
 
     save() {  
@@ -208,14 +211,14 @@ export default {
           return
         }
 
-        this.$router.push({ name: 'DiagnosticSummary' })
+        this.$router.push({ name: 'BillingSummary' })
       } else {
         if (this.modal) {
           this.$emit('next')
           return
         }
 
-        this.$router.push({ name: 'DiagnosticSummary' })
+        this.$router.push({ name: 'BillingSummary' })
       }
     },
   },

@@ -34,17 +34,9 @@
             v-if="skip && !modal"
             class="mr-2"
             variant="secondary"
-            @click="$router.push({ name: 'DiagnosticSummary' })"
+            @click="$emit('skipping')"
           >
             Skip
-          </SeButton>
-          <SeButton
-            v-if="add"
-            class="mr-2"
-            :loading="loading"
-            @click="$emit('add')"
-          >
-            Add a lab 
           </SeButton>
           <SeButton
             :icon="icon"
@@ -73,10 +65,6 @@ export default {
       default: null,
     },
     skip: {
-      type: Boolean,
-      default: false,
-    },
-    add: {
       type: Boolean,
       default: false,
     },

@@ -35,7 +35,7 @@
     <div
       class="py-6"
     >
-      <p class="text-secondary mb-4">Diagnostic Service</p>
+      <p class="text-secondary mb-4">Selected Service(s)</p>
       <div
         v-if="summary.labs"
       >
@@ -51,10 +51,10 @@
               <Diagnostic class="w-7 h-7 text-white" />
             </div>
             <div class="space-y-1">
-              <p class="text-black font-semibold">{{ lab.code.service_request_category }}</p>
+              <p class="text-black font-semibold">{{ lab.code.category }}</p>
               <p class="text-secondary text-sm">
                 Service:
-                <span class="text-primary">{{ lab.code.healthcare_service_name }}</span>
+                <span class="text-primary">{{ lab.code.display }}</span>
               </p>
               <p
                 v-if="lab.price_tier"
@@ -102,7 +102,7 @@
         :loading="loading"
         @click="save"
       >
-        Done
+        {{ this.summary.account_id || this.summary.amount ? 'Complete payment' : 'Raise Bill' }}
       </SeButton>
     </div>
   </div>
@@ -113,7 +113,7 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import modelMixin from '@/mixins/model'
 
 export default {
-  name: 'DiagnosticDetail',
+  name: 'BillingDetail',
 
   mixins: [modelMixin],
 
@@ -179,13 +179,18 @@ export default {
       createDiagnosticVisit: 'visits/createDiagnosticVisit',
       createServiceRequest: 'patients/createServiceRequest',
       refresh: 'appointments/refreshCurrentAppointment',
+      raiseBillForService: 'billing/raiseBill',
       payForService: 'billing/userPayService',
     }),
 
     async save() {
       this.loading = true
       if(this.summary.patient.id){
-        this.startVisit()
+        if (this.summary.account_id || this.summary.amount){
+          this.settleBill()
+        } else {
+          this.raiseBill()
+        }
       } else {
         this.$toast.error('Please select a patient')
         this.loading = false
@@ -194,7 +199,7 @@ export default {
 
     priceTier(lab) {
       if (!lab.code || !this.labProceedures.length) return 'Select Service'
-      let service = this.labProceedures.find(service => service.id === lab.code.id)
+      let service = this.labProceedures.find(service => service.order_code === lab.code.code)
       if (!service) 'Select Service'
       let price = service.price_tiers.filter(
         (result) => lab.price_tier === result.id,
@@ -203,10 +208,9 @@ export default {
     },
 
     async startVisit(){
-      this.loading = true
       let payload = this.summary.labs.map((el) => {
         return {
-          service_request_category: el.code.service_request_category,
+          service_request_category: el.code.category,
           priority: el.priority,
           patient_instruction: el.patient_instruction,
           note: el.note,
@@ -241,13 +245,12 @@ export default {
 
     },
 
-    async settleBill(item) {
-      console.log(this.summary)
+    async settleBill() {
+      this.loading = true
       try {
-        this.loading = true
-        let payload = item.map(element => {
+        let payload = this.summary.labs.map(element => {
           return {
-            service_request: element.id, // a service request raised by a patient
+            service_request: element.code.id, // a service request raised by a patient
             price_tier: element.price_tier,
             account_id: this.summary.account_id,
             currency: this.summary.currency,
@@ -255,7 +258,7 @@ export default {
             transaction_type: this.summary.transaction_type, //user-wallet, corporate-account, mobile-money, cash
           }
         })
-        await this.payForService(payload)
+        await this.payForService([...payload])
 
         this.$toast.open('Bill successfully settled')
         this.loading = false
@@ -263,16 +266,48 @@ export default {
           this.$emit('stop')
           return
         }
-        this.$router.push({ name: 'Orders' })
+        this.$router.push({ name: 'Billing' })
         this.refresh()
       } catch (error) {
+        this.loading = false
+        this.$toast.open({
+          message: error.message || 'payment of bill unsuccessful!',
+          type: 'error',
+        })
+      }
+    },
+
+    async raiseBill() {
+      this.loading = true
+
+      try {
+        let payload = this.summary.labs.map(element => {
+          return {
+            service_request: element.code.id, // a service request raised by a patient
+            price_tier: element.price_tier,
+            account_id: this.summary.account_id,
+            currency: this.summary.currency,
+            amount: this.summary.amount,
+            transaction_type: this.summary.transaction_type, //user-wallet, corporate-account, mobile-money, cash
+          }
+        })
+
+        await this.raiseBillForService(payload)
+
+        this.$toast.open( 'Bill successfully raised' )
         this.loading = false
         if (this.$route.params.id) {
           this.$emit('stop')
           return
         }
+        this.$router.push({ name: 'Billing' })
         this.refresh()
-        this.$router.push({ name: 'Orders' })
+      } catch (error) {
+        this.loading = false
+        this.$toast.open({
+          message: error.message || 'Raising bill unsuccessful!',
+          type: 'error',
+        })
       }
     },
 
@@ -281,7 +316,7 @@ export default {
         this.$emit('back')
         return
       }
-      this.$router.push({ name: 'DiagnosticPayment' })
+      this.$router.push({ name: 'BillingPayment' })
     },
   },
 }

@@ -26,7 +26,10 @@
 <script>
 import TimeSeries from '@/components/patients/timeline/TimeSeries'
 import DiagnosisDetailModal from '@/components/patients/timeline/DiagnosisDetailModal'
-import { format } from 'date-fns'
+import addMonths from 'date-fns/addMonths'
+import subMonths from 'date-fns/subMonths'
+import format from 'date-fns/format'
+
 export default {
   name: 'PatientTimeline',
 
@@ -70,12 +73,12 @@ export default {
       let dates = []
 
       for (let index = 0; index < 20; index++) {
-        const element = {date: Date.now()}
+        const element = { date: this.randomDate(subMonths(new Date(), 5), addMonths(new Date(), 5)) }
         const num = Math.floor(Math.random() * (this.filters.length + 1))
         const types = []
 
         for (let index = 0; index < num; index++) {
-          types.push({...this.filters[index],time:format(Date.now(), 'HH:mm')})
+          types.push({...this.filters[index],time:format(this.randomDate(subMonths(new Date(), 5), addMonths(new Date(), 5)), 'HH:mm')})
         }
 
         element.types = types
@@ -83,6 +86,12 @@ export default {
       }
 
       return this.$date.sortDate(dates)
+    },
+  },
+
+  methods: {
+    randomDate(start, end) {
+      return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
     },
   },
 }

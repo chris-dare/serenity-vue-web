@@ -2,37 +2,19 @@
   <div>
     <div class="space-y-4">
       <MultiSelect
-        v-if="isDiagnostic"
         v-model="localValue.code"
-        title="Choose lab test"
+        title="Choose Service"
         :multiple="false"
-        :options="diagnosticServices"
+        :options="isBillables"
         track_by="id"
-        label="healthcare_service_name"
-        placeholder="Search or choose a lab text to be performed"
-        :error-message="$utils.validateRequiredField(v, 'code')"
-        required
-      />
-
-      <MultiSelect
-        v-else
-        v-model="localValue.code"
-        title="Choose lab test"
-        :multiple="false"
-        :options="filteredData"
-        track_by="code"
         label="display"
-        custom-field="code"
         placeholder="Search or choose a lab text to be performed"
         :error-message="$utils.validateRequiredField(v, 'code')"
         required
-        :internal-search="false"
-        @search-change="searchLabProceedures"
       />
 
 
       <MultiSelect
-        v-if="isDiagnostic"
         v-model="localValue.price_tier"
         title="Choose price tier"
         :multiple="false"
@@ -41,20 +23,6 @@
         label="display"
         custom-field="id"
         placeholder="Search or choose a lab text to be performed"
-      />
-
-      <FormInput
-        v-model="localValue.note"
-        label="Note"
-        placeholder="Leave a note for the lab technician"
-        :rows="4"
-        type="textarea"
-        class="col-span-2 se-input-gray"
-      />
-
-      <PrioritiesSelect
-        v-model="localValue.priority"
-        :options="priorities"
       />
 
       <div
@@ -81,8 +49,7 @@
 
 <script>
 import modelMixin from '@/mixins/model'
-import { mapActions, mapGetters, mapState } from 'vuex'
-import debounce from 'lodash/debounce'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'ServiceRequestForm',
@@ -111,6 +78,8 @@ export default {
   computed: {
     ...mapState({
       labProceedures: state => state.resources.diagnosticLabProceedures,
+      storeData: (state) => state.appointments.currentAppointment,
+      data: (state) => state.patients.patientServiceRequests,
     }),
 
     ...mapGetters({
@@ -121,9 +90,16 @@ export default {
       return this.$isCurrentWorkspace('DIAG')
     },
 
+    isBillables(){
+      let list = this.data.filter(
+        (result) => 'draft' === result.status,
+      )
+      return [...list]
+    },
+
     priceTiers() {
       if (!this.localValue.code || !this.diagnosticServices.length) return []
-      let service = this.diagnosticServices.find(service => service.id === this.localValue.code.id)
+      let service = this.diagnosticServices.find(service => service.order_code === this.localValue.code.code)
 
       if (!service){
         return []
@@ -136,26 +112,6 @@ export default {
         }
       })
     },
-  },
-
-  async created() {
-    await this.getDiagnosticLabProceedures()
-
-    this.filteredData = this.labProceedures
-
-    if (this.localValue?.display) {
-      this.searchLabProceedures(this.localValue.display)
-    }
-  },
-
-  methods: {
-    ...mapActions({
-      getDiagnosticLabProceedures: 'resources/getDiagnosticLabProceedures',
-    }),
-
-    searchLabProceedures: debounce(function(search) {
-      this.filteredData = this.labProceedures.filter(data => !search || data.alias?.toLowerCase().includes(search?.toLowerCase()) || data.display?.toLowerCase().includes(search?.toLowerCase()))
-    }, 300, false),
   },
 }
 </script>
