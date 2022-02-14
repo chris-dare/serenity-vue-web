@@ -58,6 +58,7 @@
             v-model="form.notes"
             type="textarea"
             :rows="8"
+            placeholder="Enter comment"
           />
           <div class="flex items-center justify-between">
             <SeButton
@@ -74,6 +75,49 @@
             </SeButton>
           </div>
         </div>
+        <div
+          v-else-if="step === 3"
+          class="space-y-6"
+        >
+          <div class="flex flex-col justify-center items-center space-y-2">
+            <Checkmark class="text-success w-16 h-16" />
+            <p class="font-semibold text-lg">Accounts linked successfully!!</p>
+          </div>
+          
+          <div class="space-y-2">
+            <div class="space-y-4">
+              <div
+                v-for="(patient, index) in patients"
+                :key="index"
+                class="flex items-center justify-between bg-serenity-light-gray px-4 py-2"
+              >
+                <div class="flex space-x-2 items-center">
+                  <ImageBlock
+                    :url="patient.photo"
+                    :alt="(patient.name || patient.fullName) | capitalize"
+                    custom-class="w-12 h-12"
+                  />
+                  <div>
+                    <p class="text-sm font-semibold">{{ patient.mr_number }}</p>
+                    <p class="text-sm">{{ (patient.name || patient.fullName) | capitalize }}</p>
+                    <p class="text-secondary text-sm capitalize">
+                      {{ patient.gender_age_description }}
+                    </p>
+                  </div>
+                </div>
+
+                <Link />
+              </div>
+            </div>
+          </div>
+          <SeButton
+            full
+            variant="secondary"
+            @click="close"
+          >
+            Close
+          </SeButton>
+        </div>
       </div>
     </template>
   </BaseModal>
@@ -82,9 +126,13 @@
 <script>
 import modalMixin from '@/mixins/modal'
 import { required, requiredIf } from 'vuelidate/lib/validators'
+import Link from '@carbon/icons-vue/es/link/16'
+import Checkmark from '@carbon/icons-vue/es/checkmark/16'
 
 export default {
   name: 'LinkPatientsModal',
+
+  components: { Link, Checkmark },
 
 
   mixins: [modalMixin],
@@ -138,6 +186,10 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    submit() {
+      this.step = 3
+    },
+  },
 }
 </script>
