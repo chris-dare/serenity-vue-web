@@ -52,6 +52,7 @@
                 :actions="tableActions(row)"
                 :loading="loading"
                 @view="addCurrent(row)"
+                @suspend="suspendCurrent(row)"
               />
             </div>
           </cv-data-table-cell>
@@ -105,12 +106,13 @@ export default {
     ...mapActions({
       getData: 'corporate/getCorporate',
       addToCurrent: 'corporate/addToCurrentDependent',
+      suspendMember: 'clients/suspendMember',
     }),
 
     tableActions() {
       return [
         { label: 'View', event: 'view', show: true },
-        // { label: 'Suspend', event: 'suspend', show: true },
+        { label: 'Suspend', event: 'suspend', show: true },
       ]
     },
 
@@ -123,6 +125,24 @@ export default {
 
     addCurrent(client){
       this.$router.push({ name: 'Billing:Patient', params: { id: client.patientId }})
+    },
+
+    async suspendCurrent(client){
+      const id = this.$route.params.id
+      this.loading = true
+      try {
+        let data = await this.suspendMember({
+          id: client.uuid,
+          cid: id,
+          action: 'suspend',
+        })
+        this.$toast.open({
+          message: data.message,
+        })
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
     },
   },
 
