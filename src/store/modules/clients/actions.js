@@ -143,6 +143,16 @@ export default {
     }
   },
 
+  async suspendMember({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await ClientAPI.suspendMember(provider.id, payload)
+      return data
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
   addToCurrentUser({ commit }, data) {
     commit(UPDATE_FORM, data)
   },
