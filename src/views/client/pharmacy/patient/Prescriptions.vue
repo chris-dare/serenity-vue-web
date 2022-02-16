@@ -133,6 +133,8 @@ export default {
       activeMedications: [],
       created_on_before: '',
       created_on_after: '',
+      endDate: '',
+      startDate: '',
     }
   },
 
@@ -211,20 +213,9 @@ export default {
     },
   },
 
-  watch: {
-    lists: {
-      handler(val){
-        if(val){
-          this.searchByDate(val)
-        }
-      },
-    },
-  },
-
   created() {
     this.setCheckoutPatient(this.patient)
     this.activeMedications = this.patientMedications.filter(el => el.status == 'active')
-    console.log(this.data)
     // this.params.patient = this.patient.id
     this.getAllergies(this.patient?.id)
   },
@@ -236,16 +227,36 @@ export default {
       getData: 'patients/getMedicationRequests',
       getAllergies: 'patientAllergies/getAllergies',
     }),
-    
-    searchByDate(el){
-      let endDate = new Date(el.end)
-      let startDate = new Date(el.start)
 
-      let list = this.activeMedications.filter(function(date) { 
-        return new Date(date.created_at) >= startDate && new Date(date.created_at) <= endDate 
-      })
+    async formatDate(date) {
+      var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear()
+
+      if (month.length < 2) 
+        month = '0' + month
+      if (day.length < 2) 
+        day = '0' + day
+
+
+      return [year, month, day].join('-')
+    },
+    
+    async searchByDate(el){
+      this.endDate = this.formatDate(el.end)
+      this.startDate = this.formatDate(el.start)
+
+
+      let list = await this.activeMedications.filter(this.dateFilter)
 
       this.activeData = list
+      console.log(list)
+    },
+
+    dateFilter(date) {
+      let d = this.formatDate(date.created_at)
+      return d >= this.startDate && d <= this.endDate
     },
   },
 }
