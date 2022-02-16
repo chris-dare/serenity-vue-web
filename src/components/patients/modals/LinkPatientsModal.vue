@@ -35,8 +35,8 @@
                 </div>
 
                 <cv-radio-button
-                  v-model="form.patient"
-                  :value="patient.id"
+                  v-model="form.primary_patient"
+                  :value="patient.uuid"
                 />
               </div>
             </div>
@@ -55,7 +55,7 @@
         >
           <p>Give insights to why you are linking the patient data.</p>
           <FormInput
-            v-model="form.notes"
+            v-model="form.comment"
             type="textarea"
             :rows="8"
             placeholder="Enter comment"
@@ -128,6 +128,7 @@ import modalMixin from '@/mixins/modal'
 import { required, requiredIf } from 'vuelidate/lib/validators'
 import Link from '@carbon/icons-vue/es/link/16'
 import Checkmark from '@carbon/icons-vue/es/checkmark/16'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'LinkPatientsModal',
@@ -150,8 +151,8 @@ export default {
   validations() {
     return {
       form: {
-        patient: { required },
-        notes: {
+        primary_patient: { required },
+        comment: {
           required: requiredIf(() => {
             return this.step === 2
           }),
@@ -168,6 +169,7 @@ export default {
         patient.gender_age_description = patient.age ? `${this.$utils.concatData(patient, ['gender', 'age'], ', ')} years` : this.$utils.concatData(patient, ['gender', 'age'], ', ')
         return patient
       })
+      this.form.linked_patients = this.patients.map(patient => patient.uuid)
     },
     'patients:link:close': function(){
       this.close()
@@ -187,8 +189,30 @@ export default {
   },
 
   methods: {
-    submit() {
-      this.step = 3
+    ...mapActions({
+      getPatients: 'patients/getPatients',
+    }),
+
+    async submit() {
+      this.$v.$touch()
+
+      if (this.$v.$invalid) {
+        this.$toast.error('Please fill in the required fields')
+        return
+      }
+  
+      this.loading = true
+  
+      try {
+        await this.$api.patients.linkPatients(this.$providerId, this.form)
+        this.loading = false
+        this.step = 3
+        this.getPatients({ page: 1, page_size: 10 })
+      } catch (error) {
+        this.loading = false
+        this.$utils.error(error)
+        throw error
+      }
     },
   },
 }

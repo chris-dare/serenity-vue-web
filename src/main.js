@@ -6,6 +6,7 @@ import store from './store'
 
 import DatePlugin from '@/services/date'
 import UtilsPlugin from '@/services/utils'
+import APIPlugin from '@/services/api'
 import CurrencyPlugin from '@/services/currency'
 import PermissionsPlugin from '@/services/roles'
 import ScrollPlugin from '@/services/scroll'
@@ -41,6 +42,7 @@ Vue.use(PermissionsPlugin)
 Vue.use(ScrollPlugin)
 Vue.use(PrintPlugin)
 Vue.use(ConstantsPlugin)
+Vue.use(APIPlugin)
 Vue.use(Vuelidate)
 Vue.use(VueMask)
 

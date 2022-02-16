@@ -60,4 +60,8 @@ export default {
   upload(providerId, patientId, params) {
     return http.post(`${this.url}${providerId}/patient-photos/${patientId}`, params)
   },
+
+  linkPatients(providerId, params) {
+    return http.post(`${this.url}${providerId}/patient_links`, params)
+  },
 }
