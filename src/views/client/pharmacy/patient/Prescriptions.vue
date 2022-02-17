@@ -74,7 +74,7 @@
     <div class="space-y-4">
       <PharmacyDateFilters
         v-model="lists"
-        @change="searchByDate"
+        @input="searchByDate"
       >
         <Search
           v-model="search"
@@ -95,6 +95,11 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import ConfirmPrescriptionModal from '@/components/pharmacy/modals/ConfirmPrescriptionModal'
 import PharmacyDateFilters from '@/components/pharmacy/PharmacyDateFilters'
 import DataMixin from '@/mixins/data'
+import isWithinInterval from 'date-fns/isWithinInterval'
+import parseISO from 'date-fns/parseISO'
+import isAfter from 'date-fns/isAfter'
+// import isBefore from 'date-fns/isBefore'
+// import isAfter from 'date-fns/isAfter'
 
 export default {
   name: 'Prescriptions',
@@ -123,7 +128,7 @@ export default {
         'Instruction',
         'Refill',
       ],
-      lists: {},
+      lists: '',
       search: '',
       searchTerms: ['course_of_therapy_type', 'name', 'practitioner_detail.name'],
       prescriptions: {
@@ -139,26 +144,12 @@ export default {
   computed: {
     activeData: {
       get: function () {
-        let search = this.search.trim().toLowerCase()
-
-        return this.search.trim() !== ''
-          ? this.activeMedications.filter((d) => {
-            return (
-              d.practitioner_detail.name
-                .toString()
-                .toLowerCase()
-                .indexOf(search) > -1 ||
-              d.course_of_therapy_type
-                .toString()
-                .toLowerCase()
-                .indexOf(search) > -1 ||
-              d.medication_detail[0].display
-                .toString()
-                .toLowerCase()
-                .indexOf(search) > -1
-            )
-          })
-          : this.activeMedications
+        return this.activeMedications.filter(data =>
+          !this.search ||
+        data.practitioner_detail?.name?.toLowerCase().includes(this.search?.trim().toLowerCase()) ||
+        data.medication_detail[0]?.display?.toLowerCase().includes(this.search?.trim().toLowerCase()) ||
+        data.course_of_therapy_type?.toLowerCase().includes(this.search?.trim().toLowerCase()),
+        )
       },
       // setter
       set: function (newValue) {
@@ -213,8 +204,8 @@ export default {
 
   watch: {
     lists: {
-      handler(val){
-        if(val){
+      handler (val, oldVal) {
+        if (val && val !== oldVal) {
           this.searchByDate(val)
         }
       },
@@ -224,7 +215,6 @@ export default {
   created() {
     this.setCheckoutPatient(this.patient)
     this.activeMedications = this.patientMedications.filter(el => el.status == 'active')
-    console.log(this.data)
     // this.params.patient = this.patient.id
     this.getAllergies(this.patient?.id)
   },
@@ -237,13 +227,23 @@ export default {
       getAllergies: 'patientAllergies/getAllergies',
     }),
     
-    searchByDate(el){
-      let endDate = new Date(el.end)
-      let startDate = new Date(el.start)
+    async searchByDate(el){
+      if (!el) {
+        this.activeData = this.patientMedications
+        return
+      }
+      let d = el?.split(' to ')
+      let start = d[0]
+      let end = d[1]
 
-      let list = this.activeMedications.filter(function(date) { 
-        return new Date(date.created_at) >= startDate && new Date(date.created_at) <= endDate 
-      })
+      let list = this.patientMedications
+      if (!start && !end) return
+
+
+      list = await this.patientMedications.filter((date) => end ? isWithinInterval(new Date(date.created_at), {
+        start: new Date(start),
+        end:  new Date(end),
+      }) : isAfter(parseISO(date.created_at), parseISO(start)))
 
       this.activeData = list
     },

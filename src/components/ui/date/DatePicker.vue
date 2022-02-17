@@ -10,17 +10,25 @@
       >*</span>
       {{ label }}
     </div>
-    <flat-pickr
-      v-model="localValue"
-      :config="configs[type]"
-      :placeholder="placeholder"
-      class="bg-white border-b h-10 w-full border-serenity-dark px-4"
-      :disabled="disabled"
-      v-bind="$attrs"
-      :class="{ 'cursor-not-allowed opacity-40': disabled }"
-      :data-qa="qaName"
-      @on-change="$emit('change', $event)"
-    />
+    <div class="flex relative">
+      <flat-pickr
+        ref="picker"
+        v-model="localValue"
+        :config="configs[type]"
+        :placeholder="placeholder"
+        class="bg-white border-b h-10 w-full border-serenity-dark px-4"
+        :disabled="disabled"
+        v-bind="$attrs"
+        :class="{ 'cursor-not-allowed opacity-40': disabled }"
+        :data-qa="qaName"
+        @on-change="$emit('change', $event)"
+      />
+      <Close
+        v-if="localValue"
+        class="absolute right-2 top-3 cursor-pointer text-serenity-dark"
+        @click="clear"
+      />
+    </div>
     <p
       v-if="errorMessage"
       class="error"
@@ -35,12 +43,14 @@ import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import modelMixin from '@/mixins/model'
 import { startOfMonth, endOfMonth } from 'date-fns'
+import Close from '@carbon/icons-vue/es/close--outline/16.js'
 
 export default {
   name: 'DatePicker',
 
   components: {
     flatPickr,
+    Close,
   },
 
   mixins: [modelMixin],
@@ -188,6 +198,10 @@ export default {
         return
       }
       instance.element.value = dateStr.replace('to', ':#;')
+    },
+
+    clear() {
+      this.localValue = ''
     },
   },
 }
