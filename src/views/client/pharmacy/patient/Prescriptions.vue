@@ -95,6 +95,10 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import ConfirmPrescriptionModal from '@/components/pharmacy/modals/ConfirmPrescriptionModal'
 import PharmacyDateFilters from '@/components/pharmacy/PharmacyDateFilters'
 import DataMixin from '@/mixins/data'
+import isWithinInterval from 'date-fns/isWithinInterval'
+import parseISO from 'date-fns/parseISO'
+// import isBefore from 'date-fns/isBefore'
+// import isAfter from 'date-fns/isAfter'
 
 export default {
   name: 'Prescriptions',
@@ -133,8 +137,6 @@ export default {
       activeMedications: [],
       created_on_before: '',
       created_on_after: '',
-      endDate: '',
-      startDate: '',
     }
   },
 
@@ -213,6 +215,16 @@ export default {
     },
   },
 
+  watch: {
+    lists: {
+      handler (val) {
+        if (val) {
+          this.searchByDate(val)
+        }
+      },
+    },
+  },
+
   created() {
     this.setCheckoutPatient(this.patient)
     this.activeMedications = this.patientMedications.filter(el => el.status == 'active')
@@ -240,23 +252,23 @@ export default {
         day = '0' + day
 
 
-      return [year, month, day].join('-')
+      return parseISO([year, month, day].join('-'))
     },
     
     async searchByDate(el){
-      this.endDate = this.formatDate(el.end)
-      this.startDate = this.formatDate(el.start)
+      let d = {...el}
+      if (!d.start) {
+        d.start = new Date()
+      }
+      let list = await this.activeData.filter(function (date) {
+        return isWithinInterval(new Date(date.created_at), {
+          start: new Date(d.start),
+          end:  new Date(d.end),
+        })
+      })
 
-
-      let list = await this.activeMedications.filter(this.dateFilter)
-
+      console.log( new Date(d.start), new Date(d.end))
       this.activeData = list
-      console.log(list)
-    },
-
-    dateFilter(date) {
-      let d = this.formatDate(date.created_at)
-      return d >= this.startDate && d <= this.endDate
     },
   },
 }
