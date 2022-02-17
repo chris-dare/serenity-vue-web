@@ -6,12 +6,11 @@
   >
     <div class="grid grid-cols-2 gap-12 items-end">
       <slot />
-      <DateRangePicker
+      <DatePicker
         v-model="localValue"
         type="range"
         label="Date Range"
         class="flex-none se-white-date-picker"
-        @change="$emit('change', localValue)"
       />
     </div>
   </cv-form>
