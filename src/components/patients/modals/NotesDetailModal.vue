@@ -11,7 +11,7 @@
         <div class="flex items-center">
           <InfoImageBlock
             label="Dr Chris Dare"
-            description="General Practitioner"
+            description="Practitioner"
           />
         </div>
 

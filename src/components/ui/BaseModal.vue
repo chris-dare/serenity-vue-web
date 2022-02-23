@@ -9,6 +9,7 @@
   >
     <div>
       <Close
+        v-if="!hideClose"
         class="absolute right-6 top-6 w-6 h-6"
         @click="$modal.hide(name)"
       />
@@ -39,6 +40,10 @@ export default {
     name: {
       type: String,
       required: true,
+    },
+    hideClose: {
+      type: Boolean,
+      default: false,
     },
   },
 

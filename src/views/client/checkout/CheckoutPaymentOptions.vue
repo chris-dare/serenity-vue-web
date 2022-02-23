@@ -26,7 +26,6 @@
       <div class="flex items-center justify-between mt-12 mb-6">
         <div class="flex items-center space-x-2">
           <SeButton
-            v-if="!modal"
             variant="outline"
             @click="cancel"
           >

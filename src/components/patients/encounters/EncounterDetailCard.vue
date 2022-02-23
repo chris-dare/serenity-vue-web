@@ -11,7 +11,7 @@
         <p class="text-secondary">Doctor in charge</p>
         <InfoImageBlock
           :label="currentEncounterPractitioner.name"
-          description="General practitioner"
+          description="Practitioner"
         />
       </div>
       <div>

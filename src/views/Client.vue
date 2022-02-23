@@ -78,8 +78,11 @@ export default {
   // },
 
   async created() {
-
     await this.initApp()
+  },
+
+  mounted() {
+    this.$trigger('set:location:open')
   },
 
   methods: {
