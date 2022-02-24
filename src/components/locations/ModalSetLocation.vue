@@ -92,7 +92,8 @@ export default {
     }),
 
     filteredLocations() {
-      return this.$utils?.getFilteredData(this.locations, this.search, ['location_name']) || []
+      if (!this.locations.length) return []
+      return this.$utils?.getFilteredData(this.locations, this.search, ['location_name'])
     },
   },
 

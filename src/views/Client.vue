@@ -81,10 +81,6 @@ export default {
     await this.initApp()
   },
 
-  mounted() {
-    this.$trigger('set:location:open')
-  },
-
   methods: {
     ...mapActions({
       initApp: 'global/initApp',

@@ -74,6 +74,7 @@ export default {
       this.type = 'encounter'
     },
     'reception:capture:vitals:open': async function(data){
+      // this.getEncounters({patient: data.params[0].patient, visit: data.params[0].visit.id, status: 'planned' })
       this.setVitalsEncounter(data.params[0].encounters[0])
       this.type = 'reception'
       await this.getVitalsUnitTypes()

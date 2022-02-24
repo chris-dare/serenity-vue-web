@@ -84,7 +84,6 @@
           <!-- <NotificationDetailsDropdown /> -->
 
           <UserHeaderDropdown />
-          <ModalSetLocation />
         </div>
       </div>
     </header>
@@ -94,7 +93,7 @@
 <script>
 import UserHeaderDropdown from '@/components/layout/UserHeaderDropdown'
 // import NotificationDetailsDropdown from '@/components/layout/NotificationDetailsDropdown'
-const ModalSetLocation = () => import('@/components/locations/ModalSetLocation')
+
 
 import Close32 from '@carbon/icons-vue/es/close/32'
 import Menu32 from '@carbon/icons-vue/es/menu/32'
@@ -109,8 +108,6 @@ export default {
     // NotificationDetailsDropdown,
     Close32,
     Menu32,
-    ModalSetLocation,
-
   },
 
   mixins: [resize],
@@ -166,7 +163,6 @@ export default {
 
     async init() {
       // this.open = this.isTablet
-
       await this.getLocations(false)
 
       let location = localStorage.getItem('location') ? localStorage.getItem('location') : this.locations.length ? this.locations[0].id : ''
