@@ -22,14 +22,41 @@
         Refresh
       </SeButton>
     </div>
+    <ModalSetLocation />
   </div>
 </template>
 
 <script>
+import ModalSetLocation from '@/components/locations/ModalSetLocation'
+
 import updateMixin from '@/mixins/update'
+import { mapState } from 'vuex'
 export default {
   name: 'App',
 
+  components: {ModalSetLocation},
+
   mixins: [updateMixin],
+
+  computed: {
+    ...mapState({
+      loggedIn: state => state.auth.loggedIn,
+    }),
+  },
+
+  watch: {
+    loggedIn: {
+      immediate: true,
+      handler(val, oldVal) {
+        console.log('val', val, oldVal)
+        if (val && val !== oldVal) {
+          setTimeout(() => {
+            this.$trigger('set:location:open')
+          }, 300)
+        }
+        
+      },
+    },
+  },
 }
 </script>
