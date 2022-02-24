@@ -767,6 +767,12 @@ const routes = [
         component: () => import(/* webpackChunkName: "diagnostics" */ '../views/client/diagnostic/Reports.vue'),
       },
       {
+        path: '/diagnostics/devices',
+        name: 'Diagnostic:Devices',
+        props: true,
+        component: () => import(/* webpackChunkName: "diagnostics" */ '../views/client/diagnostic/Devices.vue'),
+      },
+      {
         path: '/diagnostic-orders',
         name: 'Orders',
         props: true,
