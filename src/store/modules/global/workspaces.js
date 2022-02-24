@@ -119,6 +119,7 @@ export default {
       { label: 'Patients', to: 'Diagnostic:Patients', component: 'Reference'},
       { label: 'Diagnostic Orders', to: 'Orders', component: 'List' },
       { label: 'Diagnostic Reports', to: 'Diagnostic:Reports', component: 'Report' },
+      { label: 'Diagnostic Devices', to: 'Diagnostic:Devices', component: 'Devices' },
       // { label: 'Case Management forms', to: 'Reports', component: 'Medical' },
       { label: 'Appointments', to: 'Appointments', component: 'Schedule' },
       { label: 'Schedules', to: 'Schedules', component: 'Schedule'},
