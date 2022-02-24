@@ -47,11 +47,15 @@
             <p>{{ row.maximum_dependents_allowed || 0 }}</p>
           </cv-data-table-cell>
           <cv-data-table-cell>
+            <p>{{ row.is_active ? 'Active' : 'Suspended' }}</p>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
             <div class="flex items-center cursor-pointer space-x-4">
               <TableActions
                 :actions="tableActions(row)"
-                :loading="loading"
+                :loading="isloading"
                 @view="addCurrent(row)"
+                @suspend="suspendCurrent(row)"
               />
             </div>
           </cv-data-table-cell>
@@ -78,12 +82,14 @@ export default {
     return {
       search: '',
       loading: false,
+      isloading: false,
       columns: [
         'Employee',
         'Phone Number',
         'Email',
         'Occupational Role',
         'Max Dependants Allowed',
+        'Status',
         'Action',
       ],
       searchTerms: ['last_name', 'first_name', 'occupational_role'],
@@ -105,12 +111,13 @@ export default {
     ...mapActions({
       getData: 'corporate/getCorporate',
       addToCurrent: 'corporate/addToCurrentDependent',
+      suspendMember: 'clients/suspendMember',
     }),
 
-    tableActions() {
+    tableActions(row) {
       return [
         { label: 'View', event: 'view', show: true },
-        // { label: 'Suspend', event: 'suspend', show: true },
+        { label: row.is_active ? 'Suspend' : 'Activate', event: 'suspend', show: true },
       ]
     },
 
@@ -123,6 +130,25 @@ export default {
 
     addCurrent(client){
       this.$router.push({ name: 'Billing:Patient', params: { id: client.patientId }})
+    },
+
+    async suspendCurrent(client){
+      const id = this.$route.params.id
+      this.isloading = true
+      try {
+        let data = await this.suspendMember({
+          id: client.uuid,
+          cid: id,
+          action: client.is_active ? 'SUSPEND' : 'ACTIVATE',
+        })
+        this.$toast.open({
+          message: data.message,
+        })
+        this.getData( id )
+        this.isloading = false
+      } catch (error) {
+        this.isloading = false
+      }
     },
   },
 

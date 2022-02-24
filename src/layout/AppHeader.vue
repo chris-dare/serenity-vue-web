@@ -93,6 +93,8 @@
 <script>
 import UserHeaderDropdown from '@/components/layout/UserHeaderDropdown'
 // import NotificationDetailsDropdown from '@/components/layout/NotificationDetailsDropdown'
+
+
 import Close32 from '@carbon/icons-vue/es/close/32'
 import Menu32 from '@carbon/icons-vue/es/menu/32'
 import resize from '@/mixins/resize'
@@ -148,6 +150,7 @@ export default {
   },
 
   created() {
+
     this.init()
   },
 

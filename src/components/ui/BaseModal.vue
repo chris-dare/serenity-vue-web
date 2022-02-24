@@ -9,6 +9,7 @@
   >
     <div>
       <Close
+        v-if="!hideClose"
         class="absolute right-6 top-6 w-6 h-6"
         @click="$modal.hide(name)"
       />
@@ -40,6 +41,10 @@ export default {
       type: String,
       required: true,
     },
+    hideClose: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
@@ -65,6 +70,7 @@ export default {
 
 .vm--container.scrollable{
   @apply h-main;
+  z-index: 20000;
 }
 </style>
 

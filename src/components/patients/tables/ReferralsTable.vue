@@ -32,6 +32,11 @@
             <p>{{ row.referral_type | removeUnderscore | capitalize }}</p>
           </div>
         </cv-data-table-cell>
+        <cv-data-table-cell>
+          <div>
+            <p>{{ row.reason }}</p>
+          </div>
+        </cv-data-table-cell>
       </template>
     </DataTable>
   </div>
@@ -42,6 +47,12 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'ReferralsTable',
 
+  data() {
+    return {
+      columns: ['Date', 'Referrer', 'Referee', 'Priority', 'Referral Type', 'Reason'],
+    }
+  },
+
   computed: {
     ...mapGetters({
       currentEncounterReferrals: 'encounters/currentEncounterReferrals',
@@ -49,7 +60,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

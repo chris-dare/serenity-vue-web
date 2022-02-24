@@ -57,7 +57,7 @@
           <cv-data-table-cell>
             <InfoImageBlock
               label="Dr Chris Dare"
-              description="General Practitioner"
+              description="Practitioner"
             />
           </cv-data-table-cell>
           <cv-data-table-cell>

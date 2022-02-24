@@ -125,11 +125,20 @@ export default {
     },
   },
 
+  watch: {
+    patient: {
+      handler (val){
+        if(val){
+          this.localValue.transaction_type = this.patient?.previous_payment_method || this.options.find(option => !option.hide)?.value
+        }
+      },
+    },
+  },
+
   created() {
     if (!this.localValue?.transaction_type) {
-      this.localValue.transaction_type = this.options.find(option => !option.hide)?.value
+      this.localValue.transaction_type = this.patient?.previous_payment_method || this.options.find(option => !option.hide)?.value
     }
-    
   },
 
   methods: {

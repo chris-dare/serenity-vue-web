@@ -78,7 +78,6 @@ export default {
   // },
 
   async created() {
-
     await this.initApp()
   },
 

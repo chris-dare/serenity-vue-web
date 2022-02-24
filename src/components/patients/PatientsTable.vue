@@ -19,6 +19,13 @@
         v-model="selectedFilter"
         @input="refresh"
       />
+      <SeButton
+        v-if="selectedPatients.length"
+        :icon="link"
+        @click="$trigger('patients:link:open', selectedPatients)"
+      >
+        Link
+      </SeButton>
     </div>
 
     <div>
@@ -28,6 +35,8 @@
         :pagination="pagination"
         :data="data"
         :loading="loading"
+        multiple-select
+        :selected.sync="selectedPatients"
         @pagination="actionOnPagination"
       >
         <template #default="{ row }">
@@ -74,17 +83,23 @@
         </template>
       </DataTable>
     </div>
+    
+    <LinkPatientsModal />
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 import DataMixin from '@/mixins/paginated'
+import Link from '@carbon/icons-vue/es/link/16'
+import LinkPatientsModal from '@/components/patients/modals/LinkPatientsModal'
 
 export default {
   name: 'PatientsTable',
 
-  mixins: [DataMixin],
+  components: { LinkPatientsModal },
+
+  mixins: [DataMixin], 
 
   props: {
     modal: {
@@ -110,7 +125,7 @@ export default {
 
   data() {
     return {
-      rowSelects: null,
+      selectedPatients: [],
       columns: [
         'Patient',
         'Mobile',
@@ -119,6 +134,7 @@ export default {
         'Action',
       ],
       selectedFilter: '',
+      link: Link,
     }
   },
 

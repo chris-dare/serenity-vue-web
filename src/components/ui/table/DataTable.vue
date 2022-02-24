@@ -8,10 +8,20 @@
     <cv-data-table
       v-show="!loading && !noData"
       ref="table"
+      v-model="rowSelects"
       :data="[]"
       :columns="columns"
       :class="{'small-table': small}"
+      @row-select-changes="actionRowSelectChange"
     >
+      <template
+        v-if="multipleSelect"
+        slot="batch-actions"
+      >
+        <cv-button>
+          Link
+        </cv-button>
+      </template>
       <template slot="data">
         <cv-data-table-row
           v-for="(row, rowIndex) in data"
@@ -80,6 +90,11 @@ export default {
       default: false,
     },
 
+    multipleSelect: {
+      type: Boolean,
+      default: false,
+    },
+
     pagination: {
       type: Object,
       default: null,
@@ -90,6 +105,7 @@ export default {
   data() {
     return {
       isFirstCall: true,
+      rowSelects:[],
     }
   },
 
@@ -114,6 +130,10 @@ export default {
       //   return
       // }
       this.$emit('pagination', event)
+    },
+
+    actionRowSelectChange(val) {
+      this.$emit('update:selected', this.data.filter((select, index) => val.includes(index.toString())))
     },
   },
 }
