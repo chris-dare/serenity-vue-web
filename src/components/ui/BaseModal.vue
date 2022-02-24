@@ -70,6 +70,7 @@ export default {
 
 .vm--container.scrollable{
   @apply h-main;
+  z-index: 20000;
 }
 </style>
 

@@ -31,6 +31,7 @@ import ModalSetLocation from '@/components/locations/ModalSetLocation'
 
 import updateMixin from '@/mixins/update'
 import { mapState } from 'vuex'
+import isUndefined from 'lodash/isUndefined'
 export default {
   name: 'App',
 
@@ -49,7 +50,7 @@ export default {
       immediate: true,
       handler(val, oldVal) {
         console.log('val', val, oldVal)
-        if (val && val !== oldVal) {
+        if (val && val !== oldVal && !isUndefined(oldVal)) {
           setTimeout(() => {
             this.$trigger('set:location:open')
           }, 300)
