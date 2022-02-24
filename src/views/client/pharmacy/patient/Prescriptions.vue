@@ -57,17 +57,52 @@
       </div>
       <div class="w-1/4 pt-4 px-6">
         <div class="bx--tabs__nav-item--selected"><div class="bx--tabs__nav-link border-none">Payment methods</div></div>
-        <div />
         <div
-          class="py-4 font-bold text-gray-500"
+          class="py-4"
         >
           <div
-            v-if="corporateAccounts && corporateAccounts.length > 0"
+            v-if="patient.payment_methods.corporate && patient.payment_methods.corporate.length > 0"
             class="mb-1"
           >
-            Corporate account ({{ corporateAccountNames }})
+            <div class="text-gray-500"> Corporate account : </div>
+            <cv-list
+              v-for="(list, index) in patient.payment_methods.corporate"
+              :key="index"
+            >
+              <cv-list-item class=" font-bold">
+                - {{ list.description }} ({{ list.status }})
+              </cv-list-item>
+            </cv-list>
           </div>
-          <div v-if="userAccounts && corporateAccounts.length > 0">User account</div>
+          <div
+            v-if="patient.payment_methods.patient_user && patient.payment_methods.patient_user.length > 0"
+            class="mb-1"
+          >
+            <div class="text-gray-500"> Patient account : </div>
+           
+            <cv-list
+              v-for="(list, index) in patient.payment_methods.patient_user"
+              :key="index"
+            >
+              <cv-list-item class=" font-bold">
+                - {{ list.description }} ({{ list.status }})
+              </cv-list-item>
+            </cv-list>
+          </div>
+          <div
+            v-if="patient.payment_methods.insurance && patient.payment_methods.insurance.length > 0"
+            class="mb-1"
+          >
+            <div class="text-gray-500"> Insurance account : </div>
+            <cv-list
+              v-for="(list, index) in patient.payment_methods.insurance"
+              :key="index"
+            >
+              <cv-list-item class=" font-bold">
+                - {{ list.description }} ({{ list.status }})
+              </cv-list-item>
+            </cv-list>
+          </div>
         </div>
       </div>
     </div>
