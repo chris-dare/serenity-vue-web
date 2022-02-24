@@ -5,8 +5,11 @@
 
       <EncounterReferralForm :referral="referral" />
 
-      <div v-if="mode == 'create'">
-        <p class="mb-2 font-semibold">Referrals</p>
+      <div
+        v-if="mode == 'create'"
+        class="space-y-2"
+      >
+        <p class="font-semibold">Referrals</p>
 
         <FilterGroup
           v-model="selectedFilter"
@@ -43,6 +46,11 @@
             <cv-data-table-cell>
               <div>
                 <p>{{ row.referral_type | removeUnderscore | capitalize }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
+                <p>{{ row.reason }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
@@ -140,7 +148,7 @@ export default {
 
   data() {
     return {
-      columns: ['Date', 'Referrer', 'Referee', 'Priority', 'Referral Type', ''],
+      columns: ['Date', 'Referrer', 'Referee', 'Priority', 'Referral Type', 'Reason', ''],
       referral: null,
       output: null,
       referralToBePrinted: {},

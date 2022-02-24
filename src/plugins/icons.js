@@ -11,6 +11,7 @@ import Close from '@carbon/icons-vue/es/close/16.js'
 import CheckmarkFilled from '@carbon/icons-vue/es/checkmark--filled/16.js'
 import Diagnostic from '@carbon/icons-vue/es/microscope/16.js'
 import Checkmark from '@carbon/icons-vue/es/checkmark/16.js'
+import Devices from '@carbon/icons-vue/es/devices/16.js'
 
 Vue.component('ChevronRight', ChevronRight)
 Vue.component('Add', Add)
@@ -23,6 +24,7 @@ Vue.component('CheckmarkFilled', CheckmarkFilled)
 Vue.component('Diagnostic', Diagnostic)
 Vue.component('Checkmark', Checkmark)
 Vue.component('AddFilled', AddFilled)
+Vue.component('Devices', Devices)
 
 import PaymentTypeSelector from '../components/payment/PaymentTypeSelector'
 

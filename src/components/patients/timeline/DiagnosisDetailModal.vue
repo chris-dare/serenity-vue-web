@@ -44,7 +44,7 @@
             <div>
               <p class="text-secondary">Dr. {{ 'Chris Dare' }}</p>
               <p class="text-secondary text-xs">
-                General Practitioner
+                Practitioner
               </p>
             </div>
           </div>

@@ -54,6 +54,13 @@ export default {
           value: 'add',
           hide: !this.$userCan('diagnostic.requests.write'),
         },
+        {
+          label: 'Configure',
+          description: 'Add or configure a device',
+          type: 'devices',
+          value: 'device',
+          hide: !this.$userCan('diagnostic.requests.write'),
+        },
       ]
     },
   },
@@ -67,6 +74,9 @@ export default {
         break
       case 'edit':
         this.$trigger('new-lab:add:open')
+        break
+      case 'device':
+        this.$router.push({ name: 'Diagnostic:Devices'})
         break
       case 'add':
         this.$router.push({ name: 'DiagnosticSelectPatient'})
