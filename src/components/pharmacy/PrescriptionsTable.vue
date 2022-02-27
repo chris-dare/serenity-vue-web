@@ -144,6 +144,11 @@
                   </div>
                 </cv-data-table-cell>
                 <cv-data-table-cell>
+                  <div>
+                    <p>{{ request.row.dosage_form }}</p>
+                  </div>
+                </cv-data-table-cell>
+                <cv-data-table-cell v-if="$isCurrentWorkspace('OPD')">
                   <slot
                     name="action"
                     :row="request.row"
@@ -191,7 +196,7 @@ export default {
     },
 
     patient: {
-      type: String,
+      type: [String, Number],
       default: null
     }
   },
@@ -251,7 +256,8 @@ export default {
         'Frequency',
         'Duration',
         'Special Instruction',
-        'Status'
+        'Status',
+        'Dosage form'
       ]
 
       if (this.$isCurrentWorkspace('OPD')) {

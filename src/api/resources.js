@@ -73,4 +73,8 @@ export default {
   dosageRoutes(){
     return http.get(`${this.url}valueset/dosage-route-type`)
   },
+
+  dosageForms(){
+    return http.get(`${this.url}valueset/dosage-form-type`)
+  },
 }
