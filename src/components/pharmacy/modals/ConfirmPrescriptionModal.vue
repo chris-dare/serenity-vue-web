@@ -57,18 +57,20 @@
                 <div>{{ $date.formatDate(currentDrug.drug.created_at, 'dd MMM, yyyy @ HH:mm a') }}</div>
               </div>
               <div>
-                <div class="font-sm text-gray-400 mb-2 col-span-2">Note</div>
+                <div class="font-sm text-gray-400 mb-2">Dosage Form</div>
+                <div>{{ currentDrug.drug.dosage_form }}</div>
+              </div>
+              <div class="col-span-2">
+                <div class="font-sm text-gray-400 mb-2 ">Note</div>
                 <div class="capitalize">{{ $utils.getFirstData(currentDrug.drug.medication_request_dosage_instruction, 'frequency') }}</div>
               </div>
-            </div>
-            <div class="grid grid-cols-2 gap-8 my-4">
-              <div>
+              <div class="col-span-2">
                 <div class="font-sm text-gray-400 mb-2">Course of therapy</div>
                 <div class="capitalize">
                   {{ currentDrug.drug.course_of_therapy_type }}
                 </div>
               </div>
-              <div>
+              <div class="col-span-2">
                 <div class="font-sm text-gray-400 mb-2">Encounter</div>
                 <div />
               </div>

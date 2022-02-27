@@ -80,6 +80,17 @@
             placeholder="Quantity"
             class="se-input-gray"
           />
+
+          <MultiSelect
+            v-model="drug.dosage_form"
+            title="Dosage form"
+            :options="dosages"
+            :multiple="false"
+            custom-field="code"
+            label="display"
+            track-by="code"
+            preselect
+          />  
         </div>
 
         <Trash
@@ -173,6 +184,7 @@ export default {
         { label: 'seasonal', value: 'seasonal'},
       ],
       categories: [ 'inpatient', 'outpatient', 'community', 'discharge' ],
+      dosages: [],
     }
   },
 
@@ -188,12 +200,18 @@ export default {
   created() {
     this.localValue.extra_details.priority = 'routine'
     this.getDosageRoutes()
+    this.getDosageFormsUnits()
   },
 
   methods: {
     ...mapActions({
       getDosageRoutes: 'resources/getDosageRoutes',
     }),
+
+    async getDosageFormsUnits() {
+      let { data } = await this.$api.resources.dosageForms()
+      this.dosages = data
+    },
 
     addDrug() {
       this.localValue.drugs.push({
