@@ -205,7 +205,7 @@ export default {
         payload.payment_info = this.getPaymentParams(this.form.payment_info)
       } else {
         payload.with_payment = false
-        delete payload.payment_info
+        payload.payment_info = this.getPaymentParams(this.form.payment_info)
       }
 
       try { 
