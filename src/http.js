@@ -1,8 +1,10 @@
 import axios from 'axios'
 import store from '@/store'
+import { cacheAdapterEnhancer } from 'axios-extensions' 
 
 const http = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
+  adapter: cacheAdapterEnhancer(axios.defaults.adapter),
 })
 
 // Add the authorization header on requests
@@ -40,6 +42,7 @@ http.interceptors.response.use(undefined, async (error) => {
 
 const authHttp = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
+  adapter: cacheAdapterEnhancer(axios.defaults.adapter),
 })
 
 authHttp.interceptors.response.use(undefined, (error) => {
