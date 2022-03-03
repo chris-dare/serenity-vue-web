@@ -9,22 +9,26 @@
     <template>
       <SeForm>
         <FilterGroup
+          v-if="type === 'add'"
           v-model="selected"
           :filters="filters"
           class="my-3"
         />
         <div>
-          <div class="my-3">
+          <div
+            v-if="type === 'add'"
+            class="my-3"
+          >
             <AutoCompletePatients
               v-if="selected === 'existing'"
               v-model="patient"
               class="col-span-2"
             />
-            <AddInsuranceForm
-              v-model="form"
-              @invalid="setDisabledState"
-            />
           </div>
+          <AddInsuranceForm
+            v-model="form"
+            @invalid="setDisabledState"
+          />
         </div>
       </SeForm>
       <div class="flex justify-between items-center my-8">
@@ -39,7 +43,7 @@
           :loading="loading"
           @click="submit"
         >
-          Add Beneficiary
+          {{ type === 'update' ? 'Update Beneficiary' : 'Add Beneficiary' }}
         </SeButton>
       </div>
     </template>
@@ -133,7 +137,7 @@ export default {
       depositClient: 'clients/deposit',
       updateClient: 'clients/update',
       addBenefactor: 'corporate/createInsuranceBenefactor',
-      updateEmployee: 'corporate/updateCorporateEmployee',
+      updateEmployee: 'corporate/updateBeneficiary',
       getBeneficiaries: 'corporate/getCorporate',
     }),
 
