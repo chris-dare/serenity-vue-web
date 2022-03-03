@@ -20,7 +20,7 @@ export default {
   },
 
   patientAccounts(providerId, patientId, params) {
-    return http.get(`${this.url}${providerId}/patients/${patientId}/payment-options`, { params })
+    return http.get(`${this.url}${providerId}/patients/${patientId}/payment-options`, { params, cache: false })
   },
 
   create(providerId, params) {

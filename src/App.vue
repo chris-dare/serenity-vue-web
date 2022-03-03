@@ -49,7 +49,6 @@ export default {
     loggedIn: {
       immediate: true,
       handler(val, oldVal) {
-        console.log('val', val, oldVal)
         if (val && val !== oldVal && !isUndefined(oldVal)) {
           setTimeout(() => {
             this.$trigger('set:location:open')

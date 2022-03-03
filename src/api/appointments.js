@@ -20,14 +20,14 @@ export default {
   },
 
   slots(providerId, params) {
-    return http.get(`${this.url}${providerId}/slots/availableslots`, { params: { ...params } })
+    return http.get(`${this.url}${providerId}/slots/availableslots`, { params: { ...params }, cache: false })
   },
   doctors(providerId, params) {
-    return http.get(`${this.url}${providerId}/slots/availableslots/grouped`, { params: { ...params } })
+    return http.get(`${this.url}${providerId}/slots/availableslots/grouped`, { params: { ...params }, cache: false })
   },
 
   nextSlot(providerId, params) {
-    return http.get(`${this.url}${providerId}/slots/nextavailableslot`, { params: { ...params } })
+    return http.get(`${this.url}${providerId}/slots/nextavailableslot`, { params: { ...params }, cache: false })
   },
 
   update(providerId, appointmentId, params) {

@@ -199,13 +199,12 @@ export default {
         medication_dispense: medication_dispenses,
         location: this.$locationId,
         medication_request_category: this.$isCurrentWorkspace('PHARM') ? 'outpatient' : 'inpatient',
+        payment_info: this.getPaymentParams(this.form.payment_info),
       }
       if (this.hasPaymentPermission && withPayment) {
         payload.with_payment = true
-        payload.payment_info = this.getPaymentParams(this.form.payment_info)
       } else {
         payload.with_payment = false
-        payload.payment_info = this.getPaymentParams(this.form.payment_info)
       }
 
       try { 

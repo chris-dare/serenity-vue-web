@@ -4,14 +4,13 @@
     class="flex items-end justify-between mt-4"
     @submit.prevent
   >
-    <div class="grid grid-cols-3 items-end">
+    <div class="flex w-full items-end justify-between space-x-2">
       <slot />
-      <DateRangePicker
+
+      <DatePicker
         v-model="localValue"
         type="range"
-        label="Date Range"
-        class="flex-none se-white-date-picker"
-        @change="$emit('change', localValue)"
+        class="w-1/3 se-white-date-picker"
       />
     </div>
   </cv-form>

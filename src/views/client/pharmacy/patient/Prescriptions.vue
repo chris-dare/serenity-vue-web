@@ -114,6 +114,7 @@
         <Search
           v-model="search"
           placeholder="Search prescription..."
+          custom-class="se-input-white"
         />
       </PharmacyDateFilters>
       <ConfirmPrescriptionModal

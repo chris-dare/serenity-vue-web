@@ -222,6 +222,12 @@
         </div>
       </div>
     </div>
+    <p
+      v-else
+      class="text-center"
+    >
+      No data is available
+    </p>
     <div class="my-8 flex items-center justify-end">
       <SeButton
         class="mr-4"

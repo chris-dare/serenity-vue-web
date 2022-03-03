@@ -302,7 +302,6 @@ export default {
     },
 
     dispenseDrug(row){
-      console.log(row)
       this.$router.push({ name: this.route, params: { id: row.patient_id} })
     },
 
