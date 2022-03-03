@@ -97,7 +97,7 @@
               <TableActions
                 :actions="tableActions(row)"
                 :loading="printLoading"
-                @view="$router.push({ name: route, params: { id: row.patient_id} })"
+                @view="$router.push({ name: route, params: { id: row.id} })"
               />
             </div>
           </cv-data-table-cell>

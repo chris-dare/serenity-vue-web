@@ -19,7 +19,7 @@
         label="display"
         track-by="code"
         custom-field="code"
-        title="Service request category"
+        class="multiselect-white"
       />
     </BillingPatientFilters>
     <div class="bg-white p-3">
@@ -28,6 +28,7 @@
         :columns="columns"
         :pagination="pagination"
         :data="data"
+        :loading="loading"
         class="transparent-table"
         :no-data-label="noDataLabel('bills')"
         @pagination="actionOnPagination"
@@ -107,7 +108,8 @@ export default {
       ],
       visible: false,
       order: {},
-      lists: {},
+      // lists: {},
+      lists: '',
       category: '',
     }
   },
@@ -137,13 +139,11 @@ export default {
 
   watch:{
     lists: {
-      handler(val){
-        if(val){
-
-          if (val.end) {
-            this.params.created_on__before = this.$date.formatQueryParamsDate(val.end)
-            this.params.created_on__after = this.$date.formatQueryParamsDate(val.start || Date.now())
-          }
+      handler(val, oldVal){
+        if (val !== oldVal) {
+          let values = val?.split(' to ')
+          this.params.created_on__before = values && values[1] ? this.$date.formatQueryParamsDate(values[1]) : null
+          this.params.created_on__after = values && values[0] ? this.$date.formatQueryParamsDate(values[0] || Date.now()) : null
           this.searchData()
         }
       },

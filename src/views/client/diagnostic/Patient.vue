@@ -90,15 +90,8 @@ export default {
   },
 
   beforeRouteEnter (to, from, next) {
-    next(async vm => {
-      try {
-        vm.loading = true
-        await vm.getPatient(vm.id)
-        vm.loading = false
-      } catch (error) {
-        vm.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
-        vm.loading = false
-      }
+    next(vm => {
+      vm.getPatient(vm.id)
     })
   },
 

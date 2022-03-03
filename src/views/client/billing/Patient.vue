@@ -82,14 +82,7 @@ export default {
         if (route.params.id === oldRoute?.params?.id) {
           return
         }
-        try {
-          this.loading = true
-          await this.initBillingPatientInformation(this.id)
-          this.loading = false
-        } catch (error) {
-          this.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
-          this.loading = false
-        }
+        await this.initBillingPatientInformation(this.id)
       },
     },
   },
