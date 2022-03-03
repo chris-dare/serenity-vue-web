@@ -77,7 +77,6 @@ export default {
 
   events: {
     'set:location:open': function(){
-      console.log('open')
       this.open()
       this.location = this.$locationId
     },

@@ -3,7 +3,9 @@ export function initialState() {
     patients: [],
     patientsCount: 0,
     currentPatient: {
-      payment_methods: [],
+      payment_methods: {
+        corporate: [],
+      },
     },
     patientMedications: [],
     patientDiagnosis: [],

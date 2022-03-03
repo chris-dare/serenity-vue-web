@@ -242,7 +242,6 @@ export default {
     },
 
     async settleBill(item) {
-      console.log(this.summary)
       try {
         this.loading = true
         let payload = item.map(element => {

@@ -184,7 +184,6 @@ export default {
       let price = service.price_tiers.filter(
         (result) => list.price_tier === result.id,
       )
-      console.log(price)
       return `${this.$currency(price[0].charge, price[0].currency).format()} - ${price[0].description}`
     },
 
