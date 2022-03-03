@@ -35,7 +35,11 @@ export default {
   },
 
   update(params) {
-    return http.patch(`${this.url}${params.companyId}/employees/${params.id}`, params)
+    return http.patch(`${this.url}${params.companyId}/employees/${params.uuid}`, params)
+  },
+
+  updateBeneficiary(params) {
+    return http.patch(`providers/${params.providerId}/clients/${params.companyId}/beneficiaries/${params.beneficiary[0].id}/${params.uuid}`, params)
   },
 
   delete(providerId,id) {
