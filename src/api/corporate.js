@@ -39,7 +39,7 @@ export default {
   },
 
   updateBeneficiary(params) {
-    return http.patch(`providers/${params.providerId}/clients/${params.companyId}/beneficiaries/${params.beneficiary[0].id}/${params.uuid}`, params)
+    return http.patch(`providers/${params.providerId}/clients/${params.companyId}/beneficiaries/${params.beneficiaryId}/${params.uuid}`, params)
   },
 
   delete(providerId,id) {
