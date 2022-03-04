@@ -84,6 +84,7 @@ export default {
     return {
       search: '',
       loading: false,
+      isloading: false,
       columns: [
         'Employee',
         'Phone Number',

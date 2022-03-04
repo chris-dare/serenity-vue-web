@@ -195,6 +195,7 @@ export default {
 
     async update() {
       this.loading = true
+      this.form.beneficiaryId = this.form.beneficiaries[0].id
       try {
         await this.updateEmployee(this.form)
         this.$toast.open({
