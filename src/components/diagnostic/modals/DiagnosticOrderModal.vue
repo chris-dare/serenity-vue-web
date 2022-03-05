@@ -155,16 +155,32 @@
                   :suffix-text="cat.unit"
                   :label="cat.display"
                 />
-                <MultiSelect
+                <!-- <MultiSelect
                   v-else
                   v-model="categoryValues[cat.code]"
                   :title="cat.display"
-                  :multiple="false"
                   :options="interpretationTypes"
+                  :multiple="false"
+                  :searchable="true"
+                  :internal-search="true"
+                  :clear-on-select="false"
+                  :close-on-select="false"
+                  :hide-selected="true"
                   track_by="code"
+                  :limit="3"
+                  v-bind="$attrs"
+                  taggable
+                  @remove="$emit('remove', $event)"
+                  @tag="addTag(e, cat.code)"
                   custom-field="code"
                   label="display"
                   placeholder="Search or choose a observation type"
+                /> -->
+                <AutoCompleteObservations
+                  v-else
+                  v-model="categoryValues[cat.code]"
+                  :title="cat.display"
+                  :options="interpretationTypes" 
                 />
               </div>
             </div>
@@ -493,13 +509,13 @@ export default {
       this.refresh()
     },
 
-    addTag(field, tag) {
+    addTag(tag, code) {
       let newTag = {
         code: tag,
         value: tag,
       }
-      this.options[field].push(newTag)
-      this.form[field].push(newTag)
+      console.log(tag, code)
+      this.interpretationTypes.push(newTag)
     },
 
     remove(payload) {
