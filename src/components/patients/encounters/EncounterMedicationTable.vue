@@ -26,6 +26,11 @@
           <p>{{ $utils.getFirstData(row.medication_request_dosage_instruction, 'frequency') }} {{ $utils.getFirstData(row.medication_request_dosage_instruction, 'frequency_unit') }}</p>
         </div>
       </cv-data-table-cell>
+      <cv-data-table-cell>
+        <div>
+          <p>{{ row.dosage_form }}</p>
+        </div>
+      </cv-data-table-cell>
       <cv-data-table-cell v-if="!hideAction">
         <div class="flex items-center space-x-2">
           <Edit
@@ -72,6 +77,7 @@ export default {
         'Type',
         'Duration',
         'Frequency',
+        'Dosage Form',
       ]
       if (!this.hideAction) {
         columns.push('Action')
