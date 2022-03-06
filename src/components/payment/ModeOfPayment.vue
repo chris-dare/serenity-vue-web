@@ -125,20 +125,8 @@ export default {
     },
   },
 
-  watch: {
-    patient: {
-      handler (val){
-        if(val){
-          this.localValue.transaction_type = this.patient?.previous_payment_method || this.options.find(option => !option.hide)?.value
-        }
-      },
-    },
-  },
-
-  created() {
-    if (!this.localValue?.transaction_type) {
-      this.localValue.transaction_type = this.patient?.previous_payment_method || this.options.find(option => !option.hide)?.value
-    }
+  mounted() {
+    this.init()
   },
 
   methods: {
@@ -146,6 +134,12 @@ export default {
       this.$set(this, 'localValue', {
         ...this.localValue,
         transaction_type: type.value,
+      })
+    },
+    async init () {
+      await this.$nextTick(() => {
+        this.localValue.transaction_type = this.patient?.previous_payment_method || this.options.find(option => !option.hide)?.value
+        this.localValue.account_id = this.patient?.previous_patient_account_uuid || ''
       })
     },
   },

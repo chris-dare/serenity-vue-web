@@ -57,6 +57,7 @@
                 :loading="isloading"
                 @view="addCurrent(row)"
                 @suspend="suspendCurrent(row)"
+                @edit="$trigger('insurance-patient:edit:open', {...row})"
               />
             </div>
           </cv-data-table-cell>
@@ -83,6 +84,7 @@ export default {
     return {
       search: '',
       loading: false,
+      isloading: false,
       columns: [
         'Employee',
         'Phone Number',
@@ -124,6 +126,7 @@ export default {
     tableActions(row) {
       return [
         { label: 'View', event: 'view', show: true },
+        { label: 'Edit', event: 'edit', show: true },
         { label: row.is_active ? 'Suspend' : 'Activate', event: 'suspend', show: true },
       ]
     },

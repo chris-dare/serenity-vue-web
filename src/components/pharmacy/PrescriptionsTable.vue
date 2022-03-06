@@ -60,8 +60,8 @@
           <cv-data-table-cell>
             <div class="flex items-center py-2">
               <InfoImageBlock
-                :label="row.patient.fullName | capitalize"
-                :description="row.patient.gender_age_description"
+                :label="row.patient_user.fullName | capitalize"
+                :description="row.patient_user.gender_age_description"
                 size="base"
               />
             </div>
@@ -97,7 +97,7 @@
               <TableActions
                 :actions="tableActions(row)"
                 :loading="printLoading"
-                @view="$router.push({ name: route, params: { id: row.patient_id} })"
+                @view="dispenseDrug(row)"
               />
             </div>
           </cv-data-table-cell>
@@ -144,6 +144,11 @@
                   </div>
                 </cv-data-table-cell>
                 <cv-data-table-cell>
+                  <div>
+                    <p>{{ request.row.dosage_form }}</p>
+                  </div>
+                </cv-data-table-cell>
+                <cv-data-table-cell v-if="$isCurrentWorkspace('OPD')">
                   <slot
                     name="action"
                     :row="request.row"
@@ -191,7 +196,7 @@ export default {
     },
 
     patient: {
-      type: String,
+      type: [String, Number],
       default: null
     }
   },
@@ -251,7 +256,8 @@ export default {
         'Frequency',
         'Duration',
         'Special Instruction',
-        'Status'
+        'Status',
+        'Dosage form'
       ]
 
       if (this.$isCurrentWorkspace('OPD')) {
@@ -295,6 +301,10 @@ export default {
       ]
     },
 
+    dispenseDrug(row){
+      this.$router.push({ name: this.route, params: { id: row.patient_id} })
+    },
+
     async printPrescription(drug){
       try {
         this.printLoading = true
@@ -322,13 +332,13 @@ export default {
           return el.encounter_medication_request.length > 0
         })
         .map(el => {
-          el.patient_id = el.encounter_medication_request[0].patient
+          el.patient_id = el.patient
           el.encounter_medication_request = el.encounter_medication_request
             .map(drug => {
               drug.patient = new Patient(drug.patient_detail).getNormalizedView()
               return drug
             })
-          el.patient = new Patient(el.encounter_medication_request[0].patient_detail).getNormalizedView()
+          el.patient_user = new Patient(el.encounter_medication_request[0].patient_detail).getNormalizedView()
           return el
         })
       this.prescriptions.loading = false

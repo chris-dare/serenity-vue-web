@@ -40,6 +40,15 @@ export default {
     }
   },
 
+  async updateBeneficiary({ commit }, payload) {
+    try {
+      const { data } = await CorporateAPI.updateBeneficiary(payload)
+      commit(UPDATE_CORPORATE, data.results)
+    } catch ({ response: { data: error } }) {
+      throw error
+    }
+  },
+
   async getDependent({ commit }, id) {
     try {
       const { data } = await CorporateAPI.listDependent(id)

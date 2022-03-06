@@ -9,17 +9,20 @@
     <template>
       <SeForm>
         <FilterGroup
+          v-if="type === 'add'"
           v-model="selected"
           :filters="filters"
           class="mb-3"
         />
         <div>
           <div class="grid grid-cols-2 gap-8 my-3">
-            <AutoCompletePatients
-              v-if="selected === 'existing'"
-              v-model="patient"
-              class="col-span-2"
-            />
+            <div v-if="type === 'add'">
+              <AutoCompletePatients
+                v-if="selected === 'existing'"
+                v-model="patient"
+                class="col-span-2"
+              />
+            </div>
             <div
               class="grid grid-cols-2 gap-8 col-span-2"
             >
@@ -121,7 +124,7 @@
           :loading="loading"
           @click="submit"
         >
-          Add employee
+          {{ type === 'update' ? 'Update Employee' : 'Add Employee' }}
         </SeButton>
       </div>
     </template>

@@ -54,13 +54,13 @@ export default {
           value: 'add',
           hide: !this.$userCan('diagnostic.requests.write'),
         },
-        {
-          label: 'Configure',
-          description: 'Add or configure a device',
-          type: 'devices',
-          value: 'device',
-          hide: !this.$userCan('diagnostic.requests.write'),
-        },
+        // {
+        //   label: 'Configure',
+        //   description: 'Add or configure a device',
+        //   type: 'devices',
+        //   value: 'device',
+        //   hide: !this.$userCan('diagnostic.requests.write'),
+        // },
       ]
     },
   },
