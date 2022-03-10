@@ -31,6 +31,7 @@ import {
   SET_SERVICE_REQUEST_SECTION_TYPES,
   SET_OBSERVATION_INTERPRETATION_TYPES,
   SET_DOSAGE_ROUTES,
+  SET_REVENUE_TAGS,
 } from './mutation-types'
 
 export default {
@@ -95,6 +96,9 @@ export default {
 
   [SET_SERVICE_TYPES](state, types) {
     state.serviceTypes = types
+  },
+  [SET_REVENUE_TAGS](state, types) {
+    state.revenueTags = types
   },
 
   [SET_PAYMENT_METHODS](state, methods) {

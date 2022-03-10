@@ -30,3 +30,4 @@ export const SET_SERVICE_REQUEST_SECTION_TYPES = 'Set service request section ty
 export const SET_SERVICE_REQUEST_CATEGORY_TYPES = 'Set service request category types'
 export const SET_SERVICE_GENERIC_PERIOD_UNIT_TYPES = 'Set service generic period unit types'
 export const SET_DOSAGE_ROUTES = 'Set Dosage routes'
+export const SET_REVENUE_TAGS = 'Set Revenue tags'

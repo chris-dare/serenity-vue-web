@@ -43,7 +43,6 @@
             :multiple="false"
             :options="['g', 'mg']"
             class="multiselect-white flex-1"
-            @input="$emit('change', localValue)"
           />
         </div>
         <div class="grid grid-cols-2 gap-8">
@@ -63,14 +62,14 @@
           />
         </div>
         <div class="grid grid-cols-2 gap-8">
-          <cv-text-input
+          <cv-number-input
             v-model="form.initial_quantity"
             type="number"
             label="Initial item quantity"
             placeholder=""
             :invalid-message="$utils.validateRequiredField($v, 'initial_quantity')"
           />
-          <cv-text-input
+          <cv-number-input
             v-model="form.in_hand_quantity"
             type="number"
             label="In-hand quantity"
@@ -254,10 +253,6 @@ export default {
 
         this.loading = false
       } catch (error) {
-        this.$toast.open({
-          message: error.message || 'Something went wrong!',
-          type: 'error',
-        })
         this.loading = false
       }
     },

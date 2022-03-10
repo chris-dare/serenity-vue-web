@@ -90,7 +90,7 @@ export default {
 
     id: {
       type: [String, Number],
-      required: false,
+      default: null,
     },
   },
 
