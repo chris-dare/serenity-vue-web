@@ -21,7 +21,7 @@
       <AddEditInsuranceModal />
     </div>
 
-    <!-- <Offline @detected-condition="handleConnectivityChange" /> -->
+    <Offline @detected-condition="handleConnectivityChange" />
   </div>
 </template>
 
@@ -61,21 +61,21 @@ export default {
     }
   },
 
-  // watch: {
-  //   isOnline: {
-  //     immediate: false,
-  //     handler(val, oldVal) {
-  //       if (val === oldVal) {
-  //         return
-  //       }
-  //       if (!val) {
-  //         this.$toast.default('You are offline!!')
-  //       } else {
-  //         this.$toast.default('You are back online!!')
-  //       }
-  //     },
-  //   },
-  // },
+  watch: {
+    isOnline: {
+      immediate: false,
+      handler(val, oldVal) {
+        if (val === oldVal) {
+          return
+        }
+        if (!val) {
+          this.$toast.error('You are offline!!')
+        } else {
+          this.$toast.success('You are back online!!')
+        }
+      },
+    },
+  },
 
   async created() {
     await this.initApp()

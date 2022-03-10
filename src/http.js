@@ -1,16 +1,17 @@
 import axios from 'axios'
 import store from '@/store'
-import { cacheAdapterEnhancer } from 'axios-extensions' 
+// import { cacheAdapterEnhancer } from 'axios-extensions' 
 
 const http = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
-  adapter: cacheAdapterEnhancer(axios.defaults.adapter),
+  // adapter: cacheAdapterEnhancer(axios.defaults.adapter),
 })
 
 // Add the authorization header on requests
 http.interceptors.request.use(
   (config) => {
     config.headers['X-Requested-With'] = 'XMLHttpRequest'
+    // config.headers['PROVIDER_PORTAL_ID'] = process.env.VUE_APP_PROVIDER_PORTAL_ID
 
     if (store.getters['auth/authorizationHeader'] !== 'Bearer null') {
       config.headers.Authorization = store.getters['auth/authorizationHeader']
@@ -42,10 +43,13 @@ http.interceptors.response.use(undefined, async (error) => {
 
 const authHttp = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
-  adapter: cacheAdapterEnhancer(axios.defaults.adapter),
+  // adapter: cacheAdapterEnhancer(axios.defaults.adapter),
 })
 
-authHttp.interceptors.response.use(undefined, (error) => {
+authHttp.interceptors.response.use((config) => {
+  // config.headers['PROVIDER_PORTAL_ID'] = process.env.VUE_APP_PROVIDER_PORTAL_ID
+  return config
+}, (error) => {
   const errorResponse = error.response
   return Promise.reject(errorResponse)
 })
