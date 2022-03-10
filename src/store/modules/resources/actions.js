@@ -36,6 +36,7 @@ import {
   SET_SERVICE_REQUEST_SECTION_TYPES,
   SET_OBSERVATION_INTERPRETATION_TYPES,
   SET_DOSAGE_ROUTES,
+  SET_REVENUE_TAGS,
 } from './mutation-types'
 
 export default {
@@ -117,6 +118,17 @@ export default {
       throw error
     })
     commit(SET_SERVICE_TYPES, data)
+  },
+
+  async getRevenueTags({ commit, state,rootState }) {
+    if (state.revenueTags.length) {
+      return
+    }
+    const provider = rootState.auth.provider
+    const { data } = await ResourceAPI.revenueTags(provider.id).catch((error) => {
+      throw error
+    })
+    commit(SET_REVENUE_TAGS, data)
   },
 
   async getObservationCategory({ commit, state }) {

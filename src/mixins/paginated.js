@@ -66,6 +66,6 @@ export default {
     searchData: debounce(function() {
       this.params.page = 1
       this.refresh()
-    }, 300, false),
+    }, 1000, false),
   },
 }

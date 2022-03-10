@@ -115,7 +115,7 @@ export default {
       findPatient: 'patients/findPatient',
       getPatient: 'patients/getPatient',
       getMedicationRequests: 'patients/getMedicationRequests',
-      refresh: 'patients/refreshCurrentPatient',
+      refresh: 'patients/refreshPatientDetails',
       setCheckoutPatient: 'checkout/setCheckoutPatient',
     }),
 

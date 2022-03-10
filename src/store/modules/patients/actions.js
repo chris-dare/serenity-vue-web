@@ -47,6 +47,16 @@ export default {
     
   },
 
+  refreshPatientDetails({ commit }) {
+    commit(SET_PATIENT_DATA, {})
+    commit(SET_PATIENT_DIAGNOSIS, [])
+    commit(SET_REFERRALS, [])
+    commit(SET_MEDICATION_REQUESTS, [])
+    commit(SET_OBSERVATIONS, [])
+    commit(SET_PATIENT_NOTES, [])
+    commit(SET_SERVICE_REQUESTS, [])
+  },
+
   async initBillingPatientInformation({ dispatch, state }, id) {
     await dispatch('getPatient', id)
 
@@ -143,6 +153,8 @@ export default {
   addToCurrentPatient({ commit }, data) {
     commit(ADD_PATIENT_DATA, data)
   },
+
+  
 
   refreshCurrentPatient({ commit }) {
     commit(SET_PATIENT_DATA, {})
