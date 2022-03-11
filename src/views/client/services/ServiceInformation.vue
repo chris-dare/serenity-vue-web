@@ -36,6 +36,18 @@
         preselect
         required
       />
+      <!-- <MultiSelect
+        v-model="form.revenue_tag_display"
+        :options="revenueTags"
+        label="code"
+        :multiple="false"
+        track-by="code"
+        title="Revenue tag"
+        placeholder="Choose a revenue tag"
+        :error-message="$utils.validateRequiredField($v, 'healthcare_service_types')"
+        preselect
+        required
+      /> -->
 
       <div class="grid grid-cols-2 gap-x-4">
         <div>
@@ -270,6 +282,7 @@ export default {
       categories: (state) => state.resources.categories,
       specialties: (state) => state.resources.specialties,
       serviceTypes: (state) => state.resources.serviceTypes,
+      revenueTags: (state) => state.resources.revenueTags,
       labProceedures: (state) => state.resources.diagnosticLabProceedures,
       serviceCategoryTypes: (state) => state.resources.serviceRequestCategoryTypes,
       serviceSectionTypes: (state) => state.resources.serviceRequestSectionTypes,
@@ -293,6 +306,7 @@ export default {
   created() {
     this.getCategories()
     this.getServiceTypes()
+    // this.getRevenueTags()
   },
 
   methods: {
@@ -301,6 +315,7 @@ export default {
       refreshCurrentService: 'services/refreshCurrentService',
       getCategories: 'resources/getCategories',
       getServiceTypes: 'resources/getServiceTypes',
+      getRevenueTags: 'resources/getRevenueTags',
     }),
 
     save() {

@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'production') {
     Vue: Vue,
     dsn: process.env.VUE_APP_SENTRY_DSN,
     integrations: [new Integrations.BrowserTracing()],
-    environment: 'staging',
+    environment: process.env.VUE_APP_SENTRY_ENV || 'staging',
   })
 }
 

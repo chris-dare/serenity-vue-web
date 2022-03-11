@@ -98,6 +98,7 @@
                 :actions="tableActions(row)"
                 :loading="printLoading"
                 @view="dispenseDrug(row)"
+                @print="printPrescription(row)"
               />
             </div>
           </cv-data-table-cell>
@@ -297,7 +298,7 @@ export default {
     tableActions() {
       return [
         { label: 'Dispense', event: 'view', show: this.$isCurrentWorkspace('PHARM') },
-        // { label: 'Print prescription', event: 'print', show: true },
+        { label: 'Print prescription', event: 'print', show: true },
       ]
     },
 

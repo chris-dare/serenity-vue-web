@@ -5,6 +5,7 @@ export default () => ({
   referenceTypes: [],
   codes: [],
   serviceTypes: [],
+  revenueTags: [],
   currentResource: {},
   paymentMethods: [],
   encounterClasses: [],
