@@ -11,12 +11,12 @@ const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     config.headers['X-Requested-With'] = 'XMLHttpRequest'
-    // config.headers['PROVIDER_PORTAL_ID'] = process.env.VUE_APP_PROVIDER_PORTAL_ID
+    config.headers['PROVIDER-PORTAL-ID'] = process.env.VUE_APP_PROVIDER_PORTAL_ID
 
     if (store.getters['auth/authorizationHeader'] !== 'Bearer null') {
       config.headers.Authorization = store.getters['auth/authorizationHeader']
     }
-
+    
     return config
   },
   (error) => {
@@ -46,10 +46,20 @@ const authHttp = axios.create({
   // adapter: cacheAdapterEnhancer(axios.defaults.adapter),
 })
 
-authHttp.interceptors.response.use((config) => {
-  // config.headers['PROVIDER_PORTAL_ID'] = process.env.VUE_APP_PROVIDER_PORTAL_ID
-  return config
-}, (error) => {
+// Add the authorization header on requests
+authHttp.interceptors.request.use(
+  (config) => {
+    config.headers['X-Requested-With'] = 'XMLHttpRequest'
+    config.headers['PROVIDER-PORTAL-ID'] = process.env.VUE_APP_PROVIDER_PORTAL_ID
+    
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  },
+)
+
+authHttp.interceptors.response.use(undefined, (error) => {
   const errorResponse = error.response
   return Promise.reject(errorResponse)
 })
