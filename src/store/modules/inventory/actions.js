@@ -32,8 +32,9 @@ export default {
       delete payload.provider
       const { data } = await InventoryAPI.update(provider.id, payload)
       commit(UPDATE_INVENTORY, data.data)
-    } catch ({ response: { data: error } }) {
-      throw error.message
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
     }
   },
 

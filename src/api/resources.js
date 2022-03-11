@@ -62,6 +62,10 @@ export default {
     return http.get('providers/valueset/service-type')
   },
 
+  revenueTags(providerId) {
+    return http.get(`/providers/${providerId}/revenue-tag-type`)
+  },
+
   currencies() {
     return http.get('/providers/valueset/currency-type')
   },

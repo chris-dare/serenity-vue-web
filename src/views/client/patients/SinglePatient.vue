@@ -76,7 +76,7 @@ export default {
   methods: {
     ...mapActions({
       initSinglePatientInformation: 'patients/initSinglePatientInformation',
-      refresh: 'patients/refreshCurrentPatient',
+      refresh: 'patients/refreshPatientDetails',
     }),
   },
 }
