@@ -1,6 +1,7 @@
 <template>
   <AppStatePage
     :error="error"
+    :loading="loading"
     class="max-w-7xl mx-auto"
   >
     <PatientInfoCard>
@@ -63,7 +64,15 @@ export default {
         if (route.params.id === oldRoute?.params?.id) {
           return
         }
-        await this.initSinglePatientInformation(this.id)
+        try {
+          this.loading = true
+          await this.initSinglePatientInformation(this.id)
+          this.loading = false
+        } catch (error) {
+          this.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
+          this.loading = false
+        }
+
       },
     },
   },
