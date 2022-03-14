@@ -32,8 +32,9 @@ import {
 
 export default {
   async initSinglePatientInformation({dispatch}, id) {
-    await dispatch('getPatient', id)
     dispatch('getObservations', { refresh:true, filters: { patient: id }})
+    await dispatch('getPatient', id)
+    
     await dispatch('visits/getPatientCurrentVisits', { patient: id, status: 'arrived' }, { root:true })
     // await dispatch('encounters/setEncounterFromUpcomingEncounters', visit?.upcoming_encounters, { root:true})
     await dispatch('encounters/getEncounters', { patient: id } , { root:true })
