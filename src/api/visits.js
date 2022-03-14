@@ -4,7 +4,7 @@ export default {
   url: 'providers/',
 
   list(providerId, params) {
-    return http.get(`${this.url}${providerId}/visits`, { params: {...params } })
+    return http.get(`${this.url}${providerId}/visits`, { params: {...params }, cache: false })
   },
 
   create(providerId, params) {
