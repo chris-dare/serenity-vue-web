@@ -96,8 +96,17 @@ export default {
   },
 
   beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.initSinglePatientInformation(vm.id)
+    next(async vm => {
+      try {
+        vm.loading = true
+        await vm.initSinglePatientInformation(vm.id)
+        vm.loading = false
+      } catch (error) {
+        // vm.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
+        vm.loading = false
+        throw(error)
+      }
+
     })
   },
 
