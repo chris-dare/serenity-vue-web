@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       filters: {
-        page: 1, page_size: 10,
+        page: 1, page_size: localStorage.getItem('pageSize') || 10,
       },
       columns: [
         'Date',

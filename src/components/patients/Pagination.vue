@@ -77,7 +77,7 @@ export default {
       required: true,
     },
     pageSize: {
-      type: Number,
+      type: [Number, String],
       default: 5,
     },
     pageSizes: {
@@ -161,6 +161,7 @@ export default {
     }, 300),
 
     onChangePageSize(value) {
+      localStorage.setItem('pageSize', value)
       this.$emit('change', {
         page: this.localValue,
         page_size: value,

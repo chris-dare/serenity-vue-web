@@ -11,7 +11,7 @@ export default {
       // these are the filters
       params: {
         page: 1,
-        page_size: 10,
+        page_size: localStorage.getItem('pageSize') || 10,
       },
       filter: '',
       dataMeta: null,

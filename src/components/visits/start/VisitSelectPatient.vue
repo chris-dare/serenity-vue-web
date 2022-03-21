@@ -125,7 +125,7 @@ export default {
 
   beforeMount() {
     this.pageSizes = [5, 10, 15]
-    this.params.page_size = 5
+    // this.params.page_size = 5
     this.params.useStore = true
   },
 
