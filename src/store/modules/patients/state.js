@@ -16,7 +16,7 @@ export function initialState() {
     patientCarePlans: [],
     patientsMeta: {
       page: 1,
-      page_size: 10,
+      page_size: localStorage.getItem('pageSize') || 10,
     },
 
   }

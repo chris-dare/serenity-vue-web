@@ -1,11 +1,25 @@
 import axios from 'axios'
 import store from '@/store'
+import CryptoJS from 'crypto-js'
 import { cacheAdapterEnhancer } from 'axios-extensions' 
 
 const http = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
   adapter: cacheAdapterEnhancer(axios.defaults.adapter),
 })
+
+// eslint-disable-next-line no-unused-vars
+let encryptRequest = function (privateKey, path, request_data, httpMethod) {
+  let text_request_data = JSON.stringify(request_data)
+
+  let data = `${privateKey}-${httpMethod}-${path}-${text_request_data ? JSON.stringify(request_data): ''}`
+
+  privateKey = CryptoJS.enc.Utf8.parse(privateKey)
+  data = CryptoJS.enc.Utf8.parse(data)
+
+  let computed_sig = CryptoJS.HmacSHA256(data, privateKey)
+  return CryptoJS.enc.Base64.stringify(computed_sig)
+}
 
 // Add the authorization header on requests
 http.interceptors.request.use(
@@ -16,6 +30,19 @@ http.interceptors.request.use(
     if (store.getters['auth/authorizationHeader'] !== 'Bearer null') {
       config.headers.Authorization = store.getters['auth/authorizationHeader']
     }
+
+    // let request_data = config.data
+    // let http_method = config.method.toUpperCase()
+    // // const PRIVATE_KEY = "django-insecure-_n%+dym6c6x7u63@3_i&2)q@ydp2bj*^+t)qhiqs5gb)uz491-"
+    // const PRIVATE_KEY = process.env.VUE_APP_PROVIDER_PORTAL_ID
+
+    // let parser = document.createElement('a')
+    // parser.href = config.url
+
+    // let urlPath = window.location.pathname
+
+    // let signature = encryptRequest(PRIVATE_KEY, urlPath, request_data, http_method)
+    // config.headers['Serenity-HTTP-SIGNATURE'] = signature
     
     return config
   },
@@ -51,6 +78,20 @@ authHttp.interceptors.request.use(
   (config) => {
     config.headers['X-Requested-With'] = 'XMLHttpRequest'
     config.headers['PROVIDER-PORTAL-ID'] = process.env.VUE_APP_PROVIDER_PORTAL_ID
+
+    // let request_data = config.data
+    // let http_method = config.method.toUpperCase()
+    // const PRIVATE_KEY = 'django-insecure-_n%+dym6c6x7u63@3_i&2)q@ydp2bj*^+t)qhiqs5gb)uz491-'
+    // // const PRIVATE_KEY = process.env.VUE_APP_PROVIDER_PORTAL_ID
+
+    // let parser = document.createElement('a')
+    // parser.href = config.url
+
+    // let urlPath = `/${config.url}`
+    // console.log('urlpath', urlPath, parser.pathname, config)
+
+    // let signature = encryptRequest(PRIVATE_KEY, urlPath, request_data, http_method)
+    // config.headers['Serenity-HTTP-SIGNATURE'] = signature
     
     return config
   },

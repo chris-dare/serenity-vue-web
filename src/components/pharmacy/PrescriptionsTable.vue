@@ -248,6 +248,10 @@ export default {
         columns.push('Action')
       }
 
+      if (this.$isCurrentWorkspace('OPD')) {
+        columns.push('')
+      }
+
       return columns
     },
 

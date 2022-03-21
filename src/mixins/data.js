@@ -5,7 +5,7 @@ export default {
       searchTerms: ['workspace_name', 'workspace_type'],
       search: '',
       page: 1,
-      pageLength: 10,
+      pageLength: localStorage.getItem('pageSize') || 10,
       pageStart: 1,
       paginate: false,
       loading: false,

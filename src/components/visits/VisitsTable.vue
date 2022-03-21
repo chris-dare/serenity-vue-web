@@ -128,8 +128,8 @@ export default {
 
     filters() {
       return [
-        { display: `All Visits (${ this.visits.length })`, code: 'all' },
-        { display: ` My Visits (${ this.practitionerVisits.length })`, code: 'my' },
+        { display: `All Visits (${ this.visitsTotal })`, code: 'all' },
+        { display: ` My Visits (${ this.practitionerVisitsTotal })`, code: 'my' },
       ]
     },
   },
@@ -153,7 +153,7 @@ export default {
     this.paginate = true
     this.selected = this.$isCurrentWorkspace('OPD') ? 'my' : 'all'
     this.getEncounterClasses()
-    this.getData({ page_size: 5, page: 1 })
+    this.getData({ page_size: localStorage.getItem('pageSize') || 5, page: 1 })
   },
 
   methods: {

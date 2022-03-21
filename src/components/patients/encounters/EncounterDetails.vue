@@ -139,6 +139,7 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import debounce from 'lodash/debounce'
+import isEmpty from 'lodash/isEmpty'
 
 export default {
   name: 'EncounterDetails',
@@ -161,8 +162,6 @@ export default {
       saving: null,
     }
   },
-
-
 
   computed: {
     ...mapState({
@@ -197,6 +196,12 @@ export default {
     },
   },
 
+  beforeDestroy() {
+    if (isEmpty(this.notes.display)) {
+      this.createNote
+    }
+  },
+
   methods: {
     ...mapActions({
       updateEncounter: 'encounters/updateEncounter',
@@ -223,6 +228,10 @@ export default {
 
     throttledSendHistory: debounce(function() {
       this.sendHistory()
+    }, 1500),
+
+    throttledSendNotes: debounce(function() {
+      this.createNote()
     }, 1500),
 
     async sendHistory() {
@@ -288,5 +297,7 @@ export default {
       }
     },
   },
+
+  
 }
 </script>
