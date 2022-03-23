@@ -129,7 +129,8 @@ export default {
       const observations = sortedVitals.filter(obs => obs.unit === option.code).map(obs => {
         return {
           group: 'Dataset 1',
-          date: getters.getLatestVitalsDate(obs.unit),
+          latest: getters.getLatestVitalsDate(obs.unit),
+          date: obs.issued,
           value: obs.value ? obs.value.split('/')[0] : 1,
           value2: option.code === 'BLOOD_PRESSURE' && obs.value?.split('/')?.length > 1 ? obs.value.split('/')[1] : null,
         }
@@ -139,8 +140,9 @@ export default {
         per: option.display,
         title: option.code,
         data: observations,
-        value: observations.length ? observations[0].value : '-',
+        value: observations.length ? observations[observations.length - 1].value : '-',
         date: observations.length ? observations[0].date : null,
+        latest: observations.length ? observations[0].latest : null,
         status: 'Normal',
         status_color: 'success',
       })
