@@ -40,12 +40,14 @@
         <div class="flex items-center">
           <SeButton
             :loading="loading"
+            disabled
             class="mr-3"
             variant="secondary"
           >
             Save device
           </SeButton>
           <SeButton
+            disabled
             :loading="loading"
           >
             Save and configure device

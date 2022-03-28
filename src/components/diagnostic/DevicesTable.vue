@@ -124,10 +124,8 @@ export default {
     filters() {
       return [
         { display: `All devices (${ this.dataCount })`, code: '' },
-        { display: 'Connected', code: 'connected' },
-        { display: 'Disconnected', code: 'disconnected' },
-        { display: 'Validated', code: 'validated' },
-        { display: 'Not validated', code: 'not-validated' },
+        { display: 'Connected', code: 'active' },
+        { display: 'Disconnected', code: 'inactive' },
       ]
     },
   },
