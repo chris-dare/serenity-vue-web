@@ -32,16 +32,24 @@
     >
       <template #default="{ row }">
         <cv-data-table-cell>
-          {{ row && row.display || '-' }}
+          {{ row && row.user_friendly_name || '-' }}
         </cv-data-table-cell>
         <cv-data-table-cell>
-          {{ $date.formatDate(row.effective_date_time, 'dd MMM, yyyy HH:mm a') || '-' }}
+          {{ row && row.type || '-' }}
         </cv-data-table-cell>
         <cv-data-table-cell>
-          {{ (row.patient_detail.first_name + ' ' + row.patient_detail.lastname) | capitalize }}
+          {{ row && row.manufacturer }}
         </cv-data-table-cell>
         <cv-data-table-cell>
-          {{ row.status || '' }}
+          <div>
+            <Tag
+              show-icon
+              :variant="getStatusVariant(row.status)"
+              class="cursor-pointer"
+            >
+              {{ row.status }}
+            </Tag>
+          </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div
@@ -102,7 +110,7 @@ export default {
       columns: [
         'Device',
         'Type',
-        'Validation',
+        'Manufacturer',
         'Status',
         'Action',
       ],
@@ -110,7 +118,7 @@ export default {
   },
   computed: {
     ...mapState({
-      data: (state) => state.diagnostic.diagnosticReports,
+      data: (state) => state.diagnostic.diagnosticDevices,
     }),
 
     filters() {
@@ -144,9 +152,19 @@ export default {
 
   methods: {
     ...mapActions({
-      getData: 'diagnostic/getDiagnosticReports',
-      // refresh: 'patients/refreshCurrentPatient',
+      getData: 'diagnostic/getDevices',
     }),
+    getStatusVariant(status) {
+      if (status === 'active') {
+        return 'success'
+      }
+
+      if (status === 'inactive') {
+        return 'error'
+      }
+
+      return 'primary'
+    },
   },
 
 
