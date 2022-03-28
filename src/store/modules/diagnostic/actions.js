@@ -8,6 +8,7 @@ import {
   SET_DIAGNOSTIC_REPORTS,
   UPDATE_SERVICE_REQUEST,
   DELETE_SERVICE_REQUEST,
+  SET_DIAGNOSTIC_DEVICES,
 } from './mutation-types'
 
 export default {
@@ -77,6 +78,17 @@ export default {
       const provider = rootState.auth.provider
       await ServiceRequestsAPI.delete(provider.id, id)
       commit(DELETE_SERVICE_REQUEST, id)
+    } catch (error) {
+      throw error.data || error
+    }
+  },
+
+  async getDevices({ commit, rootState }, params) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await DiagnosticAPI.listDevices(provider.id, params)
+      console.log(data)
+      commit(SET_DIAGNOSTIC_DEVICES, data.data)
     } catch (error) {
       throw error.data || error
     }
