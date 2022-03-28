@@ -147,7 +147,7 @@ export default {
         return 'primary'
       }
 
-      if (status === 'draft') {
+      if (status === 'draft' || status === 'revoked') {
         return 'error'
       }
 
