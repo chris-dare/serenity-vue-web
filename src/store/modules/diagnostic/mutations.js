@@ -1,4 +1,4 @@
-import { SET_SERVICE_REQUESTS, UPDATE_SERVICE_REQUEST, DELETE_SERVICE_REQUEST, UPDATE_DIAGNOSTIC_REPORT, DELETE_DIAGNOSTIC_REPORT, SET_DIAGNOSTIC_REPORTS } from './mutation-types'
+import { SET_SERVICE_REQUESTS, UPDATE_SERVICE_REQUEST, DELETE_SERVICE_REQUEST, UPDATE_DIAGNOSTIC_REPORT, DELETE_DIAGNOSTIC_REPORT, SET_DIAGNOSTIC_REPORTS, SET_DIAGNOSTIC_DEVICES } from './mutation-types'
 
 export default {
   [SET_SERVICE_REQUESTS](state, serviceRequests) {
@@ -26,6 +26,10 @@ export default {
 
   [SET_DIAGNOSTIC_REPORTS](state, diagnosticReports) {
     state.diagnosticReports = diagnosticReports
+  },
+
+  [SET_DIAGNOSTIC_DEVICES](state, diagnosticDevices) {
+    state.diagnosticDevices = diagnosticDevices
   },
 
   [UPDATE_DIAGNOSTIC_REPORT](state, diagnosticReport) {

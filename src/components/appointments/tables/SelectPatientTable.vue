@@ -141,7 +141,7 @@ export default {
 
   created() {
     this.pageSizes = [5, 10, 15]
-    this.params.page_size = 5
+    // this.params.page_size = 5
     this.params.useStore = true
     if (!this.hideSelectedPatient && this.patient.first_name) {
       this.params.search = this.patient.first_name

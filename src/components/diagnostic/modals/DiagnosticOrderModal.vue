@@ -12,7 +12,7 @@
           label="Test unavailable"
         />
         <Tag
-          :variant="form.status === 'sample-collected' ? 'primary' : form.status === 'draft' ? 'error' : 'success'"
+          :variant="form.status === 'sample-collected' ? 'primary' : form.status === 'draft' || form.status === 'revoked' ? 'error' : 'success'"
           :label="form.status"
         />
       </div>
@@ -47,8 +47,8 @@
               <p class="text-secondary text-xs"> Request Category </p>
             </div>
             <div class="text-right">
-              <p class="text-md">{{ form.code || 'N/A' }}</p>
-              <p class="text-secondary text-xs"> Code </p>
+              <p class="text-md">{{ form.display || 'N/A' }}</p>
+              <p class="text-secondary text-xs"> Service </p>
             </div>
           </div>
           <div class="flex items-center justify-between pt-4 pb-2">
@@ -207,6 +207,7 @@
           >
             <SeButton
               class="mx-3"
+              :disabled="sampleCancelled"
               @click="makePayment"
             >
               Raise bill / Receive payment
@@ -428,10 +429,10 @@ export default {
       return this.form.status === 'sample-collected'
     },
     unPaid(){
-      return this.form.status === 'draft'
+      return this.form.status === 'draft' || this.form.status === 'revoked'
     },
     sampleCancelled(){
-      return this.form.status === 'cancelled'
+      return this.form.status === 'cancelled' || this.form.status === 'revoked'
     },
     sampleCompleted(){
       return this.form.status === 'completed'

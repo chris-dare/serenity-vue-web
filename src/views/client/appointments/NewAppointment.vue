@@ -64,7 +64,7 @@ export default {
   },
 
   beforeMount() {
-    this.getPatients({ page: 1, page_size: 5 })
+    this.getPatients({ page: 1, page_size: localStorage.getItem('pageSize') || 5 })
   },
 
   beforeRouteLeave(to, from, next) {

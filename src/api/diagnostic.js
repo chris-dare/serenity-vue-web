@@ -10,6 +10,10 @@ export default {
     return http.get(`${this.url}${providerId}/diagnosticreports`, { params: {...params } })
   },
 
+  listDevices(providerId, params = {}) {
+    return http.get(`${this.url}${providerId}/devices`, { params: {...params } })
+  },
+
   get(providerId, id) {
     return http.get(`${this.url}${providerId}/diagnosticreports/${id}`)
   },

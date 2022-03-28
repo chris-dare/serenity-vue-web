@@ -19,7 +19,7 @@ export default {
   initAdmin({ dispatch }) {
     dispatch('workspaces/getWorkspaces', false,{ root:true })
     dispatch('appointments/getAppointments', {refresh: true}, { root:true })
-    dispatch('patients/getPatients', { page: 1, page_size: 5 }, { root:true })
+    dispatch('patients/getPatients', { page: 1, page_size: localStorage.getItem('pageSize') || 5 }, { root:true })
     dispatch('clients/getClients', { refresh: false }, { root:true })
     dispatch('roles/getRoles', null,{ root:true })
   },

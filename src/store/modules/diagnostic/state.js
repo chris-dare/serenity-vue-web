@@ -3,4 +3,5 @@ export default () => ({
   currentDiagnostic: {},
   reports: [],
   diagnosticReports: [],
+  diagnosticDevices: [],
 })
