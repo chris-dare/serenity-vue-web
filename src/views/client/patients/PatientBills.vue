@@ -132,7 +132,7 @@ export default {
         { display: `All (${ this.dataCount })`, code: null },
         { display: 'Fully Paid', code: 'billed' },
         { display: 'Pending', code: 'billable' },
-        { display: 'Cancelled', code: 'cancelled' },
+        { display: 'Cancelled', code: 'aborted' },
       ]
     },
   },

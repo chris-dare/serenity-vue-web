@@ -3,6 +3,7 @@ import SpecialtiesAPI from '@/api/specialties'
 import ObservationsAPI from '@/api/observations'
 import PharmacyInventoryApi from '@/api/pharmacy-inventory'
 import ServiceRequestAPI from '@/api/service-requests'
+import DiagnosticAPI from '@/api/diagnostic'
 import axios from 'axios'
 
 import {
@@ -37,6 +38,7 @@ import {
   SET_OBSERVATION_INTERPRETATION_TYPES,
   SET_DOSAGE_ROUTES,
   SET_REVENUE_TAGS,
+  SET_DEVICE_TYPES,
 } from './mutation-types'
 
 export default {
@@ -75,6 +77,19 @@ export default {
     try {
       const { data } = await ResourceAPI.encounterPriorities()
       commit(SET_ENCOUNTER_PRIORITIES, data)
+    } catch (error) {
+      throw error
+    }
+  },
+
+  async getDeviceTypes({ commit, state }) {
+    if (state.deviceTypes.length) {
+      return
+    }
+    // eslint-disable-next-line no-useless-catch
+    try {
+      const { data } = await DiagnosticAPI.getDeviceTypes()
+      commit(SET_DEVICE_TYPES, data)
     } catch (error) {
       throw error
     }

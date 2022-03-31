@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import DevicesTable from '@/components/diagnostic/DevicesTable'
 import AddNewDevice from '@/components/diagnostic/modals/AddNewDevice'
 
@@ -30,6 +31,16 @@ export default {
     return {
       selected: 'active',
     }
+  },
+
+  mounted(){
+    this.getDeviceTypes()
+  },
+
+  methods: {
+    ...mapActions({
+      getDeviceTypes: 'resources/getDeviceTypes',
+    }),
   },
 }
 </script>]
