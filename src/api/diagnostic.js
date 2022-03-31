@@ -57,6 +57,10 @@ export default {
     return http.get(`${this.url}valueset/specimen-type`, params)
   },
 
+  getDeviceTypes(params) {
+    return http.get(`${this.url}valueset/device-types`, params)
+  },
+
   updateReport(providerId, params) {
     return http.patch(`${this.url}${providerId}/diagnosticreports/${params.id}`, params)
   },

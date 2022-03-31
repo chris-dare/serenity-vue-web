@@ -32,6 +32,9 @@
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
+          <p>{{ $date.formatDate(row.created_on, 'dd MMM, yyyy HH:mm a') || '-' }}</p>
+        </cv-data-table-cell>
+        <cv-data-table-cell>
           <p>{{ row.service_or_product_name }}</p>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -95,6 +98,7 @@ export default {
     return {
       columns: [
         'Patient',
+        'Date',
         'Service / Product',
         'Amount Recieved',
         'Payment Method',
@@ -127,7 +131,7 @@ export default {
         { display: `All (${ this.dataCount })`, code: null },
         { display: 'Fully Paid', code: 'billed' },
         { display: 'Pending', code: 'billable' },
-        { display: 'Cancelled', code: 'cancelled' },
+        { display: 'Cancelled', code: 'aborted' },
       ]
     },
   },
