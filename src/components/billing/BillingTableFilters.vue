@@ -1,19 +1,22 @@
 <template>
   <cv-form
     autocomplete="off"
-    class="flex items-end justify-between mt-4"
+    class="flex items-center justify-between mt-4"
     @submit.prevent
   >
-    <div class="flex items-center gap-1 w-1/2">
-      <DateRangePicker
+    <div class="flex w-full items-end justify-between space-x-2">
+      <div v-if="beginPos">
+        <slot />
+      </div>
+      <DatePicker
         v-model="localValue"
         type="range"
-        label="Date Range"
-        class="flex-none se-white-date-picker"
-        @change="$emit('change', localValue)"
+        class="w-1/3 se-white-date-picker"
       />
+      <div v-if="!beginPos">
+        <slot />
+      </div>
     </div>
-    <slot />
   </cv-form>
 </template>
 
@@ -24,5 +27,12 @@ export default {
   name: 'BillingTableFilters',
 
   mixins: [ModelMixin],
+
+  props: {
+    beginPos: {
+      type: Boolean,
+      default: false,
+    },
+  },
 }
 </script>
