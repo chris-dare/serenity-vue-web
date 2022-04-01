@@ -32,6 +32,7 @@ import {
   SET_OBSERVATION_INTERPRETATION_TYPES,
   SET_DOSAGE_ROUTES,
   SET_REVENUE_TAGS,
+  SET_DEVICE_TYPES,
 } from './mutation-types'
 
 export default {
@@ -160,6 +161,11 @@ export default {
   [SET_LANGUAGES](state, languages) {
     state.languages = languages
   },
+
+  [SET_DEVICE_TYPES](state, deviceTypes) {
+    state.deviceTypes = deviceTypes
+  },
+
   [SET_VENDORS](state, vendors) {
     state.vendors = vendors
   },
