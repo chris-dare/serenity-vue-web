@@ -4,15 +4,22 @@
       v-if="!hideSearch"
       v-model="params.search"
       placeholder="Search for patient"
-      class="se-input-white"
+      class="se-input-white mb-3"
       @input="searchData"
     />
 
-    <FilterGroup
-      v-model="params.status"
-      :filters="filterOptions"
-      @input="refresh"
-    />
+  
+
+    <BillingTableFilters
+      v-model="lists"
+      :begin-pos="true"
+    >
+      <FilterGroup
+        v-model="params.status"
+        :filters="filterOptions"
+        @input="searchData"
+      />
+    </BillingTableFilters>
 
     <DataTable
       ref="table"
@@ -75,6 +82,7 @@
 <script>
 import ViewBillingDetailsModal from '@/components/billing/ViewBillingDetailsModal'
 import CancelBillingModal from '@/components/billing/CancelBillingModal'
+import BillingTableFilters from '@/components/billing/BillingTableFilters'
 import BillingSettlePaymentModal from '@/components/billing/BillingSettlePaymentModal'
 import paymentMixin from '@/mixins/payment'
 import DataMixin from '@/mixins/paginated'
@@ -83,7 +91,7 @@ import { mapActions, mapState } from 'vuex'
 export default {
   name: 'BillingTable',
 
-  components: { ViewBillingDetailsModal, BillingSettlePaymentModal, CancelBillingModal },
+  components: { ViewBillingDetailsModal, BillingSettlePaymentModal, CancelBillingModal, BillingTableFilters },
 
   mixins: [DataMixin, paymentMixin],
 
@@ -109,6 +117,7 @@ export default {
       paginate: true,
       filter: null,
       printLoading: false,
+      lists: {},
       bill: {},
       params: {
         page: 1,
@@ -135,6 +144,20 @@ export default {
       ]
     },
   },
+
+  watch: {
+    lists: {
+      handler(val, oldVal){
+        if (val !== oldVal) {
+          let values = val?.split(' to ')
+          this.params.created_on__before = values && values[1] ? this.$date.formatQueryParamsDate(values[1]) : null
+          this.params.created_on__after = values && values[0] ? this.$date.formatQueryParamsDate(values[0] || Date.now()) : null
+          this.searchData()
+        }
+      },
+    },
+  },
+  
 
   methods: {
     ...mapActions({

@@ -20,7 +20,7 @@
 import ModelMixin from '@/mixins/model'
 
 export default {
-  name: 'BillingTableFilters',
+  name: 'BillingPatientFilters',
 
   mixins: [ModelMixin],
 }
