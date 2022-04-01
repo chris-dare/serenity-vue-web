@@ -38,7 +38,7 @@
               <p class="text-secondary text-xs"> Phone Number </p>
             </div>
             <div>
-              <p>{{ $date.formatDate(new Date(), 'dd MMM, yyyy hh:mm a') }}</p>
+              <p>{{ $date.formatDate(details.occurrence_date, 'dd MMM, yyyy hh:mm a') || '-' }}</p>
               <p class="text-secondary text-xs"> Date </p>
             </div>
             <div>
