@@ -157,7 +157,7 @@ const error = (err, toast) => {
   if (err) {
     let error = ''
     if (err.data) {
-      error = err.data.error || err.data.errors || err.data[0] || err.data.detail || err.data.message
+      error = err.data.error || err.data.message || err.data.errors || err.data[0] || err.data.detail 
     } else {
       error = err.response.data.error || err.response.data.errors || err.message
     }

@@ -117,15 +117,7 @@ export default {
   },
 
   printCorporateBill(providerId, params) {
-    return http({
-      method: 'get',
-      url: `${this.url}${providerId}/finance/payer-bills/${params.payer}/print?payer=${params.payer}&date_from=${params.date_from}&date_to=${params.date_to}`,
-      responseType: 'blob',
-    }).then((response) =>
-    {
-      const url = window.URL.createObjectURL(new Blob([response.data]))
-      window.printJS(url)
-    })
+    return http.get(`${this.url}${providerId}/finance/payer-bills/${params.payer}/print`, { params }, { responseType: 'blob' })
   },
 
 }
