@@ -10,8 +10,9 @@ export default {
       const { data } = await BillingAPI.list(provider.id, params)
       commit(SET_BILLING, data.results || data.data)
       return data
-    } catch ({ response: { data: error } }) {
-      throw error
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error 
     }
   },
 
@@ -22,8 +23,9 @@ export default {
       const { data } = await BillingAPI.patientBills(provider.id, patientId, omit(params, ['id']))
       commit(SET_BILLING, data.results || data.data)
       return data
-    } catch ({ response: { data: error } }) {
-      throw error
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error 
     }
   },
 
@@ -32,8 +34,9 @@ export default {
       const provider = rootState.auth.provider
       const { data } = await BillingAPI.create(provider.id, payload)
       commit(UPDATE_BILLING, data.results)
-    } catch ({ response: { data: error } }) {
-      throw error
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error 
     }
   },
 
@@ -42,8 +45,9 @@ export default {
       const provider = rootState.auth.provider
       const { data } = await BillingAPI.update(provider.id, payload)
       commit(UPDATE_BILLING, data.results)
-    } catch ({ response: { data: error } }) {
-      throw error
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error 
     }
   },
 
@@ -52,8 +56,9 @@ export default {
       const provider = rootState.auth.provider
       await BillingAPI.delete(provider.id, id)
       commit(DELETE_BILLING, id)
-    } catch ({ response: { data: error } }) {
-      throw error
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error 
     }
   },
 
@@ -62,8 +67,9 @@ export default {
       const provider = rootState.auth.provider
       const { data } = await BillingAPI.requestCancelBill(provider.id, params)
       return data
-    } catch (response) {
-      throw response.data || response 
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error 
     }
   },
 
@@ -94,9 +100,9 @@ export default {
   async exportCorporateBills({ rootState }, params) {
     try {
       const provider = rootState.auth.provider
-      const data = await BillingAPI.printCorporateBill(provider.id, params)
-
-      return data
+      const {data} = await BillingAPI.printCorporateBill(provider.id, params)
+      const url = window.URL.createObjectURL(new Blob([data]))
+      window.printJS(url)
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
@@ -109,7 +115,8 @@ export default {
       const { data } = await BillingAPI.patientAccounts(provider.id, id, params)
       commit(SET_ACCOUNTS, data)
     } catch (error) {
-      throw error.data || error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error 
     }
   },
 
