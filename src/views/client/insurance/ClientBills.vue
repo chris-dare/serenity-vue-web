@@ -6,10 +6,7 @@
       @input="searchData"
     /> -->
 
-    <BillingTableFilters
-      v-model="lists"
-      @change="searchByDate"
-    >
+    <BillingTableFilters v-model="lists">
       <SeButton
         variant="secondary"
         :loading="printLoading"
@@ -185,9 +182,12 @@ export default {
     },
 
     lists: {
-      handler(val){
-        if(val){
-          this.searchByDate(val)
+      handler(val, oldVal){
+        if (val !== oldVal) {
+          let values = val?.split(' to ')
+          this.filters.date_to = values && values[1] ? this.$date.formatQueryParamsDate(values[1]) : null
+          this.filters.date_from = values && values[0] ? this.$date.formatQueryParamsDate(values[0] || Date.now()) : null
+          this.getData()
         }
       },
     },
@@ -251,8 +251,24 @@ export default {
       return 'success'
     }, 
     async print() {
+      let filters = { ...this.filters }
+      console.log(filters)
       let id = this.$route.params.id
-      let payload = { payer: id, ...this.filters}
+      if (!filters.date_from) {
+        delete filters.date_from
+      }
+      if (!filters.date_to) {
+        delete filters.date_to
+      }
+      if (!filters.page) {
+        delete filters.page
+      }
+      if (!filters.page_size) {
+        delete filters.page_size
+      }
+      console.log(filters)
+
+      let payload = { payer: id, ...filters }
       try {
         this.printLoading = true
         await this.exportBill(payload)

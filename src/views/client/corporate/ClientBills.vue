@@ -4,12 +4,9 @@
       v-model="search"
       placeholder="Search for patient, enter name or MR number"
       @input="searchData"
-    /> -->
+    />-->
 
-    <BillingTableFilters
-      v-model="lists"
-      @change="searchByDate"
-    >
+    <BillingTableFilters v-model="lists">
       <SeButton
         variant="secondary"
         :loading="printLoading"
@@ -66,7 +63,7 @@
                 >
               </div>
             </div>
-          </cv-data-table-cell> -->
+          </cv-data-table-cell>-->
         </template>
         <template #expand="{ row }">
           <div class="px-8">
@@ -79,9 +76,7 @@
             >
               <template #default="request">
                 <cv-data-table-cell>
-                  <div>
-                    {{ $date.formatDate(request.row.created_at, 'dd MMM, yyyy') }}
-                  </div>
+                  <div>{{ $date.formatDate(request.row.created_at, 'dd MMM, yyyy') }}</div>
                 </cv-data-table-cell>
                 <cv-data-table-cell>
                   <div>
@@ -121,7 +116,7 @@
 </template>
 
 <script>
-import { mapGetters,mapState, mapActions } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import DataMixin from '@/mixins/paginated'
 import debounce from 'lodash/debounce'
 import BillingSettlePaymentModal from '@/components/billing/BillingSettlePaymentModal'
@@ -131,7 +126,7 @@ import ClientAPI from '@/api/clients'
 export default {
   name: 'Cldata',
 
-  components: {BillingSettlePaymentModal, BillingTableFilters},
+  components: { BillingSettlePaymentModal, BillingTableFilters },
 
 
   mixins: [DataMixin],
@@ -153,7 +148,7 @@ export default {
         'Items',
         // 'Action',
       ],
-      nestedTableColumns: ['Date', 'Bill ID', 'Priority', 'Payee Type', 'Status' ],
+      nestedTableColumns: ['Date', 'Bill ID', 'Priority', 'Payee Type', 'Status'],
       selectedFilter: '',
       searchTerms: ['patient_detail.name'],
       data: [],
@@ -185,9 +180,12 @@ export default {
     },
 
     lists: {
-      handler(val){
-        if(val){
-          this.searchByDate(val)
+      handler(val, oldVal){
+        if (val !== oldVal) {
+          let values = val?.split(' to ')
+          this.filters.date_to = values && values[1] ? this.$date.formatQueryParamsDate(values[1]) : null
+          this.filters.date_from = values && values[0] ? this.$date.formatQueryParamsDate(values[0] || Date.now()) : null
+          this.getData()
         }
       },
     },
@@ -217,11 +215,11 @@ export default {
       }
     },
 
-    searchInvoices: debounce(function(search) {
+    searchInvoices: debounce(function (search) {
       this.refresh({ search, page: this.page, page_size: this.pageLength })
     }, 300, false),
 
-    searchByDate(val){
+    searchByDate(val) {
       let filters = { ...this.filters }
 
       if (val.end) {
@@ -250,10 +248,26 @@ export default {
       }
 
       return 'success'
-    }, 
+    },
     async print() {
+      let filters = { ...this.filters }
+      console.log(filters)
       let id = this.$route.params.id
-      let payload = { payer: id, ...this.filters}
+      if (!filters.date_from) {
+        delete filters.date_from
+      }
+      if (!filters.date_to) {
+        delete filters.date_to
+      }
+      if (!filters.page) {
+        delete filters.page
+      }
+      if (!filters.page_size) {
+        delete filters.page_size
+      }
+      console.log(filters)
+
+      let payload = { payer: id, ...filters }
       try {
         this.printLoading = true
         await this.exportBill(payload)
