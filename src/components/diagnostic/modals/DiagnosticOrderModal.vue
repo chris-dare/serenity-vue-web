@@ -61,10 +61,17 @@
               <p class="text-secondary text-xs"> Priority </p>
             </div>
           </div>
-          <div>
-            <p class="text-md">{{ form.note || 'N/A' }}</p>
-            <p class="text-secondary text-xs"> Request Note </p>
+          <div class="flex items-center justify-between pt-4 pb-2">
+            <div>
+              <p class="text-md">{{ form.note || 'N/A' }}</p>
+              <p class="text-secondary text-xs"> Request Note </p>
+            </div>
+            <div class="text-right">
+              <p class="text-md">{{ form.accession_number || 'N/A' }}</p>
+              <p class="text-secondary text-xs"> Accession Number </p>
+            </div>
           </div>
+          
           <div
             v-if="!sampleTaken && !unPaid"
           >
@@ -230,6 +237,13 @@
               v-else
               class="flex items-center space-x-2"
             >
+              <SeButton
+                v-if="!append"
+                :disabled="sampleCancelled || sampleCompleted"
+                @click="accessionNumber()"
+              >
+                Get Test Results
+              </SeButton>
               <SeButton
                 v-if="!append"
                 :disabled="sampleCancelled || sampleCompleted"
@@ -527,6 +541,33 @@ export default {
       this.removedObservations.push(payload)
     },
 
+
+    async accessionNumber(){
+      this.loading = true
+      let payload = [{
+        service_request: this.form.id, // required
+        specimen_type: this.form.specimen,
+        collection_body_site: this.form.service_request_bodysite,
+        collector: this.practitionerRoleId,
+      }]
+      try {
+        await this.createSpecimen(payload)
+        this.$toast.open({
+          message: 'Sample successfully taken',
+        })
+        this.specimen = !this.specimen
+        this.form.status = 'sample-collected'
+        this.sampleRejected = false
+        this.append = true
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+      }
+    },
     async takeSample(){
       this.loading = true
       let payload = [{

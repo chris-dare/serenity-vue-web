@@ -31,7 +31,12 @@ export default {
   },
 
   listSpecimen(providerId, params) {
-    return http.gett(`${this.url}${providerId}/service-requests/${params}/collected-samples`)
+    return http.get(`${this.url}${providerId}/service-requests/${params}/collected-samples`)
+  },
+
+  listAccession(providerId, id) {
+    return http.get(`${this.url}${providerId}results/${id}
+    `)
   },
   
 
