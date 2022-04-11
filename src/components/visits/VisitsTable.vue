@@ -5,10 +5,19 @@
       placeholder="Search for visit"
     />
 
-    <FilterGroup
-      v-model="selected"
-      :filters="filters"
-    />
+    <div class="flex justify-between">
+      <FilterGroup
+        v-model="selected"
+        :filters="filters"
+      />
+
+      <!-- <DatePicker
+        v-model="date"
+        type="range"
+        class="w-60"
+        @change="refresh"
+      /> -->
+    </div>
 
     <DataTable
       :columns="columns"
@@ -153,7 +162,7 @@ export default {
     this.paginate = true
     this.selected = this.$isCurrentWorkspace('OPD') ? 'my' : 'all'
     this.getEncounterClasses()
-    this.getData({ page_size: localStorage.getItem('pageSize') || 5, page: 1 })
+    this.getData({ page_size: localStorage.getItem('pageSize') || 5, page: 1, ...this.params })
   },
 
   methods: {
@@ -167,7 +176,11 @@ export default {
     }),
 
     searchVisits: debounce(function(search) {
-      this.getData({ search })
+      this.getData({ search, ...this.params })
+    }, 300, false),
+
+    refresh: debounce(function() {
+      this.getData({ ...this.params })
     }, 300, false),
 
     tableActions(row) {
