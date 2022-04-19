@@ -62,12 +62,23 @@ export default {
     }
   },
 
+  async listAccessionResults({ rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      console.log(provider)
+      const { data } = await DiagnosticAPI.listAccessionResults(payload)
+      return data
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
+    }
+  },
+
   async getServiceTypes(payload) {
     try {
       const { data } = await DiagnosticAPI.getServiceType(payload)
       return data
     } catch (error) {
-      console.log(error)
       Vue.prototype.$utils.error(error)
       throw error.data || error
     }

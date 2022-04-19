@@ -140,6 +140,7 @@
             v-if="sampleTaken"
           >
             <MultiSelect
+              v-if="!accessionNum"
               v-model="category"
               title="Observations"
               :options="categories"
@@ -147,6 +148,16 @@
               label="display"
               type="text"
             />
+            <cv-text-input
+              v-else
+              v-model="accessionNum"
+              label="Accession number"
+              type="text"
+              placeholder="Accession number"
+              disabled
+              class="inherit-full-input mt-1"
+            />
+            
             <div
               class="grid grid-cols-2 gap-y-8 my-8"
             >
@@ -156,8 +167,7 @@
                 :key="index"
               >
                 <FormMixedInput
-                  v-if="cat.unit"
-                  v-model="categoryValues[cat.code]"
+                  v-model="cat.code"
                   class="mx-2"
                   :suffix-text="cat.unit"
                   :label="cat.display"
@@ -183,12 +193,12 @@
                   label="display"
                   placeholder="Search or choose a observation type"
                 /> -->
-                <AutoCompleteObservations
+                <!-- <AutoCompleteObservations
                   v-else
                   v-model="categoryValues[cat.code]"
                   :title="cat.display"
                   :options="interpretationTypes" 
-                />
+                /> -->
               </div>
             </div>
 
@@ -239,6 +249,7 @@
             >
               <SeButton
                 v-if="!append"
+                :loading="assessionLoading"
                 :disabled="sampleCancelled || sampleCompleted"
                 @click="accessionNumber()"
               >
@@ -389,6 +400,7 @@ export default {
         PREVIOUS_OBSERVATIONS: [],
       },
       categoryList: [],
+      accessionNum: '',
       category: {},
       categoryValues: {},
       healthcare_service: '',
@@ -398,6 +410,7 @@ export default {
       raiseLoading: false,
       append: false,
       rejectLoading: false,
+      assessionLoading: false,
       removedObservations: [],
       removedAllergies: [],
       specimen: '',
@@ -497,6 +510,7 @@ export default {
   created() {
     this.getObservationCategory()
     this.getObservationInterpretationTypes()
+    this.accessionNum = null
   },
 
   methods: {
@@ -507,6 +521,7 @@ export default {
       refresh: 'appointments/refreshCurrentAppointment',
       getData: 'diagnostic/getServiceRequests',
       createSpecimen: 'diagnostic/createSpecimen',
+      listAccessionResults: 'diagnostic/listAccessionResults',
       getServiceTypes: 'diagnostic/getServiceTypes',
       addToCurrentAppointment: 'appointments/addToCurrentAppointment',
       payForService: 'billing/userPayService',
@@ -543,31 +558,31 @@ export default {
 
 
     async accessionNumber(){
-      this.loading = true
-      let payload = [{
-        service_request: this.form.id, // required
-        specimen_type: this.form.specimen,
-        collection_body_site: this.form.service_request_bodysite,
-        collector: this.practitionerRoleId,
-      }]
+      this.assessionLoading = true
       try {
-        await this.createSpecimen(payload)
+        const data = await this.listAccessionResults(this.form.accession_number)
         this.$toast.open({
           message: 'Sample successfully taken',
         })
-        this.specimen = !this.specimen
-        this.form.status = 'sample-collected'
-        this.sampleRejected = false
-        this.append = true
-        this.loading = false
+        this.category.options = data.LISResults.map(ele => {
+          return {
+            ...ele,
+            unit: ele.Unit,
+            code: ele.Result,
+            display: ele.Code,
+          }
+        })
+        this.accessionNum = this.form.accession_number
+        this.assessionLoading = false
       } catch (error) {
-        this.loading = false
+        this.assessionLoading = false
         this.$toast.open({
           message: error.message || 'Something went wrong!',
           type: 'error',
         })
       }
     },
+
     async takeSample(){
       this.loading = true
       let payload = [{
@@ -684,9 +699,16 @@ export default {
       if(append){
         this.categoryList = []
         this.appendLoading = true
-        for (var key of Object.keys(this.categoryValues)) {
-          this.categoryList.push(this.listObservation(key, this.categoryValues[key]))
-        }
+        // for (var key of Object.keys(this.categoryValues)) {
+        //   this.categoryList.push(this.listObservation(key, this.categoryValues[key]))
+        // }
+        this.categoryList = this.category.options.map(element => {
+          return {
+            value: element.code, 
+            code: element.display,
+            unit: element.unit,
+          }
+        })
         this.createRequest()
       } else {
         this.appendLoading =false
