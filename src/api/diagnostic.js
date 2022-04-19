@@ -34,11 +34,10 @@ export default {
     return http.get(`${this.url}${providerId}/service-requests/${params}/collected-samples`)
   },
 
-  listAccession(providerId, id) {
-    return http.get(`${this.url}${providerId}results/${id}
+  listAccessionResults(id) {
+    return http.get(`${process.env.VUE_APP_DIAGNOSTIC_DEVICE_CONNECTOR_URL}${id}
     `)
   },
-  
 
   createSpecimen(providerId, params = {}) {
     return http.post(`${this.url}${providerId}/specimen`, params)
