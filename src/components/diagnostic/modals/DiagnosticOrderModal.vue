@@ -573,6 +573,7 @@ export default {
           }
         })
         this.accessionNum = this.form.accession_number
+        this.appendResult(false)
         this.assessionLoading = false
       } catch (error) {
         this.assessionLoading = false
@@ -704,6 +705,7 @@ export default {
         // }
         this.categoryList = this.category.options.map(element => {
           return {
+            AnalyzerCode: element.AnalyzerCode,
             value: element.code, 
             code: element.display,
             unit: element.unit,
