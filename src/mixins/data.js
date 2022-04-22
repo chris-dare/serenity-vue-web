@@ -46,12 +46,12 @@ export default {
     date: {
       immediate: true,
       handler(val, oldVal) {
-        if (!val) return
-        if (val !== oldVal) {
-          let values = val?.split(' to ')
-          this.params[this.dateFields[0]] = values && values[1] ? this.$date.formatQueryParamsDate(values[1]) : null
-          this.params[this.dateFields[1]] = values && values[0] ? this.$date.formatQueryParamsDate(values[0] || Date.now()) : null
-        }
+        if (!val || !oldVal) return
+        // if (val !== oldVal) {
+        //   let values = val?.split(' to ')
+        //   this.params[this.dateFields[0]] = values && values[1] ? this.$date.formatQueryParamsDate(values[1]) : null
+        //   this.params[this.dateFields[1]] = values && values[0] ? this.$date.formatQueryParamsDate(values[0] || Date.now()) : null
+        // }
       },
     },
   },

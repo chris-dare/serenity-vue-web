@@ -23,14 +23,14 @@
     </div>
     <div class="grid grid-cols-2 gap-4 mt-8 mb-6">
       <MultiSelect
-        v-model="form.appointmentType"
+        v-model="form.appointment_type"
         title="Choose an appointment type"
         :multiple="false"
         :options="types"
         label="label"
         track-by="value"
         placeholder="Select type"
-        :error-message="$utils.validateRequiredField($v, 'appointmentType')"
+        :error-message="$utils.validateRequiredField($v, 'appointment_type')"
         preselect
         custom-field="value"
         required
@@ -41,7 +41,7 @@
         :multiple="false"
         :options="services"
         label="healthcare_service_name"
-        track-by="id"
+        track-by="uuid"
         placeholder="Select service"
         :error-message="$utils.validateRequiredField($v, 'service')"
         preselect
@@ -49,7 +49,7 @@
         @select="clear"
       />
 
-      <MultiSelect
+      <!-- <MultiSelect
         ref="specialty"
         v-model="form.specialty"
         title="Choose a specialty"
@@ -60,7 +60,7 @@
         placeholder="Specialties"
         :error-message="$utils.validateRequiredField($v, 'specialty')"
         required
-      />
+      /> -->
 
       <MultiSelect
         ref="serviceTier"
@@ -214,7 +214,7 @@ export default {
       return this.form.service.price_tiers.map(tier => {
         return {
           label: `${tier.display} - ${tier.currency} ${tier.charge}`,
-          value: tier.id,
+          value: tier.uuid,
         }
       })
     },
@@ -229,8 +229,8 @@ export default {
   validations: {
     form: {
       service: { required },
-      appointmentType: { required },
-      specialty: { required },
+      appointment_type: { required },
+      // specialty: { required },
       service_tier: { required },
     },
   },

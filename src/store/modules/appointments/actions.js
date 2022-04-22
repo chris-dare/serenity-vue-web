@@ -13,14 +13,11 @@ import {
 
 export default {
   // eslint-disable-next-line no-unused-vars
-  async getAppointments({ commit, rootState, state }, { refresh = true, filters }) {
-    if (!refresh && state.appointments.length) {
-      return
-    }
+  async getAppointments({ commit, rootState }, filters) {
     try {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI.list(provider.id, filters)
-      commit(SET_APPOINTMENTS, data.results)
+      commit(SET_APPOINTMENTS, data.data || data.results)
       commit(SET_APPOINTMENTS_COUNT, data.meta?.total)
     } catch (error) {
       // Vue.prototype.$utils.error(error)
@@ -103,7 +100,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI
-        .cancel(provider.id, appointmentId, payload)
+        .action(provider.id, appointmentId, payload)
       commit(UPDATE_APPOINTMENT, data.data)
       return data
     } catch (error) {
@@ -112,12 +109,11 @@ export default {
     }
   },
 
-  async updateAppointment({ commit, rootState }, payload) {
+  async updateAppointment({ commit, rootState }, { appointmentId, payload }) {
     try {
-      const appointment = new Appointment(payload).getUpdateView()
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI
-        .update(provider.id,payload.id, appointment)
+        .update(provider.id, appointmentId, payload)
       commit(UPDATE_APPOINTMENT, data.data)
     } catch (error) {
       Vue.prototype.$utils.error(error)
@@ -127,10 +123,9 @@ export default {
 
   async rescheduleAppointment({ commit, rootState }, payload) {
     try {
-      const appointment = new Appointment(payload).getRescheduleView()
       const provider = rootState.auth.provider
       const { data } = await AppointmentsAPI
-        .reschedule(provider.id, payload.id, appointment)
+        .action(provider.id, payload.uuid, { action: 'RESCHEDULE', slot_id: payload._slot.uuid })
       commit(UPDATE_APPOINTMENT, data.data)
     } catch (error) {
       Vue.prototype.$utils.error(error)

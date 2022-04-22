@@ -18,7 +18,7 @@
             :loading="loading"
             @click="$emit('delete', data)"
           >
-            Delete
+            {{ buttonLabel }}
           </SeButton>
         </div>
       </div>
@@ -47,6 +47,7 @@ export default {
       label: '',
       data: '',
       name: 'confirm-delete-modal',
+      buttonLabel: 'Delete',
     }
   },
 
@@ -55,6 +56,7 @@ export default {
       this.open()
       this.label = data.params[0].label
       this.data = data.params[0].data
+      this.buttonLabel = data.params[0].buttonLabel || 'Delete'
     },
     'confirm:delete:close': function(){
       this.close()

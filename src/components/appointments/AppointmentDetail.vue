@@ -1,7 +1,7 @@
 <template>
   <div class="divide-y divide-solid divide-subtle">
     <div
-      class="py-6"
+      class="pb-6"
     >
       <p class="text-secondary mb-4">Patient</p>
       <div
@@ -109,7 +109,7 @@
             <span
               v-else
               class="text-primary"
-            >{{ $date.formatDate(appointment.slot.start, 'dd/MM, hh:mm a') }}</span>
+            >{{ $date.formatDate(appointment.slot.start) }}</span>
           </p>
         </div>
         <div v-if="editable">
@@ -154,7 +154,7 @@
       <p class="text-secondary mb-2">Cancellation Reason:</p>
       <div class="grid grid-cols-7 gap-4">
         <div class="flex items-center col-span-6">
-          <p>{{ appointment.cancelationReason }}</p>
+          <p>{{ appointment.comment }}</p>
         </div>
       </div>
     </div>

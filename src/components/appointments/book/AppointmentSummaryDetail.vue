@@ -116,7 +116,7 @@ export default {
       slot: { required  },
       service: { required  },
       patient: { required  },
-      appointmentType: { required  },
+      appointment_type: { required  },
     },
   },
 }
