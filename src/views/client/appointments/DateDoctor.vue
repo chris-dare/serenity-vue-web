@@ -18,12 +18,12 @@ export default {
   },
 
   async beforeMount() {
-    const specialty = this.storeData.specialty
-    if(!specialty){
+    const service = this.storeData.service
+    if(!service){
       this.$router.push({
         name: 'ClinicsServices',
       })
-      this.$toast.error('Please select a specialty before proceeding')
+      this.$toast.error('Please select a service before proceeding')
 
       return
     }

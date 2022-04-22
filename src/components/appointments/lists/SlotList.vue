@@ -79,9 +79,12 @@ export default {
       type: Boolean,
       default: false,
     }, 
-  },
 
-  
+    setFirstData: {
+      type: Boolean,
+      default: false,
+    }, 
+  },
 
   computed: {
     hasSlotData() {
@@ -90,7 +93,7 @@ export default {
   },
 
   created() {
-    this.localValue = this.data[0] || {}
+    this.localValue = this.setFirstData ? this.data[0] : {}
     this.searchTerms = ['practitioner_name', 'slot', 'start', 'end', 'location', 'status']
     this.paginate= true
     this.pageLength = 5

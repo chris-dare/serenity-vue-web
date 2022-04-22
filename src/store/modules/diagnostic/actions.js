@@ -62,10 +62,9 @@ export default {
     }
   },
 
+  // eslint-disable-next-line no-unused-vars
   async listAccessionResults({ rootState }, payload) {
     try {
-      const provider = rootState.auth.provider
-      console.log(provider)
       const { data } = await DiagnosticAPI.listAccessionResults(payload)
       return data
     } catch (error) {
@@ -98,7 +97,6 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await DiagnosticAPI.listDevices(provider.id, params)
-      console.log(data)
       commit(SET_DIAGNOSTIC_DEVICES, data.data)
     } catch (error) {
       throw error.data || error

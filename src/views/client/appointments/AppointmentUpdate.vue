@@ -7,83 +7,125 @@
     @save="submit"
   >
     <div
-      class="space-y-4"
+      class="space-y-8"
     >
-      <p class="text-primary my-4 font-bold">Selected Patient</p>
-      <div>
-        <InfoImageBlock
-          :label="form.patient.name"
-          :description="form.patient.phone"
+      <p class="text-primary my-4 font-bold text-sm">Selected Patient</p>
+      <InfoImageBlock
+        :label="form.patient_full_name"
+        :description="form.patient_mobile"
+      />
+    
+    
+      <p class="text-primary my-4 font-bold text-sm">Selected service</p>
+      <div class="grid grid-cols-2 gap-4 mt-8 mb-6">
+        <MultiSelect
+          v-model="form.appointment_type"
+          title="Choose an appointment type"
+          :multiple="false"
+          :options="types"
+          label="label"
+          track-by="value"
+          placeholder="Select type"
+          :error-message="$utils.validateRequiredField($v, 'appointment_type')"
+          preselect
+          custom-field="value"
+          required
+          :disabled="isReschedule"
+        />
+
+        <MultiSelect
+          v-model="form.healthcare_service"
+          title="Choose a service"
+          :multiple="false"
+          :options="services"
+          label="healthcare_service_name"
+          track-by="id"
+          custom-field="id"
+          placeholder="Service"
+          preselect
+          :disabled="isReschedule"
+          @change="updateStore"
+        />
+
+        <MultiSelect
+          v-model="form.service_tier"
+          title="Choose a service tier"
+          :multiple="false"
+          :options="serviceTiers"
+          :custom-label="tier => `${tier.display} - ${tier.currency} ${tier.charge}`"
+          placeholder="Service tiers"
+          preselect
+          :disabled="isReschedule"
         />
       </div>
-    </div>
-    <div class="grid grid-cols-2 gap-4 mt-8 mb-6">
-      <MultiSelect
-        v-model="form.appointmentType"
-        title="Choose an appointment type"
-        :multiple="false"
-        :options="types"
-        label="label"
-        track-by="value"
-        placeholder="Select type"
-        :error-message="$utils.validateRequiredField($v, 'appointmentType')"
-        preselect
-        custom-field="value"
-        required
+
+      <p class="text-primary my-4 font-bold text-sm">
+        What time would the patient want to see the doctor?
+      </p>
+
+      <div class="space-y-2">
+        <p>Current slot</p>
+        <div class="grid grid-cols-4">
+          <p>Start: </p>
+          <p class="col-span-3">{{ $date.formatDate(form.slot_start) }}</p>
+          <p>End: </p>
+          <p class="col-span-3">{{ $date.formatDate(form.slot_end) }}</p>
+        </div>
+      </div>
+
+      <div
+        v-if="isReschedule"
+        class="space-y-4"
+      >
+        <DatePicker
+          v-model="filters"
+          type="datetimerange"
+          disable-dates-before-today
+          @change="refresh"
+        />
+        <SeButton
+          :icon="time"
+          @click="getNextSlot"
+        >
+          Give me the next time slot
+        </SeButton>
+      </div>
+
+      <SlotList
+        v-if="isReschedule"
+        v-model="form._slot"
+        :data="slots"
+        :data-loading="loading"
       />
 
-      <MultiSelect
-        v-model="form.specialty"
-        title="Choose a specialty"
-        :multiple="false"
-        :options="specialties"
-        label="display"
-        track-by="code"
-        placeholder="Specialties"
-        preselect
-        @change="updateStore"
+      <p
+        v-if="!isReschedule"
+        class="text-primary my-4 font-bold text-sm"
+      >
+        Additional notes for the appointment
+      </p>
+      <cv-text-area
+        v-if="!isReschedule"
+        v-model="form.comment"
+        placeholder="Write additional information for this appointment here"
+        :rows="10"
       />
-
-      <!-- <MultiSelect
-        v-model="form.service_tier"
-        title="Choose a service tier"
-        :multiple="false"
-        :options="serviceTiers"
-        label="label"
-        track-by="value"
-        placeholder="Service tiers"
-        preselect
-      /> -->
     </div>
-
-    <SelectSlot :specialty="form.service" />
-    <p class="text-primary my-4 font-bold">
-      Additional notes for the appointment
-    </p>
-    <cv-text-area
-      v-model="form.comment"
-      placeholder="Write additional information for this appointment here"
-      :rows="10"
-    />
   </MultiStepBase>
 </template>
 
 <script>
-import MultiStep from '@/mixins/multistep'
+import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 import Time from '@carbon/icons-vue/es/time/32'
 import SlotList from '@/components/appointments/lists/SlotList'
-import SlotInfoListItem from '@/components/appointments/lists/SlotInfoListItem'
-import SelectSlot from '@/components/appointments/book/SelectSlot'
+import isSameDay from 'date-fns/isSameDay'
 
 export default {
   name: 'AppointmentUpdate',
 
-  // eslint-disable-next-line vue/no-unused-components
-  components: { SlotList, SlotInfoListItem, SelectSlot },
-
-  mixins: [MultiStep],
+  components: { SlotList },
 
   props: {
     id: {
@@ -99,57 +141,41 @@ export default {
       },
       time: Time,
       loading: false,
-      next: 'Date Doctor',
       parent: 'Appointments',
-      hideSlots: true,
+      filters: null,
+      icon: ChevronRight,
     }
   },
 
   computed: {
     ...mapState({
-      patientsCount: (state) => state.patients.patientsCount,
       storeData: (state) => state.appointments.currentAppointment,
       services: (state) => state.services.services,
-      specialties: (state) => state.resources.specialties,
       types: (state) => state.appointments.appointmentTypes,
     }),
 
     ...mapGetters({
       availableSlots: 'appointments/availableSlots',
+      slots: 'appointments/slots',
     }),
 
-    specialty() {
-      return this.form.specialty ? this.form.specialty : {}
+    isReschedule() {
+      return this.$route.query.type === 'reschedule'
+    },
+
+    serviceId() {
+      return this.services?.find(service => service.id === this.form.healthcare_service)?.id
     },
 
     serviceTiers() {
-      if (!this.form.service || !this.form.service.price_tiers) return []
-      return this.form.service.price_tiers.map(tier => {
-        return {
-          label: `${tier.display} - ${tier.currency} ${tier.charge}`,
-          value: tier.id,
-        }
-      })
-    },
+      const service = this.services.find(service => service.id === this.form.healthcare_service)
+      if (!service || !service.price_tiers) return []
 
-    specialties() {
-      if (!this.form.service && !this.services) return []
-      const specialties = this.services.find(service => service.id === this.form.service.id)
-      return specialties ? specialties.healthcare_service_specialties : []
-    },
-
-    // filteredData() {
-    //   if (!this.form.date) return []
-    //   return this.availableSlots(this.form.date)
-    // },
-
-    filteredData() {
-      if (!this.form.date) return []
-      return this.slots
+      return service.price_tiers
     },
 
     title() {
-      return this.$route.query.type === 'update' ? 'Update appointment' : 'Rescedule appointment'
+      return this.$route.query.type === 'update' ? 'Update appointment' : 'Reschedule appointment'
     },
   },
 
@@ -157,18 +183,81 @@ export default {
     form: {
       slot: { minLength: minLength(1), required  },
       service: { required },
-      appointmentType: { required },
+      appointment_type: { required },
     },
+  },
+
+  watch: {
+    serviceId: {
+      immediate: true,
+      deep: true,
+      handler(val) {
+        if (val) {
+          this.refresh()
+        }
+      },
+    },
+  },
+
+  mounted() {
+    this.form = { ...this.storeData, _slot: null }
+  },
+
+  beforeDestroy() {
+    this.refreshCurrentAppointment()
   },
 
   methods: {
     ...mapActions({
       addToStoreData: 'appointments/addToCurrentAppointment',
-      refresh: 'appointments/refreshCurrentAppointment',
+      refreshCurrentAppointment: 'appointments/refreshCurrentAppointment',
       updateAppointment: 'appointments/updateAppointment',
       getAppointment: 'appointments/getAppointment',
       rescheduleAppointment: 'appointments/rescheduleAppointment',
+      getSlots: 'appointments/getSlots',
+      getNextAvailableSlot: 'appointments/getNextAvailableSlot',
     }),
+
+    cancel() {
+      this.$router.push({ name: this.parent })
+    },
+
+    async refresh(val = null) {
+      try {
+        this.loading = true
+        const filters = this.convertFromDatePickerFormat(val)
+        await this.getSlots({ healthcareservice: this.serviceId, ...filters })
+      } catch (error) {
+        this.loading = false
+      }
+      this.loading = false
+
+    },
+
+    convertFromDatePickerFormat(val) {
+      if (!val) {
+        return {
+          start__gte: this.$date.queryNow(),
+        }
+      }
+      return {
+        start__gte: this.$date.formatQueryParamsDate(val[0]),
+        end__lte: isSameDay(val[0], val[1]) || !val[1] ? this.$date.formatQueryParamsDate(this.$date.endOfDate(val[0])) : this.$date.formatQueryParamsDate(val[1]),
+      }
+    },
+
+    async getNextSlot() {
+      try {
+        this.loading = true
+        await this.getNextAvailableSlot({ healthcareservice_id: this.serviceId })
+        
+      } catch (error) {
+        this.loading = false
+        
+      }
+      this.loading = false
+
+    },
 
     submit() {
       this.$v.$touch()
@@ -185,37 +274,36 @@ export default {
     },
 
     async update() {
-      this.loading = true
-      await this.updateAppointment(this.form).then(() => {
+      try {
+        let payload = {
+          patient_id: this.form.patient_id,
+          healthcare_service_id: this.form.healthcare_service,
+          appointment_type: this.form.appointment_type,
+          service_tier_id: this.form.service_tier.uuid,
+          comment: this.form.comment,
+        }
+        this.loading = true
+        await this.updateAppointment({ appointmentId: this.form.uuid, payload })
         this.$toast.open({
           message: 'Appointment successfully updated!',
         })
-        this.$router.go(-1)})
-
-      this.$trigger('billing:details:open')
-      this.loading = false
+        this.$trigger('billing:details:open')
+      } finally {
+        this.loading = false
+      }
     },
 
     async reschedule() {
-      this.$v.$touch()
-
-      if (this.$v.$invalid) {
-        this.$toast.open({
-          message: 'Fill all required fields from previous steps!',
-          type: 'error',
-        })
-        return
-      }
-
-      this.loading = true
-      await this.rescheduleAppointment(this.form).then(() => {
+      try {
+        this.loading = true
+        await this.rescheduleAppointment(this.form)
         this.$toast.open({
           message: 'Appointment successfully rescheduled!',
         })
-        this.$router.go(-1)})
-
-      this.$trigger('billing:details:open')
-      this.loading = false
+        this.$router.push({ name: this.parent })
+      } finally {
+        this.loading = false
+      }
     },
 
     updateStore() {

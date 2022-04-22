@@ -31,13 +31,25 @@ import Overflow from '@carbon/icons-vue/es/overflow-menu--vertical/32'
 export default {
   name: 'AppointmentTableActions',
 
-  components: {Overflow},
+  components: { Overflow },
+
+  props: {
+    status: {
+      type: String,
+      default: null,
+    },
+  },
 
   data() {
     return {
       visible: false,
-      data: ['view', 'edit', 'reschedule', 'delete'],
     }
+  },
+
+  computed: {
+    data() {
+      return this.status === 'cancelled' ? ['view'] : ['view', 'edit', 'reschedule', 'cancel']
+    },
   },
 }
 </script>

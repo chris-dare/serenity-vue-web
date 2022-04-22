@@ -28,13 +28,15 @@ export default class Appointment {
   getCreateView() {
     let createData = { }
     
-    createData.comment = this.data.comment || ''
-    createData.appointmentType = this.data.appointmentType || 'ROUTINE'
-    createData.healthcareservice_id = this.data.service.id
-    createData.slot_id = this.data.slot ? this.data.slot.id : null
-    createData.patient_id = this.data.patient ? this.data.patient.id : null
-    createData.service_tier = this.data.service_tier ? this.data.service_tier.value : null
-    // createData.patient_id = '471d2637-56c4-420e-bde6-1489c3b93c79'
+    // createData.comment = this.data.comment || ''
+    createData.appointment_type = this.data.appointment_type || 'ROUTINE'
+    createData.healthcare_service_id = this.data.service.uuid
+    createData.slot_id = this.data.slot ? this.data.slot.uuid : null
+    createData.patient_id = this.data.patient ? this.data.patient.uuid : null
+    createData.service_tier_id = this.data.service_tier ? this.data.service_tier.value : null
+    createData.priority = 0
+    createData.requested_period = 0
+    createData.minutes_duration = 0
     
     return createData
   }
@@ -43,7 +45,7 @@ export default class Appointment {
     let updateData = { }
     
     updateData.comment = this.data.comment || ''
-    updateData.appointmentType = this.data.appointmentType || 'ROUTINE'
+    updateData.appointment_type = this.data.appointment_type || 'ROUTINE'
     updateData.slot_id = this.data.slot ? this.data.slot.id : null
     
     return updateData
@@ -61,7 +63,7 @@ export default class Appointment {
   formatServiceData(data) {
     return {
       ...data,
-      categories: data.healthcare_service_category,
+      categories: data?.healthcare_service_category,
     }
   }
 
@@ -74,6 +76,7 @@ export default class Appointment {
   }
 
   formatPatientData(data) {
+    if (!data) return {}
     return {
       ...data,
       phone: data.telephone,

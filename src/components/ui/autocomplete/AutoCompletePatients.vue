@@ -1,28 +1,24 @@
 <template>
-  <div>
-    <div>
-      <MultiSelect
-        v-model="localValue"
-        placeholder="Type to search"
-        title="Patients"
-        :custom-label="customLabel"
-        track-by="mr_number"
-        :options="options"
-        :multiple="false"
-        :searchable="true"
-        :internal-search="false"
-        :clear-on-select="false"
-        :close-on-select="false"
-        :limit="3"
-        :max-height="600"
-        :hide-selected="true"
-        v-bind="$attrs"
-        :loading="loading"
-        @search-change="(val) => throttledSend(val, true)"
-        @remove="$emit('remove', $event)"
-      />
-    </div>
-  </div>
+  <MultiSelect
+    v-model="localValue"
+    :placeholder="placeholder"
+    title="Patients"
+    :custom-label="customLabel"
+    track-by="mr_number"
+    :options="options"
+    :multiple="false"
+    :searchable="true"
+    :internal-search="false"
+    :clear-on-select="false"
+    :close-on-select="false"
+    :limit="3"
+    :max-height="600"
+    :hide-selected="true"
+    v-bind="$attrs"
+    :loading="loading"
+    @search-change="(val) => throttledSend(val, true)"
+    @remove="$emit('remove', $event)"
+  />
 </template>
 
 <script>
@@ -45,6 +41,10 @@ export default {
     title: {
       type: String,
       default: 'Patients',
+    },
+    placeholder: {
+      type: String,
+      default: 'Type to search',
     },
   },
 

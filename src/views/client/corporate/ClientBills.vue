@@ -251,7 +251,6 @@ export default {
     },
     async print() {
       let filters = { ...this.filters }
-      console.log(filters)
       let id = this.$route.params.id
       if (!filters.date_from) {
         delete filters.date_from
@@ -265,7 +264,6 @@ export default {
       if (!filters.page_size) {
         delete filters.page_size
       }
-      console.log(filters)
 
       let payload = { payer: id, ...filters }
       try {

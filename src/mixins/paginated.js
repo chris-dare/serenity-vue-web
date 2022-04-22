@@ -38,11 +38,10 @@ export default {
     dateParam: {
       immediate: true,
       handler(val, oldVal) {
-        if (!val) return
         if (val !== oldVal) {
           let values = val?.split(' to ')
-          this.params[this.dateFields[0]] = values && values[1] ? this.$date.formatQueryParamsDate(values[1]) : null
-          this.params[this.dateFields[1]] = values && values[0] ? this.$date.formatQueryParamsDate(values[0] || Date.now()) : null
+          this.params[this.dateFields[0]] = values && values[0] ? this.$date.formatQueryParamsDate(values[0]) : null
+          this.params[this.dateFields[1]] = values && values[1] ? this.$date.formatQueryParamsDate(values[1] || Date.now()) : null
         }
       },
     },
@@ -83,5 +82,7 @@ export default {
       this.params.page = 1
       this.refresh()
     }, 500, false),
+
+
   },
 }
