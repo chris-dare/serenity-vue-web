@@ -46,6 +46,10 @@ export default {
       type: String,
       default: 'Type to search',
     },
+    customLabel: {
+      type: Function,
+      default: (value) => this.$utils.concatData(value, ['title', 'first_name', 'other_names', 'last_name', 'mobile']),
+    },
   },
 
   data() {
@@ -83,9 +87,9 @@ export default {
       this.loading = false
     },
 
-    customLabel(value) {
-      return this.$utils.concatData(value, ['title', 'first_name', 'other_names', 'last_name', 'mobile'])
-    },
+    // customLabel(value) {
+    //   return this.$utils.concatData(value, ['title', 'first_name', 'other_names', 'last_name', 'mobile'])
+    // },
   },
 }
 </script>

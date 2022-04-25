@@ -81,6 +81,7 @@
               @cancel="confirmRemove(row)"
               @view="view(row)"
               @reschedule="reschedule(row)"
+              @check-in="checkIn(row)"
             />
           </div>
         </cv-data-table-cell>
@@ -173,6 +174,7 @@ export default {
     ...mapActions({
       getData: 'appointments/getAppointments',
       cancelAppointment: 'appointments/cancelAppointment',
+      actionAppointment: 'appointments/actionAppointment',
       deleteAppointment: 'appointments/deleteAppointment',
       setCurrentAppointment: 'appointments/setCurrentAppointment',
     }),
@@ -190,6 +192,13 @@ export default {
     reschedule(row) {
       this.setCurrentAppointment(row)
       this.$router.push({name: 'AppointmentUpdate', params: { id: row.id }, query: {type: 'reschedule'}})
+    },
+
+    async checkIn(row) {
+      await this.actionAppointment({ appointmentId: row.uuid, payload: { action: 'CHECK-IN' }})
+      this.$toast.open({
+        message: `Patient ${row.patient_full_name} visit has started`,
+      })
     },
 
     async cancel(id, comment) {
