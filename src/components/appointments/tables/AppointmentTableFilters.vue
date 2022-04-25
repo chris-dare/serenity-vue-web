@@ -4,7 +4,7 @@
     class="flex items-end justify-between mt-4"
     @submit.prevent
   >
-    <div class="flex items-center gap-1 w-1/3">
+    <div class="flex items-center gap-1 w-2/3">
       <MultiSelect
         v-model="localValue.status"
         title="Status"
@@ -23,24 +23,25 @@
         @input="$emit('change', localValue)"
       />
 
-      <!-- <AutoCompletePatients
-        v-model="localValue.patient"
+      <AutoCompletePatients
+        v-model="localValue.patient_id"
         class="multiselect-white flex-1"
-        custom-field="id"
+        custom-field="uuid"
+        :custom-label="(value) => $utils.concatData(value, ['title', 'first_name', 'last_name'])"
         @input="$emit('change', localValue)"
-      /> -->
+      />
 
-      <!-- <MultiSelect
-        v-model="localValue.healthcare_service_name"
+      <MultiSelect
+        v-model="localValue.healthcare_service_id"
         title="Service"
         :multiple="false"
         :options="services"
         label="healthcare_service_name"
         track-by="id"
         class="multiselect-white flex-1"
-        custom-field="healthcare_service_name"
+        custom-field="uuid"
         @input="$emit('change', localValue)"
-      /> -->
+      />
     </div>
     <DatePicker
       v-model="localDate"

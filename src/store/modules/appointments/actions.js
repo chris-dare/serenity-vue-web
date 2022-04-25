@@ -109,6 +109,19 @@ export default {
     }
   },
 
+  async actionAppointment({ commit, rootState }, { appointmentId, payload }) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await AppointmentsAPI
+        .action(provider.id, appointmentId, payload)
+      commit(UPDATE_APPOINTMENT, data.data)
+      return data
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
   async updateAppointment({ commit, rootState }, { appointmentId, payload }) {
     try {
       const provider = rootState.auth.provider
