@@ -82,7 +82,14 @@ export default {
   },
 
   created() {
-    this.refresh({ patient: this.$route.params.id })
+    let filters = {
+      patient: this.$route.params.id,
+    }
+
+    if (this.$isCurrentWorkspace('OPD')) {
+      filters.status = 'final'
+    }
+    this.refresh(filters)
   },
 
   methods: {
