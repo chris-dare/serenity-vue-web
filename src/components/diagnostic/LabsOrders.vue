@@ -6,9 +6,11 @@
       placeholder="Search for patient, enter name or MR number"
       @input="searchData"
     />
-    <FilterGroup
-      v-model="search"
-      :filters="filtering"
+    <DiagnosticTableFilters
+      v-model="params"
+      :date.sync="dateParam"
+      @change="searchData"
+      @update:date="searchData"
     />
 
     <DataTable
@@ -68,13 +70,14 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import DiagnosticTableFilters from '@/components/diagnostic/tables/DiagnosticTableFilters'
 import DataMixin from '@/mixins/paginated'
 import DiagnosticOrder from '@/components/diagnostic/modals/DiagnosticOrderModal'
 
 export default {
   name: 'LabsOrders',
 
-  components: { DiagnosticOrder },
+  components: { DiagnosticOrder, DiagnosticTableFilters },
 
   mixins: [DataMixin],
 
