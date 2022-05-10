@@ -8,11 +8,28 @@
       <div v-if="beginPos">
         <slot />
       </div>
-      <DatePicker
-        v-model="localValue"
-        type="range"
-        class="w-1/3 se-white-date-picker"
-      />
+      <div class="flex w-2/3">
+        <DatePicker
+          v-model="localValue.date"
+          placeholder="Date range"
+          type="range"
+          class="w-1/3 se-white-date-picker"
+        />
+        <MultiSelect
+          v-model="localValue.bill_detail_preference"
+          placeholder="Bill Detail"
+          :multiple="false"
+          :options="['Summarized', 'Detailed']"
+          class="multiselect-white w-1/3"
+        />
+        <MultiSelect
+          v-model="localValue.should_payer_view_diagnoses"
+          placeholder="Payer view Diagnoses"
+          :multiple="false"
+          :options="['True', 'False']"
+          class="multiselect-white w-1/3"
+        />
+      </div>
       <div v-if="!beginPos">
         <slot />
       </div>
