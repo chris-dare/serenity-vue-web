@@ -18,7 +18,6 @@
         v-model="localValue.accession_number"
         type="text"
         label="Accession number"
-        class="bg-white"
         placeholder="Enter Accession number"
         @input="$emit('change', localValue)"
       />
