@@ -35,6 +35,9 @@
           {{ row && row.display || '-' }}
         </cv-data-table-cell>
         <cv-data-table-cell>
+          {{ row.based_on }}
+        </cv-data-table-cell>
+        <cv-data-table-cell>
           {{ $date.formatDate(row.effective_date_time, 'dd MMM, yyyy HH:mm a') || '-' }}
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -101,6 +104,7 @@ export default {
       loading: false,
       columns: [
         'Report',
+        'Accession no.',
         'Date',
         'Patient',
         'Status',
