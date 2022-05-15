@@ -253,7 +253,7 @@
                 :disabled="sampleCancelled || sampleCompleted"
                 @click="accessionNumber()"
               >
-                Get Test Results
+                Retrieve from device
               </SeButton>
               <SeButton
                 v-if="!append"
@@ -434,7 +434,8 @@ export default {
       } else {
         this.pay = !this.pay
       }
-
+      this.accessionNum = null
+      this.category.options = []
       this.patient = { id: this.form.patient, ...this.form.patient_detail, last_name: this.form.patient_detail?.lastname}
       this.specimen = !!this.form.specimen
     },
