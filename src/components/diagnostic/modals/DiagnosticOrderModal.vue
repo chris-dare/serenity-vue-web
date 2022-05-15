@@ -157,8 +157,14 @@
               disabled
               class="inherit-full-input mt-1"
             />
-            
+
+
             <div
+              v-if="category.options.length === 0 && accessionNum"
+              class="text-center font-semibold mt-4"
+            >No results available</div>
+            <div
+              v-else
               class="grid grid-cols-2 gap-y-8 my-8"
             >
               

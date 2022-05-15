@@ -116,6 +116,14 @@
           placeholder="Search prescription..."
           custom-class="se-input-white"
         />
+        <MultiSelect
+          v-model="filteredStatus"
+          title="Status"
+          :multiple="false"
+          :options="['active', 'draft', 'completed']"
+          class="multiselect-white flex-1"
+          @input="changeStatus"
+        />
       </PharmacyDateFilters>
       <ConfirmPrescriptionModal
         mode="prescription"
@@ -247,6 +255,7 @@ export default {
       },
     },
   },
+  
 
   created() {
     this.setCheckoutPatient(this.patient)
@@ -262,6 +271,10 @@ export default {
       getData: 'patients/getMedicationRequests',
       getAllergies: 'patientAllergies/getAllergies',
     }),
+
+    changeStatus(){
+      this.activeData = this.patientMedications.filter(el => el.status == this.filteredStatus)
+    },
     
     async searchByDate(el){
       if (!el) {
