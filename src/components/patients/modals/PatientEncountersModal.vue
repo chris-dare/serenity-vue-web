@@ -21,7 +21,7 @@
           :key="en.id"
           class="flex space-x-2 cursor-pointer p-4 hover:bg-serenity-primary-highlight hover:bg-opacity-20"
           :class="{'bg-serenity-primary-highlight bg-opacity-20': encounter.id === en.id}"
-          @click="encounter = en"
+          @click="setEncounter(en)"
         >
           <p>{{ index + 1 }}.</p>
           <div class="flex-1 flex items-center justify-between">
@@ -35,6 +35,12 @@
           </div>
         </div>
       </div>
+      <p
+        v-if="errorMessage"
+        class="text-sm text-center text-red-500"
+      >
+        {{ errorMessage }}
+      </p>
       <div class="flex items-center justify-between mt-8">
         <SeButton
           variant="secondary"
@@ -70,6 +76,7 @@ export default {
       form: {},
       name: 'patient-encounters-modal',
       encounter: {},
+      errorMessage: null,
     }
   },
 
@@ -85,6 +92,7 @@ export default {
   computed: {
     ...mapState({
       encounters: state => state.encounters.encounters,
+      currentEncounter: state => state.encounters.currentEncounter,
     }),
     ...mapGetters({
       onGoingEncounters: 'encounters/onGoingEncounters',
@@ -103,18 +111,31 @@ export default {
     },
 
     filteredEncounters() {
+      if(!this.encounters) return
       return this.encounters.filter(en => en.status === 'in-progress' || en.status === 'planned' || en.status === 'triaged' || en.status === 'arrived' || en.status === 'onleave')
       // .filter(enc => enc.encounter_participant.find(en => en.practitioner_role === this.$practitionerId))
     },
   },
 
+  mounted() {
+    this.encounter = this.currentEncounter || {}
+  },
+
   methods: {
     ...mapActions({
       startEncounter: 'encounters/startEncounter',
+      setCurrentEncounter: 'encounters/setCurrentEncounter',
     }),
 
+    setEncounter(en) {
+      this.encounter = en
+    },
+
     async goToWizard() {
+      
+      this.errorMessage = null
       if (this.encounter.status === 'in-progress') {
+        this.setCurrentEncounter(this.encounter.id)
         this.$router.push({ name: 'EncounterReview', params: { encounter: this.encounter.id, id: this.$route.params.id } })
         return
       }
@@ -122,9 +143,11 @@ export default {
       try {
         this.loading = true
         await this.startEncounter(this.encounter.id)
+        this.setCurrentEncounter(this.encounter.id)
         this.$router.push({ name: 'EncounterReview', params: { encounter: this.encounter.id, id: this.$route.params.id } })
         this.loading = false
       } catch (error) {
+        this.errorMessage = error.data?.message
         console.log('er', error.data)
       } finally {
         this.loading = false
