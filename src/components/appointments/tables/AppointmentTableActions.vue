@@ -48,7 +48,7 @@ export default {
 
   computed: {
     data() {
-      return this.status === 'cancelled' ? ['view'] : ['view', 'check-in', 'edit', 'reschedule', 'cancel']
+      return this.status === 'cancelled' ? ['view'] : ['view', 'check-in', 'reassign', 'reschedule', 'cancel']
     },
   },
 }

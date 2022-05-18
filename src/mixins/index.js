@@ -7,6 +7,9 @@ Vue.mixin({
     $providerId() {
       return get(this.$store.state, 'auth.provider.id')
     },
+    $practitionerId() {
+      return get(this.$store.state, 'auth.provider.practitionerRoleId')
+    },
     $locationId() {
       return get(this.$store.state, 'global.location')
     },

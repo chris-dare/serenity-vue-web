@@ -4,7 +4,7 @@
     @closed="close"
   >
     <template>
-      <div>
+      <div v-if="appointment">
         <div
           v-if="appointment.patient"
           class="w-full flex justify-center items-center flex-col space-y-1 mb-4"
@@ -86,11 +86,12 @@
           >
             Return to appointments
           </div>
-          <!-- <SeButton
-            @click="$emit('print')"
+          <SeButton
+            v-if="appointment.charge_item_id"
+            @click="printBill"
           >
             Print Bill
-          </SeButton> -->
+          </SeButton>
         </div>
       </div>
     </template>
@@ -138,6 +139,7 @@ export default {
   methods: {
     ...mapActions({
       refreshCurrentAppointment: 'appointments/refreshCurrentAppointment',
+      exportChargeItem: 'billing/exportChargeItem',
     }),
 
     returnToAppointment() {
@@ -149,6 +151,17 @@ export default {
 
     afterCloseFunction() {
       this.refreshCurrentAppointment()
+    },
+
+    async printBill(){
+      
+      try {
+        this.printLoading = true
+        await this.exportChargeItem(this.appointment.charge_item_id)
+        this.printLoading = false
+      } catch (error) {
+        this.printLoading = false
+      }
     },
   },
 }

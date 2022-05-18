@@ -34,6 +34,48 @@
     </div>
     <div>
       <la-cartesian
+        v-if="includesSecondValue"
+        :bound="[0]"
+        :data="chart.data"
+        :width="width"
+        autoresize
+        :height="150"
+        :padding="[0, 20, 0, 20]"
+      >
+        <la-bar
+          v-if="includesSecondValue"
+          animated
+          prop="value"
+          color="#0C7882"
+          fill-color="#cee4e6"
+        />
+        <la-bar
+          v-if="includesSecondValue"
+          animated
+          prop="value2"
+        />
+        <la-tooltip
+          ref="tooltip"
+        >
+          <div
+            slot-scope="props"
+            class="tooltip"
+          >
+            <div>
+              <div class="flex items-center justify-between">
+                <span>Time</span>
+                <span>{{ chart.data[props.index] ? $date.formatDate(chart.data[props.index].date) : '' }}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span>Value</span>
+                <span>{{ chart.data[props.index] ? `${chart.data[props.index].value}/${chart.data[props.index].value2}` : '' }}</span>
+              </div>
+            </div>
+          </div>
+        </la-tooltip>
+      </la-cartesian>
+      <la-cartesian
+        v-else
         :width="width"
         :height="150"
         :data="chart.data"
@@ -41,6 +83,7 @@
         autoresize
       >
         <la-area
+          v-if="!includesSecondValue"
           animated
           prop="value"
           color="#0C7882"
@@ -50,17 +93,7 @@
           continued
           dot
         />
-        <la-area
-          v-if="includesSecondValue"
-          animated
-          prop="value2"
-          color="#0C7882"
-          fill-color="#cee4e6"
-          curve
-          :width="3"
-          continued
-          dot
-        />
+        
         <la-tooltip
           v-if="show"
           ref="tooltip"
@@ -87,13 +120,14 @@
 </template>
 
 <script>
-import { Cartesian, Area, Tooltip } from 'laue'
+import { Cartesian, Area, Bar, Tooltip } from 'laue'
 
 export default {
   components: {
     LaCartesian: Cartesian,
     LaArea: Area,
     LaTooltip: Tooltip,
+    LaBar: Bar,
   },
   props: {
     chart: {

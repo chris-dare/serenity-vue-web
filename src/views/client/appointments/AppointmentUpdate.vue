@@ -111,6 +111,10 @@
         :rows="10"
       />
     </div>
+
+    <BillingDetailsModal
+      :appointment="selectedAppointment"
+    />
   </MultiStepBase>
 </template>
 
@@ -121,11 +125,12 @@ import { required, minLength } from 'vuelidate/lib/validators'
 import Time from '@carbon/icons-vue/es/time/32'
 import SlotList from '@/components/appointments/lists/SlotList'
 import isSameDay from 'date-fns/isSameDay'
+import BillingDetailsModal from '@/components/appointments/BillingDetailsModal'
 
 export default {
   name: 'AppointmentUpdate',
 
-  components: { SlotList },
+  components: { SlotList, BillingDetailsModal },
 
   props: {
     id: {
@@ -144,6 +149,7 @@ export default {
       parent: 'Appointments',
       filters: null,
       icon: ChevronRight,
+      selectedAppointment: null,
     }
   },
 
@@ -175,7 +181,7 @@ export default {
     },
 
     title() {
-      return this.$route.query.type === 'update' ? 'Update appointment' : 'Reschedule appointment'
+      return this.$route.query.type === 'update' ? 'Reassign appointment' : 'Reschedule appointment'
     },
   },
 
@@ -282,12 +288,18 @@ export default {
           service_tier_id: this.form.service_tier.uuid,
           comment: this.form.comment,
         }
+
+        // if (this.form._slot) {
+        //   payload.slot_id = this.form._slot.uuid
+        // }
         this.loading = true
         await this.updateAppointment({ appointmentId: this.form.uuid, payload })
         this.$toast.open({
           message: 'Appointment successfully updated!',
         })
+        this.selectedAppointment = this.storeData
         this.$trigger('billing:details:open')
+        // this.$router.push({ name: this.parent })
       } finally {
         this.loading = false
       }
