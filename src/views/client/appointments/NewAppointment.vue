@@ -21,7 +21,7 @@ export default {
 
   computed: {
     title() {
-      return this.isUpdate ? 'Update Appointment' : this.isReschedule ? 'Reschedule Appointment' : 'New Appointment'
+      return this.isUpdate ? 'Reassign Appointment' : this.isReschedule ? 'Reschedule Appointment' : 'New Appointment'
     },
     isUpdate() {
       return this.$route.query.type === 'update'
@@ -34,7 +34,7 @@ export default {
     navItems() {
       if (this.isUpdate) {
         return[
-          { label: 'Update Appointment', description: 'Update existing appointment', path: 'AppointmentUpdate', completed: false, slug: 'select-patient'},
+          { label: 'Reassign Appointment', description: 'Reassign existing appointment', path: 'AppointmentUpdate', completed: false, slug: 'select-patient'},
         ]
       }
       if (this.isReschedule) {

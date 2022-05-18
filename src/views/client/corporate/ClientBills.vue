@@ -208,7 +208,6 @@ export default {
     },
 
     async getData() {
-      console.log(this.filters)
       try {
         this.loading = true
         const { data } = await ClientAPI.getClientClaims(this.$providerId, this.filters)

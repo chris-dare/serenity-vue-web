@@ -12,6 +12,7 @@
     <MedicationRequestModal />
     <EncounterReferralModal />
     <CaptureVitalsModal />
+    <PatientEncountersModal />
   </div>
 </template>
 
@@ -26,6 +27,7 @@ const StartEncounterModal = () => import('@/components/patients/encounters/Start
 const ServiceRequestModal = () => import('@/components/patients/modals/ServiceRequestModal')
 const MedicationRequestModal = () => import('@/components/patients/modals/MedicationRequestModal')
 const EncounterReferralModal = () => import('@/components/patients/encounters/modals/EncounterReferralModal')
+const PatientEncountersModal = () => import('@/components/patients/modals/PatientEncountersModal')
 const CaptureVitalsModal = () => import('@/components/vitals/CaptureVitalsModal')
 
 export default {
@@ -42,6 +44,7 @@ export default {
     MarkAsDeceasedModal,
     DeceasedDetailsModal,
     EndVisitConfirmationModal,
+    PatientEncountersModal,
     ObservationsModal: () => import(/* webpackPrefetch: true */ '@/components/ipd/observations/ObservationsModal'),
   },
 }

@@ -9,7 +9,7 @@
       </div>
     </template>
     <template>
-      <SeForm class="space-y-8 mt-8">
+      <SeForm class="space-y-8">
         <div class="space-y-4">
           <cv-text-input
             v-model="form.specimen"

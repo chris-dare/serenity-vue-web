@@ -39,6 +39,13 @@
           >
             {{ description }}
           </p>
+          <p
+            v-if="subtext"
+            :class="[customClass.description, descriptionClass]"
+            class="text-secondary capitalize"
+          >
+            {{ subtext }}
+          </p>
         </slot>
       </div>
     </div>
@@ -71,6 +78,10 @@ export default {
     },
 
     description: {
+      type: String,
+      default: '',
+    },
+    subtext: {
       type: String,
       default: '',
     },

@@ -77,7 +77,7 @@
             <AppointmentTableActions
               :status="row.status"
               :data-qa="`table-actions-${row.id}`"
-              @edit="edit(row)"
+              @reassign="edit(row)"
               @cancel="confirmRemove(row)"
               @view="view(row)"
               @reschedule="reschedule(row)"
