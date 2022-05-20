@@ -254,7 +254,7 @@
               class="flex items-center space-x-2"
             >
               <SeButton
-                v-if="!append"
+                v-if="!append && $userCan('diagnostic.deviceresults.read')"
                 :loading="assessionLoading"
                 :disabled="sampleCancelled || sampleCompleted"
                 @click="accessionNumber()"
@@ -262,7 +262,7 @@
                 Retrieve from device
               </SeButton>
               <SeButton
-                v-if="!append"
+                v-if="!append && $userCan('diagnostic.reports.write')"
                 :disabled="sampleCancelled || sampleCompleted"
                 @click="appendResult(false)"
               >
