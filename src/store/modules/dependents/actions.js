@@ -9,7 +9,8 @@ export default {
       const { data } = await DependentsAPI.list(provider.id, id)
       commit(SET_DEPENDENTS, data.data)
     } catch ({ response: { data: error } }) {
-      throw error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 
