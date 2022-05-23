@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty'
 export default {
   // hasActiveEncounter: (state,getters) => !!getters.onGoingEncounters.length,
   currentEncounter: (state) => state.patientEncounterOverride ? state.currentPatientEncounter : state.currentEncounter ,
-  hasActiveEncounter: (state,getters) => getters.currentEncounterStatus === 'planned' || getters.currentEncounterStatus === 'in progress',
+  hasActiveEncounter: (state,getters) => getters.currentEncounterStatus === 'planned' || getters.currentEncounterStatus === 'in progress' || getters.currentEncounterStatus === 'triaged',
 
   hasEncounterBegan: (state,getters) => getters.currentEncounterStatus === 'in progress',
 
