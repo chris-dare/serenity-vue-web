@@ -4,6 +4,7 @@
       <div class="flex items-center justify-between">
         <p class="text-xl font-bold">Device Managment</p>
         <SeButton
+          v-if="$userCan('diagnostic.devices.write')"
           variant="primary"
           @click="$trigger('device:add:open')"
         >

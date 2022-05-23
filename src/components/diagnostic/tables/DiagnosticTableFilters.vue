@@ -9,17 +9,16 @@
         v-model="localValue.status"
         title="Status"
         :multiple="false"
-        :options="['proposed', 'pending', 'booked', 'arrived', 'fullfilled', 'cancelled', 'noshow', 'entered-in-error', 'waitlist']"
+        :options="['active', 'draft', 'completed']"
         class="multiselect-white flex-1"
         @input="$emit('change', localValue)"
       />
 
-      <MultiSelect
-        v-model="localValue.appointment_type"
-        title="Type"
-        :multiple="false"
-        :options="['ROUTINE', 'FOLLOWUP', 'CHECKUP', , 'EMERGENCY']"
-        class="multiselect-white flex-1"
+      <FormInput
+        v-model="localValue.accession_number"
+        type="text"
+        label="Accession number"
+        placeholder="Enter Accession number"
         @input="$emit('change', localValue)"
       />
 

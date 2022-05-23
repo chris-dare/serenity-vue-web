@@ -10,11 +10,12 @@
     />
     <div class="grid grid-cols-5 gap-4">
       <p
-        v-if="!dataCount"
+        v-if="!dataCount && !loading"
         class="col-span-5 text-center py-6 bg-white"
       >
         {{ noDataLabel('reports') }}
       </p>
+      <Loading v-if="loading" />
       <div
         v-for="(report, index) in filteredData"
         :key="index"
@@ -81,7 +82,14 @@ export default {
   },
 
   created() {
-    this.refresh({ patient: this.$route.params.id })
+    let filters = {
+      patient: this.$route.params.id,
+    }
+
+    if (this.$isCurrentWorkspace('OPD')) {
+      filters.status = 'final'
+    }
+    this.refresh(filters)
   },
 
   methods: {

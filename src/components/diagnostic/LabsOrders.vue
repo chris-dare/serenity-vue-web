@@ -6,9 +6,11 @@
       placeholder="Search for patient, enter name or MR number"
       @input="searchData"
     />
-    <FilterGroup
-      v-model="search"
-      :filters="filtering"
+    <DiagnosticTableFilters
+      v-model="params"
+      :date.sync="dateParam"
+      @change="searchData"
+      @update:date="searchData"
     />
 
     <DataTable
@@ -24,14 +26,17 @@
           {{ row.display }}
         </cv-data-table-cell>
         <cv-data-table-cell>
+          {{ row.accession_number }}
+        </cv-data-table-cell>
+        <cv-data-table-cell>
           {{ $date.formatDate(row.occurence, 'dd MMM, yyyy HH:mm a') || '-' }}
         </cv-data-table-cell>
         <cv-data-table-cell>
           {{ row.patient_name | capitalize }}
         </cv-data-table-cell>
-        <cv-data-table-cell class="text-center">
+        <!-- <cv-data-table-cell class="text-center">
           {{ $utils.getFirstData(row.specimen, 'display' ) || '-' }}
-        </cv-data-table-cell>
+        </cv-data-table-cell> -->
         <cv-data-table-cell>
           <Tag
             :variant="getStatusVariant(row.status)"
@@ -65,13 +70,14 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import DiagnosticTableFilters from '@/components/diagnostic/tables/DiagnosticTableFilters'
 import DataMixin from '@/mixins/paginated'
 import DiagnosticOrder from '@/components/diagnostic/modals/DiagnosticOrderModal'
 
 export default {
   name: 'LabsOrders',
 
-  components: { DiagnosticOrder },
+  components: { DiagnosticOrder, DiagnosticTableFilters },
 
   mixins: [DataMixin],
 
@@ -110,9 +116,9 @@ export default {
     columns(){
       let column = [
         'Service',
+        'Accession no.',
         'Request time',
         'Patient',
-        'Specimen',
         'Status',
       ]
       if (!this.$isCurrentWorkspace('RECEPT') || !this.$isCurrentWorkspace('OPD')) {

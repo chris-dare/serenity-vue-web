@@ -33,15 +33,19 @@
       >
         <template #default="{ row }">
           <cv-data-table-cell>
-            <p>{{ $date.formatDate(row.authored_on, 'MMM dd, yyyy') }}</p>
+            <div>
+              <p>{{ $date.formatDate(row.authored_on, 'MMM dd, yyyy') }}</p>
+            </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
               <p>{{ (row.practitioner_detail ? row.practitioner_detail.name : concatData(row.patient_detail, ['first_name', 'lastname'])) | capitalize }}</p>
             </div>
           </cv-data-table-cell>
-          <cv-data-table-cell>
-            <p>{{ row.display }}</p>
+          <cv-data-table-cell class="w-1/5">
+            <div class="py-2">
+              <p>{{ row.display }}</p>
+            </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
@@ -49,7 +53,9 @@
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
-            <p class="capitalize">{{ $utils.getFirstData(row.service_request_category) | removeDash }}</p>
+            <div>
+              <p class="capitalize">{{ $utils.getFirstData(row.service_request_category) | removeDash }}</p>
+            </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div class="flex items-center">

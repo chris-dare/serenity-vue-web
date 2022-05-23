@@ -17,6 +17,12 @@ $primary: #0b6b74;
   }
 }
 
+.small-input{
+  input{
+    height: 2.5rem !important;
+  }
+}
+
 .se-no-label {
   .bx--label {
     @apply hidden;

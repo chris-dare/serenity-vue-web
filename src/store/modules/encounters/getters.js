@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty'
 export default {
   // hasActiveEncounter: (state,getters) => !!getters.onGoingEncounters.length,
   currentEncounter: (state) => state.patientEncounterOverride ? state.currentPatientEncounter : state.currentEncounter ,
-  hasActiveEncounter: (state,getters) => getters.currentEncounterStatus === 'planned' || getters.currentEncounterStatus === 'in progress',
+  hasActiveEncounter: (state,getters) => getters.currentEncounterStatus === 'planned' || getters.currentEncounterStatus === 'in progress' || getters.currentEncounterStatus === 'triaged',
 
   hasEncounterBegan: (state,getters) => getters.currentEncounterStatus === 'in progress',
 
@@ -126,7 +126,7 @@ export default {
 
     const sortedVitals = sortByDate(rootState.patients.patientObservations, 'issued', 'asc')
     options.forEach(option => {
-      const observations = sortedVitals.filter(obs => obs.unit === option.code).map(obs => {
+      const vits = sortedVitals.filter(obs => obs.unit === option.code).map(obs => {
         return {
           group: 'Dataset 1',
           latest: getters.getLatestVitalsDate(obs.unit),
@@ -135,6 +135,7 @@ export default {
           value2: option.code === 'BLOOD_PRESSURE' && obs.value?.split('/')?.length > 1 ? obs.value.split('/')[1] : null,
         }
       })
+      const observations = sortByDate(vits, 'date', 'asc')
 
       vitals.push({
         per: option.display,

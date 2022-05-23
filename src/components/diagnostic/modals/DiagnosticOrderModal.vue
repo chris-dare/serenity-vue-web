@@ -61,10 +61,17 @@
               <p class="text-secondary text-xs"> Priority </p>
             </div>
           </div>
-          <div>
-            <p class="text-md">{{ form.note || 'N/A' }}</p>
-            <p class="text-secondary text-xs"> Request Note </p>
+          <div class="flex items-center justify-between pt-4 pb-2">
+            <div>
+              <p class="text-md">{{ form.note || 'N/A' }}</p>
+              <p class="text-secondary text-xs"> Request Note </p>
+            </div>
+            <div class="text-right">
+              <p class="text-md">{{ form.accession_number || 'N/A' }}</p>
+              <p class="text-secondary text-xs"> Accession Number </p>
+            </div>
           </div>
+          
           <div
             v-if="!sampleTaken && !unPaid"
           >
@@ -133,6 +140,7 @@
             v-if="sampleTaken"
           >
             <MultiSelect
+              v-if="!accessionNum"
               v-model="category"
               title="Observations"
               :options="categories"
@@ -140,7 +148,23 @@
               label="display"
               type="text"
             />
+            <cv-text-input
+              v-else
+              v-model="accessionNum"
+              label="Accession number"
+              type="text"
+              placeholder="Accession number"
+              disabled
+              class="inherit-full-input mt-1"
+            />
+
+
             <div
+              v-if="category.options.length === 0 && accessionNum"
+              class="text-center font-semibold mt-4"
+            >No results available</div>
+            <div
+              v-else
               class="grid grid-cols-2 gap-y-8 my-8"
             >
               
@@ -149,8 +173,7 @@
                 :key="index"
               >
                 <FormMixedInput
-                  v-if="cat.unit"
-                  v-model="categoryValues[cat.code]"
+                  v-model="cat.code"
                   class="mx-2"
                   :suffix-text="cat.unit"
                   :label="cat.display"
@@ -176,12 +199,12 @@
                   label="display"
                   placeholder="Search or choose a observation type"
                 /> -->
-                <AutoCompleteObservations
+                <!-- <AutoCompleteObservations
                   v-else
                   v-model="categoryValues[cat.code]"
                   :title="cat.display"
                   :options="interpretationTypes" 
-                />
+                /> -->
               </div>
             </div>
 
@@ -231,7 +254,15 @@
               class="flex items-center space-x-2"
             >
               <SeButton
-                v-if="!append"
+                v-if="!append && $userCan('diagnostic.deviceresults.read')"
+                :loading="assessionLoading"
+                :disabled="sampleCancelled || sampleCompleted"
+                @click="accessionNumber()"
+              >
+                Retrieve from device
+              </SeButton>
+              <SeButton
+                v-if="!append && $userCan('diagnostic.reports.write')"
                 :disabled="sampleCancelled || sampleCompleted"
                 @click="appendResult(false)"
               >
@@ -375,6 +406,7 @@ export default {
         PREVIOUS_OBSERVATIONS: [],
       },
       categoryList: [],
+      accessionNum: '',
       category: {},
       categoryValues: {},
       healthcare_service: '',
@@ -384,6 +416,7 @@ export default {
       raiseLoading: false,
       append: false,
       rejectLoading: false,
+      assessionLoading: false,
       removedObservations: [],
       removedAllergies: [],
       specimen: '',
@@ -407,7 +440,8 @@ export default {
       } else {
         this.pay = !this.pay
       }
-
+      this.accessionNum = null
+      this.category.options = []
       this.patient = { id: this.form.patient, ...this.form.patient_detail, last_name: this.form.patient_detail?.lastname}
       this.specimen = !!this.form.specimen
     },
@@ -483,6 +517,7 @@ export default {
   created() {
     this.getObservationCategory()
     this.getObservationInterpretationTypes()
+    this.accessionNum = null
   },
 
   methods: {
@@ -493,6 +528,7 @@ export default {
       refresh: 'appointments/refreshCurrentAppointment',
       getData: 'diagnostic/getServiceRequests',
       createSpecimen: 'diagnostic/createSpecimen',
+      listAccessionResults: 'diagnostic/listAccessionResults',
       getServiceTypes: 'diagnostic/getServiceTypes',
       addToCurrentAppointment: 'appointments/addToCurrentAppointment',
       payForService: 'billing/userPayService',
@@ -525,6 +561,34 @@ export default {
       }
 
       this.removedObservations.push(payload)
+    },
+
+
+    async accessionNumber(){
+      this.assessionLoading = true
+      try {
+        const data = await this.listAccessionResults(this.form.accession_number)
+        this.$toast.open({
+          message: 'Sample successfully taken',
+        })
+        this.category.options = data.LISResults.map(ele => {
+          return {
+            ...ele,
+            unit: ele.Unit,
+            code: ele.Result,
+            display: ele.Code,
+          }
+        })
+        this.accessionNum = this.form.accession_number
+        this.appendResult(false)
+        this.assessionLoading = false
+      } catch (error) {
+        this.assessionLoading = false
+        this.$toast.open({
+          message: error.message || 'Something went wrong!',
+          type: 'error',
+        })
+      }
     },
 
     async takeSample(){
@@ -643,9 +707,17 @@ export default {
       if(append){
         this.categoryList = []
         this.appendLoading = true
-        for (var key of Object.keys(this.categoryValues)) {
-          this.categoryList.push(this.listObservation(key, this.categoryValues[key]))
-        }
+        // for (var key of Object.keys(this.categoryValues)) {
+        //   this.categoryList.push(this.listObservation(key, this.categoryValues[key]))
+        // }
+        this.categoryList = this.category.options.map(element => {
+          return {
+            AnalyzerCode: element.AnalyzerCode,
+            value: element.code, 
+            code: element.display,
+            unit: element.unit,
+          }
+        })
         this.createRequest()
       } else {
         this.appendLoading =false

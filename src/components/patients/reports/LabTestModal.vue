@@ -178,6 +178,7 @@ export default {
       report: {
         service_request_detail: {},
         diagnostic_report_conclusion_code: [],
+        diagnostic_report_results: [],
       },
       approveLoading: false,
       rejectLoading: false,

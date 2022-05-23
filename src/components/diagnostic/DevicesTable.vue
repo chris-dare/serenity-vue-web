@@ -54,8 +54,7 @@
         <cv-data-table-cell>
           <div
             class="flex items-center cursor-pointer"
-            :disabled="!$userCan('diagnostic.reports.read')"
-            @click="$trigger('diagnostic-report:open', row.id)"
+            :disabled="!$userCan('diagnostic.devices.read')"
           >
             View
             <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">

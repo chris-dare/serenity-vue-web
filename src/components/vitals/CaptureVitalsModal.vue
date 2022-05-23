@@ -31,7 +31,7 @@
           </SeButton>
           <SeButton
             :loading="loading"
-            @click="save"
+            @click="confirm"
           >
             Submit<ChevronRight class="w-4 h-4 text-white ml-4" />
           </SeButton>
@@ -129,6 +129,15 @@ export default {
       getEncounters: 'encounters/getEncounters',
       setVitalsEncounter: 'encounters/setVitalsEncounter',
     }),
+
+    confirm() {
+      this.$trigger('actions-modal:open', {
+        label: 'Are you sure you want to save these vitals?',
+        callback: async () => {
+          this.save()
+        },
+      })
+    },
 
     async save() {
       this.$v.$touch()

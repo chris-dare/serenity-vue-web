@@ -1,7 +1,7 @@
 <template>
   <cv-side-nav
     id="side-nav"
-    class="bg-serenity-primary max-w-xl transition-all duration-50 overflow-auto"
+    class="bg-serenity-primary max-w-xl transition-all duration-50 overflow-y-auto overflow-x-hidden"
     :class="[open ? 'w-56' : 'w-12']"
   >
     <div
@@ -27,6 +27,13 @@
         </div>
       </AppNavItem>
     </div>
+
+    <!-- <div
+      class="absolute bottom-0 p-2"
+      :class="[open ? 'visible' : 'invisible']"
+    >
+      <p class="text-white">Internet speed {{ speed }}</p>
+    </div> -->
   </cv-side-nav>
 </template>
 
@@ -83,6 +90,10 @@ export default {
     ...mapGetters({
       navItems: 'global/navItems',
     }),
+
+    speed() {
+      return navigator.connection.downlink
+    },
   },
 
   created() {
