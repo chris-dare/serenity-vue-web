@@ -16,21 +16,36 @@
           size="large"
         />
         <p class="font-semibold">Pending encounters(click to select and proceed)</p>
-        <div
-          v-for="(en, index) in filteredEncounters"
-          :key="en.id"
-          class="flex space-x-2 cursor-pointer p-4 hover:bg-serenity-primary-highlight hover:bg-opacity-20"
-          :class="{'bg-serenity-primary-highlight bg-opacity-20': encounter.id === en.id}"
-          @click="setEncounter(en)"
-        >
-          <p>{{ index + 1 }}.</p>
-          <div class="flex-1 flex items-center justify-between">
-            <div>
-              <p>{{ en.service_type_name }} with {{ en.encounter_participant[0].practitioner_detail.name }}</p>
-              <p class="text-secondary text-xs"> {{ en.status_comment }} </p>
-            </div>
-            <div class="text-right">
-              <p class="">{{ $date.formatDate(en.start_time) }} </p>
+
+        <div class="flex space-x-2 items-center">
+          <Search
+            v-model="search"
+            placeholder="Search by name"
+            class="flex-1 small-input"
+          />
+          <DatePicker
+            v-model="date"
+            class="se-input-gray"
+            placeholder="dd/mm/yyyy"
+          />
+        </div>
+        <div class="overflow-y-auto h-80">
+          <div
+            v-for="(en, index) in filteredEncounters"
+            :key="en.id"
+            class="flex space-x-2 cursor-pointer p-4 hover:bg-serenity-primary-highlight hover:bg-opacity-20"
+            :class="{'bg-serenity-primary-highlight bg-opacity-20': encounter.id === en.id}"
+            @click="setEncounter(en)"
+          >
+            <p>{{ index + 1 }}.</p>
+            <div class="flex-1 flex items-center justify-between">
+              <div>
+                <p>{{ en.service_type_name }} with {{ en.encounter_participant[0].practitioner_detail.name }}</p>
+                <p class="text-secondary text-xs"> {{ en.status_comment }} </p>
+              </div>
+              <div class="text-right">
+                <p class="">{{ $date.formatDate(en.start_time) }} </p>
+              </div>
             </div>
           </div>
         </div>
@@ -63,6 +78,8 @@
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import modalMixin from '@/mixins/modal'
 import { mapGetters, mapActions, mapState } from 'vuex'
+import isSameDay from 'date-fns/isSameDay'
+import parseISO from 'date-fns/parseISO'
 
 export default {
   name: 'PatientEncountersModal',
@@ -77,6 +94,8 @@ export default {
       name: 'patient-encounters-modal',
       encounter: {},
       errorMessage: null,
+      search: '',
+      date: null,
     }
   },
 
@@ -103,8 +122,8 @@ export default {
     },
 
     patient() {
-      if (!this.onGoingEncounters.length) return {} 
-      return this.onGoingEncounters.map(patient => {
+      if (!this.encounters.length) return {} 
+      return this.encounters.map(patient => {
         patient.patient_detail.name = `${ patient.patient_detail.first_name} ${ patient.patient_detail.lastname}`
         return patient
       })[0].patient_detail
@@ -113,6 +132,19 @@ export default {
     filteredEncounters() {
       if(!this.encounters) return
       return this.encounters.filter(en => en.status === 'in-progress' || en.status === 'planned' || en.status === 'triaged' || en.status === 'arrived' || en.status === 'onleave')
+        .filter(en => {
+          if (!this.search && !this.date) {
+            return true
+          }
+          if (!this.date && this.search) {
+            return en.slot_practitioner_name.toLowerCase().includes(this.search.toLowerCase())
+          }
+          if (this.date && !this.search) {
+            return isSameDay(parseISO(this.date), parseISO(en.start_time))
+          }
+          return en.slot_practitioner_name.toLowerCase().includes(this.search.toLowerCase()) && isSameDay(parseISO(this.date), parseISO(en.start_time))
+        })
+        // .filter(en => (!this.search && !this.date )|| en.slot_practitioner_name.toLowerCase().includes(this.search.toLowerCase()) || isSameDay(parseISO(this.date), parseISO(en.start_time)))
       // .filter(enc => enc.encounter_participant.find(en => en.practitioner_role === this.$practitionerId))
     },
   },
