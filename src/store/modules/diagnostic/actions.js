@@ -62,12 +62,22 @@ export default {
     }
   },
 
+  // eslint-disable-next-line no-unused-vars
+  async listAccessionResults({ rootState }, payload) {
+    try {
+      const { data } = await DiagnosticAPI.listAccessionResults(payload)
+      return data
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
+    }
+  },
+
   async getServiceTypes(payload) {
     try {
       const { data } = await DiagnosticAPI.getServiceType(payload)
       return data
     } catch (error) {
-      console.log(error)
       Vue.prototype.$utils.error(error)
       throw error.data || error
     }
@@ -79,6 +89,7 @@ export default {
       await ServiceRequestsAPI.delete(provider.id, id)
       commit(DELETE_SERVICE_REQUEST, id)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -87,9 +98,9 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await DiagnosticAPI.listDevices(provider.id, params)
-      console.log(data)
       commit(SET_DIAGNOSTIC_DEVICES, data.data)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -104,6 +115,7 @@ export default {
       })
       commit(SET_DIAGNOSTIC_REPORTS, new_data)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -118,6 +130,7 @@ export default {
       })
       commit(SET_DIAGNOSTIC_REPORTS, new_data)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -128,6 +141,7 @@ export default {
       const { data } = await DiagnosticAPI.create(provider.id, payload)
       commit(UPDATE_DIAGNOSTIC_REPORT, data.results)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -138,6 +152,7 @@ export default {
       const { data } = await DiagnosticAPI.createResult(provider.id, payload)
       commit(UPDATE_DIAGNOSTIC_REPORT, data)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -148,6 +163,7 @@ export default {
       const { data } = await DiagnosticAPI.updateReport(provider.id, payload)
       commit(UPDATE_DIAGNOSTIC_REPORT, data)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -159,6 +175,7 @@ export default {
       commit(UPDATE_DIAGNOSTIC_REPORT, data)
       return data
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -169,6 +186,7 @@ export default {
       await DiagnosticAPI.delete(provider.id, id)
       commit(DELETE_DIAGNOSTIC_REPORT, id)
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },

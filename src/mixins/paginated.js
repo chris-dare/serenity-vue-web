@@ -15,6 +15,8 @@ export default {
       },
       filter: '',
       dataMeta: null,
+      dateFields: ['created_at__lte', 'created_at__gte'],
+      dateParam: '',
     }
   },
 
@@ -29,6 +31,19 @@ export default {
 
     pagination() {
       return { itemsPerPage: this.params.page_size, numberOfItems: this.dataCount, pageSizes: this.pageSizes, page: this.params.page  }
+    },
+  },
+
+  watch: {
+    dateParam: {
+      immediate: true,
+      handler(val, oldVal) {
+        if (val !== oldVal) {
+          let values = val?.split(' to ')
+          this.params[this.dateFields[0]] = values && values[0] ? this.$date.formatQueryParamsDate(values[0]) : null
+          this.params[this.dateFields[1]] = values && values[1] ? this.$date.formatQueryParamsDate(values[1] || Date.now()) : null
+        }
+      },
     },
   },
 
@@ -67,5 +82,7 @@ export default {
       this.params.page = 1
       this.refresh()
     }, 500, false),
+
+
   },
 }

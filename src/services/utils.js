@@ -246,6 +246,21 @@ const formatName = (val) => {
   return word.join(' ')
 }
 
+const formatGenderAge = (gender, age) => {
+  let gender_age_description = ''
+  let age_years = age ? `${age} years` : null
+
+  if (gender) {
+    gender_age_description = `${gender}`
+  }
+
+  if (age_years) {
+    gender_age_description = `${gender_age_description}, ${age_years}`
+  }
+
+  return gender_age_description
+}
+
 const objectHasRequiredData = (data, fields) => {
   return !!Object.keys(data).find(field => {
     if (!fields.includes(field)) {
@@ -276,6 +291,7 @@ export default {
       formatName,
       getTotalValue,
       objectHasRequiredData,
+      formatGenderAge,
     }
   },
 }

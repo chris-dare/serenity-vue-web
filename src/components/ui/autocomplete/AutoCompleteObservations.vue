@@ -50,7 +50,6 @@ export default {
 
   methods: {
     addTag(tag) {
-      console.log(tag)
       let newTag = {
         code: tag,
         display: tag,

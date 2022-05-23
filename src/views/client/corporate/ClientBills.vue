@@ -180,14 +180,18 @@ export default {
     },
 
     lists: {
-      handler(val, oldVal){
-        if (val !== oldVal) {
-          let values = val?.split(' to ')
+      handler(val){
+        if (val) {
+          let values = val?.date?.split(' to ')
+          this.filters = {...val}
           this.filters.date_to = values && values[1] ? this.$date.formatQueryParamsDate(values[1]) : null
           this.filters.date_from = values && values[0] ? this.$date.formatQueryParamsDate(values[0] || Date.now()) : null
+          delete this.filters.date
           this.getData()
         }
       },
+      immediate: true,
+      deep: true,
     },
   },
 
@@ -251,7 +255,6 @@ export default {
     },
     async print() {
       let filters = { ...this.filters }
-      console.log(filters)
       let id = this.$route.params.id
       if (!filters.date_from) {
         delete filters.date_from
@@ -265,7 +268,6 @@ export default {
       if (!filters.page_size) {
         delete filters.page_size
       }
-      console.log(filters)
 
       let payload = { payer: id, ...filters }
       try {

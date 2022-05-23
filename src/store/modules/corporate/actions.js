@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import CorporateAPI from '@/api/corporate'
 import ClientsAPI from '@/api/clients'
 import { SET_CORPORATE, DELETE_CORPORATE, UPDATE_CORPORATE, SET_DEPENDENT, UPDATE_DEPENDENT, CURRENT_DEPENDENT } from './mutation-types'
@@ -8,7 +9,8 @@ export default {
       const { data } = await CorporateAPI.list(id)
       commit(SET_CORPORATE, data.data)
     } catch ({ response: { data: error } }) {
-      throw error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 
@@ -17,7 +19,8 @@ export default {
       const { data } = await CorporateAPI.create(payload)
       commit(UPDATE_CORPORATE, data.data)
     } catch ({ response: { data: error } }) {
-      throw error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 
@@ -27,7 +30,8 @@ export default {
       const { data } = await ClientsAPI.createBenefactor(provider.id, payload)
       commit(UPDATE_CORPORATE, data.data)
     } catch ({ response: { data: error } }) {
-      throw error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 
@@ -36,7 +40,8 @@ export default {
       const { data } = await CorporateAPI.update(payload)
       commit(UPDATE_CORPORATE, data.results)
     } catch ({ response: { data: error } }) {
-      throw error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 
@@ -45,7 +50,8 @@ export default {
       const { data } = await CorporateAPI.updateBeneficiary(payload)
       commit(UPDATE_CORPORATE, data.results)
     } catch ({ response: { data: error } }) {
-      throw error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 
@@ -54,7 +60,8 @@ export default {
       const { data } = await CorporateAPI.listDependent(id)
       commit(SET_DEPENDENT, data.returnedData)
     } catch ({ response: { data: error } }) {
-      throw error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 
@@ -63,7 +70,8 @@ export default {
       const { data } = await CorporateAPI.createDependent(payload)
       commit(UPDATE_DEPENDENT, data.returnedData)
     } catch ({ response: { data: error } }) {
-      throw error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 
@@ -71,7 +79,8 @@ export default {
     try {
       return await CorporateAPI.updateDependent(payload)
     } catch ({ response: { data: error } }) {
-      throw error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 
@@ -80,7 +89,8 @@ export default {
       const { data } = await CorporateAPI.updateClientAccount(payload)
       commit(UPDATE_DEPENDENT, data.results)
     } catch ({ response: { data: error } }) {
-      throw error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 
@@ -94,7 +104,8 @@ export default {
       await CorporateAPI.delete(provider.id, id)
       commit(DELETE_CORPORATE, id)
     } catch ({ response: { data: error } }) {
-      throw error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 }

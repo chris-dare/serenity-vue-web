@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import Vue from 'vue'
 import ClientAPI from '@/api/clients'
 import { SET_CLIENTS, DELETE_CLIENT, UPDATE_CLIENT, SET_CLIENTS_COUNT, UPDATE_FORM, SET_FORM, SET_CURRENT_CLIENT, SET_CURRENT_UPDATE, SET_BILLS, SET_CLIENT_ACCOUNT, SET_CLIENT_POLICIES, SET_CLAIMS } from './mutation-types'
 
@@ -9,6 +10,7 @@ export default {
     }
     const provider = rootState.auth.provider
     const { data } = await ClientAPI.list(provider.id, filters).catch((error) => {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     })
     commit(SET_CLIENTS, data.returnedData)
@@ -22,6 +24,7 @@ export default {
       commit(SET_CURRENT_CLIENT, { company: data.data })
       return data.data
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -34,6 +37,7 @@ export default {
       commit(SET_CLIENT_ACCOUNT, data[0])
       return data[0]
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -46,6 +50,7 @@ export default {
       commit(SET_CLIENT_POLICIES, data)
       return data
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -57,6 +62,7 @@ export default {
         .createPolicy(provider.id, payload)
       return data
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -68,6 +74,7 @@ export default {
         .updatePolicy(provider.id, payload)
       return data
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
     
@@ -81,6 +88,7 @@ export default {
       commit(SET_BILLS, data.returnedData)
       return data
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -94,6 +102,7 @@ export default {
       commit(SET_CLAIMS, data.returnedData)
       return data
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     } 
   },
@@ -107,6 +116,7 @@ export default {
       commit(SET_FORM, {})
       return data
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -118,6 +128,7 @@ export default {
         .deposit(provider.id, payload)
       return data
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
@@ -129,6 +140,7 @@ export default {
         .providerAccount(provider.id, payload)
       return data
     } catch (error) {
+      Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },

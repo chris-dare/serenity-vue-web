@@ -32,6 +32,7 @@ export default {
 
   [UPDATE_APPOINTMENT](state, appointment) {
     const index = state.appointments.findIndex(a => a.id === appointment.id)
+
     if (index !== -1) {
       state.appointments = state.appointments.map(a => {
         if (a.id === appointment.id) return appointment

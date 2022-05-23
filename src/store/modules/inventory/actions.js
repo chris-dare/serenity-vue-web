@@ -10,7 +10,8 @@ export default {
       commit(SET_INVENTORY, data.results)
       return data
     } catch ({ response: { data: error } }) {
-      throw error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 
@@ -43,7 +44,8 @@ export default {
       await InventoryAPI.delete(id)
       commit(DELETE_INVENTORY, id)
     } catch ({ response: { data: error } }) {
-      throw error
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
     }
   },
 }

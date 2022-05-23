@@ -10,6 +10,9 @@ export default {
       paginate: false,
       loading: false,
       pageSizes: [10, 25, 50, 100],
+      dateFields: ['created_at__lte', 'created_at__gte'],
+      date: '',
+      params: {},
     }
   },
 
@@ -37,6 +40,20 @@ export default {
 
   created() {
     this.pageLength = 10
+  },
+
+  watch: {
+    date: {
+      immediate: true,
+      handler(val, oldVal) {
+        if (!val || !oldVal) return
+        // if (val !== oldVal) {
+        //   let values = val?.split(' to ')
+        //   this.params[this.dateFields[0]] = values && values[1] ? this.$date.formatQueryParamsDate(values[1]) : null
+        //   this.params[this.dateFields[1]] = values && values[0] ? this.$date.formatQueryParamsDate(values[0] || Date.now()) : null
+        // }
+      },
+    },
   },
 
   methods: {

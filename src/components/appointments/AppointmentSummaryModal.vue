@@ -73,7 +73,7 @@ import modalMixin from '@/mixins/modal'
 export default {
   name: 'AppointmentSummaryModal',
 
-  components: {  AppointmentDetail },
+  components: { AppointmentDetail },
 
   mixins: [modalMixin],
 
@@ -127,6 +127,7 @@ export default {
 
     cancel() {
       this.$trigger('notes:open')
+      this.$emit('cancel', this.appointment)
       this.close()
     },
 

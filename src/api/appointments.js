@@ -12,7 +12,7 @@ export default {
   },
 
   create(providerId, params) {
-    return http.post(`${this.url}${providerId}/appointment`, params)
+    return http.post(`${this.url}${providerId}/appointments`, params)
   },
 
   cancel(providerId, appointmentId, params) {
@@ -31,14 +31,18 @@ export default {
   },
 
   update(providerId, appointmentId, params) {
-    return http.patch(`${this.url}${providerId}/appointment/${appointmentId}`, params)
+    return http.patch(`${this.url}${providerId}/appointments/${appointmentId}`, params)
   },
 
   reschedule(providerId, appointmentId, params) {
     return http.post(`${this.url}${providerId}/appointment/${appointmentId}/reschedule`, params)
   },
 
+  action(providerId, appointmentId, params) {
+    return http.patch(`${this.url}${providerId}/appointments/${appointmentId}/action`, params)
+  },
+
   delete(providerId,id) {
-    return http.delete(`${this.url}${providerId}/appointment/${id}`)
+    return http.delete(`${this.url}${providerId}/appointments/${id}`)
   },
 }

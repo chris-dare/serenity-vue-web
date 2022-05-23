@@ -118,6 +118,7 @@
             Close
           </SeButton>
         </div>
+        <p class="italic">NB: Patients can only be linked if they have the same birth date, gender and mobile. Please update the following patient profiles if they do not have that</p>
       </div>
     </template>
   </BaseModal>
@@ -129,6 +130,7 @@ import { required, requiredIf } from 'vuelidate/lib/validators'
 import Link from '@carbon/icons-vue/es/link/16'
 import Checkmark from '@carbon/icons-vue/es/checkmark/16'
 import { mapActions } from 'vuex'
+import intersectionBy from 'lodash/intersectionBy'
 
 export default {
   name: 'LinkPatientsModal',
@@ -185,6 +187,13 @@ export default {
       }
 
       return titles[this.step]
+    },
+
+    isSamePatient() {
+      let isSameGender = intersectionBy(this.patients, 'gender') === 1
+      let isSamePhone = intersectionBy(this.patients, 'mobile') === 1
+      let isSameDOB = intersectionBy(this.patients, 'birth_date') === 1
+      return isSameGender && isSamePhone && isSameDOB
     },
   },
 

@@ -33,12 +33,19 @@
       </p>
       <AddNewDropdown />
 
-      <SeButton
+      <!-- <SeButton
         variant="warning"
         :loading="loading"
         @click="goToWizard"
       >
         {{ hasEncounterBegan ? 'Continue Consultation' : 'Begin Consultation' }}
+      </SeButton> -->
+      <SeButton
+        variant="warning"
+        :loading="loading"
+        @click="openOngoingEncounters"
+      >
+        Ongoing Encounters
       </SeButton>
     </div>
   </div>
@@ -136,6 +143,10 @@ export default {
         },
       })
 
+    },
+
+    openOngoingEncounters() {
+      this.$trigger('profile:patient:encounters:open')
     },
 
     async goToWizard() {

@@ -1,11 +1,38 @@
 import isSameDay from 'date-fns/isSameDay'
 import isWithinInterval from 'date-fns/isWithinInterval'
 import Vue from 'vue'
-import Appointment from '@/models/Appointment'
 
 export default {
   appointments: (state) => {
-    return state.appointments.map((appoint => new Appointment(appoint).getNormalizedView()))
+    return state.appointments.map(app => {
+      app.isCancelled = app.status === 'cancelled',
+      app.isPending = app.status === 'pending',
+      app.patient = {
+        id: app.patient_id,
+        age: app.patient_age,
+        fullName: app.patient_full_name,
+        gender: app.patient_gender,
+        phone: app.patient_mobile,
+      }
+      app.service = {
+        categories: '',
+        healthcare_service_name: app.healthcare_service_name,
+        id: app.healthcare_service_id,
+      }
+      app.practitioner = {
+        fullName: app.slot_practitioner_name,
+      }
+      app.service_tier = {
+        ...app.service_tier,
+        label: `${app.service_tier.display} - ${app.service_tier.currency} ${app.service_tier.charge}`,
+      }
+      app.slot = {
+        start: app.slot_start,
+        end: app.slot_end,
+        practitioner: {},
+      }
+      return app
+    })
   },
 
   navItems: () => {
