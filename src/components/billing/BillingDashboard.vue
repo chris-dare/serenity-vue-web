@@ -16,6 +16,8 @@
     <p class="text-serenity-primary my-6 font-semibold">
       Bills / invoices
     </p>
+    <h3>{{ $route.name }}</h3>
+
     <BillingTable />
 
     <BillingTopUpModal />
