@@ -18,7 +18,7 @@
         v-model="localValue.appointment_type"
         title="Type"
         :multiple="false"
-        :options="['ROUTINE', 'FOLLOWUP', 'CHECKUP', , 'EMERGENCY']"
+        :options="['ROUTINE', 'FOLLOWUP', 'CHECKUP', 'EMERGENCY']"
         class="multiselect-white flex-1"
         @input="$emit('change', localValue)"
       />
