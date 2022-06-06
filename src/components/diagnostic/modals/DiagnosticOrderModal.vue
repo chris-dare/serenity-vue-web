@@ -178,33 +178,6 @@
                   :suffix-text="cat.unit"
                   :label="cat.display"
                 />
-                <!-- <MultiSelect
-                  v-else
-                  v-model="categoryValues[cat.code]"
-                  :title="cat.display"
-                  :options="interpretationTypes"
-                  :multiple="false"
-                  :searchable="true"
-                  :internal-search="true"
-                  :clear-on-select="false"
-                  :close-on-select="false"
-                  :hide-selected="true"
-                  track_by="code"
-                  :limit="3"
-                  v-bind="$attrs"
-                  taggable
-                  @remove="$emit('remove', $event)"
-                  @tag="addTag(e, cat.code)"
-                  custom-field="code"
-                  label="display"
-                  placeholder="Search or choose a observation type"
-                /> -->
-                <!-- <AutoCompleteObservations
-                  v-else
-                  v-model="categoryValues[cat.code]"
-                  :title="cat.display"
-                  :options="interpretationTypes" 
-                /> -->
               </div>
             </div>
 
@@ -260,6 +233,12 @@
                 @click="accessionNumber()"
               >
                 Retrieve from device
+              </SeButton>
+              <SeButton
+                v-else-if="category.options.length === 0 && accessionNum"
+                @click="accessionNum = null"
+              >
+                Take observations
               </SeButton>
               <SeButton
                 v-if="!append && $userCan('diagnostic.reports.write')"
@@ -432,6 +411,9 @@ export default {
       this.$modal.show(this.name)
       this.pay = false
       this.loading = false
+      this.category = {
+        options: [],
+      }
       this.form = {...this.form, ...data.params[0]}
       this.serviceType(this.form.id)
       this.form.transaction_type = this.$global.USER_ACCOUNT_TYPE
@@ -441,7 +423,6 @@ export default {
         this.pay = !this.pay
       }
       this.accessionNum = null
-      this.category.options = []
       this.patient = { id: this.form.patient, ...this.form.patient_detail, last_name: this.form.patient_detail?.lastname}
       this.specimen = !!this.form.specimen
     },
