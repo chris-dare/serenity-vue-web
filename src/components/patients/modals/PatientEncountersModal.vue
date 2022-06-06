@@ -29,7 +29,7 @@
             placeholder="dd/mm/yyyy"
           />
         </div>
-        <div class="overflow-y-auto h-80">
+        <div class="overflow-y-auto max-h-80">
           <div
             v-for="(en, index) in filteredEncounters"
             :key="en.id"
@@ -137,12 +137,12 @@ export default {
             return true
           }
           if (!this.date && this.search) {
-            return en.slot_practitioner_name.toLowerCase().includes(this.search.toLowerCase())
+            return en.slot_practitioner_name?.toLowerCase().includes(this.search?.toLowerCase())
           }
           if (this.date && !this.search) {
             return isSameDay(parseISO(this.date), parseISO(en.start_time))
           }
-          return en.slot_practitioner_name.toLowerCase().includes(this.search.toLowerCase()) && isSameDay(parseISO(this.date), parseISO(en.start_time))
+          return en.slot_practitioner_name?.toLowerCase().includes(this.search?.toLowerCase()) && isSameDay(parseISO(this.date), parseISO(en.start_time))
         })
         // .filter(en => (!this.search && !this.date )|| en.slot_practitioner_name.toLowerCase().includes(this.search.toLowerCase()) || isSameDay(parseISO(this.date), parseISO(en.start_time)))
       // .filter(enc => enc.encounter_participant.find(en => en.practitioner_role === this.$practitionerId))

@@ -77,10 +77,9 @@
             <AppointmentTableActions
               :status="row.status"
               :data-qa="`table-actions-${row.id}`"
-              @reassign="edit(row)"
+              @update="edit(row)"
               @cancel="confirmRemove(row)"
               @view="view(row)"
-              @reschedule="reschedule(row)"
               @check-in="checkIn(row)"
             />
           </div>
@@ -160,6 +159,7 @@ export default {
   },
 
   async mounted() {
+    this.dateParam = this.$date.userNow()
     this.refresh()
   },
 
@@ -187,11 +187,6 @@ export default {
     edit(row) {
       this.setCurrentAppointment(row)
       this.$router.push({name: 'AppointmentUpdate', params: { id: row.id }, query: {type: 'update'}})
-    },
-
-    reschedule(row) {
-      this.setCurrentAppointment(row)
-      this.$router.push({name: 'AppointmentUpdate', params: { id: row.id }, query: {type: 'reschedule'}})
     },
 
     async checkIn(row) {

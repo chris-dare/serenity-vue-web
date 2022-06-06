@@ -16,6 +16,7 @@
           class="w-1/3 se-white-date-picker"
         />
         <MultiSelect
+          v-if="$router.currentRoute.path !== '/' && $router.currentRoute.path !== '/billing'"
           v-model="localValue.bill_detail_preference"
           placeholder="Bill Detail"
           :multiple="false"
@@ -23,6 +24,7 @@
           class="multiselect-white w-1/3"
         />
         <MultiSelect
+          v-if="$router.currentRoute.path !== '/' && $router.currentRoute.path !== '/billing'"
           v-model="localValue.should_payer_view_diagnoses"
           placeholder="Payer view Diagnoses"
           :multiple="false"
@@ -39,7 +41,6 @@
 
 <script>
 import ModelMixin from '@/mixins/model'
-
 export default {
   name: 'BillingTableFilters',
 

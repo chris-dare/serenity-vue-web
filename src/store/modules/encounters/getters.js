@@ -133,6 +133,7 @@ export default {
           date: obs.issued,
           value: obs.value ? obs.value.split('/')[0] : 1,
           value2: option.code === 'BLOOD_PRESSURE' && obs.value?.split('/')?.length > 1 ? obs.value.split('/')[1] : null,
+          raw: obs.value,
         }
       })
       const observations = sortByDate(vits, 'date', 'asc')
@@ -142,6 +143,7 @@ export default {
         title: option.code,
         data: observations,
         value: observations.length ? observations[observations.length - 1].value : '-',
+        raw: observations.length ? observations[observations.length - 1].raw : '-',
         date: observations.length ? observations[0].date : null,
         latest: observations.length ? observations[0].latest : null,
         status: 'Normal',

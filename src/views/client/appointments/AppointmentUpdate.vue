@@ -30,7 +30,6 @@
           preselect
           custom-field="value"
           required
-          :disabled="isReschedule"
         />
 
         <MultiSelect
@@ -43,7 +42,8 @@
           custom-field="id"
           placeholder="Service"
           preselect
-          :disabled="isReschedule"
+          :error-message="$utils.validateRequiredField($v, 'healthcare_service')"
+          required
           @change="updateStore"
         />
 
@@ -55,7 +55,8 @@
           :custom-label="tier => `${tier.display} - ${tier.currency} ${tier.charge}`"
           placeholder="Service tiers"
           preselect
-          :disabled="isReschedule"
+          :error-message="$utils.validateRequiredField($v, 'service_tier')"
+          required
         />
       </div>
 
@@ -74,7 +75,6 @@
       </div>
 
       <div
-        v-if="isReschedule"
         class="space-y-4"
       >
         <DatePicker
@@ -92,20 +92,17 @@
       </div>
 
       <SlotList
-        v-if="isReschedule"
         v-model="form._slot"
         :data="slots"
         :data-loading="loading"
       />
 
       <p
-        v-if="!isReschedule"
         class="text-primary my-4 font-bold text-sm"
       >
         Additional notes for the appointment
       </p>
       <cv-text-area
-        v-if="!isReschedule"
         v-model="form.comment"
         placeholder="Write additional information for this appointment here"
         :rows="10"
@@ -163,6 +160,7 @@ export default {
     ...mapGetters({
       availableSlots: 'appointments/availableSlots',
       slots: 'appointments/slots',
+      getNormalisedView: 'appointments/getNormalisedView',
     }),
 
     isReschedule() {
@@ -173,6 +171,10 @@ export default {
       return this.services?.find(service => service.id === this.form.healthcare_service)?.id
     },
 
+    serviceUUId() {
+      return this.services?.find(service => service.id === this.form.healthcare_service)?.uuid
+    },
+
     serviceTiers() {
       const service = this.services.find(service => service.id === this.form.healthcare_service)
       if (!service || !service.price_tiers) return []
@@ -181,14 +183,15 @@ export default {
     },
 
     title() {
-      return this.$route.query.type === 'update' ? 'Reassign appointment' : 'Reschedule appointment'
+      return this.$route.query.type === 'update' ? 'Update appointment' : 'Reschedule appointment'
     },
   },
 
   validations: {
     form: {
       slot: { minLength: minLength(1), required  },
-      service: { required },
+      healthcare_service: { required },
+      service_tier: { required },
       appointment_type: { required },
     },
   },
@@ -200,6 +203,14 @@ export default {
       handler(val) {
         if (val) {
           this.refresh()
+        }
+      },
+    },
+    serviceTiers: {
+      deep: true,
+      handler(val, oldVal) {
+        if (val !== oldVal && oldVal.length) {
+          this.form.service_tier = null
         }
       },
     },
@@ -283,21 +294,22 @@ export default {
       try {
         let payload = {
           patient_id: this.form.patient_id,
-          healthcare_service_id: this.form.healthcare_service,
+          healthcare_service_id: this.serviceUUId,
           appointment_type: this.form.appointment_type,
           service_tier_id: this.form.service_tier.uuid,
           comment: this.form.comment,
         }
 
-        // if (this.form._slot) {
-        //   payload.slot_id = this.form._slot.uuid
-        // }
+        if (this.form._slot) {
+          payload.slot_id = this.form._slot.uuid
+        }
         this.loading = true
-        await this.updateAppointment({ appointmentId: this.form.uuid, payload })
+        const data = await this.updateAppointment({ appointmentId: this.form.uuid, payload })
         this.$toast.open({
           message: 'Appointment successfully updated!',
         })
-        this.selectedAppointment = this.storeData
+        console.log('returne', data)
+        this.selectedAppointment = this.getNormalisedView(data)
         this.$trigger('billing:details:open')
         // this.$router.push({ name: this.parent })
       } finally {
