@@ -197,7 +197,7 @@ export default {
 
     view(row) {
       this.setCurrentVisit(row)
-      this.$router.push({name: this.route, params: { id: row.patient }})
+      this.$router.push({name: this.route, params: { id: row.patient }, query: { visit: row.id }})
     },
 
     async storePagination(ev) {
