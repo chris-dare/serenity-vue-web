@@ -66,6 +66,7 @@ export default {
         { label: 'Bills', path: 'PatientBills' },
         { label: 'Reports', path: 'PatientReports' },
         { label: 'Notes', path: 'PatientNotes' },
+        { label: 'Referrals', path: 'PatientReferrals' },
       )
       return links
 

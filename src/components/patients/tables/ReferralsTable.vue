@@ -2,7 +2,7 @@
   <div>
     <DataTable
       small
-      :data="currentEncounterReferrals"
+      :data="data"
       :columns="columns"
       no-data-label="No Referrals"
     >
@@ -43,20 +43,20 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
   name: 'ReferralsTable',
+
+  props: {
+    data: {
+      type: Array,
+      default: () => [],
+    },
+  },
 
   data() {
     return {
       columns: ['Date', 'Referrer', 'Referee', 'Priority', 'Referral Type', 'Reason'],
     }
-  },
-
-  computed: {
-    ...mapGetters({
-      currentEncounterReferrals: 'encounters/currentEncounterReferrals',
-    }),
   },
 }
 </script>
