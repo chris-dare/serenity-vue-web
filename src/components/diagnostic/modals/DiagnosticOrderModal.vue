@@ -556,8 +556,8 @@ export default {
           return {
             ...ele,
             unit: ele.Unit,
-            code: ele.Result,
-            rank: '',
+            code: ele.Code,
+            rank: ele.Result,
             display: ele.Code,
           }
         })
