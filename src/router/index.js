@@ -533,6 +533,11 @@ const routes = [
             component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientTimeline.vue'),
           },
           {
+            path: '/patients/:id/referrals',
+            name: 'PatientReferrals',
+            component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientReferral.vue'),
+          },
+          {
             path: '/patients/:id/encounters',
             name: 'PatientEncounters',
             component: () => import(/* webpackChunkName: "patient" */ '../views/client/patients/PatientEncounters.vue'),
