@@ -16,7 +16,7 @@ export default {
     dispatch('patients/getNotes', patient, { root:true })
     dispatch('diagnostic/getDiagnosticReports', patient , { root:true })
     dispatch('resources/getEncounterStatuses', null, { root:true })
-    dispatch('patients/getReferrals', patient , { root:true })
+    dispatch('patients/getReferrals', {patient} , { root:true })
     dispatch('patientAllergies/getAllergies', patient , { root:true })
     dispatch('resources/getObservationUnitTypes', null, { root:true })
     dispatch('resources/getObservationInterpretationTypes', null, { root:true })
