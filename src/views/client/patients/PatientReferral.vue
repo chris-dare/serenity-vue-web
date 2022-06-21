@@ -1,5 +1,20 @@
 <template>
-  <div class="mt-2">
+  <div class="mt-2 space-y-2">
+    <div class="flex items-center justify-between">
+      <Search
+        v-model="params.search"
+        placeholder="Search by practitioner name"
+        class="se-input-white"
+        @input="searchData"
+      />
+      <DatePicker
+        v-model="params.date"
+        kind="single"
+        class="se-input-white"
+        placeholder="dd/mm/yyyy"
+        @input="searchData"
+      />
+    </div>
     <ReferralsTable :data="data" />
   </div>
 </template>
@@ -18,12 +33,12 @@ export default {
 
   computed: {
     ...mapState({
-      data: state => state.patients.referrals,
+      data: state => state.patients.patientReferrals,
     }),
   },
 
   mounted() {
-    this.params = this.$route.params.id
+    this.params = {patient: this.$route.params.id, search: '' }
     this.refresh()
   },
 
