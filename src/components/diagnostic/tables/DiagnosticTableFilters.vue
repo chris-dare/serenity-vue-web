@@ -19,6 +19,7 @@
         type="text"
         label="Accession number"
         placeholder="Enter Accession number"
+        class="white-input flex-1"
         @input="$emit('change', localValue)"
       />
 

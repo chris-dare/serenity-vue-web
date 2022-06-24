@@ -5,8 +5,8 @@ import Vue from 'vue'
 export default {
   appointments: (state) => {
     return state.appointments.map(app => {
-      app.isCancelled = app.status === 'cancelled',
-      app.isPending = app.status === 'pending',
+      app.isCancelled = app.status === 'cancelled'
+      app.isPending = app.status === 'pending'
       app.patient = {
         id: app.patient_id,
         age: app.patient_age,

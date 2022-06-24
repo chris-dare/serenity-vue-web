@@ -458,7 +458,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await PatientsAPI.getReferrals(provider.id, patient)
-      commit(SET_REFERRALS, data)
+      commit(SET_REFERRALS, data.data)
 
     } catch (error) {
       Vue.prototype.$utils.error(error)
