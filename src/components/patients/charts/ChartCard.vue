@@ -12,7 +12,18 @@
       <div>
         <div class="flex items-center justify-between">
           <div class="flex items-center">
-            <p class="text-lg font-bold">{{ chart.value }}</p>
+            <p
+              v-if="includesSecondValue"
+              class="text-lg font-bold"
+            >
+              {{ chart.raw }}
+            </p>
+            <p
+              v-else
+              class="text-lg font-bold"
+            >
+              {{ chart.value }}
+            </p>
             <p class="ml-4 text-xs font-light text-gray-500">{{ chart.per }}</p>
           </div>
           <p

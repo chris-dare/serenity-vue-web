@@ -128,6 +128,7 @@ export default {
       const { data } = await AppointmentsAPI
         .update(provider.id, appointmentId, payload)
       commit(UPDATE_APPOINTMENT, data.data)
+      return data.data
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error

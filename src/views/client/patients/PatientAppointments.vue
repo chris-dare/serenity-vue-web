@@ -13,7 +13,7 @@ export default {
   components: { PatientAppointmentTable },
 
   created() {
-    this.getAppointments({ filters: { patient: this.$route.params.id, ordering: '-start' } })
+    this.getAppointments({ patient: this.$route.params.id, ordering: '-start' })
   },
 
   methods: {

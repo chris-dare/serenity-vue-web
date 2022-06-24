@@ -34,7 +34,7 @@ export default {
     navItems() {
       if (this.isUpdate) {
         return[
-          { label: 'Reassign Appointment', description: 'Reassign existing appointment', path: 'AppointmentUpdate', completed: false, slug: 'select-patient'},
+          { label: 'Update Appointment', description: 'Update existing appointment', path: 'AppointmentUpdate', completed: false, slug: 'select-patient'},
         ]
       }
       if (this.isReschedule) {

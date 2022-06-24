@@ -173,7 +173,7 @@
                 :key="index"
               >
                 <FormMixedInput
-                  v-model="cat.code"
+                  v-model="cat.rank"
                   class="mx-2"
                   :suffix-text="cat.unit"
                   :label="cat.display"
@@ -556,7 +556,8 @@ export default {
           return {
             ...ele,
             unit: ele.Unit,
-            code: ele.Result,
+            code: ele.Code,
+            rank: ele.Result,
             display: ele.Code,
           }
         })
@@ -694,8 +695,8 @@ export default {
         this.categoryList = this.category.options.map(element => {
           return {
             AnalyzerCode: element.AnalyzerCode,
-            value: element.code, 
-            code: element.display,
+            value: element.rank, 
+            code: element.code,
             unit: element.unit,
           }
         })

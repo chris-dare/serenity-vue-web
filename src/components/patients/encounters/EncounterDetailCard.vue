@@ -118,7 +118,7 @@
         title="Referrals"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
       >
-        <ReferralsTable />
+        <ReferralsTable :data="currentEncounterReferrals" />
       </ToggleList>
       <ToggleList
         title="Notes"
@@ -182,6 +182,7 @@ export default {
       currentEncounterExamSystems: 'encounters/currentEncounterExamSystems',
       latestVitalsDate: 'encounters/latestVitalsDate',
       currentEncounterPractitioner: 'encounters/currentEncounterPractitioner',
+      currentEncounterReferrals: 'encounters/currentEncounterReferrals',
     }),
 
     hasNoCurrentEncounter() {

@@ -35,6 +35,38 @@ export default {
     })
   },
 
+  getNormalisedView: () => (app) => {
+    return {
+      ...app,
+      isCancelled: app.status === 'cancelled',
+      isPending: app.status === 'pending',
+      patient: {
+        id: app.patient_id,
+        age: app.patient_age,
+        fullName: app.patient_full_name,
+        gender: app.patient_gender,
+        phone: app.patient_mobile,
+      },
+      service: {
+        categories: '',
+        healthcare_service_name: app.healthcare_service_name,
+        id: app.healthcare_service_id,
+      },
+      practitioner: {
+        fullName: app.slot_practitioner_name,
+      },
+      service_tier: {
+        ...app.service_tier,
+        label: `${app.service_tier.display} - ${app.service_tier.currency} ${app.service_tier.charge}`,
+      },
+      slot: {
+        start: app.slot_start,
+        end: app.slot_end,
+        practitioner: {},
+      },
+    }
+  },
+
   navItems: () => {
     return[
       { label: 'Select patient', description: 'Existing or new patient', path: 'SelectPatient', completed: false, slug: 'select-patient'},

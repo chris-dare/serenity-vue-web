@@ -81,7 +81,7 @@ export default {
       const { data } = await PatientsApi.list(this.provider.id, { search })
 
       this.options = data.results
-      if (userInitiated == false) {
+      if (userInitiated === false) {
         this.defaultOptionsFound = false
       }
       this.loading = false

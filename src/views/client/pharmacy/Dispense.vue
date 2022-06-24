@@ -19,7 +19,12 @@
         </div>
         <div class="mt-12">
           <div class="flex items-center justify-between">
-            <div />
+            <SeButton
+              variant="secondary"
+              @click="goBack"
+            >
+              Go Back
+            </SeButton>
             <SeButton
               :loading="loading"
               :disabled="cart.length == 0"
@@ -113,6 +118,10 @@ export default {
       }else{
         this.$router.push({name: 'CheckoutSelectPatient'})
       }
+    },
+
+    goBack() {
+      this.$router.go(-1)
     },
   },
 }

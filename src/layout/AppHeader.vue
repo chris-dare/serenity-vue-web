@@ -52,6 +52,7 @@
               class="no-label-input se-black-input hover:bg-serenity-gray focus:bg-serenity-gray mx-2 lg:mx-6"
               label="false"
               data-qa="locations-select"
+              @change="changeLocation"
             >
               <cv-select-option
                 v-for="(item, index) in locations"
@@ -116,6 +117,7 @@ export default {
     return {
       search: '',
       open: true,
+      selectedLocation: null,
     }
   },
 
@@ -138,19 +140,9 @@ export default {
         this.setworkspaceType(value)
       },
     },
-
-    selectedLocation: {
-      get() {
-        return this.location
-      },
-      set(value) {
-        this.setGlobalLocation(value)
-      },
-    },
   },
 
   created() {
-
     this.init()
   },
 
@@ -165,6 +157,11 @@ export default {
       // this.open = this.isTablet
       await this.getLocations(false)
 
+      if (localStorage.getItem('location')) {
+        this.selectedLocation = localStorage.getItem('location')
+        return
+      }
+
       let location = localStorage.getItem('location') ? localStorage.getItem('location') : this.locations.length ? this.locations[0].id : ''
       const locationExists = !!this.locations.find(lc => lc.value === location)
 
@@ -174,6 +171,10 @@ export default {
     changeWorkspace(value) {
       this.setworkspaceType(value)
       this.$router.push({ name: this.workspaceType === 'ADMIN' ? 'GetStarted' : 'Dashboard'}).catch(()=>{})
+    },
+
+    changeLocation(value) {
+      this.setGlobalLocation(value)
     },
 
     change() {

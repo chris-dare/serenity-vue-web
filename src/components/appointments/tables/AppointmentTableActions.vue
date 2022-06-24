@@ -16,7 +16,7 @@
         @click="$emit(item)"
       >
         <div
-          v-if="$userCan(item === 'delete' ? 'appointments.delete' : 'appointments.write')"
+          v-if="$userCan(item === 'cancel' ? 'appointments.delete' : 'appointments.write')"
           class="h-12 flex items-center px-6 hover:bg-gray-50 capitalize"
         >
           {{ item }}
@@ -48,7 +48,7 @@ export default {
 
   computed: {
     data() {
-      return this.status === 'cancelled' ? ['view'] : ['view', 'check-in', 'reassign', 'reschedule', 'cancel']
+      return this.status === 'cancelled' ? ['view'] : ['view', 'check-in', 'update', 'cancel']
     },
   },
 }
