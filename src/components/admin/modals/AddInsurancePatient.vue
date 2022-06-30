@@ -22,7 +22,9 @@
             <AutoCompletePatients
               v-if="selected === 'existing'"
               v-model="patient"
-              class="col-span-2"
+              class="multiselect-white flex-1"
+              :custom-label="(value) => `${$utils.concatData(value, ['title', 'first_name', 'last_name'])} - (${value.mr_number})`"
+              @input="searchData"
             />
           </div>
           <AddInsuranceForm
@@ -56,13 +58,14 @@ import { required, email } from 'vuelidate/lib/validators'
 import AddInsuranceForm from '@/components/forms/AddInsuranceForm'
 import { emailFormatter } from '@/services/custom-validators'
 import modalMixin from '@/mixins/modal'
+import DataMixin from '@/mixins/paginated'
 
 export default {
   name: 'AddInsurancePatient',
 
   components: { AddInsuranceForm },
 
-  mixins: [modalMixin],
+  mixins: [modalMixin, DataMixin],
 
   data() {
     return {
@@ -106,18 +109,22 @@ export default {
       date_of_birth: { required },
       maximum_dependents_allowed: { required },
       occupational_role: { required },
-      address: { required},
+      address: { required },
     },
   },
 
   events: {
     'insurance-patient:add:open': function(){
+      let id = this.$route.params.id
       this.open()
+      this.form.managing_organization = id
       this.type = 'add'
     },
     'insurance-patient:edit:open': function(data){
       this.open()
+      let id = this.$route.params.id
       this.form = data.params[0]
+      this.form.managing_organization = id
       this.type = 'update'
     },
   },
@@ -138,7 +145,7 @@ export default {
       updateClient: 'clients/update',
       addBenefactor: 'corporate/createInsuranceBenefactor',
       updateEmployee: 'corporate/updateBeneficiary',
-      getBeneficiaries: 'corporate/getCorporate',
+      getBeneficiaries: 'corporate/getBeneficiaries',
     }),
 
     submit(){
@@ -164,6 +171,7 @@ export default {
       let id = this.$route.params.id
       this.form.date_of_birth = this.form.birth_date
       this.form.managing_organization = id
+      this.form.mr_number = this.patient?.mr_number
 
       try {
         await this.addBenefactor({ id, form:  {...this.form} })
@@ -184,6 +192,7 @@ export default {
         // }
         // // this.$router.go(-1)
         // this.loading = false
+        this.close()
       } catch (error) {
         this.$toast.open({
           message: error.message || 'Something went wrong!',
@@ -195,7 +204,7 @@ export default {
 
     async update() {
       this.loading = true
-      this.form.beneficiaryId = this.form.beneficiaries[0].id
+      this.form.beneficiary_id = this.form.uuid
       try {
         await this.updateEmployee(this.form)
         this.$toast.open({
