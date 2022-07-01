@@ -60,7 +60,7 @@ export default {
     try {
       const provider = rootState.auth.provider
       const { data } = await CorporateAPI.updateBeneficiary(provider.id, payload)
-      commit(UPDATE_CORPORATE, data.results)
+      commit(UPDATE_CORPORATE, data.data)
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error

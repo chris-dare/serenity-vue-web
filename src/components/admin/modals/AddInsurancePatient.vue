@@ -178,24 +178,10 @@ export default {
         this.$toast.open('Client beneficiary successfully created')
         this.$resetData()
         this.getBeneficiaries(id)
-        // if (data) {
-        //   this.$toast.open({
-        //     message: 'Client employee successfully created',
-        //   })
-        //   this.close()
-        // } else {
-        //   this.$toast.open({
-        //     message: 'Creating employee failed',
-        //     type: 'error',
-        //   })
-        //   this.close()
-        // }
-        // // this.$router.go(-1)
-        // this.loading = false
         this.close()
       } catch (error) {
         this.$toast.open({
-          message: error.message || 'Something went wrong!',
+          message: 'Something went wrong!',
           type: 'error',
         })
         this.loading = false
@@ -204,17 +190,19 @@ export default {
 
     async update() {
       this.loading = true
+      let id = this.$route.params.id
       this.form.beneficiary_id = this.form.uuid
       try {
         await this.updateEmployee(this.form)
         this.$toast.open({
           message: 'Employee successfully updated',
         })
+        this.getBeneficiaries(id)
         this.close()
         this.loading = false
       } catch (error) {
         this.$toast.open({
-          message: error.message || 'Something went wrong!',
+          message: 'Something went wrong!',
           type: 'error',
         })
         this.loading = false
