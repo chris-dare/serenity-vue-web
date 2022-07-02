@@ -14,7 +14,7 @@
       valid-color="#0B6B74"
       required
       type="tel"
-      :data-qa="qaName"
+      :data-cy="cyName"
     />
     <p
       v-if="errorMessage"
@@ -83,7 +83,7 @@ export default {
       return phoneNumber.format('E.164')
     },
 
-    qaName() {
+    cyName() {
       return this.label?.split(' ').join('_').toLowerCase()
     },
   },

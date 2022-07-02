@@ -20,7 +20,7 @@
         <div v-if="editable">
           <router-link
             tag="div"
-            :to="{name: 'DiagnosticSelectPatient'}"
+            :to="{ name: 'BillingSelectPatient' }"
             class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
           >
             <img
@@ -57,7 +57,13 @@
                 <span class="text-primary">{{ lab.code.display }}</span>
               </p>
               <p
-                v-if="lab.price_tier"
+                v-if="lab.price"
+                class="text-secondary text-sm"
+              >
+                Price: <span class="text-primary">{{ $currency(lab.price.charge, lab.price.currency).format() }} - {{ lab.price.description }}</span>
+              </p>
+              <p
+                v-if="lab.price_tier && !lab.price"
                 class="text-secondary text-sm"
               >
                 Price: <span class="text-primary">{{ priceTier(lab) }}</span>
@@ -67,7 +73,7 @@
           <div v-if="editable">
             <router-link
               tag="div"
-              :to="{ name: 'DiagnosticService' }"
+              :to="{ name: 'BillingService' }"
               class="bg-serenity-light-gray w-10 h-10 rounded-full ml-6 flex items-center justify-center"
             >
               <img
@@ -100,9 +106,10 @@
       </SeButton>
       <SeButton
         :loading="loading"
+        data-cy="raise-bill-button"
         @click="save"
       >
-        {{ this.summary.account_id || this.summary.amount ? 'Complete payment' : 'Raise Bill' }}
+        {{ label }}
       </SeButton>
     </div>
   </div>
@@ -111,11 +118,12 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import modelMixin from '@/mixins/model'
+import paymentMixin from '@/mixins/payment'
 
 export default {
   name: 'BillingDetail',
 
-  mixins: [modelMixin],
+  mixins: [modelMixin, paymentMixin],
 
   props: {
     summary: {
@@ -127,23 +135,34 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    label: {
+      type: String,
+      default: 'Complete Payment',
+    },
   },
 
   data() {
     return {
       loading: false,
       form: {},
+      previous: 'BillingPayment',
     }
   },
 
   computed: {
     ...mapState({
       provider: (state) => state.auth.provider,
+      services: (state) => state.auth.services,
     }),
 
     ...mapGetters({
       labProceedures: 'services/labProceedures',
     }),
+
+    isBillCreate() {
+      return this.$route.query.type === 'create'
+    },
 
     options() {
       let options = [
@@ -180,21 +199,47 @@ export default {
       createServiceRequest: 'patients/createServiceRequest',
       refresh: 'appointments/refreshCurrentAppointment',
       raiseBillForService: 'billing/raiseBill',
+      raiseAdminBill: 'billing/raiseAdministrativeBill',
       payForService: 'billing/userPayService',
     }),
 
+    async raiseAdministrativeBill() {
+      let payload = {
+        patient_id: this.form.patient.uuid,
+        practitioner_id: this.$practitionerId,
+      }
+      let results = this.form.labs.map(lab => {return {...payload, healthcare_service_id: lab.code.uuid, price_tier_id: lab.price.uuid}})
+
+      await this.raiseAdminBill(results)
+      // settle bill
+
+      this.bill = { ...this.form, patientid: this.form.patient.uuid }
+      await this.payChargeItems(this.form.labs)
+      this.$router.push({ name: 'Dashboard' })
+
+
+    },
+
     async save() {
-      this.loading = true
-      if(this.summary.patient.id){
-        if (this.summary.account_id || this.summary.amount){
-          this.settleBill()
-        } else {
-          this.raiseBill()
-        }
-      } else {
+      if (!this.form.patient.id) {
         this.$toast.error('Please select a patient')
         this.loading = false
+        return
       }
+      
+      if (this.isBillCreate) {
+        this.raiseAdministrativeBill()
+        return
+      }
+
+      this.loading = true
+
+      if (this.form.account_id || this.form.amount){
+        this.settleBill()
+        return
+      }
+      
+      this.raiseBill()
     },
 
     priceTier(lab) {
@@ -316,7 +361,7 @@ export default {
         this.$emit('back')
         return
       }
-      this.$router.push({ name: 'BillingPayment' })
+      this.$router.push({ name: this.previous, query: { ...this.$route.query } })
     },
   },
 }

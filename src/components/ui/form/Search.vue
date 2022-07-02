@@ -6,7 +6,7 @@
     <cv-search
       :value="value"
       :placeholder="placeholder"
-      :data-qa="qaName"
+      :data-cy="cyName"
       @input="$emit('input', $event)"
     />
   </cv-form>
@@ -26,11 +26,10 @@ export default {
       type: String,
       default: 'Search',
     },
-  },
 
-  computed: {
-    qaName() {
-      return this.label?.split(' ').join('_').toLowerCase()
+    cyName: {
+      type: String,
+      default: 'search',
     },
   },
 }

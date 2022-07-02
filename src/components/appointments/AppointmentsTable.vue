@@ -76,7 +76,7 @@
           <div class="flex items-center cursor-pointer space-x-6">
             <AppointmentTableActions
               :status="row.status"
-              :data-qa="`table-actions-${row.id}`"
+              :data-cy="`table-actions-${row.id}`"
               @update="edit(row)"
               @cancel="confirmRemove(row)"
               @view="view(row)"

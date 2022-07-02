@@ -61,6 +61,12 @@ export default {
           label: 'Raise bill',
           description: 'Raise a new bill for patient',
           type: 'cash',
+          value: 'raise',
+        },
+        {
+          label: 'Create bill',
+          description: 'Create a new bill for patient',
+          type: 'cash',
           value: 'create',
         },
         
@@ -90,8 +96,11 @@ export default {
       case 'clients':
         this.$router.push({ name: 'CorporateClients' })
         break
-      case 'create':
+      case 'raise':
         this.$router.push({ name: 'BillingSelectPatient' })
+        break
+      case 'create':
+        this.$router.push({ name: 'BillingSelectPatient', query: {type: 'create'} })
         break
 
       default:
