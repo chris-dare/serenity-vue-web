@@ -20,7 +20,9 @@
               <AutoCompletePatients
                 v-if="selected === 'existing'"
                 v-model="patient"
-                class="col-span-2"
+                class="multiselect-white flex-1"
+                :custom-label="(value) => `${$utils.concatData(value, ['title', 'first_name', 'last_name'])} - (${value.mr_number})`"
+                @input="searchData"
               />
             </div>
             <div
@@ -136,11 +138,12 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import { required, email } from 'vuelidate/lib/validators'
 import { emailFormatter } from '@/services/custom-validators'
 import modalMixin from '@/mixins/modal'
+import DataMixin from '@/mixins/paginated'
 
 export default {
   name: 'AddCorporatePatient',
 
-  mixins: [modalMixin],
+  mixins: [modalMixin, DataMixin],
 
   data() {
     return {

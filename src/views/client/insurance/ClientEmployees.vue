@@ -20,7 +20,7 @@
 
       <DataTable
         ref="table"
-        :data="filteredData"
+        :data="filteredData || []"
         :columns="columns"
         :pagination="pagination"
         :loading="loading"
@@ -111,7 +111,7 @@ export default {
 
   methods: {
     ...mapActions({
-      getData: 'corporate/getCorporate',
+      getData: 'corporate/getBeneficiaries',
       addToCurrent: 'corporate/addToCurrentDependent',
       suspendMember: 'clients/suspendMember',
     }),
@@ -132,7 +132,7 @@ export default {
     },
 
     addCurrent(client){
-      this.$router.push({ name: 'Billing:Patient', params: { id: client.patientId }})
+      this.$router.push({ name: 'Billing:Patient', params: { id: client.patient }})
     },
 
     async suspendCurrent(client){

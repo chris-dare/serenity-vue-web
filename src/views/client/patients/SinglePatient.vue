@@ -66,7 +66,7 @@ export default {
         }
         try {
           this.loading = true
-          await this.initSinglePatientInformation(this.id)
+          this.initSinglePatientInformation(this.id)
           this.loading = false
         } catch (error) {
           this.error = error.detail || 'Error loading page. Please check your internet connection and try again.'
