@@ -8,7 +8,18 @@ export default {
     try {
       const { data } = await CorporateAPI.list(id)
       commit(SET_CORPORATE, data.data)
-    } catch ({ response: { data: error } }) {
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
+    }
+  },
+
+  async getBeneficiaries({ commit, rootState }, id) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await CorporateAPI.getBeneficiaries({id: provider.id, company: id})
+      commit(SET_CORPORATE, data.results)
+    } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
     }
@@ -18,7 +29,7 @@ export default {
     try {
       const { data } = await CorporateAPI.create(payload)
       commit(UPDATE_CORPORATE, data.data)
-    } catch ({ response: { data: error } }) {
+    } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
     }
@@ -29,7 +40,7 @@ export default {
     try {
       const { data } = await ClientsAPI.createBenefactor(provider.id, payload)
       commit(UPDATE_CORPORATE, data.data)
-    } catch ({ response: { data: error } }) {
+    } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
     }
@@ -39,17 +50,18 @@ export default {
     try {
       const { data } = await CorporateAPI.update(payload)
       commit(UPDATE_CORPORATE, data.results)
-    } catch ({ response: { data: error } }) {
+    } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
     }
   },
 
-  async updateBeneficiary({ commit }, payload) {
+  async updateBeneficiary({ commit, rootState }, payload) {
     try {
-      const { data } = await CorporateAPI.updateBeneficiary(payload)
-      commit(UPDATE_CORPORATE, data.results)
-    } catch ({ response: { data: error } }) {
+      const provider = rootState.auth.provider
+      const { data } = await CorporateAPI.updateBeneficiary(provider.id, payload)
+      commit(UPDATE_CORPORATE, data.data)
+    } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
     }
@@ -59,7 +71,7 @@ export default {
     try {
       const { data } = await CorporateAPI.listDependent(id)
       commit(SET_DEPENDENT, data.returnedData)
-    } catch ({ response: { data: error } }) {
+    } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
     }
@@ -69,7 +81,7 @@ export default {
     try {
       const { data } = await CorporateAPI.createDependent(payload)
       commit(UPDATE_DEPENDENT, data.returnedData)
-    } catch ({ response: { data: error } }) {
+    } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
     }
@@ -78,7 +90,7 @@ export default {
   async updateDependent(payload) {
     try {
       return await CorporateAPI.updateDependent(payload)
-    } catch ({ response: { data: error } }) {
+    } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
     }
@@ -88,7 +100,7 @@ export default {
     try {
       const { data } = await CorporateAPI.updateClientAccount(payload)
       commit(UPDATE_DEPENDENT, data.results)
-    } catch ({ response: { data: error } }) {
+    } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
     }
@@ -103,7 +115,7 @@ export default {
       const provider = rootState.auth.provider
       await CorporateAPI.delete(provider.id, id)
       commit(DELETE_CORPORATE, id)
-    } catch ({ response: { data: error } }) {
+    } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
     }

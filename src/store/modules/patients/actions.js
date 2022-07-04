@@ -39,7 +39,7 @@ export default {
     // await dispatch('encounters/setEncounterFromUpcomingEncounters', visit?.upcoming_encounters, { root:true})
     await dispatch('encounters/getEncounters', { patient: id } , { root:true })
     dispatch('encounters/getVisitEncounter', { patient: id } , { root:true })
-    dispatch('patients/getReferrals', id , { root:true }) //on the fence
+    dispatch('patients/getReferrals', {patient:id} , { root:true }) //on the fence
     dispatch('resources/getObservationUnitTypes', null, { root:true })
     dispatch('resources/getVitalsUnitTypes', null, { root:true })
     dispatch('resources/getSocialHistoryUnitTypes', null, { root:true })
@@ -454,11 +454,11 @@ export default {
     }
   },
 
-  async getReferrals({ commit, rootState }, patient) {
+  async getReferrals({ commit, rootState }, params) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await PatientsAPI.getReferrals(provider.id, patient)
-      commit(SET_REFERRALS, data)
+      const { data } = await PatientsAPI.getReferrals(provider.id, params)
+      commit(SET_REFERRALS, data.data)
 
     } catch (error) {
       Vue.prototype.$utils.error(error)
