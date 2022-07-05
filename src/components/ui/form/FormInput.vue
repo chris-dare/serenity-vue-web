@@ -25,7 +25,7 @@
       :type="type"
       v-bind="$attrs"
       class="se-no-label"
-      :data-qa="qaName"
+      :data-cy="cyName"
       v-on="$listeners"
     />
   </div>
@@ -73,7 +73,7 @@ export default {
       return 'cv-text-input'
     },
 
-    qaName() {
+    cyName() {
       return this.label?.split(' ').join('_').toLowerCase()
     },
   },

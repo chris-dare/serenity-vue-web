@@ -1,5 +1,8 @@
 <template>
-  <Dropdown :visible.sync="visible">
+  <Dropdown
+    data-cy="user-header-dropdown"
+    :visible.sync="visible"
+  >
     <div
       slot="label"
       class="w-12 flex items-center justify-center h-12"
@@ -31,7 +34,7 @@
           <div
             v-for="(organization, index) in organizations"
             :key="index"
-            :data-qa="organization.organization_name"
+            :data-cy="organization.organization_name"
             class="text-white hover:bg-placeholder px-4 py-2 cursor-pointer"
             :class="{'bg-placeholder': $providerId === organization.organization_uuid}"
             @click="switchOrganization(organization)"

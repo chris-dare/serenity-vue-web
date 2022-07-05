@@ -59,6 +59,10 @@ export default {
     return http.post(`providers/${providerId}/finance/raise-service-request-bill`, params)
   },
 
+  raiseAdministrativeBill(providerId, params) {
+    return http.post(`providers/${providerId}/finance/administrative-bill`, params)
+  },
+
   invoicePay(providerId, invoiceId, params) {
     return http.post(`providers/${providerId}/finance/invoices/${invoiceId}/pay`, params)
   },

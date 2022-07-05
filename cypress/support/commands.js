@@ -9,8 +9,31 @@
 // ***********************************************
 //
 //
+
+import 'cypress-wait-until'
+
+
 // -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
+Cypress.Commands.add('login', (email = 'seddie@serenity.health', password = 'betacapa123') => {
+  cy.clearLocalStorage()
+  cy.window().then((win) => {
+    win.sessionStorage.clear()
+  })
+  cy.visit(`${Cypress.env('BASE_URL')}/login`)
+  cy.get('[data-cy=email] input').should('exist').first().clear().type(email).blur()
+  cy.get('[data-cy=password] input').should('exist').first().clear().type(password).blur()
+  cy.get('[data-cy=submit]').click()
+
+  cy.waitUntil(() =>  cy.get('[data-cy=set-location-radio-button]').should('exist'))
+
+  cy.get('[data-cy=set-location-radio-button]').first().click({ force: true })
+  cy.get('[data-cy=set-location-submit]').click({force: true})
+
+  cy.get('[data-cy=user-header-dropdown]').click()
+  cy.contains('QA Test Organization').click()
+
+})
+
 //
 //
 // -- This is a child command --
