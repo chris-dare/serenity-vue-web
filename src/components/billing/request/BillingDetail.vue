@@ -204,19 +204,25 @@ export default {
     }),
 
     async raiseAdministrativeBill() {
-      let payload = {
-        patient_id: this.form.patient.uuid,
-        practitioner_id: this.$practitionerId,
+      try {
+        this.loading = true
+        let payload = {
+          patient_id: this.form.patient.uuid,
+          practitioner: this.$practitionerId,
+        }
+        let results = this.form.labs.map(lab => {return {...payload, healthcare_service_id: lab.code.uuid, price_tier_id: lab.price.uuid}})
+
+        const bills = await this.raiseAdminBill(results)
+
+        this.bill = { ...this.form, patientid: this.form.patient.uuid }
+        await this.payChargeItems(bills)
+        this.$router.push({ name: 'Dashboard' })
+      } catch (error) {
+        this.$utils.error(error)
+        // 
+      } finally {
+        this.loading = false
       }
-      let results = this.form.labs.map(lab => {return {...payload, healthcare_service_id: lab.code.uuid, price_tier_id: lab.price.uuid}})
-
-      await this.raiseAdminBill(results)
-      // settle bill
-
-      this.bill = { ...this.form, patientid: this.form.patient.uuid }
-      await this.payChargeItems(this.form.labs)
-      this.$router.push({ name: 'Dashboard' })
-
 
     },
 

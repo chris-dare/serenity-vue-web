@@ -213,7 +213,7 @@ export default {
         this.$v.$touch()
 
         if (this.$v.$invalid) {
-          this.$toast.error('Please select an account')
+          this.$toast.error('Please select a valid account')
           return
         }
         this.addToStoreData(this.form)

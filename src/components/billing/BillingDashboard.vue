@@ -13,7 +13,10 @@
         @click="change(dashboard)"
       />
     </div>
-    <p class="text-serenity-primary my-6 font-semibold">
+    <p
+      data-cy="page-header-bills-dashboard"
+      class="text-serenity-primary my-6 font-semibold"
+    >
       Bills / invoices
     </p>
     <h3>{{ $route.name }}</h3>
