@@ -62,8 +62,26 @@ export default {
     commit(SET_ENCOUNTER, encounters.find(encounter => encounter.status === 'in-progress' || encounter.status === 'planned'))
   },
 
-  setPatientCurrentEncounter({commit}, encounter) {
-    commit(SET_PATIENT_CURRENT_ENCOUNTER, encounter)
+  async setPatientCurrentEncounter({ commit, rootState, dispatch }, encounter) {
+    const provider = rootState.auth.provider
+
+    const {data} = await EncountersAPI.get(provider.id, encounter.id)
+    commit(SET_PATIENT_CURRENT_ENCOUNTER, data)
+    dispatch(
+      'patients/getServiceRequests',
+      { encounter: encounter.id, patient: encounter.patient },
+      { root: true },
+    )
+    dispatch(
+      'diagnostic/getDiagnosticReports',
+      { encounter: encounter.id, patient: encounter.patient },
+      { root: true },
+    )
+    dispatch(
+      'patients/getMedicationRequests',
+      { encounter: encounter.id, patient: encounter.patient },
+      { root: true },
+    )
   },
 
   setPatientCurrentEncounterOverride({commit}, status) {
