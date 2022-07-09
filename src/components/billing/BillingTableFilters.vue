@@ -8,12 +8,12 @@
       <div v-if="beginPos">
         <slot />
       </div>
-      <div class="flex w-2/3">
+      <div class="flex">
         <DatePicker
           v-model="localValue.date"
           placeholder="Date range"
           type="range"
-          class="w-1/3 se-white-date-picker"
+          class="flex-1 se-white-date-picker"
         />
         <MultiSelect
           v-if="$router.currentRoute.path !== '/' && $router.currentRoute.path !== '/billing'"
@@ -21,7 +21,7 @@
           placeholder="Bill Detail"
           :multiple="false"
           :options="['Summarized', 'Detailed']"
-          class="multiselect-white w-1/3"
+          class="multiselect-white flex-1"
         />
         <MultiSelect
           v-if="$router.currentRoute.path !== '/' && $router.currentRoute.path !== '/billing'"
@@ -29,7 +29,7 @@
           placeholder="Payer view Diagnoses"
           :multiple="false"
           :options="['True', 'False']"
-          class="multiselect-white w-1/3"
+          class="multiselect-white flex-1"
         />
       </div>
       <div v-if="!beginPos">

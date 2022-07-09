@@ -51,7 +51,7 @@
               v-model="selectedLocation"
               class="no-label-input se-black-input hover:bg-serenity-gray focus:bg-serenity-gray mx-2 lg:mx-6"
               label="false"
-              data-qa="locations-select"
+              data-cy="locations-select"
               @change="changeLocation"
             >
               <cv-select-option
@@ -69,7 +69,7 @@
             v-model="selected"
             class="no-label-input se-dark-input hover:bg-serenity-gray focus:bg-serenity-gray mx-2 lg:mx-6 md:block hidden"
             label="false"
-            data-qa="workspaces-select"
+            data-cy="workspaces-select"
             @change="changeWorkspace"
           >
             <cv-select-option

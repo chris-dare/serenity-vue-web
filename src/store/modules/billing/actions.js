@@ -194,6 +194,17 @@ export default {
       throw error.data || error
     }
   },
+  
+  async raiseAdministrativeBill({ rootState }, params ) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await BillingAPI.raiseAdministrativeBill(provider.id, params)
+      return data.data
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error.data || error
+    }
+  },
 
   async corporatePayForService({ commit }, { patientId, chargeItemId, params }) {
     try {

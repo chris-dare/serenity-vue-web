@@ -3,7 +3,8 @@ export default {
   data() {
     return {
       icon: ChevronRight,
-      loading:false,
+      loading: false,
+      form: {},
     }
   },
 

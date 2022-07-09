@@ -33,7 +33,7 @@
         :custom-label="customLabel"
         class="group"
         v-bind="$attrs"
-        :data-qa="qaName"
+        :data-cy="cyName"
         @input="$emit('select', $event)"
         @search-change="$emit('search-change', $event)"
         @tag="$emit('tag', $event)"
@@ -171,7 +171,7 @@ export default {
       return isEmpty(this.selected)
     },
 
-    qaName() {
+    cyName() {
       return this.title?.split(' ').join('_').toLowerCase()
     },
   },

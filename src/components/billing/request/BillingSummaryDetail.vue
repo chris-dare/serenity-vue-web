@@ -1,8 +1,9 @@
 <template>
   <div>
-    <BillDetail
+    <BillingDetail
       :summary="storeData"
       :editable="true"
+      label="Raise Bill"
     />
     <BillingDetailsModal
       :appointment="storeData"
@@ -13,7 +14,7 @@
 <script>
 import Checkmark from '@carbon/icons-vue/es/checkmark--outline/32'
 import BillingDetailsModal from '@/components/appointments/BillingDetailsModal'
-import BillDetail from '@/components/billing/request/BillingDetail'
+import BillingDetail from '@/components/billing/request/BillingDetail'
 import { mapActions, mapState } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
@@ -21,7 +22,7 @@ import MultiStep from '@/mixins/multistep'
 export default {
   name: 'BillingSummaryDetail',
 
-  components: { BillingDetailsModal, BillDetail },
+  components: { BillingDetailsModal, BillingDetail },
 
   mixins: [MultiStep],
 
@@ -36,17 +37,16 @@ export default {
     return {
       icon: Checkmark,
       previous: 'BillingPayment',
-      next: 'Orders',
-      parent: 'BillingDashboard',
+      next: 'Dashboard',
+      parent: 'Dashboard',
     }
   },
 
 
   computed: {
     ...mapState({
-      storeData: (state) => state.appointments.currentAppointment,
+      storeData: (state) => state.checkout.currentCheckout,
     }),
-
     isStartVisitModal() {
       return this.modal && !this.$route.path.includes('encounter')
     },
@@ -56,13 +56,11 @@ export default {
     },
   },
 
-  beforeMount() {},
-
   methods: {
     ...mapActions({
       createAppointment: 'appointments/createAppointment',
-      refresh: 'appointments/refreshCurrentAppointment',
-      addToStoreData: 'appointments/addToCurrentAppointment',
+      refresh: 'checkout/refreshCheckout',
+      addToStoreData: 'checkout/addToCheckout',
     }),
 
     async save() {
@@ -100,8 +98,6 @@ export default {
         })
         this.loading = false
       }
-
-
     },
   },
 

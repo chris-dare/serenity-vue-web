@@ -10,7 +10,10 @@ import {
 } from './mutation-types'
 
 export default {
-  async getServices({ commit, rootState }) {
+  async getServices({ commit, rootState, state }) {
+    if (state.services.length) {
+      return
+    }
     try {
       const provider = rootState.auth.provider
       const { data } = await ServicesAPI.list(provider.id)
