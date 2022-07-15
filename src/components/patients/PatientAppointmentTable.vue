@@ -28,13 +28,13 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
-              <p>{{ row.appointmentType | capitalize }}</p>
+              <p>{{ row.appointment_type | capitalize }}</p>
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
-              <p>{{ $date.formatDate(row.start, 'dd MMM, yyyy') }}</p>
-              <p class="text-secondary text-xs">{{ $date.formatDate(row.start, 'HH:mm a') }} - {{ $date.formatDate(row.end, 'HH:mm a') }}</p>
+              <p>{{ $date.formatDate(row.slot_start, 'dd MMM, yyyy') }}</p>
+              <p class="text-secondary text-xs">{{ $date.formatDate(row.slot_start, 'HH:mm a') }} - {{ $date.formatDate(row.slot_end, 'HH:mm a') }}</p>
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters, mapState} from 'vuex'
 import DataMixin from '@/mixins/data'
 
 export default {
@@ -70,13 +70,16 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      patient: state => state.patients.currentPatient,
+    }),
     ...mapGetters({
       appointments: 'appointments/patientAppointments',
       noDataLabel: 'patients/getCurrentPatientNoDataLabel',
     }),
 
     data() {
-      return this.$date.sortByDate(this.appointments(this.$route.params.id), 'start', 'desc')
+      return this.$date.sortByDate(this.appointments(this.patient.uuid), 'start', 'desc')
     },
   },
 }

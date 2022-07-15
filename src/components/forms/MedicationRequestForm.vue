@@ -50,8 +50,8 @@
 
           <cv-text-input
             v-model="drug.medication_request_dosage_instruction[0].period"
+            v-mask="'###############'"
             label="Period"
-            type="number"
             placeholder="eg 4 days"
             class="inherit-full-input"
           />
