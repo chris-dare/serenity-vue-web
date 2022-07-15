@@ -148,7 +148,7 @@ export default {
         'Items',
         // 'Action',
       ],
-      nestedTableColumns: ['Date', 'Bill ID', 'Priority', 'Payee Type', 'Status'],
+      nestedTableColumns: ['Date', 'Bill ID', 'Payee Type', 'Amount', 'Status'],
       selectedFilter: '',
       searchTerms: ['patient_detail.name'],
       data: [],
@@ -247,7 +247,7 @@ export default {
         return 'primary'
       }
 
-      if (status === 'aborted') {
+      if (status === 'CANCELLED') {
         return 'error'
       }
 

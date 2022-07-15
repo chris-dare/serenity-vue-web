@@ -197,7 +197,7 @@ export default {
     ...mapActions({
       createDiagnosticVisit: 'visits/createDiagnosticVisit',
       createServiceRequest: 'patients/createServiceRequest',
-      refresh: 'appointments/refreshCurrentAppointment',
+      refresh: 'checkout/refreshCheckout',
       raiseBillForService: 'billing/raiseBill',
       raiseAdminBill: 'billing/raiseAdministrativeBill',
       payForService: 'billing/userPayService',
