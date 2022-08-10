@@ -4,7 +4,7 @@
     class="flex items-center justify-between mt-4"
     @submit.prevent
   >
-    <div class="flex w-full items-end justify-between space-x-2">
+    <div class="flex w-full items-end align-items-center justify-between ">
       <div v-if="beginPos">
         <slot />
       </div>
@@ -13,7 +13,7 @@
           v-model="localValue.date"
           placeholder="Date range"
           type="range"
-          class="flex-1 se-white-date-picker"
+          class=" se-white-date-picker"
         />
         <MultiSelect
           v-if="$router.currentRoute.path !== '/' && $router.currentRoute.path !== '/billing'"
@@ -21,7 +21,7 @@
           placeholder="Bill Detail"
           :multiple="false"
           :options="['Summarized', 'Detailed']"
-          class="multiselect-white flex-1"
+          class="multiselect-white mx-3"
         />
         <MultiSelect
           v-if="$router.currentRoute.path !== '/' && $router.currentRoute.path !== '/billing'"
@@ -29,7 +29,14 @@
           placeholder="Payer view Diagnoses"
           :multiple="false"
           :options="['True', 'False']"
-          class="multiselect-white flex-1"
+          class="multiselect-white "
+        />
+        <Search
+          v-if="$router.currentRoute.path !== '/' && $router.currentRoute.path !== '/billing'"
+          v-model="localValue.mr_number"
+          placeholder="Search MR no"
+          type="search"
+          class="se-input-white mx-3"
         />
       </div>
       <div v-if="!beginPos">

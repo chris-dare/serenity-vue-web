@@ -4,13 +4,13 @@
       v-model="search"
       placeholder="Search for patient, enter name or MR number"
       @input="searchData"
-    /> -->
+    />-->
 
     <BillingTableFilters v-model="lists">
       <SeButton
         variant="secondary"
         :loading="printLoading"
-        @click="print"
+        @click="$trigger('printbill:update:open', {...filters})"
       >
         Print
       </SeButton>
@@ -46,6 +46,11 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
+              <p>{{ row.currency }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
               <p>{{ row.payer_bill_claims.length }}</p>
             </div>
           </cv-data-table-cell>
@@ -63,7 +68,7 @@
                 >
               </div>
             </div>
-          </cv-data-table-cell> -->
+          </cv-data-table-cell>-->
         </template>
         <template #expand="{ row }">
           <div class="px-8">
@@ -76,9 +81,7 @@
             >
               <template #default="request">
                 <cv-data-table-cell>
-                  <div>
-                    {{ $date.formatDate(request.row.created_at, 'dd MMM, yyyy') }}
-                  </div>
+                  <div>{{ $date.formatDate(request.row.created_at, 'dd MMM, yyyy') }}</div>
                 </cv-data-table-cell>
                 <cv-data-table-cell>
                   <div>
@@ -93,6 +96,11 @@
                 <cv-data-table-cell>
                   <div>
                     <p>{{ $currency(request.row.amount).format() }}</p>
+                  </div>
+                </cv-data-table-cell>
+                <cv-data-table-cell>
+                  <div>
+                    <p>{{ request.row.currency }}</p>
                   </div>
                 </cv-data-table-cell>
                 <cv-data-table-cell>
@@ -114,21 +122,23 @@
     </div>
 
     <BillingSettlePaymentModal />
+    <PrintBillModal />
   </div>
 </template>
 
 <script>
-import { mapGetters,mapState, mapActions } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import DataMixin from '@/mixins/paginated'
 import debounce from 'lodash/debounce'
 import BillingSettlePaymentModal from '@/components/billing/BillingSettlePaymentModal'
 import BillingTableFilters from '@/components/billing/BillingTableFilters'
+import PrintBillModal from '@/components/billing/topup/PrintBill'
 import ClientAPI from '@/api/clients'
 
 export default {
   name: 'Cldata',
 
-  components: {BillingSettlePaymentModal, BillingTableFilters},
+  components: { BillingSettlePaymentModal, BillingTableFilters,PrintBillModal },
 
 
   mixins: [DataMixin],
@@ -147,10 +157,11 @@ export default {
         'Patient',
         'Cashier',
         'Total Bill',
+        '',
         'Items',
         // 'Action',
       ],
-      nestedTableColumns: ['Date', 'Bill ID', 'Priority', 'Payee Type', 'Status' ],
+      nestedTableColumns: ['Date', 'Bill ID', 'Payee Type', 'Amount', 'Currency', 'Status'],
       selectedFilter: '',
       searchTerms: ['patient_detail.name'],
       data: [],
@@ -221,11 +232,11 @@ export default {
       }
     },
 
-    searchInvoices: debounce(function(search) {
+    searchInvoices: debounce(function (search) {
       this.refresh({ search, page: this.page, page_size: this.pageLength })
     }, 300, false),
 
-    searchByDate(val){
+    searchByDate(val) {
       let filters = { ...this.filters }
 
       if (val.end) {
@@ -239,6 +250,7 @@ export default {
       this.getData()
     },
 
+
     settle(bill) {
       this.$trigger('corporate:settle:open', bill)
     },
@@ -248,12 +260,12 @@ export default {
         return 'primary'
       }
 
-      if (status === 'aborted') {
+      if (status === 'CANCELLED') {
         return 'error'
       }
 
       return 'success'
-    }, 
+    },
     async print() {
       let filters = { ...this.filters }
       let id = this.$route.params.id

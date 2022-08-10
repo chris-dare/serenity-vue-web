@@ -10,7 +10,7 @@
       <SeButton
         variant="secondary"
         :loading="printLoading"
-        @click="print"
+        @click="$trigger('printbill:update:open', {...filters})"
       >
         Print
       </SeButton>
@@ -112,6 +112,7 @@
     </div>
 
     <BillingSettlePaymentModal />
+    <PrintBillModal />
   </div>
 </template>
 
@@ -121,12 +122,13 @@ import DataMixin from '@/mixins/paginated'
 import debounce from 'lodash/debounce'
 import BillingSettlePaymentModal from '@/components/billing/BillingSettlePaymentModal'
 import BillingTableFilters from '@/components/billing/BillingTableFilters'
+import PrintBillModal from '@/components/billing/topup/PrintBill'
 import ClientAPI from '@/api/clients'
 
 export default {
   name: 'Cldata',
 
-  components: { BillingSettlePaymentModal, BillingTableFilters },
+  components: { BillingSettlePaymentModal, BillingTableFilters,PrintBillModal },
 
 
   mixins: [DataMixin],

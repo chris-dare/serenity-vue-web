@@ -13,6 +13,9 @@ geckodriver.log
 .env.local
 .env.*.local
 
+
+package-lock.json
+yarn.lock
 # Log files
 npm-debug.log*
 yarn-debug.log*
