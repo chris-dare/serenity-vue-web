@@ -5,6 +5,12 @@
     class="max-w-7xl mx-auto"
   >
     <div class="space-y-4">
+      <div
+        class="text-l font-semibold cursor-pointer"
+        @click="$router.go(-1)"
+      >
+        Back
+      </div>
       <InsuranceDetailSummary
         :client="{...client, ...clientAccount}"
         @edit="editClient"

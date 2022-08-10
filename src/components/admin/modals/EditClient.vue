@@ -267,10 +267,11 @@ export default {
           id: this.form.uuid,
           action: this.form.state,
         })
+        console.log(data, id)
         if (data.success) {
           let payload = this.client
-          payload.status = data.status
-          this.getClientAccount(id)
+          payload.status = data.data.status
+          await this.getClientAccount(id)
           this.addToClient(payload)
           this.$toast.open({
             message: data.message || 'Client successfully updated',
