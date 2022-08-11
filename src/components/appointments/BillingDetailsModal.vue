@@ -157,7 +157,7 @@ export default {
       
       try {
         this.printLoading = true
-        await this.exportChargeItem(this.appointment.charge_item_id)
+        await this.exportChargeItem({id: this.appointment.charge_item_id})
         this.printLoading = false
       } catch (error) {
         this.printLoading = false

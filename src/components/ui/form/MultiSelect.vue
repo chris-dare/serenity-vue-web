@@ -43,7 +43,7 @@
           slot="clear"
         >
           <div
-            v-if="!isEmptyData"
+            v-if="!isEmptyData && !hideClose"
             class="multiselect__clear"
             @mousedown.prevent.stop="clear"
           >
@@ -149,6 +149,11 @@ export default {
     },
 
     required: {
+      type: Boolean,
+      default: false,
+    },
+
+    hideClose: {
       type: Boolean,
       default: false,
     },

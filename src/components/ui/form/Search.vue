@@ -7,6 +7,7 @@
       :value="value"
       :placeholder="placeholder"
       :data-cy="cyName"
+      :class="{'small-input': small}"
       @input="$emit('input', $event)"
     />
   </cv-form>
@@ -30,6 +31,10 @@ export default {
     cyName: {
       type: String,
       default: 'search',
+    },
+    small: {
+      type: Boolean,
+      default: false,
     },
   },
 }

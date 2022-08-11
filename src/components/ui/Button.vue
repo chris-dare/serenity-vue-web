@@ -77,7 +77,7 @@ export default {
       type: String,
       default: 'primary',
       validator: value =>
-        ['primary', 'secondary', 'secondary-outline', 'tetiary', 'danger', 'outline', 'ghost', 'white', 'default', 'danger-outline', 'warning', 'success', 'gray'].indexOf(value) !== -1,
+        ['primary', 'secondary', 'secondary-outline', 'link', 'tetiary', 'danger', 'outline', 'ghost', 'white', 'default', 'danger-outline', 'warning', 'success', 'gray'].indexOf(value) !== -1,
     },
   },
 
@@ -121,6 +121,10 @@ export default {
 
       if (this.variant === 'tetiary') {
         return 'bg-tetiary hover:bg-tetiary text-secondary shadow-sm'
+      }
+
+      if (this.variant === 'link') {
+        return 'bg-transparent hover:bg-transparent text-secondary'
       }
 
       return 'bg-serenity-primary hover:bg-serenity-primary-highlight'

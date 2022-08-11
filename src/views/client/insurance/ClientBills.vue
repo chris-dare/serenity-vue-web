@@ -8,11 +8,12 @@
 
     <BillingTableFilters v-model="lists">
       <SeButton
-        variant="secondary"
+        variant="primary"
+        :icon="icon"
         :loading="printLoading"
         @click="$trigger('printbill:update:open', {...filters})"
       >
-        Print
+        Print all
       </SeButton>
     </BillingTableFilters>
 
@@ -46,7 +47,13 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
-              <p>{{ row.currency }}</p>
+              <CurrencySelect
+                :value="row.currency"
+                hide-close
+                class="w-20"
+                title=""
+                @input="row._currency = $event"
+              />
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
@@ -54,21 +61,16 @@
               <p>{{ row.payer_bill_claims.length }}</p>
             </div>
           </cv-data-table-cell>
-          <!-- <cv-data-table-cell>
-            <div
-              v-if="row.total_amount > 0"
-              class="flex items-center cursor-pointer"
-              @click="$trigger('billing:invoices:settle:open', {invoice: })"
-            >
-              View
-              <div class="ml-2 w-5 h-5 rounded-full bg-gray-200 flex justify-center items-center">
-                <img
-                  src="@/assets/img/view 1.svg"
-                  alt=""
-                >
-              </div>
+          <cv-data-table-cell>
+            <div>
+              <SeButton
+                variant="link"
+                @click="printInvoice(row.id, row._currency)"
+              >
+                Print <Printer class="ml-2" />
+              </SeButton>
             </div>
-          </cv-data-table-cell>-->
+          </cv-data-table-cell>
         </template>
         <template #expand="{ row }">
           <div class="px-8">
@@ -100,18 +102,33 @@
                 </cv-data-table-cell>
                 <cv-data-table-cell>
                   <div>
-                    <p>{{ request.row.currency }}</p>
+                    <CurrencySelect
+                      :value="request.row.currency"
+                      hide-close
+                      class="w-20"
+                      title=""
+                      @input="request.row._currency = $event"
+                    />
                   </div>
                 </cv-data-table-cell>
                 <cv-data-table-cell>
                   <div>
                     <Tag
-                      show-icon
                       :variant="getStatusVariant(row.status)"
                       class="cursor-pointer"
                     >
-                      {{ request.row.status }}
+                      {{ request.row.status | capitalize }}
                     </Tag>
+                  </div>
+                </cv-data-table-cell>
+                <cv-data-table-cell>
+                  <div>
+                    <SeButton
+                      variant="link"
+                      @click="printChargeItem(request.row.id, request.row._currency)"
+                    >
+                      Print <Printer class="ml-2" />
+                    </SeButton>
                   </div>
                 </cv-data-table-cell>
               </template>
@@ -134,11 +151,12 @@ import BillingSettlePaymentModal from '@/components/billing/BillingSettlePayment
 import BillingTableFilters from '@/components/billing/BillingTableFilters'
 import PrintBillModal from '@/components/billing/topup/PrintBill'
 import ClientAPI from '@/api/clients'
+import Printer from '@carbon/icons-vue/es/printer/16'
 
 export default {
-  name: 'Cldata',
+  name: 'ClientBills',
 
-  components: { BillingSettlePaymentModal, BillingTableFilters,PrintBillModal },
+  components: { BillingSettlePaymentModal, BillingTableFilters, PrintBillModal, Printer },
 
 
   mixins: [DataMixin],
@@ -159,9 +177,10 @@ export default {
         'Total Bill',
         '',
         'Items',
-        // 'Action',
+        'Action',
       ],
-      nestedTableColumns: ['Date', 'Bill ID', 'Payee Type', 'Amount', 'Currency', 'Status'],
+      icon: Printer,
+      nestedTableColumns: ['Date', 'Bill ID', 'Payee Type', 'Amount', 'Currency', 'Status', 'Action'],
       selectedFilter: '',
       searchTerms: ['patient_detail.name'],
       data: [],
@@ -196,7 +215,7 @@ export default {
       handler(val){
         if (val) {
           let values = val?.date?.split(' to ')
-          this.filters = {...val}
+          this.filters = { ...this.filters, ...val}
           this.filters.date_to = values && values[1] ? this.$date.formatQueryParamsDate(values[1]) : null
           this.filters.date_from = values && values[0] ? this.$date.formatQueryParamsDate(values[0] || Date.now()) : null
           delete this.filters.date
@@ -210,8 +229,11 @@ export default {
 
   methods: {
     ...mapActions({
-      exportBill: 'billing/exportCorporateBills',
+      exportCorporateBills: 'billing/exportCorporateBills',
+      exportInvoiceBill: 'billing/exportBill',
+      exportChargeItem: 'billing/exportChargeItem',
     }),
+
     actionOnPagination(ev) {
       this.page = ev.page
       this.pageLength = ev.length
@@ -266,6 +288,27 @@ export default {
 
       return 'success'
     },
+  
+    async printInvoice(id, currency) {
+      try {
+        this.printLoading = true
+        await this.exportInvoiceBill({ id, params: { currency }})
+        this.printLoading = false
+      } catch (error) {
+        this.printLoading = false
+      }
+    },
+
+    async printChargeItem(id, currency) {
+      try {
+        this.printLoading = true
+        await this.exportChargeItem({ id, params: { currency }})
+        this.printLoading = false
+      } catch (error) {
+        this.printLoading = false
+      }
+    },
+
     async print() {
       let filters = { ...this.filters }
       let id = this.$route.params.id
@@ -285,7 +328,7 @@ export default {
       let payload = { payer: id, ...filters }
       try {
         this.printLoading = true
-        await this.exportBill(payload)
+        await this.exportCorporateBills(payload)
         this.printLoading = false
       } catch (error) {
         this.printLoading = false

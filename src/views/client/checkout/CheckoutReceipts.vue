@@ -89,7 +89,7 @@ export default {
     async print() {
       try {
         this.loading = true
-        await this.exportBill(this.currentInvoice.uuid)
+        await this.exportBill({id:this.currentInvoice.uuid})
         this.resetCheckout()
         this.loading = false
       } catch (error) {
