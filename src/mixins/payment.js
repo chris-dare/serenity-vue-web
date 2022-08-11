@@ -86,7 +86,7 @@ export default {
     async print() {
       try {
         this.printLoading = true
-        await this.exportChargeItem(this.bill.id)
+        await this.exportChargeItem({ id: this.bill.id })
         this.printLoading = false
       } catch (error) {
         this.printLoading = false
@@ -96,7 +96,7 @@ export default {
     async printInvoice() {
       try {
         this.printLoading = true
-        await this.exportBill(this.bill.uuid)
+        await this.exportBill({ id: this.bill.uuid })
         this.printLoading = false
       } catch (error) {
         this.printLoading = false

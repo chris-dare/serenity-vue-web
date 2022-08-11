@@ -95,11 +95,11 @@ export default {
     return http.delete(`${this.url}${providerId}/bills/${id}`)
   },
 
-  print(providerId,id) {
-
+  print(providerId, id, params = {}) {
     return http({
       method: 'get',
       url: `${this.url}${providerId}/finance/invoices/${id}/print`,
+      params: {...params},
       responseType: 'blob',
     }).then((response) =>
     {
@@ -108,13 +108,13 @@ export default {
     })
   },
 
-  printChargeItem(providerId,id) {
+  printChargeItem(providerId, id, params) {
     return http({
       method: 'get',
       url: `${this.url}${providerId}/finance/charge-items/${id}/print`,
+      params: { ...params },
       responseType: 'blob',
-    }).then((response) =>
-    {
+    }).then((response) => {
       const url = window.URL.createObjectURL(new Blob([response.data]))
       window.printJS(url)
     })

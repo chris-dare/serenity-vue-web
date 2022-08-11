@@ -153,7 +153,7 @@ const checkForEmpty = (tree) => {
 }
 
 const error = (err, toast) => {
-  console.log('error', err)
+  console.log('error', err, err.data)
   if (err) {
     let error = ''
     if (err.data) {

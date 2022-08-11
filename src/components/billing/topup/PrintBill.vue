@@ -11,17 +11,7 @@
     </template>
     <template>
       <SeForm class="space-y-8">
-        <div class="space-y-4">
-          <MultiSelect
-            v-model="currency"
-            :options="currencies"
-            track-by="code"
-            label="display"
-            class="col-span-2"
-            custom-field="code"
-            title="Currency"
-          />
-        </div>
+        <CurrencySelect v-model="currency" />
       </SeForm>
 
       <div class="flex items-center justify-between mt-12">
@@ -47,7 +37,7 @@ export default {
   mixins: [modalMixin],
   data() {
     return {
-      currency: '',
+      currency: 'GHS',
       mode: 'create',
       loading: false,
       printLoading: false,
@@ -69,6 +59,7 @@ export default {
     ...mapActions({
       exportBill: 'billing/exportCorporateBills',
     }),
+
     async print() {
       if (this.currency) {
         let filters = { ...this.filters }
@@ -85,7 +76,7 @@ export default {
         if (!filters.page_size) {
           delete filters.page_size
         }
-        let payload = { payer: id, ...filters }
+        let payload = { payer: id, ...filters, currency: this.currency }
         try {
           this.printLoading = true
           await this.exportBill(payload)
