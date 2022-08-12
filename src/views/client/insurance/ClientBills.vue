@@ -10,7 +10,7 @@
       <SeButton
         variant="secondary"
         :loading="printLoading"
-        @click="$trigger('printbill:update:open', {...filters})"
+        @click="$trigger('printbill:update:open', {...params})"
       >
         Print
       </SeButton>

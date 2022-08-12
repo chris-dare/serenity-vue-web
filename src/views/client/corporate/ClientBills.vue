@@ -10,7 +10,7 @@
       <SeButton
         variant="secondary"
         :loading="printLoading"
-        @click="$trigger('printbill:update:open', {...filters})"
+        @click="$trigger('printbill:update:open', { ...params })"
       >
         Print
       </SeButton>
@@ -169,6 +169,7 @@ export default {
     }),
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
+      client: (state) => state.clients.client,
     }),
   },
 

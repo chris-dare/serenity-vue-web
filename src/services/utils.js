@@ -152,7 +152,11 @@ const checkForEmpty = (tree) => {
   return Object.keys(tree).length === 0
 }
 
-const error = (err, toast) => {
+const error = async (response, toast) => {
+  const isJsonBlob = (data) => data instanceof Blob && data.type === 'application/json'
+  const responseData = isJsonBlob(response?.data) ? await (response?.data)?.text() : response?.data || {}
+  const err = (typeof responseData === 'string') ? JSON.parse(responseData) : responseData
+
   console.log('error', err)
   if (err) {
     let error = ''
