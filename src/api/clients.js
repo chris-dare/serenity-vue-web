@@ -33,6 +33,10 @@ export default {
     return http.get(`${this.url}${providerId}/finance/payer_bills`, { params })
   },
 
+  getClientFinanceBills(providerId, params){
+    return http.get(`${this.url}${providerId}/finance/billable-patients`, { params })
+  },
+
   createBenefactor(providerId, params) {
     return http.post(`${this.url}${providerId}/clients/${params.id}/beneficiaries`, params.form)
   },
