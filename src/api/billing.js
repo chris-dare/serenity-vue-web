@@ -101,6 +101,7 @@ export default {
       url: `${this.url}${providerId}/finance/invoices/${id}/print`,
       params: {...params},
       responseType: 'blob',
+      cache: false,
     }).then((response) =>
     {
       const url = window.URL.createObjectURL(new Blob([response.data]))
@@ -114,18 +115,20 @@ export default {
       url: `${this.url}${providerId}/finance/charge-items/${id}/print`,
       params: { ...params },
       responseType: 'blob',
+      cache: false,
     }).then((response) => {
       const url = window.URL.createObjectURL(new Blob([response.data]))
       window.printJS(url)
     })
   },
 
-  printCorporateBill(providerId, params) {
+  printCorporateBill(providerId, payer, params) {
     return http({
       method: 'get',
-      url: `${this.url}${providerId}/finance/payer-bills/${params.payer}/print`,
+      url: `${this.url}${providerId}/finance/payer-bills/${payer}/print`,
       params: { ...params },
       responseType: 'blob',
+      cache: false,
     }).then((response) =>
     {
       const url = window.URL.createObjectURL(new Blob([response.data]))

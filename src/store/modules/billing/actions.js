@@ -97,10 +97,10 @@ export default {
     }
   },
 
-  async exportCorporateBills({ rootState }, params) {
+  async exportCorporateBills({ rootState }, { payer, params }) {
     try {
       const provider = rootState.auth.provider
-      const {data} = await BillingAPI.printCorporateBill(provider.id, params)
+      const {data} = await BillingAPI.printCorporateBill(provider.id, payer, params)
       const url = window.URL.createObjectURL(new Blob([data]))
       window.printJS(url)
     } catch (error) {

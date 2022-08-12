@@ -11,8 +11,7 @@
         variant="primary"
         :icon="icon"
         :loading="printLoading"
-        :disable="!data"
-        @click="$trigger('printbill:update:open', {...filters})"
+        @click="$trigger('printbill:update:open', {...params})"
       >
         Print all
       </SeButton>
@@ -204,6 +203,7 @@ export default {
     }),
     ...mapState({
       workspaceType: (state) => state.global.workspaceType,
+      client: (state) => state.clients.client,
     }),
   },
 
@@ -224,7 +224,7 @@ export default {
   },
 
   mounted() {
-    this.params = { ...this.params, payer: this.id }
+    this.params = { ...this.params, payer: this.id, payername: this.client?.company?.company_name, date_from: this.$date.formatQueryParamsDate(new Date()) }
     this.refresh()
   },
 
@@ -284,10 +284,10 @@ export default {
       let id = this.$route.params.id
       delete filters.payer
 
-      let payload = { payer: id, ...filters }
+      let payload = { ...filters }
       try {
         this.printLoading = true
-        await this.exportCorporateBills(payload)
+        await this.exportCorporateBills({ payer: id, params: payload })
         this.printLoading = false
       } catch (error) {
         this.printLoading = false
