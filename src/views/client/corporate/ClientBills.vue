@@ -6,11 +6,12 @@
       @input="searchData"
     />-->
 
-    <BillingTableFilters v-model="lists">
+    <BillingTableFilters v-model="params">
       <SeButton
-        variant="secondary"
-        :loading="printLoading"
+        variant="primary"
         :icon="icon"
+        :loading="printLoading"
+        :disable="!data"
         @click="$trigger('printbill:update:open', {...filters})"
       >
         Print all
@@ -30,19 +31,26 @@
           <cv-data-table-cell>
             <div class="flex items-center py-2">
               <InfoImageBlock
-                :label="row.patient_name | capitalize"
+                :label="$utils.customNameLabel(row || row.user) | capitalize"
+                :description="`${$utils.concatData(row, ['gender', 'age'], ', ')} ${row.age ? 'years' : ''}`"
+                :url="row.photo"
                 size="base"
               />
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
-              <p>{{ row.cashier_name }}</p>
+              <p>{{ row.mobile }}</p>
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
-              <p>{{ $currency(row.total_amount, row.currency || 'GHS').format() }}</p>
+              <p>{{ $date.formatDate(row.last_encounter) || 'N/A' }}</p>
+            </div>
+          </cv-data-table-cell>
+          <cv-data-table-cell>
+            <div>
+              <p>{{ row.mr_number }}</p>
             </div>
           </cv-data-table-cell>
           <cv-data-table-cell>
@@ -58,21 +66,16 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <div>
-              <p>{{ row.payer_bill_claims.length }}</p>
-            </div>
-          </cv-data-table-cell>
-          <cv-data-table-cell>
-            <div>
               <SeButton
                 variant="link"
-                @click="printInvoice(row.id, row._currency)"
+                @click="print(row.mr_number, row._currency)"
               >
                 Print <Printer class="ml-2" />
               </SeButton>
             </div>
           </cv-data-table-cell>
         </template>
-        <template #expand="{ row }">
+        <!-- <template #expand="{ row }">
           <div class="px-8">
             <DataTable
               ref="table"
@@ -134,7 +137,7 @@
               </template>
             </DataTable>
           </div>
-        </template>
+        </template> -->
       </DataTable>
     </div>
 
@@ -146,17 +149,19 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import DataMixin from '@/mixins/paginated'
-import debounce from 'lodash/debounce'
 import BillingSettlePaymentModal from '@/components/billing/BillingSettlePaymentModal'
 import BillingTableFilters from '@/components/billing/BillingTableFilters'
 import PrintBillModal from '@/components/billing/topup/PrintBill'
 import ClientAPI from '@/api/clients'
 import Printer from '@carbon/icons-vue/es/printer/16'
+import pickBy from 'lodash/pickBy'
+import isNil from 'lodash/isNil'
 
 export default {
   name: 'ClientBills',
 
   components: { BillingSettlePaymentModal, BillingTableFilters, PrintBillModal, Printer },
+
 
   mixins: [DataMixin],
 
@@ -172,14 +177,14 @@ export default {
       rowSelects: null,
       columns: [
         'Patient',
-        'Cashier',
-        'Total Bill',
+        'Mobile',
+        'Last encounter',
+        'MR No.',
         '',
-        'Items',
         'Action',
       ],
       icon: Printer,
-      nestedTableColumns: ['Date', 'Bill ID', 'Payee Type', 'Amount', '', 'Status', 'Action'],
+      nestedTableColumns: ['Date', 'Bill ID', 'Payee Type', 'Amount', 'Currency', 'Status', 'Action'],
       selectedFilter: '',
       searchTerms: ['patient_detail.name'],
       data: [],
@@ -189,6 +194,7 @@ export default {
       printLoading: false,
       total: 0,
       meta: 0,
+      dateFields: ['date_from', 'date_to'],
     }
   },
 
@@ -201,79 +207,44 @@ export default {
     }),
   },
 
-  watch: {
-    $route: {
-      immediate: true,
-      handler() {
-        this.filters = { payer: this.id, page: this.page, page_size: this.pageLength }
-        this.getData()
-      },
-    },
+  
 
-    lists: {
-      handler(val){
-        if (val) {
-          let values = val?.date?.split(' to ')
-          this.filters = {...this.filters, ...val}
-          this.filters.date_to = values && values[1] ? this.$date.formatQueryParamsDate(values[1]) : null
-          this.filters.date_from = values && values[0] ? this.$date.formatQueryParamsDate(values[0] || Date.now()) : null
-          delete this.filters.date
-          this.getData()
+  watch: {
+    'params.date': {
+      immediate: true,
+      handler(val, oldVal) {
+        if (val !== oldVal) {
+          let values = val?.split(' to ')
+          this.params[this.dateFields[0]] = values && values[0] ? this.$date.formatQueryParamsDate(values[0]) : null
+          this.params[this.dateFields[1]] = values && values[1] ? this.$date.formatQueryParamsDate(values[1] || Date.now()) : null
+          this.refresh()
         }
       },
-      immediate: true,
-      deep: true,
     },
+  },
+
+  mounted() {
+    this.params = { ...this.params, payer: this.id }
+    this.refresh()
   },
 
   methods: {
     ...mapActions({
-      exportBill: 'billing/exportCorporateBills',
+      exportCorporateBills: 'billing/exportCorporateBills',
       exportInvoiceBill: 'billing/exportBill',
       exportChargeItem: 'billing/exportChargeItem',
     }),
 
-    actionOnPagination(ev) {
-      this.page = ev.page
-      this.pageLength = ev.length
-      let id = this.$route.params.id
-      this.filters = { payer: id, page: ev.page, page_size: ev.length }
-      this.getData()
-    },
-
-    async getData() {
+    async getData(params) {
       try {
         this.loading = true
-        const { data } = await ClientAPI.getClientClaims(this.$providerId, this.filters)
+        const { data } = await ClientAPI.getClientFinanceBills(this.$providerId, params)
         this.data = data.results
-        this.meta = data.meta
+        this.dataMeta = data.meta
         this.loading = false
       } catch (error) {
         this.loading = false
       }
-    },
-
-    searchInvoices: debounce(function (search) {
-      this.refresh({ search, page: this.page, page_size: this.pageLength })
-    }, 300, false),
-
-    searchByDate(val) {
-      let filters = { ...this.filters }
-
-      if (val.end) {
-        filters.date_to = this.$date.formatQueryParamsDate(val.end)
-        delete filters.end
-        filters.date_from = this.$date.formatQueryParamsDate(val.start || Date.now())
-        delete filters.start
-      }
-
-      this.filters = { ...filters }
-      this.getData()
-    },
-
-
-    settle(bill) {
-      this.$trigger('corporate:settle:open', bill)
     },
 
     getStatusVariant(status) {
@@ -287,7 +258,7 @@ export default {
 
       return 'success'
     },
-
+  
     async printInvoice(id, currency) {
       try {
         this.printLoading = true
@@ -308,26 +279,15 @@ export default {
       }
     },
 
-    async print() {
-      let filters = { ...this.filters }
+    async print(patient, currency) {
+      let filters = { ...pickBy(this.params, !isNil), currency, patient__mr_number: patient }
       let id = this.$route.params.id
-      if (!filters.date_from) {
-        delete filters.date_from
-      }
-      if (!filters.date_to) {
-        delete filters.date_to
-      }
-      if (!filters.page) {
-        delete filters.page
-      }
-      if (!filters.page_size) {
-        delete filters.page_size
-      }
+      delete filters.payer
 
       let payload = { payer: id, ...filters }
       try {
         this.printLoading = true
-        await this.exportBill(payload)
+        await this.exportCorporateBills(payload)
         this.printLoading = false
       } catch (error) {
         this.printLoading = false

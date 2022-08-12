@@ -33,7 +33,7 @@
         />
         <Search
           v-if="$router.currentRoute.path !== '/' && $router.currentRoute.path !== '/billing'"
-          v-model="localValue.mr_number"
+          v-model="localValue.patient__mr_number"
           placeholder="Search MR no"
           type="search"
           class="se-input-white mx-3"
