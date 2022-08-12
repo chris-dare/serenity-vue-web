@@ -73,10 +73,10 @@ export default {
     }
   },
 
-  async exportBill({ rootState }, id) {
+  async exportBill({ rootState }, { id, params }) {
     try {
       const provider = rootState.auth.provider
-      const data = await BillingAPI.print(provider.id, id)
+      const data = await BillingAPI.print(provider.id, id, params)
 
       return data
     } catch (error) {
@@ -85,10 +85,10 @@ export default {
     }
   },
 
-  async exportChargeItem({ rootState }, id) {
+  async exportChargeItem({ rootState }, { id, params }) {
     try {
       const provider = rootState.auth.provider
-      const data = await BillingAPI.printChargeItem(provider.id, id)
+      const data = await BillingAPI.printChargeItem(provider.id, id, params)
 
       return data
     } catch (error) {

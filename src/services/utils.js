@@ -156,14 +156,13 @@ const error = async (response, toast) => {
   const isJsonBlob = (data) => data instanceof Blob && data.type === 'application/json'
   const responseData = isJsonBlob(response?.data) ? await (response?.data)?.text() : response?.data || {}
   const err = (typeof responseData === 'string') ? JSON.parse(responseData) : responseData
-
   console.log('error', err)
   if (err) {
     let error = ''
     if (err.data) {
       error = err.data.error || err.data.message || err.data.errors || err.data[0] || err.data.detail 
     } else {
-      error = err.response.data.error || err.response.data.errors || err.message
+      error = err.response?.data?.error || err.response?.data?.errors || err.message
     }
 
     if (!error) {
