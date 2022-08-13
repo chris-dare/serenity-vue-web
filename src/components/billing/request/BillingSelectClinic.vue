@@ -11,7 +11,7 @@
     @save="validateAndReroute"
   >
     <p class="text-primary my-4">
-      {{ modal ? 'Reason for visit' : 'Add a service' }}
+      Add a service
     </p>
     <div
       v-for="(list, index) in labLists"
@@ -52,20 +52,25 @@
       </div>
     </div>
     <SeForm class="space-y-8 mt-8">
-      <ServiceRequestForm
+      <MultiServiceForm
         v-model="labRequest"
+        :options="billableServiceRequests"
+        :search-options="labProceedures"
+        :loading="dataLoading"
         :v="$v"
+        @input="$v.$touch()"
       >
         <div class="flex justify-end">
           <SeButton
             class="mt-3"
             :loading="loading"
+            data-cy="billing-select-clinic-add"
             @click="addLabRequest"
           >
             Add new service
           </SeButton>
         </div>
-      </ServiceRequestForm>
+      </MultiServiceForm>
     </SeForm>
     <DeleteModal
       :loading="deleteLoading"
@@ -80,15 +85,16 @@ import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Add from '@carbon/icons-vue/es/add/32'
 import Edit from '@carbon/icons-vue/es/edit/32'
 import DeleteModal from '@/components/ui/modals/ConfirmDeleteModal'
-import ServiceRequestForm from '@/components/forms/MultiServiceForm'
+import MultiServiceForm from '@/components/forms/MultiServiceForm'
 import VirtualCareRequirementsModal from '@/components/appointments/VirtualCareRequirementsModal'
 import { mapActions, mapState, mapGetters } from 'vuex'
+import { required, minLength } from 'vuelidate/lib/validators'
 import MultiStep from '@/mixins/multistep'
 
 export default {
   name: 'BillingSelectClinic',
 
-  components: { VirtualCareRequirementsModal, DeleteModal, ServiceRequestForm },
+  components: { VirtualCareRequirementsModal, DeleteModal, MultiServiceForm },
 
   mixins: [MultiStep],
 
@@ -115,22 +121,24 @@ export default {
         code: null,
         forTravel: null,
       },
-      categories: [ 'laboratory-procedure', 'imaging', 'counselling', 'education', 'surgical-procedure' ],
       loading: false,
       finalLoading: false,
-      // propertiesToCompareChanges: ['labRequest'],
-      columns: ['Date', 'Lab type', 'Priority', 'Order detail', 'Bodysite', 'Specimen', 'Action'],
+      dataLoading: false,
       acted: false,
       deleteLoading: false,
       next: 'BillingPayment',
       previous: 'BillingSelectPatient',
-      parent: 'BillingDashboard',
+      parent: 'Dashboard',
       visitId: '',
       labLists: [],
+      form: {},
     }
   },
 
   validations: {
+    form: {
+      labs: {required, minLength: minLength(1)},
+    },
   },
 
   computed: {
@@ -138,17 +146,23 @@ export default {
       workspaceType: (state) => state.global.workspaceType,
       services: (state) => state.services.services,
       specialties: (state) => state.resources.specialties,
-      storeData: (state) => state.appointments.currentAppointment,
+      storeData: (state) => state.checkout.currentCheckout,
       provider: (state) => state.auth.provider,
       location: (state) => state.global.location,
       priorities: (state) => state.resources.priorities,
       encounter: (state) => state.encounters.currentEncounter,
-      currentEncounterServiceRequests: (state) => state.patients.patientServiceRequests,
+      patientServiceRequests: (state) => state.patients.patientServiceRequests,
     }),
 
     ...mapGetters({
       labProceedures: 'services/labProceedures',
     }),
+
+    billableServiceRequests(){
+      return this.patientServiceRequests.filter(
+        (result) => result.status === 'draft',
+      )
+    },
 
     appointmentTypes() {
       return [
@@ -163,11 +177,21 @@ export default {
   },
 
   async created(){
-    await this.getDiagnosticLabProceedures()
     this.init()
   },
 
   methods: {
+    ...mapActions({
+      refresh: 'checkout/refreshCheckout',
+      addToStoreData: 'checkout/addToCheckout',
+      createVisit: 'visits/createVisit',
+      getPatientServiceRequests: 'patients/getPatientServiceRequests',
+      createServiceRequest: 'patients/createServiceRequest',
+      updateServiceRequest: 'patients/updateServiceRequest',
+      setCurrentEncounter: 'encounters/setCurrentEncounter',
+      deleteServiceRequest: 'patients/deleteServiceRequest',
+    }),
+  
     cancel(){
       this.refresh()
       if (this.modal) {
@@ -187,24 +211,14 @@ export default {
       return `${this.$currency(price[0].charge, price[0].currency).format()} - ${price[0].description}`
     },
 
-    ...mapActions({
-      addToStoreData: 'appointments/addToCurrentAppointment',
-      refresh: 'appointments/refreshCurrentAppointment',
-      createVisit: 'visits/createVisit',
-      getPatientServiceRequests: 'patients/getPatientServiceRequests',
-      getDiagnosticLabProceedures: 'resources/getDiagnosticLabProceedures',
-      createServiceRequest: 'patients/createServiceRequest',
-      updateServiceRequest: 'patients/updateServiceRequest',
-      setCurrentEncounter: 'encounters/setCurrentEncounter',
-      deleteServiceRequest: 'patients/deleteServiceRequest',
-    }),
+    
 
     async init() {
-      this.loading = true
+      this.dataLoading = true
       let id = this.storeData.patient.id
-      await this.getPatientServiceRequests({ patient: id }).finally(() => this.loading = false )
+      await this.getPatientServiceRequests({ patient: id }).finally(() => this.dataLoading = false )
       this.labLists = this.form.labs || []
-      this.loading = false
+      this.dataLoading = false
     },
 
     async updateRequest(lab){
@@ -213,6 +227,7 @@ export default {
     },
 
     addLabRequest(){
+      this.$v.$touch()
       let service = this.labLists.find(service => service.code.id === this.labRequest.code.id)
       if(!service){
         if (!this.labRequest.price_tier) {
@@ -223,9 +238,10 @@ export default {
           return
         }
         this.labLists = [...this.labLists, { ...this.labRequest }]
-        this.labRequest = {}
+        this.labRequest = {code: null}
       }
       this.form.labs = this.labLists
+      
     },
 
     deleteLab(list){

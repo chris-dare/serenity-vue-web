@@ -75,7 +75,7 @@
             <div class="text-left">
               <p class="text-secondary capitalize">{{ list.display | removeDash }}</p>
             </div>
-            <div class="flex items-center justify-begin">
+            <div class="flex items-center justify-start">
               <p>{{ list.value || '-' }}</p>
               <p class="text-secondary ml-2"> {{ list.unit || '' }}</p>
             </div>

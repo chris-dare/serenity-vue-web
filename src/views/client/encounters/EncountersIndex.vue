@@ -9,7 +9,7 @@
           :patient="patient"
           :vitals="vitals"
           :status="status"
-          @click="$router.push({ name: currentWorkspacePatientPage, params: patient.id })"
+          @click="$router.push({ name: currentWorkspacePatientPage, params: {id: patient.id } })"
         />
 
         <div class="px-4">

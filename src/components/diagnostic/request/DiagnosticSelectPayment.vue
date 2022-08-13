@@ -6,7 +6,7 @@
     :query="$route.query"
     :modal="modal"
     :skip="true"
-    @skipping="skipping"
+    @skip="skip"
     @cancel="cancel"
     @back="goBack"
     @save="save"
@@ -186,7 +186,7 @@ export default {
       this.refresh()
     },
 
-    skipping(){
+    skip(){
       this.$router.push({ name: 'DiagnosticSummary'})
     },
 

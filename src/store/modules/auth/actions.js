@@ -14,7 +14,7 @@ export default {
     commit(SET_LOGGED_IN, status)
   },
 
-  login({ commit }, loginData) {
+  login({ commit, dispatch }, loginData) {
     return AuthAPI.login(loginData)
       .then(({ data: result }) => {
         const user = Object.assign({}, result.patient, result.user)
@@ -24,6 +24,7 @@ export default {
         commit(SET_CURRENT_ORGANIZATION, result.practitioner_roles[0])
         commit(SET_ORGANIZATIONS, result.practitioner_roles)
         commit(SET_LOGGED_IN, true)
+        dispatch('locations/getLocations', false, { root: true })
         return result
       })
       .catch(result => {

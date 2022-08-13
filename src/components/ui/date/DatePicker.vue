@@ -20,7 +20,7 @@
         :disabled="disabled"
         v-bind="$attrs"
         :class="{ 'cursor-not-allowed opacity-40': disabled }"
-        :data-qa="qaName"
+        :data-cy="cyName"
         @on-change="$emit('change', $event)"
       />
       <Close
@@ -87,6 +87,10 @@ export default {
     minDate: {
       type: [String, Date, Number],
       default: null,
+    },
+    defaultDate: {
+      type: [String, Date, Number],
+      default: Date.now(),
     },
     format: {
       type: String,
@@ -161,7 +165,7 @@ export default {
         range: {
           mode: 'range',
           dateFormat: 'Y-m-d',
-          defaultDate: Date.now(),
+          defaultDate: this.defaultDate,
           minDate: this.disableDatesBeforeToday ? 'today' : null,
         },
         datetimerange: {
@@ -186,7 +190,7 @@ export default {
       }
     },
 
-    qaName() {
+    cyName() {
       return this.label?.split(' ').join('_').toLowerCase()
     },
   },

@@ -6,14 +6,21 @@
 
 <script>
 import PatientAppointmentTable from '@/components/patients/PatientAppointmentTable'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'PatientAppointments',
 
   components: { PatientAppointmentTable },
 
+  computed: {
+    ...mapState({
+      patient: state => state.patients.currentPatient,
+    }),
+  },
+
   created() {
-    this.getAppointments({ patient: this.$route.params.id, ordering: '-start' })
+    this.getAppointments({ patient_id: this.patient.uuid, ordering: '-start' })
   },
 
   methods: {

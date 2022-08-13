@@ -10,6 +10,7 @@
           <SeButton
             v-if="!modal"
             variant="outline"
+            data-cy="multistep-cancel"
             @click="$emit('cancel')"
           >
             Cancel
@@ -18,12 +19,14 @@
             v-if="previous && !modal"
             :to="{ name: previous, query: { ...query } }"
             variant="secondary"
+            data-cy="multistep-back"
           >
             Go back
           </SeButton>
           <SeButton
             v-else
             variant="secondary"
+            data-cy="multistep-back"
             @click="$emit('back')"
           >
             Go back
@@ -34,13 +37,16 @@
             v-if="skip && !modal"
             class="mr-2"
             variant="secondary"
-            @click="$emit('skipping')"
+            data-cy="multistep-skip"
+            @click="$emit('skip')"
           >
             Skip
           </SeButton>
           <SeButton
             :icon="icon"
             :loading="loading"
+            :disabled="disabled"
+            data-cy="multistep-save"
             @click="$emit('save')"
           >
             {{ nextLabel }}
@@ -83,6 +89,10 @@ export default {
     icon: {
       type: [Object, String],
       default: null,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }

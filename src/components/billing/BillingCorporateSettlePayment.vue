@@ -145,7 +145,7 @@ export default {
     async exportBillItem() {
       try {
         this.isExportLoading = true
-        await this.exportBill(this.bill.billInfo.id)
+        await this.exportBill({id: this.bill.billInfo.id})
         this.isExportLoading = false
       } catch (error) {
         this.$toast.open({

@@ -177,28 +177,28 @@ export default {
   },
 
   watch: {
-    encounter: {
-      immediate: true,
-      handler(val, oldVal) {
-        if (val !== oldVal) {
-          this.form = { ...val }
-        }
-      },
-    },
+    // encounter: {
+    //   immediate: true,
+    //   handler(val, oldVal) {
+    //     if (val !== oldVal) {
+    //       this.form = { ...val }
+    //     }
+    //   },
+    // },
 
-    currentPatientSocialHistory: {
-      immediate: true,
-      handler(val, oldVal) {
-        if (val !== oldVal) {
-          this.family = { ...val }
-        }
-      },
-    },
+    // currentPatientSocialHistory: {
+    //   immediate: true,
+    //   handler(val, oldVal) {
+    //     if (val !== oldVal) {
+    //       this.family = { ...val }
+    //     }
+    //   },
+    // },
   },
 
   beforeDestroy() {
-    if (isEmpty(this.notes.display)) {
-      this.createNote
+    if (!isEmpty(this.notes.display)) {
+      this.createNote()
     }
   },
 

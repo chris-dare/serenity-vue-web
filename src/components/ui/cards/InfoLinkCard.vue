@@ -3,6 +3,7 @@
     v-if="!details.hide"
     class="w-full max-w-56 px-4 py-6 mr-4 cursor-pointer"
     :class="[customClass, isSelected ? 'bg-serenity-primary': '']"
+    :data-cy="cyName"
     @click="$emit('click')"
   >
     <component
@@ -112,6 +113,10 @@ export default {
   computed: {
     currentIconComponent() {
       return this.capitalizeFirstLetter(this.type)
+    },
+
+    cyName() {
+      return this.details.label?.split(' ').join('_').toLowerCase()
     },
   },
 

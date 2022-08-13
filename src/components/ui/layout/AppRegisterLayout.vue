@@ -1,7 +1,7 @@
 <template>
   <SeForm
     class="max-w-5xl mx-auto"
-    :data-qa="checked"
+    :data-cy="checked"
   >
     <p class="text-primary text-xl font-semibold">{{ label }}</p>
     <div class="grid grid-cols-4 my-6 gap-6">

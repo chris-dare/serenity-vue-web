@@ -9,10 +9,9 @@
       :track-by="null"
       @select="change"
     />
-    <MultiSelect
+    <AutoCompletePractitioners
       v-if="type === 'internal_doctor'"
       v-model="form.recipient"
-      :options="practitioners"
       :multiple="false"
       title="Doctor"
       track-by="id"

@@ -19,7 +19,7 @@
         :disabled="disabled"
         :class="{'se-input-disabled': disabled}"
         v-bind="$attrs"
-        :data-qa="qaName"
+        :data-cy="cyName"
       />
       <div
         :class="{'cursor-not-allowed bg-gray-200 border-b-0 border-serenity-dark border-solid': disabled}"
@@ -85,7 +85,7 @@ export default {
   },
 
   computed: {
-    qaName() {
+    cyName() {
       return this.label?.split(' ').join('_').toLowerCase()
     },
   },

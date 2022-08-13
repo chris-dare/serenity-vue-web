@@ -5,7 +5,7 @@
     track-by="code"
     label="display"
     custom-field="code"
-    title="Currency"
+    :title="title"
     preselect
     v-bind="$attrs"
   />
@@ -18,6 +18,13 @@ export default {
   name: 'CurrencySelect',
 
   mixins: [modelMixin],
+
+  props: {
+    title: {
+      type: String,
+      default: 'Currency',
+    },
+  },
 
   computed: {
     ...mapState({
