@@ -13,7 +13,8 @@
           v-model="localValue.date"
           placeholder="Date range"
           type="range"
-          class=" se-white-date-picker min-w-32"
+          class="se-white-date-picker min-w-32"
+          v-bind="$attrs"
         />
         <MultiSelect
           v-if="$router.currentRoute.path !== '/' && $router.currentRoute.path !== '/billing'"
