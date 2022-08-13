@@ -6,7 +6,10 @@
       @input="searchData"
     />-->
 
-    <BillingTableFilters v-model="params">
+    <BillingTableFilters
+      v-model="params"
+      default-date=""
+    >
       <SeButton
         variant="primary"
         :icon="icon"
@@ -153,8 +156,9 @@ import BillingTableFilters from '@/components/billing/BillingTableFilters'
 import PrintBillModal from '@/components/billing/topup/PrintBill'
 import ClientAPI from '@/api/clients'
 import Printer from '@carbon/icons-vue/es/printer/16'
-import pickBy from 'lodash/pickBy'
+import omitBy from 'lodash/omitBy'
 import isNil from 'lodash/isNil'
+import omit from 'lodash/omit'
 
 export default {
   name: 'ClientBills',
@@ -221,18 +225,25 @@ export default {
         }
       },
     },
+    'params.patient__mr_number': {
+      immediate: true,
+      handler(val, oldVal) {
+        if (val !== oldVal) {
+          this.params.search = val
+          this.searchData()
+        }
+      },
+    },
   },
 
   mounted() {
-    this.params = { ...this.params, payer: this.id, payername: this.client?.company?.company_name, date_from: this.$date.formatQueryParamsDate(new Date()) }
+    this.params = { ...this.params, bill_detail_preference: 'Summarized', should_payer_view_diagnoses: 'False', payer: this.id, payername: this.client?.company?.company_name, date: null }
     this.refresh()
   },
 
   methods: {
     ...mapActions({
       exportCorporateBills: 'billing/exportCorporateBills',
-      exportInvoiceBill: 'billing/exportBill',
-      exportChargeItem: 'billing/exportChargeItem',
     }),
 
     async getData(params) {
@@ -258,36 +269,15 @@ export default {
 
       return 'success'
     },
-  
-    async printInvoice(id, currency) {
-      try {
-        this.printLoading = true
-        await this.exportInvoiceBill({ id, params: { currency }})
-        this.printLoading = false
-      } catch (error) {
-        this.printLoading = false
-      }
-    },
-
-    async printChargeItem(id, currency) {
-      try {
-        this.printLoading = true
-        await this.exportChargeItem({ id, params: { currency }})
-        this.printLoading = false
-      } catch (error) {
-        this.printLoading = false
-      }
-    },
 
     async print(patient, currency) {
-      let filters = { ...pickBy(this.params, !isNil), currency, patient__mr_number: patient }
+      let filters = { ...omitBy(this.params, isNil), currency, patient__mr_number: patient }
       let id = this.$route.params.id
-      delete filters.payer
 
-      let payload = { payer: id, ...filters }
+      let payload = { ...omit(filters, ['payer', 'page', 'page_size', 'search', 'date', 'payername']) }
       try {
         this.printLoading = true
-        await this.exportCorporateBills(payload)
+        await this.exportCorporateBills({ payer: id, params: payload })
         this.printLoading = false
       } catch (error) {
         this.printLoading = false

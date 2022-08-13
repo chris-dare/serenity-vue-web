@@ -88,6 +88,10 @@ export default {
       type: [String, Date, Number],
       default: null,
     },
+    defaultDate: {
+      type: [String, Date, Number],
+      default: Date.now(),
+    },
     format: {
       type: String,
       default: null,
@@ -161,7 +165,7 @@ export default {
         range: {
           mode: 'range',
           dateFormat: 'Y-m-d',
-          defaultDate: Date.now(),
+          defaultDate: this.defaultDate,
           minDate: this.disableDatesBeforeToday ? 'today' : null,
         },
         datetimerange: {

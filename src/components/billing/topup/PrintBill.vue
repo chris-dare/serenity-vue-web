@@ -63,7 +63,7 @@ export default {
 
     async print() {
       if (this.currency) {
-        let filters = { ...omit(this.filters, ['page', 'page_size', 'payername', 'payer']) }
+        let filters = { ...omit(this.filters, ['page', 'page_size', 'payername', 'payer', 'date', 'search']) }
         let id = this.$route.params.id
         if (!filters.date_from) {
           delete filters.date_from
