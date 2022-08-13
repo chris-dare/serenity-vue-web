@@ -59,6 +59,10 @@ export default {
     return http.post(`providers/${providerId}/finance/raise-service-request-bill`, params)
   },
 
+  raiseAdministrativeBill(providerId, params) {
+    return http.post(`providers/${providerId}/finance/administrative-bill`, params)
+  },
+
   invoicePay(providerId, invoiceId, params) {
     return http.post(`providers/${providerId}/finance/invoices/${invoiceId}/pay`, params)
   },
@@ -91,12 +95,13 @@ export default {
     return http.delete(`${this.url}${providerId}/bills/${id}`)
   },
 
-  print(providerId,id) {
-
+  print(providerId, id, params = {}) {
     return http({
       method: 'get',
       url: `${this.url}${providerId}/finance/invoices/${id}/print`,
+      params: {...params},
       responseType: 'blob',
+      cache: false,
     }).then((response) =>
     {
       const url = window.URL.createObjectURL(new Blob([response.data]))
@@ -104,24 +109,26 @@ export default {
     })
   },
 
-  printChargeItem(providerId,id) {
+  printChargeItem(providerId, id, params) {
     return http({
       method: 'get',
       url: `${this.url}${providerId}/finance/charge-items/${id}/print`,
+      params: { ...params },
       responseType: 'blob',
-    }).then((response) =>
-    {
+      cache: false,
+    }).then((response) => {
       const url = window.URL.createObjectURL(new Blob([response.data]))
       window.printJS(url)
     })
   },
 
-  printCorporateBill(providerId, params) {
+  printCorporateBill(providerId, payer, params) {
     return http({
       method: 'get',
-      url: `${this.url}${providerId}/finance/payer-bills/${params.payer}/print`,
+      url: `${this.url}${providerId}/finance/payer-bills/${payer}/print`,
       params: { ...params },
       responseType: 'blob',
+      cache: false,
     }).then((response) =>
     {
       const url = window.URL.createObjectURL(new Blob([response.data]))

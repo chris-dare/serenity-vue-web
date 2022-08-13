@@ -308,7 +308,6 @@ export default {
         this.$toast.open({
           message: 'Appointment successfully updated!',
         })
-        console.log('returne', data)
         this.selectedAppointment = this.getNormalisedView(data)
         this.$trigger('billing:details:open')
         // this.$router.push({ name: this.parent })

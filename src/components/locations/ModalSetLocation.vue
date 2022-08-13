@@ -21,7 +21,10 @@
         <p>Showing {{ filteredLocations.length }} out of {{ locations.length }}</p>
 
         <div>
-          <cv-radio-group vertical>
+          <cv-radio-group
+            data-cy="set-location-radio"
+            vertical
+          >
             <div
               v-for="(loca, index) in filteredLocations"
               :key="index"
@@ -32,6 +35,7 @@
                 :name="loca.location_name"
                 :label="loca.location_name"
                 :value="loca.id"
+                data-cy="set-location-radio-button"
               />
 
               <p>{{ loca.location_name }}</p>
@@ -41,6 +45,7 @@
         <SeButton
           :loading="loading"
           full
+          data-cy="set-location-submit"
           @click="save"
         >
           Confirm

@@ -3,6 +3,7 @@
     :icon="icon"
     next-label="Next: Select Service"
     :query="$route.query"
+    data-cy="billing-select-patient"
     @cancel="cancel"
     @save="validateAndReroute"
   >
@@ -57,7 +58,7 @@ export default {
   computed: {
     ...mapState({
       patientsCount: (state) => state.patients.patientsCount,
-      storeData: (state) => state.appointments.currentAppointment,
+      storeData: (state) => state.checkout.currentCheckout,
     }),
 
     disabled() {
@@ -73,12 +74,12 @@ export default {
 
   methods: {
     ...mapActions({
-      addToStoreData: 'appointments/addToCurrentAppointment',
-      refresh: 'appointments/refreshCurrentAppointment',
+      refresh: 'checkout/refreshCheckout',
+      addToStoreData: 'checkout/addToCheckout',
     }),
 
     cancel(){
-      this.$router.push({ name: 'Dashboard'})
+      this.$router.push({ name: 'Dashboard' })
       this.refresh()
     },
 

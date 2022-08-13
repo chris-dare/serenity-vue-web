@@ -170,7 +170,7 @@ export default {
     async exportBillItem() {
       try {
         this.isExportLoading = true
-        await this.exportBill(this.bill.invoice_id)
+        await this.exportBill({id:this.bill.invoice_id})
 
         this.isExportLoading = false
       } catch (error) {

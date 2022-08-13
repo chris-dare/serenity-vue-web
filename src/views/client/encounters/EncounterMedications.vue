@@ -236,6 +236,7 @@ export default {
             medication_detail: [{ display: drug.display }],
             course_of_therapy_type: medication.course_of_therapy_type,
             medication_request_dosage_instruction: medication.medication_request_dosage_instruction,
+            dosage_form: medication.dosage_form,
             next_refill: medication.next_refill,
             quantity: medication.quantity,
           }

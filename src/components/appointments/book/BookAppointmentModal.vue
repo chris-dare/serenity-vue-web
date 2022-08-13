@@ -145,10 +145,10 @@ export default {
     },
 
     async checkForSpecialty() {
-      const specialty = this.currentAppointment.specialty
-      if(!specialty ){
+      const service = this.currentAppointment.service
+      if(!service ){
         this.step = 2
-        this.$toast.error('Please select a specialty before proceeding')
+        this.$toast.error('Please select a service before proceeding')
 
         return
       }

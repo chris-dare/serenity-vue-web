@@ -12,7 +12,7 @@
         @input="searchData"
       />
       <MultiSelect
-        v-model="category"
+        v-model="params.category"
         :options="serviceCategoryTypes"
         :multiple="false"
         placeholder="Select a service request category"
@@ -20,6 +20,7 @@
         track-by="code"
         custom-field="code"
         class="multiselect-white"
+        @input="searchData"
       />
     </BillingPatientFilters>
     <div class="bg-white p-3">
@@ -110,7 +111,6 @@ export default {
       order: {},
       // lists: {},
       lists: '',
-      category: '',
     }
   },
 
@@ -148,26 +148,17 @@ export default {
         }
       },
     },
-
-    category: {
-      handler(val){
-        if(val){
-          if (val) {
-            this.params.category = val
-          }
-          this.searchData()
-        }
-      },
-    },
   },
 
   created() {
     this.params.id = this.$route.params.id
+    this.getServiceRequestCategoryTypes()
   },
 
   methods: {
     ...mapActions({
       getData: 'billing/getPatientBilling',
+      getServiceRequestCategoryTypes: 'resources/getServiceRequestCategoryTypes',
     }),
 
     showOrder(data) {

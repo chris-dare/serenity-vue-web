@@ -22,6 +22,7 @@
       v-model="params.search"
       placeholder="Search for patient, enter name or MR number"
       class="mb-4"
+      data-cy="search"
       @input="searchData"
     />
     <cv-data-table-skeleton
@@ -52,6 +53,7 @@
           :key="`${rowIndex}`"
           :class="[`grid-cols-${columns.length + 1}`, internalPatient.id === row.id ? 'bg-gray-100' : 'bg-white']"
           class="grid grid-cols-3 gap-4 items-center hover:bg-gray-100 p-4 cursor-pointer"
+          data-cy="patient"
           @click="internalPatient = row"
         >
           <InfoImageBlock

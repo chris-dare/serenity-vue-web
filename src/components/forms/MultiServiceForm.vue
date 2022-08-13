@@ -5,12 +5,13 @@
         v-model="localValue.code"
         title="Choose Service"
         :multiple="false"
-        :options="isBillables"
+        :options="options"
         track_by="id"
-        label="display"
+        :label="display"
         placeholder="Search or choose a lab text to be performed"
         :error-message="$utils.validateRequiredField(v, 'code')"
         required
+        :loading="loading"
       />
 
 
@@ -22,6 +23,7 @@
         track_by="id"
         label="display"
         custom-field="id"
+        required
         placeholder="Search or choose a lab text to be performed"
       />
 
@@ -52,7 +54,7 @@ import modelMixin from '@/mixins/model'
 import { mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'ServiceRequestForm',
+  name: 'MultiServiceForm',
 
   mixins: [modelMixin],
 
@@ -61,25 +63,33 @@ export default {
       type: Object,
       default: () => {},
     },
-  },
 
-  data() {
-    return {
-      loading: false,
-      priorities: [
-        {display: 'Urgent (highest)', code: 'urgent'},
-        {display: 'ASAP (medium)', code: 'asap'},
-        {display: 'Routine (lowest)', code: 'routine'},
-      ],
-      filteredData: [],
-    }
+    options: {
+      type: Array,
+      default: () => [],
+    },
+  
+    searchOptions: {
+      type: Array,
+      default: () => [],
+    },
+
+    display: {
+      type: String,
+      default: 'display',
+    },
+  
+    loading: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
     ...mapState({
       labProceedures: state => state.resources.diagnosticLabProceedures,
       storeData: (state) => state.appointments.currentAppointment,
-      data: (state) => state.patients.patientServiceRequests,
+      services: state => state.services.services,
     }),
 
     ...mapGetters({
@@ -90,16 +100,13 @@ export default {
       return this.$isCurrentWorkspace('DIAG')
     },
 
-    isBillables(){
-      let list = this.data.filter(
-        (result) => 'draft' === result.status,
-      )
-      return [...list]
-    },
-
     priceTiers() {
-      if (!this.localValue.code || !this.diagnosticServices.length) return []
-      let service = this.diagnosticServices.find(service => service.order_code === this.localValue.code.code)
+      if (!this.localValue.code || !this.searchOptions.length) return []
+      let service = this.searchOptions.find(service => service.order_code === this.localValue.code.code)
+
+      if (this.localValue.code.price_tiers?.length) {
+        service = this.localValue.code
+      }
 
       if (!service){
         return []
