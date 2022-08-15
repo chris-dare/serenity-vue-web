@@ -176,24 +176,29 @@ export default {
     }),
   },
 
-  watch: {
-    // encounter: {
-    //   immediate: true,
-    //   handler(val, oldVal) {
-    //     if (val !== oldVal) {
-    //       this.form = { ...val }
-    //     }
-    //   },
-    // },
+  // watch: {
+  //   encounter: {
+  //     immediate: true,
+  //     handler(val, oldVal) {
+  //       if (val !== oldVal) {
+  //         this.form = { ...val }
+  //       }
+  //     },
+  //   },
 
-    // currentPatientSocialHistory: {
-    //   immediate: true,
-    //   handler(val, oldVal) {
-    //     if (val !== oldVal) {
-    //       this.family = { ...val }
-    //     }
-    //   },
-    // },
+  //   currentPatientSocialHistory: {
+  //     immediate: true,
+  //     handler(val, oldVal) {
+  //       if (val !== oldVal) {
+  //         this.family = { ...val }
+  //       }
+  //     },
+  //   },
+  // },
+
+  mounted() {
+    this.form = { ...this.encounter }
+    this.family = { ...this.currentPatientSocialHistory }
   },
 
   beforeDestroy() {
