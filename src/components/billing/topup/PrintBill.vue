@@ -32,6 +32,8 @@
 import { mapState, mapActions } from 'vuex'
 import modalMixin from '@/mixins/modal'
 import omit from 'lodash/omit'
+import omitBy from 'lodash/omitBy'
+import isEmpty from 'lodash/isEmpty'
 
 export default {
   name: 'PrintBillCurrency',
@@ -58,38 +60,32 @@ export default {
   },
   methods: {
     ...mapActions({
-      exportBill: 'billing/exportCorporateBills',
+      exportCorporateBills: 'billing/exportCorporateBills',
     }),
 
     async print() {
-      if (this.currency) {
-        let filters = { ...omit(this.filters, ['page', 'page_size', 'payername', 'payer', 'date', 'search']) }
-        let id = this.$route.params.id
-        if (!filters.date_from) {
-          delete filters.date_from
-        }
-        if (!filters.date_to) {
-          delete filters.date_to
-        }
-
-        let payload = { ...filters, currency: this.currency }
-        try {
-          this.printLoading = true
-          await this.exportBill({ payer:id, params: payload })
-          this.printLoading = false
-          this.open()
-        }
-        catch (error) {
-          this.printLoading = false
-        }
-      } else {
+      if (!this.currency) {
         this.$toast.open({
           message: 'Please select currency',
           type: 'error',
         })
+        return
+      }
+
+      const filters = { ...omitBy(this.filters, isEmpty), currency: this.currency }
+
+      const payload = {
+        ...omit(filters, ['payer', 'page', 'page_size', 'search', 'date', 'payername']),
+      }
+
+      try {
+        this.loading = true
+        await this.exportCorporateBills({ payer: this.$route.params.id, params: payload })
+        this.loading = false
+      } catch (error) {
+        this.loading = false
       }
     },
-
   },
 }
 </script>
