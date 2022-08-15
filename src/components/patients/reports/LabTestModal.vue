@@ -15,7 +15,7 @@
             <div>
               <p>{{ $utils.concatData(report.patient_detail, ['first_name', 'lastname']) }}</p>
               <p class="text-secondary text-xs">
-                {{ report.patient_detail ? report.patient_detail.gender : '-' }}
+                {{ report.patient_detail ? $utils.formatGenderAge(report.patient_detail.gender, report.patient_detail.age) : '-' }}
               </p>
             </div>
           </div>
