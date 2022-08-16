@@ -35,6 +35,9 @@
         placeholder="Reason for visit"
         @blur="throttledSend"
       />
+      <div class="flex justify-end py-4">
+        <SeButton @click="throttledSend">Save</SeButton>
+      </div>
     </ToggleList>
     <ToggleList
       title="History of Present illness"
@@ -47,6 +50,10 @@
         placeholder="Progress of complaint"
         @blur="throttledSend"
       />
+
+      <div class="flex justify-end py-4">
+        <SeButton @click="throttledSend">Save</SeButton>
+      </div>
     </ToggleList>
     <ToggleList
       title="Past Medical History"
@@ -71,6 +78,10 @@
         placeholder="Family history"
         @blur="throttledSendHistory"
       />
+
+      <div class="flex justify-end py-4">
+        <SeButton @click="throttledSendHistory">Save</SeButton>
+      </div>
     </ToggleList>
     <ToggleList
       title="General review"
@@ -200,7 +211,6 @@ export default {
   // },
 
   mounted() {
-    console.log('mounted')
     this.form = { ...this.encounter }
     this.family = { ...this.currentPatientSocialHistory }
   },
@@ -307,19 +317,33 @@ export default {
     },
 
     saveAll() {
-      if (!isEmpty(this.form)) {
-        this.submitAnswer()
-      }
+      try {
+        if (!isEmpty(this.form)) {
+          this.submitAnswer()
+        }
 
-      if (this.family.FAMILY_HISTORY) {
-        this.sendHistory()
+        if (this.family.FAMILY_HISTORY) {
+          this.sendHistory()
+        }
+        if (this.notes.display) {
+          this.createNote()
+        }
+        this.$refs.socialHistory.save()
+        this.$refs.reviewGeneralSystems.externalSave()
+        this.$refs.reviewSystemicSystems.externalSave()
+
+        this.$toast.open({
+          message: 'Fields saved successfully',
+        })
+
+        this.$router.push({ name: 'EncounterDiagnosis', params: { id: this.$route.params.id } })
+      } catch (error) {
+        this.$toast.open({
+          message: 'Error saving fields',
+          type: 'error',
+        })
       }
-      if (this.notes.display) {
-        this.createNote()
-      }
-      this.$refs.socialHistory.save()
-      this.$refs.reviewGeneralSystems.externalSave()
-      this.$refs.reviewSystemicSystems.externalSave()
+      
     },
   },
 

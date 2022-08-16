@@ -6,14 +6,14 @@
     </div>
 
     <div class="flex justify-end space-x-2 fixed bottom-4 right-4">
-      <SeButton
+      <!-- <SeButton
         :to="{ name: 'EncounterDiagnosis', params: { id: $route.params.id } }"
         :icon="icon"
       >
         Add Diagnosis
-      </SeButton>
+      </SeButton> -->
 
-      <SeButton @click="save">Save All</SeButton>
+      <SeButton @click="save">Save All and Go To Diagnosis</SeButton>
     </div>
   </div>
 </template>
