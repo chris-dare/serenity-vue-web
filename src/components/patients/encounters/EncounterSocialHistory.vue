@@ -82,6 +82,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import omitBy from 'lodash/omitBy'
+import isEmpty from 'lodash/isEmpty'
 
 export default {
   name: 'EncounterSocialHistory',
@@ -121,7 +123,10 @@ export default {
     async save() {
       try {
         this.loading = true
-        await this.createObservation({ payload: this.form, patient: this.$route.params.id })
+        await this.createObservation({
+          payload: omitBy(this.form, isEmpty),
+          patient: this.$route.params.id,
+        })
         this.$toast.open('Social history saved')
         this.loading = false
       } catch (error) {

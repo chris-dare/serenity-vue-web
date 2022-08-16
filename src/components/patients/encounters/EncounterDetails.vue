@@ -58,7 +58,7 @@
       title="Social History"
       class="pt-4"
     >
-      <EncounterSocialHistory />
+      <EncounterSocialHistory ref="socialHistory" />
     </ToggleList>
     <ToggleList
       title="Family History"
@@ -76,13 +76,16 @@
       title="General review"
       class="pt-4"
     >
-      <EncounterReviewSystems type="GENERAL" />
+      <EncounterReviewSystems
+        ref="reviewGeneralSystems"
+        type="GENERAL"
+      />
     </ToggleList>
     <ToggleList
       title="Systemic review"
       class="pt-4"
     >
-      <EncounterReviewSystems />
+      <EncounterReviewSystems ref="reviewSystemicSystems" />
     </ToggleList>
     <ToggleList
       title="Notes"
@@ -197,6 +200,7 @@ export default {
   // },
 
   mounted() {
+    console.log('mounted')
     this.form = { ...this.encounter }
     this.family = { ...this.currentPatientSocialHistory }
   },
@@ -300,6 +304,22 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+
+    saveAll() {
+      if (!isEmpty(this.form)) {
+        this.submitAnswer()
+      }
+
+      if (this.family.FAMILY_HISTORY) {
+        this.sendHistory()
+      }
+      if (this.notes.display) {
+        this.createNote()
+      }
+      this.$refs.socialHistory.save()
+      this.$refs.reviewGeneralSystems.externalSave()
+      this.$refs.reviewSystemicSystems.externalSave()
     },
   },
 
