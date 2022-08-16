@@ -119,6 +119,15 @@ export default {
       updateSystem: 'patients/updateObservation',
     }),
 
+    externalSave() {
+      if (this.type === 'GENERAL') this.form.unit = 'GENERAL'
+      if (this.$v.$invalid) {
+        return
+      }
+
+      this.save()
+    },
+
     submit() {
       if (this.type === 'GENERAL') this.form.unit = 'GENERAL'
       this.$v.$touch()
