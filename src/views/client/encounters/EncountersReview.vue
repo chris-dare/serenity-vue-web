@@ -26,12 +26,12 @@ export default {
   },
 
   beforeDestroy() {
-    this.save()
+    this.$refs.detail.saveAll()
   },
 
   methods: {
     save() {
-      this.$refs.detail.saveAll()
+      this.$router.push({ name: 'EncounterDiagnosis', params: { id: this.$route.params.id } })
     },
   },
 }

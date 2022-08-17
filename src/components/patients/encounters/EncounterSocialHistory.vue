@@ -84,6 +84,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import omitBy from 'lodash/omitBy'
 import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
 
 export default {
   name: 'EncounterSocialHistory',
@@ -121,6 +122,7 @@ export default {
     }),
 
     async save() {
+      if (isEqual(omitBy(this.form, isEmpty), omitBy(this.currentPatientSocialHistory, isEmpty))) return
       try {
         this.loading = true
         await this.createObservation({

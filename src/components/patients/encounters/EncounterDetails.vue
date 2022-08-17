@@ -166,6 +166,7 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
 
 export default {
   name: 'EncounterDetails',
@@ -343,32 +344,27 @@ export default {
     },
 
     saveAll() {
-      try {
-        if (!isEmpty(this.form)) {
-          this.submitAnswer()
-        }
-
-        if (this.family.FAMILY_HISTORY && this.family.FAMILY_HISTORY !== this.currentPatientSocialHistory.FAMILY_HISTORY) {
-          this.sendHistory()
-        }
-        if (this.notes.display) {
-          this.createNote()
-        }
-        this.$refs.socialHistory.save()
-        this.$refs.reviewGeneralSystems.externalSave()
-        this.$refs.reviewSystemicSystems.externalSave()
-
-        this.$toast.open({
-          message: 'Fields saved successfully',
-        })
-
-        this.$router.push({ name: 'EncounterDiagnosis', params: { id: this.$route.params.id } })
-      } catch (error) {
-        this.$toast.open({
-          message: 'Error saving fields',
-          type: 'error',
-        })
+      // try {
+      if (!isEmpty(this.form) && (!isEqual(this.form.chief_complaint, this.encounter.chief_complaint) || !isEqual(this.form.history_of_presenting_illness, this.encounter.history_of_presenting_illness))) {
+        this.submitAnswer()
       }
+
+      if (this.family.FAMILY_HISTORY && this.family.FAMILY_HISTORY !== this.currentPatientSocialHistory.FAMILY_HISTORY) {
+        this.sendHistory()
+      }
+      if (this.notes.display) {
+        this.createNote()
+      }
+      this.$refs.socialHistory.save()
+      this.$refs.reviewGeneralSystems.externalSave()
+      this.$refs.reviewSystemicSystems.externalSave()
+        
+      // } catch (error) {
+      //   this.$toast.open({
+      //     message: 'Error saving fields',
+      //     type: 'error',
+      //   })
+      // }
       
     },
   },
