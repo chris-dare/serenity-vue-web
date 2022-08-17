@@ -6,13 +6,6 @@
     </div>
 
     <div class="flex justify-end space-x-2 fixed bottom-4 right-4">
-      <!-- <SeButton
-        :to="{ name: 'EncounterDiagnosis', params: { id: $route.params.id } }"
-        :icon="icon"
-      >
-        Add Diagnosis
-      </SeButton> -->
-
       <SeButton @click="save">Save All and Go To Diagnosis</SeButton>
     </div>
   </div>
@@ -32,9 +25,13 @@ export default {
     }
   },
 
+  beforeDestroy() {
+    this.$refs.detail.saveAll()
+  },
+
   methods: {
     save() {
-      this.$refs.detail.saveAll()
+      this.$router.push({ name: 'EncounterDiagnosis', params: { id: this.$route.params.id } })
     },
   },
 }
