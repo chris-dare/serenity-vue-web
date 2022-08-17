@@ -33,10 +33,14 @@
         v-model="form.chief_complaint"
         :rows="5"
         placeholder="Reason for visit"
-        @blur="throttledSend"
       />
       <div class="flex justify-end py-4">
-        <SeButton @click="throttledSend">Save</SeButton>
+        <SeButton
+          :loading="loadingNotes"
+          @click="throttledSend"
+        >
+          Save
+        </SeButton>
       </div>
     </ToggleList>
     <ToggleList
@@ -48,11 +52,15 @@
         v-model="form.history_of_presenting_illness"
         :rows="5"
         placeholder="Progress of complaint"
-        @blur="throttledSend"
       />
 
       <div class="flex justify-end py-4">
-        <SeButton @click="throttledSend">Save</SeButton>
+        <SeButton
+          :loading="loadingNotes"
+          @click="throttledSend"
+        >
+          Save
+        </SeButton>
       </div>
     </ToggleList>
     <ToggleList
@@ -76,11 +84,15 @@
         v-model="family.FAMILY_HISTORY"
         :rows="5"
         placeholder="Family history"
-        @blur="throttledSendHistory"
       />
 
       <div class="flex justify-end py-4">
-        <SeButton @click="throttledSendHistory">Save</SeButton>
+        <SeButton
+          :loading="loadingHistory"
+          @click="throttledSendHistory"
+        >
+          Save
+        </SeButton>
       </div>
     </ToggleList>
     <ToggleList
@@ -174,6 +186,8 @@ export default {
       loading: false,
       historySaved: true,
       saving: null,
+      loadingHistory: false,
+      loadingNotes: false,
     }
   },
 
@@ -231,12 +245,18 @@ export default {
     }),
 
     async submitAnswer() {
+      this.loadingNotes = true
       this.saving = 'saving'
       try {
         await this.updateEncounter(this.form)
         this.saving = 'saved'
+        this.$toast.open({
+          message: 'Compliant updated successfully',
+        })
       } catch (error) {
         this.saving = 'error'
+      } finally {
+        this.loadingNotes = false
       }
 
     },
@@ -255,11 +275,17 @@ export default {
 
     async sendHistory() {
       this.saving = 'saving'
+      this.loadingHistory = true
       try {
         await this.createObservation({ payload: { FAMILY_HISTORY: this.family.FAMILY_HISTORY }, patient: this.$route.params.id })
         this.saving = 'saved'
+        this.$toast.open({
+          message: 'History updated successfully',
+        })
       } catch (error) {
         this.saving = 'error'
+      } finally {
+        this.loadingHistory = false
       }
     },
 
@@ -322,7 +348,7 @@ export default {
           this.submitAnswer()
         }
 
-        if (this.family.FAMILY_HISTORY) {
+        if (this.family.FAMILY_HISTORY && this.family.FAMILY_HISTORY !== this.currentPatientSocialHistory.FAMILY_HISTORY) {
           this.sendHistory()
         }
         if (this.notes.display) {

@@ -6,13 +6,6 @@
     </div>
 
     <div class="flex justify-end space-x-2 fixed bottom-4 right-4">
-      <!-- <SeButton
-        :to="{ name: 'EncounterDiagnosis', params: { id: $route.params.id } }"
-        :icon="icon"
-      >
-        Add Diagnosis
-      </SeButton> -->
-
       <SeButton @click="save">Save All and Go To Diagnosis</SeButton>
     </div>
   </div>
@@ -30,6 +23,10 @@ export default {
     return {
       icon: ChevronRight,
     }
+  },
+
+  beforeDestroy() {
+    this.save()
   },
 
   methods: {
