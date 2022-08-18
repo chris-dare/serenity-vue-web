@@ -2,16 +2,11 @@
   <div class="relative h-full flex flex-col pb-6">
     <div class="space-y-8 divide-y divide-solid divide-subtle flex-1">
       <p class="font-semibold">Patient Review</p>
-      <EncounterDetails />
+      <EncounterDetails ref="detail" />
     </div>
 
-    <div class="flex justify-end">
-      <SeButton
-        :to="{name: 'EncounterDiagnosis', params: {id: $route.params.id}}"
-        :icon="icon"
-      >
-        Add Diagnosis
-      </SeButton>
+    <div class="flex justify-end space-x-2 fixed bottom-4 right-4">
+      <SeButton @click="save">Save All and Go To Diagnosis</SeButton>
     </div>
   </div>
 </template>
@@ -28,6 +23,16 @@ export default {
     return {
       icon: ChevronRight,
     }
+  },
+
+  beforeDestroy() {
+    this.$refs.detail.saveAll()
+  },
+
+  methods: {
+    save() {
+      this.$router.push({ name: 'EncounterDiagnosis', params: { id: this.$route.params.id } })
+    },
   },
 }
 </script>

@@ -33,8 +33,15 @@
         v-model="form.chief_complaint"
         :rows="5"
         placeholder="Reason for visit"
-        @blur="throttledSend"
       />
+      <div class="flex justify-end py-4">
+        <SeButton
+          :loading="loadingNotes"
+          @click="throttledSend"
+        >
+          Save
+        </SeButton>
+      </div>
     </ToggleList>
     <ToggleList
       title="History of Present illness"
@@ -45,8 +52,16 @@
         v-model="form.history_of_presenting_illness"
         :rows="5"
         placeholder="Progress of complaint"
-        @blur="throttledSend"
       />
+
+      <div class="flex justify-end py-4">
+        <SeButton
+          :loading="loadingNotes"
+          @click="throttledSend"
+        >
+          Save
+        </SeButton>
+      </div>
     </ToggleList>
     <ToggleList
       title="Past Medical History"
@@ -58,7 +73,7 @@
       title="Social History"
       class="pt-4"
     >
-      <EncounterSocialHistory />
+      <EncounterSocialHistory ref="socialHistory" />
     </ToggleList>
     <ToggleList
       title="Family History"
@@ -69,20 +84,31 @@
         v-model="family.FAMILY_HISTORY"
         :rows="5"
         placeholder="Family history"
-        @blur="throttledSendHistory"
       />
+
+      <div class="flex justify-end py-4">
+        <SeButton
+          :loading="loadingHistory"
+          @click="throttledSendHistory"
+        >
+          Save
+        </SeButton>
+      </div>
     </ToggleList>
     <ToggleList
       title="General review"
       class="pt-4"
     >
-      <EncounterReviewSystems type="GENERAL" />
+      <EncounterReviewSystems
+        ref="reviewGeneralSystems"
+        type="GENERAL"
+      />
     </ToggleList>
     <ToggleList
       title="Systemic review"
       class="pt-4"
     >
-      <EncounterReviewSystems />
+      <EncounterReviewSystems ref="reviewSystemicSystems" />
     </ToggleList>
     <ToggleList
       title="Notes"
@@ -140,6 +166,7 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
 
 export default {
   name: 'EncounterDetails',
@@ -160,6 +187,8 @@ export default {
       loading: false,
       historySaved: true,
       saving: null,
+      loadingHistory: false,
+      loadingNotes: false,
     }
   },
 
@@ -217,12 +246,18 @@ export default {
     }),
 
     async submitAnswer() {
+      this.loadingNotes = true
       this.saving = 'saving'
       try {
         await this.updateEncounter(this.form)
         this.saving = 'saved'
+        this.$toast.open({
+          message: 'Compliant updated successfully',
+        })
       } catch (error) {
         this.saving = 'error'
+      } finally {
+        this.loadingNotes = false
       }
 
     },
@@ -241,11 +276,17 @@ export default {
 
     async sendHistory() {
       this.saving = 'saving'
+      this.loadingHistory = true
       try {
         await this.createObservation({ payload: { FAMILY_HISTORY: this.family.FAMILY_HISTORY }, patient: this.$route.params.id })
         this.saving = 'saved'
+        this.$toast.open({
+          message: 'History updated successfully',
+        })
       } catch (error) {
         this.saving = 'error'
+      } finally {
+        this.loadingHistory = false
       }
     },
 
@@ -300,6 +341,31 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+
+    saveAll() {
+      // try {
+      if (!isEmpty(this.form) && (!isEqual(this.form.chief_complaint, this.encounter.chief_complaint) || !isEqual(this.form.history_of_presenting_illness, this.encounter.history_of_presenting_illness))) {
+        this.submitAnswer()
+      }
+
+      if (this.family.FAMILY_HISTORY && this.family.FAMILY_HISTORY !== this.currentPatientSocialHistory.FAMILY_HISTORY) {
+        this.sendHistory()
+      }
+      if (this.notes.display) {
+        this.createNote()
+      }
+      this.$refs.socialHistory.save()
+      this.$refs.reviewGeneralSystems.externalSave()
+      this.$refs.reviewSystemicSystems.externalSave()
+        
+      // } catch (error) {
+      //   this.$toast.open({
+      //     message: 'Error saving fields',
+      //     type: 'error',
+      //   })
+      // }
+      
     },
   },
 
