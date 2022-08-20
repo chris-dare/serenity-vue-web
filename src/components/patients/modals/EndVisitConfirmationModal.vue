@@ -39,6 +39,7 @@ import StatusSuccess from '@carbon/icons-vue/es/watson-health/ai-status--complet
 import StatusFailure from '@carbon/icons-vue/es/watson-health/ai-status--failed/32'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import modalMixin from '@/mixins/modal'
+import isEmpty from 'lodash/isEmpty'
 
 export default {
   name: 'EndVisitConfirmationModal',
@@ -54,14 +55,17 @@ export default {
       type: 'success',
       name: 'end-visit-confirmation-modal',
       loading: false,
+      encounter: null,
     }
   },
 
   events: {
-    'visit:end:open': function(_ev, { callback }){
+    'visit:end:open': function(_ev, { callback, encounter }){
       if(this.visible)return
       this.callback = callback
       this.visible = true
+
+      this.encounter = encounter ? encounter : this.currentEncounter
       this.open()
     },
 
@@ -73,12 +77,22 @@ export default {
 
   computed: {
     ...mapState({
-      encounter: state => state.encounters.currentEncounter,
+      currentEncounter: state => state.encounters.currentEncounter,
     }),
     ...mapGetters({
-      failure: 'encounters/currentEncounterCannotBeFinished',
-      hasEncounterBegan: 'encounters/hasEncounterBegan',
+      // failure: 'encounters/currentEncounterCannotBeFinished',
+      // hasEncounterBegan: 'encounters/hasEncounterBegan',
+      getEncounterVitals: 'encounters/getEncounterVitals',
     }),
+
+    failure(){
+      if (!this.encounter) return false
+      return !this.encounter.chief_complaint || !this.encounter.history_of_presenting_illness || isEmpty(this.getEncounterVitals(this.encounter.id))
+    },
+
+    hasEncounterBegan() {
+      return this.encounter.status === 'in-progress'
+    },
 
     label() {
       if (this.failure) {

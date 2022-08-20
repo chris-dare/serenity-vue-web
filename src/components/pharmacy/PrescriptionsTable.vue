@@ -60,8 +60,8 @@
           <cv-data-table-cell>
             <div class="flex items-center py-2">
               <InfoImageBlock
-                :label="row.patient_user.fullName | capitalize"
-                :description="row.patient_user.gender_age_description"
+                :label="$utils.concatData(row.patient_detail, ['title', 'first_name', 'lastname']) | capitalize"
+                :description="$utils.formatGenderAge(row.patient_detail.gender, row.patient_detail.age)"
                 size="base"
               />
             </div>
@@ -172,7 +172,10 @@ import PrescriptionModal from '@/components/patients/modals/PrescriptionModal'
 import { mapState, mapGetters, mapActions } from 'vuex'
 import DataMixin from '@/mixins/data'
 import debounce from 'lodash/debounce'
+import isEqual from 'lodash/isEqual'
+import isEmpty from 'lodash/isEmpty'
 import Patient from '@/models/Patient'
+
 export default {
   name: 'PrescriptionsTable',
 
@@ -230,9 +233,15 @@ export default {
     }),
 
     filteredPrescriptions() {
-      return this.prescriptions.data.filter(el => {
+      let pres = this.prescriptions.data.filter(el => {
         return el.encounter_medication_request && el.encounter_medication_request.length > 0
       })
+
+      if (this.patient) {
+        pres = pres.filter(pres => !!pres.encounter_medication_request.find(req => isEqual(req.patient, parseInt(this.patient))))
+      }
+
+      return pres
     },
 
     columns() {
@@ -274,8 +283,11 @@ export default {
   },
 
   watch: {
-    filter(search) {
-      this.searchPatients(search)
+    filter(search, oldSearch) {
+      if (!isEmpty(search) && !isEqual(search, oldSearch)) {
+        this.searchPatients(search)
+      }
+      
     },
   },
 
@@ -288,14 +300,12 @@ export default {
 
   mounted() {
     this.paginate = true
-    this.refresh(false)
-    this.fetchPrescriptions()
   },
 
   methods: {
     ...mapActions({
-      getData: 'patients/getPatients',
-      searchPatientsStore: 'patients/searchPatients',
+      // getData: 'patients/getPatients',
+      // searchPatientsStore: 'patients/searchPatients',
       printing: 'encounters/exportPrescription',
     }),
 
@@ -307,7 +317,7 @@ export default {
     },
 
     dispenseDrug(row){
-      this.$router.push({ name: this.route, params: { id: row.patient_id} })
+      this.$router.push({ name: this.route, params: { id: row.patient} })
     },
 
     async printPrescription(drug){
@@ -330,20 +340,15 @@ export default {
       }
       params.date = this.prescription_date
       this.prescriptions.loading = true
-      const response = await EncounterPrescriptionsApi.list(this.provider.id, params)
+      const {data} = await EncounterPrescriptionsApi.list(this.provider.id, params)
 
-      const prescriptions = response.data
+      console.log('res', data);
+
+      const prescriptions = data
         .filter(el => {
           return el.encounter_medication_request.length > 0
-        })
-        .map(el => {
-          el.patient_id = el.patient
-          el.encounter_medication_request = el.encounter_medication_request
-            .map(drug => {
-              drug.patient = new Patient(drug.patient_detail).getNormalizedView()
-              return drug
-            })
-          el.patient_user = new Patient(el.encounter_medication_request[0].patient_detail).getNormalizedView()
+        }).map((el) => {
+          el.patient_detail = el.encounter_medication_request[0].patient_detail
           return el
         })
       this.prescriptions.loading = false

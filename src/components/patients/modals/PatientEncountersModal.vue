@@ -1,6 +1,7 @@
 <template>
   <BaseModal
     :name="name"
+    width="70%"
     title="Start/Continue Encounters"
     @closed="close"
   >
@@ -38,7 +39,7 @@
             @click="setEncounter(en)"
           >
             <p>{{ index + 1 }}.</p>
-            <div class="flex-1 flex items-center justify-between">
+            <div class="flex-1 grid grid-cols-3 gap-4">
               <div>
                 <p>{{ en.service_type_name }} with {{ en.encounter_participant[0].practitioner_detail.name }}</p>
                 <p class="text-secondary text-xs"> {{ en.status_comment }} </p>
@@ -46,6 +47,9 @@
               <div class="text-right">
                 <p class="">{{ $date.formatDate(en.start_time) }} </p>
               </div>
+              <!-- <div class="justify-end items-center flex">
+                <SeButton @click="end(en)">End</SeButton>
+              </div> -->
             </div>
           </div>
         </div>
@@ -157,6 +161,7 @@ export default {
     ...mapActions({
       startEncounter: 'encounters/startEncounter',
       setCurrentEncounter: 'encounters/setCurrentEncounter',
+      endEncounter: 'encounters/endEncounter',
     }),
 
     setEncounter(en) {
@@ -185,6 +190,27 @@ export default {
         this.loading = false
       }
       
+    },
+
+    end(encounter) {
+      this.$modal.hide('patient-encounters-modal')
+      this.$trigger('visit:end:open', {
+        encounter,
+        callback: async () => {
+          this.loading = true
+          try {
+            console.log('here')
+            await this.endEncounter(encounter)
+            this.$toast.open({
+              message: 'Encounter ended successfully',
+            })
+            this.loading = false
+          } catch (error) {
+            // empty
+            throw error || error.message
+          }
+        },
+      })
     },
 
     manageCheck(encounter) {

@@ -142,9 +142,9 @@ export default {
     }
   },
 
-  async endEncounter({ commit, state, rootState }) {
+  async endEncounter({ commit, state, rootState }, currentEncounter = state.currentEncounter) {
     try {
-      const encounter = new Encounter(state.currentEncounter).getEndView()
+      const encounter = new Encounter(currentEncounter).getEndView()
       const provider = rootState.auth.provider
       const { data } = await EncountersAPI.update(provider.id, encounter)
       commit(SET_ENCOUNTER, data)

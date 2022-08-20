@@ -1,5 +1,8 @@
 <template>
-  <div class="flex items-center space-x-4">
+  <div
+    v-if="dataFetched"
+    class="flex items-center space-x-4"
+  >
     <SeButton
       v-if="patientIsDeceased"
       variant="danger"
@@ -25,12 +28,12 @@
       >
         End Visit
       </p>
-      <p
+      <!-- <p
         class="underline cursor-pointer"
         @click="end"
       >
         End Consultation
-      </p>
+      </p> -->
       <AddNewDropdown />
 
       <!-- <SeButton
@@ -85,6 +88,11 @@ export default {
       patientHasVisit: 'patients/patientHasVisit',
       visitId: 'visits/visitId',
     }),
+
+    dataFetched() {
+      if (!this.encounter) return false
+      return parseInt(this.encounter.patient) === parseInt(this.$route.params.id)
+    },
 
     hasUpcomingEncounter() {
       if (!this.appointments) return false
