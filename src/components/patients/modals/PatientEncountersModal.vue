@@ -41,7 +41,8 @@
             <p>{{ index + 1 }}.</p>
             <div class="flex-1 grid grid-cols-3 gap-4">
               <div>
-                <p>{{ en.service_type_name }} with {{ en.encounter_participant[0].practitioner_detail.name }}</p>
+                <p v-if="en.title">{{ en.title }}</p>
+                <p v-else>{{ en.service_type_name }} with {{ getPractionerDetail(en) }}</p>
                 <p class="text-secondary text-xs"> {{ en.status_comment }} </p>
               </div>
               <div class="text-right">
@@ -211,6 +212,12 @@ export default {
           }
         },
       })
+    },
+
+    getPractionerDetail(encounter) {
+      if (!encounter.encounter_participant) return ''
+      let encounterParticipant = encounter.encounter_participant.find(part => part.practitioner_detail)
+      return encounterParticipant?.practitioner_detail?.name
     },
 
     manageCheck(encounter) {
