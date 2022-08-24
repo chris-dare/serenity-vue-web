@@ -35,6 +35,12 @@ export default {
     return getters.currentEncounterObservations.filter(vital => options.includes(vital.unit))
   },
 
+  getEncounterVitals: (state, getters, rootState) => encounter => {
+    if (!rootState.patients.patientObservations) return []
+    const options = rootState.resources.vitalsUnitTypes.map(vital => vital.code)
+    return rootState.patients.patientObservations.filter(obs => obs.encounter === encounter).filter(vital => options.includes(vital.unit))
+  },
+
   currentEncounterStatus: (state) => {
     if (isEmpty(state.currentEncounter?.status)) return ''
     return state.currentEncounter.status.split('-').join(' ')

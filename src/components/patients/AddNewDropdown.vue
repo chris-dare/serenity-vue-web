@@ -93,6 +93,7 @@ export default {
           slug: 'test',
           permission: null,
           value: 'diagnostic',
+          hide: !this.$isCurrentWorkspace('IPD'),
         },
         {
           label: 'Medication',
@@ -100,7 +101,7 @@ export default {
           color: 'bg-tetiary',
           slug: 'medication:request',
           permission: 'medication.orders.write',
-          hide: !this.$userCan('medication.orders.write'),
+          hide: !this.$userCan('medication.orders.write') || !this.$isCurrentWorkspace('IPD'),
         },
         {
           label: 'Note',
@@ -115,6 +116,7 @@ export default {
           color: 'bg-tetiary',
           slug: 'referral',
           permission: null,
+          hide: !this.$isCurrentWorkspace('IPD'),
         },
         {
           label: 'Mark as deceased',

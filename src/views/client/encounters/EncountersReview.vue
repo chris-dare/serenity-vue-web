@@ -26,6 +26,7 @@ export default {
   },
 
   beforeDestroy() {
+    if (!this.$refs.detail) return
     this.$refs.detail.saveAll()
   },
 

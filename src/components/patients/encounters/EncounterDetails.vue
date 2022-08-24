@@ -355,7 +355,10 @@ export default {
       if (this.notes.display) {
         this.createNote()
       }
-      this.$refs.socialHistory.save()
+      if (this.$refs.socialHistory) {
+        this.$refs.socialHistory.save()
+      }
+      
       this.$refs.reviewGeneralSystems.externalSave()
       this.$refs.reviewSystemicSystems.externalSave()
         

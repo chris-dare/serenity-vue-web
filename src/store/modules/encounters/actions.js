@@ -4,6 +4,12 @@ import Encounter from '@/models/Encounter'
 import { SET_ENCOUNTERS, UPDATE_ENCOUNTER, SET_ENCOUNTER, SET_ENCOUNTER_STATE, SET_PATIENT_CURRENT_ENCOUNTER, SET_PATIENT_CURRENT_ENCOUNTER_OVERRIDE } from './mutation-types'
 
 export default {
+  async refresh({ commit }) {
+    commit(SET_ENCOUNTERS, [])
+    commit(SET_ENCOUNTER, {})
+    commit(SET_PATIENT_CURRENT_ENCOUNTER, {})
+  },
+
   async initSinglePatientEncounterInformation({dispatch}, {encounter, patient }) {
     await dispatch('getEncounter', encounter)
     dispatch('visits/getPatientCurrentVisits', {patient, status: 'arrived'}, { root:true })
@@ -11,7 +17,7 @@ export default {
     dispatch('setCurrentEncounterState')
     dispatch('patients/getServiceRequests', patient, { root:true })
     dispatch('patients/getMedicationRequests', { patient }, { root:true })
-    dispatch('patients/getObservations', { refresh: true, filters: { patient }}, { root:true })
+    dispatch('patients/getObservations', { refresh: true, filters: { patient }}, { root: true })
     dispatch('patients/getDiagnosis', patient, { root:true })
     dispatch('patients/getNotes', patient, { root:true })
     dispatch('diagnostic/getDiagnosticReports', patient , { root:true })
@@ -142,9 +148,9 @@ export default {
     }
   },
 
-  async endEncounter({ commit, state, rootState }) {
+  async endEncounter({ commit, state, rootState }, currentEncounter = state.currentEncounter) {
     try {
-      const encounter = new Encounter(state.currentEncounter).getEndView()
+      const encounter = new Encounter(currentEncounter).getEndView()
       const provider = rootState.auth.provider
       const { data } = await EncountersAPI.update(provider.id, encounter)
       commit(SET_ENCOUNTER, data)
