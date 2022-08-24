@@ -48,7 +48,7 @@ export default {
     
   },
 
-  refreshPatientDetails({ commit }) {
+  refreshPatientDetails({ commit, dispatch }) {
     commit(SET_PATIENT_DATA, {})
     commit(SET_PATIENT_DIAGNOSIS, [])
     commit(SET_REFERRALS, [])
@@ -56,6 +56,7 @@ export default {
     commit(SET_OBSERVATIONS, [])
     commit(SET_PATIENT_NOTES, [])
     commit(SET_SERVICE_REQUESTS, [])
+    dispatch('encounters/refresh', null, { root: true })
   },
 
   async initBillingPatientInformation({ dispatch, state }, id) {

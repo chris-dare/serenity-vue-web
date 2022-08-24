@@ -342,9 +342,9 @@ export default {
       this.prescriptions.loading = true
       const {data} = await EncounterPrescriptionsApi.list(this.provider.id, params)
 
-      console.log('res', data);
+      let result = data?.results || data
 
-      const prescriptions = data
+      const prescriptions = result
         .filter(el => {
           return el.encounter_medication_request.length > 0
         }).map((el) => {

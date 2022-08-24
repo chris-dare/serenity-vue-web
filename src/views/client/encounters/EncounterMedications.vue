@@ -319,7 +319,7 @@ export default {
           ...data.extra_details,
           requester_practitioner_role: this.provider.practitionerRoleId,
           patient: this.$route.params.id,
-          encounter: this.encounter.id,
+          encounter: this.$route.params.encounter,
           medication_request_category: [{ display: data.extra_details.medication_request_category }],
         })
       })

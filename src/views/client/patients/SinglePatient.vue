@@ -64,6 +64,7 @@ export default {
         if (route.params.id === oldRoute?.params?.id) {
           return
         }
+        await this.refresh()
         try {
           this.loading = true
           this.initSinglePatientInformation(this.id)
@@ -77,8 +78,13 @@ export default {
     },
   },
 
-  beforeRouteLeave (from, to, next) {
+  
+
+  beforeDestroy() {
     this.refresh()
+  },
+
+  beforeRouteLeave (from, to, next) {
     next()
   },
 
