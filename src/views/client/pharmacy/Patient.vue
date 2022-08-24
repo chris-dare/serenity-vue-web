@@ -114,8 +114,11 @@ export default {
     this.findPatient(this.id)
   },
 
-  beforeRouteLeave (from,to,next) {
+  beforeDestroy() {
     this.refresh()
+  },
+
+  beforeRouteLeave (from, to, next) {
     next()
   },
 

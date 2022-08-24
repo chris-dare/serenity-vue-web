@@ -142,6 +142,14 @@ export default {
     },
   },
 
+  watch: {
+    '$locationId'(val) {
+      if (val) {
+        this.selectedLocation = val
+      }
+    },
+  },
+
   created() {
     this.init()
   },
