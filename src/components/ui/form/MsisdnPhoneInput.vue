@@ -15,6 +15,7 @@
       required
       type="tel"
       :data-cy="cyName"
+      v-bind="$attrs"
     />
     <p
       v-if="errorMessage"
