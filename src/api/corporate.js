@@ -42,8 +42,8 @@ export default {
     return http.patch(`providers/${id}/clients/${params.companyId}/beneficiaries/${params.uuid}`, params)
   },
 
-  getBeneficiaries(params) {
-    return http.get(`providers/${params.id}/clients/${params.company}/beneficiaries`)
+  getBeneficiaries(providerId, clientId, params) {
+    return http.get(`providers/${providerId}/clients/${clientId}/beneficiaries`, { params })
   },
 
   delete(providerId,id) {
