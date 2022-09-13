@@ -177,7 +177,7 @@ export default {
         await this.addBenefactor({ id, form:  {...this.form} })
         this.$toast.open('Client beneficiary successfully created')
         this.$resetData()
-        this.getBeneficiaries(id)
+        this.getBeneficiaries({ clientId: id })
         this.close()
       } catch (error) {
         this.$toast.open({
@@ -197,7 +197,7 @@ export default {
         this.$toast.open({
           message: 'Employee successfully updated',
         })
-        this.getBeneficiaries(id)
+        this.getBeneficiaries({ clientId: id })
         this.close()
         this.loading = false
       } catch (error) {

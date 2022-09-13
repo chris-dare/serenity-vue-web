@@ -2,7 +2,7 @@
   <div>
     <div class="max-w-7xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Beneficiary ({{ filteredData.length }})</p>
+        <p class="text-xl font-bold">Beneficiaries ({{ dataCount }})</p>
 
         <SeButton
           class="mx-2"
@@ -14,13 +14,14 @@
       </div>
 
       <Search
-        v-model="search"
+        v-model="params.search"
         placeholder="Search for patients"
+        @input="searchData"
       />
 
       <DataTable
         ref="table"
-        :data="filteredData || []"
+        :data="data"
         :columns="columns"
         :pagination="pagination"
         :loading="loading"
@@ -70,7 +71,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import DataMixin from '@/mixins/data'
+import DataMixin from '@/mixins/paginated'
 import AddInsurancePatient from '@/components/admin/modals/AddInsurancePatient'
 
 export default {
@@ -111,16 +112,14 @@ export default {
 
   methods: {
     ...mapActions({
-      getData: 'corporate/getBeneficiaries',
+      getBeneficiaries: 'corporate/getBeneficiaries',
       addToCurrent: 'corporate/addToCurrentDependent',
       suspendMember: 'clients/suspendMember',
     }),
 
-    async refresh() {
-      this.loading = true
+    async getData(params) {
       let id = this.$route.params.id
-      await this.getData( id )
-      this.loading = false
+      await this.getBeneficiaries({ clientId: id, params })
     },
 
     tableActions(row) {

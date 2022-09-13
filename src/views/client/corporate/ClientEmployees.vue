@@ -2,7 +2,7 @@
   <div>
     <div class="max-w-7xl mx-auto space-y-4">
       <div class="flex items-center justify-between">
-        <p class="text-xl font-bold">Corporate Employees ({{ filteredData.length }})</p>
+        <p class="text-xl font-bold">Corporate Employees ({{ dataCount }})</p>
 
         <SeButton
           class="mx-2"
@@ -14,13 +14,14 @@
       </div>
 
       <Search
-        v-model="search"
+        v-model="params.search"
         placeholder="Search for patients"
+        @input="searchData"
       />
 
       <DataTable
         ref="table"
-        :data="filteredData"
+        :data="data"
         :columns="columns"
         :pagination="pagination"
         :loading="loading"
@@ -69,7 +70,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import DataMixin from '@/mixins/data'
+import DataMixin from '@/mixins/paginated'
 import AddCorporatePatient from '@/components/admin/modals/AddCorporatePatient'
 
 export default {
@@ -110,10 +111,15 @@ export default {
 
   methods: {
     ...mapActions({
-      getData: 'corporate/getCorporate',
+      getBeneficiaries: 'corporate/getBeneficiaries',
       addToCurrent: 'corporate/addToCurrentDependent',
       suspendMember: 'clients/suspendMember',
     }),
+
+    async getData(params) {
+      let id = this.$route.params.id
+      await this.getBeneficiaries({ clientId: id, params })
+    },
 
     tableActions(row) {
       return [
@@ -121,13 +127,6 @@ export default {
         { label: 'Edit', event: 'edit', show: true },
         { label: row.is_active ? 'Suspend' : 'Activate', event: 'suspend', show: true },
       ]
-    },
-
-    async refresh() {
-      this.loading = true
-      let id = this.$route.params.id
-      await this.getData( id )
-      this.loading = false
     },
 
     addCurrent(client){

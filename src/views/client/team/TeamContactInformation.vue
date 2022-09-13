@@ -10,6 +10,7 @@
           label="Phone number"
           :error-message="$utils.validateRequiredField($v, 'mobile')"
           required
+          :disabled="isUpdate"
           @input="$v.$touch()"
         />
         <FormInput
@@ -19,6 +20,7 @@
           class="inherit-full-input"
           :invalid-message="$utils.validateRequiredField($v, 'email')"
           required
+          :disabled="isUpdate"
         />
       </div>
       <FormInput
@@ -92,6 +94,10 @@ export default {
     ...mapState({
       storeData: (state) => state.practitioners.currentUser,
     }),
+
+    isUpdate() {
+      return !!this.$route.query.id
+    },
   },
 
   created() {
