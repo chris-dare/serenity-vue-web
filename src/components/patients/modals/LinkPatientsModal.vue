@@ -205,6 +205,11 @@ export default {
     async submit() {
       this.$v.$touch()
 
+      if (!this.isSamePatient) {
+        this.$toast.error('These patients do not have the same phone number, gender or date of birth')
+        return
+      }
+
       if (this.$v.$invalid) {
         this.$toast.error('Please fill in the required fields')
         return

@@ -14,11 +14,12 @@ export default {
     }
   },
 
-  async getBeneficiaries({ commit, rootState }, id) {
+  async getBeneficiaries({ commit, rootState }, { clientId, params }) {
     try {
       const provider = rootState.auth.provider
-      const { data } = await CorporateAPI.getBeneficiaries({id: provider.id, company: id})
+      const { data } = await CorporateAPI.getBeneficiaries(provider.id, clientId, params)
       commit(SET_CORPORATE, data.results)
+      return data
     } catch (error) {
       Vue.prototype.$utils.error(error)
       throw error.data || error
