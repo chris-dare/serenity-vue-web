@@ -9,7 +9,7 @@
       <template #default="{ row }">
         <cv-data-table-cell>
           <div class="py-2">
-            {{ row.performer_name | capitalize }}
+            {{ row.practitioner_role_display | capitalize }}
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -54,7 +54,7 @@ export default {
   data() {
     return {
       columns: [
-        'Performer name',
+        'Practitioner',
         'Role',
         'Condition',
         'Date',

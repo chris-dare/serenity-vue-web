@@ -46,4 +46,8 @@ export default {
   deleteDiagnosis(providerId, id) {
     return http.delete(`${this.url}${providerId}/encounter-patient-diagnosis/${id}`)
   },
+
+  encounterActions(providerId, payload) {
+    return http.post(`${this.url}${providerId}/encounter-actions`, payload)
+  },
 }
