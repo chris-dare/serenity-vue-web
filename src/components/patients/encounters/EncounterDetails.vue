@@ -25,10 +25,16 @@
       </div>
     </ToggleList>
     <ToggleList
-      title="Chief Complaint"
       class="pt-4"
       :status="saving"
     >
+      <div slot="title">
+        <p
+          class="text-serenity-primary w-full"
+        >
+          Chief Complaint <span class="text-secondary ml-1 text-xs">- Edited by: {{ encounter.chief_complaint_editors_display }} </span>
+        </p>
+      </div>
       <cv-text-area
         v-model="form.chief_complaint"
         :rows="5"
@@ -44,10 +50,17 @@
       </div>
     </ToggleList>
     <ToggleList
-      title="History of Present illness"
       class="pt-4"
       :status="saving"
     >
+      <div slot="title">
+        <p
+          class="text-serenity-primary w-full"
+        >
+          History of Presenting illness <span class="text-secondary ml-1 text-xs">- Edited by: {{ encounter.history_of_presenting_illness_editors_display
+          }} </span>
+        </p>
+      </div>
       <cv-text-area
         v-model="form.history_of_presenting_illness"
         :rows="5"
@@ -196,6 +209,7 @@ export default {
     ...mapState({
       encounter: state => state.encounters.currentEncounter,
       provider: state => state.auth.provider,
+      patient: state => state.patients.currentPatient,
     }),
     ...mapGetters({
       vitals: 'encounters/currentEncounterLatestVitals',
@@ -242,14 +256,36 @@ export default {
       createObservation: 'patients/createObservation',
       createPatientNote: 'encounters/createNote',
       updatePatientNote: 'encounters/updateNote',
+      recordEncounterAction: 'encounters/recordEncounterAction',
       deletePatientNote: 'encounters/removeNote',
     }),
 
     async submitAnswer() {
+      if ((isEqual(this.form.chief_complaint, this.encounter.chief_complaint) && isEqual(this.form.history_of_presenting_illness, this.encounter.history_of_presenting_illness))) {
+        return
+      }
       this.loadingNotes = true
       this.saving = 'saving'
       try {
-        await this.updateEncounter(this.form)
+        const form = {
+          action: 'record-chief-complaint',
+          encounter_uuid: this.encounter.uuid,
+          patient_uuid: this.patient.uuid,
+          data: {
+            chief_complaint: this.form.chief_complaint,
+            history_of_presenting_illness: this.form.history_of_presenting_illness,
+          },
+        }
+
+        // if ((!isEqual(this.form.chief_complaint, this.encounter.chief_complaint))) {
+        //   form.data.chief_complaint = this.form.chief_complaint
+        // }
+
+        // if ((!isEqual(this.form.history_of_presenting_illness, this.encounter.history_of_presenting_illness))) {
+        //   form.data.history_of_presenting_illness = this.form.history_of_presenting_illness
+        // }
+        
+        await this.recordEncounterAction(form)
         this.saving = 'saved'
         this.$toast.open({
           message: 'Compliant updated successfully',

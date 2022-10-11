@@ -40,26 +40,39 @@
         <EncounterDiagnosis :data="currentEncounterDiagnosis" />
       </ToggleList>
       <ToggleList
-        title="Presenting Complaint"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
       >
+        <div slot="title">
+          <p
+            class="text-serenity-primary w-full"
+          >
+            Chief Complaint <span class="text-secondary ml-1 text-xs">- Edited by: {{ currentEncounter.chief_complaint_editors_display }} </span>
+          </p>
+        </div>
         <p
           v-if="!currentEncounterPresentingComplaint"
           class="text-sm text-center my-4"
         >
-          No history of presenting illness
+          No chief complaint
         </p>
         <p class="text-gray-500">{{ currentEncounterPresentingComplaint }}</p>
       </ToggleList>
       <ToggleList
-        title="History of Presenting Complaint"
         class="border-solid border-t border-serenity-subtle-border px-4 pt-4"
       >
+        <div slot="title">
+          <p
+            class="text-serenity-primary w-full"
+          >
+            History of Presenting illness <span class="text-secondary ml-1 text-xs">- Edited by: {{ currentEncounter.history_of_presenting_illness_editors_display
+            }} </span>
+          </p>
+        </div>
         <p
           v-if="!currentEncounterHistoryComplaint"
           class="text-sm text-center my-4"
         >
-          No chief complaint
+          No history of presenting illness
         </p>
         <p class="text-gray-500">{{ currentEncounterHistoryComplaint }}</p>
       </ToggleList>

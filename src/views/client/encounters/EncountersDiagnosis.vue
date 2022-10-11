@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-enc">
+  <div class="relative h-full pb-6">
     <SeForm class="space-y-8">
       <p
         v-if="mode === 'update'"
@@ -95,17 +95,17 @@
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
+                <p>{{ row.practitioner_role_display | capitalize }}</p>
+              </div>
+            </cv-data-table-cell>
+            <cv-data-table-cell>
+              <div>
                 <p>{{ row.status | capitalize }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
               <div>
                 <p>{{ row.condition }}</p>
-              </div>
-            </cv-data-table-cell>
-            <cv-data-table-cell>
-              <div>
-                <p>{{ row.role | removeDash }}</p>
               </div>
             </cv-data-table-cell>
             <cv-data-table-cell>
@@ -152,7 +152,7 @@
 <script>
 import ChevronRight from '@carbon/icons-vue/es/chevron--right/32'
 import Add from '@carbon/icons-vue/es/add/32'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import unsavedChanges from '@/mixins/unsaved-changes'
 import omit from 'lodash/omit'
@@ -181,7 +181,8 @@ export default {
       loading: false,
       deleteLoading: false,
       roles: [ 'admission-diagnosis', 'discharge-diagnosis', 'chief-complaint', 'comorbidity-diagnosis', 'pre-op-diagnosis', 'post-op-diagnosis', 'billing' ],
-      columns: ['Date', 'Type', 'Condition', 'Role', 'Action'],
+      // columns: ['Date', 'Type', 'Condition', 'Role', 'Action'],
+      columns: ['Date', 'Practitioner', 'Type', 'Condition', 'Action'],
       propertiesToCompareChanges: ['form'],
     }
   },
@@ -194,6 +195,11 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      encounter: state => state.encounters.currentEncounter,
+      provider: state => state.auth.provider,
+      patient: state => state.patients.currentPatient,
+    }),
     ...mapGetters({
       currentEncounterDiagnosis: 'encounters/currentEncounterDiagnosis',
     }),
@@ -214,6 +220,7 @@ export default {
       createDiagnosis: 'encounters/createDiagnosis',
       updateDiagnosis: 'encounters/updateDiagnosis',
       deleteDiagnosis: 'encounters/deleteDiagnosis',
+      recordEncounterAction: 'encounters/recordEncounterAction',
     }),
 
     init() {
@@ -228,16 +235,27 @@ export default {
     },
 
     confirmDelete(diagnosis) {
-      this.$trigger('confirm:delete:open', { data: diagnosis.id, label: 'Are you sure you want to delete this diagnosis?' })
+      this.$trigger('confirm:delete:open', { data: diagnosis.uuid, label: 'Are you sure you want to delete this diagnosis?' })
     },
 
     async removeDiagnosis(id) {
       this.deleteLoading = true
       try {
-        await this.deleteDiagnosis(id).then(() => {
-          this.$toast.open({
-            message: 'Diagnosis successfully deleted',
-          })
+        let form = {
+          'action': 'delete-diagnoses',
+          encounter_uuid: this.encounter.uuid,
+          patient_uuid: this.patient.uuid,
+          'data': {
+            'diagnoses': [
+              {
+                'uuid': id,
+              },
+            ],
+          },
+        }
+        await this.recordEncounterAction(form)
+        this.$toast.open({
+          message: 'Diagnosis successfully deleted',
         })
         this.deleteLoading = false
         this.$trigger('confirm:delete:close')
@@ -284,7 +302,12 @@ export default {
       this.loading = true
 
       try {
-        await this.createDiagnosis(omit(this.form, ['is_final']))
+        await this.recordEncounterAction({
+          'action': 'record-diagnoses',
+          encounter_uuid: this.encounter.uuid,
+          patient_uuid: this.patient.uuid,
+          data: {diagnoses:[omit(this.form, ['is_final'])]},
+        })
         this.loading = false
         this.$toast.open({
           message: 'Diagnosis successfully added',
@@ -321,8 +344,7 @@ export default {
 
     reset() {
       this.$v.$reset()
-      Object.assign({}, this.form, {})
-      this.resetDirtyState()
+      this.$resetData()
     },
   },
 }

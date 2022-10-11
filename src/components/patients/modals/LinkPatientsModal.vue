@@ -190,10 +190,10 @@ export default {
     },
 
     isSamePatient() {
-      let isSameGender = intersectionBy(this.patients, 'gender') === 1
-      let isSamePhone = intersectionBy(this.patients, 'mobile') === 1
-      let isSameDOB = intersectionBy(this.patients, 'birth_date') === 1
-      return isSameGender && isSamePhone && isSameDOB
+      let isSameGender = intersectionBy(this.patients, 'gender').length === 1
+      // let isSamePhone = intersectionBy(this.patients, 'mobile').length === 1
+      let isSameDOB = intersectionBy(this.patients, 'birth_date').length === 1
+      return isSameGender && isSameDOB
     },
   },
 

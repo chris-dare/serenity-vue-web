@@ -193,6 +193,18 @@ export default {
     }
   },
 
+  async recordEncounterAction({ commit, rootState }, payload) {
+    try {
+      const provider = rootState.auth.provider
+      const { data } = await EncountersAPI.encounterActions(provider.id, payload)
+
+      commit(SET_ENCOUNTER, data.data)
+    } catch (error) {
+      Vue.prototype.$utils.error(error)
+      throw error
+    }
+  },
+
   async updateNote({ commit, state, rootState }, payload) {
     try {
       let encounter = state.currentEncounter
