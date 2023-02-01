@@ -68,7 +68,7 @@
         </div>
         <div>
           <div
-            v-for="(list, index) in report.diagnostic_report_results"
+            v-for="(list, index) in orderedResults"
             :key="index"
             class="grid grid-cols-4 gap-1 mt-6"
           >
@@ -80,7 +80,7 @@
               <p class="text-secondary ml-2"> {{ list.unit || '' }}</p>
             </div>
             <div class="text-left">
-              <p>{{ $utils.getFirstData(list.observation_reference_range, 'low') + '-' + $utils.getFirstData(list.observation_reference_range, 'high') }}</p>
+              <p>{{ list.reference_range_low }} - {{ list.reference_range_high }}</p>
             </div>
             <div
               v-if="list.observation_interpretation"
@@ -175,6 +175,7 @@ import DiagnosticReportTemplate from '@/components/pdf/DiagnosticReportTemplate'
 import modalMixin from '@/mixins/modal'
 import DiagnosticAPI from '@/api/diagnostic'
 import { mapState, mapActions } from 'vuex'
+import orderBy from 'lodash/orderBy'
 
 export default {
   name: 'LabTestModal',
@@ -212,6 +213,11 @@ export default {
     },
     review() {
       return this.approval === 'preliminary'
+    },
+
+    orderedResults() {
+      if (!this.report.diagnostic_report_results) return []
+      return orderBy(this.report.diagnostic_report_results, ['rank'], ['asc'])
     },
   },
 
