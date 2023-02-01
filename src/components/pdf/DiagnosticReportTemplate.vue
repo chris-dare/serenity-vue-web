@@ -49,7 +49,7 @@
           
           <div class="min-h-20">
             <div
-              v-if="report.diagnostic_report_results.length"
+              v-if="orderedResults.length"
               class="grid grid-cols-4 gap-x-4 border-t border-b border-gray-100 border-solid py-2"
             >
               <p class="text-sm">Investigation</p>
@@ -58,7 +58,7 @@
               <p class="text-sm">Intepretation</p>
             </div>
             <div
-              v-for="(list, index) in report.diagnostic_report_results"
+              v-for="(list, index) in orderedResults"
               :key="index"
               class="grid grid-cols-4 gap-x-4 py-3 border-solid border-b border-gray-100 items-center"
             >
@@ -75,7 +75,7 @@
                 </p>
               </div>
               <div class="text-left ">
-                <p class="text-sm">{{ $utils.getFirstData(list.observation_reference_range, 'low') + '-' + $utils.getFirstData(list.observation_reference_range, 'high') }}</p>
+                <p class="text-sm">{{ list.reference_range_low }} - {{ list.reference_range_high }}</p>
               </div>
               <div
                 v-if="list.observation_interpretation"
@@ -93,7 +93,7 @@
         
 
           <div class="flex space-x-40">
-            <p class="font-bold">Conclusion</p>
+            <p class="font-bold">Comments</p>
             <p class="text-xs">{{ report.conclusion }}</p>
           </div>
         </div>
@@ -122,6 +122,8 @@
 
 <script>
 import html2pdf from 'html2pdf.js'
+import orderBy from 'lodash/orderBy'
+
 export default {
   name: 'DiagnosticReportTemplate',
 
@@ -276,6 +278,11 @@ export default {
   computed: {
     patient() {
       return this.report?.patient_detail || {}
+    },
+
+    orderedResults() {
+      if (!this.report.diagnostic_report_results) return []
+      return orderBy(this.report.diagnostic_report_results, ['rank'], ['asc'])
     },
 
     details() {
