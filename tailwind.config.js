@@ -39,6 +39,10 @@ module.exports = {
       },
       minHeight: {
         main: 'calc(100vh - 3rem)',
+        20: '20rem',
+      },
+      fontSize: {
+        xxs: '8px',
       },
       width: {
         102: '32rem',

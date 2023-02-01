@@ -154,22 +154,32 @@
         </SeButton>
         <SeButton
           :loading="loading"
-          @click="download(report.diagnostic_report_media)"
+          @click="exportPDF"
         >
           Download Document
         </SeButton>
       </div>
+
+      <DiagnosticReportTemplate
+        v-show="false"
+        ref="pdfTemplate"
+        :report="report"
+      />
     </template>
   </BaseModal>
 </template>
 
 <script>
+import DiagnosticReportTemplate from '@/components/pdf/DiagnosticReportTemplate'
+
 import modalMixin from '@/mixins/modal'
 import DiagnosticAPI from '@/api/diagnostic'
 import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'LabTestModal',
+
+  components: {DiagnosticReportTemplate},
 
   mixins: [modalMixin],
 
@@ -230,6 +240,10 @@ export default {
       getData: 'diagnostic/getDiagnosticReports',
       updateResultStatus: 'diagnostic/updateResultStatus',
     }),
+
+    exportPDF() {
+      this.$refs.pdfTemplate.exportToPDF()
+    },
   
     async updateResult(status){
       if(status === 'approve'){
