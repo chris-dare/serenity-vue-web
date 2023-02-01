@@ -29,6 +29,7 @@
     "currency.js": "^2.0.3",
     "cypress": "10.0.3",
     "date-fns": "^2.16.1",
+    "html2pdf.js": "^0.10.1",
     "laue": "^0.2.1",
     "libphonenumber-js": "^1.9.16",
     "moment-timezone": "^0.5.33",
