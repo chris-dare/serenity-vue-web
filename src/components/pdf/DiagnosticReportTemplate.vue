@@ -294,7 +294,7 @@ export default {
   methods: {
     exportToPDF() {
       html2pdf(document.getElementById('diagnostic-report'), {
-        margin: [1,1,20,1], filename: 'diagnostic-report.pdf',
+        margin: [5,1,20,1], filename: 'diagnostic-report.pdf',
       })
     },
   },
