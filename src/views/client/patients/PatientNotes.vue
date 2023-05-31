@@ -56,10 +56,12 @@
           </cv-data-table-cell>
           <cv-data-table-cell>
             <InfoImageBlock
-              label="Dr Chris Dare"
+              v-if="row.practitioner_name"
+              :label="row.practitioner_name"
               description="Practitioner"
             />
           </cv-data-table-cell>
+
           <cv-data-table-cell>
             <div>
               <p>{{ row.display }}</p>
