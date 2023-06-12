@@ -244,11 +244,11 @@ export default {
     this.family = { ...this.currentPatientSocialHistory }
   },
 
-  beforeDestroy() {
-    if (!isEmpty(this.notes.display)) {
-      this.createNote()
-    }
-  },
+  // beforeDestroy() {
+  //   if (!isEmpty(this.notes.display)) {
+  //     this.createNote()
+  //   }
+  // },
 
   methods: {
     ...mapActions({
@@ -389,6 +389,7 @@ export default {
         this.sendHistory()
       }
       if (this.notes.display) {
+        console.log('save b')
         this.createNote()
       }
       if (this.$refs.socialHistory) {

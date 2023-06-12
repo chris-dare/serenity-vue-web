@@ -8,7 +8,7 @@ export default {
   },
 
   get(providerId, encounterId) {
-    return http.get(`${this.url}${providerId}/encounter/${encounterId}`)
+    return http.get(`${this.url}${providerId}/encounter/${encounterId}`, { cache:false })
   },
 
   create(providerId, params) {
