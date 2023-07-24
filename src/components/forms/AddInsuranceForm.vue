@@ -17,6 +17,7 @@
       :multiple="false"
       :error-message="$utils.validateRequiredField($v, 'managing_organization', 'localValue')"
       required
+      :disabled="edit"
       @input="getPolicies"
     />
     <MultiSelect
@@ -131,6 +132,13 @@ export default {
 
   mixins: [modelMixin],
 
+  props: {
+    edit: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
   data() {
     return {
       policies: [],
@@ -162,6 +170,9 @@ export default {
 
   created() {
     this.$v.$reset()
+    if (this.edit) {
+      this.getPolicies()
+    }
   },
 
   validations() {

@@ -29,6 +29,7 @@
           </div>
           <AddInsuranceForm
             v-model="form"
+            :edit="type === 'update'"
             @invalid="setDisabledState"
           />
         </div>
