@@ -58,7 +58,7 @@
                 :loading="isloading"
                 @view="addCurrent(row)"
                 @suspend="suspendCurrent(row)"
-                @edit="$trigger('insurance-patient:edit:open', {...row})"
+                @edit="edit(row)"
               />
             </div>
           </cv-data-table-cell>
@@ -108,6 +108,7 @@ export default {
 
   mounted() {
     this.refresh()
+    this.getInsuranceClients({filters: { organization_type: 'INS'}})
   },
 
   methods: {
@@ -115,6 +116,7 @@ export default {
       getBeneficiaries: 'corporate/getBeneficiaries',
       addToCurrent: 'corporate/addToCurrentDependent',
       suspendMember: 'clients/suspendMember',
+      getInsuranceClients: 'clients/getClients',
     }),
 
     async getData(params) {
@@ -128,6 +130,10 @@ export default {
         { label: 'Edit', event: 'edit', show: true },
         { label: row.is_active ? 'Suspend' : 'Activate', event: 'suspend', show: true },
       ]
+    },
+
+    edit(row) {
+      this.$trigger('insurance-patient:edit:open', {...row})
     },
 
     addCurrent(client){
