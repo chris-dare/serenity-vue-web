@@ -14,8 +14,11 @@
 </template>
 
 <script>
+import { CvSearch } from '@carbon/vue/src/index'
 export default {
   name: 'Search',
+
+  components: {CvSearch},
 
   props: {
     value: {

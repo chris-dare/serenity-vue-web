@@ -64,11 +64,12 @@
 
 <script>
 import AddEditRole from '@/components/admin/modals/AddEditRoles'
+import { CvDataTable, CvDataTableRow } from '@carbon/vue/src/index'
 import { mapActions, mapState } from 'vuex'
 export default {
   name: 'Roles',
 
-  components: { AddEditRole },
+  components: { AddEditRole, CvDataTable, CvDataTableRow },
 
   data() {
     return {

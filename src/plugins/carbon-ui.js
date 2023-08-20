@@ -3,11 +3,8 @@ import 'carbon-components/css/carbon-components.css'
 
 import {
   CvButton,
-  CvDataTable,
-  CvSearch,
   CvSelect,
   CvSelectOption,
-  CvDataTableRow,
   CvDataTableCell,
   CvTextArea,
   CvTextInput,
@@ -31,11 +28,8 @@ import {
 } from '@carbon/vue/src/index'
 
 Vue.component(CvButton.name, CvButton)
-Vue.component(CvDataTable.name, CvDataTable)
-Vue.component(CvSearch.name, CvSearch)
 Vue.component(CvSelect.name, CvSelect)
 Vue.component(CvSelectOption.name, CvSelectOption)
-Vue.component(CvDataTableRow.name, CvDataTableRow)
 Vue.component(CvDataTableCell.name, CvDataTableCell)
 Vue.component(CvTextArea.name, CvTextArea)
 Vue.component(CvTextInput.name, CvTextInput)

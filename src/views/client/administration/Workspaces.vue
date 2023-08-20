@@ -72,11 +72,12 @@
 import AddEditWorkspace from '@/components/admin/modals/AddEditWorkspace'
 import { mapActions, mapState } from 'vuex'
 import DataMixin from '@/mixins/data'
+import { CvDataTable, CvDataTableRow } from '@carbon/vue/src/index'
 
 export default {
   name: 'Workspaces',
 
-  components: {AddEditWorkspace},
+  components: {AddEditWorkspace, CvDataTable, CvDataTableRow},
 
   mixins: [DataMixin],
 
