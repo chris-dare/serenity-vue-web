@@ -1,6 +1,6 @@
 import religions from '@/libs/religions'
 import languages from '@/libs/languages'
-import diagOrderTypes from '@/libs/diagOrderTypes'
+// import diagOrderTypes from '@/libs/diagOrderTypes'
 import diagServiceActionType from '@/libs/diagServiceActionType'
 import specialties from '@/libs/specialties'
 
@@ -194,7 +194,7 @@ export default () => ({
     },
   ],
   encounterPriorities: [],
-  diagnosticLabProceedures: diagOrderTypes || [],
+  diagnosticLabProceedures: [],
   serviceGenericPeriodUnits: [
     {
       code: 'hours',
