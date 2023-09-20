@@ -220,7 +220,7 @@ export default {
         if (val !== oldVal) {
           let values = val?.split(' to ')
           this.params[this.dateFields[0]] = values && values[0] ? this.$date.formatQueryParamsDate(values[0]) : null
-          this.params[this.dateFields[1]] = values && values[1] ? this.$date.formatQueryParamsDate(values[1] || Date.now()) : null
+          this.params[this.dateFields[1]] = values && values[1] ? this.$date.formatQueryParamsEndOfDay(values[1] || new Date()) : this.params[this.dateFields[0]] ? this.$date.formatQueryParamsEndOfDay(values[0]) : null
           this.refresh()
         }
       },
@@ -249,7 +249,8 @@ export default {
     async getData(params) {
       try {
         this.loading = true
-        const { data } = await ClientAPI.getClientFinanceBills(this.$providerId, params)
+        let payload = { ...omit(params, ['date']) }
+        const { data } = await ClientAPI.getClientFinanceBills(this.$providerId, payload)
         this.data = data.results
         this.dataMeta = data.meta
         this.loading = false
