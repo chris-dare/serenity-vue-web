@@ -14,7 +14,7 @@
         </cv-data-table-cell>
         <cv-data-table-cell>
           <div>
-            <p>{{ row.code }}</p>
+            <p>{{ row.display }}</p>
           </div>
         </cv-data-table-cell>
         <cv-data-table-cell>
@@ -49,7 +49,7 @@ export default {
     return {
       columns: [
         'Priority',
-        'Code',
+        'Lab',
         'Patient Instruction',
         'Date',
       ],
