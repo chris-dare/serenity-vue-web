@@ -59,10 +59,11 @@
 
 <script>
 import Pagination from '@/components/patients/Pagination'
+import { CvDataTable, CvDataTableRow } from '@carbon/vue/src/index'
 export default {
   name: 'DataTable',
 
-  components: {Pagination},
+  components: {Pagination, CvDataTable, CvDataTableRow},
 
   props: {
     columns: {

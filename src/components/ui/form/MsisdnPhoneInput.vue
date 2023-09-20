@@ -30,9 +30,13 @@
 import split from 'lodash/split'
 import get from 'lodash/get'
 import parsePhoneNumber from 'libphonenumber-js'
+import VuePhoneNumberInput from 'vue-phone-number-input'
+import 'vue-phone-number-input/dist/vue-phone-number-input.css'
 
 export default {
   name: 'MsisdnPhoneInput',
+
+  components: {VuePhoneNumberInput},
 
   props: {
     value: {
