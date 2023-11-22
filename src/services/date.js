@@ -36,6 +36,10 @@ const formatQueryParamsDate = (dateString) => {
   let date = new Date(dateString)
   return `${format(date, 'yyyy-MM-dd')}T${format(date, 'HH:mm:ss')}Z`
 }
+const formatQueryParamsEndOfDay = (dateString) => {
+  let date = endOfDate(new Date(dateString))
+  return `${format(date, 'yyyy-MM-dd')}T${format(date, 'HH:mm:ss')}Z`
+}
 
 const queryNow = () => formatQueryParamsDate(new Date())
 
@@ -77,6 +81,7 @@ export default {
       sortByDate,
       getAge,
       userNow,
+      formatQueryParamsEndOfDay,
     }
   },
 }
