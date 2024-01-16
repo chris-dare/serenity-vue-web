@@ -2,7 +2,7 @@
   <div class="space-y-2 divide-y">
     <MultiSelect
       v-model="localValue.account_id"
-      :options="insuranceAccounts"
+      :options="formattedAccounts"
       title="Insurance accounts"
       track-by="uuid"
       label="description"
@@ -11,6 +11,25 @@
       :error-message="$utils.validateRequiredField(v, 'account_id')"
       @input="onInput"
     >
+      <template
+        slot="option"
+        slot-scope="{option}"
+      >
+        <div
+          :class="{'hover:bg-transparent cursor-not-allowed': option.status !== 'ACTIVE'}"
+          class="flex justify-between items-center"
+        >
+          <span>
+            {{ option.description || '-' }} - {{ $currency(option.balance, option.currency).format() }}
+          </span>
+          <span
+            v-if="option.status !== 'ACTIVE'"
+            class="text-red-500 font-bold"
+          >
+            INACTIVE
+          </span>
+        </div>
+      </template>
       <p slot="noOptions">This patient has no insurance account</p>
       <div
         v-if="!hideAddInsurance"
@@ -124,6 +143,13 @@ export default {
     selected() {
       if (!this.localValue.account_id) return {}
       return this.insuranceAccounts.find(insuranceAccount => insuranceAccount.uuid === this.localValue.account_id)
+    },
+
+    formattedAccounts() {
+      return this.insuranceAccounts.map(account => {
+        account.$isDisabled = account.status !== 'ACTIVE'
+        return account
+      })
     },
 
     insuranceType() {

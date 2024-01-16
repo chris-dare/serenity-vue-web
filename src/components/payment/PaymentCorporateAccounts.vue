@@ -2,7 +2,7 @@
   <div class="space-y-2">
     <MultiSelect
       v-model="localValue.account_id"
-      :options="corporateAccounts"
+      :options="formattedAccounts"
       title="Corporate accounts"
       track-by="uuid"
       :custom-label="customLabel"
@@ -12,6 +12,25 @@
       :error-message="$utils.validateRequiredField(v, 'account_id')"
       @input="v.$touch()"
     >
+      <template
+        slot="option"
+        slot-scope="{option}"
+      >
+        <div
+          :class="{'hover:bg-transparent cursor-not-allowed': option.status !== 'ACTIVE'}"
+          class="flex justify-between items-center"
+        >
+          <span>
+            {{ option.description || '-' }} - {{ $currency(option.balance, option.currency).format() }}
+          </span>
+          <span
+            v-if="option.status !== 'ACTIVE'"
+            class="text-red-500 font-bold"
+          >
+            INACTIVE
+          </span>
+        </div>
+      </template>
       <p slot="noOptions">This patient has no corporate wallet</p>
     </MultiSelect>
     <div class="flex justify-end">
@@ -43,6 +62,13 @@ export default {
 
     balance() {
       return this.corporateAccounts.find(el => el.id === this.localValue.account_id)?.balance
+    },
+
+    formattedAccounts() {
+      return this.corporateAccounts.map(account => {
+        account.$isDisabled = account.status !== 'ACTIVE'
+        return account
+      })
     },
   },
 
