@@ -301,6 +301,7 @@ export default {
           gender: this.patient.gender,
           mobile: this.patient.mobile,
           email: this.patient.email,
+          mr_number: this.patient.mr_number,
         }
       }
 

@@ -8,15 +8,35 @@
     </p>
     <MultiSelect
       v-model="localValue.account_id"
-      :options="userAccounts"
+      :options="formattedUserAccounts"
       title="User accounts"
       track-by="uuid"
       :custom-label="customLabel"
       custom-field="uuid"
       :multiple="false"
       :error-message="$utils.validateRequiredField(v, 'account_id')"
+      disabled-field="_disabled"
       @input="v.$touch()"
     >
+      <template
+        slot="option"
+        slot-scope="{option}"
+      >
+        <div
+          :class="{'hover:bg-transparent cursor-not-allowed': option.status !== 'ACTIVE'}"
+          class="flex justify-between items-center"
+        >
+          <span>
+            {{ option.description || '-' }} - {{ $currency(option.balance, option.currency).format() }}
+          </span>
+          <span
+            v-if="option.status !== 'ACTIVE'"
+            class="text-red-500 font-bold"
+          >
+            INACTIVE
+          </span>
+        </div>
+      </template>
       <p slot="noOptions">This patient has no user wallet</p>
     </MultiSelect>
     <div class="flex justify-end">
@@ -48,6 +68,13 @@ export default {
     ...mapGetters({
       userAccounts: 'billing/userAccounts',
     }),
+
+    formattedUserAccounts() {
+      return this.userAccounts.map(account => {
+        account.$isDisabled = account.status !== 'ACTIVE'
+        return account
+      })
+    },
 
     balance() {
       return this.userAccounts.find(el => el.uuid === this.localValue.account_id)?.balance
