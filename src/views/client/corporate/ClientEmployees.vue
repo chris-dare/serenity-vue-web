@@ -130,7 +130,7 @@ export default {
     },
 
     addCurrent(client){
-      this.$router.push({ name: 'Billing:Patient', params: { id: client.patientId }})
+      this.$router.push({ name: 'Billing:Patient', params: { id: client.patient }})
     },
 
     async suspendCurrent(client){
